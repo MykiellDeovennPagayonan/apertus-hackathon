@@ -1,0 +1,447 @@
+import { createStore, type StateCreator, type StoreApi } from "zustand/vanilla";
+import type {
+  ExperimentContext,
+  Plan,
+  TargetedCommand,
+} from "../../lib/apertus/schema";
+import { parsePlan } from "../../lib/apertus/schema";
+import { GRAVITIES } from "../components/resources/GravityPresets";
+import type { MathBoard } from "../components/traits/MathBoards";
+import { bridgeInitializer, useBridgeStore } from "./bridgeSession";
+import { operations, validateCommand } from "./capabilities";
+import { type ActionResult, rejected } from "./commands";
+import type { CompositionDefinition } from "./definition";
+import {
+  elementaryInitializer,
+  isElementaryDemo,
+  useElementaryStore,
+} from "./elementarySession";
+import { isMathDemo } from "./mathModel";
+import { mathInitializer, useMathStore } from "./mathSession";
+import {
+  projectileInitializer,
+  projectileInstance,
+  useProjectileStore,
+} from "./projectileSession";
+import {
+  parseRecipe,
+  type Recipe,
+  resolveRecipe,
+  serializeRecipe,
+} from "./resolver";
+import { townInitializer, useTownStore } from "./townSession";
+import type { DemoType, UIAction } from "./types";
+import { resolveComposition, stageComposition } from "./validation";
+
+let active: DemoType | null = null,
+  frame = 0,
+  sequence = 0,
+  revision = 0,
+  sessionId = "";
+let definition: CompositionDefinition | null = null,
+  acceptedRecipe: Recipe | null = null;
+export function disposeSession() {
+  if (typeof cancelAnimationFrame !== "undefined") cancelAnimationFrame(frame);
+  active = null;
+  definition = null;
+  acceptedRecipe = null;
+  sessionId = "";
+  useMathStore.getState().pause();
+}
+function data<T extends object>(state: T): Partial<T> {
+  return structuredClone(
+    Object.fromEntries(
+      Object.entries(state).filter(([, v]) => typeof v !== "function"),
+    ),
+  ) as Partial<T>;
+}
+function candidate<T extends object>(
+  initializer: StateCreator<T>,
+  source: StoreApi<T>,
+): StoreApi<T> {
+  const store = createStore(initializer);
+  store.setState(data(source.getState()));
+  return store;
+}
+function stores(demo: DemoType) {
+  if (demo === "projectile")
+    return {
+      candidate: candidate(projectileInitializer, useProjectileStore),
+      live: useProjectileStore,
+    };
+  if (demo === "bridge")
+    return {
+      candidate: candidate(bridgeInitializer, useBridgeStore),
+      live: useBridgeStore,
+    };
+  if (demo === "town")
+    return {
+      candidate: candidate(townInitializer, useTownStore),
+      live: useTownStore,
+    };
+  if (isMathDemo(demo))
+    return {
+      candidate: candidate(mathInitializer, useMathStore),
+      live: useMathStore,
+    };
+  return {
+    candidate: candidate(elementaryInitializer, useElementaryStore),
+    live: useElementaryStore,
+  };
+}
+function route(
+  demo: DemoType,
+  command: UIAction,
+  store: ReturnType<typeof stores>["candidate"],
+): ActionResult {
+  const state = store.getState();
+  try {
+    // The original case-insensitive preset adapter uses the same enum validation.
+    if (command.type === "SET_GRAVITY" && typeof command.value === "string")
+      command = {
+        ...command,
+        value:
+          command.value[0].toUpperCase() + command.value.slice(1).toLowerCase(),
+      };
+    if (command.type !== "SELECT_MEMBER" || command.value !== null)
+      validateCommand(demo, command);
+    const target = command.target;
+    if (target && target !== "session") {
+      const ids =
+        demo === "projectile" && "instances" in state
+          ? state.instances.map((i) => i.id)
+          : demo === "bridge" && "truss" in state
+            ? [state.truss.id, state.truss.load.id]
+            : isMathDemo(demo) && "board" in state
+              ? [state.board.id]
+              : isElementaryDemo(demo) && "id" in state
+                ? [state.id]
+                : [];
+      if (!ids.includes(target))
+        return rejected(`${target}: unknown or unavailable target`);
+      if (
+        operations[demo][command.type].target === "session" &&
+        !isMathDemo(demo) &&
+        !isElementaryDemo(demo)
+      )
+        return rejected(`${target}: ${command.type} requires session target`);
+    }
+    const adapted =
+      target === "session" ? { ...command, target: undefined } : command;
+    // Each trusted store accepts its domain commands after shared schema validation.
+    return (state.dispatch as (c: UIAction) => ActionResult)(adapted);
+  } catch (error) {
+    return rejected(error instanceof Error ? error.message : "Invalid command");
+  }
+}
+function commitCandidate(pair: ReturnType<typeof stores>) {
+  // Domain union is erased only at this store boundary; only staged data is committed.
+  (pair.live.setState as (value: object) => void)(
+    data(pair.candidate.getState()),
+  );
+}
+function runClock(demo: DemoType) {
+  let previous: number | undefined;
+  const identity = sessionId;
+  const tick = (now: number) => {
+    if (active !== demo || identity !== sessionId) return;
+    const delta = previous === undefined ? 0 : (now - previous) / 1000;
+    previous = now;
+    if (demo === "projectile") useProjectileStore.getState().step(delta);
+    if (demo === "town") useTownStore.getState().step(delta);
+    if (isMathDemo(demo)) useMathStore.getState().step(delta);
+    frame = requestAnimationFrame(tick);
+  };
+  if (
+    (demo === "projectile" ||
+      demo === "town" ||
+      (isMathDemo(demo) && demo !== "fraction-builder")) &&
+    typeof requestAnimationFrame !== "undefined"
+  )
+    frame = requestAnimationFrame(tick);
+}
+function initialRecipe(composition: CompositionDefinition): Recipe {
+  const recipe: Recipe = {
+    schemaVersion: 1,
+    composition: { ref: `compositions/${composition.id}`, version: 1 },
+    parameters: {},
+  };
+  if (composition.demo === "projectile") {
+    const names = Object.fromEntries(
+      Object.entries(GRAVITIES).map(([name, value]) => [String(value), name]),
+    );
+    recipe.instances = composition.instances.map((i) => ({
+      id: i.id,
+      prefab: { ref: "prefabs/Projectile", version: 1 },
+      parameters: {
+        angle: Number(i.parameters.angle),
+        speed: Number(i.parameters.velocity),
+        gravityPreset: names[String(i.parameters.gravity)] ?? "unsupported",
+      },
+    }));
+  } else if (composition.demo === "town")
+    recipe.parameters = {
+      time: composition.defaults.time,
+      speed: composition.defaults.speed,
+      playing: composition.defaults.playing,
+    };
+  else if (composition.demo === "bridge")
+    recipe.parameters = Object.fromEntries(
+      ["loadPos", "loadTons", "spanScale", "dense"].map((k) => [
+        k,
+        composition.defaults[k],
+      ]),
+    );
+  else recipe.parameters = structuredClone(composition.instances[0].parameters);
+  return recipe;
+}
+export function activateSession(
+  demo: DemoType,
+  composition: CompositionDefinition = resolveComposition(demo),
+  recipe?: Recipe,
+) {
+  if (composition.demo !== demo) throw new Error("Composition demo mismatch");
+  const staged = stageComposition(composition),
+    pair = stores(demo),
+    state = pair.candidate.getState();
+  if (demo === "projectile" && "instances" in state) {
+    const instances = composition.instances.map((i) =>
+      projectileInstance(
+        i.id,
+        Number(i.parameters.angle),
+        Number(i.parameters.velocity),
+        Number(i.parameters.gravity),
+      ),
+    );
+    state.activate(instances, composition.defaults);
+  } else if (demo === "bridge" && "truss" in state) {
+    state.activate(
+      { ...state.initial, ...composition.defaults },
+      staged[0] as typeof state.truss,
+    );
+  } else if (demo === "town" && "citizens" in state) {
+    const citizens = staged.filter(
+      (i) => "homeId" in i,
+    ) as typeof state.citizens;
+    const buildings = staged.filter(
+      (i) => "building" in i && i.id !== "market",
+    ) as typeof state.buildings;
+    const market = staged.find((i) => i.id === "market") as typeof state.market;
+    state.activate({
+      ...state.initial,
+      ...composition.defaults,
+      citizens,
+      buildings,
+      market,
+    });
+  } else if (isMathDemo(demo) && "board" in state)
+    state.activate(demo, staged[0] as MathBoard);
+  else if (isElementaryDemo(demo) && "parameters" in state)
+    state.activate(
+      demo,
+      composition.instances[0].id,
+      composition.instances[0].parameters,
+    );
+  else throw new Error("No activation adapter for composition");
+  // All resolution and initialization complete before the previous clock/world is disposed.
+  disposeSession();
+  commitCandidate(pair);
+  active = demo;
+  definition = composition;
+  acceptedRecipe = recipe ?? initialRecipe(composition);
+  sessionId = `experiment-${++sequence}`;
+  revision = 0;
+  runClock(demo);
+  return composition;
+}
+export function dispatchBatch(
+  demo: DemoType,
+  commands: UIAction[],
+): ActionResult {
+  if (active !== demo) return rejected("This experiment is not active");
+  if (commands.length < 1 || commands.length > 8)
+    return rejected("A batch requires 1–8 commands");
+  const pair = stores(demo);
+  for (const [index, c] of commands.entries()) {
+    const result = route(demo, c, pair.candidate);
+    if (!result.accepted)
+      return rejected(
+        `commands[${index}] ${c.target ?? "session"}: ${result.error}`,
+      );
+  }
+  commitCandidate(pair);
+  revision++;
+  return { accepted: true };
+}
+export function dispatchCommand(demo: DemoType, command: UIAction) {
+  return dispatchBatch(demo, [command]);
+}
+export function executePlan(input: Plan): ActionResult & { demo?: DemoType } {
+  try {
+    const plan = parsePlan(input, active, getExperimentContext());
+    if (plan.operation === "unsupported" || plan.operation === "clarify")
+      return { accepted: true };
+    if (plan.operation === "create") {
+      const { message: _message, operation: _operation, ...recipe } = plan;
+      const resolved = resolveRecipe(recipe);
+      activateSession(resolved.demo, resolved, recipe);
+      return { accepted: true, demo: resolved.demo };
+    }
+    if (
+      plan.sessionId !== sessionId ||
+      plan.expectedRevision !== revision ||
+      !active
+    )
+      return rejected("Stale plan: the experiment has changed");
+    return dispatchBatch(
+      active,
+      plan.commands.map((c: TargetedCommand) => ({
+        type: c.action,
+        target: c.target,
+        ...c.arguments,
+      })),
+    );
+  } catch (error) {
+    return rejected(error instanceof Error ? error.message : "Invalid plan");
+  }
+}
+export function getExperimentContext(): ExperimentContext | null {
+  if (!active || !definition) return null;
+  const actions = Object.keys(operations[active]);
+  let instances: ExperimentContext["instances"];
+  if (active === "projectile")
+    instances = useProjectileStore.getState().instances.map((i, index) => ({
+      id: i.id,
+      label:
+        index === 0
+          ? "Primary projectile"
+          : index === 1
+            ? "Second projectile"
+            : `Projectile ${index + 1}`,
+      parameters: {
+        angle: i.launch.angle,
+        speed: i.launch.velocity,
+        gravity: i.gravity,
+        trajectoryVisible: i.trajectoryVisible,
+      },
+      outputs: {
+        range: i.metrics.range,
+        maxHeight: i.metrics.maxHeight,
+        duration: i.metrics.duration,
+      },
+      actions,
+    }));
+  else if (active === "bridge") {
+    const s = useBridgeStore.getState();
+    instances = [
+      {
+        id: s.truss.load.id,
+        label: "Bridge load",
+        parameters: {
+          loadPos: s.loadPos,
+          loadTons: s.loadTons,
+          spanScale: s.spanScale,
+          dense: s.dense,
+        },
+        outputs: {
+          supportShares: s.response.supportShares,
+          maxResponseScore: Math.max(
+            0,
+            ...Object.values(s.response.responses).map((r) => r.score),
+          ),
+        },
+        actions,
+      },
+    ];
+  } else if (active === "town") {
+    const s = useTownStore.getState();
+    instances = [
+      {
+        id: "town",
+        label: "Town schedule",
+        parameters: {
+          time: s.time,
+          speed: s.speed,
+          roadClosed: s.roadClosed,
+          marketBusy: s.marketBusy,
+        },
+        outputs: {
+          citizens: s.citizens.length,
+          traveling: s.citizens.filter((c) => c.status === "traveling").length,
+        },
+        actions,
+      },
+    ];
+  } else if (isMathDemo(active)) {
+    const b = useMathStore.getState().board;
+    const parameters = Object.fromEntries(
+      Object.entries(b).filter(
+        ([key]) =>
+          ![
+            "tokens",
+            "baskets",
+            "bars",
+            "sequence",
+            "visual",
+            "jumps",
+            "feedback",
+            "id",
+            "demo",
+          ].includes(key),
+      ),
+    );
+    if ("bars" in b) parameters.bars = b.bars.map((bar) => ({ ...bar.value }));
+    const outputs: Record<string, unknown> = { feedback: b.feedback };
+    if ("result" in b) outputs.result = b.result;
+    if ("quotient" in b) {
+      outputs.quotient = b.quotient;
+      outputs.remainder = b.remainder;
+    }
+    if ("relation" in b) outputs.relation = b.relation;
+    if ("target" in b)
+      outputs.count = b.tokens.filter((t) =>
+        b.mode === "count" ? t.ordinal !== null : t.zone === 1,
+      ).length;
+    instances = [
+      {
+        id: b.id,
+        label: "Math board",
+        parameters,
+        outputs,
+        actions,
+      },
+    ];
+  } else {
+    const s = useElementaryStore.getState();
+    instances = [
+      {
+        id: s.id,
+        label: "Activity board",
+        parameters: s.parameters,
+        outputs: s.outputs,
+        actions,
+      },
+    ];
+  }
+  return {
+    sessionId,
+    revision,
+    composition: { ref: `compositions/${definition.id}`, version: 1 },
+    instances,
+    views: [...definition.components.views],
+    assumptions: [...definition.assumptions],
+  };
+}
+export function getActiveDefinition() {
+  return definition;
+}
+/** Saves the accepted initial recipe, not a running checkpoint. */
+export function saveRecipe() {
+  if (!acceptedRecipe) throw new Error("No active recipe");
+  return serializeRecipe(acceptedRecipe);
+}
+export function loadRecipe(text: string) {
+  const recipe = parseRecipe(text),
+    resolved = resolveRecipe(recipe);
+  return activateSession(resolved.demo, resolved, recipe);
+}

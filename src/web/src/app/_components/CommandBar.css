@@ -1,0 +1,74 @@
+.command-bar {
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+  padding: 16px 24px 18px;
+  position: relative;
+}
+
+.command-bar__confirm {
+  position: relative;
+  margin-bottom: 10px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--ok);
+}
+
+.command-bar__form {
+  display: flex;
+  gap: 8px;
+}
+
+.command-bar__input {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  outline: none;
+}
+
+.command-bar__input:focus {
+  border-color: var(--accent);
+}
+
+.command-bar__input::placeholder {
+  color: var(--text-dim);
+}
+
+.command-bar__send {
+  background: var(--accent);
+  color: #fffbed;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-size: 22px;
+}
+
+.command-bar__send:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.command-bar__chips {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.command-bar__chip {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.command-bar__chip:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}

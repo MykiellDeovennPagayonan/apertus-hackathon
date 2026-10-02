@@ -1,0 +1,93 @@
+import {
+  type CompositionDefinition,
+  immutable,
+} from "../../runtime/definition";
+
+const defaultsShape = {
+  spanScale: 1,
+  dense: false as boolean,
+  loadPos: 0.5,
+  loadTons: 10,
+  removedMember: null as string | null,
+  selectedMember: null as string | null,
+  buildNonce: 0,
+};
+export const BridgeExperiment = immutable({
+  id: "BridgeExperiment",
+  demo: "bridge",
+  version: 1,
+  plane: "xy",
+  units: "normalized truss coordinates",
+  rendering: "svg",
+  components: {
+    resources: ["BridgeStyles"],
+    traits: [
+      "Transform2D",
+      "VisualBinding",
+      "TrussSettings",
+      "MemberEndpoints",
+      "MemberResponse",
+      "BridgeLoad",
+    ],
+    behaviors: [],
+    systems: ["HeuristicBridgeResponseSystem"],
+    visuals: [
+      "ShapeVisual2D",
+      "BeamVisual",
+      "LoadTruckVisual",
+      "BridgeSupportVisual",
+    ],
+    views: ["ExperimentView", "SVGWorldView", "MemberInspector", "LegendView"],
+    controls: [
+      "ParameterSlider",
+      "ActionButton",
+      "SelectionControl",
+      "BridgeControls",
+      "PromptControl",
+    ],
+    prefabs: ["Joint", "Member", "BridgeLoad", "TrussAssembly"],
+    compositions: ["BridgeExperiment"],
+  },
+  systems: ["HeuristicBridgeResponseSystem"],
+  defaults: defaultsShape,
+
+  layout: "scene-and-inspector",
+  viewSettings: {
+    width: 800,
+    height: 400,
+    deckY: 240,
+    leftPad: 60,
+    revealStages: 6,
+    revealDelay: 300,
+    revealInterval: 260,
+  },
+  measurements: ["memberResponse", "supportShares"],
+  instances: [
+    {
+      id: "bridge",
+      prefab: "TrussAssembly",
+      parameters: {
+        spanScale: 1,
+        dense: false as boolean,
+        loadPos: 0.5,
+        loadTons: 10,
+      },
+    },
+  ],
+  actions: [
+    "MOVE_LOAD",
+    "SET_LOAD",
+    "DOUBLE_LENGTH",
+    "NORMAL_LENGTH",
+    "MORE_TRIANGLES",
+    "REMOVE_MIDDLE",
+    "SELECT_MEMBER",
+    "REBUILD",
+    "RESET",
+  ],
+  assumptions: [
+    "Conceptual heuristic response; scores are dimensionless.",
+    "Support values are conceptual load shares in the demo tonne convention.",
+    "Sag is illustrative display displacement, not structural deflection.",
+  ],
+} satisfies CompositionDefinition & { defaults: typeof defaultsShape });

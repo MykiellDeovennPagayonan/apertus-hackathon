@@ -1,0 +1,8 @@
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver
+
+# Keep Framer Motion's internal APIs compatible; 13.5 removes observeTimeline.
+overrides:
+  motion-dom: 13.4.5
+  motion-utils: 13.3.0

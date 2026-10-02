@@ -1,0 +1,37 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "biome check",
+    "format": "biome format --write",
+    "test": "node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs",
+    "test:apertus": "node scripts/verify-apertus.cjs",
+    "test:browser": "node scripts/verify-browser.cjs",
+    "test:apertus:live": "node scripts/evaluate-apertus-live.cjs"
+  },
+  "dependencies": {
+    "@react-three/drei": "10.7.9",
+    "@react-three/fiber": "9.8.1",
+    "framer-motion": "13.4.5",
+    "next": "16.3.8",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "three": "0.186.1",
+    "zustand": "5.0.15"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.2",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/three": "0.186.0",
+    "babel-plugin-react-compiler": "1.0.0",
+    "playwright": "1.63.0",
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@10.14.0"
+}

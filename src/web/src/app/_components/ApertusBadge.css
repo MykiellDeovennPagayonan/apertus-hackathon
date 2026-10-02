@@ -1,0 +1,15 @@
+.apertus-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  font: 11px / 1.3 var(--font-sans);
+}
+
+.apertus-badge svg {
+  flex-shrink: 0;
+}

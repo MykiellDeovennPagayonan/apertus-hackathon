@@ -1,0 +1,67 @@
+.town-demo {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.town-demo__scene {
+  flex: 1 1;
+  min-height: 0;
+}
+.town-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin: 0 16px 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.town-controls__time {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  min-width: 260px;
+}
+.town-controls__time input {
+  flex: 1 1;
+}
+.town-controls button {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 12px;
+}
+.town-controls button.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.town-controls__count {
+  margin-left: auto;
+}
+.town-controls__badge {
+  color: var(--warn);
+  border: 1px solid var(--warn);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 11px;
+}
+.town-building-label {
+  display: block;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: #fffbefed;
+  border: 1px solid #d5cdbb;
+  box-shadow: 0 3px 12px #283d4220;
+  color: #365c52;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+  pointer-events: none;
+}

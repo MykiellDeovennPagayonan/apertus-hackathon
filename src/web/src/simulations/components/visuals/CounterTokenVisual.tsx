@@ -1,0 +1,45 @@
+import { ShapeVisual2D } from "./ShapeVisual2D";
+export function CounterTokenVisual({
+  id,
+  x,
+  y,
+  ordinal,
+  active = false,
+  color = "#245bcb",
+  radius = 23,
+}: {
+  id: string;
+  x: number;
+  y: number;
+  ordinal?: number | null;
+  active?: boolean;
+  color?: string;
+  radius?: number;
+}) {
+  return (
+    <g
+      className="math-token"
+      style={{ transform: `translate(${x}px, ${y}px)` }}
+    >
+      <circle r={Math.max(radius, 34)} fill="transparent" />
+      <ShapeVisual2D
+        identity={id}
+        r={radius}
+        fill={active ? color : "#eef2fb"}
+        stroke={color}
+        strokeWidth={2}
+      />
+      {ordinal != null && (
+        <text
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill={active ? "white" : color}
+          fontSize={Math.max(18, radius * 0.7)}
+          fontWeight={700}
+        >
+          {ordinal}
+        </text>
+      )}
+    </g>
+  );
+}

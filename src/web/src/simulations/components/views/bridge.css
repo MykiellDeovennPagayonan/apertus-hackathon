@@ -1,0 +1,71 @@
+.bridge-demo {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding: 12px;
+  position: relative;
+  margin: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fffcf3, #eee9dc);
+  overflow: hidden;
+}
+.bridge-demo__inspector {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  min-width: 180px;
+}
+.bridge-demo__inspector b {
+  font-size: 13px;
+}
+.bridge-demo__inspector span {
+  color: var(--text-dim);
+}
+.bridge-demo__disclaimer {
+  font-size: 10px;
+  margin-top: 4px;
+  opacity: 0.7;
+}
+.bridge-controls {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 0 16px 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.bridge-controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.bridge-controls label span {
+  color: var(--text);
+}
+.bridge-controls button {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+.bridge-controls button:hover {
+  border-color: var(--accent);
+}
+.bridge-controls__note {
+  margin-left: auto;
+  font-size: 11px;
+  opacity: 0.7;
+}
