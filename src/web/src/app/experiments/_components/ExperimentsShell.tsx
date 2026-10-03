@@ -8,10 +8,12 @@ import type { Plan } from "../../../lib/planner/schema";
 import { isDemo } from "../../../lib/planner/schema";
 import { ControlsTarget } from "../../../simulations/components/views/ControlsOverlay";
 import { ExperimentView } from "../../../simulations/components/views/ExperimentView";
+import { modelProvider } from "../../../simulations/runtime/assembly";
 import { templateNames } from "../../../simulations/runtime/capabilities";
 import {
   disposeSession,
   executePlan,
+  getActiveDefinition,
   getDiagnosticSnapshot,
   getExperimentContext,
   saveRecipe,
@@ -25,6 +27,7 @@ import "../../_components/LandingPage.css";
 import "./ExperimentsShell.css";
 
 const CHIPS: Partial<Record<DemoType, string[]>> = {
+  assembly: ["Reset"],
   gas: ["Heat it up", "Add more gas", "Why did the pressure increase?"],
   ratio: ["Show 25 percent", "Set the ratio to 3 out of 5"],
   "area-perimeter": ["Make a rectangle 6 metres by 4 metres"],
@@ -200,7 +203,7 @@ export default function ExperimentsShell({
         setStatus(null);
         return;
       }
-      if (!isDemo(selectedExperiment)) {
+      if (!isDemo(selectedExperiment) || selectedExperiment === "assembly") {
         disposeSession();
         setDemo(null);
         setPhase("catalog");
@@ -380,28 +383,41 @@ export default function ExperimentsShell({
         ref={workspace}
         className={`experiment-workspace${demo === "town" ? " experiment-workspace--3d" : ""}`}
       >
-        <header className="workspace-identity">
-          <button type="button" onClick={goHome}>
-            ← {landing ? "Back to the lab" : "Experiments"}
-          </button>
-          <h1>{demo ? premadeExperiments[demo].title : ""}</h1>
-        </header>
-        <nav className="workspace-toolbar" aria-label="Experiment tools">
-          <button
-            ref={controlsButton}
-            type="button"
-            aria-expanded={controlsOpen}
-            aria-controls="experiment-controls"
-            onClick={() => setControlsOpen(!controlsOpen)}
-          >
-            More settings{" "}
-            <span aria-hidden="true">{controlsOpen ? "−" : "+"}</span>
-          </button>
-          <button type="button" onClick={downloadRecipe}>
-            Save recipe
-          </button>
-          <Link href="/">Home</Link>
-        </nav>
+        <div className="workspace-header">
+          <header className="workspace-identity">
+            <button type="button" onClick={goHome}>
+              ← {landing ? "Back to the lab" : "Experiments"}
+            </button>
+            <h1>
+              {demo
+                ? demo === "assembly"
+                  ? getActiveDefinition()?.assembly?.title
+                    ? modelProvider(
+                        getActiveDefinition()?.assembly?.instances[0].prefab
+                          .ref ?? "",
+                      ).name
+                    : "Interactive lesson"
+                  : premadeExperiments[demo].title
+                : ""}
+            </h1>
+          </header>
+          <nav className="workspace-toolbar" aria-label="Experiment tools">
+            <button
+              ref={controlsButton}
+              type="button"
+              aria-expanded={controlsOpen}
+              aria-controls="experiment-controls"
+              onClick={() => setControlsOpen(!controlsOpen)}
+            >
+              More settings{" "}
+              <span aria-hidden="true">{controlsOpen ? "−" : "+"}</span>
+            </button>
+            <button type="button" onClick={downloadRecipe}>
+              Save recipe
+            </button>
+            <Link href="/">Home</Link>
+          </nav>
+        </div>
         <aside
           id="experiment-controls"
           className="workspace-controls"

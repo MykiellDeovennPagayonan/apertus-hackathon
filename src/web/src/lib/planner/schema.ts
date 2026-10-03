@@ -167,6 +167,7 @@ export function parsePlan(
       "parameters",
       "instances",
       "views",
+      "assembly",
       "message",
     ]);
     const { operation: _operation, message: _message, ...recipe } = input;

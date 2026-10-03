@@ -13,6 +13,7 @@ import { DomainObservationViews } from "./DomainObservationViews";
 import { ElementaryExperimentView } from "./ElementaryExperimentView";
 import { GasPressureView } from "./GasPressureView";
 import { MathExperimentView } from "./MathExperimentView";
+import { AssemblyView } from "./math-foundations/AssemblyView";
 import { ProjectileObservationViews } from "./ProjectileObservationViews";
 import { ProjectileScene } from "./ProjectileScene";
 import { XYGraphView } from "./XYGraphView";
@@ -22,6 +23,7 @@ const ThreeWorldView = dynamic(() => import("./ThreeWorldView"), {
   loading: () => <div aria-live="polite">Loading the town…</div>,
 });
 export function ExperimentView({ demo }: { demo: DemoType }) {
+  if (demo === "assembly") return <AssemblyView />;
   if (demo === "gas") return <GasPressureView />;
   if (isMathDemo(demo)) return <MathExperimentView demo={demo} />;
   if (isElementaryDemo(demo)) return <ElementaryExperimentView />;

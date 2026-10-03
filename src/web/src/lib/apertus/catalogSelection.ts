@@ -3,7 +3,7 @@ import { definitions } from "../../simulations/runtime/catalog";
 import type { DemoType } from "../../simulations/runtime/types";
 import { compositions } from "../../simulations/runtime/validation";
 
-const topics: Record<DemoType, RegExp> = {
+const topics: Record<Exclude<DemoType, "assembly">, RegExp> = {
   gas: /gas|pressure|temperature|volume/i,
   projectile:
     /\b(projectiles?|launch(?:es|ing)?|angles?|gravity|moon|mars|throw(?:ing)?|ballistic|trajector(?:y|ies)|sweeps?)\b/i,
@@ -21,11 +21,12 @@ const topics: Record<DemoType, RegExp> = {
   probability: /\b(probability|coins?|dice|die|trials?|random)\b/i,
 };
 export function selectCapabilities(prompt: string, demo: DemoType | null) {
+  if (demo === "assembly") return [];
   const selected = demo
     ? [demo]
     : Object.entries(topics)
         .filter(([, pattern]) => pattern.test(prompt))
-        .map(([key]) => key as DemoType);
+        .map(([key]) => key as Exclude<DemoType, "assembly">);
   const refs = new Set<string>();
   for (const model of selected) {
     refs.add(`compositions/${templateNames[model]}`);

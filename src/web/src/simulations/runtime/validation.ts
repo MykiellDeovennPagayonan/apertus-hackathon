@@ -15,6 +15,7 @@ import { FractionBuilderExperiment } from "../pre-made/fraction-builder";
 import { FractionNumberLineExperiment } from "../pre-made/fraction-number-line";
 import { ProjectileExperiment } from "../pre-made/projectile";
 import { TownExperiment } from "../pre-made/town";
+import { compileAssembly } from "./assembly";
 import { templateNames, templateParameters } from "./capabilities";
 import { definitions } from "./catalog";
 import { validNumber } from "./commands";
@@ -38,6 +39,13 @@ export const compositions = {
   town: TownExperiment,
 };
 export function stageComposition(composition: CompositionDefinition) {
+  if (composition.demo === "assembly") {
+    if (!composition.assembly) throw new Error("Missing generated assembly");
+    const compiled = compileAssembly(composition.assembly);
+    if (JSON.stringify(compiled.definition) !== JSON.stringify(composition))
+      throw new Error("Generated definition differs from compiled assembly");
+    return compiled.instances;
+  }
   if (!definitions.has(`compositions/${composition.id}`))
     throw new Error(`${composition.id}: unknown composition definition`);
   const canonical = compositions[composition.demo];
@@ -293,6 +301,8 @@ export function stageComposition(composition: CompositionDefinition) {
   return staged;
 }
 export function resolveComposition(demo: DemoType) {
+  if (demo === "assembly")
+    throw new Error("Generated experiments require an assembly recipe");
   const composition = compositions[demo];
   if (!composition) throw new Error(`Unknown composition: ${demo}`);
   stageComposition(composition);

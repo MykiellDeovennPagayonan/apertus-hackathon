@@ -231,7 +231,7 @@ for (const [id, kind] of additions)
       ? { target: "svg" as const }
       : {}),
   });
-const descriptions: Record<DemoType, string> = {
+const descriptions: Record<Exclude<DemoType, "assembly">, string> = {
   gas: "Equilibrium ideal-gas pressure P=nRT/V with illustrative particles; explore volume, temperature and amount",
   projectile:
     "Analytic ground-to-ground projectile launches, independent comparisons and angle sweeps",
@@ -257,7 +257,7 @@ for (const [demo, id] of Object.entries(templateNames)) {
     version: 1,
   };
   Object.assign(definition, {
-    description: descriptions[demo as DemoType],
+    description: descriptions[demo as Exclude<DemoType, "assembly">],
     parameters: templateParameters(ref),
     operations: operations[demo as DemoType],
   });

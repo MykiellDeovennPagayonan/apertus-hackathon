@@ -1,7 +1,7 @@
 import type { DemoType } from "../../../simulations/runtime/types";
 
 export const premadeExperiments: Record<
-  DemoType,
+  Exclude<DemoType, "assembly">,
   {
     title: string;
     description: string;

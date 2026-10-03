@@ -6,6 +6,9 @@ Date: 2026-10-03. Status: implementation and acceptance plan; all new cases Not 
 
 Implement the fifteen exact prompts in [the prompt catalog](../../PROMPT_CATALOG.md#prompts). Each must create a useful interactive experiment through fresh Apertus interpretation, meaningful Laya selection, validated component assembly, and deterministic execution. The user should not choose component IDs or provide missing educational defaults.
 
+> [!IMPORTANT]
+> **Mocks are forbidden for final checking and acceptance.** Every final browser check, qualifying round, and claim that a prompt works must submit the exact learner prompt through the normal application flow and use fresh responses from the real configured Apertus and Laya services. Mocked, stubbed, intercepted, replayed, cached, prerecorded, or hardcoded model responses may be used only for development-level unit or integration tests. They cannot count as final verification, cannot satisfy live-model provenance, and cannot justify `Working (2/2)` or any equivalent completion claim. If either Apertus or Laya is unavailable, final checking is **blocked**, not replaced with a mock.
+
 Follow [component contracts](../COMPONENT_CONTRACTS.md), [overview](../OVERVIEW.md), [005 creation contracts](005-SHORT_PROMPT_SIMULATION_CREATION.md), and [application design conventions](../design/APPLICATION_DESIGN.md). This plan strengthens the assembly requirement for these fifteen new cases: selecting a complete premade experiment and changing its parameters is insufficient. Existing experiments can retain their compatible legacy path.
 
 This document authorizes no claims of implementation or successful testing. Its five-agent allocation is a future implementation workflow, not a request to launch agents while writing documentation.
@@ -261,6 +264,12 @@ Independent numerical checks must not calculate the expected result by calling t
 
 ## 6. Live-model and Playwright MCP protocol
 
+### Mandatory real-model gate: no mocks
+
+Final checking must exercise both real model boundaries for every fresh creation: Apertus must interpret and configure the request, and Laya must make the required registry-derived selection. Browser request interception, synthetic `/api/apertus` responses, deterministic planner fixtures, saved model payloads, or any other bypass of either live service automatically disqualifies the run. Such fixtures remain useful for development regression tests, but reports must label them **non-qualifying mocked evidence**.
+
+Before counting a browser case, verify its correlation-linked diagnostics contain a fresh Apertus teaching intent, the actual Laya question/answer and accepted decision, a fresh Apertus configuration, the compiled recipe, successful staged validation, and the committed runtime revision. Missing provenance from either model fails the case. A fallback path that omits Apertus or Laya also fails the case, even when the visible simulation and numerical results appear correct.
+
 Start services using current repository instructions (currently root `make run-apertus`, `make run-laya`, `make run-web`). Verify actual readiness and hybrid configuration, then discover the available Playwright MCP tools and how they expose context, screenshots, console, and network evidence. Do not invent tool names or substitute another browser tool silently. If MCP or either model is unavailable, preserve the blocker and continue independent implementation; acceptance remains incomplete.
 
 For each of the fifteen canonical prompts, at **1440×900 and 390×844**, in a fresh isolated session:
@@ -346,3 +355,9 @@ Keep the codebase small: delete raw Playwright data as soon as analysis of the r
 6. At handoff and final acceptance, check repository status and the task-owned artifact directories for leftover generated data. Remove analyzed leftovers. An interrupted run may retain temporary data only until analysis resumes; record the owner and pending cleanup explicitly.
 
 Analysis and compact reporting happen before deletion; never discard unexamined evidence and mark a test passed. Raw captures need not survive into round two or final delivery once their results have been analyzed and recorded. Cleanup of browser data does not change the executable candidate or reset the pass streak. Keep the small final report and pass/fail history; do not retain bulky browser artifacts just to substantiate catalog status.
+
+## Agent A development update — 2026-10-03
+
+Agent A implemented the versioned assembly path and math-foundations providers for ALG-001, LINE-001 and PI-001. The [development handoff](006-validation/development/math-foundations/handoff.md) records the contribution interface, bounded recipe, provider IDs, numerical limits, commands, presentation adapters, and the remaining domain integration requests. Fresh creation selects object mechanisms and compiles model-authored instances/observations; it does not add premade catalog entries or English keyword routes. Legacy regression checks remain in scope.
+
+This is development implementation, not final acceptance. The catalog's Agent A entries are Implemented / unverified. Playwright MCP is unavailable in this session, and Agents B–E's contributions are not present. Supplemental browser CLI and live-model development results belong in the retained development reports; both complete fifteen-prompt qualifying rounds remain Not run and the consecutive pass count remains zero.

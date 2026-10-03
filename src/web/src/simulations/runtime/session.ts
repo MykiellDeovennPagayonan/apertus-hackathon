@@ -8,6 +8,8 @@ import { parsePlan } from "../../lib/planner/schema";
 import { GRAVITIES } from "../components/resources/GravityPresets";
 import type { GasState } from "../components/traits/GasState";
 import type { MathBoard } from "../components/traits/MathBoards";
+import { modelProvider } from "./assembly";
+import { assemblyInitializer, useAssemblyStore } from "./assemblySession";
 import { bridgeInitializer, useBridgeStore } from "./bridgeSession";
 import { operations, validateCommand } from "./capabilities";
 import { type ActionResult, rejected } from "./commands";
@@ -82,6 +84,11 @@ function candidate<T extends object>(
   return store;
 }
 function stores(demo: DemoType) {
+  if (demo === "assembly")
+    return {
+      candidate: candidate(assemblyInitializer, useAssemblyStore),
+      live: useAssemblyStore,
+    };
   if (demo === "gas")
     return {
       candidate: candidate(gasInitializer, useGasStore),
@@ -131,7 +138,7 @@ function route(
     const target = command.target;
     if (target && target !== "session") {
       const ids =
-        demo === "projectile" && "instances" in state
+        (demo === "assembly" || demo === "projectile") && "instances" in state
           ? state.instances.map((i) => i.id)
           : demo === "bridge" && "truss" in state
             ? [state.truss.id, state.truss.load.id]
@@ -173,6 +180,7 @@ function runClock(demo: DemoType) {
     const reduced =
       typeof matchMedia !== "undefined" &&
       matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (demo === "assembly") useAssemblyStore.getState().step(delta);
     if (demo === "projectile")
       useProjectileStore.getState().step(reduced ? 60 : delta);
     if (demo === "town") useTownStore.getState().step(delta);
@@ -181,7 +189,11 @@ function runClock(demo: DemoType) {
     frame = requestAnimationFrame(tick);
   };
   if (
-    (demo === "gas" ||
+    ((demo === "assembly" &&
+      useAssemblyStore
+        .getState()
+        .instances.some((i) => modelProvider(i.provider).step)) ||
+      demo === "gas" ||
       demo === "projectile" ||
       demo === "town" ||
       (isMathDemo(demo) && demo !== "fraction-builder")) &&
@@ -190,6 +202,13 @@ function runClock(demo: DemoType) {
     frame = requestAnimationFrame(tick);
 }
 function initialRecipe(composition: CompositionDefinition): Recipe {
+  if (composition.demo === "assembly" && composition.assembly)
+    return {
+      schemaVersion: 1,
+      composition: { ref: "assemblies/GeneratedExperiment", version: 1 },
+      parameters: {},
+      assembly: structuredClone(composition.assembly),
+    };
   const recipe: Recipe = {
     schemaVersion: 1,
     composition: { ref: `compositions/${composition.id}`, version: 1 },
@@ -233,12 +252,18 @@ export function activateSession(
   const staged = stageComposition(composition),
     pair = stores(demo),
     state = pair.candidate.getState();
-  if (demo === "gas" && "inputs" in state) {
+  if (demo === "assembly" && "assembly" in state && composition.assembly) {
+    state.activate(composition.assembly);
+  } else if (demo === "gas" && "inputs" in state) {
     state.activate(
       composition.instances[0].id,
       composition.instances[0].parameters as unknown as GasState,
     );
-  } else if (demo === "projectile" && "instances" in state) {
+  } else if (
+    demo === "projectile" &&
+    "instances" in state &&
+    !("assembly" in state)
+  ) {
     const instances = composition.instances.map((i) =>
       projectileInstance(
         i.id,
@@ -295,7 +320,13 @@ export function dispatchBatch(
   if (active !== demo) return rejected("This experiment is not active");
   if (commands.length < 1 || commands.length > 8)
     return rejected("A batch requires 1–8 commands");
-  const before = getExperimentContext()?.instances[0];
+  const changeTarget = commands.find(
+    (command) => command.target && command.target !== "session",
+  )?.target;
+  const contextBefore = getExperimentContext();
+  const before = changeTarget
+    ? contextBefore?.instances.find((instance) => instance.id === changeTarget)
+    : contextBefore?.instances[0];
   const pair = stores(demo);
   for (const [index, c] of commands.entries()) {
     const result = route(demo, c, pair.candidate);
@@ -306,7 +337,10 @@ export function dispatchBatch(
   }
   commitCandidate(pair);
   revision++;
-  const after = getExperimentContext()?.instances[0];
+  const contextAfter = getExperimentContext();
+  const after = changeTarget
+    ? contextAfter?.instances.find((instance) => instance.id === changeTarget)
+    : contextAfter?.instances[0];
   if (commands.some((c) => c.type === "RESET")) recentChange = undefined;
   else if (
     before &&
@@ -346,7 +380,7 @@ export function executePlan(input: Plan): ActionResult & { demo?: DemoType } {
       !active
     )
       return rejected("Stale plan: the experiment has changed");
-    return dispatchBatch(
+    const result = dispatchBatch(
       active,
       plan.commands.map((c: TargetedCommand) => ({
         type: c.action,
@@ -354,6 +388,9 @@ export function executePlan(input: Plan): ActionResult & { demo?: DemoType } {
         ...c.arguments,
       })),
     );
+    if (result.accepted)
+      correlationId = planCorrelations.get(input) ?? correlationId;
+    return result;
   } catch (error) {
     return rejected(error instanceof Error ? error.message : "Invalid plan");
   }
@@ -362,7 +399,15 @@ export function getExperimentContext(): ExperimentContext | null {
   if (!active || !definition) return null;
   const actions = Object.keys(operations[active]);
   let instances: ExperimentContext["instances"];
-  if (active === "gas") {
+  if (active === "assembly") {
+    instances = useAssemblyStore.getState().instances.map((i) => ({
+      id: i.id,
+      label: i.label,
+      parameters: structuredClone(i.parameters),
+      outputs: structuredClone(i.outputs),
+      actions: Object.keys(modelProvider(i.provider).actions),
+    }));
+  } else if (active === "gas") {
     const s = useGasStore.getState();
     instances = [
       {
@@ -491,7 +536,13 @@ export function getExperimentContext(): ExperimentContext | null {
     sessionId,
     revision,
     ...(recentChange ? { recentChange } : {}),
-    composition: { ref: `compositions/${definition.id}`, version: 1 },
+    composition: {
+      ref:
+        active === "assembly"
+          ? "assemblies/GeneratedExperiment"
+          : `compositions/${definition.id}`,
+      version: 1,
+    },
     instances,
     views: [...definition.components.views],
     assumptions: [...definition.assumptions],

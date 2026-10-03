@@ -1,3 +1,4 @@
+import { registeredAssemblyActions } from "./assembly";
 import {
   boolean,
   choice,
@@ -58,6 +59,10 @@ export const taskSchemas = {
   }),
 };
 export const operations: Record<DemoType, Record<string, OperationMetadata>> = {
+  assembly: {
+    ...registeredAssemblyActions(),
+    RESET: playback.RESET,
+  },
   gas: {
     SET_VOLUME: operation(num(0.25, 2, "L")),
     SET_TEMPERATURE: operation(num(100, 600, "K")),
@@ -209,7 +214,7 @@ export function validateCommand(demo: DemoType, command: UIAction) {
     command.type,
   );
 }
-export const templateNames: Record<DemoType, string> = {
+export const templateNames: Record<Exclude<DemoType, "assembly">, string> = {
   gas: "GasPressureExperiment",
   projectile: "ProjectileExperiment",
   bridge: "BridgeExperiment",
@@ -225,6 +230,7 @@ export const templateNames: Record<DemoType, string> = {
   probability: "ProbabilityExperiment",
 };
 export function templateDemo(ref: string): DemoType {
+  if (ref === "assemblies/GeneratedExperiment") return "assembly";
   const entry = Object.entries(templateNames).find(
     ([, id]) => ref === `compositions/${id}`,
   );
@@ -240,6 +246,7 @@ export function templateDemo(ref: string): DemoType {
 }
 export function templateParameters(ref: string): ParameterSchema {
   const demo = templateDemo(ref);
+  if (demo === "assembly") return object({});
   if (demo === "gas")
     return object(
       {

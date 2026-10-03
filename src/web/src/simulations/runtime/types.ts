@@ -1,5 +1,6 @@
 import type { MathDemo } from "../components/traits/MathBoards";
 export type DemoType =
+  | "assembly"
   | "gas"
   | "projectile"
   | "bridge"

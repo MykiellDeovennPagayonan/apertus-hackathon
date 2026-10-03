@@ -272,7 +272,7 @@ In this focused contract, an explanation request requires conflict so broader pl
 The proposed action is ${selection.action} on target ${selection.target}. Extract the desired NEW argument values from the original request. Changing a current value is the purpose of an edit, not a conflict. A requested new value differing from current parameters is valid if within bounds.
 Check the ENTIRE request against the proposed action and target. Return conflict only if it requests a different target/action, creation, or multiple actions. A proposal can be wrong; do not force agreement or silently retarget. For instance labels, primary/first is object 1 and second is object 2.
 Interpret ordinary spelling mistakes, synonyms, digits, number words, and units semantically. Convert explicit units into the required unit. For relative changes use only known current configuration, and convert to the absolute value required by the schema. Do not invent missing quantities outside the registered educational policies. Ambiguous targets/values and negated commands require clarify. Out-of-range requests require clarify or unsupported; never clamp or change the requested value.
-SET_PLAYING accepts BOTH pause (value:false) and resume (value:true); it does not inherently mean resume. An operation with no argument fields uses {} only after checking intent. Time values use hours (20:30 = 20.5). Bridge load units are tonnes; 5000 kg = 5 tonnes. Context assumptions remain authoritative.`,
+SET_PLAYING accepts BOTH pause (value:false) and resume (value:true); it does not inherently mean resume. An operation with no argument fields uses {} only after checking intent. Time values use hours (20:30 = 20.5). Bridge load units are tonnes; 5000 kg = 5 tonnes. Context assumptions remain authoritative. For equation steps, parameters describe the accepted ORIGINAL equation; use target.outputs for the current equation and current rational coefficients.`,
       },
       {
         role: "user",
@@ -285,6 +285,7 @@ SET_PLAYING accepts BOTH pause (value:false) and resume (value:true); it does no
                 id: target.id,
                 label: target.label,
                 parameters: target.parameters,
+                outputs: target.outputs,
               }
             : { id: "session", label: "Whole simulation" },
           instances: context.instances.map((i, index) => ({

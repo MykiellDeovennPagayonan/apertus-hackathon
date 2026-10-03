@@ -199,11 +199,23 @@
   overscroll-behavior: contain;
   scrollbar-gutter: stable both-edges;
 }
+.workspace-header {
+  position: absolute;
+  z-index: 3;
+  top: 16px;
+  right: 16px;
+  left: 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  pointer-events: none;
+}
 .workspace-identity,
 .workspace-toolbar,
 .workspace-controls {
-  position: absolute;
   z-index: 3;
+  position: absolute;
   background: #fffbeff5;
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -211,10 +223,11 @@
   backdrop-filter: blur(16px);
 }
 .workspace-identity {
-  top: 16px;
-  left: 16px;
+  position: static;
   max-width: calc(100% - 340px);
+  min-width: 0;
   padding: 12px 18px;
+  pointer-events: auto;
 }
 .workspace-identity button {
   padding: 0;
@@ -229,12 +242,13 @@
   margin: 4px 0 0;
 }
 .workspace-toolbar {
-  top: 16px;
-  right: 16px;
+  position: static;
+  flex: none;
   display: flex;
   align-items: center;
   gap: 4px;
   padding: 6px;
+  pointer-events: auto;
 }
 .workspace-toolbar button,
 .workspace-toolbar a {
@@ -871,19 +885,22 @@
   .experiment-workspace {
     --composer-bottom: max(10px, env(safe-area-inset-bottom));
   }
-  .workspace-identity {
+  .workspace-header {
     top: 10px;
+    right: 10px;
     left: 10px;
+    gap: 8px;
+  }
+  .workspace-identity {
+    flex: 1;
     padding: 8px 12px;
-    max-width: calc(100% - 175px);
+    max-width: none;
   }
   .workspace-identity h1 {
     font-size: 18px;
     overflow-wrap: anywhere;
   }
   .workspace-toolbar {
-    top: 10px;
-    right: 10px;
     gap: 0;
     padding: 4px;
   }
