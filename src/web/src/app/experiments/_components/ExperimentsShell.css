@@ -1099,3 +1099,53 @@
 .workspace-stage .projectile-scene text {
   display: none;
 }
+
+/* The 3D world fills the viewport; every UI panel floats over the canvas. */
+.experiment-workspace--3d .workspace-stage {
+  inset: 0;
+  overflow: hidden;
+  scrollbar-gutter: auto;
+}
+.experiment-workspace--3d .workspace-stage > .town-demo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+.experiment-workspace--3d .town-demo__scene {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  border-radius: 0;
+}
+.experiment-workspace--3d .workspace-controls {
+  top: var(--workspace-top, 112px);
+  max-height: calc(
+    100dvh -
+    var(--workspace-top, 112px) -
+    var(--composer-height, 64px) -
+    var(--composer-bottom) -
+    16px
+  );
+}
+.experiment-workspace--3d .town-controls__time {
+  min-width: 0;
+}
+.experiment-workspace--3d .town-controls__count {
+  margin-left: 0;
+}
+.town-controls__playback {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.town-controls__playback button {
+  flex: 1;
+  min-width: 0;
+}

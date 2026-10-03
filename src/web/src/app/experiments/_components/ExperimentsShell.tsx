@@ -173,6 +173,7 @@ export default function ExperimentsShell({
     if (result.demo) {
       setDemo(result.demo);
       setPhase("ready");
+      if (plan.operation === "create") setControlsOpen(result.demo === "town");
     }
     setStatus(
       prompt
@@ -375,7 +376,10 @@ export default function ExperimentsShell({
   };
   return (
     <ControlsTarget.Provider value={controlsTarget}>
-      <div ref={workspace} className="experiment-workspace">
+      <div
+        ref={workspace}
+        className={`experiment-workspace${demo === "town" ? " experiment-workspace--3d" : ""}`}
+      >
         <header className="workspace-identity">
           <button type="button" onClick={goHome}>
             ← {landing ? "Back to the lab" : "Experiments"}

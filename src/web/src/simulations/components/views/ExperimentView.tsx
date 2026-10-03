@@ -71,11 +71,11 @@ export function ExperimentView({ demo }: { demo: DemoType }) {
       <div className="town-demo__scene">
         {views.includes("ThreeWorldView") && <ThreeWorldView />}
       </div>
-      <section className="experiment-interaction" aria-label="Town controls">
-        <TownControls />
-      </section>
       <ControlsOverlay>
-        <details open>
+        <section aria-label="Town controls">
+          <TownControls />
+        </section>
+        <details>
           <summary>About this model</summary>
           {getActiveDefinition()?.assumptions.map((a) => (
             <p key={a}>{a}</p>

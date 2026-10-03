@@ -27,17 +27,19 @@ export function TownControls() {
           dispatchCommand("town", { type: "SET_TIME", value })
         }
       />
-      <PlaybackControls
-        playing={s.playing}
-        speed={s.speed}
-        speeds={[1, 2, 4]}
-        onPlaying={(value) =>
-          dispatchCommand("town", { type: "SET_PLAYING", value })
-        }
-        onSpeed={(value) =>
-          dispatchCommand("town", { type: "SET_SPEED", value })
-        }
-      />
+      <fieldset className="town-controls__playback" aria-label="Playback">
+        <PlaybackControls
+          playing={s.playing}
+          speed={s.speed}
+          speeds={[1, 2, 4]}
+          onPlaying={(value) =>
+            dispatchCommand("town", { type: "SET_PLAYING", value })
+          }
+          onSpeed={(value) =>
+            dispatchCommand("town", { type: "SET_SPEED", value })
+          }
+        />
+      </fieldset>
       <MetricsView
         className="town-controls__count"
         values={[{ label: "citizens", value: `${CITIZEN_COUNT} ` }]}

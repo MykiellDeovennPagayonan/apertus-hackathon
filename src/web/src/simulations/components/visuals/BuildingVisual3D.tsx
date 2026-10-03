@@ -1,7 +1,8 @@
 // biome-ignore-all lint/suspicious/noArrayIndexKey: Procedural scene slots are fixed identities.
-import { Html } from "@react-three/drei";
+
 import { TownAppearance } from "../resources/TownAppearance";
 import type { Building } from "../traits/Building";
+import { TownLabel } from "./TownLabel";
 import { Block, Window } from "./townGeometry";
 export function BuildingVisual3D({
   building,
@@ -108,9 +109,7 @@ export function BuildingVisual3D({
         ))}
       </group>
       {building.kind !== "house" && (
-        <Html position={[0, building.h + 3, 0]} center distanceFactor={65}>
-          <span className="town-building-label">{building.label}</span>
-        </Html>
+        <TownLabel position={[0, building.h + 3, 0]} text={building.label} />
       )}
       {building.kind === "school" && (
         <>

@@ -1,5 +1,5 @@
 // biome-ignore-all lint/suspicious/noArrayIndexKey: Procedural scene slots are fixed identities.
-import { Html } from "@react-three/drei";
+import { TownLabel } from "./TownLabel";
 import { Bench, Block, Fountain, Tree } from "./townGeometry";
 export function TownSceneryVisual3D({ night }: { night: boolean }) {
   return (
@@ -21,10 +21,8 @@ export function TownSceneryVisual3D({ night }: { night: boolean }) {
         <Fountain />
         <Bench at={[3, 0.24, -2.4]} rotation={Math.PI / 2} />
         <Bench at={[9, 0.24, 2.4]} rotation={-Math.PI / 2} />
-        <Html position={[6, 3.4, 0]} center distanceFactor={65}>
-          <span className="town-building-label">Town square</span>
-        </Html>
-      </group>{" "}
+        <TownLabel position={[6, 3.4, 0]} text="Town square" />
+      </group>
       {Array.from({ length: 13 }, (_, index) => (
         <Tree
           key={`north-${index}`}
