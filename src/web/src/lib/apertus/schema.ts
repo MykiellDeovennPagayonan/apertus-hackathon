@@ -44,8 +44,16 @@ export type Plan =
 const record = (value: unknown): value is Record<string, unknown> =>
   !!value && typeof value === "object" && !Array.isArray(value);
 function keys(data: Record<string, unknown>, allowed: string[]) {
-  if (Object.keys(data).some((k) => !allowed.includes(k)))
-    throw new Error("Unknown plan field");
+  // Allow and strip benign auxiliary keys often emitted by LLMs (e.g. explanation, reasoning, thought)
+  const ignoredAuxiliary = ["explanation", "reasoning", "thought", "notes"];
+  for (const aux of ignoredAuxiliary) {
+    if (aux in data && !allowed.includes(aux)) {
+      delete data[aux];
+    }
+  }
+  const unexpected = Object.keys(data).filter((k) => !allowed.includes(k));
+  if (unexpected.length > 0)
+    throw new Error(`Unknown plan field: ${unexpected.join(", ")}`);
 }
 /** Bound nesting and all data that can enter model instructions. */
 export function validateContext(value: unknown): ExperimentContext | null {
@@ -226,8 +234,18 @@ export function parseModelContent(
 ) {
   if (content.length > 16000)
     throw new Error("Model output exceeds size limit");
-  const text = content
-    .trim()
-    .replace(/^```(?:json)?\s*\n?([\s\S]*?)\n?```$/, "$1");
+  let text = content.trim();
+  // Strip markdown code fence if present
+  const codeBlockMatch = text.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
+  if (codeBlockMatch) {
+    text = codeBlockMatch[1].trim();
+  } else {
+    // If model wrapped JSON in conversational text or <think> tags, extract the outer JSON object
+    const jsonMatch = text.match(/(\{[\s\S]*\})/);
+    if (jsonMatch) {
+      text = jsonMatch[1].trim();
+    }
+  }
   return parsePlan(JSON.parse(text), demo, context);
 }
+
