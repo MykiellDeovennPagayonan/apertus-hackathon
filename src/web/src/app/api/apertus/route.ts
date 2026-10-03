@@ -1,5 +1,6 @@
-import { ApertusError, planPrompt } from "../../../lib/apertus/client";
-import { isDemo, validateContext } from "../../../lib/apertus/schema";
+import { planPrompt } from "../../../lib/planner";
+import { PlannerError } from "../../../lib/planner/errors";
+import { isDemo, validateContext } from "../../../lib/planner/schema";
 import { templateDemo } from "../../../simulations/runtime/capabilities";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
@@ -89,11 +90,11 @@ export async function POST(request: Request) {
     );
     return Response.json(plan, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
-    const status = error instanceof ApertusError ? error.status : 500;
+    const status = error instanceof PlannerError ? error.status : 500;
     return Response.json(
       {
         error:
-          error instanceof ApertusError
+          error instanceof PlannerError
             ? error.message
             : "Unable to process the prompt.",
       },

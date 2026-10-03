@@ -3,8 +3,8 @@ import type {
   ExperimentContext,
   Plan,
   TargetedCommand,
-} from "../../lib/apertus/schema";
-import { parsePlan } from "../../lib/apertus/schema";
+} from "../../lib/planner/schema";
+import { parsePlan } from "../../lib/planner/schema";
 import { GRAVITIES } from "../components/resources/GravityPresets";
 import type { MathBoard } from "../components/traits/MathBoards";
 import { bridgeInitializer, useBridgeStore } from "./bridgeSession";

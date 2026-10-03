@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict");
 const { load } = require("./test-loader.cjs");
 const runtime = load("src/simulations/runtime/session.ts");
-const { parsePlan, validateContext } = load("src/lib/apertus/schema.ts");
+const { parsePlan, validateContext } = load("src/lib/planner/schema.ts");
 const { useProjectileStore } = load(
   "src/simulations/runtime/projectileSession.ts",
 );

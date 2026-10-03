@@ -131,3 +131,89 @@ recipe fields, incompatible view bindings and conflicting field ownership are
 rejected. Probability trials are the implemented first new mechanism in the roadmap.
 The dated live-model results are in
 `../../docs/agent-only/implementation/003-APERTUS_LIVE_EVALUATION.json`.
+
+## Laya decision planner
+
+The shared planner lives in `src/lib/planner`. `PLANNER_MODE=apertus` (default)
+uses broad planning. `PLANNER_MODE=hybrid` asks Laya to select intent, actual
+target, and allowed operation, then asks Apertus to interpret arguments for that
+proposal. Both paths return the same validated Plan through `/api/apertus`.
+There is no Laya-only execution mode: Laya selects choices rather than generating
+values or executable plans.
+
+From the project root, install and start the separate Laya environment:
+
+```sh
+make -C src/inference setup-laya
+export LAYA_API_TOKEN='your-local-service-token'
+make -C src/inference run-laya
+```
+
+Configure `src/web/.env.local` with `PLANNER_MODE=hybrid`,
+`LAYA_BASE_URL=http://127.0.0.1:8000`, and the same `LAYA_API_TOKEN`, then restart
+Next.js. Keep Apertus running on port 8080 for interpretation and broader fallback.
+The Python process reads
+shell environment variables; it does not read Next.js `.env.local`. For explicit
+local-only unauthenticated use, set `LAYA_AUTH_DISABLED=true` on the Python process.
+Never expose the service token through `NEXT_PUBLIC_` variables.
+
+Laya downloads and warms `aac6fef/laya-multilingual-mlx` on first startup.
+`make -C src/inference smoke-laya` reports loading/ready/error. The default runtime
+uses MLX's default device and float16; `LAYA_DEVICE`, `LAYA_DTYPE`, `LAYA_MODEL`,
+`LAYA_HOST`, and `LAYA_PORT` configure the service. Apple Silicon is the intended
+local environment. The separate `.venv-laya` avoids changing the Apertus lock.
+The Laya requirements pin direct dependencies, not a complete transitive lock.
+
+The collaboration handles follow-up edits on active experiments. It has no regex
+command grammar or language eligibility filter: original text, including typos
+and number words, goes to the models. Dependent Laya questions receive accepted
+parent decisions. Choices come from the catalog and exposed instance actions.
+Rejected selections use compact Apertus edit planning scoped to the active
+experiment. Creation uses the existing full planner. Both support all twelve
+experiment families.
+
+Apertus gets the proposed operation's argument schema and current context for
+the focused task, rather than the full planning catalog. Its versioned result
+is `arguments`, `clarify`, `unsupported`, or `conflict`. An arguments result
+requires a `confirmedSelection` action/target inferred from the request; a
+mismatch becomes conflict. It can challenge a confident Laya proposal.
+Conflict invokes one broader planning pass with the
+original request/context. Clarification and unsupported results return directly.
+The application validates arguments and constructs action/target/session/revision
+fields. Even argument-free controls use Apertus to check intent. Relative edits
+use known configuration; missing quantities require clarification.
+
+`LAYA_ACCEPTANCE_GATE=0.9` is an initial conservative setting, not a calibrated
+accuracy claim. `LAYA_TIMEOUT_MS=3000` bounds selection; `PLANNER_TIMEOUT_MS=120000`
+bounds the whole hybrid request, including interpretation, repair, and fallback.
+Failed/malformed Laya responses trigger broader planning. Invalid Apertus output
+gets one repair; transport errors or a failed repair propagate instead of
+restarting planning. Both Apertus tasks share provider configuration and capacity.
+Cancellation does not trigger fallback. `PLANNER_MAX_CONCURRENT_REQUESTS` limits
+hybrid requests per Next.js process. Model calls run serially in the Python
+service, and HTTP cancellation does not interrupt an active MLX call.
+
+Run `pnpm test:planner` for deterministic integration checks and
+`make -C src/inference test-laya` for service tests. With a warmed Laya service,
+export its token in the shell and keep Apertus running, then run
+`pnpm test:laya:live [report.json]`. This evaluates real collaboration, recording
+selection decisions, focused/broad calls, final-state checks, and end-to-end
+timing. Cases include typos, number words, relative edits, units, ambiguity,
+negation, compound instructions, and a French request. There is no mock provider.
+Deterministic integration checks do not establish model accuracy.
+
+The October 3, 2026 live smoke run is saved in
+`../../docs/agent-only/implementation/LAYA_LIVE_EVALUATION.json`. At the 0.9 gate,
+1 of 5 supported edit cases produced an accepted direct plan. The other four
+returned no plan, including a confidently wrong target blocked by the explicit
+target check. All four intentionally ineligible requests returned no plan.
+That report belongs to the superseded parser-gated implementation. It does not
+measure this collaboration. See
+`../../docs/agent-only/implementation/004-APERTUS_LAYA_COLLABORATION.md` for the
+responsibility split and verification scope.
+
+The implemented collaboration remains experimental: the recorded full live
+run passed 3/11 cases, accepted no Laya selections at the 0.9 gate, and made four
+incorrect mutations through broader fallback. The latest isolated focused
+argument evaluation passed 1/8 cases. Reports and delivery notes are linked in
+004. Passing deterministic checks does not make the current models reliable.

@@ -11,7 +11,9 @@
     "test": "node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs",
     "test:apertus": "node scripts/verify-apertus.cjs",
     "test:browser": "node scripts/verify-browser.cjs",
-    "test:apertus:live": "node scripts/evaluate-apertus-live.cjs"
+    "test:apertus:live": "node scripts/evaluate-apertus-live.cjs",
+    "test:planner": "node scripts/verify-planner.cjs",
+    "test:laya:live": "node scripts/evaluate-laya-live.cjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",

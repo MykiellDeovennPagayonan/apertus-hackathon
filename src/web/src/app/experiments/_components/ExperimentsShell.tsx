@@ -2,9 +2,9 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { requestPlan } from "../../../lib/apertus/browser";
-import type { Plan } from "../../../lib/apertus/schema";
-import { isDemo } from "../../../lib/apertus/schema";
+import { requestPlan } from "../../../lib/planner/browser";
+import type { Plan } from "../../../lib/planner/schema";
+import { isDemo } from "../../../lib/planner/schema";
 import { ExperimentView } from "../../../simulations/components/views/ExperimentView";
 import { templateNames } from "../../../simulations/runtime/capabilities";
 import {

@@ -1,36 +1,16 @@
 import type { DemoType } from "../../simulations/runtime/types";
+import { type ExperimentContext, parseModelContent } from "../planner/schema";
 import { selectCapabilities } from "./catalogSelection";
-import { readConfig } from "./config";
-import { type ExperimentContext, parseModelContent } from "./schema";
-export class ApertusError extends Error {
-  constructor(
-    message: string,
-    public status: number,
-  ) {
-    super(message);
-  }
-}
-let active = 0;
+import { requestStructured } from "./transport";
+
+export { PlannerError as ApertusError } from "../planner/errors";
+
 export async function planPrompt(
   prompt: string,
   demo: DemoType | null,
   context: ExperimentContext | null,
   signal?: AbortSignal,
 ) {
-  let config: ReturnType<typeof readConfig>;
-  try {
-    config = readConfig();
-  } catch (error) {
-    throw new ApertusError(
-      error instanceof Error ? error.message : "Invalid Apertus configuration",
-      503,
-    );
-  }
-  if (active >= config.concurrency)
-    throw new ApertusError("Apertus is busy. Please try again shortly.", 429);
-  active++;
-  const timeout = AbortSignal.timeout(config.timeout),
-    combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
   const catalog = selectCapabilities(prompt, demo);
   const messages: { role: string; content: string }[] = [
     {
@@ -70,75 +50,10 @@ Selected catalog and dependencies (parameters use a bounded schema; enum values 
       content: JSON.stringify({ prompt, currentDemo: demo, context }),
     },
   ];
-  try {
-    for (let attempt = 0; attempt < 2; attempt++) {
-      const response = await fetch(`${config.baseUrl}/chat/completions`, {
-        method: "POST",
-        cache: "no-store",
-        headers: {
-          "Content-Type": "application/json",
-          ...(config.token ? { Authorization: `Bearer ${config.token}` } : {}),
-        },
-        signal: combined,
-        body: JSON.stringify({
-          model: config.model,
-          temperature: 0,
-          max_tokens: config.maxTokens,
-          stream: false,
-          messages,
-        }),
-      });
-      if (!response.ok) {
-        await response.body?.cancel();
-        throw new ApertusError(
-          `Apertus inference returned HTTP ${response.status}. Check the configured provider.`,
-          502,
-        );
-      }
-      const data = await response.json(),
-        choice = data?.choices?.[0];
-      if (choice?.finish_reason === "length")
-        throw new ApertusError(
-          "Apertus reached its output limit. Increase APERTUS_MAX_TOKENS and retry.",
-          502,
-        );
-      const content = choice?.message?.content;
-      if (typeof content !== "string" || !content.trim())
-        throw new ApertusError(
-          "Apertus returned no final answer. Increase APERTUS_MAX_TOKENS and retry.",
-          502,
-        );
-      try {
-        return parseModelContent(content, demo, context);
-      } catch (error) {
-        if (attempt === 1)
-          throw new ApertusError(
-            `Apertus returned an invalid plan after one repair: ${error instanceof Error ? error.message : "schema mismatch"}`,
-            502,
-          );
-        messages.push(
-          { role: "assistant", content: content.slice(0, 16000) },
-          {
-            role: "user",
-            content: `Repair the JSON once using the allowed plan schema and catalog. Validation error: ${error instanceof Error ? error.message : "schema mismatch"}. The invalid plan was not executed. Allowed composition schemas: ${JSON.stringify(catalog.filter((entry) => entry.kind === "compositions").map((entry) => ({ ref: entry.ref, parameters: entry.parameters })))}. The plural key angles holds a comparison array; angle is only a scalar single-launch value. Include schemaVersion:1. Return only the corrected JSON.`,
-          },
-        );
-      }
-    }
-    throw new ApertusError("No valid plan", 502);
-  } catch (error) {
-    if (error instanceof ApertusError) throw error;
-    if (signal?.aborted)
-      throw new ApertusError("Apertus request cancelled.", 499);
-    if (timeout.aborted)
-      throw new ApertusError("Apertus timed out. Please try again.", 504);
-    throw new ApertusError(
-      config.provider === "local"
-        ? "Cannot reach local Apertus. Start it with make -C src/inference run from the project root."
-        : "Cannot reach hosted Apertus. Check its endpoint and credentials.",
-      502,
-    );
-  } finally {
-    active--;
-  }
+  return requestStructured(
+    messages,
+    (content) => parseModelContent(content, demo, context),
+    `Use the allowed Plan schema. Allowed composition schemas: ${JSON.stringify(catalog.filter((entry) => entry.kind === "compositions").map((entry) => ({ ref: entry.ref, parameters: entry.parameters })))}. The plural key angles holds a comparison array; angle is a single-launch scalar. Include schemaVersion:1. Return only the corrected JSON.`,
+    signal,
+  );
 }
