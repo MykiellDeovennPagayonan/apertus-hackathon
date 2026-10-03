@@ -16,14 +16,11 @@ export function GasContainerVisual({
         width={width}
         height={240}
         rx={8}
-        fill="#edf6ff"
-        stroke="#245bcb"
+        fill="#e6ecdf"
+        stroke="var(--accent)"
         strokeWidth={3}
       />
       {children}
-      <text x={300} y={295} textAnchor="middle" fontSize={16}>
-        Fixed-depth schematic · {volume} L
-      </text>
     </g>
   );
 }

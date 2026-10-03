@@ -1,7 +1,6 @@
 import { dispatchCommand } from "../../runtime/session";
 import type { ArithmeticBoard } from "../traits/MathBoards";
 import { IntegerStepper } from "./IntegerStepper";
-import { MathPlayback } from "./MathPlayback";
 import { OptionSelect } from "./OptionSelect";
 import { GrownUpControls } from "./YoungLearnerControls";
 export function ArithmeticControls({ board }: { board: ArithmeticBoard }) {
@@ -45,7 +44,6 @@ export function ArithmeticControls({ board }: { board: ArithmeticBoard }) {
         value={board.b}
         onChange={(n) => task(board.a, n)}
       />
-      <MathPlayback board={board} />
     </GrownUpControls>
   );
 }

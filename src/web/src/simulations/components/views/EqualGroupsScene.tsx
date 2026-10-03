@@ -1,17 +1,11 @@
-import { useSyncExternalStore } from "react";
 import type { GroupingBoard } from "../traits/MathBoards";
 import { BasketVisual } from "../visuals/BasketVisual";
 import { CounterTokenVisual } from "../visuals/CounterTokenVisual";
 import { SVGWorldView } from "./SVGWorldView";
 
-const subscribe = (listener: () => void) => {
-  const query = matchMedia("(max-width: 650px)");
-  query.addEventListener("change", listener);
-  return () => query.removeEventListener("change", listener);
-};
-const mobileSnapshot = () => matchMedia("(max-width: 650px)").matches;
+import { useCompactDiagram } from "./useCompactDiagram";
 export function EqualGroupsScene({ board }: { board: GroupingBoard }) {
-  const mobile = useSyncExternalStore(subscribe, mobileSnapshot, () => false);
+  const mobile = useCompactDiagram();
   const sceneWidth = mobile ? 400 : 900;
   const columns = Math.min(board.groups, mobile ? 2 : 3),
     width = (sceneWidth - 60) / columns - 20,

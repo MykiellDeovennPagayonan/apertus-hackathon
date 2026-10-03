@@ -1,94 +1,129 @@
+import { useState } from "react";
 import { useProjectileStore } from "../../runtime/projectileSession";
 import { dispatchCommand } from "../../runtime/session";
 import { GravityPresets } from "../resources/GravityPresets";
-import { MetricsView } from "../views/MetricsView";
+import { ControlsOverlay } from "../views/ControlsOverlay";
 import { ActionButton } from "./ActionButton";
 import { OptionSelect } from "./OptionSelect";
 import { ParameterSlider } from "./ParameterSlider";
-import { PlaybackControls } from "./PlaybackControls";
 import "../views/projectile.css";
+
 export function ProjectileControls() {
-  const s = useProjectileStore(),
-    m = s.primary.metrics;
+  const s = useProjectileStore();
+  const [selected, setSelected] = useState(s.primary.id);
+  const ball = s.instances.find((i) => i.id === selected) ?? s.primary;
   return (
-    <div className="proj-controls">
-      <div className="proj-controls__row">
-        <ParameterSlider
-          label="Angle"
-          display={`${s.angle}°`}
-          value={s.angle}
-          min={0}
-          max={90}
-          onChange={(value) =>
-            dispatchCommand("projectile", { type: "SET_ANGLE", value })
-          }
-        />
-        <ParameterSlider
-          label="Throw speed"
-          display={`${s.velocity} m/s`}
-          value={s.velocity}
-          min={5}
-          max={40}
-          onChange={(value) =>
-            dispatchCommand("projectile", { type: "SET_VELOCITY", value })
-          }
-        />
-        <details>
-          <summary>Explore more</summary>
-          <OptionSelect
-            label="Gravity"
-            value={s.gravityName.toLowerCase()}
-            options={GravityPresets.map((p) => ({ id: p.id, label: p.label }))}
+    <>
+      <section className="experiment-interaction" aria-label="Launch controls">
+        <div className="experiment-fields">
+          {s.instances.length > 1 && (
+            <label>
+              Adjust
+              <select
+                aria-label="Selected ball"
+                value={ball.id}
+                onChange={(e) => setSelected(e.target.value)}
+              >
+                {s.instances.map((i, n) => (
+                  <option key={i.id} value={i.id}>
+                    Ball {n + 1}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          <ParameterSlider
+            label="Angle"
+            display={`${ball.launch.angle}°`}
+            value={ball.launch.angle}
+            min={0}
+            max={90}
             onChange={(value) =>
-              dispatchCommand("projectile", { type: "SET_GRAVITY", value })
+              dispatchCommand("projectile", {
+                type: "SET_ANGLE",
+                target: ball.id,
+                value,
+              })
             }
           />
-          <label>
-            <input
-              type="checkbox"
-              checked={s.showVectors}
-              onChange={(e) =>
-                dispatchCommand("projectile", {
-                  type: e.target.checked ? "SHOW_VECTORS" : "HIDE_VECTORS",
-                })
-              }
-            />{" "}
-            Show velocity vectors
-          </label>
-        </details>
-      </div>
-      <div className="proj-controls__row">
-        <ActionButton
-          onCommand={() => dispatchCommand("projectile", { type: "LAUNCH" })}
-        >
-          Throw again
-        </ActionButton>
-        <PlaybackControls
-          playing={s.playing}
-          slowMo={s.slowMo}
-          onPlaying={(value) =>
-            dispatchCommand("projectile", { type: "SET_PLAYING", value })
-          }
-          onSlowMo={(value) =>
-            dispatchCommand("projectile", { type: "SET_SLOW_MO", value })
+          <ParameterSlider
+            label="Throw speed"
+            display={`${ball.launch.velocity} m/s`}
+            value={ball.launch.velocity}
+            min={5}
+            max={40}
+            onChange={(value) =>
+              dispatchCommand("projectile", {
+                type: "SET_VELOCITY",
+                target: ball.id,
+                value,
+              })
+            }
+          />
+        </div>
+        <div className="experiment-fields experiment-actions">
+          <ActionButton
+            onCommand={() => dispatchCommand("projectile", { type: "LAUNCH" })}
+          >
+            Throw again
+          </ActionButton>
+          <ActionButton
+            onCommand={() =>
+              dispatchCommand("projectile", {
+                type: "SET_PLAYING",
+                value: !s.playing,
+              })
+            }
+          >
+            {s.playing ? "Pause" : "Play"}
+          </ActionButton>
+          <ActionButton
+            className="experiment-reset"
+            onCommand={() => dispatchCommand("projectile", { type: "RESET" })}
+          >
+            Reset
+          </ActionButton>
+          <span className="experiment-note">
+            {s.gravityName} gravity · {s.gravity} m/s²
+          </span>
+        </div>
+      </section>
+      <ControlsOverlay>
+        <OptionSelect
+          label="Gravity"
+          value={s.gravityName.toLowerCase()}
+          options={GravityPresets.map((p) => ({ id: p.id, label: p.label }))}
+          onChange={(value) =>
+            dispatchCommand("projectile", { type: "SET_GRAVITY", value })
           }
         />
-        <ActionButton
-          onCommand={() => dispatchCommand("projectile", { type: "RESET" })}
-        >
-          Reset
-        </ActionButton>
-      </div>
-      <MetricsView
-        className="proj-controls__metrics"
-        values={[
-          { label: "Distance", value: `${m.range.toFixed(2)} m` },
-          { label: "Maximum height", value: `${m.maxHeight.toFixed(2)} m` },
-          { label: "flight time", value: `${m.duration.toFixed(2)} s` },
-          { label: `${s.gravityName} gravity`, value: `${s.gravity} m/s²` },
-        ]}
-      />
-    </div>
+        <label>
+          <input
+            type="checkbox"
+            checked={s.showVectors}
+            onChange={(e) =>
+              dispatchCommand("projectile", {
+                type: e.target.checked ? "SHOW_VECTORS" : "HIDE_VECTORS",
+              })
+            }
+          />{" "}
+          Show velocity vectors
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={s.slowMo}
+            onChange={(e) =>
+              dispatchCommand("projectile", {
+                type: "SET_SLOW_MO",
+                value: e.target.checked,
+              })
+            }
+          />{" "}
+          Slow motion
+        </label>
+      </ControlsOverlay>
+    </>
   );
 }
 export default ProjectileControls;

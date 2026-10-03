@@ -175,3 +175,927 @@
   min-height: 100dvh;
   justify-content: flex-start;
 }
+
+/* Reserve real space for navigation and the composer; scroll the experiment within it. */
+.experiment-workspace {
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  --composer-bottom: max(20px, env(safe-area-inset-bottom));
+  --content-gap: 28px;
+}
+.workspace-stage {
+  position: absolute;
+  inset: var(--workspace-top, 112px) 0
+    calc(
+      var(--composer-height, 64px) +
+      var(--composer-bottom) +
+      var(--content-gap)
+    );
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable both-edges;
+}
+.workspace-identity,
+.workspace-toolbar,
+.workspace-controls {
+  position: absolute;
+  z-index: 3;
+  background: #fffbeff5;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px #30362e14;
+  backdrop-filter: blur(16px);
+}
+.workspace-identity {
+  top: 16px;
+  left: 16px;
+  max-width: calc(100% - 340px);
+  padding: 12px 18px;
+}
+.workspace-identity button {
+  padding: 0;
+  color: var(--accent);
+  font-size: 12px;
+  min-height: 28px;
+}
+.workspace-identity h1 {
+  font:
+    24px / 1.2 Georgia,
+    serif;
+  margin: 4px 0 0;
+}
+.workspace-toolbar {
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+}
+.workspace-toolbar button,
+.workspace-toolbar a {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  min-height: 40px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.workspace-toolbar button:hover,
+.workspace-toolbar a:hover {
+  background: #e6ecdf;
+}
+.workspace-toolbar button[aria-expanded="true"] {
+  background: var(--accent);
+  color: var(--panel);
+}
+.workspace-controls {
+  top: 82px;
+  right: 16px;
+  width: min(340px, calc(100% - 32px));
+  max-height: calc(
+    100dvh -
+    var(--composer-height, 64px) -
+    var(--composer-bottom) -
+    106px
+  );
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.workspace-controls[hidden] {
+  display: none;
+}
+.workspace-controls__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  position: sticky;
+  top: 0;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  z-index: 1;
+}
+.workspace-controls__heading h2 {
+  font:
+    19px Georgia,
+    serif;
+  margin: 0;
+}
+.workspace-controls__heading button {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+}
+.workspace-controls__body {
+  padding: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.workspace-controls__body
+  :is(
+    .proj-controls,
+    .bridge-controls,
+    .town-controls,
+    .math-controls,
+    .proj-graph
+  ) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  width: 100%;
+}
+.workspace-controls__body
+  :is(
+    .projectile-demo__bottom,
+    .bridge-controls,
+    .town-controls,
+    .proj-controls__row,
+    .learning-main-controls
+  ) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  padding: 0;
+}
+.workspace-controls__body :is(label, .elementary-controls) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.workspace-controls__body label:has(input[type="checkbox"]) {
+  flex-direction: row;
+  align-items: center;
+}
+.workspace-controls__body :is(input[type="number"], select) {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+}
+.workspace-controls__body input[type="range"] {
+  width: 100%;
+  min-height: 32px;
+  accent-color: var(--accent);
+}
+.workspace-controls__body button {
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 8px 12px;
+  color: var(--accent);
+  background: var(--panel);
+  font: 600 13px var(--font-sans);
+}
+.workspace-controls__body button:hover {
+  border-color: var(--accent);
+  background: #e6ecdf;
+}
+.workspace-controls__body button:disabled {
+  opacity: 0.45;
+}
+.workspace-controls__body details {
+  border-top: 1px solid var(--border);
+  padding-block: 10px;
+  margin-top: 12px;
+}
+.workspace-controls__body summary {
+  cursor: pointer;
+  padding-block: 8px;
+  color: var(--accent);
+}
+.workspace-controls__body :is(.math-grownups, .math-grownups-content) {
+  width: 100%;
+  padding: 0;
+  border: 0;
+}
+.workspace-controls__body .math-grownups-content {
+  display: flex;
+  flex-direction: column;
+}
+.workspace-controls__body .town-controls__time {
+  min-width: 0;
+  flex-wrap: wrap;
+}
+.workspace-controls__body table,
+.elementary-experiment table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.workspace-controls__body :is(th, td),
+.elementary-experiment :is(th, td) {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.workspace-controls__body caption {
+  text-align: left;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+.workspace-composer {
+  position: absolute;
+  z-index: 2;
+  bottom: var(--composer-bottom);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(760px, calc(100% - 32px));
+}
+.workspace-composer .command-bar {
+  width: 100%;
+}
+
+.workspace-stage > :is(main, .projectile-demo, .bridge-experiment, .town-demo) {
+  width: min(calc(100% - 48px), 1480px);
+  height: auto;
+  min-height: 0;
+  margin: 0 auto;
+  padding: 0 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: visible;
+  color: var(--text);
+}
+.experiment-instruction,
+.workspace-stage .learning-experiment > p,
+.workspace-stage .math-intro p {
+  margin: 0;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #606658;
+  max-width: none;
+}
+.workspace-stage .learning-experiment > h1,
+.workspace-stage .math-intro :is(h1, .math-grade) {
+  display: none;
+}
+.workspace-stage .math-intro {
+  margin: 0;
+}
+.experiment-diagram {
+  width: min(100%, 900px);
+  margin: 0 auto;
+}
+.experiment-diagram > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: clamp(280px, calc(100dvh - 300px), 520px);
+}
+.elementary-experiment--coordinates .experiment-diagram {
+  max-width: 520px;
+}
+.elementary-experiment--coordinates .experiment-diagram > svg {
+  max-height: none;
+}
+.elementary-experiment--ratio .experiment-diagram {
+  max-width: 760px;
+  padding-block: 20px;
+}
+.experiment-diagram figure {
+  margin: 0;
+}
+.experiment-diagram figure svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: clamp(260px, calc(100dvh - 320px), 480px);
+}
+.experiment-diagram figcaption {
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #606658;
+  margin-bottom: 8px;
+}
+.workspace-stage .learning-scene {
+  width: min(100%, 900px);
+  height: auto;
+  max-height: clamp(280px, calc(100dvh - 300px), 500px);
+  margin: 0 auto;
+  flex: none;
+}
+.experiment-interaction {
+  width: min(100%, 760px);
+  margin: 0 auto;
+  padding: 18px 22px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #fffbeed9;
+  text-align: center;
+  flex-shrink: 0;
+}
+.workspace-stage .experiment-interaction .experiment-primary-action {
+  width: 100%;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--panel);
+}
+.workspace-stage .experiment-interaction .experiment-example-action {
+  width: 100%;
+  margin-top: 8px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--accent);
+  font-weight: 500;
+}
+.workspace-stage .experiment-interaction .experiment-reset {
+  width: 100%;
+  flex: 1 0 100%;
+  margin-top: 14px;
+  border-color: var(--border);
+  background: transparent;
+  color: var(--accent);
+}
+.workspace-stage .experiment-interaction .experiment-reset:hover,
+.workspace-stage .experiment-interaction .experiment-example-action:hover {
+  background: #e6ecdf;
+}
+.workspace-stage .experiment-interaction .equal-groups-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+}
+.equal-groups-fields .experiment-number input {
+  width: 100%;
+}
+.workspace-stage .experiment-interaction .equal-groups-actions {
+  margin-top: 14px;
+}
+.equal-groups-actions + .experiment-example-action + output {
+  display: block;
+  margin-top: 8px;
+  color: #606658;
+}
+.experiment-fields {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.experiment-interaction label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  font-size: 14px;
+  color: var(--text);
+  min-width: 0;
+}
+.experiment-interaction label:has(input[type="range"]) {
+  flex: 1;
+  min-width: 160px;
+}
+.experiment-interaction label > span {
+  font-variant-numeric: tabular-nums;
+}
+.experiment-interaction :is(input[type="number"], select) {
+  min-height: 44px;
+  min-width: 0;
+  max-width: 100%;
+  width: 130px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  padding: 8px 10px;
+}
+.experiment-interaction select {
+  width: auto;
+}
+.experiment-interaction input[type="range"] {
+  width: 100%;
+  min-height: 32px;
+}
+.experiment-interaction button {
+  min-height: 44px;
+  min-width: 44px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 14px;
+  background: var(--panel);
+  color: var(--accent);
+  font: 600 14px var(--font-sans);
+}
+.experiment-interaction button:hover {
+  background: #e6ecdf;
+  border-color: var(--accent);
+}
+.workspace-stage
+  .experiment-interaction
+  .learning-actions
+  button:first-child:hover {
+  background: #1f4c46;
+  border-color: #1f4c46;
+  color: var(--panel);
+}
+.experiment-interaction button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.experiment-interaction button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--panel);
+}
+.experiment-mode {
+  display: flex;
+  gap: 4px;
+}
+.experiment-results {
+  display: flex;
+  justify-content: center;
+  gap: 24px 48px;
+  flex-wrap: wrap;
+  padding-top: 18px;
+  margin-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.experiment-results output {
+  display: grid;
+  gap: 6px;
+  min-width: 120px;
+}
+.experiment-results strong,
+.experiment-answer {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.experiment-answer {
+  display: block;
+  margin-top: 18px;
+}
+.experiment-answer small,
+.experiment-results small {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  color: #606658;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+.experiment-note {
+  color: #606658;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.experiment-error {
+  color: var(--danger);
+  font-size: 13px;
+  max-width: 220px;
+}
+.experiment-actions {
+  margin-top: 12px;
+  align-items: center;
+}
+.experiment-table {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+.experiment-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: #fffbee80;
+}
+.experiment-table caption {
+  text-align: left;
+  padding: 12px 0;
+  font-size: 14px;
+  color: var(--text);
+}
+.experiment-table :is(th, td) {
+  padding: 12px 14px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+.experiment-table :is(th, td):first-child {
+  text-align: left;
+}
+.workspace-stage .learning-main-controls {
+  gap: 24px;
+  text-align: left;
+}
+.workspace-stage .learning-slider {
+  margin: 0;
+}
+.workspace-stage .learning-pressure {
+  font-size: 14px;
+  min-width: 140px;
+  text-align: center;
+}
+.workspace-stage .learning-pressure strong {
+  font-size: 28px;
+}
+.workspace-stage .learning-actions {
+  justify-content: center;
+  margin: 12px 0 0;
+}
+.workspace-stage .learning-experiment .experiment-interaction > p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #606658;
+}
+.workspace-stage .math-workspace {
+  display: block;
+}
+.workspace-stage .math-stage {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+.workspace-stage .math-scene-scroll {
+  padding: 0;
+  overflow-x: auto;
+}
+.workspace-stage .math-stage svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: clamp(280px, calc(100dvh - 300px), 520px);
+  min-width: 560px;
+  margin-inline: auto;
+}
+.workspace-stage
+  :is(.math-experiment--counting, .math-experiment--equal-groups)
+  .math-stage
+  svg {
+  min-width: 0;
+}
+.workspace-stage .math-experiment--equal-groups .math-stage svg {
+  max-height: 420px;
+}
+.workspace-stage .math-experiment--fraction-number-line .math-stage svg {
+  min-width: 640px;
+}
+.workspace-stage .math-scroll-hint {
+  display: none;
+  font-size: 13px;
+  color: #606658;
+  text-align: center;
+}
+.workspace-stage .math-readout {
+  border: 0;
+  background: transparent;
+  padding: 12px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.workspace-stage .math-equation {
+  font-size: 26px;
+}
+.workspace-stage .math-readout p {
+  margin: 6px 0 0;
+  font-size: 14px;
+}
+.workspace-stage .math-input label {
+  gap: 8px;
+}
+.workspace-stage .math-stepper {
+  gap: 4px;
+}
+.workspace-stage .math-stepper input {
+  width: 70px;
+}
+.workspace-stage .math-input {
+  display: inline-block;
+  margin: 8px;
+}
+.fraction-primary__bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: end;
+  gap: 10px;
+}
+.workspace-stage .projectile-demo__scene {
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+}
+.workspace-stage .projectile-demo__scene > svg {
+  width: 100%;
+  height: auto;
+  max-height: clamp(280px, calc(100dvh - 300px), 500px);
+  display: block;
+}
+.projectile-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 32px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+.projectile-legend > div {
+  display: grid;
+  gap: 5px;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent);
+  color: var(--accent);
+}
+.projectile-legend .is-comparison {
+  border-color: var(--warn);
+  color: #80571c;
+  border-left-style: dashed;
+}
+.workspace-stage .bridge-demo {
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  flex: none;
+}
+.workspace-stage .bridge-demo > svg {
+  height: auto;
+  width: 100%;
+  max-height: clamp(300px, calc(100dvh - 280px), 540px);
+  flex: none;
+}
+.workspace-stage :is(.bridge-controls, .town-controls) {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  gap: 12px 20px;
+  justify-content: center;
+  color: var(--text);
+  font-size: 14px;
+}
+.workspace-stage .bridge-controls__note {
+  width: 100%;
+  font-size: 13px;
+}
+.workspace-stage .town-demo__scene {
+  flex: none;
+  height: clamp(280px, 45dvh, 480px);
+  min-height: 0;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.workspace-stage .town-controls__time {
+  min-width: 180px;
+}
+.workspace-stage .town-controls__count {
+  margin-left: 0;
+}
+@media (max-width: 650px) {
+  .experiment-workspace {
+    --composer-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+  .workspace-identity {
+    top: 10px;
+    left: 10px;
+    padding: 8px 12px;
+    max-width: calc(100% - 175px);
+  }
+  .workspace-identity h1 {
+    font-size: 18px;
+    overflow-wrap: anywhere;
+  }
+  .workspace-toolbar {
+    top: 10px;
+    right: 10px;
+    gap: 0;
+    padding: 4px;
+  }
+  .workspace-toolbar a {
+    display: none;
+  }
+  .workspace-toolbar button {
+    padding: 8px;
+    font-size: 11px;
+    gap: 4px;
+  }
+  .workspace-controls {
+    top: var(--workspace-top, 100px);
+    right: 10px;
+    width: calc(100% - 20px);
+    max-height: calc(
+      100dvh -
+      var(--workspace-top, 100px) -
+      var(--composer-height, 64px) -
+      var(--composer-bottom) -
+      16px
+    );
+  }
+  .workspace-composer {
+    width: calc(100% - 20px);
+  }
+  .workspace-stage
+    > :is(main, .projectile-demo, .bridge-experiment, .town-demo) {
+    width: calc(100% - 24px);
+    gap: 14px;
+  }
+  .experiment-interaction {
+    padding: 14px 12px;
+  }
+  .experiment-fields {
+    gap: 12px;
+  }
+  .experiment-interaction :is(input[type="number"], select) {
+    font-size: 16px;
+  }
+  .experiment-results {
+    gap: 20px;
+  }
+  .workspace-stage .learning-main-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .workspace-stage .learning-pressure {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .workspace-stage .math-scroll-hint {
+    display: block;
+  }
+  .workspace-stage
+    :is(.math-experiment--counting, .math-experiment--equal-groups)
+    .math-scroll-hint {
+    display: none;
+  }
+  .workspace-stage .math-experiment--equal-groups .math-stage svg {
+    max-height: none;
+  }
+  .projectile-legend {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .workspace-stage .bridge-demo {
+    overflow-x: auto;
+  }
+  .workspace-stage .bridge-demo > svg {
+    min-width: 560px;
+  }
+  .workspace-stage .town-controls__time {
+    width: 100%;
+  }
+  .experiment-table :is(th, td) {
+    padding: 10px 8px;
+  }
+}
+.experiment-mode {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+@media (min-width: 900px) {
+  .workspace-stage
+    > :is(
+      .learning-experiment,
+      .elementary-experiment,
+      .projectile-demo,
+      .bridge-experiment,
+      .town-demo
+    ) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(260px, 22vw, 300px);
+    gap: 18px clamp(20px, 2.5vw, 40px);
+    align-items: start;
+    max-width: 1480px;
+  }
+  .workspace-stage
+    > :is(.learning-experiment, .elementary-experiment, .bridge-experiment)
+    > :is(p, .experiment-table) {
+    grid-column: 1 / -1;
+  }
+  .workspace-stage .experiment-interaction {
+    width: 100%;
+    padding: 16px;
+    position: sticky;
+    top: 0;
+  }
+  .workspace-stage .experiment-interaction .experiment-results {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding-top: 14px;
+    margin-top: 14px;
+  }
+  .workspace-stage .experiment-interaction .experiment-results output {
+    min-width: 0;
+  }
+  .workspace-stage .experiment-interaction .experiment-results strong {
+    font-size: 22px;
+  }
+  .workspace-stage .learning-main-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .workspace-stage .learning-slider {
+    min-width: 0;
+  }
+  .workspace-stage .learning-pressure {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .workspace-stage .learning-scene {
+    max-height: clamp(300px, calc(100dvh - 280px), 520px);
+  }
+  .workspace-stage .elementary-experiment--coordinates .experiment-diagram {
+    max-width: 520px;
+  }
+  .workspace-stage .projectile-demo__scene > svg {
+    max-height: clamp(300px, calc(100dvh - 280px), 520px);
+  }
+  .workspace-stage .bridge-demo > svg {
+    max-height: clamp(320px, calc(100dvh - 260px), 560px);
+  }
+  .workspace-stage .math-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(260px, 22vw, 300px);
+    column-gap: clamp(20px, 2.5vw, 40px);
+    align-items: start;
+  }
+  .workspace-stage .math-scene-scroll {
+    grid-column: 1;
+    min-width: 0;
+  }
+  .workspace-stage .math-stage svg {
+    min-width: 0;
+    max-height: clamp(260px, calc(100dvh - 300px), 520px);
+  }
+  .workspace-stage .math-readout {
+    grid-column: 1;
+    margin-bottom: 0;
+  }
+  .workspace-stage .math-stage .experiment-interaction {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: start;
+  }
+  .workspace-stage .math-experiment--equal-groups .math-stage svg {
+    max-height: 340px;
+  }
+  .workspace-stage .math-stepper input {
+    width: 52px;
+  }
+  .workspace-stage .math-input {
+    margin: 8px 0;
+  }
+  .fraction-primary__bar {
+    width: 100%;
+  }
+}
+.experiment-interaction label:has(input[type="range"]) {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px;
+}
+.experiment-interaction label > input[type="range"] {
+  grid-column: 1 / -1;
+}
+.experiment-results {
+  gap: 20px;
+}
+@media (min-width: 900px) {
+  .workspace-stage .math-experiment--fraction-number-line .math-stage svg {
+    min-width: 0;
+  }
+}
+.workspace-stage .math-experiment--fraction-builder .math-stage svg {
+  min-width: 0;
+}
+.workspace-stage .math-experiment--fraction-builder .math-scroll-hint {
+  display: none;
+}
+/* Exact launch measurements live in the readable HTML comparison above. */
+.workspace-stage .projectile-scene text {
+  display: none;
+}

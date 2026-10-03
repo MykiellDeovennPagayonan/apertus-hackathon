@@ -4,6 +4,7 @@ import { useGasStore } from "../../runtime/gasSession";
 import { dispatchCommand, getActiveDefinition } from "../../runtime/session";
 import { GasContainerVisual } from "../visuals/GasContainerVisual";
 import { GasParticleVisual } from "../visuals/GasParticleVisual";
+import { ControlsOverlay } from "./ControlsOverlay";
 import "./learning.css";
 export function PressureReadout({ pressure }: { pressure: number }) {
   return (
@@ -49,7 +50,7 @@ export function GasPressureView() {
       <h1>How gas pressure works</h1>
       <p>Make the container smaller and watch the pressure rise.</p>
       <svg
-        viewBox="0 0 600 315"
+        viewBox="0 0 600 290"
         role="img"
         aria-label={`Gas container with ${s.particles.length} representative particles`}
         className="learning-scene"
@@ -65,55 +66,63 @@ export function GasPressureView() {
             ))}
         </GasContainerVisual>
       </svg>
-      <div className="learning-main-controls">
-        {slider("volume", "Volume", 0.25, 2, 0.05, "L")}
-        <PressureReadout pressure={s.metrics.pressureKPa} />
-      </div>
-      <p>
-        Temperature: {s.inputs.temperature} K · Amount of gas: {s.inputs.amount}{" "}
-        mmol. Both stay fixed when you change volume.
-      </p>
-      <div className="learning-actions">
-        <button
-          type="button"
-          onClick={() =>
-            dispatchCommand("gas", {
-              type: "SET_PLAYING",
-              value: !s.inputs.playing,
-            })
-          }
-        >
-          {s.inputs.playing ? "Pause motion" : "Resume motion"}
-        </button>
-        <button
-          type="button"
-          onClick={() => dispatchCommand("gas", { type: "RESET" })}
-        >
-          Reset
-        </button>
-      </div>
-      <details>
-        <summary>Explore more</summary>
-        <label>
-          <input
-            type="checkbox"
-            checked={showParticles}
-            onChange={(e) => setShowParticles(e.target.checked)}
-          />{" "}
-          Show illustrative particles
-        </label>
-        {slider("temperature", "Temperature", 100, 600, 10, "K")}
-        {slider("amount", "Amount of gas", 0.1, 5, 0.1, "mmol")}
-      </details>
-      <details>
-        <summary>Model details</summary>
-        {getActiveDefinition()?.assumptions.map((a) => (
-          <p key={a}>{a}</p>
-        ))}
+      <section
+        className="experiment-interaction"
+        aria-label="Try the experiment"
+      >
+        <div className="learning-main-controls">
+          {slider("volume", "Volume", 0.25, 2, 0.05, "L")}
+          <PressureReadout pressure={s.metrics.pressureKPa} />
+        </div>
         <p>
-          Pausing the illustration leaves the equilibrium calculation active.
+          Temperature: {s.inputs.temperature} K · Amount of gas:{" "}
+          {s.inputs.amount} mmol. Both stay fixed when you change volume.
         </p>
-      </details>
+        <div className="learning-actions">
+          <button
+            type="button"
+            onClick={() =>
+              dispatchCommand("gas", {
+                type: "SET_PLAYING",
+                value: !s.inputs.playing,
+              })
+            }
+          >
+            {s.inputs.playing ? "Pause motion" : "Resume motion"}
+          </button>
+          <button
+            type="button"
+            className="experiment-reset"
+            onClick={() => dispatchCommand("gas", { type: "RESET" })}
+          >
+            Reset
+          </button>
+        </div>
+      </section>
+      <ControlsOverlay>
+        <details open>
+          <summary>Gas settings</summary>
+          <label>
+            <input
+              type="checkbox"
+              checked={showParticles}
+              onChange={(e) => setShowParticles(e.target.checked)}
+            />{" "}
+            Show illustrative particles
+          </label>
+          {slider("temperature", "Temperature", 100, 600, 10, "K")}
+          {slider("amount", "Amount of gas", 0.1, 5, 0.1, "mmol")}
+        </details>
+        <details>
+          <summary>Model details</summary>
+          {getActiveDefinition()?.assumptions.map((a) => (
+            <p key={a}>{a}</p>
+          ))}
+          <p>
+            Pausing the illustration leaves the equilibrium calculation active.
+          </p>
+        </details>
+      </ControlsOverlay>
     </main>
   );
 }

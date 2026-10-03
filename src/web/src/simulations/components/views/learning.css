@@ -28,7 +28,7 @@
   display: block;
   width: 100%;
   min-height: 32px;
-  accent-color: #245bcb;
+  accent-color: var(--accent);
 }
 .learning-pressure {
   display: grid;
@@ -47,15 +47,15 @@
 .learning-actions button {
   min-height: 44px;
   padding: 8px 16px;
-  border: 1px solid #245bcb;
+  border: 1px solid var(--accent);
   border-radius: 8px;
-  background: white;
-  color: #1745a0;
+  background: var(--panel);
+  color: var(--accent);
   cursor: pointer;
 }
 .learning-actions button:first-child {
-  background: #245bcb;
-  color: white;
+  background: var(--accent);
+  color: var(--panel);
 }
 .learning-experiment details {
   padding: 12px 0;
@@ -65,7 +65,7 @@
   padding: 8px 0;
 }
 :where(button, input, summary):focus-visible {
-  outline: 3px solid #245bcb;
+  outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
 .math-experiment--equal-groups .math-scene-scroll svg {

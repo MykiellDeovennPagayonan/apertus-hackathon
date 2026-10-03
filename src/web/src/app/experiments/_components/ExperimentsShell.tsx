@@ -2,9 +2,11 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { requestPlan } from "../../../lib/planner/browser";
 import type { Plan } from "../../../lib/planner/schema";
 import { isDemo } from "../../../lib/planner/schema";
+import { ControlsTarget } from "../../../simulations/components/views/ControlsOverlay";
 import { ExperimentView } from "../../../simulations/components/views/ExperimentView";
 import { templateNames } from "../../../simulations/runtime/capabilities";
 import {
@@ -15,7 +17,8 @@ import {
   saveRecipe,
 } from "../../../simulations/runtime/session";
 import type { DemoType } from "../../../simulations/runtime/types";
-import CommandBar from "../../_components/CommandBar";
+import CommandBar, { type ComposerStatus } from "../../_components/CommandBar";
+import LandingPage from "../../_components/LandingPage";
 import { premadeExperiments } from "../_lib/premadeExperiments";
 import ExperimentCatalog from "./ExperimentCatalog";
 import "../../_components/LandingPage.css";
@@ -51,16 +54,31 @@ const CHIPS: Partial<Record<DemoType, string[]>> = {
 
 type Phase = "catalog" | "ready";
 
-export default function ExperimentsShell() {
+export default function ExperimentsShell({
+  landing = false,
+}: {
+  landing?: boolean;
+}) {
+  const [controlsOpen, setControlsOpen] = useState(false);
+  const [controlsTarget, setControlsTarget] = useState<HTMLElement | null>(
+    null,
+  );
+  const controlsButton = useRef<HTMLButtonElement>(null);
+  const [draft, setDraft] = useState("");
+  const [lastRequest, setLastRequest] = useState<{
+    prompt: string;
+    details: string;
+  } | null>(null);
+  const workspace = useRef<HTMLDivElement>(null);
+  const composerElement = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<Phase>("catalog");
   const [demo, setDemo] = useState<DemoType | null>(null);
-  const [confirmation, setConfirmation] = useState<string | null>(null);
+  const [status, setStatus] = useState<ComposerStatus | null>(null);
   const pending = useRef<AbortController | null>(null);
   const [busy, setBusy] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedExperiment = searchParams.get("experiment");
-  const youngLearner = demo === "counting" || demo === "arithmetic";
 
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_EXPERIMENT_DIAGNOSTICS !== "true") return;
@@ -73,25 +91,101 @@ export default function ExperimentsShell() {
     };
   }, []);
 
-  const applyPlan = useCallback((plan: Plan) => {
+  useEffect(() => {
+    if (!controlsOpen) return;
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setControlsOpen(false);
+        controlsButton.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onEscape);
+    return () => document.removeEventListener("keydown", onEscape);
+  }, [controlsOpen]);
+
+  useEffect(() => {
+    if (phase !== "ready" || !composerElement.current) return;
+    const composer = composerElement.current;
+    const identity = workspace.current?.querySelector(".workspace-identity");
+    const toolbar = workspace.current?.querySelector(".workspace-toolbar");
+    const measure = () => {
+      workspace.current?.style.setProperty(
+        "--composer-height",
+        `${composer.getBoundingClientRect().height}px`,
+      );
+      const bottom = Math.max(
+        identity?.getBoundingClientRect().bottom ?? 96,
+        toolbar?.getBoundingClientRect().bottom ?? 96,
+      );
+      workspace.current?.style.setProperty(
+        "--workspace-top",
+        `${bottom + 16}px`,
+      );
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(composer);
+    if (identity) observer.observe(identity);
+    if (toolbar) observer.observe(toolbar);
+    return () => observer.disconnect();
+  }, [phase]);
+
+  useEffect(() => {
+    if (status?.kind !== "success") return;
+    const timer = window.setTimeout(() => setStatus(null), 5000);
+    return () => window.clearTimeout(timer);
+  }, [status]);
+
+  const applyPlan = useCallback((plan: Plan, prompt?: string) => {
     const result = executePlan(plan);
     if (!result.accepted) {
-      setConfirmation(`No changes applied. ${result.error}`);
+      setStatus({
+        kind: "error",
+        text: "Couldn't apply those changes.",
+        details: result.error,
+        retry: true,
+      });
       return;
     }
-    if (
-      plan.operation === "explain" ||
-      plan.operation === "clarify" ||
-      plan.operation === "unsupported"
-    ) {
-      setConfirmation(plan.message);
+    if (plan.operation === "clarify" || plan.operation === "unsupported") {
+      setStatus({
+        kind: "info",
+        text:
+          plan.operation === "clarify"
+            ? "A little more detail is needed."
+            : "That request isn't supported yet.",
+        details: plan.message,
+      });
+      return;
+    }
+    if (prompt) {
+      setLastRequest({ prompt, details: plan.message });
+      setDraft("");
+    }
+    if (plan.operation === "explain") {
+      setStatus({
+        kind: "info",
+        text: "Your explanation is ready.",
+        details: plan.message,
+      });
       return;
     }
     if (result.demo) {
       setDemo(result.demo);
       setPhase("ready");
-      setConfirmation(`Experiment ready. ${plan.message}`);
-    } else setConfirmation(plan.message);
+    }
+    setStatus(
+      prompt
+        ? {
+            kind: "success",
+            text:
+              plan.operation === "create"
+                ? "Ready — explore your experiment."
+                : "Changes applied.",
+            details: plan.message,
+          }
+        : null,
+    );
   }, []);
 
   useEffect(() => {
@@ -102,14 +196,17 @@ export default function ExperimentsShell() {
         disposeSession();
         setDemo(null);
         setPhase("catalog");
-        setConfirmation(null);
+        setStatus(null);
         return;
       }
       if (!isDemo(selectedExperiment)) {
         disposeSession();
         setDemo(null);
         setPhase("catalog");
-        setConfirmation("Choose one of the premade experiments below.");
+        setStatus({
+          kind: "info",
+          text: "Choose one of the premade experiments below.",
+        });
         return;
       }
       applyPlan({
@@ -135,8 +232,15 @@ export default function ExperimentsShell() {
     pending.current?.abort();
     const controller = new AbortController();
     pending.current = controller;
+    setDraft(text);
     setBusy(true);
-    setConfirmation("Apertus is thinking…");
+    setStatus({
+      kind: "working",
+      text:
+        phase === "ready"
+          ? "Working out the changes…"
+          : "Thinking through your request…",
+    });
     const currentDemo = phase === "ready" ? demo : null;
     const context = getExperimentContext();
     try {
@@ -145,13 +249,40 @@ export default function ExperimentsShell() {
         currentDemo,
         context,
         controller.signal,
+        () => {
+          if (!controller.signal.aborted)
+            flushSync(() =>
+              setStatus({
+                kind: "working",
+                text: currentDemo
+                  ? "Checking the changes…"
+                  : "Preparing your experiment…",
+              }),
+            );
+        },
       );
-      if (!controller.signal.aborted) applyPlan(plan);
+      if (!controller.signal.aborted) {
+        flushSync(() =>
+          setStatus({
+            kind: "working",
+            text:
+              plan.operation === "create"
+                ? "Setting up the scene and parameters…"
+                : plan.operation === "edit"
+                  ? "Applying changes…"
+                  : "Preparing a response…",
+          }),
+        );
+        applyPlan(plan, text);
+      }
     } catch (error) {
       if (!controller.signal.aborted)
-        setConfirmation(
-          error instanceof Error ? error.message : "Apertus request failed.",
-        );
+        setStatus({
+          kind: "error",
+          text: "Couldn't complete your request.",
+          details: error instanceof Error ? error.message : "Please try again.",
+          retry: true,
+        });
     } finally {
       if (pending.current === controller) {
         pending.current = null;
@@ -170,11 +301,13 @@ export default function ExperimentsShell() {
       a.download = "apertus-experiment.json";
       a.click();
       URL.revokeObjectURL(url);
-      setConfirmation("Saved the initial experiment recipe.");
+      setStatus({ kind: "success", text: "Recipe saved." });
     } catch (error) {
-      setConfirmation(
-        error instanceof Error ? error.message : "Unable to save recipe.",
-      );
+      setStatus({
+        kind: "error",
+        text: "Couldn't save the recipe.",
+        details: error instanceof Error ? error.message : "Please try again.",
+      });
     }
   };
 
@@ -187,7 +320,7 @@ export default function ExperimentsShell() {
       disposeSession();
       setPhase("catalog");
       setDemo(null);
-      setConfirmation(null);
+      setStatus(null);
     }
   };
 
@@ -195,89 +328,101 @@ export default function ExperimentsShell() {
     pending.current?.abort();
     pending.current = null;
     setBusy(false);
-    setConfirmation("Request cancelled. No changes applied.");
+    setStatus({ kind: "info", text: "Stopped — your prompt is still here." });
   };
+  const composer = (
+    <CommandBar
+      placeholder={
+        phase === "ready" ? "Ask for a change…" : "Describe an experiment…"
+      }
+      chips={
+        phase === "ready" && demo
+          ? CHIPS[demo]
+          : [
+              "Show me how division works",
+              "Show me how throwing a ball works",
+              "Show me how gas pressure works",
+            ]
+      }
+      disabled={busy}
+      status={status}
+      value={draft}
+      onChange={setDraft}
+      landing={phase === "catalog"}
+      lastRequest={lastRequest}
+      onSubmit={onPrompt}
+      onStop={cancel}
+      submitLabel={phase === "ready" ? "Apply" : "Create"}
+    />
+  );
   if (phase === "catalog") {
+    if (landing) return <LandingPage>{composer}</LandingPage>;
     return (
       <div className="pg-shell pg-shell--center">
         <header className="pg-prompt-nav">
           <Link href="/" className="brand">
-            <span className="brand__mark" aria-hidden="true">
-              ✳
-            </span>{" "}
-            apertus<span className="brand__suffix">/ experiments</span>
+            ✳ apertus<span className="brand__suffix">/ experiments</span>
           </Link>
           <Link href="/">← Back to the lab</Link>
         </header>
-        <CommandBar
-          placeholder="What would you like to explore?"
-          chips={[
-            "Show me how division works",
-            "Show me how throwing a ball works",
-            "Show me how gas pressure works",
-          ]}
-          disabled={busy}
-          confirmation={confirmation}
-          onSubmit={onPrompt}
-        />
-        {busy && (
-          <button type="button" onClick={cancel}>
-            Cancel creation
-          </button>
-        )}
-        <ExperimentCatalog error={null} />
+        <ExperimentCatalog error={status?.text} />
       </div>
     );
   }
-
+  const closeControls = () => {
+    setControlsOpen(false);
+    controlsButton.current?.focus();
+  };
   return (
-    <div className="pg-shell">
-      <header className="pg-shell__top">
-        <button type="button" className="pg-shell__back" onClick={goHome}>
-          ← Experiments
-        </button>
-        <span className="pg-shell__title">
-          {demo ? premadeExperiments[demo].title : ""}
-        </span>
-        <button
-          type="button"
-          onClick={downloadRecipe}
-          disabled={phase !== "ready"}
+    <ControlsTarget.Provider value={controlsTarget}>
+      <div ref={workspace} className="experiment-workspace">
+        <header className="workspace-identity">
+          <button type="button" onClick={goHome}>
+            ← {landing ? "Back to the lab" : "Experiments"}
+          </button>
+          <h1>{demo ? premadeExperiments[demo].title : ""}</h1>
+        </header>
+        <nav className="workspace-toolbar" aria-label="Experiment tools">
+          <button
+            ref={controlsButton}
+            type="button"
+            aria-expanded={controlsOpen}
+            aria-controls="experiment-controls"
+            onClick={() => setControlsOpen(!controlsOpen)}
+          >
+            More settings{" "}
+            <span aria-hidden="true">{controlsOpen ? "−" : "+"}</span>
+          </button>
+          <button type="button" onClick={downloadRecipe}>
+            Save recipe
+          </button>
+          <Link href="/">Home</Link>
+        </nav>
+        <aside
+          id="experiment-controls"
+          className="workspace-controls"
+          aria-label="More experiment settings"
+          hidden={!controlsOpen}
         >
-          Save recipe
-        </button>
-        <Link href="/" className="pg-shell__home">
-          Home
-        </Link>
-      </header>
-
-      {phase === "ready" && demo && <ExperimentView demo={demo} />}
-
-      {busy && (
-        <button type="button" onClick={cancel}>
-          Cancel request
-        </button>
-      )}
-      {youngLearner ? (
-        <details className="pg-grownup-prompts">
-          <summary>More tools for grown-ups</summary>
-          <CommandBar
-            placeholder="Ask Apertus to change something..."
-            chips={demo && phase === "ready" ? CHIPS[demo] : []}
-            disabled={phase !== "ready" || busy}
-            confirmation={confirmation}
-            onSubmit={onPrompt}
-          />
-        </details>
-      ) : (
-        <CommandBar
-          placeholder="Ask Apertus to change something..."
-          chips={demo && phase === "ready" ? CHIPS[demo] : []}
-          disabled={phase !== "ready" || busy}
-          confirmation={confirmation}
-          onSubmit={onPrompt}
-        />
-      )}
-    </div>
+          <div className="workspace-controls__heading">
+            <h2>More settings</h2>
+            <button
+              type="button"
+              onClick={closeControls}
+              aria-label="Close controls"
+            >
+              ✕
+            </button>
+          </div>
+          <div ref={setControlsTarget} className="workspace-controls__body" />
+        </aside>
+        <div className="workspace-stage">
+          {demo && <ExperimentView demo={demo} />}
+        </div>
+        <div ref={composerElement} className="workspace-composer">
+          {composer}
+        </div>
+      </div>
+    </ControlsTarget.Provider>
   );
 }

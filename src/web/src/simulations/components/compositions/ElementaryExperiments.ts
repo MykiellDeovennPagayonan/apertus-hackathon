@@ -71,7 +71,7 @@ export const RatioExperiment = experiment(
   "parts",
   [
     "Numerator is the selected quantity; denominator is the reference whole and must be positive.",
-    "Ratios may exceed one (100%); bar fill is capped for display only.",
+    "Ratios may exceed one (100%); whole multiples and the remaining fraction are shown separately.",
   ],
 );
 export const AreaPerimeterExperiment = experiment(

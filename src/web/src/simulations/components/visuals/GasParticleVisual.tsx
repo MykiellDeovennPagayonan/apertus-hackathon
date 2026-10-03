@@ -14,7 +14,7 @@ export function GasParticleVisual({
       cx={left + 6 + p.x * (width - 12)}
       cy={31 + p.y * 228}
       r={3}
-      fill={p.contact > 0 ? "#6c98c7" : "#245bcb"}
+      fill={p.contact > 0 ? "var(--ok)" : "var(--accent)"}
     />
   );
 }

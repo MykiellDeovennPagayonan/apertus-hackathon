@@ -16,7 +16,8 @@ export function TownControls() {
   return (
     <div className="town-controls">
       <ParameterSlider
-        label={fmt(s.time)}
+        label="Time of day"
+        display={fmt(s.time)}
         className="town-controls__time"
         value={s.time}
         min={0}
@@ -42,6 +43,7 @@ export function TownControls() {
         values={[{ label: "citizens", value: `${CITIZEN_COUNT} ` }]}
       />
       <ActionButton
+        className="experiment-reset"
         onCommand={() => dispatchCommand("town", { type: "RESET" })}
       >
         Reset town

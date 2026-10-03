@@ -4,14 +4,12 @@ import { useMathStore } from "../../runtime/mathSession";
 import { getActiveDefinition } from "../../runtime/session";
 import { ArithmeticControls } from "../controls/ArithmeticControls";
 import { CountingControls } from "../controls/CountingControls";
-import {
-  EqualGroupsControls,
-  SharingAction,
-} from "../controls/EqualGroupsControls";
 import { FractionBuilderControls } from "../controls/FractionBuilderControls";
 import { FractionNumberLineControls } from "../controls/FractionNumberLineControls";
+import { MathPrimaryControls } from "../controls/MathPrimaryControls";
 import type { MathDemo } from "../traits/MathBoards";
 import { ArithmeticScene } from "./ArithmeticScene";
+import { ControlsOverlay } from "./ControlsOverlay";
 import { CountingScene } from "./CountingScene";
 import { DomainObservationViews } from "./DomainObservationViews";
 import { EqualGroupsScene } from "./EqualGroupsScene";
@@ -83,7 +81,12 @@ export function MathExperimentView({ demo }: { demo: MathDemo }) {
       break;
     case "equal-groups":
       scene = <EqualGroupsScene board={board} />;
-      controls = <EqualGroupsControls board={board} />;
+      controls = (
+        <p>
+          Change the counters and baskets beside the experiment. Each basket
+          receives an equal share.
+        </p>
+      );
       break;
     case "fraction-builder":
       scene = <FractionBuilderScene board={board} />;
@@ -101,9 +104,13 @@ export function MathExperimentView({ demo }: { demo: MathDemo }) {
       <header className="math-intro">
         <span className="math-grade">{lesson.grade} · EXPLORE MATH</span>
         <h1>{lesson.title}</h1>
-        <p>{instruction}</p>
+        <p>
+          {(board.demo === "counting" || board.demo === "arithmetic") &&
+          !board.sequence.looping
+            ? lesson.instruction
+            : instruction}
+        </p>
       </header>
-      {board.demo === "equal-groups" && <SharingAction board={board} />}
       <div className="math-workspace">
         <section className="math-stage" aria-label="Experiment diagram">
           {views.includes("SVGWorldView") && (
@@ -115,13 +122,23 @@ export function MathExperimentView({ demo }: { demo: MathDemo }) {
             </p>
           )}
           <MathReadoutView board={board} />
+          <section
+            className="experiment-interaction"
+            aria-label="Try the experiment"
+          >
+            <MathPrimaryControls board={board} />
+          </section>
         </section>
-        <aside className="math-controls" aria-label="Experiment controls">
-          {!youngLearner && <h2>Try it yourself</h2>}
-          {controls}
-        </aside>
+        <ControlsOverlay>
+          <aside className="math-controls" aria-label="Experiment controls">
+            {!youngLearner && <h2>Try it yourself</h2>}
+            {controls}
+          </aside>
+        </ControlsOverlay>
       </div>
-      <DomainObservationViews demo={demo} />
+      <ControlsOverlay>
+        <DomainObservationViews demo={demo} />
+      </ControlsOverlay>
     </main>
   );
 }

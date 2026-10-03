@@ -15,7 +15,9 @@
     "test:planner": "node scripts/verify-planner.cjs",
     "test:laya:live": "node scripts/evaluate-laya-live.cjs",
     "test:creation": "node scripts/verify-creation.cjs",
-    "test:creation:browser": "node scripts/verify-creation-browser.cjs"
+    "test:creation:browser": "node scripts/verify-creation-browser.cjs",
+    "test:workspace": "node scripts/verify-workspace-ux.cjs",
+    "test:interactions": "node scripts/verify-experiment-interactions.cjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",
