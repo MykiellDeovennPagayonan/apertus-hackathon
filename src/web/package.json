@@ -13,7 +13,9 @@
     "test:browser": "node scripts/verify-browser.cjs",
     "test:apertus:live": "node scripts/evaluate-apertus-live.cjs",
     "test:planner": "node scripts/verify-planner.cjs",
-    "test:laya:live": "node scripts/evaluate-laya-live.cjs"
+    "test:laya:live": "node scripts/evaluate-laya-live.cjs",
+    "test:creation": "node scripts/verify-creation.cjs",
+    "test:creation:browser": "node scripts/verify-creation-browser.cjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",

@@ -10,6 +10,7 @@ import { TownControls } from "../controls/TownControls";
 import { BridgeScene } from "./BridgeScene";
 import { DomainObservationViews } from "./DomainObservationViews";
 import { ElementaryExperimentView } from "./ElementaryExperimentView";
+import { GasPressureView } from "./GasPressureView";
 import { MathExperimentView } from "./MathExperimentView";
 import { ProjectileObservationViews } from "./ProjectileObservationViews";
 import { ProjectileScene } from "./ProjectileScene";
@@ -20,6 +21,7 @@ const ThreeWorldView = dynamic(() => import("./ThreeWorldView"), {
   loading: () => <div aria-live="polite">Loading the town…</div>,
 });
 export function ExperimentView({ demo }: { demo: DemoType }) {
+  if (demo === "gas") return <GasPressureView />;
   if (isMathDemo(demo)) return <MathExperimentView demo={demo} />;
   if (isElementaryDemo(demo)) return <ElementaryExperimentView />;
   const views = getActiveDefinition()?.components.views ?? [];
@@ -31,8 +33,12 @@ export function ExperimentView({ demo }: { demo: DemoType }) {
         </div>
         <div className="projectile-demo__bottom">
           <ProjectileControls />
-          {views.includes("XYGraphView") && <XYGraphView />}
+          <details>
+            <summary>Explore more: flight graph</summary>
+            {views.includes("XYGraphView") && <XYGraphView />}
+          </details>
         </div>
+        <p>Same launch and landing height; no air resistance.</p>
         <ProjectileObservationViews />
       </div>
     );

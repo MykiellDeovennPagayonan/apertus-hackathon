@@ -10,6 +10,7 @@ import { templateNames } from "../../../simulations/runtime/capabilities";
 import {
   disposeSession,
   executePlan,
+  getDiagnosticSnapshot,
   getExperimentContext,
   saveRecipe,
 } from "../../../simulations/runtime/session";
@@ -21,6 +22,7 @@ import "../../_components/LandingPage.css";
 import "./ExperimentsShell.css";
 
 const CHIPS: Partial<Record<DemoType, string[]>> = {
+  gas: ["Heat it up", "Add more gas", "Why did the pressure increase?"],
   ratio: ["Show 25 percent", "Set the ratio to 3 out of 5"],
   "area-perimeter": ["Make a rectangle 6 metres by 4 metres"],
   coordinates: ["Move the point to -3, 4"],
@@ -58,8 +60,18 @@ export default function ExperimentsShell() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedExperiment = searchParams.get("experiment");
-  const youngLearner =
-    demo === "counting" || demo === "arithmetic" || demo === "equal-groups";
+  const youngLearner = demo === "counting" || demo === "arithmetic";
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_EXPERIMENT_DIAGNOSTICS !== "true") return;
+    Object.defineProperty(window, "__experimentSnapshot", {
+      value: getDiagnosticSnapshot,
+      configurable: true,
+    });
+    return () => {
+      Reflect.deleteProperty(window, "__experimentSnapshot");
+    };
+  }, []);
 
   const applyPlan = useCallback((plan: Plan) => {
     const result = executePlan(plan);
@@ -67,15 +79,19 @@ export default function ExperimentsShell() {
       setConfirmation(`No changes applied. ${result.error}`);
       return;
     }
-    if (plan.operation === "clarify" || plan.operation === "unsupported") {
+    if (
+      plan.operation === "explain" ||
+      plan.operation === "clarify" ||
+      plan.operation === "unsupported"
+    ) {
       setConfirmation(plan.message);
       return;
     }
     if (result.demo) {
       setDemo(result.demo);
       setPhase("ready");
-      setConfirmation("Experiment ready. Initial configuration applied.");
-    } else setConfirmation("Requested changes applied to the experiment.");
+      setConfirmation(`Experiment ready. ${plan.message}`);
+    } else setConfirmation(plan.message);
   }, []);
 
   useEffect(() => {
@@ -115,7 +131,7 @@ export default function ExperimentsShell() {
   }, [selectedExperiment, applyPlan]);
 
   const onPrompt = async (text: string) => {
-    if (busy) return;
+    if (pending.current && !pending.current.signal.aborted) return;
     pending.current?.abort();
     const controller = new AbortController();
     pending.current = controller;
@@ -137,7 +153,10 @@ export default function ExperimentsShell() {
           error instanceof Error ? error.message : "Apertus request failed.",
         );
     } finally {
-      if (!controller.signal.aborted) setBusy(false);
+      if (pending.current === controller) {
+        pending.current = null;
+        setBusy(false);
+      }
     }
   };
 
@@ -172,6 +191,12 @@ export default function ExperimentsShell() {
     }
   };
 
+  const cancel = () => {
+    pending.current?.abort();
+    pending.current = null;
+    setBusy(false);
+    setConfirmation("Request cancelled. No changes applied.");
+  };
   if (phase === "catalog") {
     return (
       <div className="pg-shell pg-shell--center">
@@ -184,7 +209,23 @@ export default function ExperimentsShell() {
           </Link>
           <Link href="/">← Back to the lab</Link>
         </header>
-        <ExperimentCatalog error={confirmation} />
+        <CommandBar
+          placeholder="What would you like to explore?"
+          chips={[
+            "Show me how division works",
+            "Show me how throwing a ball works",
+            "Show me how gas pressure works",
+          ]}
+          disabled={busy}
+          confirmation={confirmation}
+          onSubmit={onPrompt}
+        />
+        {busy && (
+          <button type="button" onClick={cancel}>
+            Cancel creation
+          </button>
+        )}
+        <ExperimentCatalog error={null} />
       </div>
     );
   }
@@ -212,6 +253,11 @@ export default function ExperimentsShell() {
 
       {phase === "ready" && demo && <ExperimentView demo={demo} />}
 
+      {busy && (
+        <button type="button" onClick={cancel}>
+          Cancel request
+        </button>
+      )}
       {youngLearner ? (
         <details className="pg-grownup-prompts">
           <summary>More tools for grown-ups</summary>

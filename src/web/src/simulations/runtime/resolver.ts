@@ -51,6 +51,7 @@ export function resolveRecipe(recipe: Recipe): CompositionDefinition {
       velocity: speed,
       gravity,
       gravityName,
+      playing: p.playing ?? true,
       compareAngle: angles[1] ?? null,
     };
     composition.instances = angles.map((angle, i) => ({

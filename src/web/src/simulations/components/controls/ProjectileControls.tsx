@@ -24,7 +24,7 @@ export function ProjectileControls() {
           }
         />
         <ParameterSlider
-          label="Velocity"
+          label="Throw speed"
           display={`${s.velocity} m/s`}
           value={s.velocity}
           min={5}
@@ -33,20 +33,35 @@ export function ProjectileControls() {
             dispatchCommand("projectile", { type: "SET_VELOCITY", value })
           }
         />
-        <OptionSelect
-          label="Gravity"
-          value={s.gravityName.toLowerCase()}
-          options={GravityPresets.map((p) => ({ id: p.id, label: p.label }))}
-          onChange={(value) =>
-            dispatchCommand("projectile", { type: "SET_GRAVITY", value })
-          }
-        />
+        <details>
+          <summary>Explore more</summary>
+          <OptionSelect
+            label="Gravity"
+            value={s.gravityName.toLowerCase()}
+            options={GravityPresets.map((p) => ({ id: p.id, label: p.label }))}
+            onChange={(value) =>
+              dispatchCommand("projectile", { type: "SET_GRAVITY", value })
+            }
+          />
+          <label>
+            <input
+              type="checkbox"
+              checked={s.showVectors}
+              onChange={(e) =>
+                dispatchCommand("projectile", {
+                  type: e.target.checked ? "SHOW_VECTORS" : "HIDE_VECTORS",
+                })
+              }
+            />{" "}
+            Show velocity vectors
+          </label>
+        </details>
       </div>
       <div className="proj-controls__row">
         <ActionButton
           onCommand={() => dispatchCommand("projectile", { type: "LAUNCH" })}
         >
-          Launch
+          Throw again
         </ActionButton>
         <PlaybackControls
           playing={s.playing}
@@ -67,8 +82,8 @@ export function ProjectileControls() {
       <MetricsView
         className="proj-controls__metrics"
         values={[
-          { label: "range", value: `${m.range.toFixed(1)} m` },
-          { label: "max height", value: `${m.maxHeight.toFixed(1)} m` },
+          { label: "Distance", value: `${m.range.toFixed(2)} m` },
+          { label: "Maximum height", value: `${m.maxHeight.toFixed(2)} m` },
           { label: "flight time", value: `${m.duration.toFixed(2)} s` },
           { label: `${s.gravityName} gravity`, value: `${s.gravity} m/s²` },
         ]}

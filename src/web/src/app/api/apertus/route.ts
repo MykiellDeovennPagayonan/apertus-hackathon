@@ -1,9 +1,13 @@
+import { randomUUID } from "node:crypto";
 import { planPrompt } from "../../../lib/planner";
+import { startTrace } from "../../../lib/planner/diagnostics";
 import { PlannerError } from "../../../lib/planner/errors";
 import { isDemo, validateContext } from "../../../lib/planner/schema";
 import { templateDemo } from "../../../simulations/runtime/capabilities";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
+  const correlationId = randomUUID();
+  let trace: ReturnType<typeof startTrace> | undefined;
   try {
     const reader = request.body?.getReader();
     const chunks: Uint8Array[] = [];
@@ -82,15 +86,25 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
+    trace = startTrace(correlationId, input.prompt.trim());
     const plan = await planPrompt(
       input.prompt.trim(),
       input.demo ?? null,
       context,
       request.signal,
+      trace,
     );
-    return Response.json(plan, { headers: { "Cache-Control": "no-store" } });
+    trace("plan", plan);
+    return Response.json(plan, {
+      headers: { "Cache-Control": "no-store", "X-Request-ID": correlationId },
+    });
   } catch (error) {
     const status = error instanceof PlannerError ? error.status : 500;
+    trace?.("failure", {
+      status,
+      message:
+        error instanceof Error ? error.message : "Unknown planner failure",
+    });
     return Response.json(
       {
         error:
@@ -98,7 +112,13 @@ export async function POST(request: Request) {
             ? error.message
             : "Unable to process the prompt.",
       },
-      { status, headers: status === 429 ? { "Retry-After": "2" } : {} },
+      {
+        status,
+        headers: {
+          "X-Request-ID": correlationId,
+          ...(status === 429 ? { "Retry-After": "2" } : {}),
+        },
+      },
     );
   }
 }

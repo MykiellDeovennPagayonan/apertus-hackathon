@@ -178,14 +178,13 @@ async function main() {
   };
   try {
     process.env.PLANNER_MODE = "hybrid";
-    process.env.LAYA_API_TOKEN = "private-token";
     process.env.LAYA_BASE_URL = "http://laya.test";
     process.env.APERTUS_LOCAL_BASE_URL = "http://apertus.test/v1";
     global.fetch = async (url, options) => {
       const body = JSON.parse(options.body);
       if (String(url).includes("laya.test")) {
         layaCalls++;
-        assert.equal(options.headers.Authorization, "Bearer private-token");
+        assert.equal(options.headers.Authorization, undefined);
         assert.equal(body.state.request, activePrompt);
         if (behavior === "unavailable")
           return new Response("unavailable", { status: 503 });
@@ -301,13 +300,17 @@ async function main() {
     );
     activePrompt = prompt;
     proposal = selection;
-    for (const failure of [
-      "unavailable",
-      "malformed-laya",
-      "oversize",
-      "low",
-      "compound",
-    ]) {
+    for (const failure of ["unavailable", "malformed-laya", "oversize"]) {
+      behavior = failure;
+      const before = broadCalls;
+      await assert.rejects(planPrompt(prompt, "projectile", context));
+      assert.equal(
+        broadCalls,
+        before,
+        "Transport failure must not trigger fallback",
+      );
+    }
+    for (const failure of ["low", "compound"]) {
       behavior = failure;
       const before = broadCalls;
       assert.equal(
@@ -390,10 +393,12 @@ async function main() {
     behavior = "wait-laya";
     process.env.LAYA_TIMEOUT_MS = "10";
     const keepAlive = setTimeout(() => {}, 100);
-    assert.equal(
-      (await planPrompt(prompt, "projectile", context)).message,
-      broadPlan.message,
+    before = broadCalls;
+    await assert.rejects(
+      planPrompt(prompt, "projectile", context),
+      (e) => e.status === 504,
     );
+    assert.equal(broadCalls, before);
     clearTimeout(keepAlive);
     // The total hybrid deadline also covers a hanging Apertus interpretation.
     process.env.LAYA_TIMEOUT_MS = "3000";

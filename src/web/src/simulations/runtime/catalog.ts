@@ -188,6 +188,15 @@ for (const [id, required] of Object.entries(dependencies)) {
 registerMathDefinitions(definitions);
 
 const additions: [string, ComponentKind][] = [
+  ["GasContainer", "prefabs"],
+  ["GasSample", "prefabs"],
+  ["GasState", "traits"],
+  ["GasMetrics", "traits"],
+  ["IdealGasSystem", "systems"],
+  ["GasParticleIllustrationSystem", "systems"],
+  ["GasContainerVisual", "visuals"],
+  ["GasParticleVisual", "visuals"],
+  ["PressureReadout", "views"],
   ["ResultsTableView", "views"],
   ["ComparisonView", "views"],
   ["TimeSeriesView", "views"],
@@ -223,6 +232,7 @@ for (const [id, kind] of additions)
       : {}),
   });
 const descriptions: Record<DemoType, string> = {
+  gas: "Equilibrium ideal-gas pressure P=nRT/V with illustrative particles; explore volume, temperature and amount",
   projectile:
     "Analytic ground-to-ground projectile launches, independent comparisons and angle sweeps",
   bridge: "Truss bridge load placement and heuristic response scores",
@@ -260,6 +270,12 @@ for (const id of ["AngleComparisonExperiment", "ProjectileSweepExperiment"])
     operations: operations.projectile,
   });
 for (const [id, required, writes] of [
+  [
+    "IdealGasSystem",
+    ["traits/GasState", "traits/GasMetrics"],
+    ["sample.metrics.pressurePa", "sample.metrics.pressureKPa"],
+  ],
+  ["GasParticleIllustrationSystem", ["traits/GasState"], ["particles"]],
   ["RatioSystem", ["traits/RatioState"], ["ratio.outputs"]],
   [
     "RectangleMetricsSystem",
@@ -282,6 +298,13 @@ const outputContracts: Record<
   string,
   { name: string; unit: string; fidelity: string }[]
 > = {
+  gas: [
+    {
+      name: "pressureKPa",
+      unit: "kPa",
+      fidelity: "equilibrium ideal gas; illustrative particles",
+    },
+  ],
   projectile: [
     { name: "range", unit: "m", fidelity: "analytic ground-to-ground" },
     { name: "maxHeight", unit: "m", fidelity: "analytic" },
@@ -378,6 +401,8 @@ for (const definition of definitions.values())
     definition.description = `${definition.id}: trusted ${definition.kind} capability, version ${definition.version}`;
 
 const scopes: Record<string, string[]> = {
+  IdealGasSystem: ["GasContainer"],
+  GasParticleIllustrationSystem: ["GasContainer"],
   BallisticMotionSystem: ["Projectile"],
   MeasurementSamplingSystem: ["Projectile"],
   HeuristicBridgeResponseSystem: ["TrussAssembly"],

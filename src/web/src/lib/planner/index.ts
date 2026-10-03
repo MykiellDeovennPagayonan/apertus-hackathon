@@ -9,6 +9,7 @@ import { createLayaClient } from "../laya/client";
 import { readLayaConfig } from "../laya/config";
 import { selectWithLaya } from "../laya/planner";
 import type { PlannerSelection } from "../laya/types";
+import { planCreation, type TraceSink } from "./creation";
 import { PlannerError } from "./errors";
 import type { ExperimentContext, Plan } from "./schema";
 
@@ -18,8 +19,9 @@ export async function planPrompt(
   demo: DemoType | null,
   context: ExperimentContext | null,
   signal?: AbortSignal,
+  trace?: TraceSink,
 ): Promise<Plan> {
-  const mode = process.env.PLANNER_MODE ?? "apertus";
+  const mode = process.env.PLANNER_MODE ?? "hybrid";
   if (!["apertus", "hybrid"].includes(mode))
     throw new PlannerError("PLANNER_MODE must be apertus or hybrid.", 503);
   if (signal?.aborted)
@@ -52,6 +54,14 @@ export async function planPrompt(
     // One deadline spans all sequential Laya decisions. Apertus retains its own budget.
     const timeout = AbortSignal.timeout(config.timeout);
     const combined = AbortSignal.any([requestSignal, timeout]);
+    if (!demo && !context)
+      return await planCreation(
+        prompt,
+        createLayaClient(config, requestSignal),
+        config.creationGate,
+        requestSignal,
+        trace,
+      );
     let selection: PlannerSelection | null = null;
     try {
       selection = await selectWithLaya(
@@ -60,12 +70,19 @@ export async function planPrompt(
         context,
         createLayaClient(config, combined),
         config.gate,
+        (event) => trace?.("edit.layaSelection", event),
       );
       if (signal?.aborted)
         throw new PlannerError("Planner request cancelled.", 499);
-    } catch {
+    } catch (error) {
       if (signal?.aborted)
         throw new PlannerError("Planner request cancelled.", 499);
+      if (requestSignal.aborted || combined.aborted)
+        throw new PlannerError("Planner timed out. Please try again.", 504);
+      throw new PlannerError(
+        error instanceof Error ? error.message : "Laya transport failed.",
+        502,
+      );
     }
     if (signal?.aborted)
       throw new PlannerError("Planner request cancelled.", 499);
@@ -76,6 +93,7 @@ export async function planPrompt(
         context,
         selection,
         requestSignal,
+        (event, data) => trace?.(`edit.focused.${event}`, data),
       );
       if (signal?.aborted)
         throw new PlannerError("Planner request cancelled.", 499);
@@ -91,7 +109,9 @@ export async function planPrompt(
       // repeated schema failures propagate instead of causing more model calls.
     }
     return demo && context
-      ? await planEdits(prompt, demo, context, requestSignal)
+      ? await planEdits(prompt, demo, context, requestSignal, (event, data) =>
+          trace?.(`edit.broad.${event}`, data),
+        )
       : await planWithApertus(prompt, demo, context, requestSignal);
   } catch (error) {
     if (signal?.aborted)

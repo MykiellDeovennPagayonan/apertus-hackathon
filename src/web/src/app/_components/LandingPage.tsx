@@ -52,8 +52,8 @@ export default function LandingPage() {
             Curiosity, <em>made interactive.</em>
           </h1>
           <p>
-            Choose a premade experiment. Explore a little world and see what
-            changes.
+            Describe a concept or choose an experiment. Change something and see
+            what happens.
           </p>
           <Link className="landing__cta" href="/experiments">
             Explore the experiments ↗

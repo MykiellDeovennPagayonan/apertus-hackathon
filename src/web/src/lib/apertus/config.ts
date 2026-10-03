@@ -5,7 +5,7 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env) {
   const online = provider === "huggingface";
   const baseUrl = online
     ? env.APERTUS_HF_BASE_URL || "https://router.huggingface.co/v1"
-    : env.APERTUS_LOCAL_BASE_URL || "http://127.0.0.1:8080/v1";
+    : env.APERTUS_LOCAL_BASE_URL || "http://127.0.0.1:43101/v1";
   const url = new URL(baseUrl);
   if (
     !["http:", "https:"].includes(url.protocol) ||

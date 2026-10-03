@@ -1,9 +1,12 @@
 import { elementaryCompositions } from "../components/compositions/ElementaryExperiments";
+import { GasPressureExperiment } from "../components/compositions/GasPressureExperiment";
 import { Building } from "../components/prefabs/Building";
 import { Citizen } from "../components/prefabs/Citizen";
+import { GasContainer } from "../components/prefabs/GasContainer";
 import { Market } from "../components/prefabs/Market";
 import { Projectile } from "../components/prefabs/Projectile";
 import { buildTruss } from "../components/prefabs/TrussAssembly";
+import type { GasState } from "../components/traits/GasState";
 import { ArithmeticExperiment } from "../pre-made/arithmetic";
 import { BridgeExperiment } from "../pre-made/bridge";
 import { CountingExperiment } from "../pre-made/counting";
@@ -22,6 +25,7 @@ import { validateValue } from "./parameterSchema";
 import { systemProviders } from "./providers";
 import type { DemoType } from "./types";
 export const compositions = {
+  gas: GasPressureExperiment,
   ...elementaryCompositions,
   counting: CountingExperiment,
   arithmetic: ArithmeticExperiment,
@@ -162,6 +166,21 @@ export function stageComposition(composition: CompositionDefinition) {
       );
       elementaryOutputs(composition.demo, p);
       return { id: instance.id, ...p };
+    }
+    if (composition.demo === "gas") {
+      if (
+        instance.prefab !== "GasContainer" ||
+        composition.instances.length !== 1
+      )
+        throw new Error("Gas requires one container assembly");
+      const container = GasContainer(instance.id, p as unknown as GasState);
+      if (
+        seen.has(container.sample.id) ||
+        !composition.components.prefabs.includes("GasSample")
+      )
+        throw new Error("Invalid gas sample expansion");
+      seen.add(container.sample.id);
+      return container;
     }
     switch (instance.prefab) {
       case "Projectile":

@@ -4,13 +4,14 @@ import type { DemoType } from "../../simulations/runtime/types";
 import { compositions } from "../../simulations/runtime/validation";
 
 const topics: Record<DemoType, RegExp> = {
+  gas: /gas|pressure|temperature|volume/i,
   projectile:
     /\b(projectiles?|launch(?:es|ing)?|angles?|gravity|moon|mars|throw(?:ing)?|ballistic|trajector(?:y|ies)|sweeps?)\b/i,
   bridge: /bridge|truss|load|truck|beam/i,
   town: /town|citizen|market|road|school|nighttime/i,
   counting: /count|circles|box/i,
   arithmetic: /add|subtract|addition|subtraction/i,
-  "equal-groups": /share|groups|baskets|multiply|divide/i,
+  "equal-groups": /share|groups|baskets|multiply|divide|division/i,
   "fraction-builder": /fraction|\d+\s*\/\s*\d+/i,
   "fraction-number-line":
     /number line|place\s+\d+\s*\/|add\s+\d+\s*\/|subtract\s+\d+\s*\//i,

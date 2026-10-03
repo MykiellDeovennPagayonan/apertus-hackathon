@@ -58,6 +58,13 @@ export const taskSchemas = {
   }),
 };
 export const operations: Record<DemoType, Record<string, OperationMetadata>> = {
+  gas: {
+    SET_VOLUME: operation(num(0.25, 2, "L")),
+    SET_TEMPERATURE: operation(num(100, 600, "K")),
+    SET_AMOUNT: operation(num(0.1, 5, "mmol")),
+    SET_PLAYING: operation(boolean),
+    RESET: playback.RESET,
+  },
   projectile: {
     SET_ANGLE: operation(num(0, 90, "degrees"), "relaunch", "instance"),
     COMPARE_ANGLE: operation(num(0, 90, "degrees"), "relaunch"),
@@ -203,6 +210,7 @@ export function validateCommand(demo: DemoType, command: UIAction) {
   );
 }
 export const templateNames: Record<DemoType, string> = {
+  gas: "GasPressureExperiment",
   projectile: "ProjectileExperiment",
   bridge: "BridgeExperiment",
   town: "TownExperiment",
@@ -232,8 +240,19 @@ export function templateDemo(ref: string): DemoType {
 }
 export function templateParameters(ref: string): ParameterSchema {
   const demo = templateDemo(ref);
+  if (demo === "gas")
+    return object(
+      {
+        amount: num(0.1, 5, "mmol"),
+        temperature: num(100, 600, "K"),
+        volume: num(0.25, 2, "L"),
+        playing: boolean,
+      },
+      ["amount", "temperature", "volume", "playing"],
+    );
   if (demo === "projectile") {
     const props = {
+      playing: boolean,
       angle: num(0, 90, "degrees"),
       speed: num(5, 40, "m/s"),
       gravityPreset: choice("Moon", "Earth", "Mars", "Jupiter"),

@@ -1,0 +1,86 @@
+.learning-experiment {
+  width: min(100%, 960px);
+  margin: auto;
+  padding: clamp(16px, 3vw, 32px);
+  box-sizing: border-box;
+}
+.learning-experiment h1 {
+  font-size: clamp(24px, 4vw, 36px);
+}
+.learning-scene {
+  display: block;
+  width: 100%;
+  max-height: 430px;
+}
+.learning-main-controls {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.learning-slider {
+  display: block;
+  flex: 1;
+  min-width: 180px;
+  margin-block: 16px;
+}
+.learning-slider input {
+  display: block;
+  width: 100%;
+  min-height: 32px;
+  accent-color: #245bcb;
+}
+.learning-pressure {
+  display: grid;
+  gap: 6px;
+  font-size: 18px;
+}
+.learning-pressure strong {
+  font-size: 30px;
+}
+.learning-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-block: 16px;
+}
+.learning-actions button {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid #245bcb;
+  border-radius: 8px;
+  background: white;
+  color: #1745a0;
+  cursor: pointer;
+}
+.learning-actions button:first-child {
+  background: #245bcb;
+  color: white;
+}
+.learning-experiment details {
+  padding: 12px 0;
+}
+.learning-experiment summary {
+  cursor: pointer;
+  padding: 8px 0;
+}
+:where(button, input, summary):focus-visible {
+  outline: 3px solid #245bcb;
+  outline-offset: 3px;
+}
+.math-experiment--equal-groups .math-scene-scroll svg {
+  min-width: 0;
+  width: 100%;
+}
+.math-experiment--equal-groups .math-scroll-hint {
+  display: none;
+}
+.math-experiment--equal-groups .math-controls {
+  min-width: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .math-experiment--equal-groups * {
+    animation: none;
+    transition: none;
+  }
+}

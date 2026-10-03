@@ -8,10 +8,9 @@ export function createLayaClient(
     const response = await fetch(`${config.baseUrl}/api/decide`, {
       method: "POST",
       cache: "no-store",
-      signal,
+      signal: AbortSignal.any([signal, AbortSignal.timeout(config.timeout)]),
       headers: {
         "Content-Type": "application/json",
-        ...(config.token ? { Authorization: `Bearer ${config.token}` } : {}),
       },
       body: JSON.stringify(payload),
     });

@@ -1,9 +1,8 @@
 import logging
-import secrets
 import threading
 import time
 from contextlib import asynccontextmanager
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from .config import read_config
 from .runtime import ModelRuntime
@@ -24,13 +23,6 @@ def create_app(config=None, runtime=None):
     app = FastAPI(title="Laya inference", lifespan=lifespan)
     app.state.runtime = runtime
 
-    def require_token(request: Request):
-        if config.auth_disabled:
-            return
-        scheme, _, token = request.headers.get("Authorization", "").partition(" ")
-        if scheme.lower() != "bearer" or not config.token or not secrets.compare_digest(token, config.token):
-            raise HTTPException(401, "Missing or invalid token", headers={"WWW-Authenticate": "Bearer"})
-
     @app.middleware("http")
     async def bound_body(request, call_next):
         if request.method == "POST":
@@ -45,10 +37,10 @@ def create_app(config=None, runtime=None):
     @app.get("/api/status", response_model=RuntimeStatus)
     def status():
         return RuntimeStatus(state=runtime.state, model=config.model,
-            auth_required=not config.auth_disabled, device=config.device or "default",
+            auth_required=False, device=config.device or "default",
             dtype=config.dtype, load_ms=runtime.load_ms, warmup_ms=runtime.warmup_ms)
 
-    @app.post("/api/decide", dependencies=[Depends(require_token)])
+    @app.post("/api/decide")
     def decide(request: DecisionRequest):
         if runtime.state != "ready":
             raise HTTPException(503, "Laya is not ready; check /api/status and server logs")

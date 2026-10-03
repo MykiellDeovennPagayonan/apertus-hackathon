@@ -1,3 +1,7 @@
+import {
+  educationalEditPolicy,
+  learningPolicies,
+} from "../../simulations/components/resources/LearningPolicies";
 import type { DemoType } from "../../simulations/runtime/types";
 import { type ExperimentContext, parseModelContent } from "../planner/schema";
 import { selectCapabilities } from "./catalogSelection";
@@ -16,6 +20,8 @@ export async function planPrompt(
     {
       role: "system",
       content: `You are Apertus, the experiment planner. Return exactly ONE JSON object, with no prose outside it. Never generate code.
+Educational defaults (missing quantities are defaultable): ${JSON.stringify(learningPolicies)}. ${educationalEditPolicy}
+Explain format: {"schemaVersion":1,"operation":"explain","message":"Explain actual state and recent changes."}
 EVERY answer, including clarification and unsupported answers, MUST include "schemaVersion":1 and a nonempty "message" string.
 
 There are four exact formats. These are valid complete JSON examples:

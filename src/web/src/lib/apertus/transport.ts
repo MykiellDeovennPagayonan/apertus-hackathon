@@ -5,6 +5,13 @@ export interface Message {
   role: string;
   content: string;
 }
+export interface RequestBudget {
+  repairsRemaining: number;
+}
+export interface StructuredOptions {
+  budget?: RequestBudget;
+  onEvent?: (event: string, data: unknown) => void;
+}
 let active = 0;
 
 /** Both focused interpretation and broad planning share capacity and repair limits. */
@@ -13,6 +20,7 @@ export async function requestStructured<T>(
   parse: (content: string) => T,
   repairInstructions: string,
   signal?: AbortSignal,
+  options: StructuredOptions = {},
 ): Promise<T> {
   let config: ReturnType<typeof readConfig>;
   try {
@@ -32,6 +40,9 @@ export async function requestStructured<T>(
   const combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
   try {
     for (let attempt = 0; attempt < 2; attempt++) {
+      if (combined.aborted)
+        throw new PlannerError("Apertus request cancelled.", 499);
+      const started = Date.now();
       const response = await fetch(`${config.baseUrl}/chat/completions`, {
         method: "POST",
         cache: "no-store",
@@ -69,15 +80,30 @@ export async function requestStructured<T>(
           502,
         );
       try {
-        return parse(content);
+        const parsed = parse(content);
+        options.onEvent?.("response", {
+          model: data.model ?? config.model,
+          elapsedMs: Date.now() - started,
+          attempt,
+          result: parsed,
+        });
+        return parsed;
       } catch (error) {
         const reason =
           error instanceof Error ? error.message : "schema mismatch";
-        if (attempt === 1)
+        options.onEvent?.("schemaFailure", {
+          model: data.model ?? config.model,
+          elapsedMs: Date.now() - started,
+          attempt,
+          reason,
+          content,
+        });
+        if (attempt === 1 || options.budget?.repairsRemaining === 0)
           throw new PlannerError(
             `Apertus returned an invalid result after one repair: ${reason}`,
             502,
           );
+        if (options.budget) options.budget.repairsRemaining--;
         messages.push(
           { role: "assistant", content: content.slice(0, 16000) },
           {

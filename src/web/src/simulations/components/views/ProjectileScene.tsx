@@ -119,7 +119,7 @@ export function ProjectileScene() {
       <LegendView
         x={W - 190}
         entries={s.instances.map((instance, index) => ({
-          label: `${instance.launch.angle}° · ${instance.launch.velocity} m/s`,
+          label: `Ball ${index + 1}: ${instance.launch.angle}° · ${instance.launch.velocity} m/s`,
           color: index === 0 ? "var(--accent)" : "var(--warn)",
           ...(index > 0 ? { dash: "6 5" } : {}),
         }))}

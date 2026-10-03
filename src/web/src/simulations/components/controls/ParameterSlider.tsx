@@ -26,6 +26,7 @@ export function ParameterSlider({
       {display && <span>{display}</span>}
       <input
         type="range"
+        aria-label={label}
         min={min}
         max={max}
         step={step}

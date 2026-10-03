@@ -42,6 +42,7 @@ export function TrajectoryVisual({
           scale={scale}
           originX={originX}
           groundY={groundY}
+          comparison={comparison}
         />
       )}
     </>
@@ -53,13 +54,18 @@ function TrajectoryAnnotations({
   scale,
   originX: ORIGIN_X,
   groundY: GROUND_Y,
+  comparison,
 }: {
   metrics: FlightMetrics;
   scale: number;
   originX: number;
   groundY: number;
+  comparison: boolean;
 }) {
   const { range: R, maxHeight: Hmax } = metrics;
+  const color = comparison
+    ? ProjectileStyles.comparison
+    : ProjectileStyles.primary;
   return (
     <>
       {/* range marker */}
@@ -69,12 +75,12 @@ function TrajectoryAnnotations({
           y1={GROUND_Y}
           x2={ORIGIN_X + R * scale}
           y2={GROUND_Y + 16}
-          stroke="var(--accent)"
+          stroke={color}
         />
         <text
           x={ORIGIN_X + R * scale}
-          y={GROUND_Y + 32}
-          fill="var(--accent)"
+          y={GROUND_Y + (comparison ? 58 : 30)}
+          fill={color}
           fontSize={11}
           textAnchor="middle"
         >

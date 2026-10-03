@@ -72,3 +72,8 @@
   border-color: var(--accent);
   color: var(--text);
 }
+
+.pg-shell--center > .command-bar {
+  width: min(100%, 960px);
+  box-sizing: border-box;
+}
