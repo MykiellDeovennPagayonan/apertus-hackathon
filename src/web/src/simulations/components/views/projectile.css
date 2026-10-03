@@ -98,3 +98,46 @@
   padding: 6px 10px;
   border-bottom: 1px solid var(--border);
 }
+
+.proj-controls__metrics {
+  flex-wrap: wrap;
+}
+.projectile-demo > p {
+  padding-inline: 24px;
+}
+.projectile-demo details {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.projectile-demo summary {
+  padding: 10px;
+  cursor: pointer;
+}
+.learning-comparison {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.proj-controls__row button {
+  min-height: 44px;
+}
+@media (max-width: 500px) {
+  .proj-controls__row label {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .proj-controls__row input[type="range"] {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .projectile-demo__scene {
+    height: 230px;
+    min-height: 230px;
+  }
+  .projectile-scene text {
+    font-size: 22px;
+  }
+}

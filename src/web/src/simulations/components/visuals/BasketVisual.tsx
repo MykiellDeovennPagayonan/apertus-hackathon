@@ -4,12 +4,14 @@ export function BasketVisual({
   width,
   label,
   count,
+  height = 170,
 }: {
   x: number;
   y: number;
   width: number;
   label: string;
   count: number;
+  height?: number;
 }) {
   return (
     <g>
@@ -17,7 +19,7 @@ export function BasketVisual({
         x={x}
         y={y}
         width={width}
-        height={170}
+        height={height}
         rx={18}
         fill="#f6f1e5"
         stroke="#af9870"

@@ -10,12 +10,16 @@ import {
 import { EqualGroupingSystem } from "../components/systems/EqualGroupingSystem";
 import { FractionBuilderSystem } from "../components/systems/FractionBuilderSystem";
 import { FractionNumberLineSystem } from "../components/systems/FractionNumberLineSystem";
+import { GasParticleIllustrationSystem } from "../components/systems/GasParticleIllustrationSystem";
 import { HeuristicBridgeResponseSystem } from "../components/systems/HeuristicBridgeResponseSystem";
+import { IdealGasSystem } from "../components/systems/IdealGasSystem";
 import { MeasurementSamplingSystem } from "../components/systems/MeasurementSamplingSystem";
 import { NavigationSystem } from "../components/systems/NavigationSystem";
 import { PathFollowingSystem } from "../components/systems/PathFollowingSystem";
 /** Trusted provider code is separate from serializable definitions and recipes. */
 export const systemProviders = {
+  IdealGasSystem,
+  GasParticleIllustrationSystem,
   RatioSystem,
   RectangleMetricsSystem,
   RandomTrialSystem,

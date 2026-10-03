@@ -50,7 +50,7 @@ function DayNightRig() {
 export function ThreeWorldView() {
   return (
     <Canvas
-      shadows
+      shadows="percentage"
       dpr={[1, 1.75]}
       camera={{
         position: TownExperiment.viewSettings.cameraPosition,

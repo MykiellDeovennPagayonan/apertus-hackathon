@@ -4,11 +4,12 @@ import { useMathStore } from "../../runtime/mathSession";
 import { getActiveDefinition } from "../../runtime/session";
 import { ArithmeticControls } from "../controls/ArithmeticControls";
 import { CountingControls } from "../controls/CountingControls";
-import { EqualGroupsControls } from "../controls/EqualGroupsControls";
 import { FractionBuilderControls } from "../controls/FractionBuilderControls";
 import { FractionNumberLineControls } from "../controls/FractionNumberLineControls";
+import { MathPrimaryControls } from "../controls/MathPrimaryControls";
 import type { MathDemo } from "../traits/MathBoards";
 import { ArithmeticScene } from "./ArithmeticScene";
+import { ControlsOverlay } from "./ControlsOverlay";
 import { CountingScene } from "./CountingScene";
 import { DomainObservationViews } from "./DomainObservationViews";
 import { EqualGroupsScene } from "./EqualGroupsScene";
@@ -30,7 +31,7 @@ const lessons = {
       "Add circles to the group or take them away. Tap a circle, take one step, or press Play.",
   },
   "equal-groups": {
-    title: "A fair share for every basket.",
+    title: "How division works",
     grade: "GRADES 2–4",
     instruction:
       "Build equal groups or share circles one at a time. Some circles may be left over.",
@@ -65,7 +66,7 @@ export function MathExperimentView({ demo }: { demo: MathDemo }) {
           ? "Watch the circles come together. How many altogether?"
           : "Watch the circles go away. How many are left?"
         : board.demo === "equal-groups"
-          ? "Watch the circles go into the baskets. How many in each?"
+          ? `Share ${board.total} counters equally among ${board.groups} baskets.`
           : lesson.instruction;
   let scene: ReactNode;
   let controls: ReactNode;
@@ -80,7 +81,12 @@ export function MathExperimentView({ demo }: { demo: MathDemo }) {
       break;
     case "equal-groups":
       scene = <EqualGroupsScene board={board} />;
-      controls = <EqualGroupsControls board={board} />;
+      controls = (
+        <p>
+          Change the counters and baskets beside the experiment. Each basket
+          receives an equal share.
+        </p>
+      );
       break;
     case "fraction-builder":
       scene = <FractionBuilderScene board={board} />;
@@ -98,7 +104,12 @@ export function MathExperimentView({ demo }: { demo: MathDemo }) {
       <header className="math-intro">
         <span className="math-grade">{lesson.grade} · EXPLORE MATH</span>
         <h1>{lesson.title}</h1>
-        <p>{instruction}</p>
+        <p>
+          {(board.demo === "counting" || board.demo === "arithmetic") &&
+          !board.sequence.looping
+            ? lesson.instruction
+            : instruction}
+        </p>
       </header>
       <div className="math-workspace">
         <section className="math-stage" aria-label="Experiment diagram">
@@ -111,13 +122,23 @@ export function MathExperimentView({ demo }: { demo: MathDemo }) {
             </p>
           )}
           <MathReadoutView board={board} />
+          <section
+            className="experiment-interaction"
+            aria-label="Try the experiment"
+          >
+            <MathPrimaryControls board={board} />
+          </section>
         </section>
-        <aside className="math-controls" aria-label="Experiment controls">
-          {!youngLearner && <h2>Try it yourself</h2>}
-          {controls}
-        </aside>
+        <ControlsOverlay>
+          <aside className="math-controls" aria-label="Experiment controls">
+            {!youngLearner && <h2>Try it yourself</h2>}
+            {controls}
+          </aside>
+        </ControlsOverlay>
       </div>
-      <DomainObservationViews demo={demo} />
+      <ControlsOverlay>
+        <DomainObservationViews demo={demo} />
+      </ControlsOverlay>
     </main>
   );
 }

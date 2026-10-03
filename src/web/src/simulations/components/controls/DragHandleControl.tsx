@@ -1,4 +1,4 @@
-import { type PointerEvent, useRef } from "react";
+import { type PointerEvent, useEffect, useRef, useState } from "react";
 import { dispatchCommand } from "../../runtime/session";
 import type { DemoType, UIAction } from "../../runtime/types";
 /** SVG picking coordinates are explicitly mapped into a domain edit. */
@@ -9,6 +9,7 @@ export function DragHandleControl({
   cy,
   map,
   label,
+  keyboardStep = 8,
 }: {
   demo: DemoType;
   target: string;
@@ -16,8 +17,23 @@ export function DragHandleControl({
   cy: number;
   map: (x: number, y: number) => UIAction;
   label: string;
+  keyboardStep?: number;
 }) {
   const dragging = useRef(false);
+  const handle = useRef<SVGCircleElement>(null);
+  const [radius, setRadius] = useState(22);
+  useEffect(() => {
+    const svg = handle.current?.ownerSVGElement;
+    if (!svg) return;
+    const measure = () => {
+      const scale = svg.getScreenCTM()?.a ?? 1;
+      setRadius(Math.max(18, 22 / Math.abs(scale || 1)));
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(svg);
+    return () => observer.disconnect();
+  }, []);
   const send = (event: PointerEvent<SVGCircleElement>) => {
     const svg = event.currentTarget.ownerSVGElement,
       matrix = svg?.getScreenCTM();
@@ -33,7 +49,8 @@ export function DragHandleControl({
     <circle
       cx={cx}
       cy={cy}
-      r={18}
+      ref={handle}
+      r={radius}
       fill="transparent"
       stroke="var(--accent)"
       strokeDasharray="3 3"
@@ -62,10 +79,17 @@ export function DragHandleControl({
         )
           return;
         e.preventDefault();
+        const step = keyboardStep * (e.shiftKey ? 0.1 : 1);
         dispatchCommand(demo, {
           ...map(
-            cx + (e.key === "ArrowRight" ? 8 : e.key === "ArrowLeft" ? -8 : 0),
-            cy + (e.key === "ArrowDown" ? 8 : e.key === "ArrowUp" ? -8 : 0),
+            cx +
+              (e.key === "ArrowRight"
+                ? step
+                : e.key === "ArrowLeft"
+                  ? -step
+                  : 0),
+            cy +
+              (e.key === "ArrowDown" ? step : e.key === "ArrowUp" ? -step : 0),
           ),
           target,
         });

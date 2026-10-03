@@ -2,7 +2,10 @@ import { type Dataset, validateDataset } from "../traits/MeasurementProbe";
 export function ResultsTableView({ dataset }: { dataset: Dataset }) {
   validateDataset(dataset);
   return (
-    <div style={{ overflowX: "auto", maxHeight: 280, overflowY: "auto" }}>
+    <div
+      className="experiment-table"
+      style={{ overflowX: "auto", maxHeight: 280, overflowY: "auto" }}
+    >
       <table>
         <caption>{dataset.assumption}</caption>
         <thead>

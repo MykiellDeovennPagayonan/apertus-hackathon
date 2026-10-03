@@ -3,10 +3,13 @@ import type {
   ExperimentContext,
   Plan,
   TargetedCommand,
-} from "../../lib/apertus/schema";
-import { parsePlan } from "../../lib/apertus/schema";
+} from "../../lib/planner/schema";
+import { parsePlan } from "../../lib/planner/schema";
 import { GRAVITIES } from "../components/resources/GravityPresets";
+import type { GasState } from "../components/traits/GasState";
 import type { MathBoard } from "../components/traits/MathBoards";
+import { modelProvider } from "./assembly";
+import { assemblyInitializer, useAssemblyStore } from "./assemblySession";
 import { bridgeInitializer, useBridgeStore } from "./bridgeSession";
 import { operations, validateCommand } from "./capabilities";
 import { type ActionResult, rejected } from "./commands";
@@ -16,6 +19,7 @@ import {
   isElementaryDemo,
   useElementaryStore,
 } from "./elementarySession";
+import { gasInitializer, useGasStore } from "./gasSession";
 import { isMathDemo } from "./mathModel";
 import { mathInitializer, useMathStore } from "./mathSession";
 import {
@@ -40,12 +44,28 @@ let active: DemoType | null = null,
   sessionId = "";
 let definition: CompositionDefinition | null = null,
   acceptedRecipe: Recipe | null = null;
+let recentChange: ExperimentContext["recentChange"];
+let correlationId: string | null = null;
+const planCorrelations = new WeakMap<object, string>();
+export function correlatePlan(plan: Plan, id: string) {
+  planCorrelations.set(plan, id);
+}
+export function getDiagnosticSnapshot() {
+  return structuredClone({
+    correlationId,
+    recipe: acceptedRecipe,
+    context: getExperimentContext(),
+    state: active ? data(stores(active).live.getState()) : null,
+  });
+}
 export function disposeSession() {
   if (typeof cancelAnimationFrame !== "undefined") cancelAnimationFrame(frame);
   active = null;
   definition = null;
   acceptedRecipe = null;
   sessionId = "";
+  recentChange = undefined;
+  correlationId = null;
   useMathStore.getState().pause();
 }
 function data<T extends object>(state: T): Partial<T> {
@@ -64,6 +84,16 @@ function candidate<T extends object>(
   return store;
 }
 function stores(demo: DemoType) {
+  if (demo === "assembly")
+    return {
+      candidate: candidate(assemblyInitializer, useAssemblyStore),
+      live: useAssemblyStore,
+    };
+  if (demo === "gas")
+    return {
+      candidate: candidate(gasInitializer, useGasStore),
+      live: useGasStore,
+    };
   if (demo === "projectile")
     return {
       candidate: candidate(projectileInitializer, useProjectileStore),
@@ -108,7 +138,7 @@ function route(
     const target = command.target;
     if (target && target !== "session") {
       const ids =
-        demo === "projectile" && "instances" in state
+        (demo === "assembly" || demo === "projectile") && "instances" in state
           ? state.instances.map((i) => i.id)
           : demo === "bridge" && "truss" in state
             ? [state.truss.id, state.truss.load.id]
@@ -147,13 +177,24 @@ function runClock(demo: DemoType) {
     if (active !== demo || identity !== sessionId) return;
     const delta = previous === undefined ? 0 : (now - previous) / 1000;
     previous = now;
-    if (demo === "projectile") useProjectileStore.getState().step(delta);
+    const reduced =
+      typeof matchMedia !== "undefined" &&
+      matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (demo === "assembly") useAssemblyStore.getState().step(delta);
+    if (demo === "projectile")
+      useProjectileStore.getState().step(reduced ? 60 : delta);
     if (demo === "town") useTownStore.getState().step(delta);
+    if (demo === "gas" && !reduced) useGasStore.getState().step(delta);
     if (isMathDemo(demo)) useMathStore.getState().step(delta);
     frame = requestAnimationFrame(tick);
   };
   if (
-    (demo === "projectile" ||
+    ((demo === "assembly" &&
+      useAssemblyStore
+        .getState()
+        .instances.some((i) => modelProvider(i.provider).step)) ||
+      demo === "gas" ||
+      demo === "projectile" ||
       demo === "town" ||
       (isMathDemo(demo) && demo !== "fraction-builder")) &&
     typeof requestAnimationFrame !== "undefined"
@@ -161,6 +202,13 @@ function runClock(demo: DemoType) {
     frame = requestAnimationFrame(tick);
 }
 function initialRecipe(composition: CompositionDefinition): Recipe {
+  if (composition.demo === "assembly" && composition.assembly)
+    return {
+      schemaVersion: 1,
+      composition: { ref: "assemblies/GeneratedExperiment", version: 1 },
+      parameters: {},
+      assembly: structuredClone(composition.assembly),
+    };
   const recipe: Recipe = {
     schemaVersion: 1,
     composition: { ref: `compositions/${composition.id}`, version: 1 },
@@ -204,7 +252,18 @@ export function activateSession(
   const staged = stageComposition(composition),
     pair = stores(demo),
     state = pair.candidate.getState();
-  if (demo === "projectile" && "instances" in state) {
+  if (demo === "assembly" && "assembly" in state && composition.assembly) {
+    state.activate(composition.assembly);
+  } else if (demo === "gas" && "inputs" in state) {
+    state.activate(
+      composition.instances[0].id,
+      composition.instances[0].parameters as unknown as GasState,
+    );
+  } else if (
+    demo === "projectile" &&
+    "instances" in state &&
+    !("assembly" in state)
+  ) {
     const instances = composition.instances.map((i) =>
       projectileInstance(
         i.id,
@@ -261,6 +320,13 @@ export function dispatchBatch(
   if (active !== demo) return rejected("This experiment is not active");
   if (commands.length < 1 || commands.length > 8)
     return rejected("A batch requires 1–8 commands");
+  const changeTarget = commands.find(
+    (command) => command.target && command.target !== "session",
+  )?.target;
+  const contextBefore = getExperimentContext();
+  const before = changeTarget
+    ? contextBefore?.instances.find((instance) => instance.id === changeTarget)
+    : contextBefore?.instances[0];
   const pair = stores(demo);
   for (const [index, c] of commands.entries()) {
     const result = route(demo, c, pair.candidate);
@@ -271,6 +337,22 @@ export function dispatchBatch(
   }
   commitCandidate(pair);
   revision++;
+  const contextAfter = getExperimentContext();
+  const after = changeTarget
+    ? contextAfter?.instances.find((instance) => instance.id === changeTarget)
+    : contextAfter?.instances[0];
+  if (commands.some((c) => c.type === "RESET")) recentChange = undefined;
+  else if (
+    before &&
+    after &&
+    commands.some(
+      (c) => !["SET_PLAYING", "REPLAY", "NEXT_STEP"].includes(c.type),
+    )
+  )
+    recentChange = {
+      before: { ...before.parameters, ...before.outputs },
+      after: { ...after.parameters, ...after.outputs },
+    };
   return { accepted: true };
 }
 export function dispatchCommand(demo: DemoType, command: UIAction) {
@@ -279,12 +361,17 @@ export function dispatchCommand(demo: DemoType, command: UIAction) {
 export function executePlan(input: Plan): ActionResult & { demo?: DemoType } {
   try {
     const plan = parsePlan(input, active, getExperimentContext());
-    if (plan.operation === "unsupported" || plan.operation === "clarify")
+    if (
+      plan.operation === "explain" ||
+      plan.operation === "unsupported" ||
+      plan.operation === "clarify"
+    )
       return { accepted: true };
     if (plan.operation === "create") {
       const { message: _message, operation: _operation, ...recipe } = plan;
       const resolved = resolveRecipe(recipe);
       activateSession(resolved.demo, resolved, recipe);
+      correlationId = planCorrelations.get(input) ?? null;
       return { accepted: true, demo: resolved.demo };
     }
     if (
@@ -293,7 +380,7 @@ export function executePlan(input: Plan): ActionResult & { demo?: DemoType } {
       !active
     )
       return rejected("Stale plan: the experiment has changed");
-    return dispatchBatch(
+    const result = dispatchBatch(
       active,
       plan.commands.map((c: TargetedCommand) => ({
         type: c.action,
@@ -301,6 +388,9 @@ export function executePlan(input: Plan): ActionResult & { demo?: DemoType } {
         ...c.arguments,
       })),
     );
+    if (result.accepted)
+      correlationId = planCorrelations.get(input) ?? correlationId;
+    return result;
   } catch (error) {
     return rejected(error instanceof Error ? error.message : "Invalid plan");
   }
@@ -309,7 +399,26 @@ export function getExperimentContext(): ExperimentContext | null {
   if (!active || !definition) return null;
   const actions = Object.keys(operations[active]);
   let instances: ExperimentContext["instances"];
-  if (active === "projectile")
+  if (active === "assembly") {
+    instances = useAssemblyStore.getState().instances.map((i) => ({
+      id: i.id,
+      label: i.label,
+      parameters: structuredClone(i.parameters),
+      outputs: structuredClone(i.outputs),
+      actions: Object.keys(modelProvider(i.provider).actions),
+    }));
+  } else if (active === "gas") {
+    const s = useGasStore.getState();
+    instances = [
+      {
+        id: s.id,
+        label: "Gas sample",
+        parameters: { ...s.inputs },
+        outputs: { ...s.metrics },
+        actions,
+      },
+    ];
+  } else if (active === "projectile")
     instances = useProjectileStore.getState().instances.map((i, index) => ({
       id: i.id,
       label:
@@ -426,7 +535,14 @@ export function getExperimentContext(): ExperimentContext | null {
   return {
     sessionId,
     revision,
-    composition: { ref: `compositions/${definition.id}`, version: 1 },
+    ...(recentChange ? { recentChange } : {}),
+    composition: {
+      ref:
+        active === "assembly"
+          ? "assemblies/GeneratedExperiment"
+          : `compositions/${definition.id}`,
+      version: 1,
+    },
     instances,
     views: [...definition.components.views],
     assumptions: [...definition.assumptions],

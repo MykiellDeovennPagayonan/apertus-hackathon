@@ -1,4 +1,9 @@
-import LandingPage from "./_components/LandingPage";
+import { Suspense } from "react";
+import ExperimentsShell from "./experiments/_components/ExperimentsShell";
 export default function Home() {
-  return <LandingPage />;
+  return (
+    <Suspense fallback={<output>Preparing the lab…</output>}>
+      <ExperimentsShell landing />
+    </Suspense>
+  );
 }

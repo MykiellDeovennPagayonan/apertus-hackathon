@@ -1,7 +1,8 @@
 // biome-ignore-all lint/suspicious/noArrayIndexKey: Procedural scene slots are fixed identities.
-import { Html } from "@react-three/drei";
+
 import { TownAppearance } from "../resources/TownAppearance";
 import type { P2 } from "../traits/Resident";
+import { TownLabel } from "./TownLabel";
 import { Block } from "./townGeometry";
 export function MarketVisual3D({
   market,
@@ -55,11 +56,10 @@ export function MarketVisual3D({
           ))}
         </group>
       ))}
-      <Html position={[0, 4, 0]} center distanceFactor={65}>
-        <span className="town-building-label">
-          {busy ? "Market · bustling" : "Market"}
-        </span>
-      </Html>
+      <TownLabel
+        position={[0, 4, 0]}
+        text={busy ? "Market · bustling" : "Market"}
+      />
     </group>
   );
 }

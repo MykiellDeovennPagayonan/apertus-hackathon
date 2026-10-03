@@ -1,15 +1,18 @@
 import { useElementaryStore } from "../../runtime/elementarySession";
 import { dispatchCommand, getActiveDefinition } from "../../runtime/session";
+import { ActionButton } from "../controls/ActionButton";
 import { DragHandleControl } from "../controls/DragHandleControl";
-import type { Dataset } from "../traits/MeasurementProbe";
+import { NumberField } from "../controls/NumberField";
 import {
   CoordinateAxesVisual,
   DimensionLabelVisual,
   RatioBarVisual,
 } from "../visuals/ElementaryVisuals";
+import { ControlsOverlay } from "./ControlsOverlay";
 import { EntityInspectorView } from "./EntityInspectorView";
 import { HistogramView } from "./HistogramView";
 import { ResultsTableView } from "./ResultsTableView";
+
 export function ElementaryExperimentView() {
   const s = useElementaryStore(),
     definition = getActiveDefinition(),
@@ -22,208 +25,241 @@ export function ElementaryExperimentView() {
         : s.demo === "coordinates"
           ? "MOVE_POINT"
           : "SET_DISTRIBUTION";
-  const numericFields = Object.entries(p).filter(
-    ([, v]) => typeof v === "number",
+  const edit = (value: Record<string, unknown>) =>
+    dispatchCommand(s.demo, {
+      type: action,
+      target: s.id,
+      value: { ...p, ...value },
+    });
+  const field = (
+    key: string,
+    label: string,
+    min: number,
+    max: number,
+    step = 1,
+  ) => (
+    <NumberField
+      key={key}
+      label={label}
+      value={Number(p[key])}
+      min={min}
+      max={max}
+      step={step}
+      onChange={(value) => edit({ [key]: value })}
+    />
   );
+  const views = definition?.components.views ?? [];
   const frequencies =
     "frequencies" in s.outputs ? s.outputs.frequencies : undefined;
-  const dataset: Dataset = frequencies
-    ? {
-        columns: [
-          { key: "outcome", label: "Outcome", unit: "", type: "string" },
-          {
-            key: "observed",
-            label: "Observed",
-            unit: "trials",
-            type: "number",
-          },
-          {
-            key: "expected",
-            label: "Expected",
-            unit: "trials",
-            type: "number",
-          },
-        ],
-        rows: frequencies,
-        assumption: definition?.assumptions[0] ?? "",
-      }
-    : {
-        columns: [
-          {
-            key: "measurement",
-            label: "Measurement",
-            unit: "",
-            type: "string",
-          },
-          {
-            key: "value",
-            label: "Value",
-            unit: s.demo === "coordinates" ? "math units" : "see measurement",
-            type: "number",
-          },
-        ],
-        rows: Object.entries(s.outputs).map(([key, value]) => ({
-          measurement:
-            key === "area"
-              ? "Area (m²)"
-              : key === "perimeter"
-                ? "Perimeter (m)"
-                : key === "percentage"
-                  ? "Percentage (%)"
-                  : key,
-          value: Number(value),
-        })),
-        assumption: definition?.assumptions[0] ?? "",
-      };
-  const views = definition?.components.views ?? [];
+  const ratio = Number("ratio" in s.outputs ? s.outputs.ratio : 0);
+  const instructions = {
+    "area-perimeter":
+      "Change the side lengths and compare the area with the perimeter.",
+    coordinates:
+      "Drag the point, use the arrow keys, or enter its coordinates.",
+    ratio: "Change the selected parts or the whole to explore percentages.",
+    probability: "Choose a coin or die, then run another set of trials.",
+  };
   return (
-    <main
-      style={{
-        padding: 24,
-        width: "100%",
-        maxWidth: 1000,
-        margin: "auto",
-        overflowY: "auto",
-      }}
-    >
-      {views.includes("SVGWorldView") && (
-        <>
-          {s.demo === "ratio" && (
-            <RatioBarVisual
-              ratio={Number("ratio" in s.outputs ? s.outputs.ratio : 0)}
-            />
-          )}
+    <main className={`elementary-experiment elementary-experiment--${s.demo}`}>
+      <p className="experiment-instruction">{instructions[s.demo]}</p>
+      <div className="experiment-diagram">
+        {views.includes("SVGWorldView") && (
+          <>
+            {s.demo === "ratio" && <RatioBarVisual ratio={ratio} />}
+            {s.demo === "area-perimeter" && (
+              <DimensionLabelVisual
+                width={Number(p.width)}
+                height={Number(p.height)}
+              />
+            )}
+            {s.demo === "coordinates" && (
+              // biome-ignore lint/a11y/useSemanticElements: Interactive SVG contains a keyboard-operable point.
+              <svg
+                viewBox="0 0 440 440"
+                role="group"
+                aria-label="Interactive coordinate plane; one square is one unit"
+              >
+                <CoordinateAxesVisual />
+                <circle
+                  cx={220 + Number(p.x) * 18}
+                  cy={220 - Number(p.y) * 18}
+                  r="6"
+                  fill="var(--accent)"
+                />
+                <DragHandleControl
+                  demo={s.demo}
+                  target={s.id}
+                  cx={220 + Number(p.x) * 18}
+                  cy={220 - Number(p.y) * 18}
+                  keyboardStep={18}
+                  label="Move coordinate point"
+                  map={(x, y) => ({
+                    type: "MOVE_POINT",
+                    value: {
+                      x: Math.max(
+                        -10,
+                        Math.min(10, Math.round(((x - 220) / 18) * 10) / 10),
+                      ),
+                      y: Math.max(
+                        -10,
+                        Math.min(10, Math.round(((220 - y) / 18) * 10) / 10),
+                      ),
+                    },
+                  })}
+                />
+              </svg>
+            )}
+          </>
+        )}
+        {frequencies && views.includes("HistogramView") && (
+          <HistogramView frequencies={frequencies} />
+        )}
+      </div>
+      <section
+        className="experiment-interaction"
+        aria-label="Try the experiment"
+      >
+        <div className="experiment-fields">
           {s.demo === "area-perimeter" && (
-            <DimensionLabelVisual
-              width={Number(p.width)}
-              height={Number(p.height)}
-            />
+            <>
+              {field("width", "Width (m)", 0.1, 100, 0.1)}
+              {field("height", "Height (m)", 0.1, 100, 0.1)}
+            </>
           )}
           {s.demo === "coordinates" && (
-            <svg
-              viewBox="0 0 600 300"
-              role="img"
-              aria-label="Coordinate plane in math units"
-              style={{ width: "100%" }}
-            >
-              <CoordinateAxesVisual />
-              <circle
-                cx={280 + Number(p.x) * 24}
-                cy={140 - Number(p.y) * 12}
-                r="6"
-                fill="var(--accent)"
-              />
-              <text x="40" y="290">
-                ({String(p.x)}, {String(p.y)}) · math units
-              </text>
-              <DragHandleControl
-                demo={s.demo}
-                target={s.id}
-                cx={280 + Number(p.x) * 24}
-                cy={140 - Number(p.y) * 12}
-                label="Move coordinate point"
-                map={(x, y) => ({
-                  type: "MOVE_POINT",
-                  value: {
-                    x: Math.max(
-                      -10,
-                      Math.min(10, Math.round(((x - 280) / 24) * 10) / 10),
-                    ),
-                    y: Math.max(
-                      -10,
-                      Math.min(10, Math.round(((140 - y) / 12) * 10) / 10),
-                    ),
-                  },
-                })}
-              />
-            </svg>
+            <>
+              {field("x", "x", -10, 10, 0.1)}
+              {field("y", "y", -10, 10, 0.1)}
+            </>
           )}
-        </>
-      )}
-      {frequencies && views.includes("HistogramView") && (
-        <HistogramView frequencies={frequencies} />
-      )}
-      <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-        {numericFields.map(([key, value]) => (
-          <label key={key}>
-            {key}
-            {s.demo === "area-perimeter" ? " (m)" : ""}{" "}
-            <input
-              type="number"
-              aria-label={key}
-              step={
-                s.demo === "area-perimeter" || s.demo === "coordinates"
-                  ? 0.1
-                  : 1
-              }
-              min={
-                key === "denominator" || key === "trials"
-                  ? 1
-                  : s.demo === "coordinates"
-                    ? -10
-                    : s.demo === "area-perimeter"
-                      ? 0.1
-                      : 0
-              }
-              max={
-                key === "seed"
-                  ? 4294967295
-                  : key === "trials"
-                    ? 10000
-                    : s.demo === "coordinates"
-                      ? 10
-                      : s.demo === "area-perimeter"
-                        ? 100
-                        : 1000
-              }
-              value={Number(value)}
-              onChange={(e) =>
-                dispatchCommand(s.demo, {
-                  type: action,
-                  target: s.id,
-                  value: { ...p, [key]: Number(e.target.value) },
-                })
-              }
-            />
-          </label>
-        ))}
-        {s.demo === "probability" && (
-          <label>
-            Distribution{" "}
-            <select
-              value={String(p.preset)}
-              onChange={(e) =>
-                dispatchCommand(s.demo, {
-                  type: action,
-                  target: s.id,
-                  value: { ...p, preset: e.target.value },
-                })
-              }
-            >
-              <option value="coin">Coin</option>
-              <option value="die">Six-sided die</option>
-            </select>
-          </label>
+          {s.demo === "ratio" && (
+            <>
+              {field("numerator", "Selected parts", 0, 1000)}
+              {field("denominator", "Parts in a whole", 1, 1000)}
+            </>
+          )}
+          {s.demo === "probability" && (
+            <>
+              <label className="experiment-number">
+                <span>Experiment</span>
+                <select
+                  value={String(p.preset)}
+                  onChange={(e) => edit({ preset: e.target.value })}
+                >
+                  <option value="coin">Coin</option>
+                  <option value="die">Six-sided die</option>
+                </select>
+              </label>
+              {field("trials", "Number of trials", 1, 10000)}
+              <ActionButton
+                onCommand={() =>
+                  edit({ seed: (Number(p.seed) + 1) % 4294967296 })
+                }
+              >
+                Run again
+              </ActionButton>
+            </>
+          )}
+        </div>
+        {s.demo === "area-perimeter" && (
+          <div className="experiment-results" aria-live="polite">
+            <output aria-label="Area">
+              <span>Area</span>
+              <strong>
+                {Number(
+                  "area" in s.outputs ? s.outputs.area : 0,
+                ).toLocaleString()}{" "}
+                m²
+              </strong>
+              <small>
+                {String(p.width)} × {String(p.height)}
+              </small>
+            </output>
+            <output aria-label="Perimeter">
+              <span>Perimeter</span>
+              <strong>
+                {Number(
+                  "perimeter" in s.outputs ? s.outputs.perimeter : 0,
+                ).toLocaleString()}{" "}
+                m
+              </strong>
+              <small>
+                2 × ({String(p.width)} + {String(p.height)})
+              </small>
+            </output>
+          </div>
         )}
-        <button
-          type="button"
-          onClick={() => dispatchCommand(s.demo, { type: "RESET" })}
+        {s.demo === "coordinates" && (
+          <output
+            className="experiment-answer"
+            aria-label="Point coordinates"
+            aria-live="polite"
+          >
+            ({String(p.x)}, {String(p.y)})
+            <small>One square = one unit · Shift + arrow for 0.1 steps</small>
+          </output>
+        )}
+        {s.demo === "ratio" && (
+          <output className="experiment-answer" aria-live="polite">
+            {String(p.numerator)} / {String(p.denominator)} ={" "}
+            {(ratio * 100).toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}
+            %
+            <small>
+              {ratio > 1
+                ? `${Math.floor(ratio)} whole${Math.floor(ratio) === 1 ? "" : "s"}${ratio % 1 ? " and part of another" : ""}`
+                : "The shaded part of one whole"}
+            </small>
+          </output>
+        )}
+        <ActionButton
+          className="experiment-reset"
+          onCommand={() => dispatchCommand(s.demo, { type: "RESET" })}
         >
           Reset
-        </button>
-      </div>
-      {views.includes("ResultsTableView") && (
-        <ResultsTableView dataset={dataset} />
-      )}
-      {views.includes("EntityInspectorView") && (
-        <EntityInspectorView
-          demo={s.demo}
-          id={s.id}
-          parameters={p}
-          outputs={s.outputs}
-          assumptions={definition?.assumptions ?? []}
+        </ActionButton>
+      </section>
+      {frequencies && views.includes("ResultsTableView") && (
+        <ResultsTableView
+          dataset={{
+            columns: [
+              { key: "outcome", label: "Outcome", unit: "", type: "string" },
+              { key: "observed", label: "Observed", unit: "", type: "number" },
+              { key: "expected", label: "Expected", unit: "", type: "number" },
+            ],
+            rows: frequencies,
+            assumption: `Results from ${Number(p.trials).toLocaleString()} trials`,
+          }}
         />
       )}
+      <ControlsOverlay>
+        {s.demo === "probability" && (
+          <>
+            <p>
+              Use the same seed to reproduce a set of trials. Run again chooses
+              the next seed.
+            </p>
+            {field("seed", "Random seed", 0, 4294967295)}
+          </>
+        )}
+        <details>
+          <summary>About this model</summary>
+          {definition?.assumptions.map((a) => (
+            <p key={a}>{a}</p>
+          ))}
+        </details>
+        {views.includes("EntityInspectorView") && (
+          <EntityInspectorView
+            demo={s.demo}
+            id={s.id}
+            parameters={p}
+            outputs={s.outputs}
+            assumptions={definition?.assumptions ?? []}
+          />
+        )}
+      </ControlsOverlay>
     </main>
   );
 }

@@ -11,7 +11,15 @@
     "test": "node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs",
     "test:apertus": "node scripts/verify-apertus.cjs",
     "test:browser": "node scripts/verify-browser.cjs",
-    "test:apertus:live": "node scripts/evaluate-apertus-live.cjs"
+    "test:apertus:live": "node scripts/evaluate-apertus-live.cjs",
+    "test:planner": "node scripts/verify-planner.cjs",
+    "test:laya:live": "node scripts/evaluate-laya-live.cjs",
+    "test:creation": "node scripts/verify-creation.cjs",
+    "test:creation:browser": "node scripts/verify-creation-browser.cjs",
+    "test:workspace": "node scripts/verify-workspace-ux.cjs",
+    "test:interactions": "node scripts/verify-experiment-interactions.cjs",
+    "test:assembly": "node scripts/domains/math-foundations/verify.cjs",
+    "test:assembly:browser": "node scripts/domains/math-foundations/browser.cjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",

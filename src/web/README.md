@@ -5,11 +5,10 @@ Next.js App Router frontend and backend workspace. Initial simulations ported fr
 ## Run
 
 ```sh
-pnpm install
-pnpm dev
+make run-web
 ```
 
-Open http://localhost:3000 for the landing page. Browse `/experiments` and choose a premade experiment; all twelve load immediately without inference. Use the simulation controls or ask Apertus for follow-up changes.
+Open http://localhost:43100 for the landing page. Open `/experiments`, describe a concept, or choose one of thirteen premade experiments. Prompt creation uses live Apertus and Laya by default; premade cards remain available without inference.
 
 ## Supported experiments
 
@@ -67,33 +66,35 @@ is authoritative. Supported views include independent comparisons, results table
 model-time measurements, inspectors and angle sweeps. Saved files describe the
 accepted initial recipe; they do not resume an execution checkpoint.
 
-All runner code is included in this repository under `../inference/`; no sibling
-checkout or pre-existing virtual environment is required. Run these commands from
-this directory (`src/web` in the parent workspace):
+All runner code is included in this repository under `src/inference/`; no sibling
+checkout or pre-existing virtual environment is required. For first-time setup,
+run these commands from the project root:
 
 ```sh
-cp .env.example .env.local
-pnpm install
-make -C ../inference setup
-make -C ../inference run
+cp src/web/.env.example src/web/.env.local
+make -C src/inference setup
+make -C src/inference setup-laya
 ```
 
-In a second terminal, from the same directory:
+Then keep these commands running in three terminals:
 
 ```sh
-pnpm dev
+make run-apertus
+make run-laya
+make run-web
 ```
 
 Local inference requires macOS on Apple Silicon, Python 3.12, Metal access, and
 Make. Each teammate gets their own `../inference/.venv`. The pinned MLX-LM runner
 downloads `m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4` on first use; allow several GB
 of disk and sufficient unified memory for model weights and context. Subsequent
-runs reuse the Hugging Face cache. `make -C ../inference smoke` checks a running
-model. `make -C ../inference planner-smoke` runs the live planner evaluation. Stop inference with Ctrl+C. The server binds only to loopback.
+runs reuse the Hugging Face cache. `make -C src/inference smoke` checks a running
+model. `make -C src/inference planner-smoke` runs the live planner evaluation.
+Use `make stop` to stop all three local services. The servers bind only to loopback.
 
 Set `APERTUS_PROVIDER=local` (default) to use MLX. `APERTUS_LOCAL_BASE_URL` includes
 `/v1`; `APERTUS_LOCAL_MODEL` must match the runner's model. To override the runner,
-use `make -C ../inference run MODEL=/path/to/weights PORT=8081` and update the web env.
+use `make run-apertus MODEL=/path/to/weights APERTUS_PORT=43111` and update the web env.
 Keep inference running separately from Next.js. A deployed Next.js server's
 `127.0.0.1` points to that server, not a user's laptop.
 
@@ -131,3 +132,130 @@ recipe fields, incompatible view bindings and conflicting field ownership are
 rejected. Probability trials are the implemented first new mechanism in the roadmap.
 The dated live-model results are in
 `../../docs/agent-only/implementation/003-APERTUS_LIVE_EVALUATION.json`.
+
+## Laya decision planner
+
+The shared planner lives in `src/lib/planner`. `PLANNER_MODE=hybrid` (default)
+uses Apertus-first teaching intent for creation. On edits it asks Laya to select intent, actual
+target, and allowed operation, then asks Apertus to interpret arguments for that
+proposal. Both paths return the same validated Plan through `/api/apertus`.
+There is no Laya-only execution mode: Laya selects choices rather than generating
+values or executable plans.
+
+From the project root, install and start the separate Laya environment:
+
+```sh
+make -C src/inference setup-laya
+make -C src/inference run-laya
+```
+
+Configure `src/web/.env.local` with `PLANNER_MODE=hybrid`,
+`LAYA_BASE_URL=http://127.0.0.1:43102`, then restart Next.js. Keep Apertus running
+on port 43101 for interpretation and broader fallback. Laya is an open local
+service bound to loopback by default; it does not require an API token.
+
+Laya downloads and warms `aac6fef/laya-multilingual-mlx` on first startup.
+`make -C src/inference smoke-laya` reports loading/ready/error. The default runtime
+uses MLX's default device and float16; `LAYA_DEVICE`, `LAYA_DTYPE`, `LAYA_MODEL`,
+`LAYA_HOST`, and `LAYA_PORT` configure the service. Apple Silicon is the intended
+local environment. The separate `.venv-laya` avoids changing the Apertus lock.
+The Laya requirements pin direct dependencies, not a complete transitive lock.
+
+The collaboration handles follow-up edits on active experiments. It has no regex
+command grammar or language eligibility filter: original text, including typos
+and number words, goes to the models. Dependent Laya questions receive accepted
+parent decisions. Choices come from the catalog and exposed instance actions.
+Rejected selections use compact Apertus edit planning scoped to the active
+experiment. Creation validates a teaching intent, asks Laya to select a registry-derived assembly, and asks Apertus to configure that exact selection. Assemblies bundle their supported teaching variant, controls and observations; mandatory dependencies are compiled without extra model questions. The explicit `PLANNER_MODE=apertus` adapter remains available, but cannot qualify as joint-model creation.
+
+Apertus gets the proposed operation's argument schema and current context for
+the focused task, rather than the full planning catalog. Its versioned result
+is `arguments`, `clarify`, `unsupported`, or `conflict`. An arguments result
+requires a `confirmedSelection` action/target inferred from the request; a
+mismatch becomes conflict. It can challenge a confident Laya proposal.
+Conflict invokes one broader planning pass with the
+original request/context. Clarification and unsupported results return directly.
+The application validates arguments and constructs action/target/session/revision
+fields. Even argument-free controls use Apertus to check intent. Relative edits
+use known configuration. Missing quantities require clarification except the registered educational defaults in `LearningPolicies.ts`: leftovers uses 14/3, gas heating adds 50 K, and adding gas adds 0.5 mmol.
+
+`LAYA_ACCEPTANCE_GATE=0.9` is an initial conservative setting, not a calibrated
+accuracy claim. `LAYA_TIMEOUT_MS=3000` bounds selection; `PLANNER_TIMEOUT_MS=120000`
+bounds the whole hybrid request, including interpretation, repair, and fallback.
+Low-confidence semantic edit selections can use broader planning. Failed/malformed Laya transports propagate without starting fallback. Invalid Apertus output
+gets one repair; transport errors or a failed repair propagate instead of
+restarting planning. Both Apertus tasks share provider configuration and capacity.
+Cancellation does not trigger fallback. `PLANNER_MAX_CONCURRENT_REQUESTS` limits
+hybrid requests per Next.js process. Model calls run serially in the Python
+service, and HTTP cancellation does not interrupt an active MLX call.
+
+Run `pnpm test:planner` for deterministic integration checks and
+`make -C src/inference test-laya` for service tests. With a warmed Laya service
+and Apertus running, run
+`pnpm test:laya:live [report.json]`. This evaluates real collaboration, recording
+selection decisions, focused/broad calls, final-state checks, and end-to-end
+timing. Cases include typos, number words, relative edits, units, ambiguity,
+negation, compound instructions, and a French request. There is no mock provider.
+Deterministic integration checks do not establish model accuracy.
+
+The October 3, 2026 live smoke run is saved in
+`../../docs/agent-only/implementation/LAYA_LIVE_EVALUATION.json`. At the 0.9 gate,
+1 of 5 supported edit cases produced an accepted direct plan. The other four
+returned no plan, including a confidently wrong target blocked by the explicit
+target check. All four intentionally ineligible requests returned no plan.
+That report belongs to the superseded parser-gated implementation. It does not
+measure this collaboration. See
+`../../docs/agent-only/implementation/004-APERTUS_LAYA_COLLABORATION.md` for the
+responsibility split and verification scope.
+
+The implemented collaboration remains experimental: the recorded full live
+run passed 3/11 cases, accepted no Laya selections at the 0.9 gate, and made four
+incorrect mutations through broader fallback. The latest isolated focused
+argument evaluation passed 1/8 cases. Reports and delivery notes are linked in
+004. Passing deterministic checks does not make the current models reliable.
+
+
+## Short-prompt creation (005)
+
+Submit “Show me how division works”, “Show me how throwing a ball works”, or
+“Show me how gas pressure works” on the creation screen. Creation has one shared
+120-second deadline, one schema repair across all Apertus creation calls, and at
+most one semantic selection restart. Cancellation stops downstream work. The
+creation proposal gate is `LAYA_CREATION_ACCEPTANCE_GATE=0.75`; the edit gate stays
+0.9. These are selection signals, not correctness claims: Apertus checks the
+selection and the compiler validates the complete staged recipe. Explicit values
+are never clamped. Success appears only after runtime acceptance.
+
+Gas uses equilibrium P=nRT/V with R=8.314462618. Inputs are 0.1–5 mmol, 100–600 K,
+and 0.25–2 L; SI conversion occurs in `IdealGasSystem`. Forty seeded representative
+dots per mmol illustrate wall interactions. They are not individual molecules or
+a transient compression solver. Pausing or hiding the illustration cannot change
+pressure. Reset restores the initial generated inputs; division replay repeats
+the current task. Explanation requests read current outputs and the most recent
+accepted input change and do not mutate the scene.
+
+Run `pnpm test:creation` for deterministic oracles and creation failure-boundary
+checks. `pnpm test:creation:browser` is supplemental CLI UI validation with mocked
+responses; `pnpm test:creation:browser -- --live` uses live models but still is not
+Playwright MCP acceptance. Use `scripts/record-creation-candidate.cjs` to record
+source and working-tree fingerprints before acceptance. The complete protocol and
+run evidence live in `../../docs/agent-only/implementation/005-validation/`.
+
+For local evidence collection, set `PLANNER_DIAGNOSTICS=true` and
+`NEXT_PUBLIC_EXPERIMENT_DIAGNOSTICS=true`, then restart Next.js. Responses include
+`X-Request-ID`; the local-only `/api/planner-diagnostics?id=...` exposes a bounded
+50-request trace buffer without credentials. It is disabled in production.
+`window.__experimentSnapshot()` returns a detached read-only snapshot of the
+accepted recipe, correlation ID, revision, inputs, outputs, and playback state.
+It cannot inject a simulation or commit an edit. Do not enable diagnostics on a
+shared development server containing private prompts.
+
+For actual MCP acceptance, install `@playwright/mcp@0.0.83` and
+`@modelcontextprotocol/sdk` into a temporary prefix, set `PLAYWRIGHT_MCP_ROOT` to
+that prefix's `node_modules`, and run `node scripts/verify-creation-mcp.cjs` against
+the running diagnostic-enabled app. The harness discovers real MCP tools over
+stdio, opens a fresh isolated server/browser per case, uses the normal prompt UI
+with live models, records MCP transcripts and browser traces, and attempts two
+full passes. `CREATION_MCP_ATTEMPT` must name a fresh directory; existing evidence
+is never overwritten. Source fingerprint changes abort the run. Review captured
+screenshots and explanations before declaring acceptance.

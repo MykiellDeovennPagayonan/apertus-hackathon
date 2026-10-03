@@ -1,9 +1,10 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import ApertusBadge from "./ApertusBadge";
 import ExperimentArt from "./ExperimentArt";
 import "./LandingPage.css";
 
-export default function LandingPage() {
+export default function LandingPage({ children }: { children?: ReactNode }) {
   const experiments = [
     {
       type: "projectile",
@@ -52,12 +53,10 @@ export default function LandingPage() {
             Curiosity, <em>made interactive.</em>
           </h1>
           <p>
-            Choose a premade experiment. Explore a little world and see what
-            changes.
+            Describe a concept or choose an experiment. Change something and see
+            what happens.
           </p>
-          <Link className="landing__cta" href="/experiments">
-            Explore the experiments ↗
-          </Link>
+          {children}
         </section>
         <section id="experiments" className="experiment-section">
           <div className="section-heading">

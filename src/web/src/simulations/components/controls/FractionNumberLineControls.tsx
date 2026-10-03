@@ -1,10 +1,7 @@
 import { dispatchCommand } from "../../runtime/session";
 import { tickOptions } from "../systems/FractionNumberLineSystem";
 import type { FractionValue, NumberLineBoard } from "../traits/MathBoards";
-import { ActionButton } from "./ActionButton";
 import { FractionInputControl } from "./FractionInputControl";
-import { IntegerStepper } from "./IntegerStepper";
-import { MathPlayback } from "./MathPlayback";
 import { OptionSelect } from "./OptionSelect";
 export function FractionNumberLineControls({
   board,
@@ -18,18 +15,6 @@ export function FractionNumberLineControls({
     });
   return (
     <>
-      <OptionSelect
-        label="Activity"
-        value={board.mode}
-        options={[
-          { id: "place", label: "Place a fraction" },
-          { id: "add", label: "Add fractions" },
-          { id: "subtract", label: "Subtract fractions" },
-        ]}
-        onChange={(mode) =>
-          task(board.a, board.b, mode as NumberLineBoard["mode"])
-        }
-      />
       <FractionInputControl
         label={board.mode === "place" ? "Target" : "First fraction"}
         value={board.a}
@@ -53,36 +38,6 @@ export function FractionNumberLineControls({
           })
         }
       />
-      {board.mode === "place" ? (
-        <>
-          <IntegerStepper
-            label="Marker tick"
-            min={0}
-            max={3 * board.divisions}
-            value={(board.placed.n * board.divisions) / board.placed.d}
-            onChange={(tick) =>
-              dispatchCommand(board.demo, {
-                type: "PLACE_FRACTION",
-                value: tick,
-              })
-            }
-          />
-          <ActionButton
-            onCommand={() =>
-              dispatchCommand(board.demo, { type: "CHECK_PLACEMENT" })
-            }
-          >
-            Check placement
-          </ActionButton>
-          <ActionButton
-            onCommand={() => dispatchCommand(board.demo, { type: "RESET" })}
-          >
-            Reset
-          </ActionButton>
-        </>
-      ) : (
-        <MathPlayback board={board} />
-      )}
     </>
   );
 }

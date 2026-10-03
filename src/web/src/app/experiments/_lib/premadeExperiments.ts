@@ -1,7 +1,7 @@
 import type { DemoType } from "../../../simulations/runtime/types";
 
 export const premadeExperiments: Record<
-  DemoType,
+  Exclude<DemoType, "assembly">,
   {
     title: string;
     description: string;
@@ -9,6 +9,12 @@ export const premadeExperiments: Record<
     parameters: Record<string, unknown>;
   }
 > = {
+  gas: {
+    title: "Gas pressure",
+    description: "Explore pressure, volume and temperature.",
+    icon: "◌",
+    parameters: {},
+  },
   projectile: {
     title: "Projectile motion",
     description: "Compare launches at 30° and 60° on the Moon.",

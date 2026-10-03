@@ -28,7 +28,9 @@ export function mathReadout(board: MathBoard): {
             : `${board.total} ÷ ${board.groups} = ${done ? `${board.quotient}${board.remainder ? ` remainder ${board.remainder}` : ""}` : "?"}`,
         detail: done
           ? `${board.quotient} in every basket${board.remainder ? ` · ${board.remainder} left over` : ""}`
-          : "Sharing in progress — each basket gets a turn.",
+          : board.sequence.playing
+            ? "Sharing in progress — each basket gets a turn."
+            : "Press Share to give each basket an equal number.",
       };
     }
     case "fraction-builder":

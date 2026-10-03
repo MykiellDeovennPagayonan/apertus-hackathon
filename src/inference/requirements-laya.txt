@@ -1,0 +1,4 @@
+# Separate environment keeps the Apertus MLX-LM lock unchanged.
+laya-mlx==0.2.0
+fastapi==0.141.1
+uvicorn==0.54.0

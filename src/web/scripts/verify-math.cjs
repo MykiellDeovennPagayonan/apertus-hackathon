@@ -247,6 +247,11 @@ module.exports = function verifyMath({ load, React, renderToStaticMarkup }) {
         null,
         React.createElement(scene, { board: before }),
         React.createElement(controls, { board: before }),
+        React.createElement(
+          load("src/simulations/components/controls/MathPrimaryControls.tsx")
+            .MathPrimaryControls,
+          { board: before },
+        ),
       ),
     );
     assert.ok(html.includes("<svg"));

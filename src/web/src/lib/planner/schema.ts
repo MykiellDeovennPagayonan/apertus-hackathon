@@ -23,6 +23,10 @@ export interface ExperimentContext {
   }[];
   views: string[];
   assumptions: string[];
+  recentChange?: {
+    before: Record<string, unknown>;
+    after: Record<string, unknown>;
+  };
 }
 export type TargetedCommand = {
   target: string;
@@ -39,6 +43,7 @@ export type Plan =
       commands: TargetedCommand[];
       message: string;
     }
+  | { schemaVersion: 1; operation: "explain"; message: string }
   | { schemaVersion: 1; operation: "clarify"; message: string }
   | { schemaVersion: 1; operation: "unsupported"; message: string };
 const record = (value: unknown): value is Record<string, unknown> =>
@@ -84,6 +89,7 @@ export function validateContext(value: unknown): ExperimentContext | null {
     "instances",
     "views",
     "assumptions",
+    "recentChange",
   ]);
   if (
     typeof value.sessionId !== "string" ||
@@ -124,6 +130,15 @@ export function validateContext(value: unknown): ExperimentContext | null {
     keys(i, ["id", "label", "parameters", "outputs", "actions"]);
     seen.add(i.id);
   }
+  if (value.recentChange !== undefined) {
+    if (
+      !record(value.recentChange) ||
+      !record(value.recentChange.before) ||
+      !record(value.recentChange.after)
+    )
+      throw new Error("Invalid recent change");
+    keys(value.recentChange, ["before", "after"]);
+  }
   return value as unknown as ExperimentContext;
 }
 export function parsePlan(
@@ -152,6 +167,7 @@ export function parsePlan(
       "parameters",
       "instances",
       "views",
+      "assembly",
       "message",
     ]);
     const { operation: _operation, message: _message, ...recipe } = input;
@@ -213,7 +229,11 @@ export function parsePlan(
     }
     return input as unknown as Plan;
   }
-  if (input.operation === "clarify" || input.operation === "unsupported") {
+  if (
+    input.operation === "explain" ||
+    input.operation === "clarify" ||
+    input.operation === "unsupported"
+  ) {
     keys(input, ["schemaVersion", "operation", "message"]);
     return input as unknown as Plan;
   }

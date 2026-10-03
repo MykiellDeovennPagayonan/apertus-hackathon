@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict");
 const { load } = require("./test-loader.cjs");
 const runtime = load("src/simulations/runtime/session.ts");
-const { parsePlan, validateContext } = load("src/lib/apertus/schema.ts");
+const { parsePlan, validateContext } = load("src/lib/planner/schema.ts");
 const { useProjectileStore } = load(
   "src/simulations/runtime/projectileSession.ts",
 );
@@ -458,10 +458,31 @@ for (const [ref, params, view] of [
 ]) {
   fresh(create(ref, params));
   const Component = load(`src/simulations/components/views/${view}.tsx`)[view];
-  const html = renderToStaticMarkup(React.createElement(Component));
+  // Zustand's server renderer reads the initial snapshot. Seed that snapshot
+  // with this fixture, otherwise every elementary case silently renders ratio.
+  const store =
+    view === "ElementaryExperimentView"
+      ? useElementaryStore
+      : useProjectileStore;
+  const initial = store.getInitialState();
+  const saved = { ...initial };
+  let html;
+  try {
+    Object.assign(initial, store.getState());
+    html = renderToStaticMarkup(React.createElement(Component));
+  } finally {
+    Object.assign(initial, saved);
+  }
   assert.ok(!html.includes("NaN"));
-  assert.ok(html.includes("<table"));
-  if (ref === "RatioExperiment") assert.ok(html.includes("75"));
+  if (ref === "RatioExperiment") {
+    assert.ok(html.includes("75%"));
+    assert.ok(html.includes("Selected parts"));
+    assert.ok(!html.includes("<table"));
+  } else
+    assert.ok(
+      html.includes("<table"),
+      `${ref} should render its results table: ${html.slice(0, 300)}`,
+    );
 }
 runtime.disposeSession();
 console.log(

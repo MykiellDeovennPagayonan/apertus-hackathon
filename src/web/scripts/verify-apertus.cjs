@@ -1,3 +1,4 @@
+process.env.PLANNER_MODE = "apertus"; // This suite tests the explicit Apertus-only adapter.
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
@@ -37,7 +38,7 @@ function load(relative) {
 }
 const http = require("node:http");
 const { readConfig } = load("src/lib/apertus/config.ts");
-const { parsePlan } = load("src/lib/apertus/schema.ts");
+const { parsePlan } = load("src/lib/planner/schema.ts");
 const { POST } = load("src/app/api/apertus/route.ts");
 const { planPrompt } = load("src/lib/apertus/client.ts");
 const plan = {
