@@ -9,7 +9,7 @@
 
 ## 0. Vision in one page
 
-A **community-grown library of interactive components** and a **simulation engine** that runs them, built for **learning by doing**. Users play, break, and rebuild things in a sandbox. Apertus (8B) helps in three ways: it composes experiments from components, it explains what is happening, and it helps make new components.
+A **community-grown library of interactive components** and a **simulation engine** that runs them, built for **learning by doing**. Users play, break, and rebuild things in a sandbox. Apertus (8B) and the fast model Jev help in three ways: it composes experiments from components, it explains what is happening, and it helps make new components.
 
 ```text
                     ┌──────────────────────────────┐
@@ -22,7 +22,7 @@ A **community-grown library of interactive components** and a **simulation engin
         └───────────┬────────────┘     └───────────▲─────────┘
                     │ context, state, events       │
         ┌───────────▼────────────────────────────┴──┐
-        │   Apertus: System 1 (fast) + System 2 +      │  (§1, §4)
+        │   Jev (System 1) + Apertus (System 2) +      │  (§1, §4)
         │   domain LoRA specialists                    │
         └──────────────────────────────────────────────┘
 ```
@@ -121,19 +121,47 @@ A concept pack is only accepted if it lists: the concept, the misconception it t
 
 ---
 
-## 4. System 1 thinking: responsiveness
+## 4. System 1 thinking: Jev (fast model) for responsiveness
 
-**Goal:** Keep the interface feeling instant. Slow model calls only where they are worth waiting for.
+**Goal:** Keep the interface feeling instant. **Jev is the System 1 model.** It makes fast, bounded decisions so Apertus (System 2) is only called when deliberation is worth the wait.
+
+> Naming note: the original [Overview](agent-only/OVERVIEW.md) called this role "Laya / Jev-like classifier". This spec now uses **Jev** as the name of the System 1 model. The Overview's §15 "Laya" responsibilities carry over to Jev unchanged.
 
 ### 4.1 Two tracks
-| | System 1 (fast) | System 2 (deliberate) |
+| | System 1: **Jev** | System 2: **Apertus** |
 |---|---|---|
-| Handled by | Rules, retrieval, cache, tiny classifier (Laya/Jev-like), or a short Apertus call with a small max-token budget | Full Apertus planner (with domain/planner adapter) |
-| Examples | "Increase gravity", "add 5 citizens", "reset", match to a known template, route intent | "Build a town where information about prices spreads", novel multi-component builds |
-| Target latency | under ~300 ms perceived (local rules/cache), under ~1.5 s first token for model calls | Seconds, streamed, with visible progress |
+| Role | Fast classifier/router for bounded decisions | Semantic composer, planner, explainer |
+| Output | A label from a closed set (plus optional small structured fields) | Free-form text and full simulation specs |
+| Examples | "Increase gravity", "add 5 citizens", "reset", is this a new sim or a change?, which domain?, is the request ambiguous? | "Build a town where information about prices spreads", novel multi-component builds, explanations |
+| Target latency | under ~100–300 ms perceived | Seconds, streamed, with visible progress |
 
-### 4.2 Techniques
-- **Intent router first.** Classify: command to existing sim / new simulation / question / explain. **[PARTIAL]** `resolveExperimentPrompt.ts`, `promptMatchers.ts`, and `catalogSelection.ts` already do deterministic matching before the model.
+Rules and caches still sit *in front of* Jev. Order of attempts: **exact rules/cache → Jev → Apertus**.
+
+### 4.2 Jev's responsibilities (closed label sets)
+Carried over from the Overview's fast-classifier section:
+| Decision | Labels |
+|---|---|
+| Top-level intent | `CREATE`, `MODIFY`, `COMPARE`, `INSPECT`, `SAVE`, `REMIX` (**[NEW]** add `EXPLAIN`, `ASK`) |
+| Representation | `2D`, `3D`, `GRAPH`, `DIAGRAM`, `TIMELINE`, `TABLE` |
+| Domain | `PHYSICS`, `ENGINEERING`, `MATHEMATICS`, `ECONOMICS`, `SOCIETY`, `BIOLOGY`, `COMPUTING`, `GENERAL` (**[NEW]** `CHEMISTRY`) |
+| Modification type | `ADD`, `REMOVE`, `MOVE`, `RESIZE`, `CHANGE_PROPERTY`, `CHANGE_BEHAVIOR`, `CHANGE_RULE`, `ADD_MEASUREMENT` |
+| Ambiguity | `CLEAR`, `MISSING_TARGET`, `CONFLICTING`, `UNSUPPORTED`, `NEEDS_CLARIFICATION` |
+
+**[NEW]** Further jobs worth benchmarking for Jev:
+- **Escalation decision:** can a template/System 1 path handle this, or does it need Apertus?
+- **Adapter selection:** which domain/task LoRA (§1) Apertus should load for this request.
+- **Component pre-filter:** shortlist component categories before retrieval (§8), so Apertus sees fewer manifests.
+- **Proactive-hint gating (§10.3):** is this a good moment to offer a reflective prompt, or stay quiet?
+- **Safety/off-topic triage** before spending a System 2 call.
+
+### 4.3 Escalation and fallback
+- Jev returns a **confidence score**. Below threshold, or label `NEEDS_CLARIFICATION`/`UNSUPPORTED`, escalate to Apertus or ask the user.
+- If Jev is unavailable, fall back to the existing deterministic matchers, then to Apertus alone. The product must still work without Jev.
+- Log Jev decisions and Apertus overrides. Disagreements become training data for Jev.
+- Per the Overview: *don't include Jev merely because it exists.* Benchmark that it actually improves latency, cost, reliability, or throughput.
+
+### 4.4 Techniques
+- **Intent router first.** **[PARTIAL]** `resolveExperimentPrompt.ts`, `promptMatchers.ts`, and `catalogSelection.ts` already do deterministic matching before the model. Jev slots in after these and before Apertus. **[NEW]** a Jev provider next to the Apertus client in `lib/` (config, timeout, concurrency, in the style of `APERTUS_*`).
 - **Template-first, model-second:** instantly show the closest template, then refine it in the background and apply a diff.
 - **Optimistic UI + streaming:** stream tokens and partial specs. Validate incrementally.
 - **Constrained decoding / JSON schema** so System 1 calls cannot return invalid output.
@@ -180,7 +208,7 @@ Search (text + semantic embeddings over descriptions), tags and domains, depende
 ### 6.5 Storage
 Start simple: Git-like content-addressed packages (manifest + files + hash) in object storage with a metadata DB. **[NEW]** (the current registry is a built-in catalog `catalog.ts`).
 
-### 6.6 Security
+### 6.6 Security (deferred: v1 is declarative-only)
 Declarative components (data only) are the default and safest. If code components (Systems/Behaviors with logic) are allowed, they must run in a **sandbox** (Web Worker + restricted API, no network, CPU/memory/time budgets, deterministic). Never execute AI-generated code outside the sandbox. This is the main technical risk of an open library.
 
 ---
@@ -272,7 +300,7 @@ semantics:
 - **God tools:** pause, rewind, time scale, change gravity/constants, spawn, delete, probe, "freeze this and inspect."
 - **Satisfying failure:** things break, collapse, explode, overheat visibly, and *replays show why* (highlight the cause: the beam that exceeded load).
 - **Measure everything:** drop-in probes and graphs that make cause and effect legible.
-- **Goals optional:** open sandbox by default. Optional **challenges** ("cross the gap with < 20 beams", "keep the population stable") with soft scoring. Never forced.
+- **Goals optional:** open sandbox by default. Optional, community-made **challenges** (not a built-in campaign; pure sandbox) ("cross the gap with < 20 beams", "keep the population stable"). No built-in scoring or unlocks. Never forced.
 - **Emergence:** components interact through shared capabilities, so combos nobody scripted can happen.
 - **Snapshots and branching:** save state, try a variant, compare timelines side by side.
 - **Share a "contraption"** as a composition with one link (§6).
@@ -299,7 +327,7 @@ These are not in the original list but the product probably needs them.
 5. **Accuracy and anti-misinformation:** fidelity badges, science-check review, and citing sources in descriptions. A confident wrong simulation is worse than none.
 6. **Accessibility:** keyboard control, screen-reader narration (from §9), colorblind-safe overlays, reduced-motion, captions. Multilingual UI and descriptions.
 7. **Persistence, accounts, and sharing:** saves, versioning, remix lineage, optional anonymous mode. Decide the auth model early.
-8. **Offline / low-end operation:** cached components and a small local model; graceful degradation when no model is available (System 1 only).
+8. **Offline / low-end operation:** cached components and a small local model; graceful degradation when Apertus is unavailable (rules and Jev only).
 9. **Observability and evaluation:** a benchmark suite (planner validity, latency, simulation correctness tests) run in CI. The model must be regression-tested whenever adapters or components change.
 10. **Determinism and reproducibility:** shareable seeds, replays, bug reports from snapshots.
 11. **Undo/redo and history** for every change (manual or AI). Users need to trust the agent.
@@ -337,21 +365,44 @@ These are not in the original list but the product probably needs them.
 |---|---|---|
 | **0 (now)** | Finish extracting the three demos into components; unify session interface; add `semantics` block to manifests | 2, 9 |
 | **1** | Sandbox loop on one domain (physics): god tools, snapshots, rewind, probes, one "break it" challenge | 10, 3 |
-| **2** | System 1/2 router with constrained JSON, cache, latency benchmarks | 4 |
+| **2** | Jev (System 1) router in front of Apertus, constrained JSON, cache, latency benchmarks, Jev fine-tuning from logged routing disagreements | 4 |
 | **3** | Local registry + loader with versions/hashes; component maker v1 (manual + AI-drafted manifests) | 5, 7 |
 | **4** | First planner LoRA from synthetic, validator-filtered data; eval harness gate | 1, 8 |
 | **5** | Public library: accounts, upload checks, moderation, trust tiers | 6 |
-| **6** | Domain packs (chemistry, ecology, economics) and teacher mode | 3, 11 |
-| **7** | Sandboxed code components (only if declarative format proves limiting) | 6.6 |
+| **6** | Domain packs (chemistry, ecology, economics). Teacher mode is optional given the high school to adult focus | 3, 11 |
+| **7 (later)** | Sandboxed community code components. Deferred by decision; v1 is declarative-only | 6.6 |
 
 ---
 
-## 14. Open questions
+## 14. Decisions (2026-10-03)
 
-1. **Audience first:** young learners (the math boards suggest this), high school, or general curious adults? This changes tone, safety rules, and domain order.
-2. **Code components:** allow community logic (sandboxed) or declarative-only for v1?
-3. **Hosted vs local-first:** is a hosted public library a goal, or federated/self-hosted libraries (fits the LAN/Pi goal)?
-4. **2D vs 3D priority** for the sandbox.
-5. **Adapter strategy:** one planner adapter plus domain explainers, or per-domain everything (§1.1)?
-6. **How "game-like":** pure sandbox, or include campaign/levels?
-7. **Licensing stance** for the library and for adapters trained on community data.
+| # | Question | Decision | Consequences in this spec |
+|---|---|---|---|
+| 1 | Audience | **All ages welcome; core demographic is high school to curious adults.** | Default tone is respectful and non-childish. Domain order favors physics, math, chemistry, economics, systems. Young-learner math boards stay as an accessible entry level, not the design center. Still apply minors' privacy/safety basics (§11.4) since all ages may join. |
+| 2 | Code components | **Declarative-only for v1; community logic later.** | §6.6 sandbox is deferred (phase 7). v1 manifests must stay expressive enough (declarative Behaviors, expressions, supported actions) that this is workable. Design the manifest/version format now so sandboxed code components can be added without breaking existing packages. |
+| 3 | Hosting | **Hosted public library.** | Phase 5 needs accounts, storage, moderation, and a hosting/cost plan (§11.15). Local-first runtime is kept: the library is the hosted piece, and caching lets sims run offline once downloaded. Self-hosted/classroom mirrors stay a later option, not a v1 goal. |
+| 4 | 2D vs 3D | **2D first; 3D when it clearly helps.** | Sandbox engine, physics and tools target 2D first (§10.4). The architecture already separates model space from views, so a 3D view can be added per component (the town demo already uses 3D). Don't build a general 3D physics engine until a concrete need exists. |
+| 5 | Adapter strategy | **One planner adapter plus domain explainers.** | §1.1 recommendation is confirmed. No per-domain planner adapters. Domain knowledge reaches the planner via retrieved component descriptions (§8, §9). |
+| 6 | Game-like | **Pure sandbox.** | No campaign or levels. §10 "challenges" are demoted to optional, user- or community-made prompts, not a built-in progression. Do not build scoring or unlock systems in v1. Learning comes from experimentation and reflective prompts (§10.3). |
+| 7 | Licensing | **CC BY 4.0 default with a license allow-list; training on community content is opt-in only.** | See §14.1. |
+
+### 14.1 Licensing policy (confirmed 2026-10-03)
+Confirmed as the working policy. It is not legal advice; have someone qualified review it before launch.
+
+**Library content (components, compositions, assets)**
+- Author keeps copyright. On upload they must pick a license from a short allow-list, e.g. **CC BY 4.0** (default), CC BY-SA 4.0, CC0, or MIT (code-like declarative logic).
+- Avoid non-commercial and no-derivatives licenses. They break remixing, which is core to the product.
+- Uploading grants the platform the right to host, display, and distribute the work. Remix lineage and attribution are kept automatically.
+- Official `core.*` components need their own license too. Pick a permissive one.
+
+**Adapters and model training**
+- **Do not train on community uploads or user sessions by default.** Make it opt-in at upload time and for session logs. Users can opt out later for future training runs.
+- Training sets should record provenance and the license of each item. Only include items whose license permits it and whose authors opted in.
+- Synthetic data generated from *official* components (§1.3) needs no community consent and is the safe starting point.
+- Check Apertus' own license terms before publishing derived adapters. Publish adapters under terms compatible with the base model's license, with a model card.
+- Published adapters are not guaranteed to be "clean" of memorized training data. Another reason for opt-in only.
+
+**Platform terms (minimum)**
+- Terms of service with a takedown/DMCA-style process, a clear "what trains models" statement, and the privacy policy in §11.17.
+
+> **Open item:** confirm Apertus' own license permits publishing derived adapters.
