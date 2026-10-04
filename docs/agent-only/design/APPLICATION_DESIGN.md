@@ -109,6 +109,8 @@ Follow the repository's nine component kinds and ownership boundaries. Authorita
 
 Use TypeScript types and bounded runtime schemas for model parameters, outputs, commands, and units. Use stable versioned provider IDs and stable instance IDs. Never interpret model text as executable code. Declare unsupported bindings rather than silently ignoring them.
 
+For manual authoring, separate setup, capability selection, document commands, graph derivation, viewport navigation, content inputs, storage, and learner rendering. Name objects by their author-facing purpose; disclose composite contents before addition. Controls and results are added individually. Use bounded pan/zoom for connection workspaces and maintain keyboard alternatives. Validate and commit complete saved snapshots under a cross-tab lock; reject stale overwrites and preserve recoverable drafts.
+
 Keep React components focused, styles colocated, and domain CSS scoped under a domain root such as `.chemistry-experiment`. Reuse global tokens. Avoid global element selectors inside domain styles and avoid `!important` except an established accessibility override with a documented reason. Use a consistent domain naming scheme for exported components and provider IDs agreed at the foundation freeze.
 
 Use pure testable system functions where possible. Keep random seeds and simulation time explicit. Release timers, subscriptions, WebGL resources, and pending requests on disposal. Avoid adding dependencies for functionality already available in the runtime or browser.

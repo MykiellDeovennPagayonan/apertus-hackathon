@@ -293,7 +293,7 @@ function slopeExplanation(slope: number) {
     : `For every 1 step right, the line falls ${numberText(Math.abs(slope))}.`;
 }
 
-function LineGraph({ instances }: { instances: ModelInstance[] }) {
+export function LineGraph({ instances }: { instances: ModelInstance[] }) {
   const minX = Math.min(...instances.map((line) => Number(line.outputs.xMin)));
   const maxX = Math.max(...instances.map((line) => Number(line.outputs.xMax)));
   const allY = instances.flatMap((line) =>

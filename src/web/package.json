@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "test": "node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs",
+    "test": "node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs && node scripts/verify-builder.cjs && node scripts/verify-composition.cjs && node scripts/verify-composition-graph.cjs && node scripts/verify-canvas-editor.cjs && node scripts/verify-builder-parity.cjs",
     "test:apertus": "node scripts/verify-apertus.cjs",
     "test:browser": "node scripts/verify-browser.cjs",
     "test:apertus:live": "node scripts/evaluate-apertus-live.cjs",
@@ -19,7 +19,16 @@
     "test:workspace": "node scripts/verify-workspace-ux.cjs",
     "test:interactions": "node scripts/verify-experiment-interactions.cjs",
     "test:assembly": "node scripts/domains/math-foundations/verify.cjs",
-    "test:assembly:browser": "node scripts/domains/math-foundations/browser.cjs"
+    "test:assembly:browser": "node scripts/domains/math-foundations/browser.cjs",
+    "test:builder:parity": "node scripts/verify-builder-parity.cjs",
+    "test:builder:parity:browser": "node scripts/verify-builder-parity-browser.cjs",
+    "test:builder": "node scripts/verify-builder.cjs",
+    "test:builder:browser": "node scripts/verify-builder-browser.cjs && node scripts/verify-composition-browser.cjs",
+    "test:composition": "node scripts/verify-composition.cjs && node scripts/verify-composition-graph.cjs",
+    "test:composition:browser": "node scripts/verify-composition-browser.cjs",
+    "test:composition:graph": "node scripts/verify-composition-graph.cjs",
+    "test:canvas": "node scripts/verify-canvas-editor.cjs",
+    "test:canvas:browser": "node scripts/verify-canvas-editor-browser.cjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",

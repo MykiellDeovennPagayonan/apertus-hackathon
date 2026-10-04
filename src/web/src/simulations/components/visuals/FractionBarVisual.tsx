@@ -6,6 +6,7 @@ export function FractionBarVisual({
   y,
   label,
   onPiece,
+  interactive = true,
   barWidth = 780,
   left = 55,
   height = 90,
@@ -16,6 +17,7 @@ export function FractionBarVisual({
   left?: number;
   height?: number;
   label: string;
+  interactive?: boolean;
   onPiece: (piece: number) => ActionResult;
 }) {
   const width = barWidth / bar.value.d;
@@ -29,6 +31,7 @@ export function FractionBarVisual({
           key={`${bar.id}/${bar.value.d}/${i}`}
           label={`${label} piece ${i + 1} of ${bar.value.d}, ${shaded ? "shaded" : "unshaded"}`}
           onCommand={() => onPiece(i)}
+          passive={!interactive}
         >
           <rect
             x={left + i * width}

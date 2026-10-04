@@ -1,0 +1,800 @@
+.composition-builder {
+  color: var(--ink);
+  background: var(--paper);
+  min-height: 100vh;
+  padding: 16px;
+}
+.composition-builder *,
+.composition-lesson * {
+  box-sizing: border-box;
+}
+.composition-builder button,
+.composition-lesson button {
+  min-height: 40px;
+  border: 1px solid var(--border, #cec8bb);
+  border-radius: 6px;
+  padding: 8px 12px;
+  background: var(--panel, #fff);
+  color: var(--ink, #252a28);
+  cursor: pointer;
+}
+.composition-builder button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.composition-builder button[aria-pressed="true"] {
+  background: var(--accent-soft, #ece4cf);
+  border-color: var(--accent, #9d7943);
+}
+.composition-builder :focus-visible,
+.composition-lesson :focus-visible {
+  outline: 3px solid #4367b2;
+  outline-offset: 2px;
+}
+.composition-toolbar,
+.composition-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.composition-builder .composition-toolbar h1 {
+  font-size: 18px;
+  flex: 1;
+  min-width: 150px;
+  margin: 0;
+}
+.composition-notice {
+  display: block;
+  padding: 12px;
+  background: #fff2d8;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+.composition-workspace {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+}
+.composition-workspace:has(.composition-settings-fields) {
+  grid-template-columns: 175px minmax(0, 1fr) 280px;
+}
+.composition-builder.is-expanded .composition-workspace {
+  display: block;
+}
+.composition-inventory,
+.composition-settings-fields {
+  background: var(--panel, white);
+  border: 1px solid var(--border, #ccc);
+  padding: 12px;
+  border-radius: 8px;
+  min-width: 0;
+}
+.composition-inventory h2 {
+  font-size: 14px;
+  margin: 18px 0 8px;
+}
+.composition-inventory h2:first-child {
+  margin-top: 0;
+}
+.composition-inventory > button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.composition-inventory small {
+  font-size: 10px;
+  margin-left: auto;
+  color: var(--muted);
+}
+.composition-color {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.composition-preview {
+  min-width: 0;
+}
+.composition-preview.is-mobile {
+  width: 390px;
+  max-width: 100%;
+  margin-inline: auto;
+}
+.composition-settings-fields header,
+.composition-library header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.composition-settings-fields h2,
+.composition-library h2 {
+  flex: 1;
+  font-size: 17px;
+}
+.composition-settings-fields label,
+.composition-library label,
+.composition-learner-panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 12px 0;
+  font-size: 13px;
+}
+.composition-settings-fields input,
+.composition-settings-fields select,
+.composition-settings-fields textarea,
+.composition-library input,
+.composition-library select,
+.composition-learner-panel input:not([type="range"]):not([type="checkbox"]),
+.composition-learner-panel select {
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  border: 1px solid var(--border, #ccc);
+  border-radius: 5px;
+  padding: 7px;
+  background: var(--paper, #faf8f1);
+  color: var(--ink, #252a28);
+}
+.composition-settings-fields input[type="color"] {
+  padding: 3px;
+}
+.composition-settings-fields input[type="checkbox"],
+.composition-learner-panel input[type="checkbox"] {
+  width: 18px;
+  min-height: 18px;
+}
+.composition-settings-fields input[type="range"] {
+  padding: 0;
+  border: none;
+}
+.composition-settings-fields label.composition-toggle {
+  flex-direction: row;
+  align-items: center;
+}
+.composition-settings-fields fieldset {
+  min-width: 0;
+  border: 1px solid var(--border, #ccc);
+  border-radius: 6px;
+  margin: 12px 0;
+  padding: 10px;
+}
+.composition-settings-fields p,
+.composition-interaction-help,
+.composition-library p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted, #656b66);
+}
+.composition-number {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 80px;
+  align-items: center;
+  gap: 8px;
+}
+.composition-object-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0;
+}
+.composition-lesson {
+  container-type: inline-size;
+  border: 1px solid var(--border, #ccc);
+  background: var(--panel, #fff);
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 0;
+}
+.composition-lesson[hidden] {
+  display: none;
+}
+.composition-instruction {
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+.composition-lesson-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 215px;
+  gap: 12px;
+}
+.composition-lesson--bottom .composition-lesson-body {
+  grid-template-columns: 1fr;
+}
+.composition-scene {
+  min-width: 0;
+}
+.composition-cartesian {
+  display: block;
+  width: 100%;
+  max-height: 650px;
+  touch-action: none;
+  font-size: 12px;
+}
+.composition-handle {
+  fill: #fff;
+  stroke: #4367b2;
+  stroke-width: 2;
+  cursor: grab;
+}
+.composition-cartesian [role="button"] {
+  cursor: grab;
+}
+.composition-town {
+  height: 490px;
+  max-height: 65vh;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  touch-action: none;
+}
+.composition-camera-reset {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 2;
+}
+.composition-scene-hint {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  padding: 10px;
+  background: #ffffffdc;
+  pointer-events: none;
+  font-size: 13px;
+}
+.composition-learner-panel {
+  min-width: 0;
+  background: var(--paper, #faf8f1);
+  border-radius: 6px;
+  padding: 12px;
+}
+.composition-learner-panel > button {
+  margin-top: 10px;
+  width: 100%;
+}
+.composition-playback > output {
+  display: block;
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 8px;
+}
+.composition-playback p {
+  font-size: 12px;
+  color: var(--muted);
+}
+.composition-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border, #ccc);
+  overflow-wrap: anywhere;
+}
+.composition-readout span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.composition-readout output {
+  font-size: 16px;
+  font-weight: 600;
+}
+.composition-learner-control output {
+  font-variant-numeric: tabular-nums;
+}
+.composition-library {
+  width: 540px;
+  max-width: calc(100vw - 24px);
+  max-height: 85vh;
+  border: 1px solid var(--border, #ccc);
+  border-radius: 12px;
+  padding: 20px;
+  background: var(--panel, white);
+  color: var(--ink);
+}
+.composition-library::backdrop {
+  background: #18232170;
+}
+.composition-library nav {
+  display: flex;
+  gap: 6px;
+}
+.composition-library > button {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
+  margin: 8px 0;
+  gap: 6px;
+}
+.composition-library > button span {
+  font-size: 12px;
+  line-height: 1.5;
+}
+@container (max-width: 650px) {
+  .composition-lesson-body {
+    grid-template-columns: 1fr;
+  }
+  .composition-town {
+    height: 360px;
+  }
+}
+@media (max-width: 1100px) {
+  .composition-workspace:has(.composition-settings-fields) {
+    grid-template-columns: 150px minmax(0, 1fr) 245px;
+  }
+}
+@media (max-width: 800px) {
+  .composition-builder {
+    padding: 10px;
+  }
+  .composition-workspace,
+  .composition-workspace:has(.composition-settings-fields) {
+    display: flex;
+    flex-direction: column;
+  }
+  .composition-inventory {
+    width: 100%;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .composition-inventory h2 {
+    width: 100%;
+    margin: 8px 0 3px;
+  }
+  .composition-inventory > button {
+    width: auto;
+    max-width: 100%;
+  }
+  .composition-inventory small {
+    display: none;
+  }
+  .composition-preview {
+    width: 100%;
+    order: 3;
+  }
+  .composition-settings-fields {
+    width: 100%;
+    order: 2;
+  }
+  .composition-toolbar h1 {
+    width: 100%;
+    flex-basis: 100%;
+  }
+}
+.composition-inventory-toggle {
+  display: none;
+}
+.composition-inventory-content > button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 800px) {
+  .composition-inventory-toggle {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+  .composition-inventory-content {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .composition-inventory-content[data-open="false"] {
+    display: none;
+  }
+  .composition-inventory-content > button {
+    width: auto;
+    max-width: 100%;
+  }
+}
+.composition-plane-navigation {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.composition-plane-navigation button {
+  min-height: 32px;
+  font-size: 12px;
+  padding: 5px 9px;
+}
+/* Graph-first authoring. Settings live in the dialog, never beside the workspace. */
+.composition-builder {
+  --ink: var(--text, #30362e);
+  --paper: var(--bg, #eee9dc);
+  --muted: #626c60;
+  padding: 0;
+}
+.composition-builder .composition-toolbar,
+.composition-builder .composition-tabs {
+  margin: 0;
+}
+.composition-builder .composition-workspace,
+.composition-builder .composition-workspace:has(.composition-settings-fields) {
+  display: block;
+}
+.composition-builder .composition-preview {
+  padding: 20px;
+}
+.composition-builder .composition-preview.is-mobile {
+  width: 430px;
+}
+.composition-graph[hidden],
+.composition-preview[hidden],
+.composition-multi-lesson[hidden] {
+  display: none;
+}
+.composition-graph .connection-workspace {
+  display: flex;
+  flex-direction: column;
+  min-height: 520px;
+}
+.composition-graph .connection-camera-tools {
+  display: flex;
+  align-items: center;
+}
+.composition-view-menu {
+  position: relative;
+}
+.composition-view-menu > summary {
+  cursor: pointer;
+  padding: 10px;
+}
+.composition-view-menu > div {
+  position: absolute;
+  z-index: 8;
+  right: 0;
+  top: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 8px;
+  width: 220px;
+}
+.composition-view-menu button {
+  width: 100%;
+  margin-bottom: 6px;
+}
+.composition-builder .composition-notice {
+  margin: 0;
+  border-radius: 0;
+}
+.composition-connection-status {
+  position: absolute;
+  z-index: 5;
+  bottom: 20px;
+  right: 20px;
+  max-width: 330px;
+  padding: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px #30362e18;
+  font-size: 13px;
+}
+.composition-connection-status p {
+  margin: 0 0 10px;
+}
+.composition-connection-status button {
+  margin: 4px 4px 0 0;
+}
+.connection-wire-preview {
+  stroke: #36786b;
+  stroke-dasharray: 6 4;
+  pointer-events: none;
+}
+.component-dialog {
+  --ink: var(--text, #30362e);
+  --paper: var(--bg, #eee9dc);
+  --muted: #626c60;
+  color: var(--ink);
+  background: var(--panel, #fffbef);
+  width: 480px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100dvh - 40px);
+  padding: 0;
+  border: 1px solid var(--border, #cec8bb);
+  border-radius: 16px;
+  box-shadow: 0 20px 80px #18232138;
+}
+.component-dialog.is-wide {
+  width: 1040px;
+}
+.component-dialog::backdrop {
+  background: #18232170;
+}
+.component-dialog > header,
+.component-dialog > footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--panel);
+}
+.component-dialog > header {
+  border-bottom: 1px solid var(--border);
+}
+.component-dialog > header h2 {
+  margin: 0;
+  flex: 1;
+  font-size: 18px;
+}
+.component-dialog > footer {
+  border-top: 1px solid var(--border);
+  justify-content: flex-end;
+}
+.component-dialog-body {
+  padding: 20px;
+}
+.component-dialog .builder-inspector,
+.component-dialog .connection-inspector {
+  border: 0;
+  padding: 0;
+  width: 100%;
+  max-height: none;
+}
+.component-dialog .inspector-close,
+.component-dialog .connection-inspector-close {
+  display: none;
+}
+.composition-component-settings {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+.composition-component-settings.has-visual {
+  grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.3fr);
+  align-items: start;
+}
+.composition-settings-fields {
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.composition-settings-fields details {
+  margin: 16px 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.composition-settings-fields summary {
+  cursor: pointer;
+  font-size: 14px;
+}
+.composition-settings-fields h2 {
+  margin: 0;
+}
+.composition-settings-fields .composition-number input[type="range"] {
+  width: 100%;
+  min-width: 0;
+}
+.composition-settings-visual {
+  min-width: 0;
+  position: sticky;
+  top: 0;
+}
+.composition-settings-visual h3 {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+.component-visual-editor {
+  border: 1px solid var(--border);
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 10px;
+}
+.component-visual-editor .composition-town {
+  height: 400px;
+}
+.composition-library nav {
+  flex-wrap: wrap;
+}
+.composition-library button {
+  font-size: 14px;
+}
+.composition-canvases {
+  display: grid;
+  gap: 20px;
+}
+.composition-canvases.is-side-by-side {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+}
+.composition-canvases.is-stacked {
+  grid-template-columns: 1fr;
+}
+.composition-canvas-panel {
+  min-width: 0;
+}
+.composition-canvas-panel > header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.composition-canvas-panel > header h2 {
+  margin: 0;
+  flex: 1;
+  font-size: 16px;
+}
+.composition-build-empty {
+  padding: 60px 24px;
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+}
+.composition-draft-hint,
+.composition-unconnected-help {
+  font-size: 14px;
+  color: var(--muted);
+}
+.composition-lesson-body:has(.composition-learner-panel[data-empty="true"]) {
+  grid-template-columns: 1fr;
+}
+.composition-learner-panel[data-empty="true"] {
+  background: transparent;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.composition-learner-panel[data-empty="true"] > button {
+  width: auto;
+  margin: 0;
+  font-size: 12px;
+}
+@media (max-width: 800px) {
+  .composition-builder {
+    padding: 0;
+  }
+  .composition-component-settings.has-visual {
+    grid-template-columns: 1fr;
+  }
+  .composition-settings-visual {
+    position: static;
+    grid-row: 1;
+  }
+  .component-dialog {
+    max-height: calc(100dvh - 16px);
+    max-width: calc(100vw - 16px);
+  }
+  .component-dialog-body {
+    padding: 14px;
+  }
+  .composition-graph .connection-workspace-header {
+    padding: 10px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .composition-graph .connection-workspace-actions {
+    width: 100%;
+  }
+  .composition-graph .connection-workspace-actions select {
+    flex: 1;
+  }
+  .composition-graph .connection-workspace {
+    height: max(560px, calc(100dvh - 240px));
+  }
+  .composition-graph .connection-legend {
+    font-size: 10px;
+    gap: 10px;
+    left: 12px;
+  }
+  .composition-connection-status {
+    bottom: 85px;
+    left: 12px;
+    right: 12px;
+    max-width: none;
+  }
+  .composition-builder .composition-preview {
+    padding: 12px;
+  }
+  .composition-builder .composition-toolbar h1 {
+    flex: 1;
+    flex-basis: auto;
+    width: auto;
+    min-width: 120px;
+  }
+  .composition-toolbar {
+    padding: 12px;
+    gap: 6px;
+  }
+  .composition-toolbar button {
+    font-size: 12px;
+    padding: 8px;
+  }
+  .composition-builder .composition-tabs {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+  .composition-tabs button {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+}
+.manual-builder:not(.composition-builder) .component-dialog .builder-inspector {
+  padding: 0;
+  border: 0;
+}
+.manual-builder .component-dialog .builder-inspector h2 {
+  display: none;
+}
+.manual-builder[data-tab="Connections"] .builder-mobile-settings {
+  display: block;
+}
+.component-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+.component-dialog > header,
+.component-dialog > footer {
+  flex-shrink: 0;
+}
+.component-dialog-body {
+  overflow-y: auto;
+  min-height: 0;
+}
+.connection-port {
+  touch-action: none;
+}
+.composition-edit-selection {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.composition-display-scene {
+  min-width: 0;
+  width: 100%;
+}
+.composition-display {
+  display: block;
+  width: 100%;
+  min-height: 260px;
+  max-height: 580px;
+  background: #fffdf7;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  touch-action: none;
+}
+.composition-display-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.composition-display [role="button"] {
+  cursor: grab;
+}
+.composition-display [role="button"]:focus-visible {
+  outline: none;
+  stroke: #b75d45;
+  stroke-width: 0.8px;
+}
+.composition-display .math-scene-label {
+  font-size: 3px;
+}
+.composition-fraction-pieces .math-scene-label {
+  display: none;
+}
+.composition-fraction-pieces rect[fill="#245bcb"] {
+  fill: var(--fraction-color, #245bcb);
+}
+.composition-fraction-pieces rect[stroke="#245bcb"] {
+  stroke: var(--fraction-color, #245bcb);
+}

@@ -360,7 +360,16 @@ export default function ExperimentsShell({
     />
   );
   if (phase === "catalog") {
-    if (landing) return <LandingPage>{composer}</LandingPage>;
+    if (landing)
+      return (
+        <LandingPage>
+          {composer}
+          <div className="manual-create-entry">
+            <Link href="/experiments/builder">Create manually →</Link>
+            <span>Choose a canvas and build it yourself.</span>
+          </div>
+        </LandingPage>
+      );
     return (
       <div className="pg-shell pg-shell--center">
         <header className="pg-prompt-nav">
@@ -415,6 +424,25 @@ export default function ExperimentsShell({
             <button type="button" onClick={downloadRecipe}>
               Save recipe
             </button>
+            <Link href="/experiments/builder">Build manually</Link>
+            {(demo === "gas" ||
+              demo === "fraction-builder" ||
+              demo === "town" ||
+              (demo === "assembly" &&
+                Boolean(getActiveDefinition()?.assembly?.instances.length) &&
+                getActiveDefinition()?.assembly?.instances.every(
+                  (instance) =>
+                    instance.prefab.ref === "prefabs/math-foundations/Line",
+                ))) && (
+              <Link
+                href="/experiments/builder?remix=1"
+                onClick={() =>
+                  sessionStorage.setItem("apertus-builder-remix", saveRecipe())
+                }
+              >
+                Remix in builder
+              </Link>
+            )}
             <Link href="/">Home</Link>
           </nav>
         </div>

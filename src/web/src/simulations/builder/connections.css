@@ -1,0 +1,686 @@
+/* The connection editor has its own canvas, card, port, and inspector surfaces. */
+.manual-builder[data-tab="Connections"] .builder-settings-nav,
+.manual-builder[data-tab="Connections"] .builder-mobile-settings {
+  display: none;
+}
+.manual-builder[data-tab="Connections"] .builder-layout {
+  align-items: stretch;
+}
+.manual-builder[data-tab="Connections"][data-inspector="true"] .builder-layout {
+  grid-template-columns: minmax(0, 1fr) 304px;
+}
+.manual-builder .connection-workspace {
+  height: max(560px, calc(100dvh - 154px));
+  background: #f7f5ed;
+}
+.connection-workspace-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+.connection-workspace-title {
+  display: grid;
+  gap: 2px;
+}
+.connection-workspace-title strong {
+  font-size: 16px;
+}
+.connection-workspace-title > span {
+  font-size: 13px;
+  color: #626c60;
+}
+.connection-workspace-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.manual-builder .connection-workspace-actions select {
+  width: 190px;
+  font-size: 14px;
+}
+.manual-builder .connection-workspace-actions button,
+.connection-options > summary {
+  font-size: 14px;
+  padding: 10px 12px;
+}
+.connection-options {
+  position: relative;
+}
+.connection-options > summary {
+  cursor: pointer;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  text-align: center;
+}
+.connection-options > summary::-webkit-details-marker {
+  display: none;
+}
+.connection-options > div {
+  position: absolute;
+  z-index: 7;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 270px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 28px #30362e1a;
+}
+.connection-options p {
+  color: #626c60;
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+.connection-navigation {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.manual-builder .connection-navigation .builder-canvas-scroll {
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+  touch-action: none;
+  overscroll-behavior: contain;
+  flex: 1;
+  height: auto;
+  min-height: 360px;
+  border: 0;
+  background: radial-gradient(#c9cdbf 0.8px, transparent 0.8px) 0 0 / 24px 24px;
+}
+.manual-builder .connection-navigation .builder-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: none;
+}
+.manual-builder .connection-camera-tools {
+  position: absolute;
+  z-index: 4;
+  left: 20px;
+  bottom: 20px;
+  padding: 6px;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: 0 3px 16px #30362e12;
+  flex-wrap: nowrap;
+}
+.manual-builder .connection-camera-tools > button {
+  min-height: 40px;
+  border: 0;
+  background: transparent;
+  font-size: 14px;
+  padding: 8px 12px;
+}
+.connection-camera-tools output {
+  min-width: 48px;
+  font-size: 13px;
+}
+.connection-help {
+  position: relative;
+  border-left: 1px solid var(--border);
+}
+.connection-help summary {
+  list-style: none;
+  min-height: 40px;
+  min-width: 40px;
+  text-align: center;
+  padding: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.connection-help summary::-webkit-details-marker {
+  display: none;
+}
+.connection-help > div {
+  position: absolute;
+  bottom: calc(100% + 16px);
+  left: -240px;
+  width: 300px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 28px #30362e20;
+  font-size: 14px;
+}
+.connection-help p {
+  margin-bottom: 0;
+}
+.connection-legend {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  display: flex;
+  gap: 16px;
+  color: #626c60;
+  pointer-events: none;
+  font-size: 12px;
+}
+.connection-legend > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.connection-legend i {
+  font-style: normal;
+}
+.legend-action {
+  color: #a77239;
+}
+.legend-data {
+  color: #36786b;
+}
+.legend-placement {
+  color: #816798;
+}
+.manual-builder .connection-node {
+  position: absolute;
+  width: 248px;
+  border: 1px solid #d6dacd;
+  border-radius: 14px;
+  overflow: visible;
+  background: #fffef9;
+  box-shadow: 0 4px 16px #30362e0b;
+}
+.manual-builder .connection-node.is-selected {
+  border-color: #285e56;
+  outline: 2px solid #285e56;
+  outline-offset: 2px;
+  box-shadow: 0 5px 24px #285e5614;
+}
+.manual-builder .connection-node.is-compatible {
+  outline: 2px dashed #a77239;
+  outline-offset: 4px;
+}
+.manual-builder .connection-node-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  border-radius: 14px 14px 0 0;
+  padding: 16px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  touch-action: none;
+  cursor: grab;
+}
+.manual-builder .connection-node-heading[aria-pressed="true"] {
+  background: #f2f6ed;
+}
+.connection-node-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: #285e56;
+  background: #e8eee3;
+  font-size: 22px;
+}
+.connection-node--control .connection-node-icon {
+  color: #8c5d2c;
+  background: #f4ebda;
+}
+.connection-node--result .connection-node-icon {
+  color: #36786b;
+  background: #e6f0e9;
+}
+.connection-node--view .connection-node-icon {
+  color: #61735c;
+  background: #eef0e8;
+}
+.connection-node-title {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+.connection-node-title small {
+  font-size: 11px;
+  font-weight: 500;
+  color: #626c60;
+}
+.connection-node-title strong {
+  font-size: 15px;
+  line-height: 1.25;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.connection-node-title > span {
+  font-size: 11px;
+  color: #626c60;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.connection-node-ports {
+  border-top: 1px solid #e9ebdf;
+  padding-bottom: 0;
+}
+.connection-port-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+.manual-builder .connection-port {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  min-height: 40px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  padding: 6px 14px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+.manual-builder .connection-port--output {
+  justify-content: flex-end;
+  text-align: right;
+}
+.connection-port-label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.manual-builder .connection-port .connection-port-handle {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  background: #fffef9;
+  font-size: 14px;
+  border: 1px solid #d6dacd;
+  border-radius: 50%;
+  left: -12px;
+  padding: 0;
+  color: #36786b;
+}
+.manual-builder .connection-port--output .connection-port-handle {
+  left: auto;
+  right: -12px;
+}
+.manual-builder .connection-port--action .connection-port-handle {
+  color: #a77239;
+}
+.manual-builder .connection-port--placement .connection-port-handle {
+  color: #816798;
+}
+.manual-builder .connection-port:hover:not(:disabled) .connection-port-handle,
+.manual-builder .connection-port:focus-visible .connection-port-handle {
+  border-color: currentColor;
+  box-shadow: 0 0 0 3px #dfe8d9;
+}
+.connection-node-additions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid #e9ebdf;
+  padding: 8px 12px;
+}
+.manual-builder .connection-node-additions button {
+  min-height: 36px;
+  border: 0;
+  padding: 6px 8px;
+  font-size: 12px;
+  background: transparent;
+}
+.manual-builder .connection-wires {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+.connection-wire {
+  transition: opacity 120ms ease;
+}
+.connection-wire.is-muted {
+  opacity: 0.25;
+}
+.connection-wire-line {
+  fill: none;
+  stroke-width: 2;
+}
+.connection-wire.is-related .connection-wire-line {
+  fill: none;
+  stroke-width: 3;
+}
+.connection-wires .connection-wire-hit {
+  stroke: transparent;
+  stroke-width: 18px;
+  fill: none;
+  pointer-events: stroke;
+  cursor: pointer;
+}
+.connection-wires .connection-wire-hit:focus-visible {
+  stroke: #285e5633;
+  outline: none;
+}
+.connection-wire:hover .connection-wire-line {
+  fill: none;
+  stroke-width: 3;
+}
+.manual-builder .connection-composer {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 6;
+  width: min(330px, calc(100% - 40px));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  background: var(--panel);
+  box-shadow: 0 8px 32px #30362e20;
+}
+.connection-composer header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.manual-builder .connection-composer header button {
+  border: 0;
+  font-size: 20px;
+  min-width: 44px;
+  background: transparent;
+}
+.connection-composer p,
+.connection-composer footer span {
+  font-size: 13px;
+  color: #626c60;
+}
+.connection-composer footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+.connection-empty {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(320px, 80%);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+}
+.manual-builder .connection-inspector {
+  padding: 24px 20px;
+  max-height: max(560px, calc(100dvh - 154px));
+  overflow-y: auto;
+  border-left: 1px solid var(--border);
+}
+.connection-inspector-kind {
+  margin: 0 44px 6px 0;
+  font-size: 12px;
+  color: #626c60;
+}
+.manual-builder .connection-inspector h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.connection-binding-summary {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #edf1e6;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.connection-binding-summary > span {
+  font-size: 13px;
+  color: #626c60;
+}
+.connection-binding-summary strong {
+  font-size: 15px;
+}
+.manual-builder .connection-inspector .connection-edit-lesson {
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  margin: 12px 0;
+}
+.connection-related-items {
+  display: grid;
+  gap: 6px;
+}
+.manual-builder .connection-related-items button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+.connection-related-items button > span:last-child {
+  margin-left: auto;
+}
+.connection-inspector-additions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.connection-position > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.manual-builder .connection-remove {
+  color: #963e32;
+  border-color: #d8beb4;
+  font-size: 14px;
+  margin-top: 24px;
+}
+@media (max-width: 800px) {
+  .manual-builder[data-tab="Connections"][data-inspector="true"]
+    .builder-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .manual-builder .connection-workspace {
+    height: max(560px, calc(100dvh - 180px));
+  }
+  .connection-workspace-header {
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    gap: 10px;
+  }
+  .connection-workspace-title {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+  }
+  .connection-workspace-actions {
+    width: 100%;
+  }
+  .manual-builder .connection-workspace-actions select {
+    flex: 1;
+    width: 0;
+  }
+  .manual-builder .connection-inspector {
+    position: fixed;
+    z-index: 8;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    max-height: 40dvh;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 4px 32px #30362e26;
+    padding: 20px;
+  }
+  .manual-builder .connection-camera-tools {
+    left: 12px;
+    bottom: 12px;
+  }
+  .connection-legend {
+    left: 16px;
+    font-size: 11px;
+    gap: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .connection-wire {
+    transition: none;
+  }
+}
+
+.manual-builder .builder-canvas-scroll.is-panning {
+  cursor: grabbing;
+}
+.connection-wires .wire-action .connection-wire-line {
+  stroke: #a77239;
+}
+.connection-wires .wire-data .connection-wire-line {
+  stroke: #36786b;
+}
+.connection-wires .wire-placement .connection-wire-line {
+  stroke: #816798;
+  stroke-dasharray: 5 5;
+}
+
+.manual-builder .connection-node-edit {
+  position: absolute;
+  right: 8px;
+  top: 6px;
+  padding: 3px 7px;
+  font-size: 11px;
+  border-radius: 5px;
+}
+.manual-builder .connection-node-heading {
+  padding-right: 48px;
+}
+.manual-builder .connection-group {
+  position: absolute;
+  border: 2px dashed #80956b;
+  border-radius: 14px;
+  background: rgb(128 149 107 / 5%);
+  pointer-events: none;
+}
+.manual-builder .connection-group.is-selected {
+  border-color: #4367b2;
+  background: rgb(67 103 178 / 6%);
+}
+.manual-builder .connection-group > button {
+  pointer-events: auto;
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  height: 28px;
+  cursor: grab;
+  touch-action: none;
+  padding: 3px 10px;
+}
+.connection-marquee {
+  position: absolute;
+  border: 1px solid #4367b2;
+  background: rgb(67 103 178 / 14%);
+  pointer-events: none;
+  z-index: 3;
+}
+.connection-context-menu {
+  position: fixed;
+  z-index: 30;
+  display: grid;
+  min-width: 200px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #faf8f1;
+  box-shadow: 0 6px 24px rgb(0 0 0 / 18%);
+}
+.manual-builder .connection-context-menu button {
+  text-align: left;
+  padding: 9px;
+  border: 0;
+  background: transparent;
+}
+.manual-builder .connection-context-menu button:hover {
+  background: #e9edde;
+}
+.manual-builder .connection-navigation .builder-canvas,
+.manual-builder .connection-wires {
+  overflow: visible;
+}
+.builder-action-history {
+  position: relative;
+}
+.builder-action-history summary {
+  cursor: pointer;
+}
+.builder-action-history > div {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 20;
+  width: min(360px, 85vw);
+  max-height: 360px;
+  overflow: auto;
+  padding: 14px;
+  background: #faf8f1;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgb(0 0 0 / 15%);
+}
+.builder-action-history li {
+  padding: 4px 0;
+}
+.builder-action-history .is-undone {
+  opacity: 0.55;
+}
+
+.connection-workspace-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+@media (max-width: 800px) {
+  .connection-workspace-header {
+    flex-wrap: wrap;
+  }
+  .connection-workspace-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* Selection tools float without shifting the graph between the two clicks of
+   a double-click, especially when a narrow header would otherwise wrap. */
+.composition-graph .connection-workspace-header {
+  position: relative;
+}
+.composition-graph .connection-selection-actions {
+  position: absolute;
+  left: 12px;
+  top: calc(100% + 8px);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel, #fffdf7);
+  box-shadow: 0 4px 12px #30362e14;
+}

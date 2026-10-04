@@ -42,7 +42,15 @@
     ".next-agent-c/types/**/*.ts",
     ".next-agent-c/dev/types/**/*.ts",
     ".next-agent-b/types/**/*.ts",
-    ".next-agent-b/dev/types/**/*.ts"
+    ".next-agent-b/dev/types/**/*.ts",
+    ".next-composition/types/**/*.ts",
+    ".next-composition/dev/types/**/*.ts",
+    ".next-graph/types/**/*.ts",
+    ".next-graph/dev/types/**/*.ts",
+    ".next-parity/types/**/*.ts",
+    ".next-parity/dev/types/**/*.ts",
+    ".next-parity-build/types/**/*.ts",
+    ".next-parity-build/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

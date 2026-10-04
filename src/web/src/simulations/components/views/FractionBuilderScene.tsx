@@ -5,10 +5,15 @@ import { SVGWorldView } from "./SVGWorldView";
 import { useCompactDiagram } from "./useCompactDiagram";
 export function FractionBuilderScene({
   board,
+  interactive = true,
+  compact: compactOverride,
 }: {
   board: FractionComparisonBoard;
+  interactive?: boolean;
+  compact?: boolean;
 }) {
-  const compact = useCompactDiagram();
+  const viewportCompact = useCompactDiagram();
+  const compact = compactOverride ?? viewportCompact;
   return (
     <SVGWorldView
       role="group"
@@ -19,16 +24,22 @@ export function FractionBuilderScene({
         <FractionBarVisual
           key={bar.id}
           bar={bar}
+          interactive={interactive}
           y={compact ? 75 + i * 165 : 85 + i * 175}
           barWidth={compact ? 380 : 780}
           left={compact ? 30 : 55}
           height={compact ? 78 : 90}
           label={`Bar ${i === 0 ? "A" : "B"}`}
           onPiece={(piece) =>
-            dispatchCommand(board.demo, {
-              type: "TOGGLE_FRACTION_PIECE",
-              value: { bar: i, piece },
-            })
+            !interactive
+              ? {
+                  accepted: false,
+                  error: "Direct shading is disabled for this lesson.",
+                }
+              : dispatchCommand(board.demo, {
+                  type: "TOGGLE_FRACTION_PIECE",
+                  value: { bar: i, piece },
+                })
           }
         />
       ))}

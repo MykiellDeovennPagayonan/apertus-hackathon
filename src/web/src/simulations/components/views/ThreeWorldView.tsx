@@ -47,13 +47,19 @@ function DayNightRig() {
   );
 }
 
-export function ThreeWorldView() {
+export function ThreeWorldView({
+  cameraPreset = "overview",
+}: {
+  cameraPreset?: "overview" | "close";
+} = {}) {
   return (
     <Canvas
       shadows="percentage"
       dpr={[1, 1.75]}
       camera={{
-        position: TownExperiment.viewSettings.cameraPosition,
+        position: TownExperiment.viewSettings.cameraPosition.map(
+          (value) => value * (cameraPreset === "close" ? 0.65 : 1),
+        ) as [number, number, number],
         fov: TownExperiment.viewSettings.fov,
       }}
     >
