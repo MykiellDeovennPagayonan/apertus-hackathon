@@ -1,0 +1,342 @@
+.chemistry-assembly {
+  display: grid;
+  gap: 24px;
+}
+.chemistry-experiment h2,
+.chemistry-experiment h3 {
+  font-family: Georgia, serif;
+}
+.chemistry-experiment h2 {
+  margin: 0;
+  font-size: 24px;
+}
+.chemistry-experiment h3 {
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+.chem-scene-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.chem-scene-heading p {
+  margin: 0;
+  color: #606658;
+  font-size: 13px;
+  text-align: right;
+}
+.chemistry-experiment figure {
+  margin: 0;
+}
+.chemistry-experiment svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 410px;
+}
+.chemistry-experiment svg text {
+  fill: currentColor;
+  font-size: 14px;
+}
+.chemistry-experiment figcaption,
+.chemistry-experiment .chem-caption {
+  margin-top: 8px;
+  color: #606658;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.chemistry-experiment button,
+.chemistry-experiment input {
+  min-height: 44px;
+  border: 1px solid var(--border, #797a6c);
+  border-radius: 9px;
+  padding: 8px 10px;
+  background: var(--panel, #fffbef);
+  color: inherit;
+  font: inherit;
+}
+.chemistry-experiment button {
+  cursor: pointer;
+}
+.chemistry-experiment button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.chemistry-experiment .chem-primary {
+  width: 100%;
+  border-color: var(--accent, #285e56);
+  background: var(--accent, #285e56);
+  color: var(--panel, #fffbef);
+  font-weight: 600;
+}
+.chem-panel-title {
+  margin: 0 0 12px;
+  font:
+    21px / 1.25 Georgia,
+    serif;
+}
+.chem-coach,
+.chem-insight {
+  margin: 0 0 14px;
+  color: #555e51;
+  font-size: 14px;
+}
+.chem-insight {
+  margin: 12px 0 0;
+}
+.chem-key-results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.chem-key-results--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.chem-key-results > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 9px;
+  border-radius: 10px;
+  background: #f3eddf;
+}
+.chem-key-results span {
+  color: #606658;
+  font-size: 11px;
+}
+.chem-key-results strong {
+  color: var(--accent, #285e56);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.chem-feedback {
+  display: block;
+  min-height: 20px;
+}
+.chem-input {
+  margin: 0;
+}
+.chem-input label,
+.chem-coefficients label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+.chem-input > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+.chemistry-experiment input {
+  width: 100%;
+  min-width: 0;
+}
+.chem-input small {
+  display: block;
+  margin-top: 4px;
+  color: #606658;
+  font-size: 12px;
+}
+.chem-equation {
+  margin: 6px 0;
+  text-align: center;
+  font:
+    clamp(24px, 4vw, 36px) / 1.2 Georgia,
+    serif;
+}
+.chem-balance-state {
+  margin: 0 0 8px;
+  text-align: center;
+  font-weight: 600;
+}
+.chem-molecules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.chem-species {
+  flex: 1 1 110px;
+}
+.chem-species > span {
+  display: block;
+  color: #606658;
+  font-size: 13px;
+}
+.chem-molecule-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 10px;
+}
+.chem-molecule {
+  display: inline-flex;
+  padding: 4px;
+  border: 1px solid #797a6c;
+  border-radius: 20px;
+}
+.chem-atom {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e0e9e1;
+  font-size: 14px;
+}
+.chem-atom-O {
+  background: #eedbc8;
+}
+.chem-atom-C {
+  background: #dfd9ed;
+}
+.chem-coefficients {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+.chem-coefficients input {
+  text-align: center;
+}
+.chem-element-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chem-element-summary > div {
+  flex: 1 1 86px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 8px;
+  padding: 8px;
+  border: 1px solid var(--danger, #bb5e50);
+  border-radius: 9px;
+  background: #fff5f1;
+}
+.chem-element-summary > .is-matched {
+  border-color: var(--ok, #467e53);
+  background: #eef6ed;
+}
+.chem-element-summary small {
+  grid-column: 1 / -1;
+  color: #606658;
+}
+.chem-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.chem-actions button {
+  flex: 1 1 70px;
+  font-size: 13px;
+}
+.chem-reset {
+  width: 100%;
+  margin-top: 14px;
+  color: var(--accent, #285e56);
+}
+.chem-details > summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--accent, #285e56);
+  cursor: pointer;
+  font-size: 14px;
+}
+.chem-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 16px;
+  padding: 16px 0;
+}
+.chem-details-grid > section {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--border, #d5cdbb);
+  border-radius: 12px;
+  background: #fffbee80;
+}
+.chem-details-grid dl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 16px;
+  margin: 0;
+}
+.chem-details-grid dd {
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.chem-table-wrap {
+  overflow-x: auto;
+}
+.chemistry-experiment table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.chemistry-experiment :is(th, td) {
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--border, #d5cdbb);
+  text-align: left;
+}
+.chemistry-experiment caption {
+  margin-bottom: 8px;
+  text-align: left;
+}
+.chem-assumptions {
+  color: #606658;
+  font-size: 14px;
+}
+.chem-assumptions p {
+  margin: 6px 0;
+}
+.chem-particles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 8px;
+}
+.chem-particles span {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  color: #fffbef;
+  font-size: 13px;
+}
+.chem-particle-a {
+  background: #285e56;
+}
+.chem-particle-b {
+  background: #885410;
+}
+@media (max-width: 760px) {
+  .chem-scene-heading {
+    display: block;
+    text-align: center;
+  }
+  .chem-scene-heading p {
+    margin-top: 6px;
+    text-align: center;
+  }
+  .chemistry-experiment svg {
+    max-height: 320px;
+  }
+  .chem-key-results--three {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .chem-key-results--three > div:last-child {
+    grid-column: 1 / -1;
+  }
+  .chem-coefficients {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

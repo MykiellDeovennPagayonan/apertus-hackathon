@@ -182,7 +182,12 @@ async function main() {
       "Invalid output gets exactly one repair request",
     );
     assert.equal(captured.body.messages.length, 4);
-    assert.match(captured.body.messages[3].content, /Validation error/);
+    assert.match(captured.body.messages[0].content, /Validation error/);
+    assert.equal(
+      captured.body.messages[3].content,
+      captured.body.messages[1].content,
+      "Repair preserves original learner request as the final user message",
+    );
     mode = "repair";
     assert.equal((await POST(request({ prompt: "launch" }))).status, 200);
     mode = "truncated";

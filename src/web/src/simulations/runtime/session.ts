@@ -8,7 +8,7 @@ import { parsePlan } from "../../lib/planner/schema";
 import { GRAVITIES } from "../components/resources/GravityPresets";
 import type { GasState } from "../components/traits/GasState";
 import type { MathBoard } from "../components/traits/MathBoards";
-import { modelProvider } from "./assembly";
+import { modelProvider, validateAssemblyInstances } from "./assembly";
 import { assemblyInitializer, useAssemblyStore } from "./assemblySession";
 import { bridgeInitializer, useBridgeStore } from "./bridgeSession";
 import { operations, validateCommand } from "./capabilities";
@@ -335,6 +335,18 @@ export function dispatchBatch(
         `commands[${index}] ${c.target ?? "session"}: ${result.error}`,
       );
   }
+  if (demo === "assembly") {
+    try {
+      const staged = pair.candidate.getState() as ReturnType<
+        typeof useAssemblyStore.getState
+      >;
+      validateAssemblyInstances(staged.instances);
+    } catch (error) {
+      return rejected(
+        error instanceof Error ? error.message : "Invalid instance comparison",
+      );
+    }
+  }
   commitCandidate(pair);
   revision++;
   const contextAfter = getExperimentContext();
@@ -395,6 +407,27 @@ export function executePlan(input: Plan): ActionResult & { demo?: DemoType } {
     return rejected(error instanceof Error ? error.message : "Invalid plan");
   }
 }
+/** Expose edit-relevant summaries without sending nested visual geometry or large graph datasets. */
+function plannerOutputs(outputs: Record<string, unknown>) {
+  const shallow = (value: unknown, depth = 0): boolean => {
+    if (depth > 2) return false;
+    if (
+      value === null ||
+      ["number", "string", "boolean"].includes(typeof value)
+    )
+      return true;
+    if (Array.isArray(value))
+      return value.length <= 8 && value.every((v) => shallow(v, depth + 1));
+    if (value && typeof value === "object")
+      return Object.values(value).every((v) => shallow(v, depth + 1));
+    return false;
+  };
+  return structuredClone(
+    Object.fromEntries(
+      Object.entries(outputs).filter(([, value]) => shallow(value)),
+    ),
+  );
+}
 export function getExperimentContext(): ExperimentContext | null {
   if (!active || !definition) return null;
   const actions = Object.keys(operations[active]);
@@ -404,7 +437,7 @@ export function getExperimentContext(): ExperimentContext | null {
       id: i.id,
       label: i.label,
       parameters: structuredClone(i.parameters),
-      outputs: structuredClone(i.outputs),
+      outputs: plannerOutputs(i.outputs),
       actions: Object.keys(modelProvider(i.provider).actions),
     }));
   } else if (active === "gas") {

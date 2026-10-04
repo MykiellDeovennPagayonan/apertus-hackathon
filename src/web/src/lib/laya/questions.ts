@@ -6,11 +6,13 @@ export function intentQuestion(): ChoiceQuestion {
   return {
     type: "choice",
     instructions:
-      "Classify the whole original request. Understand paraphrases and spelling mistakes. Select edit only for a single edit or control of the active experiment. Negation or ambiguity is unclear; multiple changes and new creations are other.",
+      "Classify the whole original request. Understand paraphrases and spelling mistakes. Select edit for one parameter change or control of the active experiment. A relative change to one object using another object's parameter as a reference is one edit. Number words, ordinal object references and relative factors are supported, not ambiguity. Negation or missing target/value is unclear; multiple changes and new creations are other.",
     criteria: {
-      edit: "One change or playback control of the existing experiment",
-      other: "Creation, explanation, multiple changes, or a broader request",
-      unclear: "Negated request or unclear intent",
+      edit: "One parameter change or playback control of a uniquely identified existing object. Includes a relative factor referencing another object's known parameter; that reference is not a second edit.",
+      other:
+        "Create a NEW experiment, explain a concept without changing settings, or request multiple independent edits",
+      unclear:
+        "Negated request or missing target/value. A specified ordinal target and numeric or relative value are clear supported edit intent.",
     },
   };
 }

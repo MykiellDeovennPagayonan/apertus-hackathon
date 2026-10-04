@@ -35,6 +35,8 @@ export async function selectWithLaya(
             id: i.id,
             label: i.label,
             ordinal: index + 1,
+            parameters: i.parameters,
+            actions: i.actions,
           })),
         },
         previous_decisions: { ...previous },

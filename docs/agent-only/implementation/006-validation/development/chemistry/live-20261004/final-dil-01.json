@@ -1,0 +1,722 @@
+{
+  "transport": "Playwright MCP stdio",
+  "serverVersion": "0.0.83",
+  "qualifying": false,
+  "scope": "Agent C development browser inspection, not a complete frozen fifteen-prompt round",
+  "startedAt": "2026-10-03T23:38:53.581Z",
+  "feedbackBudgetMs": 3000,
+  "requestBudgetMs": 190000,
+  "fingerprint": "a523c2373aaa9cf244a6d46181d290309e5551b17159013161bfc0da2e337957",
+  "models": {
+    "apertus": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+    "laya": "aac6fef/laya-multilingual-mlx"
+  },
+  "testScriptSha256": "8a7d0b81b6b1850667b22ee7bc499a3461a266580b59efa5316fefb8cafd46dc",
+  "cleanup": {
+    "owner": "Agent C",
+    "rawDirectory": "/private/tmp/apertus-006-agent-c-final-dil-01",
+    "status": "completed",
+    "removedFiles": 11,
+    "categories": [
+      "screenshots",
+      "MCP text/log output",
+      "raw report JSON",
+      "closed isolated browser contexts"
+    ],
+    "completedAt": "2026-10-03T23:40:35.078699+00:00"
+  },
+  "cases": [
+    {
+      "id": "DIL-001",
+      "variant": "typo",
+      "width": 1440,
+      "result": "passed",
+      "assertions": [
+        "Fresh Apertus intent/configuration + real accepted Laya selection; committed recipe; defaults",
+        "Exact live follow-up; independent numerical oracle",
+        "Primary button and valid numeric controls update the authoritative model; independent targets are preserved",
+        "Invalid numeric UI input preserves accepted state",
+        "Reset, keyboard access, assumptions, 44px targets, no page overflow/errors"
+      ],
+      "errors": [],
+      "height": 900,
+      "requests": [
+        {
+          "prompt": "What happens to salt water when I add mor water?",
+          "submittedAt": "2026-10-03T23:38:55.526Z",
+          "latencyMs": 21842,
+          "feedbackLatencyMs": 43,
+          "status": 200,
+          "correlationId": "ede25853-7ce3-4578-af9e-f3ff28d4364c",
+          "operation": "create",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "intent.referenceNormalization",
+              "elapsedMs": 13829,
+              "supplied": "compositions/Dilution",
+              "canonical": "prefabs/chemistry/Dilution"
+            },
+            {
+              "event": "intent.response",
+              "elapsedMs": 13829,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "teachingIntent",
+              "elapsedMs": 13830
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 14074
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 14104
+            },
+            {
+              "event": "optionalStructureDefault",
+              "elapsedMs": 14104,
+              "reason": "No accepted optional structure choice; preserve the registered educational default."
+            },
+            {
+              "event": "configuration.response",
+              "elapsedMs": 21757,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "configuration",
+              "elapsedMs": 21757
+            },
+            {
+              "event": "stagedValidation",
+              "elapsedMs": 21757
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 21757
+            }
+          ],
+          "observedState": [
+            {
+              "id": "object/first",
+              "provider": "prefabs/chemistry/Dilution",
+              "outputs": {
+                "saltMass": 10,
+                "volume": 1,
+                "concentration": 10
+              }
+            }
+          ],
+          "committedRevision": 0,
+          "selections": [
+            {
+              "question": "assembly",
+              "decision": {
+                "choice": "prefabs/chemistry/Dilution",
+                "probability": 0.8372
+              },
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 207.044,
+                "server_ms": 207.266
+              },
+              "answers": {
+                "assembly": {
+                  "type": "choice",
+                  "confidence": 0.557,
+                  "action": {
+                    "act_probability": 1
+                  },
+                  "choice": "prefabs/chemistry/Dilution",
+                  "probabilities": {
+                    "compositions/GasPressureExperiment": 0.0309,
+                    "compositions/ProjectileExperiment": 0.0731,
+                    "compositions/EqualGroupsExperiment": 0.0589,
+                    "prefabs/chemistry/Dilution": 0.8372
+                  }
+                }
+              }
+            },
+            {
+              "question": "structure",
+              "decision": null,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 23.624,
+                "server_ms": 23.653
+              },
+              "answers": {
+                "structure": {
+                  "type": "choice",
+                  "confidence": 0.1048,
+                  "action": {
+                    "act_probability": 1
+                  },
+                  "choice": "single",
+                  "probabilities": {
+                    "single": 0.6883,
+                    "comparison": 0.3117
+                  }
+                }
+              }
+            }
+          ],
+          "recipe": {
+            "version": 1,
+            "title": "Dilution Effect on Salt Concentration",
+            "learningGoal": "Describe how adding water changes salt concentration in a salt-water solution",
+            "instances": [
+              {
+                "id": "object/first",
+                "label": "Editable object",
+                "prefab": {
+                  "ref": "prefabs/chemistry/Dilution",
+                  "version": 1
+                },
+                "parameters": {
+                  "saltMass": 10,
+                  "volume": 1
+                }
+              }
+            ],
+            "observations": [
+              {
+                "id": "object/first/saltMass",
+                "instance": "object/first",
+                "output": "saltMass",
+                "unit": "g"
+              },
+              {
+                "id": "object/first/volume",
+                "instance": "object/first",
+                "output": "volume",
+                "unit": "L"
+              },
+              {
+                "id": "object/first/concentration",
+                "instance": "object/first",
+                "output": "concentration",
+                "unit": "g/L"
+              }
+            ],
+            "connections": [
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "saltMass"
+                },
+                "to": "object/first/saltMass"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "volume"
+                },
+                "to": "object/first/volume"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "concentration"
+                },
+                "to": "object/first/concentration"
+              }
+            ],
+            "controls": [
+              {
+                "instance": "object/first",
+                "action": "CHEM_ADD_WATER"
+              }
+            ],
+            "views": [
+              {
+                "ref": "views/AssemblyScene",
+                "observations": [
+                  "object/first/saltMass",
+                  "object/first/volume",
+                  "object/first/concentration"
+                ]
+              },
+              {
+                "ref": "views/AssemblyTable",
+                "observations": [
+                  "object/first/saltMass",
+                  "object/first/volume",
+                  "object/first/concentration"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "prompt": "Add another litre of water.",
+          "submittedAt": "2026-10-03T23:39:17.863Z",
+          "latencyMs": 4004,
+          "feedbackLatencyMs": 30,
+          "status": 200,
+          "correlationId": "ff8b4580-8bb1-41d9-865b-c7ee757915e1",
+          "operation": "edit",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "edit.layaSelection",
+              "elapsedMs": 39,
+              "model": "aac6fef/laya-multilingual-mlx"
+            },
+            {
+              "event": "edit.layaSelection",
+              "elapsedMs": 58,
+              "model": "aac6fef/laya-multilingual-mlx"
+            },
+            {
+              "event": "edit.layaSelection",
+              "elapsedMs": 71,
+              "model": "aac6fef/laya-multilingual-mlx"
+            },
+            {
+              "event": "edit.broad.response",
+              "elapsedMs": 3963,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 3963
+            }
+          ],
+          "observedState": [
+            {
+              "id": "object/first",
+              "provider": "prefabs/chemistry/Dilution",
+              "outputs": {
+                "saltMass": 10,
+                "volume": 2,
+                "concentration": 5
+              }
+            }
+          ],
+          "committedRevision": 1,
+          "selections": [
+            {
+              "question": "intent",
+              "accepted": true,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 34.959,
+                "server_ms": 34.974
+              },
+              "choice": "edit",
+              "probability": 0.962
+            },
+            {
+              "question": "target",
+              "accepted": true,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 16.804,
+                "server_ms": 16.817
+              },
+              "choice": "object/first",
+              "probability": 0.9691
+            },
+            {
+              "question": "action",
+              "accepted": false,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 9.797,
+                "server_ms": 9.815
+              }
+            }
+          ]
+        }
+      ],
+      "consoleReview": [
+        "### Result\nTotal messages: 2 (Errors: 0, Warnings: 0)\nReturning 0 messages for level \"error\"\n"
+      ],
+      "networkReview": "Inspected relevant /api/ requests: statuses/correlation IDs retained in requests; no application request interception."
+    },
+    {
+      "id": "DIL-001",
+      "variant": "typo",
+      "width": 390,
+      "result": "passed",
+      "assertions": [
+        "Fresh Apertus intent/configuration + real accepted Laya selection; committed recipe; defaults",
+        "Exact live follow-up; independent numerical oracle",
+        "Primary button and valid numeric controls update the authoritative model; independent targets are preserved",
+        "Invalid numeric UI input preserves accepted state",
+        "Reset, keyboard access, assumptions, 44px targets, no page overflow/errors"
+      ],
+      "errors": [],
+      "height": 844,
+      "requests": [
+        {
+          "prompt": "What happens to salt water when I add mor water?",
+          "submittedAt": "2026-10-03T23:39:24.249Z",
+          "latencyMs": 17047,
+          "feedbackLatencyMs": 41,
+          "status": 200,
+          "correlationId": "8c85005c-25a7-414f-ba92-bbdfb43b0751",
+          "operation": "create",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "intent.referenceNormalization",
+              "elapsedMs": 11669,
+              "supplied": "compositions/Dilution",
+              "canonical": "prefabs/chemistry/Dilution"
+            },
+            {
+              "event": "intent.response",
+              "elapsedMs": 11669,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "teachingIntent",
+              "elapsedMs": 11669
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 11707
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 11726
+            },
+            {
+              "event": "optionalStructureDefault",
+              "elapsedMs": 11726,
+              "reason": "No accepted optional structure choice; preserve the registered educational default."
+            },
+            {
+              "event": "configuration.response",
+              "elapsedMs": 16961,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "configuration",
+              "elapsedMs": 16961
+            },
+            {
+              "event": "stagedValidation",
+              "elapsedMs": 16961
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 16961
+            }
+          ],
+          "observedState": [
+            {
+              "id": "object/first",
+              "provider": "prefabs/chemistry/Dilution",
+              "outputs": {
+                "saltMass": 10,
+                "volume": 1,
+                "concentration": 10
+              }
+            }
+          ],
+          "committedRevision": 0,
+          "selections": [
+            {
+              "question": "assembly",
+              "decision": {
+                "choice": "prefabs/chemistry/Dilution",
+                "probability": 0.8372
+              },
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 31.141,
+                "server_ms": 31.189
+              },
+              "answers": {
+                "assembly": {
+                  "type": "choice",
+                  "confidence": 0.557,
+                  "action": {
+                    "act_probability": 1
+                  },
+                  "choice": "prefabs/chemistry/Dilution",
+                  "probabilities": {
+                    "compositions/GasPressureExperiment": 0.0309,
+                    "compositions/ProjectileExperiment": 0.0731,
+                    "compositions/EqualGroupsExperiment": 0.0589,
+                    "prefabs/chemistry/Dilution": 0.8372
+                  }
+                }
+              }
+            },
+            {
+              "question": "structure",
+              "decision": null,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 14.079,
+                "server_ms": 14.104
+              },
+              "answers": {
+                "structure": {
+                  "type": "choice",
+                  "confidence": 0.1048,
+                  "action": {
+                    "act_probability": 1
+                  },
+                  "choice": "single",
+                  "probabilities": {
+                    "single": 0.6883,
+                    "comparison": 0.3117
+                  }
+                }
+              }
+            }
+          ],
+          "recipe": {
+            "version": 1,
+            "title": "Dilution Effect on Salt Concentration",
+            "learningGoal": "Describe how adding water changes salt concentration in a salt-water solution",
+            "instances": [
+              {
+                "id": "object/first",
+                "label": "Editable object",
+                "prefab": {
+                  "ref": "prefabs/chemistry/Dilution",
+                  "version": 1
+                },
+                "parameters": {
+                  "saltMass": 10,
+                  "volume": 1
+                }
+              }
+            ],
+            "observations": [
+              {
+                "id": "object/first/saltMass",
+                "instance": "object/first",
+                "output": "saltMass",
+                "unit": "g"
+              },
+              {
+                "id": "object/first/volume",
+                "instance": "object/first",
+                "output": "volume",
+                "unit": "L"
+              },
+              {
+                "id": "object/first/concentration",
+                "instance": "object/first",
+                "output": "concentration",
+                "unit": "g/L"
+              }
+            ],
+            "connections": [
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "saltMass"
+                },
+                "to": "object/first/saltMass"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "volume"
+                },
+                "to": "object/first/volume"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "concentration"
+                },
+                "to": "object/first/concentration"
+              }
+            ],
+            "controls": [
+              {
+                "instance": "object/first",
+                "action": "CHEM_ADD_WATER"
+              }
+            ],
+            "views": [
+              {
+                "ref": "views/AssemblyScene",
+                "observations": [
+                  "object/first/saltMass",
+                  "object/first/volume",
+                  "object/first/concentration"
+                ]
+              },
+              {
+                "ref": "views/AssemblyTable",
+                "observations": [
+                  "object/first/saltMass",
+                  "object/first/volume",
+                  "object/first/concentration"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "prompt": "Add another litre of water.",
+          "submittedAt": "2026-10-03T23:39:41.672Z",
+          "latencyMs": 2020,
+          "feedbackLatencyMs": 33,
+          "status": 200,
+          "correlationId": "daef6ff1-59b3-4a28-90a0-fdd0addbd028",
+          "operation": "edit",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "edit.layaSelection",
+              "elapsedMs": 32,
+              "model": "aac6fef/laya-multilingual-mlx"
+            },
+            {
+              "event": "edit.layaSelection",
+              "elapsedMs": 47,
+              "model": "aac6fef/laya-multilingual-mlx"
+            },
+            {
+              "event": "edit.layaSelection",
+              "elapsedMs": 60,
+              "model": "aac6fef/laya-multilingual-mlx"
+            },
+            {
+              "event": "edit.broad.response",
+              "elapsedMs": 1974,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 1974
+            }
+          ],
+          "observedState": [
+            {
+              "id": "object/first",
+              "provider": "prefabs/chemistry/Dilution",
+              "outputs": {
+                "saltMass": 10,
+                "volume": 2,
+                "concentration": 5
+              }
+            }
+          ],
+          "committedRevision": 1,
+          "selections": [
+            {
+              "question": "intent",
+              "accepted": true,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 29.762,
+                "server_ms": 29.781
+              },
+              "choice": "edit",
+              "probability": 0.962
+            },
+            {
+              "question": "target",
+              "accepted": true,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 11.726,
+                "server_ms": 11.741
+              },
+              "choice": "object/first",
+              "probability": 0.9691
+            },
+            {
+              "question": "action",
+              "accepted": false,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 10.605,
+                "server_ms": 10.627
+              }
+            }
+          ]
+        }
+      ],
+      "consoleReview": [
+        "### Result\nTotal messages: 2 (Errors: 0, Warnings: 0)\nReturning 0 messages for level \"error\"\n"
+      ],
+      "networkReview": "Inspected relevant /api/ requests: statuses/correlation IDs retained in requests; no application request interception."
+    }
+  ],
+  "independentAudit": {
+    "method": "Exact mass/volume/concentration expectations: 10 g / 2 L = 5 g/L",
+    "result": "passed both viewports"
+  }
+}

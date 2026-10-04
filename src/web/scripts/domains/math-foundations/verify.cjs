@@ -283,24 +283,26 @@ annotatedEquationWire.objects[0].observations = [
   "substitution: true",
 ];
 assert.deepEqual(
-  parseConfiguration(JSON.stringify(annotatedEquationWire), ref("Equation"))
-    .plan.assembly.observations.map((observation) => observation.output),
+  parseConfiguration(
+    JSON.stringify(annotatedEquationWire),
+    ref("Equation"),
+  ).plan.assembly.observations.map((observation) => observation.output),
   ["equation", "solution", "substitution"],
 );
 const inventedObservationWire = structuredClone(equationWire);
 inventedObservationWire.objects[0].observations = ["balance: equal"];
 assert.throws(() =>
-  parseConfiguration(
-    JSON.stringify(inventedObservationWire),
-    ref("Equation"),
-  ),
+  parseConfiguration(JSON.stringify(inventedObservationWire), ref("Equation")),
 );
 assert.deepEqual(
   parseConfiguration(`${JSON.stringify(equationWire)}]`, ref("Equation")),
   equationConfig,
 );
 assert.throws(() =>
-  parseConfiguration(`${JSON.stringify(equationWire)} arbitrary`, ref("Equation")),
+  parseConfiguration(
+    `${JSON.stringify(equationWire)} arbitrary`,
+    ref("Equation"),
+  ),
 );
 assert.equal(equationConfig.plan.message, equationWire.learningGoal);
 assert.equal(
@@ -366,6 +368,17 @@ const originalFetch = global.fetch,
   for (const model of assemblyModels) {
     const a =
       model.presentation === "line" ? comparison : defaultAssembly(model.ref);
+    if (
+      model.graphOutput &&
+      !a.views.some((v) => v.ref === "views/AssemblyGraph")
+    ) {
+      a.views.push({
+        ref: "views/AssemblyGraph",
+        observations: a.observations
+          .filter((o) => o.output === model.graphOutput)
+          .map((o) => o.id),
+      });
+    }
     const queue = [
       {
         schemaVersion: 1,
@@ -437,8 +450,7 @@ const originalFetch = global.fetch,
     parsePlan(result);
     assert.ok(events.some((e) => e.event === "stagedValidation"));
     assert.ok(decisions.includes("assembly"));
-    if (model.maximumInstances > 1)
-      assert.ok(decisions.includes("structure"));
+    if (model.maximumInstances > 1) assert.ok(decisions.includes("structure"));
     if (model.presentation === "line")
       assert.ok(decisions.includes("observation"));
   }

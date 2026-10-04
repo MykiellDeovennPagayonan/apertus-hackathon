@@ -5,6 +5,10 @@ import { modelProvider } from "../../../runtime/assembly";
 import { useAssemblyStore } from "../../../runtime/assemblySession";
 import type { ModelInstance } from "../../../runtime/contribution";
 import { dispatchCommand } from "../../../runtime/session";
+import { ChemistryLesson } from "../chemistry/ChemistryLesson";
+import { DynamicSystemsLesson } from "../dynamic-systems/DynamicSystemsLesson";
+import { NaturalSystemsView } from "../natural-systems/NaturalSystemsView";
+import { PhysicalSystemsView } from "../physical-systems/PhysicalSystemsView";
 import { useCompactDiagram } from "../useCompactDiagram";
 import "./AssemblyView.css";
 
@@ -764,9 +768,55 @@ function CircleLesson({
 }
 
 export function AssemblyView() {
-  const { assembly, instances } = useAssemblyStore();
+  const { assembly, instances, resetCount } = useAssemblyStore();
   const [feedback, setFeedback] = useState("");
   if (!assembly || instances.length === 0) return null;
+  if (
+    instances.every((instance) =>
+      instance.provider.startsWith("prefabs/natural-systems/"),
+    )
+  )
+    return <NaturalSystemsView key={resetCount} />;
+  if (
+    instances.every((instance) =>
+      instance.provider.startsWith("prefabs/dynamic-systems/"),
+    )
+  )
+    return (
+      <main className="dynamic-systems-assembly" aria-label={assembly.title}>
+        {instances.map((instance) => (
+          <DynamicSystemsLesson
+            key={`${instance.id}:${resetCount}`}
+            instance={instance}
+            learningGoal={assembly.learningGoal}
+            dispatch={(command) => dispatchCommand("assembly", command)}
+          />
+        ))}
+      </main>
+    );
+  if (
+    instances.every((instance) =>
+      instance.provider.startsWith("prefabs/physical-systems/"),
+    )
+  )
+    return <PhysicalSystemsView key={resetCount} />;
+  if (
+    instances.every((instance) =>
+      instance.provider.startsWith("prefabs/chemistry/"),
+    )
+  )
+    return (
+      <main className="chemistry-assembly" aria-label={assembly.title}>
+        {instances.map((instance) => (
+          <ChemistryLesson
+            key={`${instance.id}:${resetCount}`}
+            instance={instance}
+            learningGoal={assembly.learningGoal}
+            dispatch={(command) => dispatchCommand("assembly", command)}
+          />
+        ))}
+      </main>
+    );
   const presentations = instances.map(
     (instance) => modelProvider(instance.provider).presentation,
   );
@@ -776,7 +826,9 @@ export function AssemblyView() {
     ? "Use the same operation on both sides to isolate x."
     : presentations.every((presentation) => presentation === "line")
       ? "Move the slope and watch the line change direction and steepness."
-      : "Change the circle’s size. The distance around stays about 3.14 times the distance across.";
+      : presentations.every((presentation) => presentation === "circle")
+        ? "Change the circle’s size. The distance around stays about 3.14 times the distance across."
+        : "Change a setting and compare the measured results.";
   return (
     <main className="math-foundations-experiment" aria-label={assembly.title}>
       <header className="foundation-intro">
@@ -797,6 +849,18 @@ export function AssemblyView() {
       {presentations.every((presentation) => presentation === "circle") && (
         <CircleLesson instance={instances[0]} report={setFeedback} />
       )}
+      {instances
+        .filter((instance) =>
+          instance.provider.startsWith("prefabs/chemistry/"),
+        )
+        .map((instance) => (
+          <ChemistryLesson
+            key={`${instance.id}:${resetCount}`}
+            instance={instance}
+            learningGoal={assembly.learningGoal}
+            dispatch={(command) => dispatchCommand("assembly", command)}
+          />
+        ))}
     </main>
   );
 }

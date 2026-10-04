@@ -38,6 +38,9 @@ export async function requestStructured<T>(
   active++;
   const timeout = AbortSignal.timeout(config.timeout);
   const combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
+  const originalRequest =
+    [...messages].reverse().find((message) => message.role === "user")
+      ?.content ?? "";
   try {
     for (let attempt = 0; attempt < 2; attempt++) {
       if (combined.aborted)
@@ -104,11 +107,17 @@ export async function requestStructured<T>(
             502,
           );
         if (options.budget) options.budget.repairsRemaining--;
+        const repair = `Formatting retry for the SAME original request, not a new simulation request. Do not classify repair instructions as learner intent. No change was executed. Preserve the original request's meaning, quantities and targets while fixing invalid JSON. Validation error: ${reason}. ${repairInstructions}`;
+        messages = messages.map((message) =>
+          message.role === "system"
+            ? { ...message, content: `${message.content}\n${repair}` }
+            : message,
+        );
         messages.push(
           { role: "assistant", content: content.slice(0, 16000) },
           {
             role: "user",
-            content: `Repair the JSON once. Validation error: ${reason}. No change was executed. ${repairInstructions}`,
+            content: originalRequest,
           },
         );
       }

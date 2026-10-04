@@ -1,0 +1,1431 @@
+{
+  "qualifying": false,
+  "fingerprint": "c250c73d1e4d317c22ffb770295e03426c4b8e95d283769089abaf77c7a2b05e",
+  "transport": "Playwright MCP stdio",
+  "serverVersion": "0.0.83",
+  "startedAt": "2026-10-03T17:03:53.660Z",
+  "feedbackBudgetMs": 3000,
+  "requestBudgetMs": 190000,
+  "testScriptSha256": "8936356b624c668025b82b2e36b293919f4b6e7cac4efc312887cacdf34db594",
+  "cleanup": {
+    "owner": "Agent C",
+    "rawDirectory": "/private/tmp/apertus-006-agent-c-20261004-variants-01",
+    "status": "absent after external session interruption",
+    "note": "Temporary directory disappeared before continuation. Stored compact report survives; no raw evidence was reconstructed."
+  },
+  "cases": [
+    {
+      "id": "DIL-001",
+      "variant": "typo",
+      "width": 1440,
+      "result": "failed",
+      "error": "{\"schemaVersion\":1,\"operation\":\"clarify\",\"message\":\"I could not select a compatible experiment. Please describe the relationship you want to explore.\"}",
+      "assertions": [],
+      "errors": [],
+      "requests": [
+        {
+          "prompt": "What happens to salt water when I add mor water?",
+          "submittedAt": "2026-10-03T17:03:54.684Z",
+          "latencyMs": 11807,
+          "feedbackLatencyMs": 42,
+          "status": 200,
+          "correlationId": "51e97bc5-72dc-4395-ad34-ed81196d652d",
+          "operation": "clarify",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "intent.response",
+              "elapsedMs": 11730,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "teachingIntent",
+              "elapsedMs": 11730
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 11761
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 11761
+            }
+          ],
+          "selections": [
+            {
+              "question": "assembly",
+              "decision": null,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 28.434,
+                "server_ms": 28.447
+              }
+            }
+          ]
+        }
+      ],
+      "consoleReview": "React development/HMR notices only in passing cases; relevant failed HTTP requests recorded as failures."
+    },
+    {
+      "id": "CHEM-001",
+      "variant": "typo",
+      "width": 1440,
+      "result": "passed",
+      "assertions": [
+        "Fresh Apertus intent/configuration + real accepted Laya selection; committed recipe; defaults",
+        "Exact live follow-up; independent numerical oracle",
+        "Primary button and valid numeric controls update the authoritative model; independent targets are preserved",
+        "Invalid numeric UI input preserves accepted state",
+        "Reset, keyboard access, assumptions, 44px targets, no page overflow/errors"
+      ],
+      "errors": [],
+      "requests": [
+        {
+          "prompt": "Help me see why chemical equatons need balancing.",
+          "submittedAt": "2026-10-03T17:04:08.394Z",
+          "latencyMs": 16452,
+          "feedbackLatencyMs": 42,
+          "status": 200,
+          "correlationId": "60eec8c5-cd25-4ff1-9397-39c041ba5308",
+          "operation": "create",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "intent.response",
+              "elapsedMs": 10788,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "teachingIntent",
+              "elapsedMs": 10788
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 11040
+            },
+            {
+              "event": "configuration.response",
+              "elapsedMs": 16381,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "configuration",
+              "elapsedMs": 16381
+            },
+            {
+              "event": "stagedValidation",
+              "elapsedMs": 16381
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 16381
+            }
+          ],
+          "observedState": [
+            {
+              "id": "object/first",
+              "provider": "prefabs/chemistry/Conservation",
+              "outputs": {
+                "equation": "H\u2082 + O\u2082 \u2192 H\u2082O",
+                "balanced": false,
+                "atoms": [
+                  {
+                    "element": "H",
+                    "left": 2,
+                    "right": 2,
+                    "conserved": true
+                  },
+                  {
+                    "element": "O",
+                    "left": 2,
+                    "right": 1,
+                    "conserved": false
+                  }
+                ]
+              }
+            }
+          ],
+          "committedRevision": 0,
+          "selections": [
+            {
+              "question": "assembly",
+              "decision": {
+                "choice": "prefabs/chemistry/Conservation",
+                "probability": 0.9903
+              },
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 248.943,
+                "server_ms": 248.968
+              }
+            }
+          ],
+          "recipe": {
+            "version": 1,
+            "title": "Why chemical equations need balancing",
+            "learningGoal": "Understand why chemical equations require balancing by comparing reactant and product atom counts",
+            "instances": [
+              {
+                "id": "object/first",
+                "label": "Editable object",
+                "prefab": {
+                  "ref": "prefabs/chemistry/Conservation",
+                  "version": 1
+                },
+                "parameters": {
+                  "reactionId": "water",
+                  "coefficients": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "observations": [
+              {
+                "id": "object/first/equation",
+                "instance": "object/first",
+                "output": "equation",
+                "unit": "1"
+              },
+              {
+                "id": "object/first/balanced",
+                "instance": "object/first",
+                "output": "balanced",
+                "unit": "1"
+              },
+              {
+                "id": "object/first/atoms",
+                "instance": "object/first",
+                "output": "atoms",
+                "unit": "atoms"
+              }
+            ],
+            "connections": [
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "equation"
+                },
+                "to": "object/first/equation"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "balanced"
+                },
+                "to": "object/first/balanced"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "atoms"
+                },
+                "to": "object/first/atoms"
+              }
+            ],
+            "controls": [
+              {
+                "instance": "object/first",
+                "action": "CHEM_SET_COEFFICIENTS"
+              },
+              {
+                "instance": "object/first",
+                "action": "CHEM_BALANCE"
+              }
+            ],
+            "views": [
+              {
+                "ref": "views/AssemblyScene",
+                "observations": [
+                  "object/first/equation",
+                  "object/first/balanced",
+                  "object/first/atoms"
+                ]
+              },
+              {
+                "ref": "views/AssemblyTable",
+                "observations": [
+                  "object/first/equation",
+                  "object/first/balanced",
+                  "object/first/atoms"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "prompt": "Balance it.",
+          "submittedAt": "2026-10-03T17:04:25.296Z",
+          "latencyMs": 3926,
+          "feedbackLatencyMs": 38,
+          "status": 200,
+          "correlationId": "0bfb6847-350d-448a-be3b-af1647fdb41e",
+          "operation": "edit",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "edit.layaSelection",
+              "elapsedMs": 52,
+              "model": "aac6fef/laya-multilingual-mlx"
+            },
+            {
+              "event": "edit.broad.response",
+              "elapsedMs": 3879,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 3879
+            }
+          ],
+          "observedState": [
+            {
+              "id": "object/first",
+              "provider": "prefabs/chemistry/Conservation",
+              "outputs": {
+                "equation": "2H\u2082 + O\u2082 \u2192 2H\u2082O",
+                "balanced": true,
+                "atoms": [
+                  {
+                    "element": "H",
+                    "left": 4,
+                    "right": 4,
+                    "conserved": true
+                  },
+                  {
+                    "element": "O",
+                    "left": 2,
+                    "right": 2,
+                    "conserved": true
+                  }
+                ]
+              }
+            }
+          ],
+          "committedRevision": 1,
+          "selections": [
+            {
+              "question": "intent",
+              "accepted": false,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 49.177,
+                "server_ms": 49.194
+              }
+            }
+          ]
+        }
+      ],
+      "consoleReview": "React development/HMR notices only in passing cases; relevant failed HTTP requests recorded as failures."
+    },
+    {
+      "id": "RATE-001",
+      "variant": "punctuation",
+      "width": 1440,
+      "result": "passed",
+      "assertions": [
+        "Fresh Apertus intent/configuration + real accepted Laya selection; committed recipe; defaults",
+        "Exact live follow-up; independent numerical oracle",
+        "Primary button and valid numeric controls update the authoritative model; independent targets are preserved",
+        "Invalid numeric UI input preserves accepted state",
+        "Reduced-motion step, play/pause, frozen paused time and current-setting restart",
+        "Reset, keyboard access, assumptions, 44px targets, no page overflow/errors"
+      ],
+      "errors": [],
+      "requests": [
+        {
+          "prompt": "Why do reactions happen faster when it's warmer?",
+          "submittedAt": "2026-10-03T17:04:31.649Z",
+          "latencyMs": 23126,
+          "feedbackLatencyMs": 39,
+          "status": 200,
+          "correlationId": "d02a6087-d152-435d-8cd0-abfb07dba3ea",
+          "operation": "create",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "intent.response",
+              "elapsedMs": 14029,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "teachingIntent",
+              "elapsedMs": 14029
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 14077
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 14102
+            },
+            {
+              "event": "optionalStructureDefault",
+              "elapsedMs": 14102,
+              "reason": "No accepted optional structure choice; preserve the registered educational default."
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 14168
+            },
+            {
+              "event": "optionalObservationDefault",
+              "elapsedMs": 14168,
+              "reason": "No accepted optional graph choice; the coordinate scene remains available."
+            },
+            {
+              "event": "configuration.response",
+              "elapsedMs": 23016,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "configuration",
+              "elapsedMs": 23016
+            },
+            {
+              "event": "stagedValidation",
+              "elapsedMs": 23016
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 23016
+            }
+          ],
+          "observedState": [
+            {
+              "id": "object/first",
+              "provider": "prefabs/chemistry/ReactionRate",
+              "outputs": {
+                "temperature": 300,
+                "comparisonTemperature": 300,
+                "playing": false,
+                "rateConstant": 0.1,
+                "halfLife": 6.931471805599452,
+                "comparisonRate": 0.1,
+                "comparisonHalfLife": 6.931471805599452,
+                "elapsed": 0,
+                "concentrationA": 1,
+                "concentrationB": 0,
+                "totalConcentration": 1
+              }
+            }
+          ],
+          "committedRevision": 0,
+          "selections": [
+            {
+              "question": "assembly",
+              "decision": {
+                "choice": "prefabs/chemistry/ReactionRate",
+                "probability": 1
+              },
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 40.792,
+                "server_ms": 40.824
+              }
+            },
+            {
+              "question": "structure",
+              "decision": null,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 18.79,
+                "server_ms": 18.823
+              }
+            },
+            {
+              "question": "observation",
+              "decision": null,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 62.264,
+                "server_ms": 62.293
+              }
+            }
+          ],
+          "recipe": {
+            "version": 1,
+            "title": "Temperature's Effect on Reaction Rates",
+            "learningGoal": "Explain how increasing temperature increases reaction rates via higher average kinetic energy and more successful collisions",
+            "instances": [
+              {
+                "id": "object/first",
+                "label": "Editable object",
+                "prefab": {
+                  "ref": "prefabs/chemistry/ReactionRate",
+                  "version": 1
+                },
+                "parameters": {
+                  "initialConcentration": 1,
+                  "temperature": 300,
+                  "referenceRate": 0.1,
+                  "activationEnergy": 40000,
+                  "duration": 30
+                }
+              }
+            ],
+            "observations": [
+              {
+                "id": "object/first/temperature",
+                "instance": "object/first",
+                "output": "temperature",
+                "unit": "K"
+              },
+              {
+                "id": "object/first/rateConstant",
+                "instance": "object/first",
+                "output": "rateConstant",
+                "unit": "s^-1"
+              },
+              {
+                "id": "object/first/halfLife",
+                "instance": "object/first",
+                "output": "halfLife",
+                "unit": "s"
+              },
+              {
+                "id": "object/first/concentrationA",
+                "instance": "object/first",
+                "output": "concentrationA",
+                "unit": "mol/L"
+              },
+              {
+                "id": "object/first/concentrationB",
+                "instance": "object/first",
+                "output": "concentrationB",
+                "unit": "mol/L"
+              },
+              {
+                "id": "object/first/points",
+                "instance": "object/first",
+                "output": "points",
+                "unit": "mol/L"
+              }
+            ],
+            "connections": [
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "temperature"
+                },
+                "to": "object/first/temperature"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "rateConstant"
+                },
+                "to": "object/first/rateConstant"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "halfLife"
+                },
+                "to": "object/first/halfLife"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "concentrationA"
+                },
+                "to": "object/first/concentrationA"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "concentrationB"
+                },
+                "to": "object/first/concentrationB"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "points"
+                },
+                "to": "object/first/points"
+              }
+            ],
+            "controls": [
+              {
+                "instance": "object/first",
+                "action": "CHEM_SET_TEMPERATURE"
+              },
+              {
+                "instance": "object/first",
+                "action": "CHEM_RESTART_RATE"
+              },
+              {
+                "instance": "object/first",
+                "action": "CHEM_SET_RATE_PLAYING"
+              },
+              {
+                "instance": "object/first",
+                "action": "CHEM_STEP_RATE"
+              }
+            ],
+            "views": [
+              {
+                "ref": "views/AssemblyScene",
+                "observations": [
+                  "object/first/temperature",
+                  "object/first/rateConstant",
+                  "object/first/halfLife",
+                  "object/first/concentrationA",
+                  "object/first/concentrationB",
+                  "object/first/points"
+                ]
+              },
+              {
+                "ref": "views/AssemblyTable",
+                "observations": [
+                  "object/first/temperature",
+                  "object/first/rateConstant",
+                  "object/first/halfLife",
+                  "object/first/concentrationA",
+                  "object/first/concentrationB",
+                  "object/first/points"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "prompt": "Compare it at 320 kelvin.",
+          "submittedAt": "2026-10-03T17:04:55.280Z",
+          "latencyMs": 2368,
+          "feedbackLatencyMs": 41,
+          "status": 200,
+          "correlationId": "860b3acd-32b9-4b7c-a3fd-1bd42881ecb4",
+          "operation": "edit",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "edit.layaSelection",
+              "elapsedMs": 33,
+              "model": "aac6fef/laya-multilingual-mlx"
+            },
+            {
+              "event": "edit.broad.response",
+              "elapsedMs": 2316,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 2316
+            }
+          ],
+          "observedState": [
+            {
+              "id": "object/first",
+              "provider": "prefabs/chemistry/ReactionRate",
+              "outputs": {
+                "temperature": 320,
+                "comparisonTemperature": 300,
+                "playing": false,
+                "rateConstant": 0.27246102624060925,
+                "halfLife": 2.5440232319606317,
+                "comparisonRate": 0.1,
+                "comparisonHalfLife": 6.931471805599452,
+                "elapsed": 0,
+                "concentrationA": 1,
+                "concentrationB": 0,
+                "totalConcentration": 1
+              }
+            }
+          ],
+          "committedRevision": 1,
+          "selections": [
+            {
+              "question": "intent",
+              "accepted": false,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 30.25,
+                "server_ms": 30.263
+              }
+            }
+          ]
+        }
+      ],
+      "consoleReview": "React development/HMR notices only in passing cases; relevant failed HTTP requests recorded as failures."
+    },
+    {
+      "id": "CHEM-001",
+      "variant": "registered-reaction",
+      "width": 1440,
+      "result": "failed",
+      "error": "Wrong initial equation",
+      "assertions": [],
+      "errors": [],
+      "requests": [
+        {
+          "prompt": "Help me balance carbon plus oxygen into carbon dioxide.",
+          "submittedAt": "2026-10-03T17:05:01.014Z",
+          "latencyMs": 21030,
+          "feedbackLatencyMs": 41,
+          "status": 200,
+          "correlationId": "bd1b62b1-8db6-4118-97cd-a2ac0fa6e2c9",
+          "operation": "create",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "intent.response",
+              "elapsedMs": 14800,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "teachingIntent",
+              "elapsedMs": 14800
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 14891
+            },
+            {
+              "event": "configuration.response",
+              "elapsedMs": 20935,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "configuration",
+              "elapsedMs": 20935
+            },
+            {
+              "event": "stagedValidation",
+              "elapsedMs": 20935
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 20935
+            }
+          ],
+          "observedState": [
+            {
+              "id": "object/first",
+              "provider": "prefabs/chemistry/Conservation",
+              "outputs": {
+                "equation": "H\u2082 + O\u2082 \u2192 H\u2082O",
+                "balanced": false,
+                "atoms": [
+                  {
+                    "element": "H",
+                    "left": 2,
+                    "right": 2,
+                    "conserved": true
+                  },
+                  {
+                    "element": "O",
+                    "left": 2,
+                    "right": 1,
+                    "conserved": false
+                  }
+                ]
+              }
+            }
+          ],
+          "committedRevision": 0,
+          "selections": [
+            {
+              "question": "assembly",
+              "decision": {
+                "choice": "prefabs/chemistry/Conservation",
+                "probability": 0.9354
+              },
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 85.026,
+                "server_ms": 85.052
+              }
+            }
+          ],
+          "recipe": {
+            "version": 1,
+            "title": "Balancing H\u2082 + O\u2082 \u2192 H\u2082O",
+            "learningGoal": "Describe the requested initial unbalanced water equation.",
+            "instances": [
+              {
+                "id": "object/first",
+                "label": "Editable object",
+                "prefab": {
+                  "ref": "prefabs/chemistry/Conservation",
+                  "version": 1
+                },
+                "parameters": {
+                  "reactionId": "water",
+                  "coefficients": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "observations": [
+              {
+                "id": "object/first/equation",
+                "instance": "object/first",
+                "output": "equation",
+                "unit": "1"
+              },
+              {
+                "id": "object/first/balanced",
+                "instance": "object/first",
+                "output": "balanced",
+                "unit": "1"
+              },
+              {
+                "id": "object/first/atoms",
+                "instance": "object/first",
+                "output": "atoms",
+                "unit": "atoms"
+              }
+            ],
+            "connections": [
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "equation"
+                },
+                "to": "object/first/equation"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "balanced"
+                },
+                "to": "object/first/balanced"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "atoms"
+                },
+                "to": "object/first/atoms"
+              }
+            ],
+            "controls": [
+              {
+                "instance": "object/first",
+                "action": "CHEM_SET_COEFFICIENTS"
+              },
+              {
+                "instance": "object/first",
+                "action": "CHEM_BALANCE"
+              }
+            ],
+            "views": [
+              {
+                "ref": "views/AssemblyScene",
+                "observations": [
+                  "object/first/equation",
+                  "object/first/balanced",
+                  "object/first/atoms"
+                ]
+              },
+              {
+                "ref": "views/AssemblyTable",
+                "observations": [
+                  "object/first/equation",
+                  "object/first/balanced",
+                  "object/first/atoms"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "consoleReview": "React development/HMR notices only in passing cases; relevant failed HTTP requests recorded as failures."
+    },
+    {
+      "id": "RATE-001",
+      "variant": "two-independent-runs",
+      "width": 1440,
+      "result": "failed",
+      "error": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.chemistry-experiment').first() to be visible\n",
+      "assertions": [],
+      "errors": [],
+      "requests": [
+        {
+          "prompt": "Compare two independent runs of A to B: first at 300 kelvin, second at 320 kelvin.",
+          "submittedAt": "2026-10-03T17:05:24.145Z",
+          "latencyMs": 41124,
+          "feedbackLatencyMs": 40,
+          "status": 200,
+          "correlationId": "f70a98ff-bd07-49ad-9677-bfb045b33863",
+          "operation": "create",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "intent.response",
+              "elapsedMs": 11463,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "teachingIntent",
+              "elapsedMs": 11463
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 12010
+            },
+            {
+              "event": "configuration.response",
+              "elapsedMs": 18175,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "configuration",
+              "elapsedMs": 18175
+            },
+            {
+              "event": "semanticRestart",
+              "elapsedMs": 18175,
+              "attempt": 0,
+              "reason": "The original prompt asks to compare two independent runs of A to B at 300 K and 320 K, but the selected composition 'compositions/GasPressureExperiment' is designed for a single experiment with fixed volume and amount. It cannot directly compare two independent runs as requested. The composition is intended for investigating temperature effects on pressure under constant conditions, not for comparative analysis between two scenarios."
+            },
+            {
+              "event": "intent.response",
+              "elapsedMs": 35731,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "teachingIntent",
+              "elapsedMs": 35731
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 36204
+            },
+            {
+              "event": "configuration.response",
+              "elapsedMs": 41058,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "configuration",
+              "elapsedMs": 41058
+            },
+            {
+              "event": "stagedValidation",
+              "elapsedMs": 41058
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 41058
+            }
+          ],
+          "selections": [
+            {
+              "question": "assembly",
+              "decision": {
+                "choice": "compositions/GasPressureExperiment",
+                "probability": 0.9947
+              },
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 542.399,
+                "server_ms": 542.432
+              }
+            },
+            {
+              "question": "assembly",
+              "decision": {
+                "choice": "compositions/GasPressureExperiment",
+                "probability": 0.7736
+              },
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 467.409,
+                "server_ms": 467.445
+              }
+            }
+          ]
+        }
+      ],
+      "consoleReview": "React development/HMR notices only in passing cases; relevant failed HTTP requests recorded as failures."
+    },
+    {
+      "id": "DIL-001",
+      "variant": "typo",
+      "width": 390,
+      "result": "failed",
+      "error": "{\"schemaVersion\":1,\"operation\":\"clarify\",\"message\":\"I could not select a compatible experiment. Please describe the relationship you want to explore.\"}",
+      "assertions": [],
+      "errors": [],
+      "requests": [
+        {
+          "prompt": "What happens to salt water when I add mor water?",
+          "submittedAt": "2026-10-03T17:06:37.099Z",
+          "latencyMs": 10723,
+          "feedbackLatencyMs": 58,
+          "status": 200,
+          "correlationId": "98df2456-7b32-4d6b-aa13-de4e7b59568f",
+          "operation": "clarify",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "intent.response",
+              "elapsedMs": 10636,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "teachingIntent",
+              "elapsedMs": 10636
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 10662
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 10662
+            }
+          ],
+          "selections": [
+            {
+              "question": "assembly",
+              "decision": null,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 20.906,
+                "server_ms": 20.928
+              }
+            }
+          ]
+        }
+      ],
+      "consoleReview": "React development/HMR notices only in passing cases; relevant failed HTTP requests recorded as failures."
+    },
+    {
+      "id": "CHEM-001",
+      "variant": "typo",
+      "width": 390,
+      "result": "passed",
+      "assertions": [
+        "Fresh Apertus intent/configuration + real accepted Laya selection; committed recipe; defaults",
+        "Exact live follow-up; independent numerical oracle",
+        "Primary button and valid numeric controls update the authoritative model; independent targets are preserved",
+        "Invalid numeric UI input preserves accepted state",
+        "Reset, keyboard access, assumptions, 44px targets, no page overflow/errors"
+      ],
+      "errors": [],
+      "requests": [
+        {
+          "prompt": "Help me see why chemical equatons need balancing.",
+          "submittedAt": "2026-10-03T17:06:49.485Z",
+          "latencyMs": 16109,
+          "feedbackLatencyMs": 41,
+          "status": 200,
+          "correlationId": "04118ac6-8cfd-430a-a20d-456f642c031e",
+          "operation": "create",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "intent.response",
+              "elapsedMs": 10810,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "teachingIntent",
+              "elapsedMs": 10810
+            },
+            {
+              "event": "layaSelection",
+              "elapsedMs": 10843
+            },
+            {
+              "event": "configuration.response",
+              "elapsedMs": 16049,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "configuration",
+              "elapsedMs": 16049
+            },
+            {
+              "event": "stagedValidation",
+              "elapsedMs": 16049
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 16049
+            }
+          ],
+          "observedState": [
+            {
+              "id": "object/first",
+              "provider": "prefabs/chemistry/Conservation",
+              "outputs": {
+                "equation": "H\u2082 + O\u2082 \u2192 H\u2082O",
+                "balanced": false,
+                "atoms": [
+                  {
+                    "element": "H",
+                    "left": 2,
+                    "right": 2,
+                    "conserved": true
+                  },
+                  {
+                    "element": "O",
+                    "left": 2,
+                    "right": 1,
+                    "conserved": false
+                  }
+                ]
+              }
+            }
+          ],
+          "committedRevision": 0,
+          "selections": [
+            {
+              "question": "assembly",
+              "decision": {
+                "choice": "prefabs/chemistry/Conservation",
+                "probability": 0.9903
+              },
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 29.872,
+                "server_ms": 29.887
+              }
+            }
+          ],
+          "recipe": {
+            "version": 1,
+            "title": "Why chemical equations need balancing",
+            "learningGoal": "Understand why chemical equations require balancing by comparing reactant and product atom counts",
+            "instances": [
+              {
+                "id": "object/first",
+                "label": "Editable object",
+                "prefab": {
+                  "ref": "prefabs/chemistry/Conservation",
+                  "version": 1
+                },
+                "parameters": {
+                  "reactionId": "water",
+                  "coefficients": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "observations": [
+              {
+                "id": "object/first/equation",
+                "instance": "object/first",
+                "output": "equation",
+                "unit": "1"
+              },
+              {
+                "id": "object/first/balanced",
+                "instance": "object/first",
+                "output": "balanced",
+                "unit": "1"
+              },
+              {
+                "id": "object/first/atoms",
+                "instance": "object/first",
+                "output": "atoms",
+                "unit": "atoms"
+              }
+            ],
+            "connections": [
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "equation"
+                },
+                "to": "object/first/equation"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "balanced"
+                },
+                "to": "object/first/balanced"
+              },
+              {
+                "type": "observation-source",
+                "from": {
+                  "instance": "object/first",
+                  "output": "atoms"
+                },
+                "to": "object/first/atoms"
+              }
+            ],
+            "controls": [
+              {
+                "instance": "object/first",
+                "action": "CHEM_SET_COEFFICIENTS"
+              },
+              {
+                "instance": "object/first",
+                "action": "CHEM_BALANCE"
+              }
+            ],
+            "views": [
+              {
+                "ref": "views/AssemblyScene",
+                "observations": [
+                  "object/first/equation",
+                  "object/first/balanced",
+                  "object/first/atoms"
+                ]
+              },
+              {
+                "ref": "views/AssemblyTable",
+                "observations": [
+                  "object/first/equation",
+                  "object/first/balanced",
+                  "object/first/atoms"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "prompt": "Balance it.",
+          "submittedAt": "2026-10-03T17:07:05.929Z",
+          "latencyMs": 3632,
+          "feedbackLatencyMs": 28,
+          "status": 200,
+          "correlationId": "eb5380f0-fbd2-4e82-906e-bc12da1fa249",
+          "operation": "edit",
+          "configuration": {
+            "mode": "hybrid",
+            "apertus": {
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "maxTokens": 2048,
+              "temperature": 0,
+              "timeout": 180000
+            },
+            "laya": {
+              "timeout": 30000,
+              "gate": 0.9,
+              "creationGate": 0.75
+            },
+            "deadlineMs": 180000
+          },
+          "events": [
+            {
+              "event": "edit.layaSelection",
+              "elapsedMs": 62,
+              "model": "aac6fef/laya-multilingual-mlx"
+            },
+            {
+              "event": "edit.broad.response",
+              "elapsedMs": 3593,
+              "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+              "attempt": 0
+            },
+            {
+              "event": "plan",
+              "elapsedMs": 3593
+            }
+          ],
+          "observedState": [
+            {
+              "id": "object/first",
+              "provider": "prefabs/chemistry/Conservation",
+              "outputs": {
+                "equation": "2H\u2082 + O\u2082 \u2192 2H\u2082O",
+                "balanced": true,
+                "atoms": [
+                  {
+                    "element": "H",
+                    "left": 4,
+                    "right": 4,
+                    "conserved": true
+                  },
+                  {
+                    "element": "O",
+                    "left": 2,
+                    "right": 2,
+                    "conserved": true
+                  }
+                ]
+              }
+            }
+          ],
+          "committedRevision": 1,
+          "selections": [
+            {
+              "question": "intent",
+              "accepted": false,
+              "model": "aac6fef/laya-multilingual-mlx",
+              "timing": {
+                "inference_ms": 58.572,
+                "server_ms": 58.595
+              }
+            }
+          ]
+        }
+      ],
+      "consoleReview": "React development/HMR notices only in passing cases; relevant failed HTTP requests recorded as failures."
+    }
+  ],
+  "status": "Stopped after fixed-variant failures; remaining mobile cases not run."
+}
