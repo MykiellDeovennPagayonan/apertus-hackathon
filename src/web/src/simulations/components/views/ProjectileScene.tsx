@@ -1,5 +1,4 @@
 import { useId } from "react";
-import { useProjectileStore } from "../../runtime/projectileSession";
 import { ProjectileExperiment } from "../compositions/ProjectileExperiment";
 import { ProjectileStyles } from "../resources/ProjectileStyles";
 import { LauncherVisual } from "../visuals/LauncherVisual";
@@ -15,8 +14,21 @@ const {
   originX: ORIGIN_X,
 } = ProjectileExperiment.viewSettings;
 
-export function ProjectileScene() {
-  const s = useProjectileStore();
+export function ProjectileScene({
+  state: s,
+  visualLayers = [
+    "appearance/Launcher",
+    "appearance/Trajectory",
+    "appearance/VelocityArrow",
+    "appearance/ProjectileBody",
+  ],
+}: {
+  visualLayers?: string[];
+  state: Pick<
+    import("../../runtime/projectileSession").ProjectileState,
+    "primary" | "instances" | "angle" | "velocity" | "gravity" | "showVectors"
+  >;
+}) {
   const markerId = useId();
 
   const { duration: T, range: R, maxHeight: Hmax } = s.primary.metrics;
@@ -67,9 +79,16 @@ export function ProjectileScene() {
           strokeWidth={2}
         />
 
-        <LauncherVisual angle={s.angle} originX={ORIGIN_X} groundY={GROUND_Y} />
+        {visualLayers.includes("appearance/Launcher") && (
+          <LauncherVisual
+            angle={s.angle}
+            originX={ORIGIN_X}
+            groundY={GROUND_Y}
+          />
+        )}
         {s.instances.map((instance, index) =>
-          instance.trajectoryVisible ? (
+          instance.trajectoryVisible &&
+          visualLayers.includes("appearance/Trajectory") ? (
             <TrajectoryVisual
               key={instance.id}
               metrics={instance.metrics}
@@ -84,6 +103,7 @@ export function ProjectileScene() {
           ) : null,
         )}
         {s.showVectors &&
+          visualLayers.includes("appearance/VelocityArrow") &&
           vecTimes.map((tv, i) => (
             <VelocityArrowVisual
               key={i === 0 ? "start" : i === 1 ? "middle" : "end"}
@@ -112,23 +132,28 @@ export function ProjectileScene() {
         </defs>
 
         {/* ball */}
-        <ShapeVisual2D
-          identity={s.primary.id}
-          cx={bx}
-          cy={by}
-          r={ProjectileStyles.radius}
-          fill="var(--accent)"
-        />
-        {s.instances.slice(1).map((instance) => (
+        {visualLayers.includes("appearance/ProjectileBody") && (
           <ShapeVisual2D
-            key={instance.id}
-            identity={instance.id}
-            cx={ORIGIN_X + instance.transform.position.x * scale}
-            cy={GROUND_Y - instance.transform.position.y * scale}
+            identity={s.primary.id}
+            cx={bx}
+            cy={by}
             r={ProjectileStyles.radius}
-            fill="var(--warn)"
+            fill="var(--accent)"
           />
-        ))}
+        )}
+        {s.instances
+          .slice(1)
+          .filter(() => visualLayers.includes("appearance/ProjectileBody"))
+          .map((instance) => (
+            <ShapeVisual2D
+              key={instance.id}
+              identity={instance.id}
+              cx={ORIGIN_X + instance.transform.position.x * scale}
+              cy={GROUND_Y - instance.transform.position.y * scale}
+              r={ProjectileStyles.radius}
+              fill="var(--warn)"
+            />
+          ))}
       </SVGWorldView>
     </>
   );

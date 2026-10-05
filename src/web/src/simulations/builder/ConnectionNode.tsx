@@ -7,6 +7,8 @@ import {
 } from "./graph/types";
 
 const symbols = {
+  Composite: "▦",
+  Resource: "◉",
   Object: "◈",
   Control: "↗",
   Result: "◎",
@@ -162,7 +164,7 @@ export function ConnectionNode({
       <div className="connection-node-ports">
         {Array.from({ length: rows }, (_, index) => (
           <div
-            key={node.inputs[index]?.id ?? node.outputs[index]?.id ?? "empty"}
+            key={`${node.inputs[index]?.id ?? ""}/${node.outputs[index]?.id ?? ""}`}
             className="connection-port-row"
             style={{ height: PORT_HEIGHT }}
           >

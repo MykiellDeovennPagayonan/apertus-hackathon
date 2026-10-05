@@ -31,12 +31,16 @@ export function ComponentDialog({
       className={`component-dialog ${wide ? "is-wide" : ""}`}
       aria-label={title}
       onKeyDown={(e) => {
-        if (e.key === "Escape") {
+        if (
+          e.key === "Escape" &&
+          (e.target as Element).closest("dialog") === e.currentTarget
+        ) {
           e.preventDefault();
           onClose();
         }
       }}
       onCancel={(e) => {
+        if (e.target !== e.currentTarget) return;
         e.preventDefault();
         onClose();
       }}

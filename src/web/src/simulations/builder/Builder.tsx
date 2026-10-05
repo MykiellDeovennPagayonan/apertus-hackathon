@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import CompositionBuilder from "./composition/CompositionBuilder";
 import {
-  createBlankDocument,
   createDocument,
   type ExperimentDocument,
   isRunnableDocument,
@@ -10,6 +9,7 @@ import {
   serializeDocument,
   validateDocument,
 } from "./document";
+import { createCanvasDocument } from "./document/canonical";
 import { useDocumentHistory } from "./history/useDocumentHistory";
 import {
   type DraftRecovery,
@@ -290,10 +290,12 @@ export default function Builder() {
           if (setupOpen && doc && canvas === doc.template) {
             edit((d) => {
               d.presentation.layout = layout;
+              if (d.authored)
+                d.authored.layout.kind = layout === "bottom" ? "stack" : "grid";
             });
           } else {
             if (setupOpen && !(await preserveCurrentDraft())) return;
-            open(createBlankDocument(canvas, layout));
+            open(createCanvasDocument(canvas, layout));
           }
           setSetupOpen(false);
         }}
@@ -338,7 +340,7 @@ export default function Builder() {
       current ? { ...current, editor: { ...current.editor, zoom } } : current,
     );
   };
-  if (doc.scene && valid.scene)
+  if (doc.authored && valid.authored)
     return (
       <CompositionBuilder
         key={`${sessionRevision}/${doc.template}`}

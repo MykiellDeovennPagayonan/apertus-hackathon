@@ -3,7 +3,7 @@ import type { NumberLineBoard } from "../traits/MathBoards";
 import { FractionJumpVisual } from "../visuals/FractionJumpVisual";
 import { NumberLineVisual } from "../visuals/NumberLineVisual";
 import { SVGWorldView } from "./SVGWorldView";
-export function FractionNumberLineScene({ board }: { board: NumberLineBoard }) {
+export function FractionNumberLineScene({ board, onCommand = (command) => dispatchCommand(board.demo, command) }: { board: NumberLineBoard; onCommand?: (command: import("../../runtime/types").UIAction) => import("../../runtime/commands").ActionResult }) {
   const marker =
     board.mode === "place" ? board.placed : board.jumps[board.sequence.cursor];
   return (
@@ -34,7 +34,7 @@ export function FractionNumberLineScene({ board }: { board: NumberLineBoard }) {
         marker={marker}
         interactive={board.mode === "place"}
         onTick={(tick) =>
-          dispatchCommand(board.demo, { type: "PLACE_FRACTION", value: tick })
+          onCommand({ type: "PLACE_FRACTION", value: tick })
         }
       />
     </SVGWorldView>

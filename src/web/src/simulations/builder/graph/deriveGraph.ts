@@ -20,6 +20,7 @@ import {
 import { requireRecord } from "../../runtime/records";
 import type { ExperimentDocument } from "../document";
 import { controlDefaults } from "../editor/workspaceCommands";
+import { authoredGraph } from "./authoredGraph";
 import type { GraphNode, GraphPort, GraphWire, MovingBlock } from "./types";
 
 const port = (
@@ -36,6 +37,7 @@ export function compositionGraph(
   moving: MovingBlock | null = null,
   saved = true,
 ) {
+  if (doc.authored) return authoredGraph(doc, moving, saved);
   const s = requireRecord(doc.scene),
     w = requireRecord(s.workspace);
   const nodes: GraphNode[] = [],

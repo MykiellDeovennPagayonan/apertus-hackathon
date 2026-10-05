@@ -23,7 +23,8 @@ export interface ResultRecord {
   slot: Slot;
 }
 export interface ExperimentDocument {
-  documentVersion: 1 | 2;
+  documentVersion: 1 | 2 | 3;
+  authored?: import("../../runtime/authoring/types").AuthoredDocument;
   scene?: CompositionScene;
   template: TemplateId;
   recipe: Recipe | null;

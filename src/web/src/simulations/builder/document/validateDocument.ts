@@ -1,3 +1,4 @@
+import { validateAuthoredDocument } from "../../runtime/authoring/validate";
 import { validateCommand } from "../../runtime/capabilities";
 import { validateScene } from "../../runtime/composition/index";
 import {
@@ -68,6 +69,27 @@ function boundedText(
 export function validateDocument(
   input: unknown,
 ): asserts input is ExperimentDocument {
+  if (
+    input &&
+    typeof input === "object" &&
+    "documentVersion" in input &&
+    input.documentVersion === 3
+  ) {
+    const doc = input as ExperimentDocument;
+    validateAuthoredDocument(doc.authored);
+    if (
+      doc.scene ||
+      doc.recipe ||
+      doc.presentation.controls.length ||
+      doc.presentation.results.length
+    )
+      throw new Error(
+        "Canonical documents cannot contain independently editable legacy bindings",
+      );
+    if (JSON.stringify(doc.lesson) !== JSON.stringify(doc.authored.lesson))
+      throw new Error("Canonical lesson metadata is out of sync");
+    return;
+  }
   const envelope =
     input && typeof input === "object" && "scene" in input
       ? Object.fromEntries(
@@ -373,6 +395,10 @@ function validateEditorGroups(doc: ExperimentDocument, ids: Set<string>) {
 
 export function validateRunnableDocument(doc: ExperimentDocument) {
   validateDocument(doc);
+  if (doc.authored) {
+    validateAuthoredDocument(doc.authored, true);
+    return;
+  }
   if (doc.scene) {
     boundedText(doc.lesson.title, 150, "Title", true);
     boundedText(doc.lesson.instruction, 150, "Instruction", true);

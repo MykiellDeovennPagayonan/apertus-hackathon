@@ -425,14 +425,27 @@ export default function ExperimentsShell({
               Save recipe
             </button>
             <Link href="/experiments/builder">Build manually</Link>
-            {(demo === "gas" ||
-              demo === "fraction-builder" ||
-              demo === "town" ||
+            {([
+              "gas",
+              "counting",
+              "arithmetic",
+              "equal-groups",
+              "fraction-builder",
+              "fraction-number-line",
+              "ratio",
+              "area-perimeter",
+              "coordinates",
+              "probability",
+              "town",
+              "projectile",
+              "bridge",
+            ].includes(demo ?? "") ||
               (demo === "assembly" &&
                 Boolean(getActiveDefinition()?.assembly?.instances.length) &&
-                getActiveDefinition()?.assembly?.instances.every(
-                  (instance) =>
-                    instance.prefab.ref === "prefabs/math-foundations/Line",
+                getActiveDefinition()?.assembly?.instances.every((instance) =>
+                  /prefabs\/(chemistry|math-foundations|physical-systems|natural-systems|dynamic-systems)\//.test(
+                    instance.prefab.ref,
+                  ),
                 ))) && (
               <Link
                 href="/experiments/builder?remix=1"

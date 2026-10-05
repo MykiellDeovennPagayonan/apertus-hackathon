@@ -1,10 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useId, useState } from "react";
-import { useBridgeStore } from "../../runtime/bridgeSession";
-import { dispatchCommand } from "../../runtime/session";
 import { BridgeExperiment } from "../compositions/BridgeExperiment";
 import { DragHandleControl } from "../controls/DragHandleControl";
-import { selectMember } from "../controls/SelectionControl";
 import { BridgeStyles } from "../resources/BridgeStyles";
 import BridgeMember from "../visuals/BeamVisual";
 import { BridgeSupportVisual } from "../visuals/BridgeSupportVisual";
@@ -12,7 +9,6 @@ import { bridgeDrop } from "../visuals/bridgeDeformation";
 import { LoadTruckVisual } from "../visuals/LoadTruckVisual";
 import { AnimatedShapeVisual2D } from "../visuals/ShapeVisual2D";
 import { LegendView } from "./LegendView";
-import { MemberInspector } from "./MemberInspector";
 import { SVGWorldView } from "./SVGWorldView";
 import "./bridge.css";
 
@@ -26,8 +22,22 @@ const {
   revealInterval,
 } = BridgeExperiment.viewSettings;
 
-export function BridgeScene() {
-  const s = useBridgeStore();
+export function BridgeScene({
+  state: s,
+  onCommand,
+  visualLayers = [
+    "appearance/Beam",
+    "appearance/Joint",
+    "appearance/BridgeSupport",
+    "appearance/LoadTruck",
+  ],
+}: {
+  visualLayers?: string[];
+  state: import("../../runtime/bridgeSession").BridgeState;
+  onCommand: (
+    command: import("../../runtime/types").UIAction,
+  ) => import("../../runtime/commands").ActionResult;
+}) {
   const [stage, setStage] = useState(0);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Rebuild restarts the assembly animation.
@@ -68,9 +78,6 @@ export function BridgeScene() {
 
   const loadX = left + s.loadPos * spanPx;
   const loadY = DECK_Y + sag * Math.sin(Math.PI * s.loadPos);
-  const sel = s.selectedMember
-    ? visibleMembers.find((m) => m.id === s.selectedMember)
-    : null;
 
   return (
     <div className="bridge-demo">
@@ -131,7 +138,7 @@ export function BridgeScene() {
         <text x="30" y="65" fill="var(--text-dim)" fontSize="11">
           STRUCTURAL LAB / {s.spanScale * 30} m span · {truss.panels} panels
         </text>
-        {stage >= 1 && (
+        {stage >= 1 && visualLayers.includes("appearance/BridgeSupport") && (
           <BridgeSupportVisual
             left={left}
             spanPx={spanPx}
@@ -142,6 +149,7 @@ export function BridgeScene() {
 
         {/* deck at stage 2, remaining members at stage 4 */}
         {visibleMembers
+          .filter(() => visualLayers.includes("appearance/Beam"))
           .filter((m) => (m.kind === "deck" ? stage >= 2 : stage >= 4))
           .map((m) => (
             <BridgeMember
@@ -156,12 +164,13 @@ export function BridgeScene() {
               response={s.response.responses[m.id]}
               sag={sag}
               selected={s.selectedMember === m.id}
-              onSelect={selectMember}
+              onSelect={(id) => onCommand({ type: "SELECT_MEMBER", value: id })}
             />
           ))}
 
         {/* joints */}
         {stage >= 3 &&
+          visualLayers.includes("appearance/Joint") &&
           truss.joints.map((j) => {
             const p = jointPx(j.id);
             const drop = bridgeDrop(j.x, s.loadPos, sag);
@@ -181,7 +190,7 @@ export function BridgeScene() {
             );
           })}
 
-        {stage >= 5 && (
+        {stage >= 5 && visualLayers.includes("appearance/LoadTruck") && (
           <LoadTruckVisual
             loadX={loadX}
             loadY={loadY}
@@ -191,9 +200,9 @@ export function BridgeScene() {
           />
         )}
 
-        {stage >= 5 && (
+        {stage >= 5 && visualLayers.includes("appearance/LoadTruck") && (
           <DragHandleControl
-            onCommand={(command) => dispatchCommand("bridge", command)}
+            onCommand={(command) => onCommand(command)}
             target={truss.load.id}
             cx={loadX}
             cy={loadY - 35}
@@ -239,10 +248,6 @@ export function BridgeScene() {
           </motion.g>
         )}
       </SVGWorldView>
-
-      {sel && (
-        <MemberInspector member={sel} response={s.response.responses[sel.id]} />
-      )}
     </div>
   );
 }

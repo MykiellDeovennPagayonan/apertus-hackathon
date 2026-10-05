@@ -1,16 +1,12 @@
 "use client";
-import { type FormEvent, useId, useState } from "react";
+import { publicDefinition } from "../../catalog";
+import { SchemaForm } from "../SchemaForm";
 import type { ActionResult } from "../../../runtime/commands";
 import type { ModelInstance } from "../../../runtime/contribution";
 import type { UIAction } from "../../../runtime/types";
-
 export type DynamicDispatch = (command: UIAction) => ActionResult;
-
 export function DynamicNumberControl({
   label,
-  min,
-  max,
-  step = "any",
   initial,
   action,
   instance,
@@ -27,33 +23,7 @@ export function DynamicNumberControl({
   dispatch: DynamicDispatch;
   report: (message: string) => void;
 }) {
-  const id = useId();
-  const [draft, setDraft] = useState(String(initial));
-  const submit = (event: FormEvent) => {
-    event.preventDefault();
-    const value = draft.trim() ? Number(draft) : Number.NaN;
-    const result = dispatch({ type: action, target: instance.id, value });
-    report(result.accepted ? "Change applied." : result.error);
-  };
-  return (
-    <form className="dynamic-input" onSubmit={submit}>
-      <label htmlFor={id}>{label}</label>
-      <div>
-        <input
-          id={id}
-          type="number"
-          min={min}
-          max={max}
-          step={step}
-          required
-          value={draft}
-          onChange={(event) => setDraft(event.target.value)}
-        />
-        <button type="submit">Apply</button>
-      </div>
-      <small>
-        Range: {min}–{max}
-      </small>
-    </form>
-  );
+  const schema = publicDefinition(instance.provider).commands[action]?.arguments;
+  if (!schema) return null;
+  return <SchemaForm schema={schema} initial={{ value: initial }} label={label} onSubmit={args => { const result = dispatch({ type: action, target: instance.id, value: args.value }); report(result.accepted ? "Change applied." : result.error); return result; }} />;
 }

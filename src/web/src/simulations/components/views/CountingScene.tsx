@@ -4,7 +4,7 @@ import type { CountingBoard } from "../traits/MathBoards";
 import { CounterTokenVisual } from "../visuals/CounterTokenVisual";
 import { CountingBoxVisual } from "../visuals/CountingBoxVisual";
 import { SVGWorldView } from "./SVGWorldView";
-export function CountingScene({ board }: { board: CountingBoard }) {
+export function CountingScene({ board, onCommand = (command) => dispatchCommand(board.demo, command) }: { board: CountingBoard; onCommand?: (command: import("../../runtime/types").UIAction) => import("../../runtime/commands").ActionResult }) {
   return (
     <SVGWorldView
       role={board.sequence.looping ? "img" : "group"}
@@ -53,7 +53,7 @@ export function CountingScene({ board }: { board: CountingBoard }) {
             passive={board.sequence.looping}
             label={`Circle ${i + 1}, ${board.mode === "count" ? (t.ordinal === null ? "not counted" : `counted as ${t.ordinal}`) : t.zone ? "in box; tap to remove" : "outside box; tap to place"}`}
             onCommand={() =>
-              dispatchCommand(board.demo, {
+              onCommand({
                 type:
                   board.mode === "count"
                     ? "COUNT_TOKEN"

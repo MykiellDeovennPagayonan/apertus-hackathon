@@ -16,7 +16,9 @@ export type GraphNode = {
     | "View"
     | "Lesson"
     | "Placement"
-    | "Behavior";
+    | "Behavior"
+    | "Composite"
+    | "Resource";
   description: string;
   inputs: GraphPort[];
   outputs: GraphPort[];

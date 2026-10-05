@@ -20,15 +20,17 @@ export function describeEdit(
   after: ExperimentDocument,
 ) {
   const components = (d: ExperimentDocument) =>
-    d.scene
-      ? [
-          ...d.scene.objects,
-          ...d.scene.controls,
-          ...d.scene.measurements,
-          ...(d.scene.workspace?.canvases ?? []),
-          ...(d.scene.workspace?.trips ?? []),
-        ]
-      : [...d.presentation.controls, ...d.presentation.results];
+    d.authored
+      ? d.authored.nodes
+      : d.scene
+        ? [
+            ...d.scene.objects,
+            ...d.scene.controls,
+            ...d.scene.measurements,
+            ...(d.scene.workspace?.canvases ?? []),
+            ...(d.scene.workspace?.trips ?? []),
+          ]
+        : [...d.presentation.controls, ...d.presentation.results];
   const a = components(before),
     b = components(after);
   const added = b.filter((v) => !a.some((old) => old.id === v.id));

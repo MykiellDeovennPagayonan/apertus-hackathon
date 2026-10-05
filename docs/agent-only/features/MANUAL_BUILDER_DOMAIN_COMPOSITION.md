@@ -77,3 +77,11 @@ When only legacy fraction values exist, migration creates the same prefix-shaded
 Browser scripts accept `BUILDER_BASE_URL`; their default port is 3000. Captures from the parity script are written to `/tmp/apertus-builder-parity/`.
 
 Local acceptance passed on 2026-10-05, including simulation/integration and existing Cartesian/town/editor browser regressions, TypeScript, and scoped lint. Production build passed with `pnpm build --webpack`; the default Turbopack build encountered a local loader-worker port permission error. See [the completed plan](../implementation/007-MANUAL_BUILDER_COMPOSITION_PARITY.md#12-local-completion-evidence--2026-10-05) for actual commands, outcomes, and verification limits.
+
+## Canonical spatial authoring (009)
+
+The original manual builder, through its integrated Add component catalog, is the supported authoring destination for physical comparisons, generated bridges, procedural town lessons and authored Scheduled Trip worlds. `runtime/authoring/` executes expanded version-3 recipes; spatial definitions and recipes live in `components/catalog/spatial.ts` and `components/composites/spatial.ts`. Existing composition documents translate automatically on opening. Migration retains its original source, projects workspace departure trips into each person's schedule, and creates one clock per town canvas.
+
+Keep coherent motion ownership in Town Navigation and expose routine/building/market settings as public inputs. Keep bridge topology as explicit joint/member nodes with declared references; adding a new structural topology requires a model feature, not merely a schema relaxation. Public renderers consume scoped snapshots. Compatibility session adapters may translate old prompt commands, but must stage complete batches and must not introduce lesson-specific controls or layouts.
+
+Verify new spatial features with the permanent spatial catalog contract and browser suites. Regeneration needs preview, cancel, one undo step, stable load/control identities and outside-reference checks. Exercise saved user recipes as well as built-in insertion, array reference remapping, rejected imports, scoped clock/reset behavior and presentation invariance.

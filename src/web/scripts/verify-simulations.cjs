@@ -453,8 +453,12 @@ const duplicateViews = renderToStaticMarkup(
   React.createElement(
     React.Fragment,
     null,
-    React.createElement(ProjectileScene),
-    React.createElement(ProjectileScene),
+    React.createElement(ProjectileScene, {
+      state: useProjectileStore.getState(),
+    }),
+    React.createElement(ProjectileScene, {
+      state: useProjectileStore.getState(),
+    }),
   ),
 );
 const markerIds = Array.from(

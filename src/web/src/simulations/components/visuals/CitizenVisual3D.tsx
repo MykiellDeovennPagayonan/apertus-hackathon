@@ -1,4 +1,3 @@
-import { useTownStore } from "../../runtime/townSession";
 import { TownAppearance } from "../resources/TownAppearance";
 import type { Citizen } from "../traits/Resident";
 import { townSurfaceHeight } from "./townSurface";
@@ -45,23 +44,6 @@ export function CitizenVisual3D({
     </group>
   );
 }
-export default function CitizensView() {
-  const citizens = useTownStore((s) => s.citizens),
-    nearSchool = useTownStore((s) => s.marketNearSchool);
-  return (
-    <group>
-      {citizens.map((c, i) => (
-        <CitizenVisual3D
-          key={c.id}
-          citizen={c}
-          index={i}
-          nearSchool={nearSchool}
-        />
-      ))}
-    </group>
-  );
-}
-
 /** Body appearance consumes a profile; scene policies supply positions, headings and selection. */
 export function CitizenBodyVisual({
   color,

@@ -1,3 +1,4 @@
+import { migrateManualDocument } from "../document/canonical";
 import { composeLegacy } from "../document/migrations/composeLegacy";
 import { parseDocument } from "../document/serialization";
 import type { ExperimentDocument } from "../document/types";
@@ -15,10 +16,14 @@ export type DraftRecovery = {
   recovery?: string;
 };
 export function editableDocument(document: ExperimentDocument) {
+  if (document.authored) {
+    validateDocument(document);
+    return structuredClone(document);
+  }
   const next = composeLegacy(document);
   if (next.scene) upgradeWorkspace(next.scene);
   validateDocument(next);
-  return next;
+  return migrateManualDocument(next);
 }
 export function usableEntries(entries: SavedExperiment[]) {
   return entries.filter((entry) => {

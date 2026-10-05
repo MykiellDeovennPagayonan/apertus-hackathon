@@ -4,6 +4,32 @@ Date: 2026-10-05.
 
 Status: proposed implementation specification. The audit records the working-tree source inspected during this discussion. The target contracts, catalog entries, recipes, folder structure, and five implementation phases below are not claims of completed implementation.
 
+Implementation checkpoint: the version-3 catalog/composite path now includes physical comparisons, projectile flight/sampling, generated editable bridges, explicit town instance/presentation nodes, authored Scheduled Trip worlds, the remaining generic controls/displays/data resources, exposed parameters for saved user prebuilts, compatibility/contract previews, and responsive conditional themed layout settings. Public renderers receive scoped snapshots; supported topology, identity/reference preservation, atomic command policies, migration recovery, regeneration transactions, bounded data evaluation/conversion, and layout-binding remapping have permanent verification. Existing prompt/session protocols and saved-input readers remain as explicit compatibility adapters; their private lesson/control assemblies are retired. See [009 implementation evidence](009-IMPLEMENTATION-EVIDENCE.md) for the exact verified scope and commands run.
+
+Manual-builder integration correction: the separate catalog workspace was an implementation deviation. The original 2D/3D setup now opens the common authored document in `CompositionBuilder`; catalog discovery/import is in Add component, composites use the existing graph, and settings remain focused dialogs. `catalog-editor/` has been removed. Older documents migrate at opening rather than requiring a workspace switch. See the implementation evidence for current verification.
+
+## Reading map
+
+- [Purpose and product promise](#1-purpose-and-product-promise)
+- [Philosophy and invariants](#2-philosophy-and-architectural-invariants)
+- [Current findings](#3-findings-from-the-current-working-tree)
+- [Audit method](#4-audit-method-and-required-ledger)
+- [2D, 3D, Cartesian, and other spaces](#5-space-and-presentation-taxonomy)
+- [Public catalog and existence status](#6-target-public-catalog-and-implementation-readiness)
+- [Unified contracts](#7-contract-unification)
+- [Documents and composite recipes](#8-canonical-document-and-composite-recipe)
+- [Builder feature workflows](#9-builder-features)
+- [Composite breakdown matrix](#10-composite-catalog-and-decomposition-matrix)
+- [Implementation slices](#11-detailed-composite-implementation-slices)
+- [Source disposition](#12-source-disposition-rules)
+- [Target folder structure](#13-target-folder-structure)
+- [Migration and compatibility](#14-migration-and-compatibility)
+- [Five implementation phases](#15-implementation-phases--exactly-five)
+- [Verification](#16-verification-strategy)
+- [Risks and established decisions](#17-risks-and-decisions-to-keep-explicit)
+- [Source links](#18-related-sources)
+- [All 238 current source files](#appendix-a-complete-inspected-source-file-inventory)
+
 ## 1. Purpose and product promise
 
 The builder must become the place where authors can assemble the same experiments that developers currently assemble in code.
@@ -1548,3 +1574,312 @@ Decisions already established by this specification:
 - [Runtime catalog](../../../src/web/src/simulations/runtime/catalog.ts)
 - [Clipboard/group operations](../../../src/web/src/simulations/builder/editor/selection.ts)
 
+
+## Appendix A. Complete inspected source-file inventory
+
+Snapshot: 2026-10-05 working tree. Paths below are relative to `src/web/src/simulations/components/`. Every current file is listed once. The destination column is an initial disposition, not proof that migration or full behavioral audit has finished. Phase 1 must attach consumer lists, field ownership, stable IDs, and verification evidence to these records.
+
+A file may split into several public packages. Conversely, several old files may converge into one package. File count is not a target component count.
+
+### README.md (1 file)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `README.md` | Documentation: rewrite around public catalog and private package boundaries |
+
+### behaviors (2 files)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `behaviors/DailyRoutine.ts` | Daily Routine recipe + Rule Behavior provider |
+| `behaviors/ScheduledTrip.ts` | Public Scheduled Trip contract/runtime |
+
+### compositions (11 files)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `compositions/AngleComparisonExperiment.ts` | Editable public recipe; split bundled experiments; premade selects same recipe |
+| `compositions/ArithmeticExperiment.ts` | Editable public recipe; split bundled experiments; premade selects same recipe |
+| `compositions/BridgeExperiment.ts` | Editable public recipe; split bundled experiments; premade selects same recipe |
+| `compositions/CountingExperiment.ts` | Editable public recipe; split bundled experiments; premade selects same recipe |
+| `compositions/ElementaryExperiments.ts` | Editable public recipe; split bundled experiments; premade selects same recipe |
+| `compositions/EqualGroupsExperiment.ts` | Editable public recipe; split bundled experiments; premade selects same recipe |
+| `compositions/FractionBuilderExperiment.ts` | Editable public recipe; split bundled experiments; premade selects same recipe |
+| `compositions/FractionNumberLineExperiment.ts` | Editable public recipe; split bundled experiments; premade selects same recipe |
+| `compositions/GasPressureExperiment.ts` | Editable public recipe; split bundled experiments; premade selects same recipe |
+| `compositions/ProjectileExperiment.ts` | Editable public recipe; split bundled experiments; premade selects same recipe |
+| `compositions/TownExperiment.ts` | Editable public recipe; split bundled experiments; premade selects same recipe |
+
+### contracts (9 files)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `contracts/ActionContract.ts` | component-kit/contracts or owning model schema; preserve schema authority |
+| `contracts/ComponentDefinition.ts` | component-kit/contracts or owning model schema; preserve schema authority |
+| `contracts/LineParameters.ts` | component-kit/contracts or owning model schema; preserve schema authority |
+| `contracts/Observation.ts` | component-kit/contracts or owning model schema; preserve schema authority |
+| `contracts/OutputContract.ts` | component-kit/contracts or owning model schema; preserve schema authority |
+| `contracts/PropertyContract.ts` | component-kit/contracts or owning model schema; preserve schema authority |
+| `contracts/composition.ts` | component-kit/contracts or owning model schema; preserve schema authority |
+| `contracts/numericField.ts` | component-kit/contracts or owning model schema; preserve schema authority |
+| `contracts/objectFields.ts` | component-kit/contracts or owning model schema; preserve schema authority |
+
+### controls (34 files)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `controls/ActionButton.tsx` | Public Action Button |
+| `controls/ArithmeticControls.tsx` | Domain control recipe built from public controls; preserve supported actions |
+| `controls/BoundControl.tsx` | Presentation binding infrastructure |
+| `controls/BridgeCommands.ts` | Command interpretation/adaptation infrastructure |
+| `controls/BridgeControls.tsx` | Domain control recipe built from public controls; preserve supported actions |
+| `controls/CountingControls.tsx` | Domain control recipe built from public controls; preserve supported actions |
+| `controls/DragHandleControl.tsx` | Public Drag Interaction |
+| `controls/EqualGroupsControls.tsx` | Domain control recipe built from public controls; preserve supported actions |
+| `controls/FractionBuilderControls.tsx` | Domain control recipe built from public controls; preserve supported actions |
+| `controls/FractionInputControl.tsx` | Fraction Input recipe |
+| `controls/FractionNumberLineControls.tsx` | Domain control recipe built from public controls; preserve supported actions |
+| `controls/IntegerStepper.tsx` | Integer Stepper recipe |
+| `controls/MathCommands.ts` | Command interpretation/adaptation infrastructure |
+| `controls/MathObjectControl.tsx` | Parameter Form recipe/adapters |
+| `controls/MathPlayback.tsx` | Playback Panel recipe |
+| `controls/MathPrimaryControls.tsx` | Domain control recipe selection |
+| `controls/NumberField.tsx` | Public Number Input |
+| `controls/OptionSelect.tsx` | Public Select |
+| `controls/OrbitCameraControl.tsx` | Public Orbit Camera |
+| `controls/ParameterSlider.tsx` | Public Slider |
+| `controls/PlaybackControls.tsx` | Playback Panel recipe |
+| `controls/ProjectileCommands.ts` | Command interpretation/adaptation infrastructure |
+| `controls/ProjectileControls.tsx` | Domain control recipe built from public controls; preserve supported actions |
+| `controls/PromptControl.ts` | Command interpretation infrastructure; parser is not a UI widget |
+| `controls/SelectionControl.ts` | Extract public Selection Interaction; retain command adapter in runtime |
+| `controls/ToggleControl.tsx` | Public Toggle |
+| `controls/TownCommands.ts` | Command interpretation/adaptation infrastructure |
+| `controls/TownControls.tsx` | Domain control recipe built from public controls; preserve supported actions |
+| `controls/YoungLearnerControls.tsx` | Disclosure/layout configuration |
+| `controls/chemistry/ChemistryControls.tsx` | Split shared controls/forms and domain recipes; remove singleton dispatch where present |
+| `controls/dynamic-systems/DynamicControls.tsx` | Split shared controls/forms and domain recipes; remove singleton dispatch where present |
+| `controls/natural-systems/NaturalControls.tsx` | Split shared controls/forms and domain recipes; remove singleton dispatch where present |
+| `controls/physical-systems/PhysicalControls.tsx` | Split shared controls/forms and domain recipes; remove singleton dispatch where present |
+| `controls/promptMatchers.ts` | Command interpretation infrastructure |
+
+### definitions (8 files)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `definitions/Building.ts` | Corresponding public model package definition; keep serialized identity migration |
+| `definitions/FractionBar.ts` | Corresponding public model package definition; keep serialized identity migration |
+| `definitions/GasContainer.ts` | Corresponding public model package definition; keep serialized identity migration |
+| `definitions/Ground.ts` | Corresponding public model package definition; keep serialized identity migration |
+| `definitions/Line.ts` | Corresponding public model package definition; keep serialized identity migration |
+| `definitions/Person.ts` | Corresponding public model package definition; keep serialized identity migration |
+| `definitions/Road.ts` | Corresponding public model package definition; keep serialized identity migration |
+| `definitions/Square.ts` | Corresponding public model package definition; keep serialized identity migration |
+
+### prefabs (15 files)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `prefabs/BridgeLoad.ts` | Owning public model initialization; compose default appearance explicitly |
+| `prefabs/Building.ts` | Owning public model initialization; compose default appearance explicitly |
+| `prefabs/Citizen.ts` | Person initialization plus population recipe generation; preserve identity/policy |
+| `prefabs/CounterToken.ts` | Owning public model initialization; compose default appearance explicitly |
+| `prefabs/ElementaryBoards.ts` | Split model initialization and multi-component recipes; preserve state ownership |
+| `prefabs/GasContainer.ts` | Owning public model initialization; compose default appearance explicitly |
+| `prefabs/Joint.ts` | Owning public model initialization; compose default appearance explicitly |
+| `prefabs/Market.ts` | Market recipe: Building + Market Appearance + label |
+| `prefabs/MathBoards.ts` | Split model initialization and multi-component recipes; preserve state ownership |
+| `prefabs/Member.ts` | Owning public model initialization; compose default appearance explicitly |
+| `prefabs/Projectile.ts` | Owning public model initialization; compose default appearance explicitly |
+| `prefabs/TrussAssembly.ts` | Author-time Truss Assembly generator producing editable public nodes |
+| `prefabs/dynamic-systems/objects.ts` | Owning domain model initialize provider or catalog aliases; not a whole opaque recipe |
+| `prefabs/natural-systems/objects.ts` | Owning domain model initialize provider or catalog aliases; not a whole opaque recipe |
+| `prefabs/physical-systems/objects.ts` | Owning domain model initialize provider or catalog aliases; not a whole opaque recipe |
+
+### registry.ts (1 file)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `registry.ts` | Catalog definition registration and compatibility aliases |
+
+### resources (17 files)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `resources/ArithmeticTasks.ts` | Arithmetic task Dataset |
+| `resources/BridgeStyles.ts` | Theme/configuration resource; separate model constraints from appearance |
+| `resources/CountingTasks.ts` | Counting task Dataset |
+| `resources/DailySchedule.ts` | Typed schedule dataset |
+| `resources/EqualGroupsTasks.ts` | Grouping task Dataset |
+| `resources/FractionTasks.ts` | Fraction task Dataset |
+| `resources/GravityPresets.ts` | Gravity Parameter Preset |
+| `resources/LearningPolicies.ts` | Split model constraints/defaults and educational presets |
+| `resources/MathAppearance.ts` | Theme/configuration resource; separate model constraints from appearance |
+| `resources/ProjectileStyles.ts` | Theme/configuration resource; separate model constraints from appearance |
+| `resources/TownAppearance.ts` | Theme/configuration resource; separate model constraints from appearance |
+| `resources/TownLayout.ts` | Town Environment scene recipe |
+| `resources/WalkingProfile.ts` | Navigation Parameter Preset |
+| `resources/chemistry/definitions.ts` | Reaction Dataset and model defaults |
+| `resources/dynamic-systems/defaults.ts` | Owning model defaults; named Parameter Presets where useful |
+| `resources/natural-systems/defaults.ts` | Owning model defaults; named Parameter Presets where useful |
+| `resources/physical-systems/defaults.ts` | Owning model defaults; named Parameter Presets where useful |
+
+### systems (34 files)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `systems/ArithmeticSystem.ts` | Arithmetic model/operation provider; resolve token ownership |
+| `systems/BallisticMotionSystem.ts` | Projectile runtime calculation |
+| `systems/BehaviorRunnerSystem.ts` | Rule Behavior runtime provider |
+| `systems/BuildingGeometrySystem.ts` | Building model private geometry |
+| `systems/ComposedFractionSystem.ts` | Fraction Bar runtime; preserve mask semantics |
+| `systems/CountingSystem.ts` | Counting model/operation provider; resolve token ownership |
+| `systems/ElementarySystems.ts` | Split Ratio, Rectangle, Random Trial implementations |
+| `systems/EqualGroupingSystem.ts` | Equal Grouping provider; resolve collection ownership |
+| `systems/FractionBuilderSystem.ts` | Fraction model/comparison runtime |
+| `systems/FractionNumberLineSystem.ts` | Number Line runtime |
+| `systems/FractionObservationSystem.ts` | Fraction model/comparison outputs |
+| `systems/GasParticleIllustrationSystem.ts` | Gas Particle Illustration private animation provider |
+| `systems/HeuristicBridgeResponseSystem.ts` | Public Bridge Response; preserve heuristic limits |
+| `systems/IdealGasSystem.ts` | Gas Container runtime calculation |
+| `systems/LineGeometrySystem.ts` | Line model private geometry |
+| `systems/LineIntersectionSystem.ts` | Public Line Intersection operation |
+| `systems/LineObservationSystem.ts` | Line model outputs |
+| `systems/MeasurementSamplingSystem.ts` | Public Sample Recorder runtime |
+| `systems/NavigationSystem.ts` | Navigation runtime provider |
+| `systems/PathFollowingSystem.ts` | Navigation runtime adapter; preserve premade policy |
+| `systems/RouteFollowingSystem.ts` | Navigation private route following |
+| `systems/RouteSearchSystem.ts` | Navigation private route search |
+| `systems/ScheduleSystem.ts` | Town schedule/rule runtime; audit consumers |
+| `systems/ScheduledTripSystem.ts` | Scheduled Trip runtime provider |
+| `systems/SquareGeometrySystem.ts` | Square model private geometry |
+| `systems/TownObservationSystem.ts` | Town models/clock observations |
+| `systems/chemistry/models.ts` | Split by domain model provider; keep numerical helpers private and assumptions explicit |
+| `systems/dynamic-systems/models.ts` | Split by domain model provider; keep numerical helpers private and assumptions explicit |
+| `systems/fractionMath.ts` | Rational/Fraction private exact-arithmetic helpers |
+| `systems/math-foundations/models.ts` | Split by domain model provider; keep numerical helpers private and assumptions explicit |
+| `systems/mathSequence.ts` | Action Sequence or private presentation sequence after ownership audit |
+| `systems/natural-systems/models.ts` | Split by domain model provider; keep numerical helpers private and assumptions explicit |
+| `systems/physical-systems/models.ts` | Split by domain model provider; keep numerical helpers private and assumptions explicit |
+| `systems/townNavigation.ts` | Navigation policies/private helpers |
+
+### traits (24 files)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `traits/BallisticMotion.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/BehaviorBinding.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/BehaviorState.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/BridgeLoad.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/Building.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/ElementaryBoards.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/FlightMetrics.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/GasState.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/LaunchSettings.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/MathBoards.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/MeasurementProbe.ts` | Sample Recorder schema and shared Dataset contract |
+| `traits/MemberEndpoints.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/MemberResponse.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/NavigationAgent.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/NavigationObstacle.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/Resident.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/SceneObjects.ts` | Split model schemas; retain legacy union only in compatibility readers |
+| `traits/Transform2D.ts` | Shared attachment/frame contracts or owning model fields |
+| `traits/TrussSettings.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/VisualBinding.ts` | Shared attachment/frame contracts or owning model fields |
+| `traits/chemistry/ChemistryState.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/dynamic-systems/state.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/natural-systems/state.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+| `traits/physical-systems/state.ts` | Owning model state/schema; split bundled types; interfaces are not library nodes |
+
+### views (48 files)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `views/ArithmeticScene.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/AuthoredTownView.tsx` | World Canvas and town recipe/rendering adapters |
+| `views/BridgeScene.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/CartesianView.tsx` | Public Cartesian Canvas |
+| `views/ComparisonView.tsx` | Grid/Split Pane comparison recipe |
+| `views/CompositionCanvas.tsx` | Presentation provider dispatch infrastructure |
+| `views/ControlsOverlay.tsx` | Lesson portal infrastructure |
+| `views/CountingScene.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/DisplayView.tsx` | Public Diagram Canvas |
+| `views/DomainObservationViews.tsx` | Observation/display binding infrastructure |
+| `views/ElementaryExperimentView.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/EntityInspectorView.tsx` | Public Inspector |
+| `views/EqualGroupsScene.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/ExperimentLessonFrame.tsx` | Shared lesson shell and authorable layout contracts |
+| `views/ExperimentView.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/FractionBuilderScene.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/FractionNumberLineScene.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/GasPressureView.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/HistogramView.tsx` | Public Histogram |
+| `views/LegendView.tsx` | Public Legend |
+| `views/MathExperimentView.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/MathReadoutView.tsx` | Model observations plus Readout/Formula |
+| `views/MemberInspector.tsx` | Inspector configured for bridge members |
+| `views/MetricsView.tsx` | Readout/Grid recipe |
+| `views/ProjectileObservationViews.tsx` | Observation/display binding infrastructure |
+| `views/ProjectileScene.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/ResultsTableView.tsx` | Public Data Table |
+| `views/SVGWorldView.tsx` | Diagram Canvas host/private projection helpers |
+| `views/ThreeWorldView.tsx` | World Canvas, Environment Lighting, and town recipe |
+| `views/TimeSeriesView.tsx` | Public Chart with time-series variant |
+| `views/XYGraphView.tsx` | Public Chart; remove projectile session coupling |
+| `views/bridge.css` | Split component styles, shared presentation tokens, and recipe themes |
+| `views/chemistry/ChemistryLesson.css` | Split component styles, shared presentation tokens, and recipe themes |
+| `views/chemistry/ChemistryLesson.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/dynamic-systems/DynamicSystemsLesson.css` | Split component styles, shared presentation tokens, and recipe themes |
+| `views/dynamic-systems/DynamicSystemsLesson.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/experiment-lesson.css` | Split component styles, shared presentation tokens, and recipe themes |
+| `views/learning.css` | Split component styles, shared presentation tokens, and recipe themes |
+| `views/math-foundations/AssemblyView.css` | Split component styles, shared presentation tokens, and recipe themes |
+| `views/math-foundations/AssemblyView.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/math.css` | Split component styles, shared presentation tokens, and recipe themes |
+| `views/natural-systems/NaturalSystemsView.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/natural-systems/natural-systems.css` | Split component styles, shared presentation tokens, and recipe themes |
+| `views/physical-systems/PhysicalSystemsView.tsx` | Extract public displays/interactions; replace whole scene/lesson assembly with recipe |
+| `views/physical-systems/physical-systems.css` | Split component styles, shared presentation tokens, and recipe themes |
+| `views/projectile.css` | Split component styles, shared presentation tokens, and recipe themes |
+| `views/town.css` | Split component styles, shared presentation tokens, and recipe themes |
+| `views/useCompactDiagram.ts` | Presentation utility |
+
+### visuals (34 files)
+
+| Current file | Proposed disposition |
+| --- | --- |
+| `visuals/BasketVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/BeamVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/BridgeSupportVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/BuildingVisual3D.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/CitizenVisual3D.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/CounterTokenVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/CountingBoxVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/ElementaryVisuals.tsx` | Split Ratio Bar, Dimension Label, Coordinate Axes public visuals |
+| `visuals/FractionBarVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/FractionJumpVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/GasContainerVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/GasParticleVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/GroundVisual3D.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/LauncherVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/LineVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/LoadTruckVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/MarketVisual3D.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/NumberLineVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/OperationZonesVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/RoadVisual3D.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/ShapeVisual2D.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/SquareVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/TownEnvironment.tsx` | Town Environment recipe; remove store subscription |
+| `visuals/TownLabel.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/TownSceneryVisual3D.tsx` | Scenery recipe/public variants; split assembled contents |
+| `visuals/TrajectoryVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/VelocityArrowVisual.tsx` | Corresponding public appearance package; private helpers colocated |
+| `visuals/bridgeDeformation.ts` | Bridge visual private deformation helper |
+| `visuals/chemistry/ChemistryVisuals.tsx` | Split named public visual packages; replace general curves with Chart configurations |
+| `visuals/dynamic-systems/DynamicVisuals.tsx` | Split named public visual packages; replace general curves with Chart configurations |
+| `visuals/natural-systems/NaturalVisuals.tsx` | Split named public visual packages; replace general curves with Chart configurations |
+| `visuals/physical-systems/PhysicalVisuals.tsx` | Split named public visual packages; replace general curves with Chart configurations |
+| `visuals/townGeometry.tsx` | Scenery variants plus private mesh helpers |
+| `visuals/townSurface.ts` | Town geometry/surface private helper |

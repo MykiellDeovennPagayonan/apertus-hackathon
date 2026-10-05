@@ -1,5 +1,5 @@
 "use client";
-import { type FormEvent, useId, useState } from "react";
+import { SchemaForm } from "../SchemaForm";
 import { naturalSystems } from "../../../domains/natural-systems";
 import type { ModelInstance } from "../../../runtime/contribution";
 import { dispatchBatch, dispatchCommand } from "../../../runtime/session";
@@ -39,43 +39,10 @@ function NumberControl({
   label: string;
   command: NaturalCommand;
 }) {
-  const id = useId();
-  const [draft, setDraft] = useState<string | null>(null);
-  const model = naturalSystems.models.find(
-    (candidate) => candidate.ref === instance.provider,
-  );
-  const schema = model?.actions[action].arguments;
-  const field = schema?.type === "object" ? schema.properties.value : null;
-  if (!field || (field.type !== "number" && field.type !== "integer"))
-    return null;
-  const current = instance.parameters[parameterByAction[action]];
-  const submit = (event: FormEvent) => {
-    event.preventDefault();
-    if (draft === "") return;
-    command(instance, action, Number(draft ?? current));
-    setDraft(null);
-  };
-  return (
-    <form onSubmit={submit} className="natural-number-control">
-      <label htmlFor={id}>{label}</label>
-      <div>
-        <input
-          id={id}
-          type="number"
-          min={field.minimum}
-          max={field.maximum}
-          step="any"
-          required
-          value={draft ?? String(current)}
-          onChange={(event) => setDraft(event.target.value)}
-        />
-        <button type="submit">Set</button>
-      </div>
-      <small>
-        {field.minimum}–{field.maximum} {field.unit}
-      </small>
-    </form>
-  );
+  const model = naturalSystems.models.find(candidate => candidate.ref === instance.provider);
+  const schema = model?.actions[action]?.arguments;
+  if (!schema) return null;
+  return <SchemaForm schema={schema} initial={{ value: instance.parameters[parameterByAction[action]] }} label={label} onSubmit={args => { command(instance, action, args.value); return { accepted: true }; }} />;
 }
 export function NaturalControls({
   instance,

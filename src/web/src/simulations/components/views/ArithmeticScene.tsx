@@ -4,7 +4,7 @@ import type { ArithmeticBoard } from "../traits/MathBoards";
 import { CounterTokenVisual } from "../visuals/CounterTokenVisual";
 import { OperationZonesVisual } from "../visuals/OperationZonesVisual";
 import { SVGWorldView } from "./SVGWorldView";
-export function ArithmeticScene({ board }: { board: ArithmeticBoard }) {
+export function ArithmeticScene({ board, onCommand = (command) => dispatchCommand(board.demo, command) }: { board: ArithmeticBoard; onCommand?: (command: import("../../runtime/types").UIAction) => import("../../runtime/commands").ActionResult }) {
   return (
     <SVGWorldView
       role={board.sequence.looping ? "img" : "group"}
@@ -36,7 +36,7 @@ export function ArithmeticScene({ board }: { board: ArithmeticBoard }) {
             label={`Circle ${t.order + 1}, ${right ? (board.operation === "add" ? "waiting to add" : "taken away") : "in result group"}`}
             disabled={disabled}
             onCommand={() =>
-              dispatchCommand(board.demo, { type: "MOVE_TOKEN", value: t.id })
+              onCommand({ type: "MOVE_TOKEN", value: t.id })
             }
           >
             <CounterTokenVisual

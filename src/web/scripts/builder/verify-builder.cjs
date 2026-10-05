@@ -24,7 +24,10 @@ for (const template of ["gas", "fractions", "line", "town"]) {
   const doc = createDocument(template);
   assert.deepEqual(parseDocument(serializeDocument(doc)), doc);
   const imported = parseDocument(JSON.stringify(doc.recipe));
-  assert.deepEqual(imported.recipe, doc.recipe);
+  assert.deepEqual(
+    imported.authored?.compatibility?.source ?? imported.recipe,
+    doc.recipe,
+  );
   const resolved = resolveRecipe(doc.recipe);
   runtime.activateSession(resolved.demo, resolved, doc.recipe);
   assert.equal(

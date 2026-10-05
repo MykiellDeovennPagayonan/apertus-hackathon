@@ -2,13 +2,17 @@
 
 This is the shared implementation home for all components used by the projectile, bridge, town, and five mathematics simulations. Components are organized by **type**. Each implementation lives here once, including components currently used by only one simulation.
 
-**Status:** All eight demos use this library. `simulations/pre-made/` contains explicit selections; `simulations/runtime/` owns validated commands, session state, stepping, and lifecycle. The former `premade-simulations/` implementation directory has been retired.
+**Status:** Premade lessons and both builder paths use this library. `components/catalog/` publishes data-only authoring definitions, `components/composites/` publishes expandable recipes, and `runtime/authoring/` owns version-3 document validation, scoped execution, remapping, and recipe expansion. `simulations/pre-made/` retains explicit selections and compatibility entry points while saved legacy documents continue to migrate through supported readers.
 
 Read the [implementation plan and complete inventory](../../../../../docs/agent-only/implementation/001-COMPONENT_IMPLEMENTATION.md) for every component needed by the three simulations, its consumers, source code, command coverage, migration order and completion checks. [Component Architecture](../../../../../docs/COMPONENT_ARCHITECTURE.md) explains the concepts; [Component Contracts](../../../../../docs/agent-only/COMPONENT_CONTRACTS.md) defines their boundaries.
 
 The [early mathematics plan and implementation notes](../../../../../docs/agent-only/implementation/002-EARLY_MATH_SIMULATIONS.md) cover Counting Circles, Addition and Subtraction, Equal Groups, Fraction Builder, and Fraction Number Line. Their board schemas and prefabs share focused `MathBoards.ts` modules; five pure systems own the mathematics, and SVG views render their snapshots. Math prompts use bounded local adapters while the three original demos retain their Apertus planner integration.
 
 ## Manual composition components
+
+The original manual builder is the single authoring surface. Its 2D/3D setup, Connections graph, Build preview and focused settings dialogs edit canonical version-3 documents. Add component discovers public definitions and built-in or locally saved recipes, including JSON import. Composite insertion expands into ordinary nodes, connections, scopes, groups, resources and layout, displayed as expandable graph groups. Older saved scenes translate on opening; their original input is retained for recovery. The separate catalog editor has been removed.
+
+Catalog definitions contain schemas and contracts only. Executable model providers live in `runtime/authoring/providers.ts`; React/SVG/Three presentation stays in views and visuals. `RecipeLesson` consumes runtime snapshots and never owns model stepping. Dataset resources participate in the same scoped runtime and remain read-only.
 
 The manual builder uses canonical definitions registered with the existing runtime catalog. `contracts/` contains property/action/output and authoring schemas; `definitions/` contains the eight independently registered object kinds. `registry.ts` is pure and imports no rendering backends. Renderer providers are selected separately by `views/CompositionCanvas.tsx`.
 
@@ -26,7 +30,7 @@ The manual builder uses canonical definitions registered with the existing runti
 
 Shared execution never imports `builder/`. `runtime/composition/` owns validation/projection/staging and per-canvas lifecycle; `lessons/` owns formatting and assembly. Builder capture, settings portals, document compatibility, history, and persistence stay under `builder/`. Fraction controls/scenes and drag handles receive command interfaces; their premade view owners provide session adapters.
 
-`pnpm test:architecture` enforces these boundaries and checks pre-refactor document migrations, town paths/timelines, independent construction, and cross-adapter geometry. It is included in `pnpm test`. Related pure verification scripts are grouped under `scripts/builder/`; package command names remain unchanged.
+`pnpm test:architecture` enforces these boundaries and checks pre-refactor document migrations, town paths/timelines, independent construction, and cross-adapter geometry. `pnpm test:public-catalog` checks all built-in recipes, exposed parameters, external bindings, resource runtime behavior, independent copies, atomic batches, migration, remapping, capture, and storage failures. Both are included in `pnpm test`; `pnpm test:public-catalog:browser` covers the catalog workflow in a real browser.
 
 ## Directory structure
 
@@ -170,4 +174,12 @@ The shell activates one session after the assembly transition and disposes it on
 
 Trait files include field units, edit timing, ranges, and ownership metadata. The small static catalog uses kind-qualified keys, so a `Building` trait and a `Building` prefab remain distinct. Staged validation checks models/renderers, providers and dependencies, input ranges, identities, references, supported actions, and writer conflicts. Pure models and recipes import no React or Three.js code. SVG definitions are scoped by view instance.
 
-`pnpm test` verifies the preserved formulas/prompts plus prefab independence, invalid commands, topology references, paused edits, synchronized market relocation, full reset, arrival task identity, and clock cancellation. `pnpm exec tsc --noEmit` and `pnpm lint` check the complete app. The extraction does not change dependency versions; the local installed Framer Motion/motion-dom mismatch and sandbox restrictions currently prevent production/browser verification.
+`pnpm test` verifies the preserved formulas/prompts plus prefab independence, invalid commands, topology references, paused edits, synchronized market relocation, full reset, arrival task identity, clock cancellation, canonical recipes, and version-3 migration. `pnpm exec tsc --noEmit` and scoped Biome checks verify the changed app source. Browser acceptance runs against a local server, and `next build --webpack` provides the production-build check when the default Turbopack build stalls in the local environment.
+
+### Spatial public recipes
+
+`catalog/spatial.ts` and `composites/spatial.ts` expose projectile, truss, load/response, town building/market/routine/navigation, World presentation attachments, and authored Scheduled Trip clock contracts. Instances enter `runtime/authoring/DocumentRuntime`; views receive snapshots and command callbacks. Model calculations remain in shared systems and pure runtime model owners. Public definitions declare configuration-reference paths so duplication never guesses which text contains an ID.
+
+The old Projectile/Bridge/Town control exports, ThreeWorldView and PhysicalSystemsView are compatibility entry points backed by recipes. Their previous private control/lesson assembly is retired. Keep compatibility readers and prompt/session adapters until all saved/protocol consumers migrate. Do not use those adapters as dependencies of new public primitives.
+
+Run `npm test`, `npm run test:spatial-catalog:browser`, TypeScript and a production build for spatial changes. Refresh `docs/agent-only/implementation/009-SOURCE-LEDGER.json` with `node scripts/builder/audit-public-catalog.cjs`; it includes new files as well as the original inventory.

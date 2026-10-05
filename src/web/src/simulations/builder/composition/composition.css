@@ -598,3 +598,91 @@ never beside the workspace. */
 .composition-fraction-pieces rect[stroke="#245bcb"] {
   stroke: var(--fraction-color, #245bcb);
 }
+
+/* The full catalog lives inside the existing focused component dialog. */
+.composition-catalog {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.composition-catalog > label,
+.composition-catalog > output,
+.composition-catalog > textarea,
+.composition-recipe-preview {
+  grid-column: 1 / -1;
+}
+.composition-catalog label,
+.component-dialog-body > fieldset label {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0;
+  font-size: 14px;
+}
+.composition-catalog input,
+.composition-catalog select,
+.composition-catalog textarea,
+.component-dialog-body > fieldset input {
+  max-width: 100%;
+  min-width: 0;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--ink);
+  background: var(--panel);
+}
+.composition-catalog article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg, #eee9dc);
+}
+.composition-catalog article > strong {
+  display: block;
+  font-size: 16px;
+}
+.composition-catalog article small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 6px;
+}
+.composition-catalog article p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.composition-catalog article button {
+  margin: 6px 6px 0 0;
+}
+.composition-catalog article details {
+  margin-top: 12px;
+}
+.composition-catalog fieldset {
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.composition-recovery {
+  padding: 12px 24px;
+  font-size: 13px;
+}
+.connection-node--composite {
+  border-color: var(--accent, #647556);
+}
+@media (max-width: 650px) {
+  .composition-catalog {
+    grid-template-columns: 1fr;
+  }
+}
+.composition-catalog > output:empty {
+  display: none;
+}
+.composition-catalog > label:has(select) {
+  grid-column: auto;
+}
+.composition-catalog > label:first-child {
+  grid-column: 1 / -1;
+}
+.composition-catalog > label {
+  margin: 0;
+}

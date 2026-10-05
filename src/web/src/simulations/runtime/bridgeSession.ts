@@ -12,7 +12,7 @@ import {
 
 const defaults = BridgeExperiment.defaults;
 const initialTruss = () => buildTruss(defaults.spanScale, defaults.dense);
-interface BridgeState {
+export interface BridgeState {
   initial: typeof defaults;
   activate: (
     parameters: typeof defaults,

@@ -1,3 +1,10 @@
+import { builtInRecipe } from "../../components/composites/catalog";
+import {
+  insertRecipe,
+  removeNodes,
+  selectionRecipe,
+} from "../../runtime/authoring/recipes";
+import { requireValue } from "../../runtime/authoring/requireValue";
 import { entrance } from "../../runtime/composition/index";
 import { clockTarget } from "../../runtime/composition/projectCanvas";
 import { requireRecord } from "../../runtime/records";
@@ -10,6 +17,16 @@ export type ComponentClipboard = {
 };
 
 export function expandSelection(doc: ExperimentDocument, ids: string[]) {
+  if (doc.authored)
+    return [
+      ...new Set(
+        ids.flatMap(
+          (id) =>
+            requireValue(doc.authored).groups.find((g) => g.id === id)
+              ?.members ?? [id],
+        ),
+      ),
+    ];
   const selected = new Set(ids);
   for (const group of doc.editor.groups ?? [])
     if (group.members.some((id) => selected.has(id)))
@@ -18,7 +35,15 @@ export function expandSelection(doc: ExperimentDocument, ids: string[]) {
 }
 
 export function cleanEditor(doc: ExperimentDocument) {
-  const ids = new Set(compositionGraph(doc).blocks.map((b) => b.id));
+  const ids = new Set(
+    doc.authored
+      ? [
+          ...doc.authored.nodes,
+          ...doc.authored.resources,
+          ...doc.authored.groups,
+        ].map((n) => n.id)
+      : compositionGraph(doc).blocks.map((b) => b.id),
+  );
   for (const id of Object.keys(doc.editor.positions))
     if (!ids.has(id)) delete doc.editor.positions[id];
   if (doc.editor.groups)
@@ -29,6 +54,22 @@ export function cleanEditor(doc: ExperimentDocument) {
 
 export function groupComponents(doc: ExperimentDocument, ids: string[]) {
   const members = expandSelection(doc, ids);
+  if (doc.authored) {
+    if (members.length < 2) throw new Error("Select at least two components");
+    const id = `group-${crypto.randomUUID()}`;
+    const children = doc.authored.groups.filter(
+      (g) => g.members.every((m) => members.includes(m)) && !g.parent,
+    );
+    for (const child of children) child.parent = id;
+    doc.authored.groups.push({
+      id,
+      label: "Group",
+      members,
+      collapsed: true,
+      parameters: [],
+    });
+    return;
+  }
   if (members.length < 2)
     throw new Error("Select at least two components to create a group");
   const groups = doc.editor.groups ?? [];
@@ -43,6 +84,20 @@ export function groupComponents(doc: ExperimentDocument, ids: string[]) {
 }
 
 export function ungroupComponents(doc: ExperimentDocument, ids: string[]) {
+  if (doc.authored) {
+    const removed = new Set(
+      doc.authored.groups
+        .filter(
+          (g) =>
+            ids.includes(g.id) || g.members.every((id) => ids.includes(id)),
+        )
+        .map((g) => g.id),
+    );
+    doc.authored.groups = doc.authored.groups.filter((g) => !removed.has(g.id));
+    for (const g of doc.authored.groups)
+      if (g.parent && removed.has(g.parent)) delete g.parent;
+    return;
+  }
   doc.editor.groups = (doc.editor.groups ?? []).filter(
     (g) => !g.members.some((id) => ids.includes(id)),
   );
@@ -50,6 +105,11 @@ export function ungroupComponents(doc: ExperimentDocument, ids: string[]) {
 
 /** Remove selected components without silently deleting surviving controls or results. */
 export function deleteComponents(doc: ExperimentDocument, ids: string[]) {
+  if (doc.authored) {
+    doc.authored = removeNodes(doc.authored, expandSelection(doc, ids));
+    cleanEditor(doc);
+    return;
+  }
   const removed = new Set(ids);
   const scene = requireRecord(doc.scene);
   const workspace = requireRecord(scene.workspace);
@@ -88,6 +148,53 @@ export function pasteComponents(
   clipboard: ComponentClipboard,
   offset = 40,
 ) {
+  if (doc.authored && clipboard.document.authored) {
+    const ids = expandSelection(clipboard.document, clipboard.ids);
+    const recipe = selectionRecipe(clipboard.document.authored, ids, {
+      id: "clipboard",
+      title: "Copy",
+      description: "",
+      tags: [],
+    });
+    const prefix = crypto.randomUUID();
+    const bindings: Record<string, { node: string; port: string }> = {};
+    for (const external of recipe.externalPorts) {
+      const original = clipboard.document.authored.connections.find((c) =>
+        external.direction === "input"
+          ? c.to.node === external.endpoint.node &&
+            c.to.port === external.endpoint.port
+          : c.from.node === external.endpoint.node &&
+            c.from.port === external.endpoint.port,
+      );
+      const endpoint =
+        external.direction === "input" ? original?.from : original?.to;
+      if (
+        endpoint &&
+        [...doc.authored.nodes, ...doc.authored.resources].some(
+          (n) => n.id === endpoint.node,
+        )
+      )
+        bindings[external.name] = endpoint;
+    }
+    doc.authored = insertRecipe(
+      doc.authored,
+      recipe,
+      builtInRecipe,
+      (id) => `${prefix}/${id}`,
+      {},
+      bindings,
+    );
+    const graph = compositionGraph(clipboard.document);
+    for (const id of ids) {
+      const node = graph.node(id);
+      if (node)
+        doc.editor.positions[`${prefix}/${id}`] = {
+          x: node.x + offset,
+          y: node.y + offset,
+        };
+    }
+    return ids.map((id) => `${prefix}/${id}`);
+  }
   const scene = requireRecord(doc.scene);
   const original = requireRecord(clipboard.document.scene);
   if (scene.kind !== original.kind)

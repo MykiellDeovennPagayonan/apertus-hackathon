@@ -54,7 +54,7 @@ function aliases(instances: ProjectileInstance[]) {
     elapsed: primary.elapsed,
   };
 }
-interface ProjectileState extends Omit<typeof defaults, never> {
+export interface ProjectileState extends Omit<typeof defaults, never> {
   instances: ProjectileInstance[];
   initial: ProjectileInstance[];
   initialSettings: typeof defaults;

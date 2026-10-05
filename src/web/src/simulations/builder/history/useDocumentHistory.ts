@@ -25,6 +25,11 @@ export function useDocumentHistory(
     [future, setFuture] = useState<HistoryEntry[]>([]);
   const editingGroup = useRef<string | null>(null);
   const activateEdit = (next: ExperimentDocument) => {
+    if (next.authored)
+      next = {
+        ...next,
+        authored: { ...next.authored, editor: structuredClone(next.editor) },
+      };
     setDoc(next);
     try {
       validateDocument(next);
@@ -43,6 +48,11 @@ export function useDocumentHistory(
     try {
       const next = structuredClone(doc);
       change(next);
+      if (next.authored) {
+        next.authored.editor = structuredClone(next.editor);
+        next.lesson = structuredClone(next.authored.lesson);
+        validateDocument(next);
+      }
       if (JSON.stringify(next) === JSON.stringify(doc)) return false;
       if (!group || editingGroup.current !== group)
         setPast((p) => [

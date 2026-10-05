@@ -71,6 +71,15 @@ export function BeamVisual({
       }}
       transition={{ duration: 0.3 }}
       style={{ cursor: "pointer" }}
+      role="button"
+      tabIndex={0}
+      aria-label={`Inspect member ${member.id}`}
+      onKeyDown={(event) => {
+        if (["Enter", " "].includes(event.key)) {
+          event.preventDefault();
+          onSelect(member.id);
+        }
+      }}
       onClick={() => onSelect(member.id)}
       data-force={response.classification}
     />

@@ -1,37 +1,27 @@
 "use client";
 import Link from "next/link";
-import { type ReactNode, useEffect, useState } from "react";
-import type {
-  CompositionScene,
-  SceneObject,
-} from "../../runtime/composition/index";
-import { canvasFor } from "../../runtime/composition/projectCanvas";
+import { type ReactNode, useState } from "react";
+import { SchemaForm } from "../../components/controls/SchemaForm";
+import { RecipeLesson } from "../../components/views/RecipeLesson";
+import { regenerateTruss } from "../../runtime/authoring/regenerateTruss";
+import { requireValue } from "../../runtime/authoring/requireValue";
+import { object } from "../../runtime/parameterSchema";
 import { ComponentDialog } from "../ComponentDialog";
 import {
   type ExperimentDocument,
   isRunnableDocument,
-  requireRecord,
   validateRunnableDocument,
 } from "../document";
-import { addSceneObject, removeSceneObject } from "../editor/objectCommands";
-import { cleanEditor } from "../editor/selection";
-import {
-  addCanvas,
-  pendingConnections,
-  removeCanvas,
-} from "../editor/workspaceCommands";
-import { compositionGraph, connectPorts } from "../graph/deriveGraph";
-import { BuilderPreview } from "../preview/BuilderPreview";
-import { BindingSettings } from "./BindingSettings";
-import { CanvasSettings } from "./CanvasSettings";
+import { deleteComponents } from "../editor/selection";
+import { SaveCompositeDialog } from "../library/SaveCompositeDialog";
+import { ComponentSettings } from "./ComponentSettings";
 import { CompositionGraph } from "./CompositionGraph";
+import { CompositionLibrary } from "./CompositionLibrary";
 import {
-  type ComponentChoice,
-  CompositionLibrary,
-  type LibraryRequest,
-} from "./CompositionLibrary";
-import { ObjectSettings } from "./ObjectSettings";
-import { TripSettings } from "./TripSettings";
+  ManualComponentSettings,
+  manualDefinition,
+} from "./ManualComponentSettings";
+import { download, useComponentCatalog } from "./useComponentCatalog";
 import "./composition.css";
 type Edit = (
   change: (d: ExperimentDocument) => void,
@@ -73,198 +63,47 @@ export default function CompositionBuilder({
   onSetup: () => void;
   expanded: boolean;
   onExpanded: (v: boolean) => void;
-  onZoom: (zoom: number) => void;
+  onZoom: (v: number) => void;
 }) {
-  const scene = requireRecord(doc.scene),
-    workspace = requireRecord(scene.workspace);
-  const [selected, setSelected] = useState(""),
-    [tab, setTab] = useState("Connections"),
-    [mobile, setMobile] = useState(false);
-  const [libraryRequest, setLibraryRequest] = useState<LibraryRequest | null>(
-    null,
-  );
-  const [feedback, setFeedback] = useState("");
-  const [reveal, setReveal] = useState<{
-    id: string;
-    sequence: number;
-  }>();
-  const [editorContainer, setEditorContainer] = useState<HTMLDivElement | null>(
-    null,
-  );
-  const o = scene.objects.find((o) => o.id === selected),
-    c = scene.controls.find((c) => c.id === selected),
-    m = scene.measurements.find((m) => m.id === selected);
-  const canvas = workspace.canvases.find((c) => c.id === selected),
-    trip = workspace.trips.find((t) => t.id === selected);
-  const editorCanvas =
-    canvas ??
-    (o
-      ? canvasFor(scene, o.id)
-      : trip?.person
-        ? canvasFor(scene, trip.person)
-        : undefined);
-  const changeScene = (change: (s: CompositionScene) => void, group?: string) =>
-    edit((d) => {
-      try {
-        change(requireRecord(d.scene));
-        cleanPositions(d);
-        setFeedback("");
-      } catch (e) {
-        setFeedback(e instanceof Error ? e.message : "Change rejected");
-        throw e;
-      }
-    }, group);
-  const replace = (object: SceneObject, group?: string) =>
-    changeScene((s) => {
-      // Runtime people contain compiled trip schedules. Keep the authored trip nodes authoritative.
-      const existing = s.objects.find((o) => o.id === object.id);
-      const next =
-        object.kind === "person" && existing?.kind === "person"
-          ? { ...object, schedule: existing.schedule }
-          : object;
-      if (object.kind === "person")
-        for (const step of object.schedule) {
-          const t = requireRecord(s.workspace).trips.find(
-            (t) => t.id === step.id,
-          );
-          if (t)
-            Object.assign(t, { target: step.target, x: step.x, z: step.z });
-        }
-      s.objects = s.objects.map((o) => (o.id === object.id ? next : o));
-    }, group);
+  const catalog = useComponentCatalog(doc, edit);
+  const {
+    document,
+    components,
+    change,
+    select,
+    report,
+    regeneration,
+    setRegeneration,
+    regenerationDialog,
+  } = catalog;
+  const [selected, setSelected] = useState("");
+  const [tab, setTab] = useState("Connections");
+  const [mobile, setMobile] = useState(false);
+  const [libraryOpen, setLibraryOpen] = useState(false);
+  const [saveOpen, setSaveOpen] = useState(false);
+  const feedback = catalog.feedback;
+  const current = components.find((n) => n.id === selected);
+  const errorText = (e: unknown) =>
+    e instanceof Error ? e.message : "Change rejected";
   const openLibrary = (category = "all", target?: string) => {
+    catalog.categorize(category === "results" ? "displays" : category);
+    catalog.search("");
+    catalog.report("");
+    if (target) {
+      select([target]);
+      const n = components.find((n) => n.id === target);
+      const canvas = document.nodes.find(
+        (c) => c.definition.startsWith("canvases/") && c.scope === n?.scope,
+      );
+      catalog.setDestination(canvas?.id ?? "");
+    }
     setSelected("");
-    setLibraryRequest({ category, target });
+    setLibraryOpen(true);
   };
-  useEffect(() => {
-    if (
-      selected &&
-      selected !== "lesson" &&
-      ![
-        ...scene.objects,
-        ...scene.controls,
-        ...scene.measurements,
-        ...workspace.canvases,
-        ...workspace.trips,
-      ].some((item) => item.id === selected)
-    )
-      setSelected("");
-  }, [scene, workspace, selected]);
-  const cleanPositions = cleanEditor;
-  const add = (choice: ComponentChoice) => {
-    const id = `component-${crypto.randomUUID()}`;
-    edit((d) => {
-      const s = requireRecord(d.scene);
-      if (choice === "canvas") addCanvas(s, id);
-      else if (["slider", "number", "toggle", "button"].includes(choice))
-        s.controls.push({
-          id,
-          target: "",
-          property: "",
-          binding: choice === "button" ? "action" : "property",
-          label:
-            choice === "button"
-              ? "Action button"
-              : choice === "number"
-                ? "Number input"
-                : choice === "toggle"
-                  ? "Toggle"
-                  : "Slider",
-          widget: choice as "slider" | "number" | "toggle" | "button",
-          min: 0,
-          max: 10,
-          step: 0.1,
-          slot: "primary",
-        });
-      else if (
-        choice === "readout" ||
-        choice === "intersection" ||
-        choice === "comparison"
-      )
-        s.measurements.push({
-          id,
-          target: "",
-          other: "",
-          output:
-            choice === "intersection"
-              ? "intersection"
-              : choice === "comparison"
-                ? "comparison"
-                : "",
-          label:
-            choice === "intersection"
-              ? "Intersection"
-              : choice === "comparison"
-                ? "Comparison"
-                : "Readout",
-          precision: 2,
-          slot: "primary",
-        });
-      else if (choice === "trip") {
-        const person = s.objects.find(
-          (o) => o.id === libraryRequest?.target && o.kind === "person",
-        );
-        const times = requireRecord(s.workspace)
-          .trips.filter((t) => t.person === person?.id)
-          .map((t) => t.at);
-        const at =
-          person?.kind === "person"
-            ? Math.min(
-                23.99,
-                Math.max(
-                  person.spawnAt,
-                  times.length ? Math.max(...times) + 0.25 : person.spawnAt,
-                ),
-              )
-            : 8;
-        requireRecord(s.workspace).trips.push({
-          id,
-          label: "Scheduled trip",
-          person: "",
-          at,
-          target: "",
-          x: 5,
-          z: 0,
-        });
-      } else addSceneObject(s, choice as SceneObject["kind"], id);
-      const graph = compositionGraph(d);
-      const added = requireRecord(graph.node(id));
-      let x = added.x,
-        y = added.y;
-      const height = (n: typeof added) =>
-        96 +
-        Math.max(n.inputs.length, n.outputs.length, 1) * 40 +
-        (n.kind === "Object" ? 48 : 0);
-      while (
-        graph.blocks.some(
-          (n) =>
-            n.id !== id &&
-            x < n.x + 278 &&
-            x + 278 > n.x &&
-            y < n.y + height(n) + 30 &&
-            y + height(added) + 30 > n.y,
-        )
-      ) {
-        y += height(added) + 60;
-        if (y + height(added) > 2900) {
-          y = 80;
-          x += 330;
-        }
-      }
-      d.editor.positions[id] = { x, y };
-    });
-    setLibraryRequest(null);
-    setSelected("");
-    setReveal({ id, sequence: (reveal?.sequence ?? 0) + 1 });
+  const selectSettings = (id: string) => {
+    setSelected(id);
+    select(document.groups.find((g) => g.id === id)?.members ?? [id]);
   };
-  const remove = (change: (s: CompositionScene) => void) => {
-    edit((d) => {
-      change(requireRecord(d.scene));
-      cleanPositions(d);
-    });
-    setSelected("");
-  };
-  const pending = pendingConnections(scene);
   return (
     <main
       className={`manual-builder composition-builder ${expanded ? "is-expanded" : ""}`}
@@ -302,9 +141,9 @@ export default function CompositionBuilder({
             if (!expanded) {
               try {
                 validateRunnableDocument(doc);
-                setFeedback("");
+                catalog.report("");
               } catch (e) {
-                setFeedback(
+                catalog.report(
                   e instanceof Error ? e.message : "Complete the lesson first",
                 );
                 if (!doc.lesson.title || !doc.lesson.instruction)
@@ -373,292 +212,269 @@ export default function CompositionBuilder({
           </details>
         </nav>
       )}
+
       <div className="composition-workspace">
         <CompositionGraph
           doc={doc}
           selected={selected}
-          onSelect={setSelected}
+          onSelect={selectSettings}
           onAdd={openLibrary}
           edit={edit}
           onZoom={onZoom}
           active={!expanded && tab === "Connections"}
-          reveal={reveal}
+          onSelectionChange={select}
+          onSaveComposite={(ids) => {
+            select(ids);
+            catalog.setParameterTargets([]);
+            setSaveOpen(true);
+          }}
         />
-        <div
-          className={`composition-preview ${mobile ? "is-mobile" : ""}`}
-          hidden={!expanded && tab !== "Build"}
-        >
-          {!expanded && pending.length > 0 && (
-            <p className="composition-draft-hint">
-              {pending.length} connection{pending.length === 1 ? "" : "s"} to
-              complete. {pending[0]}.
-            </p>
-          )}
-          <BuilderPreview
-            document={valid}
-            hidden={!expanded && tab !== "Build"}
-            authoring={!expanded}
-            selected={selected}
-            onSelect={setSelected}
-            onCommit={replace}
-            editor={
-              editorCanvas
-                ? {
-                    canvasId: editorCanvas.id,
-                    objectId: o?.id ?? trip?.person ?? "",
-                    container: editorContainer,
+        {(expanded || tab === "Build") && (
+          <div className={`composition-preview ${mobile ? "is-mobile" : ""}`}>
+            <RecipeLesson
+              document={requireValue(valid.authored)}
+              authoring={!expanded}
+              selected={selected}
+              onSelect={selectSettings}
+              onAuthorChange={(node) =>
+                change("Edit starting geometry", (d) => {
+                  const target = d.nodes.find((n) => n.id === node.id);
+                  if (target) {
+                    const { id: _, ...configuration } = node;
+                    target.configuration = configuration;
                   }
-                : undefined
-            }
-            onCapture={(current, canvasId) =>
-              changeScene((s) => {
-                s.objects = s.objects.map((o) => {
-                  const captured = current.objects.find(
-                    (item) => item.id === o.id,
-                  );
-                  return captured
-                    ? captured.kind === "person" && o.kind === "person"
-                      ? { ...captured, schedule: o.schedule }
-                      : captured
-                    : o;
-                });
-                const canvas = requireRecord(s.workspace).canvases.find(
-                  (c) => c.id === canvasId,
-                );
-                if (canvas && current.clock) canvas.clock = current.clock;
-              })
-            }
-          />
-        </div>
+                })
+              }
+              onCapture={(next) =>
+                change("Capture starting values", () => next)
+              }
+            />
+          </div>
+        )}
       </div>
       <ComponentDialog
         open={!expanded && !!selected}
         title={
-          o?.label ??
-          c?.label ??
-          m?.label ??
-          canvas?.label ??
-          trip?.label ??
+          current?.label ??
+          document.groups.find((g) => g.id === selected)?.label ??
           "Lesson settings"
         }
-        wide={!!editorCanvas}
         onClose={() => setSelected("")}
+        wide={selected === "lesson" || !!manualDefinition(current)}
       >
-        <div
-          className={`composition-component-settings ${editorCanvas ? "has-visual" : ""}`}
-        >
-          <div className="composition-settings-fields">
-            {(error || feedback) && <p role="alert">{error || feedback}</p>}
-            {o && (
-              <>
-                <label>
-                  Display on canvas
-                  <select
-                    aria-label="Display on canvas"
-                    value={workspace.placements[o.id] ?? ""}
-                    onChange={(e) => {
-                      if (!e.target.value)
-                        changeScene((s) => {
-                          delete requireRecord(s.workspace).placements[o.id];
-                        });
-                      else
-                        changeScene((s) =>
-                          connectPorts(
-                            s,
-                            { node: o.id, port: "geometry" },
-                            { node: e.target.value, port: "objects" },
-                          ),
-                        );
-                    }}
-                  >
-                    <option value="">Not connected</option>
-                    {workspace.canvases.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <ObjectSettings
-                  key={o.id}
-                  object={o}
-                  scene={scene}
-                  onChange={replace}
-                  onDelete={() => remove((s) => removeSceneObject(s, o.id))}
-                  onDuplicate={() => {
-                    const id = `component-${crypto.randomUUID()}`;
-                    changeScene((s) => {
-                      if (s.objects.length >= 64)
-                        throw new Error("Use at most 64 objects");
-                      const copy = structuredClone(o);
-                      copy.id = id;
-                      copy.label = `${o.label} copy`.slice(0, 100);
-                      if (copy.kind === "person") copy.schedule = [];
-                      s.objects.push(copy);
-                    });
-                    setSelected(id);
-                  }}
-                />
-                <div className="composition-object-actions">
-                  <button
-                    type="button"
-                    onClick={() => openLibrary("controls", o.id)}
-                  >
-                    Add learner control
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => openLibrary("results", o.id)}
-                  >
-                    Add result
-                  </button>
-                  {o.kind === "person" && (
-                    <button
-                      type="button"
-                      onClick={() => openLibrary("behaviors", o.id)}
-                    >
-                      Add scheduled trip
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
-            {(c || m) && (
-              <BindingSettings
-                key={selected}
-                binding={c ?? requireRecord(m)}
-                scene={scene}
-                changeScene={changeScene}
-                setSelected={(id) => {
-                  setSelected(id);
-                }}
-              />
-            )}
-            {canvas && (
-              <CanvasSettings
-                canvas={canvas}
-                update={(change, group) =>
-                  changeScene(
-                    (s) =>
-                      change(
-                        requireRecord(
-                          requireRecord(s.workspace).canvases.find(
-                            (c) => c.id === canvas.id,
-                          ),
-                        ),
+        <output>{feedback || notice}</output>
+        {regeneration && (
+          <dialog
+            ref={regenerationDialog}
+            aria-label="Replace truss topology"
+            onCancel={() => setRegeneration(null)}
+          >
+            <h2>Replace truss topology</h2>
+            <p>
+              This replaces {regeneration.removed} joints and members with{" "}
+              {regeneration.added} generated components. Member edits and
+              selection are cleared. Load and controls are kept. Undo restores
+              the previous truss.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                change("Regenerate truss", () => regeneration.document);
+                setRegeneration(null);
+              }}
+            >
+              Replace topology
+            </button>
+            <button type="button" onClick={() => setRegeneration(null)}>
+              Cancel
+            </button>
+          </dialog>
+        )}
+        {current?.definition === "models/BridgeResponse" && (
+          <section aria-label="Generate truss">
+            <p>
+              Generate supported topology (replaces edited joints and members).
+            </p>
+            {[
+              { label: "Standard truss", span: 1, dense: false },
+              { label: "Dense truss", span: 1, dense: true },
+              { label: "Long truss", span: 2, dense: false },
+            ].map((p) => (
+              <button
+                key={p.label}
+                type="button"
+                onClick={() => {
+                  try {
+                    const prefix = crypto.randomUUID();
+                    setRegeneration(
+                      regenerateTruss(
+                        document,
+                        current.id,
+                        p.span,
+                        p.dense,
+                        (id) => `${prefix}/${id}`,
                       ),
-                    group,
+                    );
+                  } catch (e) {
+                    report(errorText(e));
+                  }
+                }}
+              >
+                {p.label}
+              </button>
+            ))}
+          </section>
+        )}
+        {document.groups
+          .filter((g) => g.id === selected)
+          .map((g) => (
+            <div className="catalog-group" key={g.id}>
+              <strong>{g.label}</strong>{" "}
+              <span>{g.members.length} children</span>
+              <button
+                type="button"
+                onClick={() =>
+                  change(
+                    `${g.collapsed ? "Expand" : "Collapse"} ${g.label}`,
+                    (d) => {
+                      requireValue(
+                        d.groups.find((p) => p.id === g.id),
+                      ).collapsed = !g.collapsed;
+                    },
                   )
                 }
-                onDelete={() => remove((s) => removeCanvas(s, canvas.id))}
-                onDuplicate={() => {
-                  const id = `component-${crypto.randomUUID()}`;
-                  changeScene((s) => {
-                    const copy = addCanvas(s, id);
-                    copy.label = `${canvas.label} copy`.slice(0, 100);
-                    copy.settings = structuredClone(canvas.settings);
-                    if (canvas.clock)
-                      copy.clock = structuredClone(canvas.clock);
-                  });
-                  setSelected(id);
-                }}
-              />
-            )}
-            {trip && (
-              <TripSettings
-                trip={trip}
-                scene={scene}
-                changeScene={changeScene}
-                onDelete={() =>
-                  remove((s) => {
-                    requireRecord(s.workspace).trips = requireRecord(
-                      s.workspace,
-                    ).trips.filter((t) => t.id !== trip.id);
+              >
+                {g.collapsed ? "Expand" : "Collapse"}
+              </button>
+              <button type="button" onClick={() => select(g.members)}>
+                Select group
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  change(`Ungroup ${g.label}`, (d) => {
+                    d.groups = d.groups.filter((p) => p.id !== g.id);
+                    for (const child of d.groups)
+                      if (child.parent === g.id) {
+                        if (g.parent) child.parent = g.parent;
+                        else delete child.parent;
+                      }
                   })
                 }
-              />
-            )}
-            {selected === "lesson" && (
-              <>
-                {(["title", "instruction", "explanation"] as const).map(
-                  (key) => (
-                    <label key={key}>
-                      {key === "title"
-                        ? "Title"
-                        : key === "instruction"
-                          ? "Short instruction"
-                          : "Explanation"}
-                      <textarea
-                        value={doc.lesson[key]}
-                        maxLength={key === "explanation" ? 10000 : 150}
-                        onChange={(e) =>
-                          edit((d) => {
-                            d.lesson[key] = e.target.value;
-                          }, `lesson/${key}`)
-                        }
-                      />
-                    </label>
-                  ),
-                )}
-                <label>
-                  Canvas arrangement
-                  <select
-                    value={workspace.arrangement}
-                    onChange={(e) =>
-                      changeScene((s) => {
-                        requireRecord(s.workspace).arrangement = e.target
-                          .value as "side-by-side" | "stacked";
-                      })
-                    }
-                  >
-                    <option value="side-by-side">Side by side</option>
-                    <option value="stacked">Stacked</option>
-                  </select>
-                </label>
-                {scene.kind !== "town" && (
-                  <label>
-                    Controls and results
-                    <select
-                      value={doc.presentation.layout}
-                      onChange={(e) =>
-                        edit((d) => {
-                          d.presentation.layout = e.target.value as
-                            | "right"
-                            | "bottom";
-                        })
-                      }
-                    >
-                      <option value="right">Beside each canvas</option>
-                      <option value="bottom">Below each canvas</option>
-                    </select>
-                  </label>
-                )}
-              </>
-            )}
-          </div>
-          {editorCanvas && (
-            <div className="composition-settings-visual">
-              <h3>{editorCanvas.label}</h3>
-              <div ref={setEditorContainer} />
-              <p className="composition-interaction-help">
-                These are starting values for the experiment.
-              </p>
+              >
+                Ungroup
+              </button>
+              {g.parameters.length > 0 && (
+                <details>
+                  <summary>Edit exposed parameters</summary>
+                  <SchemaForm
+                    key={`${g.id}/${JSON.stringify(
+                      g.parameters.map(
+                        (parameter) =>
+                          components.find((node) => node.id === parameter.node)
+                            ?.configuration[parameter.field],
+                      ),
+                    )}`}
+                    schema={object(
+                      Object.fromEntries(
+                        g.parameters.map((parameter) => [
+                          parameter.name,
+                          parameter.schema,
+                        ]),
+                      ),
+                    )}
+                    initial={Object.fromEntries(
+                      g.parameters.map((parameter) => [
+                        parameter.name,
+                        components.find((node) => node.id === parameter.node)
+                          ?.configuration[parameter.field] ?? parameter.default,
+                      ]),
+                    )}
+                    label={`${g.label} parameters`}
+                    onSubmit={(values) => {
+                      const accepted = change(
+                        `Edit ${g.label} parameters`,
+                        (d) => {
+                          for (const parameter of g.parameters)
+                            requireValue(
+                              [...d.nodes, ...d.resources].find(
+                                (node) => node.id === parameter.node,
+                              ),
+                            ).configuration[parameter.field] = structuredClone(
+                              values[parameter.name],
+                            );
+                        },
+                      );
+                      return accepted
+                        ? { accepted: true }
+                        : {
+                            accepted: false,
+                            error: "Parameters were rejected.",
+                          };
+                    }}
+                  />
+                </details>
+              )}
             </div>
-          )}
-          {o && !editorCanvas && (
-            <p className="composition-unconnected-help">
-              Connect this object to a canvas to edit it visually. You can still
-              change its parameters here.
-            </p>
-          )}
-        </div>
+          ))}
+
+        {manualDefinition(current) ? (
+          <ManualComponentSettings
+            catalog={catalog}
+            node={requireValue(current)}
+          />
+        ) : (
+          !document.groups.some((g) => g.id === selected) && (
+            <ComponentSettings catalog={catalog} id={selected} />
+          )
+        )}
+        {current && !manualDefinition(current) && (
+          <button
+            type="button"
+            onClick={() => {
+              if (
+                edit(
+                  (d) => deleteComponents(d, [current.id]),
+                  null,
+                  "Delete component",
+                )
+              )
+                setSelected("");
+            }}
+          >
+            Delete component
+          </button>
+        )}
       </ComponentDialog>
       <CompositionLibrary
-        scene={scene}
-        request={libraryRequest}
-        onClose={() => setLibraryRequest(null)}
-        onAdd={add}
+        catalog={catalog}
+        open={libraryOpen}
+        onClose={() => setLibraryOpen(false)}
       />
+      <SaveCompositeDialog
+        catalog={catalog}
+        open={saveOpen}
+        onClose={() => setSaveOpen(false)}
+      />
+      {document.compatibility && (
+        <details className="composition-recovery">
+          <summary>Imported document recovery</summary>
+          {document.compatibility.notices.map((n) => (
+            <p key={n}>{n}</p>
+          ))}
+          <button
+            type="button"
+            onClick={() =>
+              download(
+                document.compatibility?.source,
+                "original-experiment.json",
+              )
+            }
+          >
+            Export original document
+          </button>
+        </details>
+      )}
     </main>
   );
 }

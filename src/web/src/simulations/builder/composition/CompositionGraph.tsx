@@ -9,6 +9,11 @@ import { ConnectionNode } from "../ConnectionNode";
 import { ConnectionViewport } from "../ConnectionViewport";
 import { type ExperimentDocument, validateDocument } from "../document";
 import {
+  connectDocument,
+  disconnectDocument,
+  documentConnectionError,
+} from "../editor/connectionCommands";
+import {
   type ComponentClipboard,
   deleteComponents,
   expandSelection,
@@ -16,13 +21,7 @@ import {
   pasteComponents,
   ungroupComponents,
 } from "../editor/selection";
-import {
-  compositionGraph,
-  connectionError,
-  connectPorts,
-  disconnectWire,
-  type Endpoint,
-} from "../graph/deriveGraph";
+import { compositionGraph, type Endpoint } from "../graph/deriveGraph";
 import { type GraphWire, portPoint } from "../graph/types";
 import { isTextEditing } from "../history/entries";
 import "../connections.css";
@@ -43,7 +42,11 @@ export function CompositionGraph({
   active,
   reveal,
   onZoom,
+  onSaveComposite,
+  onSelectionChange,
 }: {
+  onSaveComposite?: (ids: string[]) => void;
+  onSelectionChange?: (ids: string[]) => void;
   doc: ExperimentDocument;
   selected: string;
   onSelect: (id: string) => void;
@@ -61,6 +64,9 @@ export function CompositionGraph({
   >({});
   const movingRef = useRef(moving);
   const [selection, setSelection] = useState<string[]>([]);
+  useEffect(() => {
+    onSelectionChange?.(expandSelection(doc, selection));
+  }, [selection, doc, onSelectionChange]);
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
@@ -111,7 +117,9 @@ export function CompositionGraph({
   const blocks = graph.blocks.map((b) => ({ ...b, ...(moving[b.id] ?? {}) }));
   const wires = graph.wires;
   const node = (id: string) => blocks.find((b) => b.id === id);
-  const selectedIds = expandSelection(doc, selection).filter((id) =>
+  const graphSelection = (ids: string[]) =>
+    doc.authored ? ids : expandSelection(doc, ids);
+  const selectedIds = graphSelection(selection).filter((id) =>
     blocks.some((b) => b.id === id),
   );
   const height = (id: string) =>
@@ -128,7 +136,7 @@ export function CompositionGraph({
     };
   };
   const select = (id: string, additive = false) => {
-    const members = expandSelection(doc, [id]);
+    const members = graphSelection([id]);
     setSelection(
       additive
         ? selectedIds.includes(id)
@@ -190,11 +198,7 @@ export function CompositionGraph({
   };
   const removeConnection = (wire = wireSelection) => {
     if (!wire) return;
-    if (
-      run("Delete connection", (d) =>
-        disconnectWire(requireRecord(d.scene), wire),
-      )
-    ) {
+    if (run("Delete connection", (d) => disconnectDocument(d, wire))) {
       setWireSelection(null);
       setFeedback("");
       setContextMenu(null);
@@ -229,7 +233,7 @@ export function CompositionGraph({
     nodeClickSuppressed.current = false;
     const ids = selectedIds.includes(id)
       ? selectedIds
-      : expandSelection(doc, event.shiftKey ? [...selectedIds, id] : [id]);
+      : graphSelection(event.shiftKey ? [...selectedIds, id] : [id]);
     drag.current = {
       id,
       x: event.clientX,
@@ -350,14 +354,12 @@ export function CompositionGraph({
     (p) => p.id === source?.port,
   )?.label;
   const connect = (from: Endpoint, to: Endpoint) => {
-    const error = connectionError(requireRecord(doc.scene), from, to);
+    const error = documentConnectionError(doc, from, to);
     if (error) {
       setFeedback(error);
       return;
     }
-    run("Connect components", (d) =>
-      connectPorts(requireRecord(d.scene), from, to),
-    );
+    run("Connect components", (d) => connectDocument(d, from, to));
     setSource(null);
     setGhost(null);
     setFeedback("");
@@ -467,7 +469,7 @@ export function CompositionGraph({
         const groupTarget = (event.target as Element).closest<HTMLElement>(
           "[data-group-id]",
         );
-        const group = doc.editor.groups?.find(
+        const group = (doc.authored?.groups ?? doc.editor.groups)?.find(
           (g) => g.id === groupTarget?.dataset.groupId,
         );
         if (group && !group.members.some((id) => selectedIds.includes(id)))
@@ -538,7 +540,9 @@ export function CompositionGraph({
             <strong>Connections</strong>
             <span>
               {blocks.length
-                ? `${requireRecord(requireRecord(doc.scene).workspace).canvases.length} canvases · ${requireRecord(doc.scene).objects.length} objects`
+                ? doc.authored
+                  ? `${doc.authored.nodes.filter((n) => n.definition.startsWith("canvases/")).length} canvases · ${doc.authored.nodes.length} components`
+                  : `${requireRecord(requireRecord(doc.scene).workspace).canvases.length} canvases · ${requireRecord(doc.scene).objects.length} objects`
                 : "Start with an empty canvas"}
             </span>
           </div>
@@ -546,6 +550,16 @@ export function CompositionGraph({
             {selectedIds.length > 0 && (
               <div className="connection-selection-actions">
                 <span aria-live="polite">{selectedIds.length} selected</span>
+                {onSaveComposite && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onSaveComposite(expandSelection(doc, selectedIds))
+                    }
+                  >
+                    Save as composite
+                  </button>
+                )}
                 <button type="button" onClick={copy}>
                   Copy
                 </button>
@@ -654,8 +668,8 @@ export function CompositionGraph({
                     type="button"
                     role="menuitem"
                     disabled={
-                      !(doc.editor.groups ?? []).some((g) =>
-                        g.members.some((id) => selectedIds.includes(id)),
+                      !(doc.authored?.groups ?? doc.editor.groups ?? []).some(
+                        (g) => g.members.some((id) => selectedIds.includes(id)),
                       )
                     }
                     onClick={ungroup}
@@ -754,7 +768,11 @@ export function CompositionGraph({
             </>
           }
         >
-          {(doc.editor.groups ?? []).map((group) => {
+          {(
+            doc.authored?.groups.filter((g) => !g.collapsed) ??
+            doc.editor.groups ??
+            []
+          ).map((group) => {
             const members = blocks.filter((b) => group.members.includes(b.id));
             if (members.length < 2) return null;
             const left = Math.min(...members.map((b) => b.x)) - 20;
@@ -785,6 +803,15 @@ export function CompositionGraph({
                 >
                   {group.label}
                 </button>
+                {doc.authored && (
+                  <button
+                    type="button"
+                    onClick={() => onSelect(group.id)}
+                    aria-label={`Edit ${group.label}`}
+                  >
+                    Edit group
+                  </button>
+                )}
               </div>
             );
           })}
@@ -873,7 +900,7 @@ export function CompositionGraph({
                 !!source &&
                 b.inputs.some(
                   (p) =>
-                    !connectionError(requireRecord(doc.scene), source, {
+                    !documentConnectionError(doc, source, {
                       node: b.id,
                       port: p.id,
                     }),
@@ -911,7 +938,7 @@ export function CompositionGraph({
                   e.preventDefault();
                   const ids = selectedIds.includes(b.id)
                     ? selectedIds
-                    : expandSelection(doc, [b.id]);
+                    : graphSelection([b.id]);
                   setSelection(ids);
                   run(`Move ${ids.length} components`, (next) => {
                     for (const id of ids) {
