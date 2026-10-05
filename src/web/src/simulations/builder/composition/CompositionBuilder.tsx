@@ -423,6 +423,18 @@ export default function CompositionBuilder({
           "Lesson settings"
         }
         onClose={() => setSelected("")}
+        footerLabel={
+          /^displays\/(DataTable|Chart|Histogram|Heatmap)$/.test(
+            current?.definition ?? "",
+          )
+            ? "Close settings"
+            : "Done"
+        }
+        footerPrimary={
+          !/^displays\/(DataTable|Chart|Histogram|Heatmap)$/.test(
+            current?.definition ?? "",
+          )
+        }
         wide={selected === "lesson" || !!manualDefinition(current)}
       >
         <FeedbackView message={catalog.message} />

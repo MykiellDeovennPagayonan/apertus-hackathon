@@ -1,56 +1,43 @@
-import { type Dataset, validateDataset } from "../traits/MeasurementProbe";
+import type { Dataset } from "../traits/MeasurementProbe";
+import { DatasetDisplay } from "./DatasetDisplay";
 export function TimeSeriesView({ dataset }: { dataset: Dataset }) {
-  validateDataset(dataset);
+  const columns = Array.isArray(dataset?.columns) ? dataset.columns : [];
+  const observable = columns.find((c) => c?.key === "value");
+  const time = columns.find((c) => c?.key === "time");
   if (
-    !dataset.columns.some(
-      (c) => c.key === "time" && c.unit === "s" && c.type === "number",
-    ) ||
-    !dataset.columns.some((c) => c.key === "value" && c.type === "number")
+    dataset &&
+    (time?.unit !== "s" ||
+      time?.type !== "number" ||
+      observable?.type !== "number")
   )
-    throw new Error(
-      "Time-series view requires time in seconds and a numeric observable",
-    );
-  const xs = dataset.rows.map((r) => Number(r.time)),
-    ys = dataset.rows.map((r) => Number(r.value));
-  const xmax = Math.max(1, ...xs),
-    ymin = Math.min(0, ...ys),
-    ymax = Math.max(1, ...ys),
-    column = dataset.columns.find((c) => c.key === "value");
-  const points = dataset.rows
-    .map(
-      (r) =>
-        `${40 + (Number(r.time) / xmax) * 510},${210 - ((Number(r.value) - ymin) / (ymax - ymin)) * 180}`,
-    )
-    .join(" ");
-  return (
-    <figure>
-      <figcaption>
-        {column?.label} ({column?.unit}) over model time (s)
-      </figcaption>
-      <svg
-        viewBox="0 0 600 250"
-        role="img"
-        aria-label={`${column?.label} time series`}
-        style={{ width: "100%", maxHeight: 220 }}
-      >
-        <path d="M40 20V210H550" fill="none" stroke="currentColor" />
-        <polyline
-          points={points}
-          fill="none"
-          stroke="var(--accent)"
-          strokeWidth="2"
+    return (
+      <section aria-label="Time-series observations">
+        <p>
+          A time-series plot needs numeric model time in seconds and a numeric
+          observation. The available data is shown below.
+        </p>
+        <DatasetDisplay
+          value={dataset}
+          kind="DataTable"
+          label="Time-series observations"
         />
-        <text x="40" y="235">
-          0 s
-        </text>
-        <text x="510" y="235">
-          {xmax.toFixed(1)} s
-        </text>
-        <text x="5" y="30">
-          {ymax.toFixed(1)}
-        </text>
-      </svg>
-      <small>{dataset.assumption}</small>
-    </figure>
+      </section>
+    );
+  return (
+    <DatasetDisplay
+      value={dataset}
+      kind="Chart"
+      label={
+        observable
+          ? `${observable.label} over model time`
+          : "Observations over model time"
+      }
+      presentation={{
+        xKey: "time",
+        xLabel: "Model time",
+        xUnit: "s",
+        series: ["value"],
+      }}
+    />
   );
 }

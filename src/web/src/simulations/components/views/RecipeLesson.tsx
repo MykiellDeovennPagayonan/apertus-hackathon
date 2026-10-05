@@ -70,6 +70,11 @@ import {
 import { ArithmeticScene } from "./ArithmeticScene";
 import { CompositionCanvas } from "./CompositionCanvas";
 import { CountingScene } from "./CountingScene";
+import { DatasetDisplay } from "./DatasetDisplay";
+import {
+  type DataPresentation,
+  outputDataPresentation,
+} from "./dataPresentation";
 import { EqualGroupsScene } from "./EqualGroupsScene";
 import { FractionBuilderScene } from "./FractionBuilderScene";
 import { FractionNumberLineScene } from "./FractionNumberLineScene";
@@ -141,146 +146,6 @@ const display = (v: unknown, precision = 3): string =>
         : v === undefined || v === null
           ? "Unavailable"
           : JSON.stringify(v);
-function DatasetDisplay({
-  value,
-  kind,
-  label,
-}: {
-  value: unknown;
-  kind: string;
-  label: string;
-}) {
-  const rows = Array.isArray(value) ? value : [];
-  if (kind === "Heatmap" && rows.every((r) => Array.isArray(r))) {
-    const grid = rows as number[][],
-      max = Math.max(1, ...grid.flat());
-    return (
-      <svg
-        viewBox={`0 0 ${grid[0]?.length ?? 1} ${grid.length || 1}`}
-        role="img"
-        aria-label={label}
-      >
-        {grid.flatMap((row, y) =>
-          row.map((v, x) => (
-            <rect
-              // biome-ignore lint/suspicious/noArrayIndexKey: Fixed grid coordinates are cell identities.
-              key={`${x}/${y}`}
-              x={x}
-              y={y}
-              width={1}
-              height={1}
-              fill={`rgb(${Math.round((255 * v) / max)},100,180)`}
-            />
-          )),
-        )}
-      </svg>
-    );
-  }
-  const records = rows.filter(
-    (r) => r && typeof r === "object" && !Array.isArray(r),
-  ) as Record<string, unknown>[];
-  const columns = [...new Set(records.flatMap(Object.keys))];
-  const numeric = columns.filter((k) =>
-    records.every((r) => typeof r[k] === "number"),
-  );
-  if (kind === "Histogram" && records.length) {
-    const max = Math.max(
-      1,
-      ...records.flatMap((r) => [
-        Number(r.observed ?? 0),
-        Number(r.expected ?? 0),
-      ]),
-    );
-    return (
-      <figure>
-        <svg viewBox="0 0 520 280" role="img" aria-label={label}>
-          {records.map((r, i) => (
-            <g key={String(r.id ?? r.outcome ?? i)}>
-              <rect
-                x={30 + (i * 470) / records.length}
-                y={230 - (Number(r.observed) * 200) / max}
-                width={200 / records.length}
-                height={(Number(r.observed) * 200) / max}
-                fill="#245bcb"
-              />
-              <rect
-                x={30 + (i * 470) / records.length + 200 / records.length}
-                y={230 - (Number(r.expected) * 200) / max}
-                width={200 / records.length}
-                height={(Number(r.expected) * 200) / max}
-                fill="#cc543d"
-              />
-              <text x={30 + (i * 470) / records.length} y={255}>
-                {String(r.outcome)}
-              </text>
-            </g>
-          ))}
-        </svg>
-        <figcaption>{label} · blue observed, coral expected</figcaption>
-      </figure>
-    );
-  }
-  if (
-    ["Chart", "Histogram"].includes(kind) &&
-    records.length &&
-    numeric.length
-  ) {
-    const xs = records.map((r, i) => Number(r.x ?? i)),
-      xMin = Math.min(...xs),
-      xMax = Math.max(xMin + 1, ...xs),
-      series = numeric.filter((k) => k !== "x"),
-      ys = records.flatMap((r) => series.map((k) => Number(r[k]))),
-      yMin = Math.min(0, ...ys),
-      yMax = Math.max(yMin + 1, ...ys);
-    return (
-      <figure>
-        <svg viewBox="0 0 520 260" role="img" aria-label={label}>
-          <path d="M30 10 V230 H510" fill="none" stroke="currentColor" />
-          {series.map((k, index) => (
-            <polyline
-              key={k}
-              fill="none"
-              stroke={["#245bcb", "#cc543d", "#237f63"][index % 3]}
-              points={records
-                .map(
-                  (r, i) =>
-                    `${30 + ((xs[i] - xMin) * 470) / (xMax - xMin)},${230 - ((Number(r[k]) - yMin) * 210) / (yMax - yMin)}`,
-                )
-                .join(" ")}
-            />
-          ))}
-        </svg>
-        <figcaption>
-          {label}: {series.join(", ")}
-        </figcaption>
-      </figure>
-    );
-  }
-  if (!records.length) return <output>{display(value)}</output>;
-  return (
-    <div className="recipe-table">
-      <table>
-        <caption>{label}</caption>
-        <thead>
-          <tr>
-            {columns.map((c) => (
-              <th key={c}>{c}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {records.map((r, i) => (
-            <tr key={String(r.id ?? r.element ?? r.outcome ?? i)}>
-              {columns.map((c) => (
-                <td key={c}>{display(r[c])}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
 function Appearance({
   node,
   runtime,
@@ -859,20 +724,37 @@ function NodeView({
           }
         />
       );
+    if (["Chart", "Histogram", "Heatmap", "DataTable"].includes(kind)) {
+      const source = runtime.document.nodes.find(
+        (n) => n.id === binding?.from.node,
+      );
+      const defaults = outputDataPresentation(
+        source?.definition ?? "",
+        binding?.from.port ?? "",
+      );
+      const presentation = {
+        ...defaults,
+        ...Object.fromEntries(
+          Object.entries(config).filter(
+            ([key]) => !["label", "precision", "tone"].includes(key),
+          ),
+        ),
+      } as DataPresentation;
+      return (
+        <DatasetDisplay
+          value={value}
+          kind={kind}
+          label={String(config.label)}
+          precision={Number(config.precision ?? 3)}
+          presentation={presentation}
+          authoring={author.authoring}
+        />
+      );
+    }
     return (
       <section aria-label={String(config.label)}>
         <strong>{String(config.label)}</strong>
-        {["Chart", "Histogram", "Heatmap", "DataTable"].includes(kind) ? (
-          <DatasetDisplay
-            value={value}
-            kind={kind}
-            label={String(config.label)}
-          />
-        ) : (
-          <output aria-live={kind === "StatusMessage" ? "polite" : "off"}>
-            {display(value, Number(config.precision))}
-          </output>
-        )}
+        <output>{display(value, Number(config.precision))}</output>
       </section>
     );
   }
@@ -1095,9 +977,15 @@ function LayoutView({
             connection.kind === "command" && connection.from.node === node.id,
         )
       : publicDefinition(node.definition).category === "displays" &&
-          !["displays/Text", "displays/Formula", "displays/Legend"].includes(
-            node.definition,
-          )
+          ![
+            "displays/Text",
+            "displays/Formula",
+            "displays/Legend",
+            "displays/DataTable",
+            "displays/Chart",
+            "displays/Histogram",
+            "displays/Heatmap",
+          ].includes(node.definition)
         ? !runtime.document.connections.some(
             (connection) =>
               connection.kind === "value" && connection.to.node === node.id,
@@ -1106,12 +994,18 @@ function LayoutView({
     : false;
   const content = (
     <>
-      {node && author.authoring ? (
+      {node ? (
         <section
-          className={`recipe-author-item${author.selected === node.id ? " is-selected" : ""}`}
-          aria-label={`${node.label} authoring controls`}
+          className={
+            author.authoring
+              ? `recipe-author-item${author.selected === node.id ? " is-selected" : ""}`
+              : undefined
+          }
+          aria-label={
+            author.authoring ? `${node.label} authoring controls` : undefined
+          }
         >
-          {!boardHosted && (
+          {author.authoring && !boardHosted && (
             <div className="recipe-author-label">
               <span>{node.label}</span>
               <button
@@ -1124,7 +1018,7 @@ function LayoutView({
               </button>
             </div>
           )}
-          {disconnected ? (
+          {author.authoring && disconnected ? (
             <div className="recipe-disconnected">
               <strong>{node.label} needs a connection</strong>
               <p>Connect it in component settings to show learner content.</p>

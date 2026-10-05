@@ -1,0 +1,275 @@
+.data-display {
+  margin: 0;
+  min-width: 0;
+  max-width: 100%;
+  color: var(--text, #30362e);
+  font-size: 14px;
+  line-height: 1.5;
+  container-type: inline-size;
+}
+.data-display .data-display-title {
+  font-size: 16px;
+  font-weight: 650;
+  margin: 0 0 12px;
+  overflow-wrap: anywhere;
+}
+.data-display .data-state {
+  display: grid;
+  gap: 4px;
+  padding: 16px;
+  margin: 8px 0;
+  background: var(--bg, #eee9dc);
+  border-radius: 8px;
+}
+.data-display .data-state span,
+.data-table-note,
+.data-assumption {
+  color: var(--muted, #626c60);
+}
+.data-display .data-table-note,
+.data-display .data-assumption {
+  font-size: 13px;
+  margin: 8px 0;
+}
+.data-table-scroll,
+.data-plot-scroll {
+  overflow: auto;
+  max-width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border, #d5cdbb) transparent;
+  border-radius: 4px;
+}
+.data-table-scroll {
+  max-height: 300px;
+  border: 1px solid var(--border, #d5cdbb);
+}
+.data-display .data-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  font-size: 14px;
+}
+.data-display .data-table :is(th, td) {
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--border, #d5cdbb);
+  text-align: left;
+  min-width: 100px;
+  max-width: 360px;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+.data-display .data-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--panel, #fffbef);
+  font-weight: 650;
+}
+.data-display .data-table th small {
+  font-size: inherit;
+  font-weight: 400;
+}
+.data-display .data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.data-display .data-table tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--bg, #eee9dc) 45%, transparent);
+}
+.data-display .data-table .data-number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.data-display .data-cell-state {
+  color: var(--muted, #626c60);
+  font-style: italic;
+}
+.data-display .data-axis-label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  overflow-wrap: anywhere;
+}
+.data-display .data-plot {
+  display: block;
+  width: 100%;
+  max-height: none;
+}
+.data-display .data-plot text {
+  fill: var(--text, #30362e);
+  font: 13px sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.data-grid-line {
+  stroke: var(--border, #d5cdbb);
+  stroke-width: 1;
+  fill: none;
+}
+.data-axis {
+  stroke: var(--muted, #626c60);
+  stroke-width: 1;
+  fill: none;
+}
+.data-series {
+  stroke: currentColor;
+  color: var(--accent, #285e56);
+}
+.data-series--1,
+.data-series--4 {
+  color: #8b4c32;
+}
+.data-series--2,
+.data-series--5 {
+  color: #595381;
+}
+.data-series--3 {
+  color: #526933;
+}
+.data-bar-observed {
+  fill: var(--accent, #285e56);
+  stroke: var(--accent, #285e56);
+  stroke-width: 1;
+}
+.data-bar-expected {
+  fill: var(--panel, #fffbef);
+  stroke: #8b4c32;
+  stroke-width: 2;
+}
+.data-display .data-series-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  font-size: 13px;
+}
+.data-series-legend li {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+.data-series-legend svg {
+  flex: 0 0 36px;
+}
+.data-display .data-equivalent {
+  margin-top: 12px;
+  border-top: 1px solid var(--border, #d5cdbb);
+}
+.data-display .data-equivalent summary {
+  cursor: pointer;
+  padding: 12px 4px;
+  min-height: 44px;
+  box-sizing: border-box;
+  font-weight: 600;
+  color: var(--accent, #285e56);
+}
+.data-display
+  :is(summary, .data-table-scroll, .data-plot-scroll):focus-visible {
+  outline: 2px solid var(--accent, #285e56);
+  outline-offset: -2px;
+}
+.data-heatmap-scroll {
+  max-height: 400px;
+}
+.data-scale {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 12px 0 4px;
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+}
+.data-scale-gradient {
+  flex: 1;
+  height: 12px;
+  border: 1px solid var(--border, #d5cdbb);
+  background: linear-gradient(to right, #efe9dc, #285e56);
+  border-radius: 3px;
+}
+.data-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+@container (max-width: 400px) {
+  .data-display .data-table :is(th, td) {
+    padding: 8px;
+  }
+  .data-display .data-series-legend {
+    gap: 6px 12px;
+  }
+}
+.data-display .data-scroll-hint {
+  display: none;
+  font-size: 13px;
+  color: var(--muted, #626c60);
+  margin: 4px 0 8px;
+}
+@container (max-width: 559px) {
+  .data-display .data-scroll-hint {
+    display: block;
+  }
+}
+/* Keep labels at their intended size instead of magnifying a small viewBox on wide hosts. */
+.data-display .data-plot {
+  max-width: 760px;
+  margin-inline: auto;
+}
+.data-settings {
+  min-width: 0;
+}
+.data-settings > details {
+  border-top: 1px solid var(--border, #d5cdbb);
+  padding-top: 4px;
+}
+.data-settings summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: list-item;
+  align-content: center;
+  font-weight: 600;
+  color: var(--accent, #285e56);
+}
+.data-settings-help {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted, #626c60);
+}
+.data-settings-columns {
+  display: grid;
+  gap: 12px;
+}
+.data-settings .catalog-form-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.catalog-form.data-settings .recipe-action {
+  min-height: 44px;
+}
+.catalog-form.data-settings .recipe-action--quiet {
+  background: transparent;
+  border-color: transparent;
+  color: var(--muted, #626c60);
+}
+.data-settings :is(input, select, button, summary):focus-visible {
+  outline: 2px solid var(--accent, #285e56);
+  outline-offset: 2px;
+}
+
+.catalog-form.data-settings .recipe-action--primary:is(:hover, :focus-visible) {
+  background: var(--accent, #285e56);
+  color: #fffdf7;
+  border-color: var(--accent, #285e56);
+}

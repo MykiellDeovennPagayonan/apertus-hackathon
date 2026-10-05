@@ -2,6 +2,7 @@ import { publicDefinition } from "../../components/catalog";
 import { SchemaForm } from "../../components/controls/SchemaForm";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import { emptyLayout, type Layout } from "../../runtime/authoring/types";
+import { DataDisplaySettings } from "./DataDisplaySettings";
 import { ManualCanvasSettings } from "./ManualComponentSettings";
 import type { ComponentCatalog } from "./useComponentCatalog";
 export function ComponentSettings({
@@ -36,6 +37,32 @@ export function ComponentSettings({
             current.definition,
           ) ? (
             <ManualCanvasSettings catalog={catalog} node={current} />
+          ) : [
+              "displays/DataTable",
+              "displays/Chart",
+              "displays/Histogram",
+              "displays/Heatmap",
+            ].includes(current.definition) ? (
+            <DataDisplaySettings
+              key={`${current.id}/${JSON.stringify(current.configuration)}`}
+              node={current}
+              document={document}
+              onApply={(configuration) => {
+                const accepted = change("Edit display settings", (d) => {
+                  requireValue(
+                    [...d.nodes, ...d.resources].find(
+                      (n) => n.id === current.id,
+                    ),
+                  ).configuration = configuration;
+                });
+                return accepted
+                  ? { accepted: true }
+                  : {
+                      accepted: false,
+                      error: "Display settings were rejected.",
+                    };
+              }}
+            />
           ) : (
             <SchemaForm
               key={`${current.id}/${JSON.stringify(current.configuration)}`}

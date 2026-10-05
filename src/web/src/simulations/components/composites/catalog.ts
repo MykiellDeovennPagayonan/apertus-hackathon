@@ -8,6 +8,7 @@ import {
 import type { ParameterSchema } from "../../runtime/parameterSchema";
 import { publicDefinition, publicDefinitions } from "../catalog";
 import { commandPresentation } from "../controls/commandPresentation";
+import { outputDataPresentation } from "../views/dataPresentation";
 import { spatialRecipes } from "./spatial";
 export function schemaDefault(schema: ParameterSchema): unknown {
   switch (schema.type) {
@@ -302,15 +303,19 @@ export function modelRecipe(definition: string): CompositeRecipe {
     )
       continue;
     const display =
-      port.kind === "dataset"
-        ? "displays/Chart"
-        : port.kind === "grid"
-          ? "displays/Heatmap"
-          : ["atoms", "customers", "frequencies", "steps"].includes(output)
-            ? "displays/DataTable"
-            : output === "feedback"
-              ? "displays/StatusMessage"
-              : "displays/Readout";
+      output === "frequencies"
+        ? "displays/Histogram"
+        : port.kind === "dataset"
+          ? "displays/Chart"
+          : port.kind === "grid" ||
+              (output === "field" &&
+                definition === "prefabs/natural-systems/DiffusionField")
+            ? "displays/Heatmap"
+            : ["atoms", "customers", "frequencies", "steps"].includes(output)
+              ? "displays/DataTable"
+              : output === "feedback"
+                ? "displays/StatusMessage"
+                : "displays/Readout";
     add(
       display,
       `display/${output}`,
@@ -327,8 +332,15 @@ export function modelRecipe(definition: string): CompositeRecipe {
             ? "Pressure"
             : output === "atoms"
               ? "Atoms on each side"
-              : `${output} ${port.unit === "1" ? "" : port.unit}`,
+              : output === "frequencies"
+                ? "Observed and expected frequencies"
+                : output === "field"
+                  ? "Dye concentration"
+                  : output === "points" || output === "comparisonPoints"
+                    ? `${output === "comparisonPoints" ? "Comparison: " : ""}${outputDataPresentation(definition, output).yLabel ?? "Observations"}`
+                    : `${output} ${port.unit === "1" ? "" : port.unit}`,
         precision: 3,
+        ...outputDataPresentation(definition, output),
       },
     );
     d.connections.push({
