@@ -1,8 +1,8 @@
 {
   "generatedBy": "src/web/scripts/builder/audit-public-catalog.cjs",
-  "originalSourceFiles": 254,
-  "sourceFiles": 255,
-  "exportRecords": 579,
+  "originalSourceFiles": 255,
+  "sourceFiles": 257,
+  "exportRecords": 581,
   "records": [
     {
       "source": "src/web/src/simulations/components/README.md",
@@ -934,6 +934,14 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/builder/composition/InputEditor.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition",
+            "publicDefinitions"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx",
           "typeOnly": false,
           "symbols": [
@@ -970,6 +978,13 @@
         },
         {
           "source": "src/web/src/simulations/builder/editor/connectionCommands.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/builder/editor/insertionPlan.ts",
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
@@ -1104,6 +1119,14 @@
             "*"
           ],
           "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/verify-spatial-immersive-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "responsibility": "infrastructure",
@@ -1114,12 +1137,14 @@
           "src/web/src/simulations/builder/composition/ComponentSettings.tsx",
           "src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx",
           "src/web/src/simulations/builder/composition/CompositionLibrary.tsx",
+          "src/web/src/simulations/builder/composition/InputEditor.tsx",
           "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx",
           "src/web/src/simulations/builder/composition/libraryChoices.ts",
           "src/web/src/simulations/builder/composition/useComponentCatalog.ts",
           "src/web/src/simulations/builder/document/canonical.ts",
           "src/web/src/simulations/builder/editor/compositeCommands.ts",
           "src/web/src/simulations/builder/editor/connectionCommands.ts",
+          "src/web/src/simulations/builder/editor/insertionPlan.ts",
           "src/web/src/simulations/builder/editor/selection.ts",
           "src/web/src/simulations/builder/graph/authoredGraph.ts",
           "src/web/src/simulations/builder/library/SaveCompositeDialog.tsx",
@@ -1137,9 +1162,10 @@
           "src/web/src/simulations/runtime/authoring/validate.ts",
           "src/web/scripts/builder/audit-public-catalog.cjs",
           "src/web/scripts/builder/verify-public-catalog.cjs",
-          "src/web/scripts/builder/verify-spatial-catalog.cjs"
+          "src/web/scripts/builder/verify-spatial-catalog.cjs",
+          "src/web/scripts/verify-spatial-immersive-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/builder/graph/authoredGraph.ts, src/web/src/simulations/builder/library/SaveCompositeDialog.tsx, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/providers.ts, src/web/src/simulations/runtime/authoring/recipes.ts, src/web/src/simulations/runtime/authoring/references.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts, src/web/scripts/builder/audit-public-catalog.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs"
+        "destination": "src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/InputEditor.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/insertionPlan.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/builder/graph/authoredGraph.ts, src/web/src/simulations/builder/library/SaveCompositeDialog.tsx, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/providers.ts, src/web/src/simulations/runtime/authoring/recipes.ts, src/web/src/simulations/runtime/authoring/references.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts, src/web/scripts/builder/audit-public-catalog.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/verify-spatial-immersive-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -1175,6 +1201,14 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/builder/composition/InputEditor.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition",
+            "publicDefinitions"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx",
           "typeOnly": false,
           "symbols": [
@@ -1211,6 +1245,13 @@
         },
         {
           "source": "src/web/src/simulations/builder/editor/connectionCommands.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/builder/editor/insertionPlan.ts",
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
@@ -1340,6 +1381,14 @@
         },
         {
           "source": "src/web/scripts/builder/verify-spatial-catalog.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/verify-spatial-immersive-browser.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -1379,6 +1428,14 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/builder/composition/InputEditor.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition",
+            "publicDefinitions"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx",
           "typeOnly": false,
           "symbols": [
@@ -1415,6 +1472,13 @@
         },
         {
           "source": "src/web/src/simulations/builder/editor/connectionCommands.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/builder/editor/insertionPlan.ts",
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
@@ -1549,6 +1613,14 @@
             "*"
           ],
           "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/verify-spatial-immersive-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "responsibility": "infrastructure",
@@ -1559,12 +1631,14 @@
           "src/web/src/simulations/builder/composition/ComponentSettings.tsx",
           "src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx",
           "src/web/src/simulations/builder/composition/CompositionLibrary.tsx",
+          "src/web/src/simulations/builder/composition/InputEditor.tsx",
           "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx",
           "src/web/src/simulations/builder/composition/libraryChoices.ts",
           "src/web/src/simulations/builder/composition/useComponentCatalog.ts",
           "src/web/src/simulations/builder/document/canonical.ts",
           "src/web/src/simulations/builder/editor/compositeCommands.ts",
           "src/web/src/simulations/builder/editor/connectionCommands.ts",
+          "src/web/src/simulations/builder/editor/insertionPlan.ts",
           "src/web/src/simulations/builder/editor/selection.ts",
           "src/web/src/simulations/builder/graph/authoredGraph.ts",
           "src/web/src/simulations/builder/library/SaveCompositeDialog.tsx",
@@ -1582,9 +1656,10 @@
           "src/web/src/simulations/runtime/authoring/validate.ts",
           "src/web/scripts/builder/audit-public-catalog.cjs",
           "src/web/scripts/builder/verify-public-catalog.cjs",
-          "src/web/scripts/builder/verify-spatial-catalog.cjs"
+          "src/web/scripts/builder/verify-spatial-catalog.cjs",
+          "src/web/scripts/verify-spatial-immersive-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/builder/graph/authoredGraph.ts, src/web/src/simulations/builder/library/SaveCompositeDialog.tsx, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/providers.ts, src/web/src/simulations/runtime/authoring/recipes.ts, src/web/src/simulations/runtime/authoring/references.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts, src/web/scripts/builder/audit-public-catalog.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs"
+        "destination": "src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/InputEditor.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/insertionPlan.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/builder/graph/authoredGraph.ts, src/web/src/simulations/builder/library/SaveCompositeDialog.tsx, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/providers.ts, src/web/src/simulations/runtime/authoring/recipes.ts, src/web/src/simulations/runtime/authoring/references.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts, src/web/scripts/builder/audit-public-catalog.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/verify-spatial-immersive-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -1620,6 +1695,14 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/builder/composition/InputEditor.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition",
+            "publicDefinitions"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx",
           "typeOnly": false,
           "symbols": [
@@ -1656,6 +1739,13 @@
         },
         {
           "source": "src/web/src/simulations/builder/editor/connectionCommands.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/builder/editor/insertionPlan.ts",
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
@@ -1785,6 +1875,14 @@
         },
         {
           "source": "src/web/scripts/builder/verify-spatial-catalog.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/verify-spatial-immersive-browser.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -2232,6 +2330,14 @@
           "kind": "verification load"
         },
         {
+          "source": "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
           "source": "src/web/scripts/verify-unified-builder-browser.cjs",
           "typeOnly": false,
           "symbols": [
@@ -2262,9 +2368,10 @@
           "src/web/scripts/builder/verify-public-catalog.cjs",
           "src/web/scripts/builder/verify-spatial-catalog.cjs",
           "src/web/scripts/builder/verify-unified-builder.cjs",
+          "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
           "src/web/scripts/verify-unified-builder-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
+        "destination": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -2403,6 +2510,14 @@
         },
         {
           "source": "src/web/scripts/builder/verify-unified-builder.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -2560,6 +2675,14 @@
           "kind": "verification load"
         },
         {
+          "source": "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
           "source": "src/web/scripts/verify-unified-builder-browser.cjs",
           "typeOnly": false,
           "symbols": [
@@ -2590,9 +2713,10 @@
           "src/web/scripts/builder/verify-public-catalog.cjs",
           "src/web/scripts/builder/verify-spatial-catalog.cjs",
           "src/web/scripts/builder/verify-unified-builder.cjs",
+          "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
           "src/web/scripts/verify-unified-builder-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
+        "destination": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -2731,6 +2855,14 @@
         },
         {
           "source": "src/web/scripts/builder/verify-unified-builder.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -2888,6 +3020,14 @@
           "kind": "verification load"
         },
         {
+          "source": "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
           "source": "src/web/scripts/verify-unified-builder-browser.cjs",
           "typeOnly": false,
           "symbols": [
@@ -2918,9 +3058,10 @@
           "src/web/scripts/builder/verify-public-catalog.cjs",
           "src/web/scripts/builder/verify-spatial-catalog.cjs",
           "src/web/scripts/builder/verify-unified-builder.cjs",
+          "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
           "src/web/scripts/verify-unified-builder-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
+        "destination": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -3059,6 +3200,14 @@
         },
         {
           "source": "src/web/scripts/builder/verify-unified-builder.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -3216,6 +3365,14 @@
           "kind": "verification load"
         },
         {
+          "source": "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
           "source": "src/web/scripts/verify-unified-builder-browser.cjs",
           "typeOnly": false,
           "symbols": [
@@ -3246,9 +3403,10 @@
           "src/web/scripts/builder/verify-public-catalog.cjs",
           "src/web/scripts/builder/verify-spatial-catalog.cjs",
           "src/web/scripts/builder/verify-unified-builder.cjs",
+          "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
           "src/web/scripts/verify-unified-builder-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
+        "destination": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -3387,6 +3545,14 @@
         },
         {
           "source": "src/web/scripts/builder/verify-unified-builder.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -3544,6 +3710,14 @@
           "kind": "verification load"
         },
         {
+          "source": "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
           "source": "src/web/scripts/verify-unified-builder-browser.cjs",
           "typeOnly": false,
           "symbols": [
@@ -3574,9 +3748,10 @@
           "src/web/scripts/builder/verify-public-catalog.cjs",
           "src/web/scripts/builder/verify-spatial-catalog.cjs",
           "src/web/scripts/builder/verify-unified-builder.cjs",
+          "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
           "src/web/scripts/verify-unified-builder-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
+        "destination": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -3715,6 +3890,14 @@
         },
         {
           "source": "src/web/scripts/builder/verify-unified-builder.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -3872,6 +4055,14 @@
           "kind": "verification load"
         },
         {
+          "source": "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
           "source": "src/web/scripts/verify-unified-builder-browser.cjs",
           "typeOnly": false,
           "symbols": [
@@ -3902,9 +4093,10 @@
           "src/web/scripts/builder/verify-public-catalog.cjs",
           "src/web/scripts/builder/verify-spatial-catalog.cjs",
           "src/web/scripts/builder/verify-unified-builder.cjs",
+          "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
           "src/web/scripts/verify-unified-builder-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
+        "destination": "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/compositeCommands.ts, src/web/src/simulations/builder/editor/connectionCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -4043,6 +4235,14 @@
         },
         {
           "source": "src/web/scripts/builder/verify-unified-builder.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/verify-builder-ux-reliability-browser.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -13627,6 +13827,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/builder/composition/InputEditor.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SchemaForm"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx",
           "typeOnly": false,
           "symbols": [
@@ -13663,12 +13870,13 @@
           "src/web/src/simulations/builder/composition/ComponentSettings.tsx",
           "src/web/src/simulations/builder/composition/CompositionBuilder.tsx",
           "src/web/src/simulations/builder/composition/CompositionLibrary.tsx",
+          "src/web/src/simulations/builder/composition/InputEditor.tsx",
           "src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx",
           "src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx",
           "src/web/src/simulations/components/controls/natural-systems/NaturalControls.tsx",
           "src/web/src/simulations/components/views/RecipeLesson.tsx"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositionBuilder.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/controls/natural-systems/NaturalControls.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx"
+        "destination": "src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositionBuilder.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/InputEditor.tsx, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/controls/natural-systems/NaturalControls.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -13698,6 +13906,13 @@
         },
         {
           "source": "src/web/src/simulations/builder/composition/CompositionLibrary.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SchemaForm"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/builder/composition/InputEditor.tsx",
           "typeOnly": false,
           "symbols": [
             "SchemaForm"
@@ -86399,6 +86614,100 @@
       "dependencies": [
         {
           "source": "src/web/src/simulations/pre-made/projectile/views/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+      "export": "SpatialBoard",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SpatialBoard"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/RecipeLesson.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SpatialBoard"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/board/board.css",
+      "export": "(file)",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+      },
+      "classification": "private presentation stylesheet",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
           "typeOnly": false,
           "symbols": [
             "*"

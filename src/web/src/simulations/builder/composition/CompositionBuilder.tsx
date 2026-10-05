@@ -3,6 +3,7 @@ import Link from "next/link";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { SchemaForm } from "../../components/controls/SchemaForm";
 import { RecipeLesson } from "../../components/views/RecipeLesson";
+import { reconcileBoard } from "../../runtime/authoring/board";
 import { regenerateTruss } from "../../runtime/authoring/regenerateTruss";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import { object } from "../../runtime/parameterSchema";
@@ -12,7 +13,11 @@ import {
   isRunnableDocument,
   validateRunnableDocument,
 } from "../document";
-import { deleteComponents } from "../editor/selection";
+import {
+  type ComponentClipboard,
+  deleteComponents,
+  pasteComponents,
+} from "../editor/selection";
 import { SaveCompositeDialog } from "../library/SaveCompositeDialog";
 import { ComponentSettings } from "./ComponentSettings";
 import { CompositeInterfaceEditor } from "./CompositeInterfaceEditor";
@@ -70,6 +75,7 @@ export default function CompositionBuilder({
   onExpanded: (v: boolean) => void;
   onZoom: (v: number) => void;
 }) {
+  const boardClipboard = useRef<ComponentClipboard | null>(null);
   const documentMenu = useRef<HTMLDetailsElement>(null);
   useEffect(() => {
     const close = (event: PointerEvent | KeyboardEvent) => {
@@ -191,9 +197,7 @@ export default function CompositionBuilder({
               ref={documentMenu}
               className="composition-document-menu composition-view-menu"
             >
-              <summary aria-label="More document actions">
-                More
-              </summary>
+              <summary aria-label="More document actions">More</summary>
               <div>
                 {history}
                 {fileMenu}
@@ -320,11 +324,77 @@ export default function CompositionBuilder({
             setSaveOpen(true);
           }}
         />
-        {(expanded || tab === "Build") && (
-          <div className={`composition-preview ${mobile ? "is-mobile" : ""}`}>
+        {
+          <div
+            hidden={!expanded && tab !== "Build"}
+            className={`composition-preview ${mobile ? "is-mobile" : ""} ${!expanded && !mobile && valid.authored?.presentation?.mode === "board" ? "is-board-workspace" : ""}`}
+          >
             <RecipeLesson
               document={requireValue(valid.authored)}
               authoring={!expanded}
+              workspace={!expanded && !mobile}
+              onBoardAction={(action, layoutIds) => {
+                const ids: string[] = [];
+                const collect = (
+                  layout: typeof document.layout,
+                  selected = false,
+                ) => {
+                  const inside = selected || layoutIds.includes(layout.id);
+                  if (inside && layout.node) ids.push(layout.node);
+                  layout.children.forEach((child) => {
+                    collect(child, inside);
+                  });
+                };
+                collect(document.layout);
+                if (action === "copy") {
+                  boardClipboard.current = {
+                    document: structuredClone(doc),
+                    ids,
+                  };
+                  report("Content copied. Use Paste to place a copy.");
+                  return;
+                }
+                if (action === "paste" && !boardClipboard.current) {
+                  report("Copy some board content first.");
+                  return;
+                }
+                edit(
+                  (d) => {
+                    if (action === "delete") {
+                      deleteComponents(d, ids);
+                      if (d.authored) {
+                        const prune = (layout: typeof document.layout) => {
+                          layout.children = layout.children.filter(
+                            (child) => !layoutIds.includes(child.id),
+                          );
+                          layout.children.forEach(prune);
+                        };
+                        prune(d.authored.layout);
+                        if (layoutIds.includes(d.authored.layout.id)) {
+                          d.authored.layout.children = [];
+                          delete d.authored.layout.node;
+                        }
+                        reconcileBoard(d.authored);
+                      }
+                    } else
+                      pasteComponents(
+                        d,
+                        action === "duplicate"
+                          ? { document: doc, ids }
+                          : requireValue(boardClipboard.current),
+                      );
+                  },
+                  null,
+                  action === "delete"
+                    ? "Delete board content"
+                    : "Paste board content",
+                );
+              }}
+              onPresentationChange={(presentation) =>
+                change("Edit board presentation", (d) => {
+                  d.presentation = presentation;
+                })
+              }
               selected={selected}
               onSelect={selectSettings}
               onAuthorChange={(node) =>
@@ -343,7 +413,7 @@ export default function CompositionBuilder({
               }
             />
           </div>
-        )}
+        }
       </div>
       <ComponentDialog
         open={!expanded && !!selected}

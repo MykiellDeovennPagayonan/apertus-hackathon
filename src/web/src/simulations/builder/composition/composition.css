@@ -277,6 +277,31 @@ never beside the workspace. */
 .composition-preview[hidden] {
   display: none;
 }
+/* Build shares the same uninterrupted workspace as Connections. */
+.composition-builder:has(
+    .composition-preview.is-board-workspace:not([hidden])
+  ) {
+  height: 100dvh;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.composition-builder:has(.composition-preview.is-board-workspace:not([hidden]))
+  > .composition-workspace {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+.composition-builder .composition-preview.is-board-workspace {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
 .composition-graph .connection-workspace {
   display: flex;
   flex-direction: column;
@@ -1886,5 +1911,17 @@ never beside the workspace. */
 @media (min-width: 701px) and (max-width: 1100px) {
   .manual-builder .composition-graph .connection-selection-actions {
     bottom: 78px;
+  }
+}
+/* Keep the mode switch intact at compact widths: actions wrap instead of overlapping it. */
+.composition-builder .composition-mode-switch {
+  flex-shrink: 0;
+}
+@media (max-width: 480px) {
+  .composition-builder .composition-tabs {
+    flex-wrap: wrap;
+  }
+  .composition-builder .composition-tabs > details {
+    margin-left: 0;
   }
 }

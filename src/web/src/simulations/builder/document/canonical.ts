@@ -2,6 +2,7 @@ import { publicDefinition } from "../../components/catalog";
 import { createPublicNode } from "../../components/composites/catalog";
 import { componentDefinition } from "../../components/registry";
 import { assemblyDocument } from "../../runtime/authoring/adapters";
+import { convertToBoard } from "../../runtime/authoring/board";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import {
   emptyAuthoredDocument,
@@ -268,5 +269,8 @@ export function createCanvasDocument(
   next.presentation.layout = layout;
   requireValue(next.authored).layout.kind =
     layout === "bottom" ? "stack" : "grid";
+  requireValue(next.authored).presentation = convertToBoard(
+    requireValue(next.authored),
+  );
   return next;
 }

@@ -1,5 +1,6 @@
 import { publicDefinition } from "../../components/catalog";
 import { createPublicNode } from "../../components/composites/catalog";
+import { reconcileBoard } from "../../runtime/authoring/board";
 import { insertRecipe } from "../../runtime/authoring/recipes";
 import { visitConfigurationReferences } from "../../runtime/authoring/references";
 import {
@@ -106,6 +107,7 @@ export function addCatalogComponent(
         : {}),
       node: id,
     });
+  reconcileBoard(d);
   validateAuthoredDocument(d);
   return id;
 }
@@ -218,6 +220,7 @@ export function insertComposite(
   for (const group of next.groups)
     if (!document.groups.some((g) => g.id === group.id) && !group.parent)
       group.collapsed = true;
+  reconcileBoard(next);
   validateAuthoredDocument(next);
   return next;
 }

@@ -142,6 +142,11 @@ async function main() {
     const forms = page
       .locator(".recipe-lesson form")
       .filter({ has: page.locator('input[type="number"]') });
+    // Keyboard focus reveals offscreen content on the spatial board.
+    await forms
+      .first()
+      .getByRole("button", { name: "Apply", exact: true })
+      .focus();
     await forms
       .first()
       .getByRole("button", { name: "Apply", exact: true })
@@ -186,6 +191,7 @@ async function main() {
     await page
       .getByRole("button", { name: "+ Add component", exact: true })
       .click();
+    await library.getByRole("button", { name: /Filters/ }).click();
     await library.getByLabel("Category").selectOption("saved");
     await library.getByText("My dilution", { exact: true }).waitFor();
     const savedCard = library

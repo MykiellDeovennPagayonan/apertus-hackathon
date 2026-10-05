@@ -155,6 +155,7 @@ export type ExposedParameter = {
 };
 export type AuthoredDocument = {
   formatVersion: 3;
+  presentation?: { mode: "flow" } | import("./board").BoardPresentation;
   compatibility?: { source: Record<string, unknown>; notices: string[] };
   nodes: ComponentInstance[];
   connections: Connection[];

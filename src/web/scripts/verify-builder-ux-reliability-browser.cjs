@@ -144,16 +144,25 @@ async function main() {
       .getByRole("button", { name: "Add component", exact: true })
       .click();
     assert.equal((await draft()).authored.nodes.length, 2);
-    // Build is an authoring surface with clear component affordances and a
-    // bounded learner preview.
+    // Build fills the authoring workspace; runtime actions are disclosed beside
+    // camera controls rather than occupying a permanent lesson footer.
     await page.getByRole("button", { name: "Build", exact: true }).click();
     await page
       .getByRole("region", { name: "Cartesian plane authoring controls" })
       .waitFor();
     await page.getByRole("button", { name: "Select Line" }).waitFor();
-    assert.equal(await page.locator(".recipe-runtime-actions").count(), 1);
+    assert.equal(await page.locator(".recipe-runtime-actions").count(), 0);
     const previewBox = await page.locator(".composition-preview").boundingBox();
-    assert.ok(previewBox.width <= 1240);
+    assert.equal(previewBox.width, page.viewportSize().width);
+    await page.getByLabel("Board navigation help", { exact: true }).click();
+    assert.ok(
+      await page
+        .getByRole("button", { name: "Reset experiment", exact: true })
+        .isVisible(),
+    );
+    await page
+      .getByLabel("Board navigation help", { exact: true })
+      .press("Escape");
     await screenshot("build-authoring");
     await page
       .getByRole("button", { name: "Connections", exact: true })

@@ -2,6 +2,7 @@ import { publicDefinition } from "../../components/catalog";
 import type { Joint, Member } from "../../components/traits/MemberEndpoints";
 import { validateValue } from "../parameterSchema";
 import { bridgeResponseFromParts } from "../trussModel";
+import { validateBoard } from "./board";
 import { visitConfigurationReferences } from "./references";
 import { requireValue } from "./requireValue";
 import type { AuthoredDocument, Connection, Layout } from "./types";
@@ -70,6 +71,7 @@ export function validateAuthoredDocument(
     d.connections.length > limits.connections
   )
     throw new Error("Expanded document exceeds component/connection limit");
+  validateBoard(d, runnable);
   const ids = new Set<string>();
   const claim = (id: string, path: string) => {
     if (typeof id !== "string" || !idPattern.test(id) || ids.has(id))

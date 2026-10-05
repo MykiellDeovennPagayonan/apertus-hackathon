@@ -1,5 +1,6 @@
 const assert = require("node:assert/strict");
 const { load } = require("../test-loader.cjs");
+const { reconcileBoard } = load("src/simulations/runtime/authoring/board.ts");
 const { builtInRecipes, builtInRecipe } = load(
   "src/simulations/components/composites/catalog.ts",
 );
@@ -265,6 +266,7 @@ reuseHost.layout.children.push({
   kind: "panel",
   label: "Intentional empty panel",
 });
+reconcileBoard(reuseHost);
 const reused = insertComposite(
   reuseHost,
   line,

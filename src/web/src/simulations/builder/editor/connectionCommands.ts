@@ -1,5 +1,6 @@
 import { publicDefinition } from "../../components/catalog";
 import { schemaDefault } from "../../components/composites/catalog";
+import { reconcileBoard } from "../../runtime/authoring/board";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import type { Connection, Endpoint } from "../../runtime/authoring/types";
 import { validateAuthoredDocument } from "../../runtime/authoring/validate";
@@ -78,6 +79,7 @@ export function connectDocument(
     to,
     kind,
   });
+  reconcileBoard(d);
   validateAuthoredDocument(d);
 }
 export function documentConnectionError(

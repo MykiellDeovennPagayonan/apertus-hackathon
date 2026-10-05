@@ -6,6 +6,7 @@ import {
   builtInRecipe,
   builtInRecipes,
 } from "../../components/composites/catalog";
+import { reconcileBoard } from "../../runtime/authoring/board";
 import {
   selectionRecipe,
   validateRecipe,
@@ -129,6 +130,7 @@ export function useComponentCatalog(
           for (const id of Object.keys(d.editor.positions))
             if (!validIds.has(id)) delete d.editor.positions[id];
           if (d.authored) d.authored.editor = structuredClone(d.editor);
+          if (d.authored) reconcileBoard(d.authored);
           validateAuthoredDocument(d.authored);
           new DocumentRuntime(requireValue(d.authored));
           d.lesson = structuredClone(d.authored?.lesson);

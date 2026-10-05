@@ -1,5 +1,6 @@
 import { publicDefinition } from "../../components/catalog";
 import { validateValue } from "../parameterSchema";
+import { reconcileBoard } from "./board";
 import { visitConfigurationReferences } from "./references";
 import { requireValue } from "./requireValue";
 import {
@@ -172,6 +173,27 @@ export function remapDocument(
     l.children.forEach(rewriteLayout);
   }
   rewriteLayout(next.layout);
+  if (next.presentation?.mode === "board") {
+    const p = next.presentation;
+    for (const i of p.items) claim(i.id);
+    for (const g of p.groups) claim(g.id);
+    for (const o of p.immersive.overlays) claim(o.id);
+    for (const i of p.items) {
+      i.id = ref(i.id);
+      i.layoutId = ref(i.layoutId);
+    }
+    for (const g of p.groups) {
+      g.id = ref(g.id);
+      g.members = g.members.map(ref);
+    }
+    if (p.immersive.sceneItemId)
+      p.immersive.sceneItemId = ref(p.immersive.sceneItemId);
+    for (const o of p.immersive.overlays) {
+      o.id = ref(o.id);
+      o.sceneItemId = ref(o.sceneItemId);
+      o.contentItemIds = o.contentItemIds.map(ref);
+    }
+  }
   next.editor.positions = Object.fromEntries(
     Object.entries(next.editor.positions).map(([id, p]) => [ref(id), p]),
   );
@@ -184,6 +206,19 @@ function append(d: AuthoredDocument, addition: AuthoredDocument) {
   d.scopes.push(...addition.scopes);
   d.groups.push(...addition.groups);
   d.layout.children.push(addition.layout);
+  if (
+    d.presentation?.mode === "board" &&
+    addition.presentation?.mode === "board"
+  ) {
+    const incoming = structuredClone(addition.presentation);
+    for (const item of incoming.items) {
+      item.rect.x += 40;
+      item.rect.y += 40;
+    }
+    d.presentation.items.push(...incoming.items);
+    d.presentation.groups.push(...incoming.groups);
+    d.presentation.immersive.overlays.push(...incoming.immersive.overlays);
+  }
   Object.assign(d.editor.positions, addition.editor.positions);
 }
 export function insertRecipe(
@@ -318,6 +353,7 @@ export function insertRecipe(
       to: external.direction === "input" ? internal : structuredClone(bound),
     });
   }
+  reconcileBoard(next);
   validateAuthoredDocument(next);
   return next;
 }
@@ -443,6 +479,10 @@ export function selectionRecipe(
     ),
   );
   d.lesson = structuredClone(document.lesson);
+  if (document.presentation) {
+    d.presentation = structuredClone(document.presentation);
+    reconcileBoard(d);
+  }
   const r: CompositeRecipe = {
     recipeVersion: 1,
     ...metadata,
@@ -491,6 +531,7 @@ export function removeNodes(document: AuthoredDocument, selection: string[]) {
   for (const g of next.groups)
     if (g.parent && empty.has(g.parent)) delete g.parent;
   for (const id of [...ids, ...empty]) delete next.editor.positions[id];
+  reconcileBoard(next);
   validateAuthoredDocument(next);
   return next;
 }

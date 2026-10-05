@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "test": "node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs && node scripts/builder/verify-builder.cjs && node scripts/builder/verify-composition.cjs && node scripts/builder/verify-composition-graph.cjs && node scripts/builder/verify-canvas-editor.cjs && node scripts/builder/verify-builder-parity.cjs && node scripts/builder/verify-architecture.cjs && node scripts/builder/verify-public-catalog.cjs && node scripts/builder/verify-spatial-catalog.cjs && node scripts/builder/verify-unified-builder.cjs && node scripts/builder/verify-builder-ux-reliability.cjs",
+    "test": "node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs && node scripts/builder/verify-builder.cjs && node scripts/builder/verify-composition.cjs && node scripts/builder/verify-composition-graph.cjs && node scripts/builder/verify-canvas-editor.cjs && node scripts/builder/verify-builder-parity.cjs && node scripts/builder/verify-architecture.cjs && node scripts/builder/verify-public-catalog.cjs && node scripts/builder/verify-spatial-catalog.cjs && node scripts/builder/verify-unified-builder.cjs && node scripts/builder/verify-builder-ux-reliability.cjs && node scripts/builder/verify-spatial-board.cjs",
     "test:apertus": "node scripts/verify-apertus.cjs",
     "test:browser": "node scripts/verify-browser.cjs",
     "test:apertus:live": "node scripts/evaluate-apertus-live.cjs",
@@ -35,7 +35,10 @@
     "test:public-catalog": "node scripts/builder/verify-public-catalog.cjs",
     "test:public-catalog:browser": "node scripts/verify-public-catalog-browser.cjs",
     "test:builder:unified": "node scripts/builder/verify-unified-builder.cjs",
-    "test:builder:ux": "node scripts/builder/verify-builder-ux-reliability.cjs && node scripts/verify-builder-ux-reliability-browser.cjs"
+    "test:builder:ux": "node scripts/builder/verify-builder-ux-reliability.cjs && node scripts/verify-builder-ux-reliability-browser.cjs",
+    "test:board": "node scripts/builder/verify-spatial-board.cjs",
+    "test:board:browser": "node scripts/verify-spatial-board-browser.cjs && node scripts/verify-spatial-immersive-browser.cjs && node scripts/verify-board-workspace-browser.cjs",
+    "test:board:performance": "node scripts/verify-spatial-board-performance.cjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",

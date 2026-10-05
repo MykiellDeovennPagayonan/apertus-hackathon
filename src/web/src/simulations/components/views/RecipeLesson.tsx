@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import { BridgeScene } from "./BridgeScene";
+import { SpatialBoard } from "./board/SpatialBoard";
 import { MemberInspector } from "./MemberInspector";
 import { ProjectileScene } from "./ProjectileScene";
 
@@ -13,6 +14,7 @@ const ScopedWorld = dynamic(() => import("./ScopedWorldView"), {
 
 import {
   createContext,
+  memo,
   useContext,
   useEffect,
   useRef,
@@ -815,10 +817,12 @@ function LayoutView({
   layout,
   runtime,
   item,
+  boardHosted,
 }: {
   layout: Layout;
   runtime: DocumentRuntime;
   item?: Record<string, unknown>;
+  boardHosted?: boolean;
 }) {
   const snapshot = useContext(SnapshotContext);
   const author = useContext(AuthorContext);
@@ -912,12 +916,14 @@ function LayoutView({
           className={`recipe-author-item${author.selected === node.id ? " is-selected" : ""}`}
           aria-label={`${node.label} authoring controls`}
         >
-          <div className="recipe-author-label">
-            <span>{node.label}</span>
-            <button type="button" onClick={() => author.onSelect?.(node.id)}>
-              Edit
-            </button>
-          </div>
+          {!boardHosted && (
+            <div className="recipe-author-label">
+              <span>{node.label}</span>
+              <button type="button" onClick={() => author.onSelect?.(node.id)}>
+                Edit
+              </button>
+            </div>
+          )}
           {disconnected ? (
             <div className="recipe-disconnected">
               <strong>{node.label} needs a connection</strong>
@@ -1020,18 +1026,31 @@ function LayoutView({
     </section>
   );
 }
+const PresentationLayout = memo(LayoutView);
+
 export function RecipeLesson({
   document,
   runtime: supplied,
   onCapture,
+  onPresentationChange,
+  onBoardAction,
   authoring,
+  workspace,
   selected,
   onSelect,
   onAuthorChange,
 }: AuthorControls & {
   document: AuthoredDocument;
+  workspace?: boolean;
   runtime?: DocumentRuntime;
   onCapture?: (document: AuthoredDocument) => void;
+  onBoardAction?: (
+    action: "copy" | "paste" | "duplicate" | "delete",
+    layoutIds: string[],
+  ) => void;
+  onPresentationChange?: (
+    presentation: AuthoredDocument["presentation"],
+  ) => void;
 }) {
   const ref = useRef<DocumentRuntime | null>(null);
   if (!ref.current) ref.current = supplied ?? new DocumentRuntime(document);
@@ -1062,8 +1081,24 @@ export function RecipeLesson({
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [runtime, document.nodes, supplied]);
+  const boardWorkspace = workspace && document.presentation?.mode === "board";
+  const runtimeActions = (
+    <>
+      <button type="button" onClick={() => runtime.reset()}>
+        Reset experiment
+      </button>
+      {onCapture && (
+        <button type="button" onClick={() => onCapture(runtime.capture())}>
+          Use current settings as starting values
+        </button>
+      )}
+    </>
+  );
   return (
-    <main className="recipe-lesson" aria-label={document.lesson.title}>
+    <main
+      className={`recipe-lesson ${workspace && document.presentation?.mode === "board" ? "is-board-workspace" : ""}`}
+      aria-label={document.lesson.title}
+    >
       <header>
         <h1>{document.lesson.title}</h1>
         <p>{document.lesson.instruction}</p>
@@ -1072,19 +1107,29 @@ export function RecipeLesson({
         value={{ authoring, selected, onSelect, onAuthorChange }}
       >
         <SnapshotContext.Provider value={snapshot}>
-          <LayoutView layout={document.layout} runtime={runtime} />
+          <SpatialBoard
+            document={document}
+            authoring={authoring}
+            workspace={workspace}
+            actions={boardWorkspace ? runtimeActions : undefined}
+            onEdit={onSelect}
+            onChange={onPresentationChange}
+            onAction={onBoardAction}
+            render={(layout) => (
+              <PresentationLayout
+                layout={layout}
+                runtime={runtime}
+                boardHosted={
+                  authoring && document.presentation?.mode === "board"
+                }
+              />
+            )}
+          />
         </SnapshotContext.Provider>
       </AuthorContext.Provider>
-      <footer className="recipe-runtime-actions">
-        <button type="button" onClick={() => runtime.reset()}>
-          Reset experiment
-        </button>
-        {onCapture && (
-          <button type="button" onClick={() => onCapture(runtime.capture())}>
-            Use current settings as starting values
-          </button>
-        )}
-      </footer>
+      {!boardWorkspace && (
+        <footer className="recipe-runtime-actions">{runtimeActions}</footer>
+      )}
     </main>
   );
 }
