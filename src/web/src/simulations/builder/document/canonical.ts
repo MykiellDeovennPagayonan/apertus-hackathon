@@ -35,7 +35,7 @@ export function canonicalDocument(
       controls: [],
       results: [],
     },
-    editor: { positions: {}, zoom: 1 },
+    editor: structuredClone(authored.editor),
   };
 }
 export function fromAssembly(assembly: Assembly): ExperimentDocument {

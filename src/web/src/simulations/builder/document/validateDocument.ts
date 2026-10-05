@@ -1,4 +1,7 @@
-import { validateAuthoredDocument } from "../../runtime/authoring/validate";
+import {
+  validateAuthoredDocument,
+  validateEditorMetadata,
+} from "../../runtime/authoring/validate";
 import { validateCommand } from "../../runtime/capabilities";
 import { validateScene } from "../../runtime/composition/index";
 import {
@@ -77,6 +80,16 @@ export function validateDocument(
   ) {
     const doc = input as ExperimentDocument;
     validateAuthoredDocument(doc.authored);
+    validateEditorMetadata(
+      doc.editor,
+      new Set(
+        [
+          ...doc.authored.nodes,
+          ...doc.authored.resources,
+          ...doc.authored.groups,
+        ].map((n) => n.id),
+      ),
+    );
     if (
       doc.scene ||
       doc.recipe ||

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { publicDefinition } from "../../components/catalog";
 import {
   builtInRecipe,
@@ -16,64 +16,18 @@ import { DocumentRuntime } from "../../runtime/authoring/runtime";
 import type {
   AuthoredDocument,
   CompositeRecipe,
-  Endpoint,
   ExposedParameter,
   Layout,
-  Port,
 } from "../../runtime/authoring/types";
 import { validateAuthoredDocument } from "../../runtime/authoring/validate";
 import type { ExperimentDocument } from "../document";
-import {
-  addCatalogComponent,
-  insertComposite,
-} from "../editor/compositeCommands";
+import { planInsertion } from "../editor/insertionPlan";
 import { RecipeRepository } from "../library/RecipeRepository";
+import { type Feedback, makeFeedback } from "./feedback";
 import { libraryChoices } from "./libraryChoices";
 
 const errorText = (e: unknown) =>
   e instanceof Error ? e.message : "Change could not be applied";
-const compatible = (source: Port, target: Port) =>
-  (target.kind === "command"
-    ? source.kind === "event"
-    : target.kind === "attachment"
-      ? source.kind === "attachment"
-      : ["value", "dataset", "grid"].includes(source.kind) &&
-        ["value", "dataset", "grid"].includes(target.kind)) &&
-  (target.unit === "*" || source.unit === target.unit);
-function resolveExternalBindings(
-  recipe: CompositeRecipe,
-  authored: AuthoredDocument,
-  selection: string[],
-) {
-  const selected = [...authored.nodes, ...authored.resources].filter((n) =>
-      selection.includes(n.id),
-    ),
-    result: Record<string, Endpoint> = {};
-  for (const external of recipe.externalPorts) {
-    const candidates: Endpoint[] = [];
-    for (const node of selected) {
-      const definition = publicDefinition(node.definition);
-      if (external.direction === "input") {
-        for (const [port, contract] of Object.entries(definition.outputs))
-          if (compatible(contract, external.port))
-            candidates.push({ node: node.id, port });
-      } else {
-        for (const [port, contract] of Object.entries(definition.inputs))
-          if (compatible(external.port, contract))
-            candidates.push({ node: node.id, port });
-        if (external.port.kind === "event")
-          for (const port of Object.keys(definition.commands))
-            candidates.push({ node: node.id, port });
-      }
-    }
-    if (candidates.length !== 1)
-      throw new Error(
-        `${recipe.title} needs one selected compatible endpoint for ${external.name}; found ${candidates.length}.`,
-      );
-    result[external.name] = candidates[0];
-  }
-  return result;
-}
 const download = (value: unknown, filename: string) => {
   const url = URL.createObjectURL(
     new Blob([JSON.stringify(value, null, 2)], { type: "application/json" }),
@@ -97,19 +51,43 @@ export function useComponentCatalog(
     [query, search] = useState(""),
     [category, categorize] = useState("all"),
     [recipes, setRecipes] = useState<CompositeRecipe[]>([]),
-    [feedback, report] = useState(""),
+    [message, setMessage] = useState<Feedback | null>(null),
     [recovery, retain] = useState(""),
     [name, setName] = useState("My prebuilt"),
     [tags, setTags] = useState(""),
     [parameterTargets, setParameterTargets] = useState<string[]>([]),
     [compatibility, setCompatibility] = useState<"all" | "compatible">("all"),
-    [recipePreview, setRecipePreview] = useState<CompositeRecipe | null>(null),
     [destination, setDestination] = useState("");
+  const feedback = message?.body ?? "";
+  const report = (
+    text: string,
+    severity: Feedback["severity"] = "error",
+    action = "Update component",
+    code = "component.update",
+  ) => setMessage(text ? makeFeedback(text, severity, action, code) : null);
+  const destinationMissing =
+    !!destination &&
+    !document.nodes.some(
+      (n) =>
+        n.id === destination &&
+        publicDefinition(n.definition).category === "canvases",
+    );
+  const chooseDestination = (value: string) => {
+    setDestination(value);
+    report("");
+  };
   useEffect(() => {
     try {
       setRecipes(new RecipeRepository(localStorage).read());
     } catch (e) {
-      report(errorText(e));
+      setMessage(
+        makeFeedback(
+          errorText(e),
+          "error",
+          "open the saved library",
+          "library.read",
+        ),
+      );
     }
   }, []);
   const [regeneration, setRegeneration] = useState<ReturnType<
@@ -137,7 +115,19 @@ export function useComponentCatalog(
       (d) => {
         try {
           const next = mutate(requireValue(d.authored));
-          if (next) d.authored = next;
+          if (next) {
+            d.authored = next;
+            Object.assign(d.editor.positions, next.editor.positions);
+          }
+          const validIds = new Set(
+            [
+              ...(d.authored?.nodes ?? []),
+              ...(d.authored?.resources ?? []),
+              ...(d.authored?.groups ?? []),
+            ].map((n) => n.id),
+          );
+          for (const id of Object.keys(d.editor.positions))
+            if (!validIds.has(id)) delete d.editor.positions[id];
           if (d.authored) d.authored.editor = structuredClone(d.editor);
           validateAuthoredDocument(d.authored);
           new DocumentRuntime(requireValue(d.authored));
@@ -151,43 +141,41 @@ export function useComponentCatalog(
       null,
       action,
     );
-  const insert = (
-    recipe: CompositeRecipe,
-    overrides: Record<string, unknown> = {},
+  const execute = (
+    request: Parameters<typeof planInsertion>[1],
+    action: string,
   ) => {
     try {
-      const prefix = crypto.randomUUID(),
-        externalBindings = resolveExternalBindings(recipe, document, selection),
-        next = insertComposite(
-          document,
-          recipe,
-          resolve,
-          (id) => `${prefix}/${id}`,
-          overrides,
-          externalBindings,
-          destination,
-        );
-      if (!change(`Insert ${recipe.title}`, () => next)) return false;
-      select(
-        next.nodes
-          .filter((n) => !document.nodes.some((old) => old.id === n.id))
-          .map((n) => n.id),
+      const plan = planInsertion(
+        document,
+        request,
+        destination,
+        selection,
+        resolve,
+        crypto.randomUUID(),
       );
+      if (!change(action, () => plan.document)) {
+        report(
+          "The change was rejected. Your experiment is unchanged. Review the settings and try again.",
+          "error",
+          action,
+          "insertion.rejected",
+        );
+        return false;
+      }
+      select(plan.selected);
       return true;
     } catch (e) {
-      report(errorText(e));
+      report(errorText(e), "error", action, "insertion.rejected");
       return false;
     }
   };
-  const add = (id: string) => {
-    const identity = crypto.randomUUID();
-    let selected = identity;
-    const accepted = change(`Add ${publicDefinition(id).title}`, (d) => {
-      selected = addCatalogComponent(d, id, identity, destination, selection);
-    });
-    if (accepted) select([selected]);
-    return accepted;
-  };
+  const insert = (
+    recipe: CompositeRecipe,
+    overrides: Record<string, unknown> = {},
+  ) => execute({ recipe, overrides }, `Insert ${recipe.title}`);
+  const add = (id: string) =>
+    execute({ definition: id }, `Add ${publicDefinition(id).title}`);
   const saveRecipe = async () => {
     try {
       const recipe = makeSelectionRecipe();
@@ -200,6 +188,9 @@ export function useComponentCatalog(
       );
       report(
         `Saved ${recipe.title}${recipe.externalPorts.length ? ` with ${recipe.externalPorts.length} external ports` : ""}.`,
+        "success",
+        "Save assembly",
+        "library.saved",
       );
     } catch (e) {
       report(errorText(e));
@@ -249,83 +240,107 @@ export function useComponentCatalog(
     validateRecipe(recipe);
     return recipe;
   };
+  let checkPrefix = "catalog-check";
+  while (
+    [...document.nodes, ...document.resources, ...document.groups].some(
+      (n) => n.id === checkPrefix || n.id.startsWith(`${checkPrefix}/`),
+    )
+  )
+    checkPrefix += "-next";
   const selectedComponents = [...document.nodes, ...document.resources].filter(
     (n) => selection.includes(n.id),
   );
+  // Searching and opening Details must not repeat insertion planning for every card.
+  // Invalidate when the document, destination, bindings or local recipe library changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Invalidate the planning cache when insertion context changes.
+  const checks = useMemo(
+    () => ({
+      components: new Map<string, { compatible: boolean; reason: string }>(),
+      recipes: new Map<string, { compatible: boolean; reason: string }>(),
+    }),
+    [document, selection, destination, recipes],
+  );
+  const componentChecks = checks.components;
+  const recipeChecks = checks.recipes;
   const componentCompatibility = (
     definition: ReturnType<typeof publicDefinition>,
   ) => {
-    if (!selectedComponents.length)
-      return {
-        compatible: true,
-        reason: "Available in a new or existing workspace scope.",
-      };
-    if (definition.application)
-      return {
-        compatible: selectedComponents.some(
-          (n) => n.definition === definition.application?.target,
-        ),
-        reason: `Select ${publicDefinition(definition.application.target).title}.`,
-      };
-    const matches = selectedComponents.some((node) => {
-      const selectedDefinition = publicDefinition(node.definition);
-      return (
-        Object.values(selectedDefinition.outputs).some((out) =>
-          Object.values(definition.inputs).some((input) =>
-            compatible(out, input),
-          ),
-        ) ||
-        Object.values(definition.outputs).some((out) =>
-          Object.values(selectedDefinition.inputs).some((input) =>
-            compatible(out, input),
-          ),
-        )
+    const existing = componentChecks.get(definition.id);
+    if (existing) return existing;
+    let result: { compatible: boolean; reason: string };
+    try {
+      const plan = planInsertion(
+        document,
+        { definition: definition.id },
+        destination,
+        selection,
+        resolve,
+        checkPrefix,
       );
-    });
-    const sharedPlacement = selectedComponents.some((node) =>
-      publicDefinition(node.definition).placement.some((p) =>
-        definition.placement.includes(p),
-      ),
-    );
-    return {
-      compatible:
-        matches || sharedPlacement || definition.category === "layout",
-      reason:
-        matches || sharedPlacement
-          ? "Compatible with the current selection."
-          : `Needs ${definition.placement.join(" or ")} placement.`,
-    };
+      result = { compatible: true, reason: plan.summary };
+    } catch (e) {
+      result = { compatible: false, reason: errorText(e) };
+    }
+    componentChecks.set(definition.id, result);
+    return result;
   };
   const recipeCompatibility = (recipe: CompositeRecipe) => {
-    if (!recipe.externalPorts.length)
-      return { compatible: true, reason: "Self-contained prebuilt." };
+    const key = `${recipe.id}@${recipe.version}`;
+    const existing = recipeChecks.get(key);
+    if (existing) return existing;
+    let result: { compatible: boolean; reason: string };
     try {
-      resolveExternalBindings(recipe, document, selection);
-      return {
-        compatible: true,
-        reason: "Required external ports match the current selection.",
-      };
+      const plan = planInsertion(
+        document,
+        { recipe },
+        destination,
+        selection,
+        resolve,
+        checkPrefix,
+      );
+      result = { compatible: true, reason: plan.summary };
     } catch (e) {
-      return { compatible: false, reason: errorText(e) };
+      result = { compatible: false, reason: errorText(e) };
     }
+    recipeChecks.set(key, result);
+    return result;
   };
-  const importRecipe = async (text: string) => {
+  const importRecipe = async (text: string, saveCopy = false) => {
     retain(text);
     try {
       const recipe: CompositeRecipe = JSON.parse(text);
       validateRecipe(recipe);
-
+      if (saveCopy) {
+        recipe.id = `user/${crypto.randomUUID()}`;
+        recipe.title = `${recipe.title} (copy)`;
+      } else if (allRecipes.some((r) => r.id === recipe.id))
+        throw new Error(
+          "This identity already exists. Save a separate copy to keep both assemblies.",
+        );
       if (!navigator.locks)
         throw new Error(
-          "Local saving needs browser locks; export the retained recipe.",
+          "Local saving needs browser locks. Keep your file and try a supported browser.",
         );
       await navigator.locks.request("apertus-composites-v1", () =>
         setRecipes(new RecipeRepository(localStorage).save(recipe)),
       );
       retain("");
-      report("Prebuilt imported. Choose it in the library to insert.");
+      report(
+        `Saved ${recipe.title} to your library.`,
+        "success",
+        "Import assembly",
+        "import.saved",
+      );
+      return { recipe, error: null };
     } catch (e) {
-      report(errorText(e));
+      const failure = makeFeedback(
+        errorText(e),
+        "error",
+        "Save imported assembly",
+        "import.persistence",
+      );
+      setMessage(failure);
+      return { recipe: null, error: failure };
     }
   };
   const components = [...document.nodes, ...document.resources];
@@ -351,6 +366,8 @@ export function useComponentCatalog(
     categorize,
     recipes,
     feedback,
+    message,
+    destinationMissing,
     report,
     recovery,
     retain,
@@ -362,8 +379,6 @@ export function useComponentCatalog(
     setParameterTargets,
     compatibility,
     setCompatibility,
-    recipePreview,
-    setRecipePreview,
     regeneration,
     setRegeneration,
     regenerationDialog,
@@ -382,7 +397,7 @@ export function useComponentCatalog(
     layoutTargets,
     choices,
     destination,
-    setDestination,
+    setDestination: chooseDestination,
   };
 }
 export type ComponentCatalog = ReturnType<typeof useComponentCatalog>;

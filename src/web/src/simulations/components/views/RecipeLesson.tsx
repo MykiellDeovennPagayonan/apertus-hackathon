@@ -821,6 +821,7 @@ function LayoutView({
   item?: Record<string, unknown>;
 }) {
   const snapshot = useContext(SnapshotContext);
+  const author = useContext(AuthorContext);
   const boundValue = (
     endpoint?: import("../../runtime/authoring/types").Endpoint,
   ) =>
@@ -876,22 +877,71 @@ function LayoutView({
   const kind = node?.definition.startsWith("layout/")
     ? node.definition.split("/")[1].toLowerCase()
     : layout.kind;
+  const nodeContent =
+    node &&
+    (item && node.definition === "displays/Text" ? (
+      <p>
+        {String(node.configuration.text).replace(
+          /\{\{([a-zA-Z0-9_]+)\}\}/g,
+          (_match, key) => display(item[key]),
+        )}
+      </p>
+    ) : (
+      <NodeView node={node} runtime={runtime} />
+    ));
+  const disconnected = node
+    ? publicDefinition(node.definition).category === "controls"
+      ? !runtime.document.connections.some(
+          (connection) =>
+            connection.kind === "command" && connection.from.node === node.id,
+        )
+      : publicDefinition(node.definition).category === "displays" &&
+          !["displays/Text", "displays/Formula", "displays/Legend"].includes(
+            node.definition,
+          )
+        ? !runtime.document.connections.some(
+            (connection) =>
+              connection.kind === "value" && connection.to.node === node.id,
+          )
+        : false
+    : false;
   const content = (
     <>
-      {node &&
-        (item && node.definition === "displays/Text" ? (
-          <p>
-            {String(node.configuration.text).replace(
-              /\{\{([a-zA-Z0-9_]+)\}\}/g,
-              (_match, key) => display(item[key]),
-            )}
-          </p>
-        ) : (
-          <NodeView node={node} runtime={runtime} />
-        ))}
+      {node && author.authoring ? (
+        <section
+          className={`recipe-author-item${author.selected === node.id ? " is-selected" : ""}`}
+          aria-label={`${node.label} authoring controls`}
+        >
+          <div className="recipe-author-label">
+            <span>{node.label}</span>
+            <button type="button" onClick={() => author.onSelect?.(node.id)}>
+              Edit
+            </button>
+          </div>
+          {disconnected ? (
+            <div className="recipe-disconnected">
+              <strong>{node.label} needs a connection</strong>
+              <p>Connect it in component settings to show learner content.</p>
+              <button type="button" onClick={() => author.onSelect?.(node.id)}>
+                Open settings
+              </button>
+            </div>
+          ) : (
+            nodeContent
+          )}
+        </section>
+      ) : (
+        nodeContent
+      )}
       {layout.children.map((l) => (
         <LayoutView key={l.id} layout={l} runtime={runtime} item={item} />
       ))}
+      {author.authoring && !node && !layout.children.length && (
+        <div className="recipe-empty-layout">
+          <strong>{layout.label || "Empty layout area"}</strong>
+          <p>Add or move a component here to include it in the lesson.</p>
+        </div>
+      )}
     </>
   );
   const theme = boundValue(layout.theme),
@@ -906,7 +956,9 @@ function LayoutView({
           ? node.configuration.gap
           : layout.gap,
       ),
-      gridTemplateColumns: `repeat(${node?.definition.startsWith("layout/") ? node.configuration.columns : layout.columns}, minmax(0, 1fr))`,
+      "--desktop-columns": node?.definition.startsWith("layout/")
+        ? node.configuration.columns
+        : layout.columns,
       alignItems: layout.alignment ?? "stretch",
       fontFamily:
         font === "serif"
@@ -1023,14 +1075,16 @@ export function RecipeLesson({
           <LayoutView layout={document.layout} runtime={runtime} />
         </SnapshotContext.Provider>
       </AuthorContext.Provider>
-      <button type="button" onClick={() => runtime.reset()}>
-        Reset experiment
-      </button>
-      {onCapture && (
-        <button type="button" onClick={() => onCapture(runtime.capture())}>
-          Use current settings as starting values
+      <footer className="recipe-runtime-actions">
+        <button type="button" onClick={() => runtime.reset()}>
+          Reset experiment
         </button>
-      )}
+        {onCapture && (
+          <button type="button" onClick={() => onCapture(runtime.capture())}>
+            Use current settings as starting values
+          </button>
+        )}
+      </footer>
     </main>
   );
 }

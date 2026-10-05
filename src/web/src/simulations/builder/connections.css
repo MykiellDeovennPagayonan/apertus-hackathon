@@ -211,7 +211,7 @@
   gap: 12px;
   border: 0;
   border-radius: 14px 14px 0 0;
-  padding: 16px;
+  padding: 10px 16px;
   width: 100%;
   text-align: left;
   background: transparent;
@@ -249,6 +249,7 @@
   gap: 3px;
 }
 .connection-node-title small {
+  line-height: 1.2;
   font-size: 11px;
   font-weight: 500;
   color: #626c60;
@@ -257,10 +258,13 @@
   font-size: 15px;
   line-height: 1.25;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
 }
 .connection-node-title > span {
+  line-height: 1.3;
   font-size: 11px;
   color: #626c60;
   white-space: nowrap;
@@ -567,13 +571,20 @@
 .manual-builder .connection-node-edit {
   position: absolute;
   right: 8px;
-  top: 6px;
-  padding: 3px 7px;
-  font-size: 11px;
-  border-radius: 5px;
+  top: 8px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted, #626c60);
 }
 .manual-builder .connection-node-heading {
-  padding-right: 48px;
+  padding-right: 56px;
 }
 .manual-builder .connection-group {
   position: absolute;
@@ -671,8 +682,34 @@
 /* Selection tools float without shifting the graph between the two clicks of
    a double-click, especially when a narrow header would otherwise wrap. */
 .composition-graph .connection-workspace-header {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 4;
+  width: auto;
+  max-width: calc(100% - 24px);
+  gap: 12px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #30362e0c;
+}
+.composition-graph .connection-workspace {
   position: relative;
 }
+.composition-graph .connection-workspace-title {
+  display: none;
+}
+@media (max-width: 800px) {
+  .composition-graph .connection-workspace-header {
+    flex-wrap: nowrap;
+  }
+  .composition-graph .connection-workspace-actions {
+    width: auto;
+    flex-wrap: nowrap;
+  }
+}
+
 .composition-graph .connection-selection-actions {
   position: absolute;
   left: 12px;
@@ -689,4 +726,11 @@
   border-radius: 10px;
   background: var(--panel, #fffdf7);
   box-shadow: 0 4px 12px #30362e14;
+}
+
+@media (max-width: 800px) {
+  .manual-builder .composition-graph .connection-workspace-actions select {
+    flex: none;
+    width: 180px;
+  }
 }

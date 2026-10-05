@@ -20,6 +20,7 @@ export type GraphNode = {
     | "Composite"
     | "Resource";
   description: string;
+  displayKind?: string;
   inputs: GraphPort[];
   outputs: GraphPort[];
   x: number;

@@ -242,6 +242,38 @@ export function validateAuthoredDocument(
       ancestors.add(parent);
       parent = d.groups.find((p) => p.id === parent)?.parent;
     }
+    if (g.exposedPorts !== undefined && !Array.isArray(g.exposedPorts))
+      throw new Error(`${g.label}: invalid exposed interface`);
+    const names = new Set<string>();
+    const endpoints = new Set<string>();
+    for (const p of g.exposedPorts ?? []) {
+      const node = nodes.get(p.endpoint?.node);
+      const def = node && publicDefinition(node.definition, node.version);
+      const contract =
+        p.direction === "input"
+          ? (def?.inputs[p.endpoint.port] ??
+            (def?.commands[p.endpoint.port]
+              ? { kind: "command", unit: "" }
+              : undefined))
+          : p.direction === "output"
+            ? def?.outputs[p.endpoint.port]
+            : undefined;
+      const key = `${p.direction}:${p.endpoint?.node}:${p.endpoint?.port}`;
+      if (
+        !node ||
+        !g.members.includes(node.id) ||
+        typeof p.name !== "string" ||
+        !p.name.trim() ||
+        names.has(p.name) ||
+        endpoints.has(key) ||
+        !contract ||
+        JSON.stringify(contract) !== JSON.stringify(p.port) ||
+        (p.required !== undefined && typeof p.required !== "boolean")
+      )
+        throw new Error(`${g.label}: invalid exposed port`);
+      names.add(p.name);
+      endpoints.add(key);
+    }
     for (const p of g.parameters) {
       const node = nodes.get(p.node);
       if (
@@ -260,18 +292,10 @@ export function validateAuthoredDocument(
     )
   )
     throw new Error("lesson: invalid content");
-  if (
-    !d.editor ||
-    !Number.isFinite(d.editor.zoom) ||
-    d.editor.zoom < 0.2 ||
-    d.editor.zoom > 2 ||
-    !d.editor.positions ||
-    typeof d.editor.positions !== "object"
-  )
-    throw new Error("editor: invalid metadata");
-  for (const [id, p] of Object.entries(d.editor.positions))
-    if (!nodes.has(id) || !p || !Number.isFinite(p.x) || !Number.isFinite(p.y))
-      throw new Error(`${id}: invalid editor position`);
+  validateEditorMetadata(
+    d.editor,
+    new Set([...nodes.keys(), ...d.groups.map((g) => g.id)]),
+  );
   if (runnable)
     for (const n of d.nodes) {
       const def = publicDefinition(n.definition);
@@ -362,4 +386,29 @@ export function validateConnection(d: AuthoredDocument, c: Connection) {
     );
   if (from.scope !== to.scope && (!input.crossScope || !output.crossScope))
     throw new Error(`${c.id}: incompatible runtime scopes`);
+}
+
+/** The working envelope and the portable authored document share this contract. */
+export function validateEditorMetadata(
+  editor: AuthoredDocument["editor"],
+  identities: Set<string>,
+) {
+  if (
+    !editor ||
+    !Number.isFinite(editor.zoom) ||
+    editor.zoom < 0.2 ||
+    editor.zoom > 2 ||
+    !editor.positions ||
+    typeof editor.positions !== "object" ||
+    Array.isArray(editor.positions)
+  )
+    throw new Error("editor: invalid metadata");
+  for (const [id, p] of Object.entries(editor.positions))
+    if (
+      !identities.has(id) ||
+      !p ||
+      !Number.isFinite(p.x) ||
+      !Number.isFinite(p.y)
+    )
+      throw new Error(`${id}: invalid editor position`);
 }

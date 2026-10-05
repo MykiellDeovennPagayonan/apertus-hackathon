@@ -1,3 +1,4 @@
+import { publicDefinition } from "../../components/catalog";
 import { builtInRecipe } from "../../components/composites/catalog";
 import {
   insertRecipe,
@@ -46,6 +47,7 @@ export function cleanEditor(doc: ExperimentDocument) {
   );
   for (const id of Object.keys(doc.editor.positions))
     if (!ids.has(id)) delete doc.editor.positions[id];
+  if (doc.authored) doc.authored.editor = structuredClone(doc.editor);
   if (doc.editor.groups)
     doc.editor.groups = doc.editor.groups
       .map((g) => ({ ...g, members: g.members.filter((id) => ids.has(id)) }))
@@ -96,6 +98,7 @@ export function ungroupComponents(doc: ExperimentDocument, ids: string[]) {
     doc.authored.groups = doc.authored.groups.filter((g) => !removed.has(g.id));
     for (const g of doc.authored.groups)
       if (g.parent && removed.has(g.parent)) delete g.parent;
+    cleanEditor(doc);
     return;
   }
   doc.editor.groups = (doc.editor.groups ?? []).filter(
@@ -157,17 +160,38 @@ export function pasteComponents(
       tags: [],
     });
     const prefix = crypto.randomUUID();
+    recipe.externalPorts = recipe.externalPorts.map((p) => ({
+      ...p,
+      required: false,
+    }));
     const bindings: Record<string, { node: string; port: string }> = {};
     for (const external of recipe.externalPorts) {
       const original = clipboard.document.authored.connections.find((c) =>
         external.direction === "input"
           ? c.to.node === external.endpoint.node &&
-            c.to.port === external.endpoint.port
+            c.to.port === external.endpoint.port &&
+            !ids.includes(c.from.node)
           : c.from.node === external.endpoint.node &&
-            c.from.port === external.endpoint.port,
+            c.from.port === external.endpoint.port &&
+            !ids.includes(c.to.node),
       );
       const endpoint =
         external.direction === "input" ? original?.from : original?.to;
+      if (external.direction === "output" && endpoint) {
+        const target = [...doc.authored.nodes, ...doc.authored.resources].find(
+          (n) => n.id === endpoint.node,
+        );
+        const input =
+          target && publicDefinition(target.definition).inputs[endpoint.port];
+        if (
+          input &&
+          input.cardinality !== "many" &&
+          doc.authored.connections.some(
+            (c) => c.to.node === endpoint.node && c.to.port === endpoint.port,
+          )
+        )
+          continue;
+      }
       if (
         endpoint &&
         [...doc.authored.nodes, ...doc.authored.resources].some(
@@ -184,6 +208,15 @@ export function pasteComponents(
       {},
       bindings,
     );
+    Object.assign(doc.editor.positions, doc.authored.editor.positions);
+    for (const g of recipe.document.groups) {
+      const p = clipboard.document.editor.positions[g.id];
+      if (p)
+        doc.editor.positions[`${prefix}/${g.id}`] = {
+          x: p.x + offset,
+          y: p.y + offset,
+        };
+    }
     const graph = compositionGraph(clipboard.document);
     for (const id of ids) {
       const node = graph.node(id);
@@ -193,6 +226,7 @@ export function pasteComponents(
           y: node.y + offset,
         };
     }
+    doc.authored.editor = structuredClone(doc.editor);
     return ids.map((id) => `${prefix}/${id}`);
   }
   const scene = requireRecord(doc.scene);

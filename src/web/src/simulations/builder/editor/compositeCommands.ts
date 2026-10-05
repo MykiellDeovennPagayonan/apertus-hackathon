@@ -36,6 +36,10 @@ export function addCatalogComponent(
       n.id === destination &&
       publicDefinition(n.definition).category === "canvases",
   );
+  if (destination && !canvas)
+    throw new Error(
+      "The selected canvas was removed. Choose another canvas or use automatic placement.",
+    );
   const appearance = def.outputs.appearance;
   if (!destination && appearance)
     canvas = d.nodes.find(
@@ -130,8 +134,13 @@ export function insertComposite(
   const target = destination
     ? next.nodes.find((n) => n.id === destination)
     : undefined;
-  if (destination && !target)
-    throw new Error("The destination canvas is no longer available.");
+  if (
+    destination &&
+    (!target || publicDefinition(target.definition).category !== "canvases")
+  )
+    throw new Error(
+      "The selected canvas was removed. Choose another canvas or use automatic placement.",
+    );
   const canvases = added.filter(
     (n) => publicDefinition(n.definition).category === "canvases",
   );
@@ -161,9 +170,24 @@ export function insertComposite(
       if (c.from.node === source.id) c.from.node = target.id;
       if (c.to.node === source.id) c.to.node = target.id;
     }
-    const prune = (layout: AuthoredDocument["layout"]) => {
-      layout.children = layout.children.filter((l) => l.node !== source.id);
-      layout.children.forEach(prune);
+    const originalLayouts = new Set<string>();
+    const remember = (layout: AuthoredDocument["layout"]) => {
+      originalLayouts.add(layout.id);
+      layout.children.forEach(remember);
+    };
+    remember(document.layout);
+    const prune = (layout: AuthoredDocument["layout"]): boolean => {
+      const before = layout.children.length;
+      layout.children = layout.children.filter(
+        (child) => child.node !== source.id && !prune(child),
+      );
+      // Only a wrapper emptied by this removal is eligible; authored empty containers survive.
+      return (
+        !originalLayouts.has(layout.id) &&
+        before > 0 &&
+        !layout.node &&
+        layout.children.length === 0
+      );
     };
     prune(next.layout);
     for (const n of added)
@@ -174,6 +198,10 @@ export function insertComposite(
     for (const g of next.groups) {
       g.members = g.members.filter((id) => id !== source.id);
       g.parameters = g.parameters.filter((p) => p.node !== source.id);
+      if (g.exposedPorts)
+        g.exposedPorts = g.exposedPorts.filter(
+          (p) => p.endpoint.node !== source.id,
+        );
     }
   } else if (target && !recipe.externalPorts.length) {
     const scopes = new Set(added.map((n) => n.scope));

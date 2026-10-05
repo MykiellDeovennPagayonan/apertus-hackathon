@@ -139,13 +139,14 @@ export function ConnectionNode({
         </span>
         <span className="connection-node-title">
           <small>
-            {node.kind === "Object"
-              ? "Model"
-              : node.kind === "View"
-                ? "Canvas"
-                : node.kind === "Placement"
-                  ? "Layout"
-                  : node.kind}
+            {node.displayKind ??
+              (node.kind === "Object"
+                ? "Model"
+                : node.kind === "View"
+                  ? "Canvas"
+                  : node.kind === "Placement"
+                    ? "Layout"
+                    : node.kind)}
           </small>
           <strong title={node.label}>{node.label}</strong>
           <span>{node.description}</span>
@@ -157,8 +158,22 @@ export function ConnectionNode({
           className="connection-node-edit"
           onClick={onOpen}
           aria-label={`Edit ${node.label}`}
+          title={`Edit ${node.label}`}
         >
-          Edit
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m16 3 5 5-12 12-6 1 1-6L16 3Z" />
+            <path d="m13 6 5 5" />
+          </svg>
         </button>
       )}
       <div className="connection-node-ports">

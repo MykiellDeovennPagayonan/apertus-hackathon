@@ -93,7 +93,9 @@ async function main() {
       .locator("article")
       .filter({ has: page.getByText("Dilution Lab", { exact: true }) });
     await page.screenshot({ path: "/tmp/unified-builder-library.png" });
-    await card.getByRole("button", { name: "Insert", exact: true }).click();
+    await card
+      .getByRole("button", { name: "Add experiment", exact: true })
+      .click();
     await library.waitFor({ state: "hidden" });
     assert.equal(await page.locator(".connection-node--composite").count(), 1);
     assert.equal(
@@ -129,7 +131,9 @@ async function main() {
       .getByRole("button", { name: "+ Add component", exact: true })
       .click();
     await library.getByRole("searchbox").fill("Dilution Lab");
-    await card.getByRole("button", { name: "Insert", exact: true }).click();
+    await card
+      .getByRole("button", { name: "Add experiment", exact: true })
+      .click();
     await page.getByRole("button", { name: "Build", exact: true }).click();
     const concentrations = page.locator(
       '.recipe-lesson section[aria-label="concentration g/L"] output',
@@ -187,9 +191,21 @@ async function main() {
     const savedCard = library
       .locator("article")
       .filter({ has: page.getByText("My dilution", { exact: true }) });
-    await savedCard.getByText("Customize exposed parameters").click();
-    assert.equal(await savedCard.locator("form").count(), 1);
-    // Import uses the same catalog and is retained across reopening.
+    await savedCard
+      .getByRole("button", { name: "Details for My dilution" })
+      .click();
+    const savedDetails = library.getByRole("region", {
+      name: "Details for My dilution",
+    });
+    await savedDetails.getByText("Customize exposed parameters").click();
+    assert.equal(await savedDetails.locator("form").count(), 1);
+    await savedDetails
+      .getByRole("button", { name: "← Back to results" })
+      .click();
+    await library
+      .getByRole("button", { name: "Import assembly", exact: true })
+      .click();
+    // Import validates and reviews the same catalog format before saving.
     const { load } = require("./test-loader.cjs");
     const recipe = load(
       "src/simulations/components/composites/catalog.ts",
@@ -200,8 +216,10 @@ async function main() {
       buffer: Buffer.from(JSON.stringify(recipe)),
     });
     await library
-      .getByRole("status")
-      .filter({ hasText: "Prebuilt imported" })
+      .getByRole("button", { name: "Save separate copy to library" })
+      .click();
+    await library
+      .getByRole("region", { name: "Details for Dilution Lab (copy)" })
       .waitFor();
 
     await page.setViewportSize({ width: 390, height: 844 });

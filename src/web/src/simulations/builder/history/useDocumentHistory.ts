@@ -69,7 +69,10 @@ export function useDocumentHistory(
       setNotice("");
       return true;
     } catch (e) {
-      setNotice(message(e));
+      const label = action?.trim() || "apply that change";
+      setNotice(
+        `Couldn't ${label.charAt(0).toLowerCase()}${label.slice(1)}. ${message(e)} Your experiment is unchanged.`,
+      );
       return false;
     }
   };

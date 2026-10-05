@@ -115,6 +115,7 @@ export function SchemaForm({
   initial,
   label,
   mode = "submit",
+  submitLabel,
   onSubmit,
   widget,
 }: {
@@ -123,6 +124,7 @@ export function SchemaForm({
   initial: unknown;
   label: string;
   mode?: "submit" | "immediate";
+  submitLabel?: string;
   onSubmit: (v: Record<string, unknown>) => ActionResult;
 }) {
   const [value, setValue] = useState(initial),
@@ -156,9 +158,10 @@ export function SchemaForm({
       />
       {mode === "submit" && (
         <button type="submit">
-          {schema.type === "object" && !Object.keys(schema.properties).length
-            ? label
-            : "Apply"}
+          {submitLabel ??
+            (schema.type === "object" && !Object.keys(schema.properties).length
+              ? label
+              : "Apply")}
         </button>
       )}
       <output aria-live="polite">{feedback}</output>

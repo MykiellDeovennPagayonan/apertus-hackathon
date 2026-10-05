@@ -25,6 +25,8 @@ import { compositionGraph, type Endpoint } from "../graph/deriveGraph";
 import { type GraphWire, portPoint } from "../graph/types";
 import { isTextEditing } from "../history/entries";
 import "../connections.css";
+import { InputEditor } from "./InputEditor";
+
 type Edit = (
   change: (d: ExperimentDocument) => void,
   group?: string | null,
@@ -59,6 +61,7 @@ export function CompositionGraph({
     sequence: number;
   };
 }) {
+  const [editingInput, setEditingInput] = useState<Endpoint | null>(null);
   const [moving, setMoving] = useState<
     Record<string, { x: number; y: number }>
   >({});
@@ -535,6 +538,52 @@ export function CompositionGraph({
       }}
     >
       <section className="connection-workspace" aria-label="Block workspace">
+        {selectedIds.length > 0 && (
+          <fieldset
+            className="connection-selection-actions"
+            aria-label="Selection actions"
+          >
+            <span aria-live="polite">{selectedIds.length} selected</span>
+            {onSaveComposite && (
+              <button
+                type="button"
+                onClick={() =>
+                  onSaveComposite(expandSelection(doc, selectedIds))
+                }
+              >
+                Save as composite
+              </button>
+            )}
+            <button type="button" onClick={copy}>
+              Copy
+            </button>
+            <button
+              type="button"
+              disabled={!componentClipboard}
+              onClick={paste}
+            >
+              Paste
+            </button>
+            <button type="button" className="selection-delete" onClick={remove}>
+              Delete
+            </button>
+            <button
+              type="button"
+              className="selection-clear"
+              aria-label="Clear selection"
+              title="Clear selection (Escape)"
+              onClick={() => setSelection([])}
+            >
+              ×
+            </button>
+            {selectedIds.length >= 2 && (
+              <button type="button" onClick={group}>
+                Create group
+              </button>
+            )}
+          </fieldset>
+        )}
+
         <header className="connection-workspace-header">
           <div className="connection-workspace-title">
             <strong>Connections</strong>
@@ -547,39 +596,6 @@ export function CompositionGraph({
             </span>
           </div>
           <div className="connection-workspace-actions">
-            {selectedIds.length > 0 && (
-              <div className="connection-selection-actions">
-                <span aria-live="polite">{selectedIds.length} selected</span>
-                {onSaveComposite && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      onSaveComposite(expandSelection(doc, selectedIds))
-                    }
-                  >
-                    Save as composite
-                  </button>
-                )}
-                <button type="button" onClick={copy}>
-                  Copy
-                </button>
-                <button
-                  type="button"
-                  disabled={!componentClipboard}
-                  onClick={paste}
-                >
-                  Paste
-                </button>
-                <button type="button" onClick={remove}>
-                  Delete
-                </button>
-                {selectedIds.length >= 2 && (
-                  <button type="button" onClick={group}>
-                    Create group
-                  </button>
-                )}
-              </div>
-            )}
             <select
               aria-label="Find a component"
               value=""
@@ -724,7 +740,15 @@ export function CompositionGraph({
                   className="composition-connection-status"
                   aria-label="Connection editor"
                 >
-                  {feedback && <p role="alert">{feedback}</p>}
+                  {feedback && (
+                    <p
+                      role={
+                        /^(Copied|Pasted) /.test(feedback) ? "status" : "alert"
+                      }
+                    >
+                      {feedback}
+                    </p>
+                  )}
                   {source && (
                     <>
                       <strong>
@@ -975,7 +999,9 @@ export function CompositionGraph({
                   setFeedback("");
                   setWireSelection(null);
                 } else if (source) connect(source, { node: b.id, port: p.id });
-                else setFeedback("Choose an output first, then this input");
+                else if (doc.authored)
+                  setEditingInput({ node: b.id, port: p.id });
+                else onSelect(b.id);
               }}
               onDrop={(p, value) => {
                 const [id, port] = (value ?? "").split("::");
@@ -985,6 +1011,14 @@ export function CompositionGraph({
             />
           ))}
         </ConnectionViewport>
+        {editingInput && (
+          <InputEditor
+            doc={doc}
+            target={editingInput}
+            edit={edit}
+            onClose={() => setEditingInput(null)}
+          />
+        )}
       </section>
     </div>
   );

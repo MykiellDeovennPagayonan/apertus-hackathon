@@ -64,7 +64,7 @@ async function main() {
         .locator("article")
         .filter({ has: page.getByText("Bridge Lab", { exact: true }) })
         .first()
-        .getByRole("button", { name: "Insert", exact: true })
+        .getByRole("button", { name: "Add experiment", exact: true })
         .click();
       await page
         .getByRole("button", { name: "Edit Bridge Lab", exact: true })

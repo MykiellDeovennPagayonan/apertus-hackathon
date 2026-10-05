@@ -32,6 +32,32 @@ export function validateRecipe(r: CompositeRecipe) {
     !Array.isArray(r.assumptions)
   )
     throw new Error("recipe: invalid format or metadata");
+  if (
+    r.discovery &&
+    (![
+      "component",
+      "object",
+      "model",
+      "preset",
+      "composite",
+      "experiment",
+    ].includes(r.discovery.kind) ||
+      ![
+        "objects",
+        "controls",
+        "displays",
+        "canvases",
+        "models",
+        "layout",
+        "composites",
+        "experiments",
+      ].includes(r.discovery.group) ||
+      typeof r.discovery.summary !== "string" ||
+      !r.discovery.summary.trim() ||
+      typeof r.discovery.placement !== "string" ||
+      !r.discovery.placement.trim())
+  )
+    throw new Error("recipe: invalid discovery metadata");
   validateAuthoredDocument(r.document);
   for (const dep of r.dependencies) publicDefinition(dep.id, dep.version);
   for (const n of [...r.document.nodes, ...r.document.resources])
@@ -63,8 +89,17 @@ export function validateRecipe(r: CompositeRecipe) {
   }
   const external = new Set<string>();
   for (const p of r.externalPorts) {
-    const n = r.document.nodes.find((n) => n.id === p.endpoint.node);
-    if (!n || external.has(p.name))
+    const n = [...r.document.nodes, ...r.document.resources].find(
+      (n) => n.id === p.endpoint?.node,
+    );
+    if (
+      !n ||
+      typeof p.name !== "string" ||
+      !p.name.trim() ||
+      external.has(p.name) ||
+      !["input", "output"].includes(p.direction) ||
+      (p.required !== undefined && typeof p.required !== "boolean")
+    )
       throw new Error(`${p.name}: invalid external port`);
     external.add(p.name);
     const def = publicDefinition(n.definition);
@@ -126,6 +161,8 @@ export function remapDocument(
     g.members = g.members.map(ref);
     if (g.parent) g.parent = ref(g.parent);
     for (const p of g.parameters) p.node = ref(p.node);
+    for (const p of g.exposedPorts ?? [])
+      p.endpoint.node = ref(p.endpoint.node);
   }
   function rewriteLayout(l: Layout) {
     l.id = ref(l.id);
@@ -181,6 +218,7 @@ export function insertRecipe(
       source: { id: r.id, version: r.version },
       collapsed: false,
       parameters: structuredClone(r.parameters),
+      exposedPorts: structuredClone(r.externalPorts),
     };
     for (const g of result.groups) if (!g.parent) g.parent = group.id;
     result.groups.push(group);
@@ -261,7 +299,7 @@ export function insertRecipe(
   next.scopes = next.scopes.filter((scope) =>
     [...next.nodes, ...next.resources].some((node) => node.scope === scope.id),
   );
-  for (const external of recipe.externalPorts) {
+  for (const [index, external] of recipe.externalPorts.entries()) {
     const bound = externalBindings[external.name];
     if (!bound) continue;
     const internal = {
@@ -269,7 +307,7 @@ export function insertRecipe(
       port: external.endpoint.port,
     };
     next.connections.push({
-      id: allocate(`external/${external.name}`),
+      id: allocate(`external/${index}`),
       kind:
         external.port.kind === "command" || external.port.kind === "event"
           ? "command"
@@ -364,6 +402,29 @@ export function selectionRecipe(
           port,
         });
     }
+  d.groups = structuredClone(
+    document.groups.filter((g) => g.members.every((id) => chosen.has(id))),
+  );
+  const groupIds = new Set(d.groups.map((g) => g.id));
+  for (const g of d.groups)
+    if (g.parent && !groupIds.has(g.parent)) delete g.parent;
+  // Intentional interfaces survive selection export, even without boundary wires.
+  for (const g of d.groups.filter((g) => !g.parent))
+    for (const p of g.exposedPorts ?? [])
+      if (
+        !ports.some(
+          (e) =>
+            e.direction === p.direction &&
+            e.endpoint.node === p.endpoint.node &&
+            e.endpoint.port === p.endpoint.port,
+        )
+      ) {
+        let name = p.name;
+        let suffix = 2;
+        while (ports.some((e) => e.name === name))
+          name = `${p.name} ${suffix++}`;
+        ports.push({ ...structuredClone(p), name, required: false });
+      }
   function prune(l: Layout): Layout | null {
     const children = l.children
       .map(prune)
@@ -376,8 +437,8 @@ export function selectionRecipe(
   d.layout = prune(document.layout) ?? emptyLayout();
   d.editor.positions = structuredClone(
     Object.fromEntries(
-      Object.entries(document.editor.positions).filter(([id]) =>
-        chosen.has(id),
+      Object.entries(document.editor.positions).filter(
+        ([id]) => chosen.has(id) || groupIds.has(id),
       ),
     ),
   );
@@ -420,6 +481,8 @@ export function removeNodes(document: AuthoredDocument, selection: string[]) {
   for (const g of next.groups) {
     g.members = g.members.filter((id) => !ids.has(id));
     g.parameters = g.parameters.filter((p) => !ids.has(p.node));
+    if (g.exposedPorts)
+      g.exposedPorts = g.exposedPorts.filter((p) => !ids.has(p.endpoint.node));
   }
   const empty = new Set(
     next.groups.filter((g) => !g.members.length).map((g) => g.id),
@@ -427,7 +490,7 @@ export function removeNodes(document: AuthoredDocument, selection: string[]) {
   next.groups = next.groups.filter((g) => !empty.has(g.id));
   for (const g of next.groups)
     if (g.parent && empty.has(g.parent)) delete g.parent;
-  for (const id of ids) delete next.editor.positions[id];
+  for (const id of [...ids, ...empty]) delete next.editor.positions[id];
   validateAuthoredDocument(next);
   return next;
 }

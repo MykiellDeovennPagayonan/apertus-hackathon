@@ -7,12 +7,18 @@ export function ComponentDialog({
   onClose,
   children,
   wide = false,
+  footerLabel = "Done",
+  footerPrimary = true,
+  className = "",
 }: {
   open: boolean;
   title: string;
   onClose: () => void;
   children: ReactNode;
   wide?: boolean;
+  footerLabel?: string;
+  footerPrimary?: boolean;
+  className?: string;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const opener = useRef<HTMLElement | null>(null);
@@ -28,7 +34,7 @@ export function ComponentDialog({
   return (
     <dialog
       ref={dialog}
-      className={`component-dialog ${wide ? "is-wide" : ""}`}
+      className={`component-dialog ${wide ? "is-wide" : ""} ${className}`}
       aria-label={title}
       onKeyDown={(e) => {
         if (
@@ -50,14 +56,18 @@ export function ComponentDialog({
     >
       <header>
         <h2>{title}</h2>
-        <button type="button" aria-label="Close settings" onClick={onClose}>
+        <button type="button" aria-label={`Close ${title}`} onClick={onClose}>
           ×
         </button>
       </header>
       <div className="component-dialog-body">{children}</div>
       <footer>
-        <button type="button" className="builder-primary" onClick={onClose}>
-          Done
+        <button
+          type="button"
+          className={footerPrimary ? "builder-primary" : undefined}
+          onClick={onClose}
+        >
+          {footerLabel}
         </button>
       </footer>
     </dialog>

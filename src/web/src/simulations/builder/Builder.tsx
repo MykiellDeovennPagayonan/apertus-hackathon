@@ -171,7 +171,7 @@ export default function Builder() {
       setSaveId(id);
       setNotice("Saved on this device.");
     } catch (e) {
-      setNotice(message(e));
+      setNotice(`Couldn't save the experiment. ${message(e)}`);
     } finally {
       storageBusy.current = false;
       setSaving(false);
@@ -189,7 +189,7 @@ export default function Builder() {
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch (e) {
-      setNotice(message(e));
+      setNotice(`Couldn't export the experiment. ${message(e)}`);
     }
   };
   const importText = (text: string) => {
@@ -198,7 +198,7 @@ export default function Builder() {
       setRecovery("");
     } catch (e) {
       setRecovery(text);
-      setNotice(message(e));
+      setNotice(`Couldn't import the experiment. ${message(e)}`);
     }
   };
   const importField = (
@@ -213,7 +213,7 @@ export default function Builder() {
             try {
               importText(await file.text());
             } catch (error) {
-              setNotice(message(error));
+              setNotice(`Couldn't read the selected file. ${message(error)}`);
             }
           }
           e.target.value = "";
@@ -334,10 +334,36 @@ export default function Builder() {
     if (!Number.isFinite(zoom) || zoom < 0.2 || zoom > 2) return;
     // Camera navigation is editor metadata, not a lesson edit or an undo step.
     setDoc((current) =>
-      current ? { ...current, editor: { ...current.editor, zoom } } : current,
+      current
+        ? {
+            ...current,
+            editor: { ...current.editor, zoom },
+            ...(current.authored
+              ? {
+                  authored: {
+                    ...current.authored,
+                    editor: { ...current.editor, zoom },
+                  },
+                }
+              : {}),
+          }
+        : current,
     );
     setValid((current) =>
-      current ? { ...current, editor: { ...current.editor, zoom } } : current,
+      current
+        ? {
+            ...current,
+            editor: { ...current.editor, zoom },
+            ...(current.authored
+              ? {
+                  authored: {
+                    ...current.authored,
+                    editor: { ...current.editor, zoom },
+                  },
+                }
+              : {}),
+          }
+        : current,
     );
   };
   if (doc.authored && valid.authored)
@@ -354,6 +380,17 @@ export default function Builder() {
         history={history}
         onSave={save}
         saving={saving}
+        saveState={
+          saveId &&
+          saved.some(
+            (entry) =>
+              entry.id === saveId &&
+              JSON.stringify(entry.document.authored) ===
+                JSON.stringify(doc.authored),
+          )
+            ? "Saved on this device"
+            : "Unsaved changes"
+        }
         error={error}
         notice={notice}
         onSetup={() => setSetupOpen(true)}

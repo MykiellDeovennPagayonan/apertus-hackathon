@@ -4,6 +4,7 @@ import type { Port, PublicDefinition } from "../../runtime/authoring/types";
 import { boolean, num, object } from "../../runtime/parameterSchema";
 import { componentDefinitions } from "../registry";
 import { authoringDefinitions } from "./authoring";
+import { definitionDiscovery } from "./discovery";
 import { genericDefinitions } from "./generic";
 import {
   learningAppearances,
@@ -48,6 +49,12 @@ for (const d of Object.values(componentDefinitions)) {
     id: d.id,
     version: 1,
     title: d.label,
+    discovery: {
+      kind: "object",
+      group: "objects",
+      summary: d.description,
+      placement: "Uses a compatible canvas",
+    },
     description: d.description,
     category: "models",
     tags: [d.space, d.kind],
@@ -249,3 +256,10 @@ publicDefinition("canvases/town").inputs.timeline = {
   unit: "town/timeline",
   optional: true,
 };
+
+// Author-facing metadata is separate from runtime identity and execution contracts.
+for (const definition of publicDefinitions.values()) {
+  definition.discovery = definitionDiscovery(definition);
+  if (definition.description === definition.title)
+    definition.description = definition.discovery.summary;
+}

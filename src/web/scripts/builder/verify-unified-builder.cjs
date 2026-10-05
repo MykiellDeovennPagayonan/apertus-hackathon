@@ -117,7 +117,7 @@ const host = destinationDoc.authored.nodes.find(
   (n) => n.definition === "canvases/cartesian",
 );
 host.configuration.xMin = -25;
-const lineRecipe = builtInRecipes.find((r) => r.title === "Line");
+const lineRecipe = builtInRecipes.find((r) => r.title === "Line exploration");
 const placed = insertComposite(
   destinationDoc.authored,
   lineRecipe,

@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "test": "node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs && node scripts/builder/verify-builder.cjs && node scripts/builder/verify-composition.cjs && node scripts/builder/verify-composition-graph.cjs && node scripts/builder/verify-canvas-editor.cjs && node scripts/builder/verify-builder-parity.cjs && node scripts/builder/verify-architecture.cjs && node scripts/builder/verify-public-catalog.cjs && node scripts/builder/verify-spatial-catalog.cjs && node scripts/builder/verify-unified-builder.cjs",
+    "test": "node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs && node scripts/builder/verify-builder.cjs && node scripts/builder/verify-composition.cjs && node scripts/builder/verify-composition-graph.cjs && node scripts/builder/verify-canvas-editor.cjs && node scripts/builder/verify-builder-parity.cjs && node scripts/builder/verify-architecture.cjs && node scripts/builder/verify-public-catalog.cjs && node scripts/builder/verify-spatial-catalog.cjs && node scripts/builder/verify-unified-builder.cjs && node scripts/builder/verify-builder-ux-reliability.cjs",
     "test:apertus": "node scripts/verify-apertus.cjs",
     "test:browser": "node scripts/verify-browser.cjs",
     "test:apertus:live": "node scripts/evaluate-apertus-live.cjs",
@@ -23,7 +23,7 @@
     "test:builder:parity": "node scripts/builder/verify-builder-parity.cjs",
     "test:builder:parity:browser": "node scripts/verify-builder-parity-browser.cjs",
     "test:builder": "node scripts/builder/verify-builder.cjs",
-    "test:builder:browser": "node scripts/verify-unified-builder-browser.cjs && node scripts/verify-spatial-catalog-browser.cjs",
+    "test:builder:browser": "node scripts/verify-unified-builder-browser.cjs && node scripts/verify-spatial-catalog-browser.cjs && node scripts/verify-builder-ux-reliability-browser.cjs",
     "test:composition": "node scripts/builder/verify-composition.cjs && node scripts/builder/verify-composition-graph.cjs && node scripts/builder/verify-architecture.cjs",
     "test:composition:browser": "node scripts/verify-composition-browser.cjs",
     "test:composition:graph": "node scripts/builder/verify-composition-graph.cjs",
@@ -34,7 +34,8 @@
     "test:spatial-catalog": "node scripts/builder/verify-spatial-catalog.cjs",
     "test:public-catalog": "node scripts/builder/verify-public-catalog.cjs",
     "test:public-catalog:browser": "node scripts/verify-public-catalog-browser.cjs",
-    "test:builder:unified": "node scripts/builder/verify-unified-builder.cjs"
+    "test:builder:unified": "node scripts/builder/verify-unified-builder.cjs",
+    "test:builder:ux": "node scripts/builder/verify-builder-ux-reliability.cjs && node scripts/verify-builder-ux-reliability-browser.cjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",

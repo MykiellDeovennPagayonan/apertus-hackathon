@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { SchemaForm } from "../../components/controls/SchemaForm";
 import { RecipeLesson } from "../../components/views/RecipeLesson";
 import { regenerateTruss } from "../../runtime/authoring/regenerateTruss";
@@ -15,8 +15,11 @@ import {
 import { deleteComponents } from "../editor/selection";
 import { SaveCompositeDialog } from "../library/SaveCompositeDialog";
 import { ComponentSettings } from "./ComponentSettings";
+import { CompositeInterfaceEditor } from "./CompositeInterfaceEditor";
 import { CompositionGraph } from "./CompositionGraph";
 import { CompositionLibrary } from "./CompositionLibrary";
+import { FeedbackView } from "./FeedbackView";
+import { makeFeedback } from "./feedback";
 import {
   ManualComponentSettings,
   manualDefinition,
@@ -39,6 +42,7 @@ export default function CompositionBuilder({
   history,
   onSave,
   saving,
+  saveState,
   error,
   notice,
   fileMenu,
@@ -57,6 +61,7 @@ export default function CompositionBuilder({
   history: ReactNode;
   onSave: () => void;
   saving: boolean;
+  saveState: string;
   error: string;
   notice: string;
   fileMenu: ReactNode;
@@ -65,6 +70,24 @@ export default function CompositionBuilder({
   onExpanded: (v: boolean) => void;
   onZoom: (v: number) => void;
 }) {
+  const documentMenu = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    const close = (event: PointerEvent | KeyboardEvent) => {
+      const menu = documentMenu.current;
+      if (!menu?.open) return;
+      if (event instanceof KeyboardEvent) {
+        if (event.key !== "Escape") return;
+        menu.open = false;
+        menu.querySelector("summary")?.focus();
+      } else if (!menu.contains(event.target as Node)) menu.open = false;
+    };
+    window.addEventListener("pointerdown", close);
+    window.addEventListener("keydown", close);
+    return () => {
+      window.removeEventListener("pointerdown", close);
+      window.removeEventListener("keydown", close);
+    };
+  }, []);
   const catalog = useComponentCatalog(doc, edit);
   const {
     document,
@@ -81,7 +104,14 @@ export default function CompositionBuilder({
   const [mobile, setMobile] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
-  const feedback = catalog.feedback;
+  const noticeFailure = /Couldn't |could not|unsupported or invalid/i.test(
+    notice,
+  );
+  const saveLabel = saving
+    ? "Saving…"
+    : isRunnableDocument(doc)
+      ? "Save experiment"
+      : "Save draft";
   const current = components.find((n) => n.id === selected);
   const errorText = (e: unknown) =>
     e instanceof Error ? e.message : "Change rejected";
@@ -109,34 +139,75 @@ export default function CompositionBuilder({
       className={`manual-builder composition-builder ${expanded ? "is-expanded" : ""}`}
       data-tab={tab}
     >
+      <h1 className="builder-sr-only">
+        {doc.lesson.title || "Untitled experiment"}
+      </h1>
       <header className="builder-toolbar composition-toolbar">
         <Link href="/experiments">← Experiments</Link>
-        <h1>{doc.lesson.title || "Untitled experiment"}</h1>
+        <label className="composition-document-title">
+          <span className="builder-sr-only">Experiment title</span>
+          <input
+            aria-label="Experiment title"
+            value={doc.lesson.title}
+            placeholder="Untitled experiment"
+            maxLength={100}
+            readOnly={expanded}
+            onChange={(event) =>
+              edit(
+                (d) => {
+                  d.lesson.title = event.target.value;
+                  if (d.authored) d.authored.lesson.title = event.target.value;
+                },
+                "experiment-title",
+                "Rename experiment",
+              )
+            }
+          />
+        </label>
+        <output className="composition-save-state">
+          {saving ? "Saving…" : saveState}
+        </output>
         {!expanded && (
           <>
-            <button type="button" onClick={onSetup}>
-              Back to setup
-            </button>
             <button type="button" disabled={!canUndo} onClick={undo}>
               Undo
             </button>
             <button type="button" disabled={!canRedo} onClick={redo}>
               Redo
             </button>
-            <button type="button" disabled={!!error || saving} onClick={onSave}>
-              {saving
-                ? "Saving…"
-                : isRunnableDocument(doc)
-                  ? "Save experiment"
-                  : "Save draft"}
+            <button
+              type="button"
+              className="composition-save-action"
+              aria-label={saveLabel}
+              disabled={!!error || saving}
+              onClick={onSave}
+            >
+              <span className="toolbar-full-label">{saveLabel}</span>
+              <span className="toolbar-short-label">
+                {saving ? "Saving…" : "Save"}
+              </span>
             </button>
-            {history}
-            {fileMenu}
+            <details
+              ref={documentMenu}
+              className="composition-document-menu composition-view-menu"
+            >
+              <summary aria-label="More document actions">
+                More
+              </summary>
+              <div>
+                {history}
+                {fileMenu}
+                <button type="button" onClick={onSetup}>
+                  Back to setup
+                </button>
+              </div>
+            </details>
           </>
         )}
         <button
           type="button"
           className="builder-primary"
+          aria-label={expanded ? "Return to builder" : "Try lesson ↗"}
           onClick={() => {
             if (!expanded) {
               try {
@@ -155,37 +226,57 @@ export default function CompositionBuilder({
             onExpanded(!expanded);
           }}
         >
-          {expanded ? "Return to builder" : "Try lesson ↗"}
+          <span className="toolbar-full-label">
+            {expanded ? "Return to builder" : "Try lesson ↗"}
+          </span>
+          <span className="toolbar-short-label">
+            {expanded ? "Edit" : "Try ↗"}
+          </span>
         </button>
       </header>
-      {(error || notice || feedback) && (
-        <output
-          className="composition-notice"
-          role={error || feedback ? "alert" : "status"}
-        >
-          {error
-            ? `Preview shows the last valid draft. ${error}`
-            : feedback || notice}
-        </output>
+      {error && (
+        <section className="builder-feedback is-error" role="alert">
+          <strong>Preview is using the last valid draft</strong>
+          <p>{error}</p>
+          <button type="button" onClick={() => setTab("Connections")}>
+            Review connections
+          </button>
+        </section>
       )}
+      {!error && notice && (
+        <FeedbackView
+          message={makeFeedback(
+            notice,
+            noticeFailure ? "error" : "info",
+            "Update document",
+            "document.action",
+          )}
+        />
+      )}
+      {!libraryOpen && <FeedbackView message={catalog.message} />}
       {!expanded && (
         <nav
           className="builder-tabs composition-tabs"
           aria-label="Builder panels"
         >
-          {["Connections", "Build"].map((name) => (
-            <button
-              key={name}
-              type="button"
-              aria-pressed={tab === name}
-              onClick={() => {
-                setTab(name);
-                setSelected("");
-              }}
-            >
-              {name}
-            </button>
-          ))}
+          <fieldset
+            className="composition-mode-switch"
+            aria-label="Authoring mode"
+          >
+            {["Connections", "Build"].map((name) => (
+              <button
+                key={name}
+                type="button"
+                aria-pressed={tab === name}
+                onClick={() => {
+                  setTab(name);
+                  setSelected("");
+                }}
+              >
+                {name}
+              </button>
+            ))}
+          </fieldset>
           <button
             type="button"
             data-composition-add
@@ -245,8 +336,10 @@ export default function CompositionBuilder({
                   }
                 })
               }
-              onCapture={(next) =>
-                change("Capture starting values", () => next)
+              onCapture={
+                expanded
+                  ? undefined
+                  : (next) => change("Capture starting values", () => next)
               }
             />
           </div>
@@ -262,7 +355,17 @@ export default function CompositionBuilder({
         onClose={() => setSelected("")}
         wide={selected === "lesson" || !!manualDefinition(current)}
       >
-        <output>{feedback || notice}</output>
+        <FeedbackView message={catalog.message} />
+        {notice && (
+          <FeedbackView
+            message={makeFeedback(
+              notice,
+              noticeFailure ? "error" : "info",
+              "Update document",
+              "document.action",
+            )}
+          />
+        )}
         {regeneration && (
           <dialog
             ref={regenerationDialog}
@@ -329,6 +432,17 @@ export default function CompositionBuilder({
           .filter((g) => g.id === selected)
           .map((g) => (
             <div className="catalog-group" key={g.id}>
+              <CompositeInterfaceEditor
+                group={g}
+                document={document}
+                onChange={(ports) =>
+                  change(`Edit ${g.label} interface`, (d) => {
+                    requireValue(
+                      d.groups.find((p) => p.id === g.id),
+                    ).exposedPorts = ports;
+                  })
+                }
+              />
               <strong>{g.label}</strong>{" "}
               <span>{g.members.length} children</span>
               <button

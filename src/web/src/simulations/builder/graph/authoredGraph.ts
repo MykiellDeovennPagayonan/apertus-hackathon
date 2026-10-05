@@ -36,8 +36,18 @@ export function resolveGraphEndpoint(
 ): Endpoint {
   if (!doc.authored?.groups.some((g) => g.id === endpoint.node))
     return endpoint;
-  const [node, port] = JSON.parse(endpoint.port) as [string, string];
-  return { node, port };
+  const group = requireValue(
+    doc.authored?.groups.find((g) => g.id === endpoint.node),
+  );
+  const parsed: unknown = JSON.parse(endpoint.port);
+  if (
+    !Array.isArray(parsed) ||
+    parsed.length !== 2 ||
+    parsed.some((v) => typeof v !== "string") ||
+    !group.members.includes(parsed[0])
+  )
+    throw new Error("Choose a valid composite port");
+  return { node: parsed[0], port: parsed[1] };
 }
 export function authoredGraph(
   doc: ExperimentDocument,
@@ -66,6 +76,7 @@ export function authoredGraph(
         id: n.id,
         label: n.label,
         kind: role[def.category],
+        displayKind: def.discovery?.kind === "object" ? "Object" : undefined,
         description: def.description,
         inputs: [
           ...Object.entries(def.inputs).map(([id, p]) => graphPort(id, p)),
@@ -84,6 +95,11 @@ export function authoredGraph(
   for (const group of collapsed) {
     const inputs: GraphPort[] = [],
       outputs: GraphPort[] = [];
+    for (const exposed of group.exposedPorts ?? []) {
+      const id = JSON.stringify([exposed.endpoint.node, exposed.endpoint.port]);
+      const list = exposed.direction === "input" ? inputs : outputs;
+      list.push({ ...graphPort(id, exposed.port), label: exposed.name });
+    }
     // Boundary ports remain real child endpoints. Collapsing is only a graph projection.
     for (const c of d.connections) {
       const insideFrom = group.members.includes(c.from.node),

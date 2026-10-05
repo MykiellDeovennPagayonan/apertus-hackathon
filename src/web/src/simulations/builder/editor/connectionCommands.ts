@@ -56,6 +56,22 @@ export function connectDocument(
         schemaDefault(command.arguments),
       );
   }
+  // Explicit placement onto another canvas joins the object's runtime scope.
+  // Controls and owned views travel together so command bindings remain valid.
+  const destination = d.nodes.find((n) => n.id === to.node);
+  if (kind === "attachment" && destination && to.port === "objects") {
+    const canvas = publicDefinition(destination.definition);
+    if (
+      canvas.category === "canvases" &&
+      canvas.inputs.objects?.unit === output?.unit &&
+      node.scope !== destination.scope
+    ) {
+      const previousScope = node.scope;
+      for (const member of [...d.nodes, ...d.resources])
+        if (member.scope === previousScope) member.scope = destination.scope;
+      d.scopes = d.scopes.filter((scope) => scope.id !== previousScope);
+    }
+  }
   d.connections.push({
     id: `connection-${crypto.randomUUID()}`,
     from,

@@ -20,6 +20,7 @@ export type PublicDefinition = {
   version: number;
   title: string;
   description: string;
+  discovery?: DiscoveryMetadata;
   category:
     | "models"
     | "controls"
@@ -106,6 +107,35 @@ export type Layout = {
   theme?: Endpoint;
   children: Layout[];
 };
+/** Missing exposedPorts in older documents means boundary-only projection.
+ * Missing required on legacy recipe ports retains mandatory insertion binding. */
+export type ExposedPort = {
+  name: string;
+  endpoint: Endpoint;
+  direction: "input" | "output";
+  port: Port;
+  required?: boolean;
+};
+export type DiscoveryMetadata = {
+  kind:
+    | "component"
+    | "object"
+    | "model"
+    | "preset"
+    | "composite"
+    | "experiment";
+  group:
+    | "objects"
+    | "controls"
+    | "displays"
+    | "canvases"
+    | "models"
+    | "layout"
+    | "composites"
+    | "experiments";
+  summary: string;
+  placement: string;
+};
 export type Group = {
   id: string;
   label: string;
@@ -114,6 +144,7 @@ export type Group = {
   source?: { id: string; version: number };
   collapsed: boolean;
   parameters: ExposedParameter[];
+  exposedPorts?: ExposedPort[];
 };
 export type ExposedParameter = {
   name: string;
@@ -144,12 +175,8 @@ export type CompositeRecipe = {
   document: AuthoredDocument;
   nested: { id: string; recipe: string; version: number }[];
   parameters: ExposedParameter[];
-  externalPorts: {
-    name: string;
-    endpoint: Endpoint;
-    direction: "input" | "output";
-    port: Port;
-  }[];
+  discovery?: DiscoveryMetadata;
+  externalPorts: ExposedPort[];
   dependencies: { id: string; version: number }[];
   assumptions: string[];
 };
