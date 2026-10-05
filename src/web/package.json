@@ -11,6 +11,7 @@
     "test": "node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs && node scripts/builder/verify-builder.cjs && node scripts/builder/verify-composition.cjs && node scripts/builder/verify-composition-graph.cjs && node scripts/builder/verify-canvas-editor.cjs && node scripts/builder/verify-builder-parity.cjs && node scripts/builder/verify-architecture.cjs && node scripts/builder/verify-public-catalog.cjs && node scripts/builder/verify-spatial-catalog.cjs && node scripts/builder/verify-unified-builder.cjs && node scripts/builder/verify-builder-ux-reliability.cjs && node scripts/builder/verify-spatial-board.cjs",
     "test:apertus": "node scripts/verify-apertus.cjs",
     "test:browser": "node scripts/verify-browser.cjs",
+    "test:components:browser": "node scripts/verify-component-presentation-browser.cjs",
     "test:apertus:live": "node scripts/evaluate-apertus-live.cjs",
     "test:planner": "node scripts/verify-planner.cjs",
     "test:laya:live": "node scripts/evaluate-laya-live.cjs",

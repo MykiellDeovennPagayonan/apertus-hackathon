@@ -1,9 +1,50 @@
 {
   "generatedBy": "src/web/scripts/builder/audit-public-catalog.cjs",
   "originalSourceFiles": 255,
-  "sourceFiles": 257,
-  "exportRecords": 581,
+  "sourceFiles": 258,
+  "exportRecords": 583,
   "records": [
+    {
+      "source": "src/web/src/simulations/components/controls/SchemaForm.tsx",
+      "export": "FieldPresentation",
+      "responsibility": "typed field presentation metadata",
+      "activeConsumers": [{ "source": "src/web/src/simulations/components/controls/commandPresentation.ts", "typeOnly": true, "symbols": ["FieldPresentation"] }],
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": ["src/web/src/simulations/components/controls/commandPresentation.ts"],
+        "destination": "src/web/src/simulations/components/controls/SchemaForm.tsx"
+      },
+      "classification": "presentation contract",
+      "stateOwnership": "Type only; stable argument paths carry display labels, choices and help",
+      "commands": [], "outputs": [], "space": [],
+      "coupling": { "singletonImports": [], "singletonReads": false, "builderImports": false },
+      "dependencies": [], "identity": [],
+      "verification": "TypeScript and component presentation regression suites",
+      "completion": "Shared type consumed by command presentation metadata"
+    },
+    {
+      "source": "src/web/src/simulations/components/controls/commandPresentation.ts",
+      "export": "commandPresentation",
+      "responsibility": "control presentation metadata",
+      "activeConsumers": [
+        { "source": "src/web/src/simulations/components/views/RecipeLesson.tsx", "typeOnly": false, "symbols": ["commandPresentation"] },
+        { "source": "src/web/src/simulations/components/composites/catalog.ts", "typeOnly": false, "symbols": ["commandPresentation"] }
+      ],
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": ["src/web/src/simulations/components/views/RecipeLesson.tsx", "src/web/src/simulations/components/composites/catalog.ts"],
+        "destination": "src/web/src/simulations/components/controls/commandPresentation.ts"
+      },
+      "classification": "presentation metadata",
+      "stateOwnership": "No model state; labels map stable command and argument identities to learner presentation",
+      "commands": [], "outputs": [], "space": [],
+      "coupling": { "singletonImports": [], "singletonReads": false, "builderImports": false },
+      "dependencies": [], "identity": [],
+      "verification": "TypeScript, public catalog and component presentation regression suites",
+      "completion": "Shared semantic labels used by default recipes and existing recipe rendering"
+    },
     {
       "source": "src/web/src/simulations/components/README.md",
       "export": "(file)",

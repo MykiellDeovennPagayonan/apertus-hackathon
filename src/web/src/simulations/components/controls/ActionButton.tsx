@@ -6,12 +6,14 @@ export function ActionButton({
   className,
   disabled = false,
   label,
+  intent = "secondary",
 }: {
   children: ReactNode;
   onCommand: () => ActionResult;
   className?: string;
   disabled?: boolean;
   label?: string;
+  intent?: "primary" | "secondary" | "quiet";
 }) {
   const [error, setError] = useState<string>();
   return (
@@ -20,7 +22,7 @@ export function ActionButton({
         type="button"
         disabled={disabled}
         aria-label={label}
-        className={className}
+        className={`recipe-action recipe-action--${intent} ${className ?? ""}`}
         onClick={() => {
           const result = onCommand();
           setError(result.accepted ? undefined : result.error);
@@ -28,7 +30,11 @@ export function ActionButton({
       >
         {children}
       </button>
-      {error && <span role="alert">{error}</span>}
+      {error && (
+        <span className="catalog-feedback catalog-feedback--error" role="alert">
+          {error}
+        </span>
+      )}
     </>
   );
 }

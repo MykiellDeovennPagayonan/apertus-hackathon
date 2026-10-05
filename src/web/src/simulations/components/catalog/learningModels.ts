@@ -91,7 +91,15 @@ export const learningDefinitions: PublicDefinition[] = Object.keys(
             !(demo in mathActions) ||
             mathActions[demo as MathDemo].includes(key),
         )
-        .map(([key, o]) => [key, { ...o }]),
+        .map(([key, o]) => [
+          key,
+          {
+            ...o,
+            ...(["SET_LOOPING", "SET_TICK_DIVISIONS"].includes(key)
+              ? { submission: "continuous" as const }
+              : {}),
+          },
+        ]),
     ),
     placement: ["logic"],
     lifecycle: {

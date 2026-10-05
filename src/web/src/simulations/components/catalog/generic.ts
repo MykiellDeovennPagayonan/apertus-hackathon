@@ -81,7 +81,14 @@ export const genericDefinitions: PublicDefinition[] = [
       `displays/${name}`,
       name.replace(/([a-z])([A-Z])/g, "$1 $2"),
       "displays",
-      object({ label: text, precision: num(0, 8, "", true) }),
+      object(
+        {
+          label: text,
+          precision: num(0, 8, "", true),
+          tone: choice("neutral", "success", "warning", "error"),
+        },
+        ["tone"],
+      ),
       { label: name, precision: 3 },
     ),
     inputs: {

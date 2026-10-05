@@ -19,8 +19,8 @@ export function ToggleControl({
   const [error, setError] = useState<string>();
   if (mode === "checkbox")
     return (
-      <label className="composition-learner-control">
-        {label}
+      <label className="composition-learner-control catalog-toggle">
+        <span>{label}</span>
         <input
           type="checkbox"
           aria-label={label}

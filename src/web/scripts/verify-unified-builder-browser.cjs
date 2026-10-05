@@ -136,7 +136,7 @@ async function main() {
       .click();
     await page.getByRole("button", { name: "Build", exact: true }).click();
     const concentrations = page.locator(
-      '.recipe-lesson section[aria-label="concentration g/L"] output',
+      '.recipe-lesson section[aria-label="concentration"] output',
     );
     assert.equal(await concentrations.count(), 2);
     const forms = page
@@ -145,11 +145,11 @@ async function main() {
     // Keyboard focus reveals offscreen content on the spatial board.
     await forms
       .first()
-      .getByRole("button", { name: "Apply", exact: true })
+      .getByRole("button", { name: "Apply changes", exact: true })
       .focus();
     await forms
       .first()
-      .getByRole("button", { name: "Apply", exact: true })
+      .getByRole("button", { name: "Apply changes", exact: true })
       .click();
     assert.notEqual(
       await concentrations.nth(0).textContent(),

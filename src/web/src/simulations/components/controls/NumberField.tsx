@@ -34,17 +34,18 @@ export function NumberField({
       setError(
         `Choose ${integer ? "a whole number" : "a number"} from ${min} to ${max}.`,
       );
-      return;
+      return false;
     }
     if (n === value) {
       setError("");
-      return;
+      return true;
     }
     const result = onChange(n);
     setError(result.accepted ? "" : result.error);
+    return result.accepted;
   };
   return (
-    <label className="experiment-number">
+    <label className="experiment-number catalog-field">
       <span>{label}</span>
       <input
         aria-label={label}
@@ -68,11 +69,14 @@ export function NumberField({
             commit(text);
         }}
         onBlur={(e) => {
-          commit(e.target.value);
-          setDraft(null);
+          if (commit(e.target.value)) setDraft(null);
         }}
         onKeyDown={(e) => {
           if (e.key === "Enter") e.currentTarget.blur();
+          if (e.key === "Escape") {
+            setDraft(null);
+            setError("");
+          }
         }}
       />
       {error && (

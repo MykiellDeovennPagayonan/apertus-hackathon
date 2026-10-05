@@ -7,6 +7,7 @@ import {
 } from "../../runtime/authoring/types";
 import type { ParameterSchema } from "../../runtime/parameterSchema";
 import { publicDefinition, publicDefinitions } from "../catalog";
+import { commandPresentation } from "../controls/commandPresentation";
 import { spatialRecipes } from "./spatial";
 export function schemaDefault(schema: ParameterSchema): unknown {
   switch (schema.type) {
@@ -75,6 +76,12 @@ export function modelRecipe(definition: string): CompositeRecipe {
     };
   d.layout.kind = "split";
   d.layout.children = [scene, controls, details];
+  const advanced = {
+    ...emptyLayout("layout/advanced"),
+    kind: "disclosure" as const,
+    label: "More ways to explore",
+  };
+  const learningModel = model.tags.includes("mathematics");
   function add(
     def: string,
     id: string,
@@ -144,6 +151,8 @@ export function modelRecipe(definition: string): CompositeRecipe {
     }
   }
   for (const [key, command] of Object.entries(model.commands)) {
+    if (/SET_(RATE_)?PLAYING$/.test(key)) continue;
+    const metadata = commandPresentation(key, definition);
     const args = schemaDefault(command.arguments) as Record<string, unknown>;
     // These are authored presets, not range/command contracts. Schemas remain the authority.
     const presets: Record<string, unknown> = {
@@ -164,12 +173,16 @@ export function modelRecipe(definition: string): CompositeRecipe {
         model.defaults[field] ??
         args.value;
     }
+    if (/SET_.*TASK/.test(key) && model.defaults.task)
+      args.value = structuredClone(model.defaults.task);
+    if (key === "SET_FRACTION_COMPARISON" && Array.isArray(model.defaults.bars))
+      args.value = { a: model.defaults.bars[0], b: model.defaults.bars[1] };
     const valueSchema =
       command.arguments.type === "object"
         ? command.arguments.properties.value
         : undefined;
     const widget =
-      key.startsWith("set:") && valueSchema?.type === "boolean"
+      valueSchema?.type === "boolean"
         ? "controls/Toggle"
         : key.startsWith("set:") &&
             (valueSchema?.type === "number" || valueSchema?.type === "integer")
@@ -177,13 +190,25 @@ export function modelRecipe(definition: string): CompositeRecipe {
           : Object.keys(args).length
             ? "controls/Form"
             : "controls/Button";
-    add(widget, `control/${key}`, controls, {
+    const secondary =
+      learningModel &&
+      [
+        "MOVE_TOKEN",
+        "COUNT_TOKEN",
+        "PLACE_TOKEN",
+        "REMOVE_TOKEN",
+        "SET_BAR_FRACTION",
+        "TOGGLE_FRACTION_PIECE",
+        "SUBDIVIDE_FRACTION",
+        "SET_LOOPING",
+      ].includes(key);
+    add(widget, `control/${key}`, secondary ? advanced : controls, {
       label:
         key === "RESET" && model.tags.includes("natural-systems")
           ? "Reset initial settings"
-          : command.description || key.replaceAll("_", " "),
+          : metadata.label || command.description || key.replaceAll("_", " "),
       initial: JSON.stringify(args),
-      mode: key.startsWith("set:") ? "immediate" : "submit",
+      mode: command.submission === "continuous" ? "immediate" : "submit",
     });
     d.connections.push({
       id: `link/control/${key}`,
@@ -270,7 +295,10 @@ export function modelRecipe(definition: string): CompositeRecipe {
       port.kind === "attachment" ||
       output === "data" ||
       output === "board" ||
-      output === "configuration"
+      output === "configuration" ||
+      (learningModel && output === "playing" && !model.commands.SET_PLAYING) ||
+      (output === "playing" &&
+        quickActions.some((quick) => /SET_(RATE_)?PLAYING$/.test(quick.action)))
     )
       continue;
     const display =
@@ -280,16 +308,26 @@ export function modelRecipe(definition: string): CompositeRecipe {
           ? "displays/Heatmap"
           : ["atoms", "customers", "frequencies", "steps"].includes(output)
             ? "displays/DataTable"
-            : "displays/Readout";
+            : output === "feedback"
+              ? "displays/StatusMessage"
+              : "displays/Readout";
     add(
       display,
       `display/${output}`,
-      definition === "prefabs/chemistry/Dilution" ? controls : details,
+      output === "pressureKPa"
+        ? scene
+        : output === "feedback" ||
+            output === "playing" ||
+            definition === "prefabs/chemistry/Dilution"
+          ? controls
+          : details,
       {
         label:
-          output === "atoms"
-            ? "Atoms on each side"
-            : `${output} ${port.unit === "1" ? "" : port.unit}`,
+          output === "pressureKPa"
+            ? "Pressure"
+            : output === "atoms"
+              ? "Atoms on each side"
+              : `${output} ${port.unit === "1" ? "" : port.unit}`,
         precision: 3,
       },
     );
@@ -304,6 +342,36 @@ export function modelRecipe(definition: string): CompositeRecipe {
     text: model.assumptions.join("\n"),
     variant: "body",
   });
+  if (advanced.children.length) controls.children.push(advanced);
+  if (learningModel) {
+    const actionIds = new Set(
+      d.nodes
+        .filter((node) => node.definition === "controls/Button")
+        .map((node) => node.id),
+    );
+    const actions = controls.children.filter(
+      (child) => child.node && actionIds.has(child.node),
+    );
+    const setup = controls.children.filter(
+      (child) =>
+        child.node && /SET_.*TASK|SET_FRACTION_COMPARISON/.test(child.node),
+    );
+    const others = controls.children.filter(
+      (child) => !actions.includes(child) && !setup.includes(child),
+    );
+    const actionRow = {
+      ...emptyLayout("layout/activity-actions"),
+      kind: "row" as const,
+      label: "",
+      gap: 8,
+      children: actions,
+    };
+    controls.children = [
+      ...setup,
+      ...(actions.length ? [actionRow] : []),
+      ...others,
+    ];
+  }
   const parameters =
     model.configuration.type === "object"
       ? Object.entries(model.configuration.properties)

@@ -17,6 +17,7 @@ import {
   memo,
   useContext,
   useEffect,
+  useId,
   useRef,
   useState,
   useSyncExternalStore,
@@ -35,6 +36,8 @@ import type { ModelInstance } from "../../runtime/contribution";
 import { object } from "../../runtime/parameterSchema";
 import { publicDefinition } from "../catalog";
 import { schemaDefault } from "../composites/catalog";
+import { ActionButton } from "../controls/ActionButton";
+import { commandPresentation } from "../controls/commandPresentation";
 import { DragHandleControl } from "../controls/DragHandleControl";
 import { SchemaForm } from "../controls/SchemaForm";
 import type { MathBoard } from "../traits/MathBoards";
@@ -70,6 +73,7 @@ import { CountingScene } from "./CountingScene";
 import { EqualGroupsScene } from "./EqualGroupsScene";
 import { FractionBuilderScene } from "./FractionBuilderScene";
 import { FractionNumberLineScene } from "./FractionNumberLineScene";
+import { MathReadoutView } from "./MathReadoutView";
 import "./recipe-lesson.css";
 import "./chemistry/ChemistryLesson.css";
 import "./dynamic-systems/DynamicSystemsLesson.css";
@@ -568,6 +572,41 @@ function NodeView({
         ? publicDefinition(target.definition).commands[connection.to.port]
         : undefined;
     if (!command) return <p>{node.label}: connect a supported command.</p>;
+    const commandKey = connection?.to.port ?? "";
+    const metadata = commandPresentation(commandKey, target?.definition ?? "");
+    const defaultLabel = String(config.label);
+    const label =
+      metadata.label &&
+      (defaultLabel === command.description ||
+        defaultLabel === commandKey.replaceAll("_", " "))
+        ? metadata.label
+        : defaultLabel;
+    if (
+      /SET_(RATE_)?PLAYING$/.test(commandKey) ||
+      commandKey === "set:playing"
+    ) {
+      const playing =
+        (snapshot.outputs[target?.id ?? ""]?.playing ??
+          snapshot.state[target?.id ?? ""]?.playing ??
+          (
+            snapshot.state[target?.id ?? ""]?.inputs as
+              | Record<string, unknown>
+              | undefined
+          )?.playing) === true;
+      return (
+        <div className="recipe-playback">
+          <ActionButton
+            intent="primary"
+            onCommand={() => runtime.submit(node.id, { value: !playing })}
+          >
+            {playing ? "Pause" : "Play"}
+          </ActionButton>
+          <span className="recipe-playback-state">
+            {playing ? "Running" : "Paused"}
+          </span>
+        </div>
+      );
+    }
     if (node.definition === "controls/EntityPicker") {
       const argument =
           command.arguments.type === "object"
@@ -609,6 +648,38 @@ function NodeView({
     } catch {
       initial = schemaDefault(command.arguments);
     }
+    const state = snapshot.state[target?.id ?? ""];
+    let current: Record<string, unknown> | undefined;
+    if (
+      state &&
+      commandKey.startsWith("set:") &&
+      state.inputs &&
+      Object.hasOwn(state.inputs as object, commandKey.slice(4))
+    )
+      current = {
+        value: (state.inputs as Record<string, unknown>)[commandKey.slice(4)],
+      };
+    if (state && commandKey === "SET_LOOPING")
+      current = {
+        value:
+          (state.sequence as { looping?: boolean } | undefined)?.looping ??
+          false,
+      };
+    if (
+      state &&
+      commandKey.startsWith("set:") &&
+      Object.hasOwn(state, commandKey.slice(4))
+    )
+      current = { value: state[commandKey.slice(4)] };
+    if (state && commandKey === "SET_ARITHMETIC_TASK")
+      current = {
+        value: { operation: state.operation, a: state.a, b: state.b },
+      };
+    if (state && commandKey === "SET_FRACTION_COMPARISON") {
+      const bars = state.bars as { value: unknown }[] | undefined;
+      if (bars?.length === 2)
+        current = { value: { a: bars[0].value, b: bars[1].value } };
+    }
     return (
       <SchemaForm
         key={`${node.id}/${connection?.to.node}/${connection?.to.port}/${config.initial}`}
@@ -617,7 +688,10 @@ function NodeView({
           node.definition === "controls/Button" ? object({}) : command.arguments
         }
         initial={node.definition === "controls/Button" ? {} : initial}
-        label={String(config.label)}
+        current={current}
+        label={label}
+        presentation={metadata.presentation}
+        submitLabel={metadata.submitLabel}
         mode={
           command.submission === "continuous" && config.mode === "immediate"
             ? "immediate"
@@ -627,8 +701,25 @@ function NodeView({
       />
     );
   }
-  if (def.category === "appearance")
-    return <Appearance node={node} runtime={runtime} />;
+  if (def.category === "appearance") {
+    const modelBinding = runtime.document.connections.find(
+      (c) =>
+        c.kind === "attachment" &&
+        c.to.node === node.id &&
+        c.to.port === "model",
+    );
+    const board = modelBinding
+      ? (snapshot.outputs[modelBinding.from.node]?.board as
+          | MathBoard
+          | undefined)
+      : undefined;
+    return (
+      <div className="recipe-scene-content">
+        <Appearance node={node} runtime={runtime} />
+        {board && <MathReadoutView board={board} />}
+      </div>
+    );
+  }
   if (node.definition === "displays/Text")
     return config.variant === "heading" ? (
       <h2>{String(config.text)}</h2>
@@ -693,6 +784,59 @@ function NodeView({
         ? snapshot.outputs[binding.from.node]?.[binding.from.port]
         : undefined,
       kind = node.definition.split("/")[1];
+    if (
+      kind === "StatusMessage" ||
+      binding?.from.port === "feedback" ||
+      (kind === "Readout" && typeof value === "boolean")
+    ) {
+      if (value === "" || (binding?.from.port === "feedback" && value == null))
+        return null;
+      const message =
+        typeof value === "boolean"
+          ? binding?.from.port === "playing"
+            ? value
+              ? "Running"
+              : "Paused"
+            : `${String(config.label)}: ${value ? "Enabled" : "Disabled"}`
+          : value === undefined || value === null
+            ? "Waiting for a result"
+            : display(value);
+      return (
+        <output
+          className={`recipe-status recipe-status--${String(config.tone ?? "neutral")}`}
+          aria-live="polite"
+        >
+          <span className="recipe-status-dot" aria-hidden="true" />
+          {message}
+        </output>
+      );
+    }
+    if (kind === "Readout") {
+      const source = runtime.document.nodes.find(
+        (candidate) => candidate.id === binding?.from.node,
+      );
+      const rawUnit =
+        source && binding
+          ? publicDefinition(source.definition).outputs[binding.from.port]?.unit
+          : undefined;
+      const unit = rawUnit && rawUnit !== "1" && rawUnit !== "*" ? rawUnit : "";
+      const configuredLabel = String(config.label);
+      const label =
+        unit && configuredLabel.endsWith(` ${unit}`)
+          ? configuredLabel.slice(0, -unit.length - 1)
+          : configuredLabel;
+      return (
+        <section className="recipe-measurement" aria-label={label}>
+          <output className="recipe-measurement-value">
+            {value === ""
+              ? "Unavailable"
+              : display(value, Number(config.precision))}
+            <small>{unit}</small>
+          </output>
+          <span className="recipe-measurement-label">{label}</span>
+        </section>
+      );
+    }
     if (
       kind === "Inspector" &&
       value &&
@@ -788,28 +932,63 @@ function TabsLayout({
   runtime: DocumentRuntime;
 }) {
   const [active, setActive] = useState(layout.children[0]?.id ?? "");
+  const tabId = useId();
   const chosen =
     layout.children.find((l) => l.id === active) ?? layout.children[0];
   return (
     <section className="recipe-layout">
       <div role="tablist" aria-label={layout.label || "Sections"}>
-        {layout.children.map((l) => (
+        {layout.children.map((l, index) => (
           <button
             type="button"
             role="tab"
             aria-selected={chosen?.id === l.id}
+            tabIndex={chosen?.id === l.id ? 0 : -1}
+            id={`${tabId}-tab-${index}`}
+            aria-controls={`${tabId}-panel-${index}`}
             key={l.id}
             onClick={() => setActive(l.id)}
+            onKeyDown={(event) => {
+              const direction =
+                event.key === "ArrowRight"
+                  ? 1
+                  : event.key === "ArrowLeft"
+                    ? -1
+                    : 0;
+              const next =
+                event.key === "Home"
+                  ? 0
+                  : event.key === "End"
+                    ? layout.children.length - 1
+                    : direction
+                      ? (index + direction + layout.children.length) %
+                        layout.children.length
+                      : undefined;
+              if (next === undefined) return;
+              event.preventDefault();
+              setActive(layout.children[next].id);
+              const buttons =
+                event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>(
+                  '[role="tab"]',
+                );
+              buttons?.[next]?.focus();
+            }}
           >
             {l.label || l.kind}
           </button>
         ))}
       </div>
-      {chosen && (
-        <div role="tabpanel">
-          <LayoutView layout={chosen} runtime={runtime} />
+      {layout.children.map((child, index) => (
+        <div
+          key={child.id}
+          role="tabpanel"
+          id={`${tabId}-panel-${index}`}
+          aria-labelledby={`${tabId}-tab-${index}`}
+          hidden={chosen?.id !== child.id}
+        >
+          <LayoutView layout={child} runtime={runtime} />
         </div>
-      )}
+      ))}
     </section>
   );
 }
@@ -833,6 +1012,22 @@ function LayoutView({
   if (layout.visibleWhen && boundValue(layout.visibleWhen) !== true)
     return null;
   const node = runtime.document.nodes.find((n) => n.id === layout.node);
+  if (
+    node?.definition === "displays/StatusMessage" ||
+    node?.definition === "displays/Readout"
+  ) {
+    const binding = runtime.document.connections.find(
+      (connection) =>
+        connection.kind === "value" && connection.to.node === node.id,
+    );
+    const value = binding ? boundValue(binding.from) : undefined;
+    if (
+      binding?.from.port === "feedback" &&
+      (value === "" || value == null) &&
+      author.selected !== node.id
+    )
+      return null;
+  }
   if (node?.definition === "layout/Repeater") {
     const binding = runtime.document.connections.find(
       (c) => c.kind === "value" && c.to.node === node.id,
@@ -919,8 +1114,13 @@ function LayoutView({
           {!boardHosted && (
             <div className="recipe-author-label">
               <span>{node.label}</span>
-              <button type="button" onClick={() => author.onSelect?.(node.id)}>
-                Edit
+              <button
+                type="button"
+                aria-label={`Edit ${node.label}`}
+                title={`Edit ${node.label}`}
+                onClick={() => author.onSelect?.(node.id)}
+              >
+                <span aria-hidden="true">✎</span>
               </button>
             </div>
           )}
@@ -940,7 +1140,13 @@ function LayoutView({
         nodeContent
       )}
       {layout.children.map((l) => (
-        <LayoutView key={l.id} layout={l} runtime={runtime} item={item} />
+        <LayoutView
+          key={l.id}
+          layout={l}
+          runtime={runtime}
+          item={item}
+          boardHosted={boardHosted}
+        />
       ))}
       {author.authoring && !node && !layout.children.length && (
         <div className="recipe-empty-layout">
@@ -1021,7 +1227,7 @@ function LayoutView({
       aria-disabled={disabled || undefined}
       {...(disabled ? { inert: "" as never } : {})}
     >
-      {layout.label && <h3>{layout.label}</h3>}
+      {layout.label && !boardHosted && <h3>{layout.label}</h3>}
       {content}
     </section>
   );

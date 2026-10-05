@@ -233,3 +233,43 @@ The following checks are work still required, not tests reported as passed by th
 Capture the arithmetic and fraction scenarios in learner and Build modes, including compact width, invalid input, unavailable result, and selected state. Add interaction checks around the actual failure-prone behavior—draft persistence, accepted state, reset scope, keyboard alternatives, and dataset errors. Model tests alone cannot demonstrate presentation compliance.
 
 The first milestone should be a coherent arithmetic/fraction experience through the shared recipe renderer. That fixes the problems in the supplied images while establishing reusable patterns for the broader component refactor.
+
+## 9. Work done
+
+Date: 2026-10-05. Scope: the controls-and-results presentation milestone agreed for this session. The original audit above remains the historical assessment; this section records implemented changes and their verification, rather than claiming that every inventoried component is now compliant.
+
+### Implemented presentation and interaction changes
+
+| Surface | Work done |
+| --- | --- |
+| `SchemaForm` | Removed empty action fieldsets and incidental single `value` envelopes. Added meaningful compound grouping, aligned fields, readable units, explicit primary submit actions, contextual success/error feedback, and accessible invalid/error associations. Preserved primitive schemas used by the builder input editor, array/object payloads, validation, and explicit submission for rebuilding activities. |
+| Semantic metadata | Added `controls/commandPresentation.ts` with stable command/argument mappings for activity labels, first/second numbers, named fractions, shaded/total parts, operation choices, named bars, scoped submit labels, and explanations of task replacement and denominator changes. Existing author-customized control labels remain authoritative. |
+| Slider and numeric entry | Added paired range/exact-entry presentations and a visible current value. Reusable `ParameterSlider` shares its authoritative value with `NumberField`. Recipe sliders preserve incomplete/rejected exact-entry drafts while the track continues to show accepted state; Escape restores the accepted value. Numeric fields retain rejected drafts on blur and support Escape recovery. |
+| Actions, toggles, selects | Added shared primary/secondary/quiet action variants and coherent field/toggle/select layouts. Rejection feedback is local and associated with the relevant control. Safe looping/division setters declare continuous submission; disruptive task changes retain explicit submission. Zero-argument actions avoid repetitive generic success banners. |
+| Playback | Recipe playback uses one accepted-state Play/Pause action with Running/Paused wording, including gas properties stored in `inputs`. New default recipes omit redundant schema-generated playback controls and duplicate playback observations. Fraction comparison no longer displays a playback status for an activity with no playback command. |
+| Measurements and statuses | Readouts emphasize values with adjacent units, supporting labels, deliberate precision, and tabular numerals. Empty/missing numerical results show Unavailable; valid zero remains visible. Status messages have optional neutral/success/warning/error tones, meaningful boolean wording, and polite announcements. Empty activity feedback produces no result block. Gas pressure is visible beside its scene. |
+| Arithmetic and fractions | Default recipes put activity setup before compact action rows, retain secondary operations under “More ways to explore,” and initialize task forms from authored defaults. Scenes show the existing authoritative equation/comparison and explanation through `MathReadoutView`; unfinished calculations keep `?`. Commands remain available through the composition and disclosure. |
+| State synchronization | Clean arithmetic/fraction setup forms and object-property controls follow accepted runtime changes and resets. Dirty explicit drafts remain recoverable through “Discard edits.” Tab panels remain mounted so switching tabs preserves drafts; tab controls have arrow/Home/End navigation, roving focus, and explicit panel linkage. |
+| Build preview | Replaced persistent type/name rows with compact, named pencil settings actions. Selection/focus treatment remains distinct from learner state. Board-host ownership propagates through nested layout content, preventing duplicate authoring chrome and panel headings. Learner mode contains no author settings actions. |
+| Shared styling | Applied warm application tokens, restrained teal emphasis, fine borders, consistent input/action sizing, purposeful spacing, visible focus, exact-entry unit alignment, and width-aware slider reflow. Primary hover styles retain contrast in the builder. Action rows preserve intrinsic sizing so buttons cannot overlap. |
+
+### Compatibility and implementation boundaries
+
+Saved documents are rendered through the improved shared presentation without rewriting their identifiers, connections, or authored layout. Recipe curation changes newly generated defaults; it does not remove controls from an existing user-authored document. Model computation and runtime dispatch remain authoritative. The optional status tone configuration is backward compatible with documents that omit it.
+
+The source ledger was extended for the new presentation helper and field metadata type. A dedicated `npm run test:components:browser` command now runs the behavioral component regression suite. The unified-builder browser selectors were updated for “Apply changes” and the separated measurement unit.
+
+### Verification evidence
+
+- `npx tsc --noEmit`: passed.
+- Biome checks for the changed implementation and browser-test files: passed.
+- `npm test`: passed, including simulation/integration, builder graph/parity, public and spatial catalog, independent copies, rollback, serialization, migrations, source-ledger closure, and spatial-board contracts.
+- `npm run test:components:browser`: passed for arithmetic/fraction hierarchy, rejected draft retention/recovery, accepted playback, clean-field reset synchronization, precise gas slider editing and rejection, pressure units, learner/Build separation, desktop/mobile overflow, keyboard tabs, and draft preservation.
+- `node scripts/verify-unified-builder-browser.cjs`: passed for setup, catalog insertion, Build preview, independent dilution copies, atomic undo/redo, saved composites, recovery, and mobile layout.
+- `node scripts/verify-builder-input-editor-browser.cjs`: passed for the shared primitive-schema manual input path, draft preservation across source modes, add-and-connect, undo, Escape, and responsive input editing.
+
+Browser verification used an isolated local Next development build on port 43002 with `.next-component-review` output, preserving the existing development server. The Browser plugin's required execution tool was unavailable, so verification used the repository's local browser regression harness. Desktop, learner, and compact control captures were visually inspected. Session captures are in `/private/tmp/component-arithmetic-*`, `/private/tmp/component-fraction-builder-*`, and `/private/tmp/component-slider-measurement.png`.
+
+### Remaining work
+
+This milestone does not sign off charts, tables, heatmaps, inspectors, remaining domain controls, or scene/camera interaction. The gas scene's existing canvas framing still needs a separate scene/host review. Runtime synchronization is implemented for the reference arithmetic/fraction tasks, object-property controls, and looping; other domain-specific command adapters still need their own accepted-value mappings. Full screen-reader, real touch-device, reduced-motion, and every saved-document combination reviews remain outstanding. The historical P1/P2 findings continue to describe that follow-up work.
