@@ -2,7 +2,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
 const { load } = require("./test-loader.cjs");
-const { modelRecipe } = load(
+const { builtInRecipe, createPublicNode, modelRecipe } = load(
   "src/simulations/components/composites/catalog.ts",
 );
 const { canonicalDocument } = load(
@@ -238,8 +238,148 @@ async function openFixture(browser, authored) {
     assert.ok(await tabs.nth(1).getAttribute("aria-controls"));
     assert.deepEqual(errors, []);
     await page.close();
+    // Object selection reflects accepted runtime state and inspectors avoid raw dumps.
+    const bridge = structuredClone(builtInRecipe("recipes/BridgeLab").document);
+    const response = bridge.nodes.find(
+      (node) => node.definition === "models/BridgeResponse",
+    );
+    const member = bridge.nodes.find(
+      (node) => node.definition === "models/TrussMember",
+    );
+    assert.ok(response && member);
+    const picker = createPublicNode(
+      "controls/EntityPicker",
+      "control/member-picker",
+      response.scope,
+    );
+    picker.configuration = {
+      ...picker.configuration,
+      label: "Inspect bridge member",
+      targetDefinition: "models/TrussMember",
+    };
+    const inspector = createPublicNode(
+      "displays/Inspector",
+      "display/member-properties",
+      response.scope,
+    );
+    inspector.configuration = {
+      ...inspector.configuration,
+      label: "Member properties",
+      precision: 2,
+    };
+    const invalidMember = structuredClone(member);
+    invalidMember.id = "unconnected-member";
+    invalidMember.label = "Unconnected member";
+    bridge.nodes.push(picker, inspector, invalidMember);
+    bridge.connections.push(
+      {
+        id: "link/member-picker",
+        kind: "command",
+        from: { node: picker.id, port: "submit" },
+        to: { node: response.id, port: "SELECT_MEMBER" },
+      },
+      {
+        id: "link/member-properties",
+        kind: "value",
+        from: { node: member.id, port: "data" },
+        to: { node: inspector.id, port: "value" },
+      },
+    );
+    bridge.layout.children
+      .find((layout) => layout.id === "layout/controls")
+      .children.unshift({
+        ...emptyLayout("layout/member-picker"),
+        node: picker.id,
+      });
+    bridge.layout.children
+      .find((layout) => layout.id === "layout/scene")
+      .children.push({
+        ...emptyLayout("layout/member-properties"),
+        node: inspector.id,
+      });
+    const bridgeFixture = await openFixture(browser, bridge);
+    const bridgeLesson = bridgeFixture.page.locator(".recipe-lesson");
+    const memberSelect = bridgeLesson.getByLabel("Inspect bridge member");
+    assert.match(
+      await memberSelect.locator(`option[value="${member.id}"]`).textContent(),
+      /^Truss member \d+$/,
+      "Internal generated IDs receive meaningful picker labels",
+    );
+    await memberSelect.selectOption(member.id);
+    assert.equal(await memberSelect.inputValue(), member.id);
+    assert.ok(
+      (await bridgeLesson.textContent()).includes("Selected: Truss member"),
+    );
+    const memberInspector = bridgeLesson.locator(".bridge-demo__inspector");
+    await memberInspector.waitFor();
+    assert.equal(
+      (await memberInspector.textContent()).includes("generated/"),
+      false,
+      "Specialized inspection also hides generated IDs",
+    );
+    const properties = bridgeLesson.getByRole("region", {
+      name: "Member properties",
+    });
+    assert.ok((await properties.textContent()).includes("Type"));
+    assert.equal(
+      (await properties.textContent()).includes("generated/"),
+      false,
+      "Known references do not expose generated path IDs",
+    );
+    assert.equal(
+      (await properties.textContent()).includes('{"'),
+      false,
+      "Structured values never fall through to JSON text",
+    );
+    await bridgeFixture.page.screenshot({
+      path: "/tmp/component-inspector-selection-build.png",
+      fullPage: true,
+    });
+    await memberSelect.selectOption(invalidMember.id);
+    await bridgeLesson.getByRole("alert").waitFor();
+    assert.equal(
+      await memberSelect.inputValue(),
+      member.id,
+      "Rejected object selection preserves the accepted value",
+    );
+    assert.match(
+      await bridgeLesson.getByRole("alert").textContent(),
+      /Unknown/,
+    );
+    await bridgeLesson
+      .getByRole("button", { name: "Restart activity", exact: true })
+      .click();
+    await bridgeFixture.page.waitForFunction(
+      () => document.querySelector(".entity-picker select")?.value === "",
+    );
+    assert.equal(
+      await memberSelect.inputValue(),
+      "",
+      "External reset restores the picker to authoritative state",
+    );
+    await bridgeFixture.page
+      .getByRole("button", { name: "Try lesson ↗", exact: true })
+      .click();
+    assert.equal(await bridgeLesson.locator(".recipe-author-label").count(), 0);
+    await bridgeFixture.page.screenshot({
+      path: "/tmp/component-inspector-selection-learner.png",
+      fullPage: true,
+    });
+    await bridgeFixture.page.setViewportSize({ width: 390, height: 844 });
+    await properties.scrollIntoViewIfNeeded();
+    assert.ok(
+      await bridgeFixture.page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth + 1,
+      ),
+    );
+    await bridgeFixture.page.screenshot({
+      path: "/tmp/component-inspector-selection-mobile.png",
+      fullPage: false,
+    });
+    assert.deepEqual(bridgeFixture.errors, []);
+    await bridgeFixture.page.close();
     console.log(
-      "Component UX: arithmetic/fraction hierarchy, draft rejection/recovery, playback acceptance, reset synchronization, compact overflow, keyboard tabs and draft preservation passed.",
+      "Component UX: arithmetic/fraction hierarchy, draft rejection/recovery, playback acceptance, reset synchronization, compact overflow, keyboard tabs, draft preservation, accepted object selection and structured inspection passed.",
     );
   } finally {
     await browser.close();

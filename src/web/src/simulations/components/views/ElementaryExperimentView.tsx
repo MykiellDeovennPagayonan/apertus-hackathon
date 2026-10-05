@@ -254,6 +254,7 @@ export function ElementaryExperimentView() {
           <EntityInspectorView
             demo={s.demo}
             id={s.id}
+            label="activity"
             parameters={p}
             outputs={s.outputs}
             assumptions={definition?.assumptions ?? []}

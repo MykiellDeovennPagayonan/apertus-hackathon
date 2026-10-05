@@ -59,6 +59,7 @@ export function DomainObservationViews({ demo }: { demo: DemoType }) {
             key={i.id}
             demo={demo}
             id={i.id}
+            label={i.label}
             parameters={i.parameters}
             outputs={i.outputs}
             assumptions={definition.assumptions}

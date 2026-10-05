@@ -75,6 +75,7 @@ import {
   type DataPresentation,
   outputDataPresentation,
 } from "./dataPresentation";
+import { PropertyInspector } from "./EntityInspectorView";
 import { EqualGroupsScene } from "./EqualGroupsScene";
 import { FractionBuilderScene } from "./FractionBuilderScene";
 import { FractionNumberLineScene } from "./FractionNumberLineScene";
@@ -91,6 +92,86 @@ type AuthorControls = {
   onSelect?: (id: string) => void;
   onAuthorChange?: (node: SceneObject) => void;
 };
+
+function EntityPickerControl({
+  label,
+  candidates,
+  value,
+  onSelect,
+}: {
+  label: string;
+  candidates: ComponentInstance[];
+  value: string;
+  onSelect: (value: string) => import("../../runtime/commands").ActionResult;
+}) {
+  const [accepted, setAccepted] = useState(value);
+  const [error, setError] = useState("");
+  const feedbackId = useId();
+  useEffect(() => {
+    setAccepted(value);
+    setError("");
+  }, [value]);
+  const displayLabel = (candidate: ComponentInstance, index: number) => {
+    const internalName = candidate.id.split("/").at(-1) ?? candidate.id;
+    return candidate.label === candidate.id || candidate.label === internalName
+      ? `${publicDefinition(candidate.definition).title} ${index + 1}`
+      : candidate.label;
+  };
+  const selectedIndex = candidates.findIndex(
+    (candidate) => candidate.id === accepted,
+  );
+  const selectedLabel =
+    selectedIndex >= 0
+      ? displayLabel(candidates[selectedIndex], selectedIndex)
+      : undefined;
+  return (
+    <div className="entity-picker">
+      <label>
+        <span>{label}</span>
+        <select
+          value={accepted}
+          disabled={!candidates.length}
+          aria-invalid={!!error || undefined}
+          aria-describedby={error || selectedLabel ? feedbackId : undefined}
+          onChange={(event) => {
+            const next = event.target.value;
+            const result = onSelect(next);
+            if (result.accepted) {
+              setAccepted(next);
+              setError("");
+            } else setError(result.error);
+          }}
+        >
+          <option value="" disabled>
+            {candidates.length ? "Choose an object" : "No compatible objects"}
+          </option>
+          {candidates.map((candidate, index) => (
+            <option key={candidate.id} value={candidate.id}>
+              {displayLabel(candidate, index)}
+            </option>
+          ))}
+        </select>
+      </label>
+      {error ? (
+        <span
+          id={feedbackId}
+          className="catalog-feedback catalog-feedback--error"
+          role="alert"
+        >
+          {error}
+        </span>
+      ) : selectedLabel ? (
+        <p
+          id={feedbackId}
+          className="entity-picker__accepted"
+          aria-live="polite"
+        >
+          Selected: {selectedLabel}
+        </p>
+      ) : null}
+    </div>
+  );
+}
 const AuthorContext = createContext<AuthorControls>({});
 const SnapshotContext = createContext<Snapshot>({ state: {}, outputs: {} });
 const appearances: Record<
@@ -436,7 +517,17 @@ function NodeView({
       target && connection
         ? publicDefinition(target.definition).commands[connection.to.port]
         : undefined;
-    if (!command) return <p>{node.label}: connect a supported command.</p>;
+    if (!command)
+      return (
+        <div className="recipe-disconnected">
+          <strong>{String(config.label || node.label)}</strong>
+          <p>
+            {author.authoring
+              ? "Connect this control to a compatible model command."
+              : "This control is unavailable in the current activity."}
+          </p>
+        </div>
+      );
     const commandKey = connection?.to.port ?? "";
     const metadata = commandPresentation(commandKey, target?.definition ?? "");
     const defaultLabel = String(config.label);
@@ -486,25 +577,33 @@ function NodeView({
             (!targetDefinition || candidate.definition === targetDefinition),
         );
       if (!argument)
-        return <p>{node.label}: target command has no reference argument.</p>;
+        return (
+          <div className="recipe-disconnected">
+            <strong>{label}</strong>
+            <p>
+              {author.authoring
+                ? "Choose a command with a component-reference argument in Connections."
+                : "Object selection is unavailable in the current activity."}
+            </p>
+          </div>
+        );
+      const targetState = snapshot.state[target?.id ?? ""];
+      const acceptedReference = String(
+        targetState?.[argument] ??
+          (commandKey === "SELECT_MEMBER"
+            ? targetState?.selectedMember
+            : commandKey.startsWith("set:")
+              ? targetState?.[commandKey.slice(4)]
+              : "") ??
+          "",
+      );
       return (
-        <label>
-          {String(config.label)}
-          <select
-            defaultValue=""
-            onChange={(event) => {
-              if (event.target.value)
-                runtime.submit(node.id, { [argument]: event.target.value });
-            }}
-          >
-            <option value="">Choose component</option>
-            {candidates.map((candidate) => (
-              <option key={candidate.id} value={candidate.id}>
-                {candidate.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        <EntityPickerControl
+          label={label}
+          candidates={candidates}
+          value={acceptedReference}
+          onSelect={(value) => runtime.submit(node.id, { [argument]: value })}
+        />
       );
     }
     let initial: unknown;
@@ -724,6 +823,31 @@ function NodeView({
           }
         />
       );
+    if (kind === "Inspector") {
+      const source = runtime.document.nodes.find(
+        (candidate) => candidate.id === binding?.from.node,
+      );
+      const rawUnit =
+        source && binding
+          ? publicDefinition(source.definition).outputs[binding.from.port]?.unit
+          : "";
+      const unit = rawUnit && !["1", "*"].includes(rawUnit) ? rawUnit : "";
+      const configuredLabel = String(config.label);
+      const inspectorLabel =
+        source?.definition === "models/BridgeResponse" &&
+        binding?.from.port === "selected" &&
+        configuredLabel.toLowerCase() === "selected"
+          ? "Selected member"
+          : configuredLabel;
+      return (
+        <PropertyInspector
+          label={inspectorLabel}
+          value={value}
+          precision={Number(config.precision ?? 3)}
+          unit={unit}
+        />
+      );
+    }
     if (["Chart", "Histogram", "Heatmap", "DataTable"].includes(kind)) {
       const source = runtime.document.nodes.find(
         (n) => n.id === binding?.from.node,
