@@ -1,6 +1,11 @@
 "use client";
 import Link from "next/link";
 import { type ReactNode, useEffect, useState } from "react";
+import type {
+  CompositionScene,
+  SceneObject,
+} from "../../runtime/composition/index";
+import { canvasFor } from "../../runtime/composition/projectCanvas";
 import { ComponentDialog } from "../ComponentDialog";
 import {
   type ExperimentDocument,
@@ -8,31 +13,25 @@ import {
   requireRecord,
   validateRunnableDocument,
 } from "../document";
+import { addSceneObject, removeSceneObject } from "../editor/objectCommands";
+import { cleanEditor } from "../editor/selection";
+import {
+  addCanvas,
+  pendingConnections,
+  removeCanvas,
+} from "../editor/workspaceCommands";
+import { compositionGraph, connectPorts } from "../graph/deriveGraph";
+import { BuilderPreview } from "../preview/BuilderPreview";
 import { BindingSettings } from "./BindingSettings";
 import { CanvasSettings } from "./CanvasSettings";
 import { CompositionGraph } from "./CompositionGraph";
-import { CompositionLesson } from "./CompositionLesson";
 import {
   type ComponentChoice,
   CompositionLibrary,
   type LibraryRequest,
 } from "./CompositionLibrary";
-import { cleanEditor } from "./editor";
-import { compositionGraph, connectPorts } from "./graph";
-import {
-  addSceneObject,
-  type CompositionScene,
-  removeSceneObject,
-  type SceneObject,
-} from "./model";
 import { ObjectSettings } from "./ObjectSettings";
 import { TripSettings } from "./TripSettings";
-import {
-  addCanvas,
-  canvasFor,
-  pendingConnections,
-  removeCanvas,
-} from "./workspace";
 import "./composition.css";
 type Edit = (
   change: (d: ExperimentDocument) => void,
@@ -395,7 +394,7 @@ export default function CompositionBuilder({
               complete. {pending[0]}.
             </p>
           )}
-          <CompositionLesson
+          <BuilderPreview
             document={valid}
             hidden={!expanded && tab !== "Build"}
             authoring={!expanded}

@@ -1,14 +1,17 @@
-import { dispatchCommand } from "../../runtime/session";
+import type { ActionResult } from "../../runtime/commands";
+import type { UIAction } from "../../runtime/types";
 import type { FractionComparisonBoard } from "../traits/MathBoards";
 import { FractionBarVisual } from "../visuals/FractionBarVisual";
 import { SVGWorldView } from "./SVGWorldView";
 import { useCompactDiagram } from "./useCompactDiagram";
 export function FractionBuilderScene({
   board,
+  onCommand,
   interactive = true,
   compact: compactOverride,
 }: {
   board: FractionComparisonBoard;
+  onCommand: (command: UIAction) => ActionResult;
   interactive?: boolean;
   compact?: boolean;
 }) {
@@ -36,7 +39,7 @@ export function FractionBuilderScene({
                   accepted: false,
                   error: "Direct shading is disabled for this lesson.",
                 }
-              : dispatchCommand(board.demo, {
+              : onCommand({
                   type: "TOGGLE_FRACTION_PIECE",
                   value: { bar: i, piece },
                 })

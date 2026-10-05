@@ -36,7 +36,7 @@ The graph generates a card for each component and derives ports from its capabil
 
 Cards are initially packed into columns by role. Their spacing accounts for port count and card height. Adding a component checks for overlap and reveals its card in the workspace.
 
-Component creation is coordinated by [CompositionBuilder.tsx](../../../src/web/src/simulations/builder/composition/CompositionBuilder.tsx). Object definitions and capabilities live in [model.ts](../../../src/web/src/simulations/builder/composition/model.ts).
+Component creation is coordinated by [CompositionBuilder.tsx](../../../src/web/src/simulations/builder/composition/CompositionBuilder.tsx). Object definitions and capabilities live in [registry.ts](../../../src/web/src/simulations/components/registry.ts).
 
 ## 3. Connecting ports changes the experiment
 
@@ -71,13 +71,13 @@ intersection.output = "intersection"
 
 These stored relationships are the source of the visible wires. The graph reads the document and reconstructs its connections. Reconnecting a port changes actual experiment behavior; the same slider can target a different compatible object without rebuilding its UI.
 
-The connection operations are implemented in [graph.ts](../../../src/web/src/simulations/builder/composition/graph.ts).
+The connection operations are implemented in [deriveGraph.ts](../../../src/web/src/simulations/builder/graph/deriveGraph.ts).
 
 ## 4. Connector interaction
 
 Authors can drag an output to an input or click an output followed by an input. During connection selection, compatible destination cards are highlighted. A temporary wire follows the pointer during dragging, and Escape cancels the operation.
 
-The wires use curved SVG paths. Separate hit areas make them easier to select, and keyboard activation is supported. Selecting a wire exposes a disconnect action that removes the corresponding document relationship.
+The wires use curved SVG paths. Their wide hit areas retain the same screen size when zooming, making them easier to select. Click a wire or focus it with Tab to highlight it and expose **Delete connection**. Delete or Backspace removes the selected relationship while keeping both components. Escape clears selection; undo/redo restores or removes that relationship in one action.
 
 Moving cards updates wire positions because their endpoints are calculated from the cards' current port positions. Workspace zoom is accounted for when translating pointer movement into card movement.
 
@@ -101,7 +101,7 @@ Moving a line to another plane is rejected when it would break an existing inter
 
 These checks provide useful defaults and immediate feedback. Document validation also checks imported documents and settings edits independently of the connector UI.
 
-Connection checks live in [graph.ts](../../../src/web/src/simulations/builder/composition/graph.ts); workspace validation lives in [workspace.ts](../../../src/web/src/simulations/builder/composition/workspace.ts).
+Connection checks live in [deriveGraph.ts](../../../src/web/src/simulations/builder/graph/deriveGraph.ts); workspace validation lives in [validateWorkspace.ts](../../../src/web/src/simulations/runtime/composition/validateWorkspace.ts).
 
 ## 6. Assembling a runnable scene for each canvas
 
@@ -117,7 +117,7 @@ An intersection is included only when both lines are present in the projected sc
 
 Each canvas receives its own runtime state. Several planes can belong to one authored workspace while operating as separate experiments, with independent bounds and settings. The workspace supports up to eight canvases, arranged side by side or stacked. Its canvases must use the same space kind as the scene.
 
-Projection is implemented in [workspace.ts](../../../src/web/src/simulations/builder/composition/workspace.ts), and preview assembly in [CompositionLesson.tsx](../../../src/web/src/simulations/builder/composition/CompositionLesson.tsx).
+Projection is implemented in [projectCanvas.ts](../../../src/web/src/simulations/runtime/composition/projectCanvas.ts), and preview assembly in [CompositionLesson.tsx](../../../src/web/src/simulations/lessons/CompositionLesson.tsx).
 
 ## 7. Updating geometry through a control
 
@@ -145,7 +145,7 @@ Storing lines as points also supports vertical lines naturally. Their equation c
 
 Intersection calculations distinguish parallel lines from coincident lines and return appropriate messages rather than misleading coordinates.
 
-Property updates are implemented in [model.ts](../../../src/web/src/simulations/builder/composition/model.ts). Result calculations live in [measurements.ts](../../../src/web/src/simulations/builder/composition/measurements.ts).
+Property updates are implemented in [registry.ts](../../../src/web/src/simulations/components/registry.ts). Result calculations live in [observations.ts](../../../src/web/src/simulations/runtime/composition/observations.ts).
 
 ## 8. Dragging geometry on the Cartesian plane
 
@@ -167,7 +167,7 @@ Both axes share a scale, preserving the shape of squares. Thin lines have wider 
 
 Pan and zoom change local viewing bounds. Reset restores the authored bounds. Grid tick intervals adapt to the visible range using readable steps based on 1, 2, 5, and 10.
 
-The plane and its interaction logic are implemented in [CartesianScene.tsx](../../../src/web/src/simulations/builder/composition/CartesianScene.tsx).
+The plane and its interaction logic are implemented in [CartesianView.tsx](../../../src/web/src/simulations/components/views/CartesianView.tsx).
 
 ## 9. Authoring and experimentation have different lifetimes
 
@@ -179,7 +179,7 @@ Authors can experiment with controls and explicitly select **Use current setting
 
 The runtime distinguishes configuration changes from many presentation changes. Updating a label or line color can refresh the display while preserving current runtime geometry. Changing authored geometry establishes new starting configuration.
 
-The distinction is implemented in [useSceneRuntime.ts](../../../src/web/src/simulations/builder/composition/useSceneRuntime.ts), with capture and authoring behavior coordinated by [CompositionLesson.tsx](../../../src/web/src/simulations/builder/composition/CompositionLesson.tsx).
+The distinction is implemented in [useCanvasRuntime.ts](../../../src/web/src/simulations/runtime/composition/useCanvasRuntime.ts), with capture and settings portals coordinated by [BuilderPreview.tsx](../../../src/web/src/simulations/builder/preview/BuilderPreview.tsx).
 
 ## 10. Editing, undo, and recovery
 
@@ -201,7 +201,7 @@ If another tab changed that entry, saving reports a conflict rather than silentl
 
 JSON export provides a portable copy. Import parses and validates documents. Existing line and town examples can be migrated into editable composition components when opened. Invalid imported text is retained for repair and retry.
 
-Local saving is implemented in [storage.ts](../../../src/web/src/simulations/builder/storage.ts), and legacy conversion in [migration.ts](../../../src/web/src/simulations/builder/composition/migration.ts).
+Local saving is implemented in [storage.ts](../../../src/web/src/simulations/builder/persistence/storage.ts), and legacy conversion in [composeLegacy.ts](../../../src/web/src/simulations/builder/document/migrations/composeLegacy.ts).
 
 ## 12. Trying the lesson
 
@@ -230,3 +230,11 @@ This lets authors edit what learners manipulate, where it appears, and what gets
 ## Exploration scope
 
 The original Cartesian walkthrough was based on source-code inspection. Physical/diagram parity was subsequently implemented and has separate domain, integration, and browser checks; see the domain composition feature document for commands and scope.
+
+## Shared ownership after refactor 008
+
+Component definitions, editable contracts, defaults, operations, and presentation/state preservation fields live in `components/definitions/` and the pure `components/registry.ts`. Registration adds those same definition objects to the existing runtime catalog. Settings and graph ports consume their contracts; numeric editor bounds come from their schemas.
+
+`runtime/composition/` owns scene/workspace validation, projection, staged mutations, and per-canvas lifecycle. `lessons/CompositionLesson.tsx` renders learner assembly through shared views and supplied command controls. `builder/preview/BuilderPreview.tsx` owns settings portals and explicit capture. The shell delegates history to `builder/history/` and local storage/recovery to `builder/persistence/`. Document readers, serialization, and migration live in `builder/document/`.
+
+Legacy recipes/documents remain supported data inputs. All opening, import, recovery, and saved-playback paths translate them to the composition editor. The former singleton editor/lesson/graph UI has been removed.

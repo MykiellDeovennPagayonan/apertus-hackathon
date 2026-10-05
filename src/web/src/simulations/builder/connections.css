@@ -363,18 +363,24 @@
 }
 .connection-wires .connection-wire-hit {
   stroke: transparent;
-  stroke-width: 18px;
+  stroke-width: 20px;
   fill: none;
   pointer-events: stroke;
   cursor: pointer;
 }
 .connection-wires .connection-wire-hit:focus-visible {
-  stroke: #285e5633;
+  outline: none;
+}
+.composition-graph .connection-wires .connection-wire-hit:focus {
   outline: none;
 }
 .connection-wire:hover .connection-wire-line {
   fill: none;
   stroke-width: 3;
+}
+.connection-wire.is-selected .connection-wire-line {
+  stroke-width: 4px;
+  vector-effect: non-scaling-stroke;
 }
 .manual-builder .connection-composer {
   position: absolute;

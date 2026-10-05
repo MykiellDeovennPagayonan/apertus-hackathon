@@ -1,6 +1,14 @@
 import { useState } from "react";
-import type { CompositionScene, SceneObject } from "./model";
-import { entrance, properties, propertyValue, setProperty } from "./model";
+import { numericField } from "../../components/contracts/numericField";
+import { componentDefinition } from "../../components/registry";
+import {
+  type CompositionScene,
+  entrance,
+  properties,
+  propertyValue,
+  type SceneObject,
+  setProperty,
+} from "../../runtime/composition/index";
 export function ObjectSettings({
   object: o,
   scene,
@@ -17,48 +25,44 @@ export function ObjectSettings({
   const [inputError, setInputError] = useState("");
   const patch = (change: object, group?: string) =>
     onChange({ ...o, ...change } as SceneObject, group);
-  const number = (
-    label: string,
-    key: string,
-    value: number,
-    min: number,
-    max: number,
-    step = 0.1,
-  ) => (
-    <label key={key}>
-      {label}
-      <div className="composition-number">
-        <input
-          aria-label={`${label} slider`}
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={Number.isFinite(value) ? value : min}
-          onChange={(e) =>
-            patch({ [key]: Number(e.target.value) }, `${o.id}/${key}`)
-          }
-        />
-        <input
-          aria-label={label}
-          type="number"
-          min={min}
-          max={max}
-          step={step}
-          value={Number.isFinite(value) ? value : ""}
-          onChange={(e) =>
-            patch(
-              {
-                [key]:
-                  e.target.value === "" ? Number.NaN : Number(e.target.value),
-              },
-              `${o.id}/${key}`,
-            )
-          }
-        />
-      </div>
-    </label>
-  );
+  const number = (label: string, key: string, value: number, step = 0.1) => {
+    const { min, max } = numericField(componentDefinition(o.kind).schema, key);
+    return (
+      <label key={key}>
+        {label}
+        <div className="composition-number">
+          <input
+            aria-label={`${label} slider`}
+            type="range"
+            min={min}
+            max={max}
+            step={step}
+            value={Number.isFinite(value) ? value : min}
+            onChange={(e) =>
+              patch({ [key]: Number(e.target.value) }, `${o.id}/${key}`)
+            }
+          />
+          <input
+            aria-label={label}
+            type="number"
+            min={min}
+            max={max}
+            step={step}
+            value={Number.isFinite(value) ? value : ""}
+            onChange={(e) =>
+              patch(
+                {
+                  [key]:
+                    e.target.value === "" ? Number.NaN : Number(e.target.value),
+                },
+                `${o.id}/${key}`,
+              )
+            }
+          />
+        </div>
+      </label>
+    );
+  };
   const toggle = (label: string, key: string, value: boolean) => (
     <label key={key} className="composition-toggle">
       <input
@@ -82,8 +86,12 @@ export function ObjectSettings({
           <input
             type="number"
             step="0.1"
-            min={-1000}
-            max={1000}
+            min={
+              numericField(componentDefinition(o.kind).schema, key, axis).min
+            }
+            max={
+              numericField(componentDefinition(o.kind).schema, key, axis).max
+            }
             value={Number.isFinite(p[axis]) ? p[axis] : ""}
             onChange={(e) =>
               patch(
@@ -216,8 +224,20 @@ export function ObjectSettings({
                 <input
                   aria-label={`Display ${key}`}
                   type="number"
-                  min={key === "x" || key === "y" ? -100 : 5}
-                  max={100}
+                  min={
+                    numericField(
+                      componentDefinition(o.kind).schema,
+                      "display",
+                      key,
+                    ).min
+                  }
+                  max={
+                    numericField(
+                      componentDefinition(o.kind).schema,
+                      "display",
+                      key,
+                    ).max
+                  }
                   step={1}
                   value={o.display[key]}
                   onChange={(e) =>
@@ -295,14 +315,7 @@ export function ObjectSettings({
             <summary>Precise coordinates and appearance</summary>
             {pointInput("First handle", "a", o.a)}
             {pointInput("Second handle", "b", o.b)}
-            {number(
-              "Line thickness (screen px)",
-              "width",
-              o.width,
-              0.5,
-              16,
-              0.5,
-            )}
+            {number("Line thickness (screen px)", "width", o.width, 0.5)}
             {toggle("Dashed line", "dashed", o.dashed)}
             {toggle("Learners can drag this line", "draggable", o.draggable)}
           </details>
@@ -314,18 +327,11 @@ export function ObjectSettings({
             <summary>Precise center</summary>
             {pointInput("Center", "center", o.center)}
           </details>
-          {number("Side length", "side", o.side, 0.1, 100)}
-          {number("Rotation (degrees)", "rotation", o.rotation, -360, 360, 1)}
-          {number(
-            "Outline thickness (screen px)",
-            "width",
-            o.width,
-            0.5,
-            16,
-            0.5,
-          )}
+          {number("Side length", "side", o.side)}
+          {number("Rotation (degrees)", "rotation", o.rotation, 1)}
+          {number("Outline thickness (screen px)", "width", o.width, 0.5)}
           {toggle("Filled square", "fill", o.fill)}
-          {o.fill && number("Fill opacity", "opacity", o.opacity, 0, 1, 0.05)}
+          {o.fill && number("Fill opacity", "opacity", o.opacity, 0.05)}
           {toggle("Learners can drag this square", "draggable", o.draggable)}
           <p>
             Area and perimeter use the mathematical side length. Outline
@@ -335,33 +341,19 @@ export function ObjectSettings({
       )}
       {(o.kind === "building" || o.kind === "road" || o.kind === "person") && (
         <>
-          {number("X position", "x", o.x, -100, 100, 0.5)}
-          {number("Z position", "z", o.z, -100, 100, 0.5)}
+          {number("X position", "x", o.x, 0.5)}
+          {number("Z position", "z", o.z, 0.5)}
         </>
       )}
       {(o.kind === "ground" || o.kind === "building" || o.kind === "road") && (
         <>
-          {number(
-            "Width",
-            "width",
-            o.width,
-            o.kind === "ground" ? 4 : o.kind === "building" ? 1 : 0.5,
-            o.kind === "building" ? 30 : 100,
-            0.5,
-          )}
-          {number(
-            "Depth",
-            "depth",
-            o.depth,
-            o.kind === "ground" ? 4 : o.kind === "building" ? 1 : 0.5,
-            o.kind === "building" ? 30 : 100,
-            0.5,
-          )}
+          {number("Width", "width", o.width, 0.5)}
+          {number("Depth", "depth", o.depth, 0.5)}
         </>
       )}
       {o.kind === "building" && (
         <>
-          {number("Height", "height", o.height, 0.5, 30, 0.5)}
+          {number("Height", "height", o.height, 0.5)}
           <label>
             Entrance side
             <select
@@ -392,8 +384,8 @@ export function ObjectSettings({
       )}
       {o.kind === "person" && (
         <>
-          {number("Spawn time (hours)", "spawnAt", o.spawnAt, 0, 23.99, 0.25)}
-          {number("Walking speed (units/second)", "speed", o.speed, 0.1, 10)}
+          {number("Spawn time (hours)", "spawnAt", o.spawnAt, 0.25)}
+          {number("Walking speed (units/second)", "speed", o.speed)}
           {!scene.workspace && (
             <fieldset className="composition-schedule">
               <legend>Where and when</legend>

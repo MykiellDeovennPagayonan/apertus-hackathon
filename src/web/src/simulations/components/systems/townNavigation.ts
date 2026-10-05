@@ -6,6 +6,11 @@ import {
 } from "../resources/TownLayout";
 import type { Building } from "../traits/Building";
 import type { Point } from "./NavigationSystem";
+import {
+  clearRouteSegment,
+  premadeRoutePolicy,
+  searchRoute,
+} from "./RouteSearchSystem";
 
 export interface Obstacle {
   x: number;
@@ -60,23 +65,12 @@ export function clearTownSegment(
   to: Point,
   obstacles: Obstacle[],
 ): boolean {
-  const steps = Math.max(
-    1,
-    Math.ceil(Math.hypot(to.x - from.x, to.z - from.z) / 0.15),
+  return clearRouteSegment(
+    { x: from.x, y: from.z },
+    { x: to.x, y: to.z },
+    (p) => isTownWalkable({ x: p.x, z: p.y }, obstacles),
+    0.15,
   );
-  for (let index = 0; index <= steps; index++) {
-    if (
-      !isTownWalkable(
-        {
-          x: from.x + ((to.x - from.x) * index) / steps,
-          z: from.z + ((to.z - from.z) * index) / steps,
-        },
-        obstacles,
-      )
-    )
-      return false;
-  }
-  return true;
 }
 
 export function avoidTownObstacles(
@@ -84,73 +78,15 @@ export function avoidTownObstacles(
   to: Point,
   obstacles: Obstacle[],
 ): Point[] {
-  if (!isTownWalkable(to, obstacles)) return [];
-  if (clearTownSegment(from, to, obstacles)) return [to];
-  const spacing = 0.5;
-  const width = 121;
-  const height = 101;
-  const pointAt = (index: number): Point => ({
-    x: (index % width) * spacing - 30,
-    z: Math.floor(index / width) * spacing - 25,
-  });
-  const indexAt = (point: Point) =>
-    Math.round((point.z + 25) / spacing) * width +
-    Math.round((point.x + 30) / spacing);
-  const start = indexAt(from);
-  const queue = [start];
-  const parents = new Int32Array(width * height).fill(-1);
-  parents[start] = start;
-  let reached = -1;
-  for (let cursor = 0; cursor < queue.length; cursor++) {
-    const current = queue[cursor];
-    const point = pointAt(current);
-    if (
-      Math.hypot(point.x - to.x, point.z - to.z) <= 0.75 &&
-      clearTownSegment(point, to, obstacles)
-    ) {
-      reached = current;
-      break;
-    }
-    for (const [dx, dz] of [
-      [1, 0],
-      [-1, 0],
-      [0, 1],
-      [0, -1],
-    ]) {
-      const column = (current % width) + dx;
-      const row = Math.floor(current / width) + dz;
-      if (column < 0 || column >= width || row < 0 || row >= height) continue;
-      const next = row * width + column;
-      if (
-        parents[next] !== -1 ||
-        !clearTownSegment(
-          current === start ? from : point,
-          pointAt(next),
-          obstacles,
-        )
-      )
-        continue;
-      parents[next] = current;
-      queue.push(next);
-    }
-  }
-  if (reached === -1) return [];
-  const reverse: Point[] = [to];
-  while (reached !== start) {
-    reverse.push(pointAt(reached));
-    reached = parents[reached];
-  }
-  const route = reverse.reverse();
-  const result: Point[] = [];
-  let anchor = from;
-  for (let index = 0; index < route.length; index++) {
-    if (
-      index === route.length - 1 ||
-      !clearTownSegment(anchor, route[index + 1], obstacles)
-    ) {
-      result.push(route[index]);
-      anchor = route[index];
-    }
-  }
-  return result;
+  return searchRoute(
+    {
+      bounds: { width: 60, depth: 50 },
+      walkable: (p) => isTownWalkable({ x: p.x, z: p.y }, obstacles),
+      clear: (a, b) =>
+        clearTownSegment({ x: a.x, z: a.y }, { x: b.x, z: b.y }, obstacles),
+    },
+    { x: from.x, y: from.z },
+    { x: to.x, y: to.z },
+    premadeRoutePolicy,
+  ).map((p) => ({ x: p.x, z: p.y }));
 }

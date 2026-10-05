@@ -4,7 +4,7 @@ import {
   type GraphPort,
   NODE_HEADER,
   PORT_HEIGHT,
-} from "./connections";
+} from "./graph/types";
 
 const symbols = {
   Object: "◈",

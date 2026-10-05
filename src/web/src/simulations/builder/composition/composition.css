@@ -4,12 +4,10 @@
   min-height: 100vh;
   padding: 16px;
 }
-.composition-builder *,
-.composition-lesson * {
+.composition-builder * {
   box-sizing: border-box;
 }
-.composition-builder button,
-.composition-lesson button {
+.composition-builder button {
   min-height: 40px;
   border: 1px solid var(--border, #cec8bb);
   border-radius: 6px;
@@ -26,8 +24,7 @@
   background: var(--accent-soft, #ece4cf);
   border-color: var(--accent, #9d7943);
 }
-.composition-builder :focus-visible,
-.composition-lesson :focus-visible {
+.composition-builder :focus-visible {
   outline: 3px solid #4367b2;
   outline-offset: 2px;
 }
@@ -119,8 +116,7 @@
   font-size: 17px;
 }
 .composition-settings-fields label,
-.composition-library label,
-.composition-learner-panel label {
+.composition-library label {
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -131,9 +127,7 @@
 .composition-settings-fields select,
 .composition-settings-fields textarea,
 .composition-library input,
-.composition-library select,
-.composition-learner-panel input:not([type="range"]):not([type="checkbox"]),
-.composition-learner-panel select {
+.composition-library select {
   width: 100%;
   min-width: 0;
   min-height: 38px;
@@ -146,8 +140,7 @@
 .composition-settings-fields input[type="color"] {
   padding: 3px;
 }
-.composition-settings-fields input[type="checkbox"],
-.composition-learner-panel input[type="checkbox"] {
+.composition-settings-fields input[type="checkbox"] {
   width: 18px;
   min-height: 18px;
 }
@@ -167,7 +160,6 @@
   padding: 10px;
 }
 .composition-settings-fields p,
-.composition-interaction-help,
 .composition-library p {
   font-size: 12px;
   line-height: 1.6;
@@ -184,111 +176,6 @@
   flex-wrap: wrap;
   gap: 6px;
   margin: 14px 0;
-}
-.composition-lesson {
-  container-type: inline-size;
-  border: 1px solid var(--border, #ccc);
-  background: var(--panel, #fff);
-  border-radius: 8px;
-  padding: 12px;
-  min-width: 0;
-}
-.composition-lesson[hidden] {
-  display: none;
-}
-.composition-instruction {
-  margin: 0 0 12px;
-  line-height: 1.5;
-}
-.composition-lesson-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 215px;
-  gap: 12px;
-}
-.composition-lesson--bottom .composition-lesson-body {
-  grid-template-columns: 1fr;
-}
-.composition-scene {
-  min-width: 0;
-}
-.composition-cartesian {
-  display: block;
-  width: 100%;
-  max-height: 650px;
-  touch-action: none;
-  font-size: 12px;
-}
-.composition-handle {
-  fill: #fff;
-  stroke: #4367b2;
-  stroke-width: 2;
-  cursor: grab;
-}
-.composition-cartesian [role="button"] {
-  cursor: grab;
-}
-.composition-town {
-  height: 490px;
-  max-height: 65vh;
-  position: relative;
-  overflow: hidden;
-  border-radius: 6px;
-  touch-action: none;
-}
-.composition-camera-reset {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  z-index: 2;
-}
-.composition-scene-hint {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  padding: 10px;
-  background: #ffffffdc;
-  pointer-events: none;
-  font-size: 13px;
-}
-.composition-learner-panel {
-  min-width: 0;
-  background: var(--paper, #faf8f1);
-  border-radius: 6px;
-  padding: 12px;
-}
-.composition-learner-panel > button {
-  margin-top: 10px;
-  width: 100%;
-}
-.composition-playback > output {
-  display: block;
-  font-size: 22px;
-  font-variant-numeric: tabular-nums;
-  margin-bottom: 8px;
-}
-.composition-playback p {
-  font-size: 12px;
-  color: var(--muted);
-}
-.composition-readout {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border, #ccc);
-  overflow-wrap: anywhere;
-}
-.composition-readout span {
-  font-size: 12px;
-  color: var(--muted);
-}
-.composition-readout output {
-  font-size: 16px;
-  font-weight: 600;
-}
-.composition-learner-control output {
-  font-variant-numeric: tabular-nums;
 }
 .composition-library {
   width: 540px;
@@ -403,19 +290,8 @@
     max-width: 100%;
   }
 }
-.composition-plane-navigation {
-  display: flex;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 6px;
-}
-.composition-plane-navigation button {
-  min-height: 32px;
-  font-size: 12px;
-  padding: 5px 9px;
-}
-/* Graph-first authoring. Settings live in the dialog, never beside the workspace. */
+/* Graph-first authoring. Settings live in the dialog,
+never beside the workspace. */
 .composition-builder {
   --ink: var(--text, #30362e);
   --paper: var(--bg, #eee9dc);
@@ -437,8 +313,7 @@
   width: 430px;
 }
 .composition-graph[hidden],
-.composition-preview[hidden],
-.composition-multi-lesson[hidden] {
+.composition-preview[hidden] {
   display: none;
 }
 .composition-graph .connection-workspace {
@@ -609,30 +484,6 @@
 .composition-library button {
   font-size: 14px;
 }
-.composition-canvases {
-  display: grid;
-  gap: 20px;
-}
-.composition-canvases.is-side-by-side {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
-}
-.composition-canvases.is-stacked {
-  grid-template-columns: 1fr;
-}
-.composition-canvas-panel {
-  min-width: 0;
-}
-.composition-canvas-panel > header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.composition-canvas-panel > header h2 {
-  margin: 0;
-  flex: 1;
-  font-size: 16px;
-}
 .composition-build-empty {
   padding: 60px 24px;
   text-align: center;
@@ -643,21 +494,6 @@
 .composition-unconnected-help {
   font-size: 14px;
   color: var(--muted);
-}
-.composition-lesson-body:has(.composition-learner-panel[data-empty="true"]) {
-  grid-template-columns: 1fr;
-}
-.composition-learner-panel[data-empty="true"] {
-  background: transparent;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.composition-learner-panel[data-empty="true"] > button {
-  width: auto;
-  margin: 0;
-  font-size: 12px;
 }
 @media (max-width: 800px) {
   .composition-builder {
@@ -752,42 +588,6 @@
 }
 .connection-port {
   touch-action: none;
-}
-.composition-edit-selection {
-  font-size: 12px;
-  margin-bottom: 8px;
-}
-
-.composition-display-scene {
-  min-width: 0;
-  width: 100%;
-}
-.composition-display {
-  display: block;
-  width: 100%;
-  min-height: 260px;
-  max-height: 580px;
-  background: #fffdf7;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  touch-action: none;
-}
-.composition-display-tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-.composition-display [role="button"] {
-  cursor: grab;
-}
-.composition-display [role="button"]:focus-visible {
-  outline: none;
-  stroke: #b75d45;
-  stroke-width: 0.8px;
-}
-.composition-display .math-scene-label {
-  font-size: 3px;
 }
 .composition-fraction-pieces .math-scene-label {
   display: none;

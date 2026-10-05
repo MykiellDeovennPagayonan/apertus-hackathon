@@ -24,9 +24,15 @@ Each canvas resets independently. Display drags support Escape cancellation and 
 
 See [Physical and diagram composition](agent-only/features/MANUAL_BUILDER_DOMAIN_COMPOSITION.md) for the current implementation and verification scope. The dated initial-release design and reviews below describe historical legacy adapters; their singleton restrictions do not apply to the current manual composition builder.
 
+### Shared component ownership
+
+Component definitions and contracts now live in `simulations/components/`; the builder consumes those definitions for creation, settings, library entries, and graph ports. Geometry, fraction/gas operations, navigation search, and route following are shared with recipe/premade consumers. Explicit adapters preserve endpoint versus slope/intercept line representations, authored town bounds versus premade street policies, and each town's appearance.
+
+Scene validation, projection, mutations, and lifecycle belong to `runtime/composition/`. Learner assembly belongs to `lessons/`; settings portals and capture belong to `builder/preview/`. Document compatibility survives as readers and migrations under `builder/document/`, while the former editor and singleton lesson branches have been retired.
+
 ### Verification
 
-`pnpm test` includes geometry, simulation/integration, document/binding, migration, graph projection, disconnection, typed endpoint, multiple-canvas, trip compilation, and save round-trip checks. `pnpm test:builder:browser` exercises gas/fraction compatibility plus the new Cartesian/town graph workflow. Use a local app on port 3000 or set `BUILDER_BASE_URL`. `pnpm exec tsc --noEmit` and scoped Biome checks verify the changed source.
+`pnpm test` includes import-boundary checks, pure definition loading, fixed pre-refactor document and town fixtures, geometry, simulation/integration, document/binding, migration, graph projection, disconnection, typed endpoint, multiple-canvas, trip compilation, and save round-trip checks. `pnpm test:builder:browser` exercises gas/fraction compatibility plus the new Cartesian/town graph workflow. Use a local app on port 3000 or set `BUILDER_BASE_URL`. `pnpm exec tsc --noEmit` and scoped Biome checks verify the changed source.
 
 Browser scenarios cover two planes, pointer wire creation, dialog handle dragging and one-step undo, node movement without opening settings, calculations, disconnection, runtime lifetime, draft recovery, town trip connections, and mobile layouts. Review captures are written to `/tmp/apertus-graph-browser/`.
 

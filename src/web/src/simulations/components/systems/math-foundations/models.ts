@@ -1,3 +1,4 @@
+import { lineYAt } from "../LineGeometrySystem";
 /** Exact signed rationals; unsafe arithmetic fails before candidate state commits. */
 export interface Rational {
   n: number;
@@ -149,9 +150,10 @@ export function lineMeasure(p: Record<string, unknown>) {
     xMax = Number(p.xMax);
   if (xMin >= xMax)
     throw new Error("Line domain minimum must be below its maximum");
+  const geometry = { slope, intercept };
   const points = Array.from({ length: 21 }, (_, i) => {
     const x = xMin + ((xMax - xMin) * i) / 20;
-    return { x, y: slope * x + intercept };
+    return { x, y: lineYAt(geometry, x) };
   });
   return {
     equation: `${slope === 0 ? "y" : `y = ${slope === 1 ? "" : slope === -1 ? "−" : slope}x`}${
@@ -162,8 +164,8 @@ export function lineMeasure(p: Record<string, unknown>) {
           : ` ${intercept < 0 ? "−" : "+"} ${Math.abs(intercept)}`
     }`,
     points,
-    yAtZero: intercept,
-    yAtOne: slope + intercept,
+    yAtZero: lineYAt(geometry, 0),
+    yAtOne: lineYAt(geometry, 1),
     rise: slope,
     run: 1,
     marker: [

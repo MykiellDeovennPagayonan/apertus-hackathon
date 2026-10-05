@@ -1,7 +1,7 @@
-import { requireRecord } from "../records";
-import { connectPorts } from "./graph";
-import type { CompositionScene } from "./model";
-import type { TripComponent } from "./workspace";
+import type { CompositionScene } from "../../runtime/composition/index";
+import type { TripComponent } from "../../runtime/composition/types";
+import { requireRecord } from "../../runtime/records";
+import { connectPorts } from "../graph/deriveGraph";
 export function TripSettings({
   trip,
   scene,

@@ -1,7 +1,9 @@
 // biome-ignore-all lint/suspicious/noArrayIndexKey: Procedural scene slots are fixed identities.
 
 import { TownAppearance } from "../resources/TownAppearance";
+import { entrance } from "../systems/BuildingGeometrySystem";
 import type { Building } from "../traits/Building";
+import type { BuildingObject } from "../traits/SceneObjects";
 import { TownLabel } from "./TownLabel";
 import { Block, Window } from "./townGeometry";
 export function BuildingVisual3D({
@@ -138,5 +140,42 @@ export function BuildingVisual3D({
         <Block at={[2.5, 6, -1.7]} size={[0.85, 4, 0.85]} color="#947d68" />
       )}
     </group>
+  );
+}
+
+export function AuthoredBuildingVisual3D({
+  object: o,
+  selected,
+}: {
+  object: BuildingObject;
+  selected: boolean;
+}) {
+  return (
+    <>
+      <mesh position={[0, o.height / 2, 0]} castShadow receiveShadow>
+        <boxGeometry args={[o.width, o.height, o.depth]} />
+        <meshStandardMaterial
+          color={o.color}
+          emissive={selected ? "#66552a" : "#000000"}
+          emissiveIntensity={0.35}
+        />
+      </mesh>
+      <mesh
+        position={[0, o.height + 0.55, 0]}
+        rotation={[0, Math.PI / 4, 0]}
+        scale={[o.width, 1, o.depth]}
+        castShadow
+      >
+        <coneGeometry args={[Math.SQRT1_2, 1.1, 4]} />
+        <meshStandardMaterial color="#805b50" />
+      </mesh>
+      <mesh
+        position={[entrance(o).x - o.x, 0.08, entrance(o).y - o.z]}
+        rotation={[-Math.PI / 2, 0, 0]}
+      >
+        <circleGeometry args={[0.4, 16]} />
+        <meshStandardMaterial color="#fff1a5" />
+      </mesh>
+    </>
   );
 }

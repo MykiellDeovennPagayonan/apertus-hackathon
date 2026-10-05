@@ -9,12 +9,14 @@ export function NumberField({
   max,
   step = 1,
   onChange,
+  integer = step === 1,
 }: {
   label: string;
   value: number;
   min: number;
   max: number;
   step?: number;
+  integer?: boolean;
   onChange: (value: number) => ActionResult;
 }) {
   const [draft, setDraft] = useState<string | null>(null);
@@ -27,10 +29,10 @@ export function NumberField({
       !Number.isFinite(n) ||
       n < min ||
       n > max ||
-      (step === 1 && !Number.isInteger(n))
+      (integer && !Number.isInteger(n))
     ) {
       setError(
-        `Choose ${step === 1 ? "a whole number" : "a number"} from ${min} to ${max}.`,
+        `Choose ${integer ? "a whole number" : "a number"} from ${min} to ${max}.`,
       );
       return;
     }
@@ -45,6 +47,7 @@ export function NumberField({
     <label className="experiment-number">
       <span>{label}</span>
       <input
+        aria-label={label}
         type="number"
         min={min}
         max={max}
@@ -60,7 +63,7 @@ export function NumberField({
             text !== "" &&
             n >= min &&
             n <= max &&
-            (step !== 1 || Number.isInteger(n))
+            (!integer || Number.isInteger(n))
           )
             commit(text);
         }}

@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { canvasNames } from "./definitions";
-import type { CompositionScene, ObjectKind } from "./model";
+import { canvasNames } from "../../components/contracts/composition";
+import { componentDefinitions } from "../../components/registry";
+import type {
+  CompositionScene,
+  ObjectKind,
+} from "../../runtime/composition/index";
 export type LibraryRequest = { category: string; target?: string };
 export type ComponentChoice =
   | ObjectKind
@@ -61,73 +65,16 @@ export function CompositionLibrary({
             : "Empty display space. Connect independent objects to it.",
       category: "canvases",
     },
-    ...(scene.kind === "cartesian"
-      ? [
-          {
-            kind: "line",
-            label: "Line",
-            description:
-              "An infinite line with draggable handles, slope, intercept and color.",
-            category: "objects",
-          },
-          {
-            kind: "square",
-            label: "Square",
-            description:
-              "A square with size, rotation, fill and outline settings.",
-            category: "objects",
-          },
-        ]
-      : scene.kind === "physical"
-        ? [
-            {
-              kind: "gas",
-              label: "Gas container",
-              description:
-                "One independent container with one gas sample, properties and pressure output.",
-              category: "objects",
-            },
-          ]
-        : scene.kind === "diagram"
-          ? [
-              {
-                kind: "fraction-bar",
-                label: "Fraction bar",
-                description:
-                  "An independent equal-whole bar with editable partitions and shading.",
-                category: "objects",
-              },
-            ]
-          : [
-              {
-                kind: "ground",
-                label: "Ground",
-                description:
-                  "A walkable surface with editable dimensions and color.",
-                category: "objects",
-              },
-              {
-                kind: "building",
-                label: "House / building",
-                description:
-                  "An independent building, entrance and destination.",
-                category: "objects",
-              },
-              {
-                kind: "road",
-                label: "Road",
-                description: "A rectangular road that can be open or closed.",
-                category: "objects",
-              },
-              {
-                kind: "person",
-                label: "Person",
-                description:
-                  "A person with a spawn point, spawn time and walking speed.",
-                category: "objects",
-              },
-            ]
-    ).map((c) => c as Choice),
+    ...Object.values(componentDefinitions)
+      .filter((d) => d.space === scene.kind)
+      .map(
+        (d): Choice => ({
+          kind: d.kind,
+          label: d.kind === "building" ? "House / building" : d.label,
+          description: d.description,
+          category: "objects",
+        }),
+      ),
     {
       kind: "slider",
       label: "Slider",

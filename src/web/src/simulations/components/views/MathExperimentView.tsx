@@ -1,7 +1,7 @@
 "use client";
 import type { ReactNode } from "react";
 import { useMathStore } from "../../runtime/mathSession";
-import { getActiveDefinition } from "../../runtime/session";
+import { dispatchCommand, getActiveDefinition } from "../../runtime/session";
 import { ArithmeticControls } from "../controls/ArithmeticControls";
 import { CountingControls } from "../controls/CountingControls";
 import { FractionBuilderControls } from "../controls/FractionBuilderControls";
@@ -89,8 +89,18 @@ export function MathExperimentView({ demo }: { demo: MathDemo }) {
       );
       break;
     case "fraction-builder":
-      scene = <FractionBuilderScene board={board} />;
-      controls = <FractionBuilderControls board={board} />;
+      scene = (
+        <FractionBuilderScene
+          board={board}
+          onCommand={(command) => dispatchCommand(board.demo, command)}
+        />
+      );
+      controls = (
+        <FractionBuilderControls
+          board={board}
+          onCommand={(command) => dispatchCommand(board.demo, command)}
+        />
+      );
       break;
     case "fraction-number-line":
       scene = <FractionNumberLineScene board={board} />;

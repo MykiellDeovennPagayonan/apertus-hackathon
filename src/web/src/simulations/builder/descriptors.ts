@@ -1,3 +1,4 @@
+import { lineProperties } from "../components/contracts/LineParameters";
 import { modelProvider } from "../runtime/assembly";
 import { operations } from "../runtime/capabilities";
 import type { Recipe } from "../runtime/resolver";
@@ -120,8 +121,8 @@ export const templates: Record<TemplateId, Template> = {
         action: "SET_SLOPE",
         parameter: "slope",
         unit: "1",
-        min: -20,
-        max: 20,
+        min: lineProperties.slope.min,
+        max: lineProperties.slope.max,
         step: 0.1,
         widget: "slider",
         slot: "primary",
@@ -131,8 +132,8 @@ export const templates: Record<TemplateId, Template> = {
         action: "SET_INTERCEPT",
         parameter: "intercept",
         unit: "math units",
-        min: -100,
-        max: 100,
+        min: lineProperties.intercept.min,
+        max: lineProperties.intercept.max,
         step: 1,
         widget: "number",
         slot: "primary",

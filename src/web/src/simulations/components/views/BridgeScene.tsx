@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useId, useState } from "react";
 import { useBridgeStore } from "../../runtime/bridgeSession";
+import { dispatchCommand } from "../../runtime/session";
 import { BridgeExperiment } from "../compositions/BridgeExperiment";
 import { DragHandleControl } from "../controls/DragHandleControl";
 import { selectMember } from "../controls/SelectionControl";
@@ -192,7 +193,7 @@ export function BridgeScene() {
 
         {stage >= 5 && (
           <DragHandleControl
-            demo="bridge"
+            onCommand={(command) => dispatchCommand("bridge", command)}
             target={truss.load.id}
             cx={loadX}
             cy={loadY - 35}

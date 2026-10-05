@@ -88,7 +88,7 @@ export function ElementaryExperimentView() {
                   fill="var(--accent)"
                 />
                 <DragHandleControl
-                  demo={s.demo}
+                  onCommand={(command) => dispatchCommand(s.demo, command)}
                   target={s.id}
                   cx={220 + Number(p.x) * 18}
                   cy={220 - Number(p.y) * 18}

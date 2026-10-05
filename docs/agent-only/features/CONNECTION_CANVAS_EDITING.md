@@ -12,6 +12,7 @@ The Cartesian, town, physical, and diagram composition workspaces support free n
 - Shift-click, Ctrl-click, or Command-click toggles additional selections.
 - Shift-drag empty space to add intersecting cards to the selection.
 - Ctrl/Command+A selects all components; Escape clears selection and transient connection/menu state.
+- Click a connecting wire to select it. Its highlight stays visible and the connection panel offers **Delete connection**. Delete or Backspace removes the selected wire; both component cards remain. Tab can focus wires for keyboard selection, and Escape cancels selection. Undo/redo restores or removes the connection in one action.
 
 ## Component actions
 

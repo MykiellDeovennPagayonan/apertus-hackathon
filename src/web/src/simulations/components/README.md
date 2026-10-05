@@ -8,12 +8,35 @@ Read the [implementation plan and complete inventory](../../../../../docs/agent-
 
 The [early mathematics plan and implementation notes](../../../../../docs/agent-only/implementation/002-EARLY_MATH_SIMULATIONS.md) cover Counting Circles, Addition and Subtraction, Equal Groups, Fraction Builder, and Fraction Number Line. Their board schemas and prefabs share focused `MathBoards.ts` modules; five pure systems own the mathematics, and SVG views render their snapshots. Math prompts use bounded local adapters while the three original demos retain their Apertus planner integration.
 
+## Manual composition components
+
+The manual builder uses canonical definitions registered with the existing runtime catalog. `contracts/` contains property/action/output and authoring schemas; `definitions/` contains the eight independently registered object kinds. `registry.ts` is pure and imports no rendering backends. Renderer providers are selected separately by `views/CompositionCanvas.tsx`.
+
+| Responsibility | Canonical owner | Consumers |
+| --- | --- | --- |
+| Line/square definitions and editable schemas | `definitions/Line.ts`, `Square.ts` | Library, settings, graph, validation, runtime |
+| Line geometry/intersection, square metrics | `systems/LineGeometrySystem.ts`, `LineIntersectionSystem.ts`, `SquareGeometrySystem.ts` | Endpoint composition; slope/intercept recipe adapter |
+| Gas and independent fractions | `definitions/GasContainer.ts`, `FractionBar.ts`; existing gas/fraction systems | Builder canvases and premade boards/sessions |
+| Shared line appearance | `visuals/LineVisual.tsx` | Cartesian view and recipe line graph |
+| Authored and premade town routing | `systems/RouteSearchSystem.ts`, `RouteFollowingSystem.ts` | Authored bounds/diagonal policy and premade street/cardinal policy |
+| Departure contract and execution | `behaviors/ScheduledTrip.ts`, `systems/ScheduledTripSystem.ts` | Authored person schedules and compiled workspace trips |
+| Town appearance | Existing `BuildingVisual3D.tsx`, `RoadVisual3D.tsx`, `CitizenVisual3D.tsx`; `GroundVisual3D.tsx` | Explicit authored/premade appearance profiles |
+| Canvas rendering | `views/CartesianView.tsx`, `DisplayView.tsx`, `AuthoredTownView.tsx` | Author preview and learner lesson |
+| Learner commands | `controls/BoundControl.tsx` and slider/number/toggle/action primitives | Supplied per-canvas command interface |
+
+Shared execution never imports `builder/`. `runtime/composition/` owns validation/projection/staging and per-canvas lifecycle; `lessons/` owns formatting and assembly. Builder capture, settings portals, document compatibility, history, and persistence stay under `builder/`. Fraction controls/scenes and drag handles receive command interfaces; their premade view owners provide session adapters.
+
+`pnpm test:architecture` enforces these boundaries and checks pre-refactor document migrations, town paths/timelines, independent construction, and cross-adapter geometry. It is included in `pnpm test`. Related pure verification scripts are grouped under `scripts/builder/`; package command names remain unchanged.
+
 ## Directory structure
 
 ```text
 simulations/
 ├── components/                 # All implementations and definitions
 │   ├── README.md
+│   ├── contracts/
+│   ├── definitions/
+│   ├── registry.ts
 │   ├── resources/
 │   ├── traits/
 │   ├── behaviors/

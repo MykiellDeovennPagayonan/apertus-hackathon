@@ -1,9 +1,9 @@
 import { type PointerEvent, useEffect, useRef, useState } from "react";
-import { dispatchCommand } from "../../runtime/session";
-import type { DemoType, UIAction } from "../../runtime/types";
+import type { ActionResult } from "../../runtime/commands";
+import type { UIAction } from "../../runtime/types";
 /** SVG picking coordinates are explicitly mapped into a domain edit. */
 export function DragHandleControl({
-  demo,
+  onCommand,
   target,
   cx,
   cy,
@@ -11,7 +11,7 @@ export function DragHandleControl({
   label,
   keyboardStep = 8,
 }: {
-  demo: DemoType;
+  onCommand: (command: UIAction) => ActionResult;
   target: string;
   cx: number;
   cy: number;
@@ -42,7 +42,7 @@ export function DragHandleControl({
     point.x = event.clientX;
     point.y = event.clientY;
     const mapped = point.matrixTransform(matrix.inverse());
-    dispatchCommand(demo, { ...map(mapped.x, mapped.y), target });
+    onCommand({ ...map(mapped.x, mapped.y), target });
   };
   return (
     // biome-ignore lint/a11y/useSemanticElements: SVG picking supports pointer capture and keyboard commands.
@@ -80,7 +80,7 @@ export function DragHandleControl({
           return;
         e.preventDefault();
         const step = keyboardStep * (e.shiftKey ? 0.1 : 1);
-        dispatchCommand(demo, {
+        onCommand({
           ...map(
             cx +
               (e.key === "ArrowRight"

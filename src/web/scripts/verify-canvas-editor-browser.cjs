@@ -1,6 +1,6 @@
 const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
-const { fixture } = require("./verify-canvas-editor.cjs");
+const { fixture } = require("./builder/verify-canvas-editor.cjs");
 (async () => {
   const browser = await chromium.launch({
     headless: true,

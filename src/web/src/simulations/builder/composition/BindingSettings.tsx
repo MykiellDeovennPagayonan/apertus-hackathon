@@ -1,5 +1,9 @@
-import { requireRecord } from "../document";
-import { actions, isPairOutput, outputSpec, pairKind } from "./definitions";
+import {
+  actions,
+  isPairOutput,
+  outputSpec,
+  pairKind,
+} from "../../components/contracts/composition";
 import {
   type CompositionScene,
   type Measurement,
@@ -7,9 +11,10 @@ import {
   properties,
   type SceneControl,
   validateScene,
-} from "./model";
-import { templateForScene } from "./runtimeState";
-import { controlDefaults, targetChoices } from "./workspace";
+} from "../../runtime/composition/index";
+import { templateForScene } from "../../runtime/composition/runtimeState";
+import { requireRecord } from "../document";
+import { controlDefaults, targetChoices } from "../editor/workspaceCommands";
 
 export function BindingSettings({
   binding,

@@ -4,12 +4,10 @@ import {
   useRef,
   useState,
 } from "react";
+import { requireRecord } from "../../runtime/records";
 import { ConnectionNode } from "../ConnectionNode";
 import { ConnectionViewport } from "../ConnectionViewport";
-import { type GraphWire, portPoint } from "../connections";
 import { type ExperimentDocument, validateDocument } from "../document";
-import { isTextEditing } from "../history";
-import { requireRecord } from "../records";
 import {
   type ComponentClipboard,
   deleteComponents,
@@ -17,14 +15,16 @@ import {
   groupComponents,
   pasteComponents,
   ungroupComponents,
-} from "./editor";
+} from "../editor/selection";
 import {
   compositionGraph,
   connectionError,
   connectPorts,
   disconnectWire,
   type Endpoint,
-} from "./graph";
+} from "../graph/deriveGraph";
+import { type GraphWire, portPoint } from "../graph/types";
+import { isTextEditing } from "../history/entries";
 import "../connections.css";
 type Edit = (
   change: (d: ExperimentDocument) => void,
@@ -169,6 +169,7 @@ export function CompositionGraph({
     ) {
       pasteCount++;
       setSelection(ids);
+      setWireSelection(null);
       if (ids[0]) setJump({ id: ids[0], sequence: (jump?.sequence ?? 0) + 1 });
       setFeedback(`Pasted ${ids.length} components`);
     }
@@ -187,6 +188,29 @@ export function CompositionGraph({
     }
     setContextMenu(null);
   };
+  const removeConnection = (wire = wireSelection) => {
+    if (!wire) return;
+    if (
+      run("Delete connection", (d) =>
+        disconnectWire(requireRecord(d.scene), wire),
+      )
+    ) {
+      setWireSelection(null);
+      setFeedback("");
+      setContextMenu(null);
+      surface.current
+        ?.querySelector<HTMLElement>(".builder-canvas-scroll")
+        ?.focus({ preventScroll: true });
+    }
+  };
+  const selectConnection = (wire: GraphWire) => {
+    setWireSelection(wire);
+    setSelection([]);
+    setSource(null);
+    setGhost(null);
+    setFeedback("");
+    setContextMenu(null);
+  };
   const group = () => {
     if (selectedIds.length < 2) return;
     run("Create group", (d) => groupComponents(d, selectedIds));
@@ -201,6 +225,7 @@ export function CompositionGraph({
     id: string,
   ) => {
     if (event.button !== 0) return;
+    setWireSelection(null);
     nodeClickSuppressed.current = false;
     const ids = selectedIds.includes(id)
       ? selectedIds
@@ -267,6 +292,8 @@ export function CompositionGraph({
     ungroup,
     active,
     selectedIds,
+    wireSelection,
+    removeConnection,
   });
   commands.current = {
     copy,
@@ -276,6 +303,8 @@ export function CompositionGraph({
     ungroup,
     active,
     selectedIds,
+    wireSelection,
+    removeConnection,
   };
   useEffect(() => {
     const key = (event: KeyboardEvent) => {
@@ -295,16 +324,19 @@ export function CompositionGraph({
           if (event.shiftKey) commands.current.ungroup();
           else commands.current.group();
         }
-        if (value === "a")
+        if (value === "a") {
+          setWireSelection(null);
           setSelection(
             compositionGraph(current.current.doc).blocks.map((b) => b.id),
           );
+        }
       } else if (
         ["Delete", "Backspace"].includes(event.key) &&
-        commands.current.selectedIds.length
+        (commands.current.wireSelection || commands.current.selectedIds.length)
       ) {
         event.preventDefault();
-        commands.current.remove();
+        if (commands.current.wireSelection) commands.current.removeConnection();
+        else commands.current.remove();
       } else if (event.key === "Escape") {
         setSelection([]);
         setContextMenu(null);
@@ -456,6 +488,7 @@ export function CompositionGraph({
         )
           return;
         event.preventDefault();
+        setWireSelection(null);
         const origin = worldPoint(event.clientX, event.clientY);
         marqueeDrag.current = { origin, previous: selectedIds };
         setMarquee({ ...origin, right: origin.x, bottom: origin.y });
@@ -697,23 +730,16 @@ export function CompositionGraph({
                   )}
                   {wireSelection && (
                     <>
+                      <strong>Selected connection</strong>
                       <p>
                         {node(wireSelection.from)?.label} →{" "}
                         {node(wireSelection.to)?.label}
                       </p>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          run("Disconnect components", (d) =>
-                            disconnectWire(
-                              requireRecord(d.scene),
-                              wireSelection,
-                            ),
-                          );
-                          setWireSelection(null);
-                        }}
-                      >
-                        Disconnect
+                      <p>
+                        Press Delete or Backspace to remove this connection.
+                      </p>
+                      <button type="button" onClick={() => removeConnection()}>
+                        Delete connection
                       </button>
                       <button
                         type="button"
@@ -787,10 +813,15 @@ export function CompositionGraph({
                 portPoint(a, w.fromPort, "output"),
                 portPoint(b, w.toPort, "input"),
               );
+              const isSelected =
+                wireSelection?.from === w.from &&
+                wireSelection.fromPort === w.fromPort &&
+                wireSelection.to === w.to &&
+                wireSelection.toPort === w.toPort;
               return (
                 <g
                   key={`${w.from}/${w.fromPort}/${w.to}/${w.toPort}`}
-                  className={`connection-wire wire-${w.type}`}
+                  className={`connection-wire wire-${w.type} ${isSelected ? "is-selected" : ""}`}
                 >
                   <path className="connection-wire-line" d={d} />
                   {/* biome-ignore lint/a11y/useSemanticElements: SVG wires need keyboard-accessible path hit targets. */}
@@ -799,18 +830,27 @@ export function CompositionGraph({
                     d={d}
                     role="button"
                     tabIndex={0}
+                    vectorEffect="non-scaling-stroke"
+                    style={{ outline: "none" }}
+                    aria-pressed={isSelected}
                     aria-label={`${a.label} → ${b.label}: ${w.label}`}
-                    onClick={() => {
-                      setWireSelection(w);
-                      setSelection([]);
-                      setSource(null);
+                    onFocus={() => selectConnection(w)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.currentTarget.focus({ preventScroll: true });
+                      selectConnection(w);
                     }}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
+                      if (
+                        isSelected &&
+                        (e.key === "Delete" || e.key === "Backspace")
+                      ) {
                         e.preventDefault();
-                        setWireSelection(w);
-                        setSelection([]);
-                        setSource(null);
+                        e.stopPropagation();
+                        removeConnection(w);
+                      } else if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        selectConnection(w);
                       }
                     }}
                   />
@@ -841,7 +881,7 @@ export function CompositionGraph({
               }
               activePort={source?.node === b.id ? source.port : null}
               onOpen={() => {
-                setSelection(expandSelection(doc, [b.id]));
+                select(b.id);
                 onSelect(b.id);
               }}
               onSelect={(event) => {

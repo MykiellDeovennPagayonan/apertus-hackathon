@@ -277,17 +277,102 @@ fs.mkdirSync(output, { recursive: true });
     await button("Try lesson ↗").click();
     await button("Return to builder").click();
     await button("Connections").click();
-    // Disconnecting a wire changes Build; Undo restores it.
+    // Click near a curved wire even when zoomed out, then delete only the connection.
     await fit();
     const wirePath = graph.getByRole("button", {
       name: /Square 1 → Cartesian plane 2: Display/,
     });
-    await wirePath.focus();
-    await page.keyboard.press("Enter");
-    await button("Disconnect").click();
+    const clickWire = async (wire) => {
+      const point = await wire.evaluate((el) => {
+        const length = el.getTotalLength();
+        const matrix = el.getScreenCTM();
+        for (const fraction of [0.5, 0.4, 0.6, 0.3, 0.7]) {
+          const p = el
+            .getPointAtLength(length * fraction)
+            .matrixTransform(matrix);
+          const next = el
+            .getPointAtLength(length * fraction + 1)
+            .matrixTransform(matrix);
+          const distance = Math.hypot(next.x - p.x, next.y - p.y);
+          const x = p.x - (6 * (next.y - p.y)) / distance;
+          const y = p.y + (6 * (next.x - p.x)) / distance;
+          if (document.elementFromPoint(x, y) === el) return { x, y };
+        }
+        return null;
+      });
+      assert.ok(
+        point,
+        "wire has a usable hit area six screen pixels off its curve",
+      );
+      await page.mouse.click(point.x, point.y);
+      assert.equal(await wire.getAttribute("aria-pressed"), "true");
+      assert.equal(
+        await wire.evaluate((el) => getComputedStyle(el).outlineStyle),
+        "none",
+        "selected wire has no blue focus rectangle",
+      );
+      assert.equal(
+        await wire.evaluate((el) => getComputedStyle(el).stroke),
+        "rgba(0, 0, 0, 0)",
+        "selection has no wide highlight halo",
+      );
+      assert.equal(
+        await graph.locator(".connection-node.is-selected").count(),
+        0,
+      );
+    };
+    const beforeDelete = await draft();
+    await node(square).locator(".connection-node-heading").click();
+    await clickWire(wirePath);
+    await page.screenshot({ path: `${output}/selected-connection.png` });
+    await page.keyboard.press("Delete");
     assert.equal((await draft()).scene.workspace.placements[square], undefined);
+    assert.deepEqual(
+      (await draft()).scene.objects,
+      beforeDelete.scene.objects,
+      "wire deletion keeps components",
+    );
+    assert.equal(await wirePath.count(), 0);
     await button("Undo").click();
     assert.equal((await draft()).scene.workspace.placements[square], b);
+    await button("Redo").click();
+    assert.equal((await draft()).scene.workspace.placements[square], undefined);
+    await button("Undo").click();
+    await wirePath.focus();
+    assert.equal(
+      await wirePath.evaluate((el) => getComputedStyle(el).outlineStyle),
+      "none",
+    );
+    await page.keyboard.press("Backspace");
+    assert.equal((await draft()).scene.workspace.placements[square], undefined);
+    await button("Undo").click();
+    await clickWire(wirePath);
+    await page.keyboard.press("Escape");
+    await page.keyboard.press("Delete");
+    assert.equal(
+      (await draft()).scene.workspace.placements[square],
+      b,
+      "Escape cancels wire selection",
+    );
+    await clickWire(wirePath);
+    await button("Delete connection").click();
+    assert.equal((await draft()).scene.workspace.placements[square], undefined);
+    await button("Undo").click();
+    // The same deletion gesture detaches a readout rather than deleting its card.
+    const areaWire = graph.getByRole("button", {
+      name: /Square 1 → Square area: area/,
+    });
+    await areaWire.focus();
+    await page.keyboard.press("Delete");
+    const detached = (await draft()).scene.measurements.find(
+      (m) => m.id === area,
+    );
+    assert.equal(detached.target, "");
+    await button("Undo").click();
+    assert.equal(
+      (await draft()).scene.measurements.find((m) => m.id === area).target,
+      square,
+    );
     await page.setViewportSize({ width: 390, height: 844 });
     await fit();
     await noOverflow();
@@ -350,7 +435,7 @@ fs.mkdirSync(output, { recursive: true });
     const { load } = require("./test-loader.cjs");
     const docs = load("src/simulations/builder/document.ts");
     const { composeLegacy } = load(
-      "src/simulations/builder/composition/migration.ts",
+      "src/simulations/builder/document/migrations/composeLegacy.ts",
     );
     const legacy = composeLegacy(docs.createDocument("line"));
     for (const invalid of [false, true]) {

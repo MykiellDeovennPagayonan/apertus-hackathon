@@ -15,7 +15,7 @@ A new document contains an empty workspace. Canvas, object, control, and measure
 
 Canvases use one scene kind per document. Up to eight canvases, 64 objects, 40 controls, and 40 measurements are supported. Moving a bar across canvases is rejected if it would break a connected comparison. Disconnect the comparison first.
 
-`definitions.ts` declares scene compatibility, domain schemas/defaults, gas property contracts from the existing gas schema, action contracts, and output types/units. Existing model and workspace validators enforce these definitions independently of the graph UI. New action controls carry an explicit action binding; old numeric/toggle controls remain readable.
+`components/definitions/` declares canonical component schemas/defaults, property contracts, actions, outputs, and state preservation policies. `components/registry.ts` registers these same contracts with the runtime catalog. `runtime/composition/` validates scenes, bindings, and workspaces independently of the graph UI. Shared views and controls live under `components/`; learner assembly lives under `lessons/`. New action controls carry an explicit action binding; old numeric/toggle controls remain readable.
 
 ## Gas
 

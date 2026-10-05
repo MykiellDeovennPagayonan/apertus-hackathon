@@ -5,6 +5,7 @@ import { modelProvider } from "../../../runtime/assembly";
 import { useAssemblyStore } from "../../../runtime/assemblySession";
 import type { ModelInstance } from "../../../runtime/contribution";
 import { dispatchCommand } from "../../../runtime/session";
+import { LineStroke } from "../../visuals/LineVisual";
 import { ChemistryLesson } from "../chemistry/ChemistryLesson";
 import { DynamicSystemsLesson } from "../dynamic-systems/DynamicSystemsLesson";
 import { NaturalSystemsView } from "../natural-systems/NaturalSystemsView";
@@ -386,7 +387,7 @@ export function LineGraph({ instances }: { instances: ModelInstance[] }) {
             const marker = line.outputs.marker as Point[];
             return (
               <g key={line.id} style={{ color: palette[index] }}>
-                <polyline
+                <LineStroke
                   className="graph-line"
                   points={(line.outputs.points as Point[])
                     .map((point) => `${x(point.x)},${y(point.y)}`)

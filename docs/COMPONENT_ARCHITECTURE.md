@@ -6,6 +6,8 @@
 
 For implementation contracts, see [Component Contracts](agent-only/COMPONENT_CONTRACTS.md). The earlier [architecture catalog](agent-only/COMPONENT_ARCHITECTURE.md) remains useful as a roadmap, but this guide and the contracts replace its conflicting terminology. The [project overview](agent-only/OVERVIEW.md) still describes the broader product vision.
 
+The manual builder now uses this shared ownership for lines, squares, gas containers, fraction bars, and authored towns. Pure definitions under `components/definitions/` register with the existing runtime catalog; `runtime/composition/` validates and executes independent canvases. Shared views and controls serve author previews and learner playback, with builder-only capture and settings integration in `builder/preview/`. See [refactor 008](agent-only/implementation/008-SHARED_COMPONENT_BUILDER_REFACTOR.md) for the delivered owners, compatibility adapters, and verification evidence.
+
 ## 1. The decision in one page
 
 The playground consists of reusable **components**. That is the umbrella term, not the name of one particular type.

@@ -1,5 +1,6 @@
 import { WalkingProfile } from "../resources/WalkingProfile";
 import type { Citizen } from "../traits/Resident";
+import { interpolateSegment } from "./RouteFollowingSystem";
 import { clearTownSegment, type Obstacle } from "./townNavigation";
 /** Owns position/heading and advances an index through assigned waypoints; never generates or replaces a route. */
 export function PathFollowingSystem(
@@ -19,10 +20,12 @@ export function PathFollowingSystem(
     }
     if (remaining <= 0) break;
     const step = Math.min(distance, remaining),
-      proposed = {
-        x: c.pos.x + (dx / distance) * step,
-        z: c.pos.z + (dz / distance) * step,
-      };
+      point = interpolateSegment(
+        { x: c.pos.x, y: c.pos.z },
+        { x: next.x, y: next.z },
+        step,
+      ),
+      proposed = { x: point.x, z: point.y };
     if (!clearTownSegment(c.pos, proposed, obstacles)) {
       c.status = "no-route";
       break;
