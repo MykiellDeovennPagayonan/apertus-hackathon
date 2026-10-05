@@ -1,6 +1,5 @@
 "use client";
-
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
 import { createStore, type StateCreator } from "zustand/vanilla";
 import { runtimeProvider } from "../../runtime/authoring/providers";
 import { remapDocument } from "../../runtime/authoring/recipes";
@@ -13,6 +12,12 @@ import {
   projectileInitializer,
   useProjectileStore,
 } from "../../runtime/projectileSession";
+import {
+  advanceSessionTime,
+  getSessionAnimation,
+  setSessionAnimation,
+  subscribeSessionAnimation,
+} from "../../runtime/session";
 import { townInitializer, useTownStore } from "../../runtime/townSession";
 import { bridgeRecipe, townRecipe } from "../composites/spatial";
 import { GRAVITIES } from "../resources/GravityPresets";
@@ -25,6 +30,11 @@ export function SpatialRecipeView({
   demo: "bridge" | "projectile" | "town";
   controlsOnly?: boolean;
 }) {
+  const animationEnabled = useSyncExternalStore(
+    subscribeSessionAnimation,
+    getSessionAnimation,
+    () => false,
+  );
   const bridge = useBridgeStore(),
     projectile = useProjectileStore(),
     town = useTownStore();
@@ -251,6 +261,9 @@ export function SpatialRecipeView({
           : document
       }
       runtime={runtime}
+      animationEnabled={animationEnabled}
+      onAnimationChange={setSessionAnimation}
+      onAdvanceTime={advanceSessionTime}
     />
   );
 }

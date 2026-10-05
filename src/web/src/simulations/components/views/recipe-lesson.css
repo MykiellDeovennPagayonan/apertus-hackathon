@@ -757,3 +757,140 @@
     grid-template-columns: 1fr;
   }
 }
+
+.simulation-surface {
+  min-width: 0;
+  width: 100%;
+}
+.simulation-surface > section > svg {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+}
+.simulation-feedback {
+  display: block;
+  color: var(--danger, #a14638);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.simulation-feedback:not(:empty) {
+  padding: 8px 0;
+}
+.simulation-surface svg :focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.math-stepper > .catalog-field {
+  min-width: 90px;
+  flex: 1;
+}
+.math-stepper > button {
+  min-height: 44px;
+  white-space: normal;
+}
+.recipe-legend svg {
+  flex: 0 0 32px;
+}
+
+.recipe-camera-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.recipe-camera-controls .catalog-toggle {
+  flex-basis: 100%;
+}
+.recipe-camera-help,
+.recipe-motion-policy p {
+  color: var(--text-dim);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.recipe-motion-policy {
+  max-width: 560px;
+  display: grid;
+  gap: 8px;
+}
+.composition-town:has(.recipe-camera-controls) {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+  height: 560px;
+  max-height: none;
+}
+.composition-town:has(.recipe-camera-controls) > div:last-child {
+  flex: 1;
+  min-height: 240px;
+}
+@media (max-width: 650px) {
+  .recipe-camera-controls button {
+    flex: 1 1 110px;
+  }
+  .math-stepper {
+    flex-wrap: wrap;
+  }
+}
+
+.recipe-legend svg {
+  width: 32px;
+  height: 16px;
+  max-height: 16px;
+}
+.simulation-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+.simulation-scroll:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.measurement-family {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.composition-town:has(.recipe-camera-controls) {
+  touch-action: auto;
+  overflow: visible;
+}
+
+.recipe-camera-controls,
+fieldset.math-stepper {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.recipe-lesson .recipe-action--primary,
+.catalog-form .recipe-action--primary {
+  min-height: 44px;
+}
+
+.catalog-field-grid > .catalog-field {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 2;
+  align-content: start;
+}
+.catalog-field-grid > .catalog-field > input,
+.catalog-field-grid > .catalog-field > select {
+  align-self: start;
+}
+
+.recipe-layout .math-scene-svg {
+  max-height: none;
+  height: auto;
+}
+.simulation-surface--scrollable {
+  max-height: 480px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.simulation-surface--scrollable:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}

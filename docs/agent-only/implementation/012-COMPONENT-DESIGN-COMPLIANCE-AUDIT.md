@@ -1,11 +1,13 @@
 # Simulation component design compliance audit
 
 Date: 2026-10-05  
-Status: source and supplied-screenshot audit; refactoring recommendations, not completed implementation.  
+Status: implementation batches completed; automated acceptance verified; human accessibility/device sign-off remains open (see §9).<br>
 Scope: `src/web/src/simulations/components`, with the application stylesheet inspected for inherited styling.  
 Standard: [Component design: presentation and interaction philosophy](../design/002-COMPONENT-DESIGN-PHILOSOPHY.md).
 
 ## Assessment
+
+**Historical baseline:** §§1–8 retain the original findings and implementation plan. They do not describe the current code. §9 records the completed changes and current verification boundaries against both [component](../design/002-COMPONENT-DESIGN-PHILOSOPHY.md) and [builder](../design/001-EXPERIMENT-BUILDER-DESIGN-PHILOSOPHY.md) philosophies.
 
 **The shared learner inputs and results need substantial redesign. The scene foundations generally need preservation and targeted improvements.** The supplied screenshots show a systematic problem: internal command structures are rendered as the learning interface. Better colors alone will not fix the repeated headings, nested fieldsets, ambiguous actions, weak result hierarchy, and excessive vertical length.
 
@@ -213,7 +215,7 @@ Do not remove compatibility exports or rewrite model systems as part of a stylin
 
 ## 8. Acceptance matrix for the refactor
 
-The following checks are work still required, not tests reported as passed by this audit.
+This is the original acceptance matrix. The work and automated evidence for these scenarios are recorded in §9; human accessibility and physical-device verification remain separate.
 
 | Scenario | Pass condition |
 | --- | --- |
@@ -323,6 +325,42 @@ Verification for this milestone:
 - `node scripts/verify-unified-builder-browser.cjs`: passed for setup, catalog insertion, Build preview, atomic undo/redo, saved composites, recovery, and mobile flows.
 - Build, learner, and 390px captures were visually inspected. Browser checks used an isolated local Next development server on port 43002 with `.next-inspector-review` output and the repository's Chrome harness. Captures are in `/private/tmp/component-inspector-selection-*`.
 
-### Remaining work
+### Domain, scene, and compatibility completion milestone (2026-10-05)
 
-The shared public data families, generic/legacy inspectors, EntityPicker, and compatible dedicated views now have representative browser verification; this is not a sign-off for every specialized domain visualization, `XYGraphView`, remaining domain controls, or scene/camera interaction. Unknown domain-specific inspector fields deliberately retain their exact source key until a stable presentation meaning is defined; broader author-configurable property metadata remains a possible follow-up rather than guessed semantics. The gas scene's existing canvas framing still needs a separate scene/host review. Runtime synchronization is implemented for the reference arithmetic/fraction tasks, object-property controls, looping, Dataset resources, and the reference member-selection command; other domain-specific command adapters still need their own accepted-value mappings. Full screen-reader, real touch-device, reduced-motion, zoom/text-scaling, large-grid performance, and every saved-document combination reviews remain outstanding. Histogram presentation intentionally supports the existing observed/expected frequency contract; arbitrary distribution records need a separately defined bin/series contract. The historical P1/P2 findings continue to describe those follow-up paths.
+Completed the remaining implementation batches in §7 while preserving model calculations, command contracts, saved graph identities, independent instances, and the existing scene foundations. All seven planned implementation stages are now implemented. This is **100% of the scoped implementation plan**, not a claim of universal accessibility certification or exhaustive coverage of every authored document. The opening tables remain historical evidence rather than current defect lists.
+
+| Surface | Work done |
+| --- | --- |
+| Domain controls and accepted state | Added semantic task/field names, units, enum choices, consequences, and accepted-value adapters across arithmetic/counting/groups/number lines, fractions, probability configuration, chemistry, physical systems, ecology, growth, traffic, queueing, and bridge loads. Persistent setters follow accepted model state after reset/external changes. Additive operations and trial commands retain intentional drafts instead of pretending they are current state. Compound fields and the selected fraction bar use dependent accepted values. Changing bar selection does not falsely report an external update. |
+| Draft recovery and action hierarchy | Dirty drafts survive accepted external changes and display an explicit recovery notice; Discard edits restores current accepted values. Rejected input remains visible, invalid, and associated with local feedback. Model actions have deliberate primary/secondary/quiet intent. Physical Play/Pause follows accepted playing state without binding to an output that the model does not expose. Primitive numeric fields retain exact entry while summary values use deliberate precision. |
+| Recipe curation and result hierarchy | Generated recipes initialize controls from authored starting values, use meaningful result headings, place primary observations beside the scene, and disclose secondary scenario/multiplier commands and assumptions. Descriptions retain complete sentences. Existing saved layouts and control identities are preserved. Town activities use a categorical table with Person/Current activity headings and learner-safe generated names, including compatible saved Chart nodes. |
+| Dedicated domain observations | Chemistry reaction, diffusion/population/plant comparisons, compound/simple growth, and projectile range-versus-angle use the shared typed chart/table family. Comparisons align on authoritative x values and preserve gaps; malformed/duplicate x values produce explicit invalid data. Physical/chemistry/traffic/queue observation rows use friendly labels, units, and structured values. Metrics use the shared numerical policy. Spatial queue, ring traffic, molecules, and beakers retain their meaningful domain geometry. |
+| Secondary presentation states | Formula has intentional unavailable/nonfinite/structured/numeric states rather than stringification. Readout and default Repeater items use bounded structured properties. Repeater contract errors are actionable in Build and local learner-safe messages in lesson mode. Boolean results describe meaningful domain states. Legend patterns/markers follow supplied metadata instead of inventing series encodings. |
+| Compact scenes and overflow | Arithmetic and counting have stacked compact layouts with readable instructions and tokens. Arithmetic, counting, equal groups, and fraction-builder sizing observe allocated SVG width rather than viewport width alone. Large math scenes have bounded named keyboard scrolling. Fraction number-line ticks retain a readable minimum width with explicit horizontal access. Feedback stays outside the scrolling SVG region. Existing gas presentation remains framed separately from its physical dimensions. |
+| Direct scene interactions | Drag handles and math-object controls surface accepted/rejected feedback outside the SVG with live announcements and visible focus. Bridge members use keyboard-enabled selection and a wider transparent hit target. Cartesian square resize and rotation work by keyboard. Escape, pointer cancellation, and capture loss restore the original preview instead of committing. Unfilled squares accept interior selection; decorative axes do not intercept selection. |
+| Authored geometry and history | Recipe canvas and geometry-settings previews keep pointer motion local; completing a gesture commits one authored change. Cancellation does not persist temporary geometry. Explicit numeric/settings edits remain authoritative. This preserves atomic undo behavior while allowing responsive scene previews. |
+| Town navigation | Added accessible Rotate left/right, Zoom in/out, and Reset camera actions. Camera gestures are an explicit opt-in, preserving page/workspace navigation by default. Button navigation retains the current orbit/pan target. Camera reset is independent of experiment reset and changes no authored town data. |
+| Motion and compatibility | JavaScript gas decoration, bridge staging, Orbit damping, authored town autoplay, and compatibility clocks honor reduced-motion preferences. Compatibility views expose explicit animation opt-in and a 0.25-second advance action using the existing authoritative clock; multiple views share the policy and no extra model clock is introduced. An explicit Play command remains available in authored activities. |
+| Source ownership and regression coverage | Extended the source ledger for the accepted-state, comparison, feedback, motion, and inspector exports while retaining curated audit metadata. Added `verify-component-completion.cjs` to `npm test` and a completion browser suite to `npm run test:components:browser`. Updated the builder integration selector for the meaningful Salt concentration heading. |
+
+Verification for this milestone:
+
+- `npx tsc --noEmit`: passed.
+- Targeted Biome checks across changed TypeScript/TSX, CSS, package configuration, and regression scripts: passed.
+- `npm test`: passed. New coverage exercises 27 real command acceptance/reset cases, renders all 42 generated model recipes with finite geometry, validates comparison alignment/gaps/invalid shapes, and renders the supported 1,000-row table and 15×15 heatmap boundaries. Compatibility clock tests verify reduced-motion pause, explicit stepping, opt-in animation, shared policy, and invalid-step rejection. Existing simulation, integration, builder, migration, isolation, rollback, serialization, spatial, and ledger checks also pass.
+- `npm run test:components:browser`: passed. Existing controls/inspectors/data suites remain included. New coverage exercises 14 activity/domain screens, rejected drafts, discard/reset, accepted external changes during editing, meaningful accessible field names, Build/learner separation, 44px primary targets, measured primary contrast of 7.31:1, 390px viewport layout, text enlargement, and a 300px diagram on a wide desktop. It additionally tests emulated touch stepping under reduced motion, explicit animation opt-in, learner-safe Formula/Repeater states, town camera keyboard actions with unchanged saved document, keyboard square resize/rotation, and pointer-preview Escape cancellation with unchanged authored geometry.
+- `node scripts/verify-unified-builder-browser.cjs`: passed for setup, catalog insertion, editable composite graphs, independent copies, Build preview, atomic undo/redo, saved composite, recovery, and mobile behavior.
+- Desktop/mobile domain, narrow-diagram, town-camera, reduced-motion, and geometry-settings captures are in `/private/tmp/component-completion/`. Representative captures were visually inspected and used to correct cramped compact diagrams, boolean wording, excessive summary precision, and categorical town chart selection. Verification used the existing isolated local development server on port 43002 and the repository Chrome harness because the Browser skill's required execution tool was unavailable.
+
+### Current completion and remaining verification
+
+The P0-A through P0-D, P1-A, P1-B, and P2 implementation work described by this audit is complete within the existing component contracts. Representative automated acceptance now covers each scenario category in §8. Existing document and independence regressions pass; coverage is representative rather than an exhaustive enumeration of every possible saved graph.
+
+A full **100% design-compliance sign-off remains open** until the following human/environment-specific checks are recorded:
+
+1. Run a screen reader through learner and Build flows: names/grouping, draft rejection and recovery announcements, scene selection feedback, observation disclosure/table reading, settings entry/exit, and modal focus restoration. Automated accessible-name and keyboard checks passed; a human screen-reader session was not performed.
+2. Test on physical touch devices, including scrolling versus scene gestures, fraction interactions, camera pinch/orbit opt-in, and comfortable target access. Playwright touch emulation passed for reduced-motion stepping; it does not establish real hardware behavior.
+3. Review browser zoom and operating-system text scaling across supported browsers/devices. Narrow viewport and enlarged-text automation passed; this is not an OS-level/browser matrix sign-off.
+4. Record interactive performance on representative lower-powered devices for the supported large table/grid bounds and 3D town. Static bounded render checks passed; they are not end-to-end device-performance measurements.
+
+Broader author-configurable inspector metadata and arbitrary histogram bin/series contracts remain optional product extensions, not unfinished requirements of the current supported contracts. Unknown fields retain their source meaning rather than receiving guessed labels or units. Future new model/command contracts should add accepted-state mappings and presentation evidence before claiming coverage.

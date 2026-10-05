@@ -10,6 +10,7 @@ import { LoadTruckVisual } from "../visuals/LoadTruckVisual";
 import { AnimatedShapeVisual2D } from "../visuals/ShapeVisual2D";
 import { LegendView } from "./LegendView";
 import { SVGWorldView } from "./SVGWorldView";
+import { useReducedMotion } from "./useCompactDiagram";
 import "./bridge.css";
 
 const {
@@ -38,10 +39,15 @@ export function BridgeScene({
     command: import("../../runtime/types").UIAction,
   ) => import("../../runtime/commands").ActionResult;
 }) {
-  const [stage, setStage] = useState(0);
+  const reducedMotion = useReducedMotion();
+  const [stage, setStage] = useState(reducedMotion ? STAGES : 0);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Rebuild restarts the assembly animation.
   useEffect(() => {
+    if (reducedMotion) {
+      setStage(STAGES);
+      return;
+    }
     const resetTimer = setTimeout(() => setStage(0), 0);
     const timers = Array.from({ length: STAGES }, (_, i) =>
       setTimeout(() => setStage(i + 1), revealDelay + i * revealInterval),
@@ -50,7 +56,7 @@ export function BridgeScene({
       clearTimeout(resetTimer);
       timers.forEach(clearTimeout);
     };
-  }, [s.buildNonce]);
+  }, [s.buildNonce, reducedMotion]);
 
   const truss = s.truss;
   const svgId = useId();
@@ -82,8 +88,8 @@ export function BridgeScene({
   return (
     <div className="bridge-demo">
       <SVGWorldView
-        aria-label="Simulation diagram"
-        role="img"
+        aria-label="Bridge structure; inspect a member or move the load"
+        role="group"
         viewBox={`0 0 ${W} ${H}`}
         style={{ width: "100%", flex: 1 }}
       >

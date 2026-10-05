@@ -12,6 +12,7 @@ const ScopedWorld = dynamic(() => import("./ScopedWorldView"), {
   loading: () => <output>Loading world…</output>,
 });
 
+import { MotionConfig } from "framer-motion";
 import {
   createContext,
   memo,
@@ -37,7 +38,10 @@ import { object } from "../../runtime/parameterSchema";
 import { publicDefinition } from "../catalog";
 import { schemaDefault } from "../composites/catalog";
 import { ActionButton } from "../controls/ActionButton";
-import { commandPresentation } from "../controls/commandPresentation";
+import {
+  acceptedCommandArguments,
+  commandPresentation,
+} from "../controls/commandPresentation";
 import { DragHandleControl } from "../controls/DragHandleControl";
 import { SchemaForm } from "../controls/SchemaForm";
 import type { MathBoard } from "../traits/MathBoards";
@@ -73,6 +77,7 @@ import { CountingScene } from "./CountingScene";
 import { DatasetDisplay } from "./DatasetDisplay";
 import {
   type DataPresentation,
+  formatDataNumber,
   outputDataPresentation,
 } from "./dataPresentation";
 import { PropertyInspector } from "./EntityInspectorView";
@@ -80,6 +85,8 @@ import { EqualGroupsScene } from "./EqualGroupsScene";
 import { FractionBuilderScene } from "./FractionBuilderScene";
 import { FractionNumberLineScene } from "./FractionNumberLineScene";
 import { MathReadoutView } from "./MathReadoutView";
+import { SVGWorldView } from "./SVGWorldView";
+import { useReducedMotion } from "./useCompactDiagram";
 import "./recipe-lesson.css";
 import "./chemistry/ChemistryLesson.css";
 import "./dynamic-systems/DynamicSystemsLesson.css";
@@ -172,6 +179,7 @@ function EntityPickerControl({
     </div>
   );
 }
+const MotionContext = createContext(true);
 const AuthorContext = createContext<AuthorControls>({});
 const SnapshotContext = createContext<Snapshot>({ state: {}, outputs: {} });
 const appearances: Record<
@@ -216,7 +224,7 @@ function PhysicalAppearance({ instance }: { instance: ModelInstance }) {
 const display = (v: unknown, precision = 3): string =>
   typeof v === "number"
     ? Number.isFinite(v)
-      ? v.toLocaleString(undefined, { maximumFractionDigits: precision })
+      ? formatDataNumber(v, precision)
       : "Unavailable"
     : typeof v === "string"
       ? v
@@ -226,7 +234,9 @@ const display = (v: unknown, precision = 3): string =>
           : "No"
         : v === undefined || v === null
           ? "Unavailable"
-          : JSON.stringify(v);
+          : Array.isArray(v)
+            ? `${v.length} items`
+            : "Structured observation";
 function Appearance({
   node,
   runtime,
@@ -234,9 +244,17 @@ function Appearance({
   node: ComponentInstance;
   runtime: DocumentRuntime;
 }) {
+  const author = useContext(AuthorContext);
   const snapshot = useContext(SnapshotContext);
   const model = runtime.attached(node.id);
-  if (!model) return <p>Connect a model to this appearance.</p>;
+  if (!model)
+    return (
+      <p>
+        {author.authoring
+          ? "Connect a model to this appearance."
+          : "This scene is waiting for its activity."}
+      </p>
+    );
   const visualLayers = runtime.document.connections
     .filter((c) => c.to.node === node.id && c.to.port === "visuals")
     .map((c) => runtime.document.nodes.find((n) => n.id === c.from.node))
@@ -244,7 +262,14 @@ function Appearance({
     .map((n) => requireValue(n).definition);
   if (node.definition === "appearance/Bridge") {
     const state = snapshot.state[model.id];
-    if (!state?.ready) return <p>Connect truss joints, members and a load.</p>;
+    if (!state?.ready)
+      return (
+        <p>
+          {author.authoring
+            ? "Connect truss joints, members and a load."
+            : "The bridge is waiting for its structure."}
+        </p>
+      );
     const load = runtime.document.connections.find(
       (c) => c.to.node === model.id && c.to.port === "load",
     );
@@ -303,7 +328,11 @@ function Appearance({
           .filter(Boolean)}
       />
     ) : (
-      <p>Connect buildings, daily routines and a market.</p>
+      <p>
+        {author.authoring
+          ? "Connect buildings, daily routines and a market."
+          : "The town is waiting for its activity setup."}
+      </p>
     );
   }
   const instance: ModelInstance = {
@@ -383,7 +412,11 @@ function Appearance({
     const x = Number(instance.outputs.x),
       y = Number(instance.outputs.y);
     return (
-      <svg viewBox="0 0 440 440" aria-label="Interactive coordinate plane">
+      <SVGWorldView
+        role="group"
+        viewBox="0 0 440 440"
+        aria-label="Interactive coordinate plane"
+      >
         <CoordinateAxesVisual />
         <circle cx={220 + x * 18} cy={220 - y * 18} r={6} fill="#245bcb" />
         <DragHandleControl
@@ -407,7 +440,7 @@ function Appearance({
             },
           })}
         />
-      </svg>
+      </SVGWorldView>
     );
   }
   if (name === "line")
@@ -432,14 +465,10 @@ function Appearance({
       </div>
     );
   return (
-    <dl>
-      {Object.entries(instance.outputs).map(([key, value]) => (
-        <div key={key}>
-          <dt>{key}</dt>
-          <dd>{display(value)}</dd>
-        </div>
-      ))}
-    </dl>
+    <PropertyInspector
+      label={instance.label || "Observations"}
+      value={instance.outputs}
+    />
   );
 }
 function CircleAppearance({ instance }: { instance: ModelInstance }) {
@@ -494,6 +523,89 @@ function CircleAppearance({ instance }: { instance: ModelInstance }) {
     </figure>
   );
 }
+/** The host owns authored commits; dragging is a local preview until completion. */
+function CanvasPresentation({
+  node,
+  runtime,
+}: {
+  node: ComponentInstance;
+  runtime: DocumentRuntime;
+}) {
+  const author = useContext(AuthorContext);
+  const snapshot = useContext(SnapshotContext);
+  const [draft, setDraft] = useState<{
+    source: string;
+    object: SceneObject;
+  } | null>(null);
+  const kind = node.definition.split("/")[1] as CompositionScene["kind"];
+  const accepted = runtime.document.connections
+    .filter(
+      (connection) =>
+        connection.kind === "attachment" &&
+        connection.to.node === node.id &&
+        connection.to.port === "objects",
+    )
+    .map(
+      (connection) =>
+        snapshot.state[connection.from.node] as unknown as SceneObject,
+    );
+  const source = JSON.stringify(accepted);
+  const preview = draft?.source === source ? draft.object : null;
+  const objects = accepted.map((object) =>
+    object.id === preview?.id ? preview : object,
+  );
+  const scene: CompositionScene = {
+    version: 2,
+    kind,
+    canvas: node.configuration as unknown as CompositionScene["canvas"],
+    objects,
+    controls: [],
+    measurements: [],
+  };
+  return (
+    <>
+      <CompositionCanvas
+        scene={scene}
+        people={
+          (snapshot.state[
+            runtime.document.connections.find(
+              (connection) =>
+                connection.to.node === node.id &&
+                connection.to.port === "timeline",
+            )?.from.node ?? ""
+          ]?.people ??
+            []) as import("../systems/ScheduledTripSystem").PersonSnapshot[]
+        }
+        selected={author.selected ?? ""}
+        authoring={author.authoring ?? false}
+        active
+        resetToken={node.id}
+        onSelect={author.onSelect ?? (() => {})}
+        onChange={(object) => {
+          if (author.authoring) setDraft({ source, object });
+        }}
+        onCommit={(object) => {
+          setDraft(null);
+          if (author.authoring) author.onAuthorChange?.(object);
+        }}
+        onPiece={(id, index) =>
+          runtime.dispatch([
+            { node: id, command: "togglePiece", arguments: { index } },
+          ])
+        }
+      />
+      {preview &&
+        JSON.stringify(preview) !==
+          JSON.stringify(
+            accepted.find((object) => object.id === preview.id),
+          ) && (
+          <output className="catalog-help" aria-live="polite">
+            Previewing geometry. Release to apply; Escape cancels.
+          </output>
+        )}
+    </>
+  );
+}
 function NodeView({
   node,
   runtime,
@@ -503,6 +615,7 @@ function NodeView({
 }) {
   const author = useContext(AuthorContext);
   const snapshot = useContext(SnapshotContext);
+  const animated = useContext(MotionContext);
   const def = publicDefinition(node.definition),
     config = node.configuration;
   if (def.category === "models") return null;
@@ -539,7 +652,8 @@ function NodeView({
         : defaultLabel;
     if (
       /SET_(RATE_)?PLAYING$/.test(commandKey) ||
-      commandKey === "set:playing"
+      commandKey === "set:playing" ||
+      commandKey === "PHYS_PLAY"
     ) {
       const playing =
         (snapshot.outputs[target?.id ?? ""]?.playing ??
@@ -558,7 +672,11 @@ function NodeView({
             {playing ? "Pause" : "Play"}
           </ActionButton>
           <span className="recipe-playback-state">
-            {playing ? "Running" : "Paused"}
+            {playing
+              ? animated
+                ? "Running"
+                : "Ready; automatic motion paused"
+              : "Paused"}
           </span>
         </div>
       );
@@ -613,37 +731,11 @@ function NodeView({
       initial = schemaDefault(command.arguments);
     }
     const state = snapshot.state[target?.id ?? ""];
-    let current: Record<string, unknown> | undefined;
-    if (
-      state &&
-      commandKey.startsWith("set:") &&
-      state.inputs &&
-      Object.hasOwn(state.inputs as object, commandKey.slice(4))
-    )
-      current = {
-        value: (state.inputs as Record<string, unknown>)[commandKey.slice(4)],
-      };
-    if (state && commandKey === "SET_LOOPING")
-      current = {
-        value:
-          (state.sequence as { looping?: boolean } | undefined)?.looping ??
-          false,
-      };
-    if (
-      state &&
-      commandKey.startsWith("set:") &&
-      Object.hasOwn(state, commandKey.slice(4))
-    )
-      current = { value: state[commandKey.slice(4)] };
-    if (state && commandKey === "SET_ARITHMETIC_TASK")
-      current = {
-        value: { operation: state.operation, a: state.a, b: state.b },
-      };
-    if (state && commandKey === "SET_FRACTION_COMPARISON") {
-      const bars = state.bars as { value: unknown }[] | undefined;
-      if (bars?.length === 2)
-        current = { value: { a: bars[0].value, b: bars[1].value } };
-    }
+    const current = acceptedCommandArguments(
+      commandKey,
+      state,
+      initial as Record<string, unknown>,
+    );
     return (
       <SchemaForm
         key={`${node.id}/${connection?.to.node}/${connection?.to.port}/${config.initial}`}
@@ -653,9 +745,20 @@ function NodeView({
         }
         initial={node.definition === "controls/Button" ? {} : initial}
         current={current}
+        currentRevision={
+          commandKey === "SET_BAR_FRACTION"
+            ? JSON.stringify(state?.bars)
+            : undefined
+        }
+        currentForDraft={
+          commandKey === "SET_BAR_FRACTION"
+            ? (draft) => acceptedCommandArguments(commandKey, state, draft)
+            : undefined
+        }
         label={label}
         presentation={metadata.presentation}
         submitLabel={metadata.submitLabel}
+        actionIntent={metadata.actionIntent}
         mode={
           command.submission === "continuous" && config.mode === "immediate"
             ? "immediate"
@@ -699,7 +802,24 @@ function NodeView({
       value = binding
         ? snapshot.outputs[binding.from.node]?.[binding.from.port]
         : config.text;
-    return <output className="recipe-formula">{display(value)}</output>;
+    return (
+      <output
+        className="recipe-formula"
+        aria-label={String(config.label || node.label)}
+      >
+        {value == null || value === ""
+          ? "Formula unavailable"
+          : typeof value === "number"
+            ? Number.isFinite(value)
+              ? value.toLocaleString(undefined, {
+                  maximumFractionDigits: Number(config.precision ?? 3),
+                })
+              : "Formula unavailable"
+            : typeof value === "string"
+              ? value
+              : "Formula unavailable"}
+      </output>
+    );
   }
   if (node.definition === "displays/Legend") {
     const binding = runtime.document.connections.find(
@@ -726,13 +846,37 @@ function NodeView({
                 : { label: entry };
             return (
               <li key={String(record.id ?? record.label ?? index)}>
-                <span
-                  style={{
-                    background: /^#[0-9a-f]{6}$/i.test(String(record.color))
-                      ? String(record.color)
-                      : "#64748b",
-                  }}
-                />
+                <svg
+                  aria-hidden="true"
+                  width="32"
+                  height="16"
+                  viewBox="0 0 32 16"
+                >
+                  <line
+                    x1="1"
+                    y1="8"
+                    x2="31"
+                    y2="8"
+                    stroke={
+                      /^#[0-9a-f]{6}$/i.test(String(record.color))
+                        ? String(record.color)
+                        : "var(--accent)"
+                    }
+                    strokeWidth="3"
+                    strokeDasharray={String(record.dash ?? "")}
+                  />
+                  {record.marker === "circle" ? (
+                    <circle cx="16" cy="8" r="3" fill="var(--text)" />
+                  ) : record.marker === "square" ? (
+                    <rect
+                      x="13"
+                      y="5"
+                      width="6"
+                      height="6"
+                      fill="var(--text)"
+                    />
+                  ) : null}
+                </svg>
                 {String(record.label ?? entry)}
               </li>
             );
@@ -761,7 +905,23 @@ function NodeView({
             ? value
               ? "Running"
               : "Paused"
-            : `${String(config.label)}: ${value ? "Enabled" : "Disabled"}`
+            : binding?.from.port === "balanced"
+              ? value
+                ? "The reaction is balanced"
+                : "The reaction is not balanced yet"
+              : binding?.from.port === "stopped"
+                ? value
+                  ? "Motion has stopped"
+                  : "The object is moving"
+                : ["closed", "roadClosed"].includes(binding?.from.port ?? "")
+                  ? value
+                    ? "Road closed"
+                    : "Road open"
+                  : binding?.from.port === "disturbanceActive"
+                    ? value
+                      ? "Braking disturbance active"
+                      : "No braking disturbance"
+                    : `${String(config.label)}: ${value ? "Enabled" : "Disabled"}`
           : value === undefined || value === null
             ? "Waiting for a result"
             : display(value);
@@ -789,6 +949,15 @@ function NodeView({
         unit && configuredLabel.endsWith(` ${unit}`)
           ? configuredLabel.slice(0, -unit.length - 1)
           : configuredLabel;
+      if (value && typeof value === "object")
+        return (
+          <PropertyInspector
+            label={label}
+            value={value}
+            precision={Number(config.precision ?? 3)}
+            unit={unit}
+          />
+        );
       return (
         <section className="recipe-measurement" aria-label={label}>
           <output className="recipe-measurement-value">
@@ -864,10 +1033,26 @@ function NodeView({
           ),
         ),
       } as DataPresentation;
+      const townActivities =
+        source?.definition === "models/TownNavigation" &&
+        binding?.from.port === "activity";
+      const presentedValue =
+        townActivities && Array.isArray(value)
+          ? value.map((row) =>
+              row &&
+              typeof row === "object" &&
+              /^town\/citizen-\d+$/.test(String(row.id))
+                ? {
+                    ...row,
+                    id: `Person ${Number(String(row.id).split("-").at(-1)) + 1}`,
+                  }
+                : row,
+            )
+          : value;
       return (
         <DatasetDisplay
-          value={value}
-          kind={kind}
+          value={presentedValue}
+          kind={townActivities ? "DataTable" : kind}
           label={String(config.label)}
           precision={Number(config.precision ?? 3)}
           presentation={presentation}
@@ -884,50 +1069,8 @@ function NodeView({
   }
   if (node.definition === "canvases/World")
     return <Appearance node={node} runtime={runtime} />;
-  if (def.category === "canvases") {
-    const kind = node.definition.split("/")[1] as CompositionScene["kind"];
-    const objects = runtime.document.connections
-      .filter(
-        (c) =>
-          c.kind === "attachment" &&
-          c.to.node === node.id &&
-          c.to.port === "objects",
-      )
-      .map((c) => snapshot.state[c.from.node] as unknown as SceneObject);
-    const scene: CompositionScene = {
-      version: 2,
-      kind,
-      canvas: config as unknown as CompositionScene["canvas"],
-      objects,
-      controls: [],
-      measurements: [],
-    };
-    return (
-      <CompositionCanvas
-        scene={scene}
-        people={
-          (snapshot.state[
-            runtime.document.connections.find(
-              (c) => c.to.node === node.id && c.to.port === "timeline",
-            )?.from.node ?? ""
-          ]?.people ??
-            []) as import("../systems/ScheduledTripSystem").PersonSnapshot[]
-        }
-        selected={author.selected ?? ""}
-        authoring={author.authoring ?? false}
-        active
-        resetToken={node.id}
-        onSelect={author.onSelect ?? (() => {})}
-        onChange={author.onAuthorChange ?? (() => {})}
-        onCommit={author.onAuthorChange ?? (() => {})}
-        onPiece={(id, index) =>
-          runtime.dispatch([
-            { node: id, command: "togglePiece", arguments: { index } },
-          ])
-        }
-      />
-    );
-  }
+  if (def.category === "canvases")
+    return <CanvasPresentation node={node} runtime={runtime} />;
   return null;
 }
 function TabsLayout({
@@ -1048,7 +1191,19 @@ function LayoutView({
     );
     if (keys.some((k) => !k) || new Set(keys).size !== keys.length)
       return (
-        <p role="alert">Repeater requires unique stable item keys ({field}).</p>
+        <output className="recipe-disconnected" aria-live="polite">
+          {author.authoring
+            ? `Choose a unique, nonempty item key (${field}) in repeater settings.`
+            : "These items are temporarily unavailable."}
+        </output>
+      );
+    if (!rows.length)
+      return (
+        <p className="recipe-disconnected">
+          {author.authoring && !binding
+            ? "Connect a collection to show repeated items."
+            : "No items to show yet."}
+        </p>
       );
     // Repeater is a presentation projection; it never creates additional model instances or clocks.
     return (
@@ -1065,14 +1220,7 @@ function LayoutView({
                 />
               ))
             ) : (
-              <dl>
-                {Object.entries(row).map(([k, v]) => (
-                  <div key={k}>
-                    <dt>{k}</dt>
-                    <dd>{display(v)}</dd>
-                  </div>
-                ))}
-              </dl>
+              <PropertyInspector label={`Item ${i + 1}`} value={row} />
             )}
           </section>
         ))}
@@ -1263,10 +1411,18 @@ export function RecipeLesson({
   selected,
   onSelect,
   onAuthorChange,
+  onAnimationChange,
+  onAdvanceTime,
+  animationEnabled,
 }: AuthorControls & {
   document: AuthoredDocument;
   workspace?: boolean;
   runtime?: DocumentRuntime;
+  animationEnabled?: boolean;
+  onAnimationChange?: (enabled: boolean) => void;
+  onAdvanceTime?: (
+    delta: number,
+  ) => import("../../runtime/commands").ActionResult;
   onCapture?: (document: AuthoredDocument) => void;
   onBoardAction?: (
     action: "copy" | "paste" | "duplicate" | "delete",
@@ -1276,6 +1432,10 @@ export function RecipeLesson({
     presentation: AuthoredDocument["presentation"],
   ) => void;
 }) {
+  const reducedMotion = useReducedMotion();
+  const [localMotion, setAllowMotion] = useState(false);
+  const allowMotion = animationEnabled ?? localMotion;
+  const animated = !reducedMotion || allowMotion;
   const ref = useRef<DocumentRuntime | null>(null);
   if (!ref.current) ref.current = supplied ?? new DocumentRuntime(document);
   const runtime = supplied ?? ref.current;
@@ -1288,7 +1448,7 @@ export function RecipeLesson({
     runtime.getSnapshot,
   );
   useEffect(() => {
-    if (supplied) return;
+    if (supplied || !animated) return;
     let frame = 0,
       previous = 0;
     const tick = (now: number) => {
@@ -1304,11 +1464,59 @@ export function RecipeLesson({
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [runtime, document.nodes, supplied]);
+  }, [runtime, document.nodes, supplied, animated]);
   const boardWorkspace = workspace && document.presentation?.mode === "board";
   const runtimeActions = (
     <>
-      <button type="button" onClick={() => runtime.reset()}>
+      {reducedMotion &&
+        (!supplied || onAdvanceTime) &&
+        document.nodes.some(
+          (node) => publicDefinition(node.definition).lifecycle.clock,
+        ) && (
+          <div className="recipe-motion-policy">
+            <p>
+              Automatic motion is paused to match your motion preference.
+              Advance time in steps, or choose animation.
+            </p>
+            <label className="catalog-toggle">
+              <span>Animate simulation</span>
+              <input
+                type="checkbox"
+                checked={allowMotion}
+                onChange={(event) => {
+                  setAllowMotion(event.target.checked);
+                  onAnimationChange?.(event.target.checked);
+                }}
+              />
+            </label>
+            {!allowMotion && (
+              <ActionButton
+                onCommand={() => {
+                  try {
+                    if (onAdvanceTime) return onAdvanceTime(0.25);
+                    runtime.step(0.25);
+                    return { accepted: true };
+                  } catch (error) {
+                    return {
+                      accepted: false,
+                      error:
+                        error instanceof Error
+                          ? error.message
+                          : "Unable to advance time.",
+                    };
+                  }
+                }}
+              >
+                Advance time by 0.25 seconds
+              </ActionButton>
+            )}
+          </div>
+        )}
+      <button
+        className="recipe-action recipe-action--quiet"
+        type="button"
+        onClick={() => runtime.reset()}
+      >
         Reset experiment
       </button>
       {onCapture && (
@@ -1319,41 +1527,45 @@ export function RecipeLesson({
     </>
   );
   return (
-    <main
-      className={`recipe-lesson ${workspace && document.presentation?.mode === "board" ? "is-board-workspace" : ""}`}
-      aria-label={document.lesson.title}
-    >
-      <header>
-        <h1>{document.lesson.title}</h1>
-        <p>{document.lesson.instruction}</p>
-      </header>
-      <AuthorContext.Provider
-        value={{ authoring, selected, onSelect, onAuthorChange }}
-      >
-        <SnapshotContext.Provider value={snapshot}>
-          <SpatialBoard
-            document={document}
-            authoring={authoring}
-            workspace={workspace}
-            actions={boardWorkspace ? runtimeActions : undefined}
-            onEdit={onSelect}
-            onChange={onPresentationChange}
-            onAction={onBoardAction}
-            render={(layout) => (
-              <PresentationLayout
-                layout={layout}
-                runtime={runtime}
-                boardHosted={
-                  authoring && document.presentation?.mode === "board"
-                }
+    <MotionConfig reducedMotion="user">
+      <MotionContext.Provider value={animated}>
+        <main
+          className={`recipe-lesson ${workspace && document.presentation?.mode === "board" ? "is-board-workspace" : ""}`}
+          aria-label={document.lesson.title}
+        >
+          <header>
+            <h1>{document.lesson.title}</h1>
+            <p>{document.lesson.instruction}</p>
+          </header>
+          <AuthorContext.Provider
+            value={{ authoring, selected, onSelect, onAuthorChange }}
+          >
+            <SnapshotContext.Provider value={snapshot}>
+              <SpatialBoard
+                document={document}
+                authoring={authoring}
+                workspace={workspace}
+                actions={boardWorkspace ? runtimeActions : undefined}
+                onEdit={onSelect}
+                onChange={onPresentationChange}
+                onAction={onBoardAction}
+                render={(layout) => (
+                  <PresentationLayout
+                    layout={layout}
+                    runtime={runtime}
+                    boardHosted={
+                      authoring && document.presentation?.mode === "board"
+                    }
+                  />
+                )}
               />
-            )}
-          />
-        </SnapshotContext.Provider>
-      </AuthorContext.Provider>
-      {!boardWorkspace && (
-        <footer className="recipe-runtime-actions">{runtimeActions}</footer>
-      )}
-    </main>
+            </SnapshotContext.Provider>
+          </AuthorContext.Provider>
+          {!boardWorkspace && (
+            <footer className="recipe-runtime-actions">{runtimeActions}</footer>
+          )}
+        </main>
+      </MotionContext.Provider>
+    </MotionConfig>
   );
 }

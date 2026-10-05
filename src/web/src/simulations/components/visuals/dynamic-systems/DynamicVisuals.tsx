@@ -1,68 +1,56 @@
 import type { CSSProperties } from "react";
 import type { ModelInstance } from "../../../runtime/contribution";
+import { DatasetDisplay } from "../../views/DatasetDisplay";
 
 export const dynamicNumber = (value: unknown, digits = 2) =>
   typeof value === "number" && Number.isFinite(value)
     ? value.toLocaleString(undefined, { maximumFractionDigits: digits })
     : "—";
 
-type Point = { x: number; y: number };
-function path(points: Point[], width: number, height: number, maxY: number) {
-  const maxX = Math.max(1, ...points.map((point) => point.x));
-  return points
-    .map((point, index) => {
-      const x = 44 + (point.x / maxX) * (width - 66);
-      const y = height - 34 - (point.y / Math.max(1, maxY)) * (height - 60);
-      return `${index ? "L" : "M"}${x.toFixed(2)},${y.toFixed(2)}`;
-    })
-    .join(" ");
-}
-
 export function GrowthVisual({ instance }: { instance: ModelInstance }) {
-  const compound = instance.outputs.compoundPoints as Point[];
-  const simple = instance.outputs.simplePoints as Point[];
-  const width = 600;
-  const height = 310;
-  const maxY = Math.max(
-    ...compound.map((point) => point.y),
-    ...simple.map((point) => point.y),
-  );
+  const compound = instance.outputs.compoundPoints as {
+    x: number;
+    y: number;
+  }[];
+  const simple = instance.outputs.simplePoints as { x: number; y: number }[];
+  const value =
+    Array.isArray(compound) && Array.isArray(simple)
+      ? compound.map((point) => ({
+          x: point.x,
+          compound: point.y,
+          simple: simple.find((prior) => prior.x === point.x)?.y,
+        }))
+      : undefined;
   return (
-    <figure className="dynamic-chart">
-      <svg
-        viewBox={`0 0 ${width} ${height}`}
-        role="img"
-        aria-label="Compound and simple balance by year"
-      >
-        <title>Compound and simple balance by year</title>
-        <line x1="44" y1="18" x2="44" y2={height - 34} />
-        <line x1="44" y1={height - 34} x2={width - 16} y2={height - 34} />
-        <path
-          className="dynamic-line dynamic-line--compound"
-          d={path(compound, width, height, maxY)}
-        />
-        <path
-          className="dynamic-line dynamic-line--simple"
-          d={path(simple, width, height, maxY)}
-        />
-        <text x="12" y="26">
-          ${dynamicNumber(maxY, 0)}
-        </text>
-        <text x="44" y={height - 10}>
-          0
-        </text>
-        <text x={width - 46} y={height - 10}>
-          {String(instance.outputs.years)} yr
-        </text>
-      </svg>
-      <figcaption>
-        <span className="dynamic-key dynamic-key--compound" /> Compound{" "}
-        <span className="dynamic-key dynamic-key--simple" /> Simple
-      </figcaption>
-    </figure>
+    <DatasetDisplay
+      kind="Chart"
+      label="Compound and simple growth"
+      value={value}
+      presentation={{
+        xKey: "x",
+        xLabel: "Annual periods",
+        xUnit: "years",
+        yLabel: "Balance",
+        yUnit: "currency units",
+        columns: [
+          { key: "x", label: "Annual periods", unit: "years", type: "number" },
+          {
+            key: "compound",
+            label: "Compound growth",
+            unit: "currency units",
+            type: "number",
+          },
+          {
+            key: "simple",
+            label: "Simple growth",
+            unit: "currency units",
+            type: "number",
+          },
+        ],
+      }}
+    />
   );
 }
-
 export function TrafficVisual({ instance }: { instance: ModelInstance }) {
   const vehicles = instance.outputs.vehicles as {
     id: number;

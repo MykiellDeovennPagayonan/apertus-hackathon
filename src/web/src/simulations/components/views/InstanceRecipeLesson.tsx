@@ -1,10 +1,16 @@
 "use client";
-import { useMemo } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 import { insertRecipe } from "../../runtime/authoring/recipes";
 import { DocumentRuntime } from "../../runtime/authoring/runtime";
 import { emptyAuthoredDocument } from "../../runtime/authoring/types";
 import type { ActionResult } from "../../runtime/commands";
 import type { ModelInstance } from "../../runtime/contribution";
+import {
+  advanceSessionTime,
+  getSessionAnimation,
+  setSessionAnimation,
+  subscribeSessionAnimation,
+} from "../../runtime/session";
 import type { UIAction } from "../../runtime/types";
 import { builtInRecipe, modelRecipe } from "../composites/catalog";
 import { RecipeLesson } from "./RecipeLesson";
@@ -18,6 +24,11 @@ export function InstanceRecipeLesson({
   dispatch: (command: UIAction) => ActionResult;
   learningGoal?: string;
 }) {
+  const animationEnabled = useSyncExternalStore(
+    subscribeSessionAnimation,
+    getSessionAnimation,
+    () => false,
+  );
   const { document, runtime } = useMemo(() => {
     const recipe = modelRecipe(instance.provider);
     const model = recipe.document.nodes.find((n) => n.id === "model");
@@ -57,5 +68,13 @@ export function InstanceRecipeLesson({
     });
     return { document, runtime };
   }, [instance, dispatch, learningGoal]);
-  return <RecipeLesson document={document} runtime={runtime} />;
+  return (
+    <RecipeLesson
+      document={document}
+      runtime={runtime}
+      animationEnabled={animationEnabled}
+      onAnimationChange={setSessionAnimation}
+      onAdvanceTime={advanceSessionTime}
+    />
+  );
 }

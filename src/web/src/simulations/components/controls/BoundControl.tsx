@@ -1,5 +1,6 @@
 import type { ActionResult } from "../../runtime/commands";
 import type { SceneControl } from "../../runtime/composition/types";
+import { formatDataNumber } from "../views/dataPresentation";
 import { ActionButton } from "./ActionButton";
 import { NumberField } from "./NumberField";
 import { ParameterSlider } from "./ParameterSlider";
@@ -28,7 +29,14 @@ export function BoundControl({
         onChange={onChange}
       />
     );
-  const display = `${Number(Number(value).toFixed(3))}${c.unit ? ` ${c.unit}` : ""}`;
+  if (typeof value !== "number" || !Number.isFinite(value))
+    return (
+      <div className="recipe-disconnected">
+        <strong>{c.label}</strong>
+        <p>This value is unavailable.</p>
+      </div>
+    );
+  const display = `${formatDataNumber(value, 3)}${c.unit ? ` ${c.unit}` : ""}`;
   return (
     <div className="composition-learner-control">
       {c.widget === "slider" ? (

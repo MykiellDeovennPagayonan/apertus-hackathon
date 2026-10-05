@@ -42,6 +42,8 @@ let active: DemoType | null = null,
   sequence = 0,
   revision = 0,
   sessionId = "";
+let automaticMotion = false;
+const motionListeners = new Set<() => void>();
 let definition: CompositionDefinition | null = null,
   acceptedRecipe: Recipe | null = null;
 let recentChange: ExperimentContext["recentChange"];
@@ -170,7 +172,37 @@ function commitCandidate(pair: ReturnType<typeof stores>) {
     data(pair.candidate.getState()),
   );
 }
+/** Presentation clock policy; domain playing state and calculations remain authoritative. */
+export function setSessionAnimation(enabled: boolean) {
+  if (automaticMotion === enabled) return;
+  automaticMotion = enabled;
+  for (const listener of motionListeners) listener();
+}
+export const getSessionAnimation = () => automaticMotion;
+export function subscribeSessionAnimation(listener: () => void) {
+  motionListeners.add(listener);
+  return () => {
+    motionListeners.delete(listener);
+  };
+}
+export function advanceSessionTime(delta: number): ActionResult {
+  if (!active || !Number.isFinite(delta) || delta < 0 || delta > 60)
+    return rejected("Choose a finite timestep from zero to 60 seconds.");
+  try {
+    if (active === "assembly") useAssemblyStore.getState().step(delta);
+    if (active === "projectile") useProjectileStore.getState().step(delta);
+    if (active === "town") useTownStore.getState().step(delta);
+    if (active === "gas") useGasStore.getState().step(delta);
+    if (isMathDemo(active)) useMathStore.getState().step(delta);
+    return { accepted: true };
+  } catch (error) {
+    return rejected(
+      error instanceof Error ? error.message : "Unable to advance time.",
+    );
+  }
+}
 function runClock(demo: DemoType) {
+  setSessionAnimation(false);
   let previous: number | undefined;
   const identity = sessionId;
   const tick = (now: number) => {
@@ -180,12 +212,7 @@ function runClock(demo: DemoType) {
     const reduced =
       typeof matchMedia !== "undefined" &&
       matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (demo === "assembly") useAssemblyStore.getState().step(delta);
-    if (demo === "projectile")
-      useProjectileStore.getState().step(reduced ? 60 : delta);
-    if (demo === "town") useTownStore.getState().step(delta);
-    if (demo === "gas" && !reduced) useGasStore.getState().step(delta);
-    if (isMathDemo(demo)) useMathStore.getState().step(delta);
+    if (!reduced || automaticMotion) advanceSessionTime(delta);
     frame = requestAnimationFrame(tick);
   };
   if (

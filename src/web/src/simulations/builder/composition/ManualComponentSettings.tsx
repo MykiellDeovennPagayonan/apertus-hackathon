@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { publicDefinition } from "../../components/catalog";
 import { createPublicNode } from "../../components/composites/catalog";
 import { componentDefinitions } from "../../components/registry";
@@ -27,6 +28,11 @@ export function ManualComponentSettings({
   catalog: ComponentCatalog;
   node: ComponentInstance;
 }) {
+  const [preview, setPreview] = useState<{
+    source: string;
+    object: SceneObject;
+  }>();
+  const source = JSON.stringify(node.configuration);
   const definition = requireValue(manualDefinition(node));
   const d = catalog.document;
   const attached = d.connections.find(
@@ -52,6 +58,15 @@ export function ManualComponentSettings({
     controls: [],
     measurements: [],
   };
+  const previewScene =
+    preview?.source === source
+      ? {
+          ...scene,
+          objects: scene.objects.map((item) =>
+            item.id === node.id ? preview.object : item,
+          ),
+        }
+      : scene;
   const commit = (next: SceneObject) =>
     catalog.change("Edit starting geometry", (doc) => {
       const target = requireValue(doc.nodes.find((n) => n.id === next.id));
@@ -133,14 +148,17 @@ export function ManualComponentSettings({
           <h3>{canvas.label}</h3>
           <CompositionCanvas
             people={[]}
-            scene={scene}
+            scene={previewScene}
             selected={node.id}
             authoring
             active
             resetToken={node.id}
             onSelect={() => {}}
-            onChange={commit}
-            onCommit={commit}
+            onChange={(next) => setPreview({ source, object: next })}
+            onCommit={(next) => {
+              setPreview(undefined);
+              commit(next);
+            }}
             onPiece={(id, index) => {
               const target = scene.objects.find((n) => n.id === id);
               if (target?.kind === "fraction-bar") {

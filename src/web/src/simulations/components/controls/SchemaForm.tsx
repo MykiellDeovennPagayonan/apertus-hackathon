@@ -7,6 +7,7 @@ import {
   type ParameterSchema,
   validateValue,
 } from "../../runtime/parameterSchema";
+import { formatDataNumber } from "../views/dataPresentation";
 
 const fieldNames: Record<string, string> = {
   a: "First value",
@@ -98,7 +99,10 @@ function Field({
               // biome-ignore lint/suspicious/noArrayIndexKey: Schema tuples have fixed positional argument identity.
               key={index}
               id={`${id}-${index}`}
-              label={`${label} ${index + 1}`}
+              label={
+                presentation[`${path}.${index}`]?.label ??
+                `${label} ${index + 1}`
+              }
               widget={widget}
               schema={schema.items}
               path={`${path}.${index}`}
@@ -169,7 +173,9 @@ function Field({
         <div className="catalog-slider-heading">
           <label htmlFor={`${id}-range`}>{label}</label>
           <span className="catalog-current-value">
-            {String(value ?? "")}
+            {typeof value === "number"
+              ? formatDataNumber(value)
+              : String(value ?? "")}
             {unit && <small>{unit}</small>}
           </span>
         </div>
@@ -231,6 +237,7 @@ function Field({
         id={id}
         aria-describedby={errorId}
         aria-invalid={!!errorId || undefined}
+        aria-label={label}
         type={numeric ? "number" : "text"}
         min={numeric ? schema.minimum : undefined}
         max={numeric ? schema.maximum : undefined}
@@ -255,20 +262,32 @@ export function SchemaForm({
   onSubmit,
   widget,
   presentation = {},
-  current,
+  current: providedCurrent,
+  currentForDraft,
+  currentRevision,
+  actionIntent = "secondary",
 }: {
   widget?: string;
+  actionIntent?: "primary" | "secondary" | "quiet";
   presentation?: FieldPresentation;
   schema: ParameterSchema;
   initial: unknown;
   current?: Record<string, unknown>;
+  currentRevision?: string;
+  currentForDraft?: (
+    draft: Record<string, unknown>,
+  ) => Record<string, unknown> | undefined;
   label: string;
   mode?: "submit" | "immediate";
   submitLabel?: string;
   onSubmit: (v: Record<string, unknown>) => ActionResult;
 }) {
   const [draft, setValue] = useState(initial);
+  const current =
+    currentForDraft?.(draft as Record<string, unknown>) ?? providedCurrent;
+  const revision = currentRevision ?? JSON.stringify(current);
   const [dirty, setDirty] = useState(false);
+  const [draftOrigin, setDraftOrigin] = useState<string>();
   const value = current && !dirty ? current : draft;
   const [feedback, setFeedback] = useState("");
   const [feedbackTone, setFeedbackTone] = useState<"success" | "error">(
@@ -316,6 +335,7 @@ export function SchemaForm({
       return;
     }
     setFeedback("");
+    if (!dirty) setDraftOrigin(revision);
     setDirty(true);
     setValue(next);
   };
@@ -330,7 +350,7 @@ export function SchemaForm({
     >
       {isAction ? (
         <button
-          className="recipe-action recipe-action--secondary"
+          className={`recipe-action recipe-action--${actionIntent}`}
           type="submit"
         >
           {submitLabel ?? label}
@@ -427,6 +447,12 @@ export function SchemaForm({
           aria-live="polite"
         >
           {feedback}
+        </output>
+      )}
+      {dirty && current && draftOrigin !== revision && (
+        <output className="catalog-help" aria-live="polite">
+          The activity changed while you were editing. Your draft is kept;
+          Discard edits restores the current values.
         </output>
       )}
       {dirty && current && (

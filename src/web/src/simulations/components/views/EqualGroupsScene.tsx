@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import type { GroupingBoard } from "../traits/MathBoards";
 import { BasketVisual } from "../visuals/BasketVisual";
 import { CounterTokenVisual } from "../visuals/CounterTokenVisual";
@@ -5,7 +6,8 @@ import { SVGWorldView } from "./SVGWorldView";
 
 import { useCompactDiagram } from "./useCompactDiagram";
 export function EqualGroupsScene({ board }: { board: GroupingBoard }) {
-  const mobile = useCompactDiagram();
+  const surface = useRef<SVGSVGElement>(null);
+  const mobile = useCompactDiagram(surface);
   const sceneWidth = mobile ? 400 : 900;
   const columns = Math.min(board.groups, mobile ? 2 : 3),
     width = (sceneWidth - 60) / columns - 20,
@@ -21,6 +23,9 @@ export function EqualGroupsScene({ board }: { board: GroupingBoard }) {
     trayHeight = 60 + Math.ceil(board.total / trayColumns) * 35;
   return (
     <SVGWorldView
+      ref={surface}
+      scrollable
+      className="math-scene-svg"
       aria-label={`${board.groups} baskets; ${board.sequence.cursor} of ${board.total} circles distributed`}
       viewBox={`0 0 ${sceneWidth} ${trayY + trayHeight}`}
     >

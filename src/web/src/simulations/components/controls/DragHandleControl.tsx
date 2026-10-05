@@ -1,6 +1,13 @@
-import { type PointerEvent, useEffect, useRef, useState } from "react";
+import {
+  type PointerEvent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import type { ActionResult } from "../../runtime/commands";
 import type { UIAction } from "../../runtime/types";
+import { SceneFeedbackContext } from "../views/SVGWorldView";
 /** SVG picking coordinates are explicitly mapped into a domain edit. */
 export function DragHandleControl({
   onCommand,
@@ -20,6 +27,19 @@ export function DragHandleControl({
   keyboardStep?: number;
 }) {
   const dragging = useRef(false);
+  const report = useContext(SceneFeedbackContext);
+  const [feedback, setFeedback] = useState("");
+  const submit = (command: UIAction) => {
+    const result = onCommand(command);
+    const message = result.accepted ? "" : result.error;
+    setFeedback(message);
+    report?.(message);
+  };
+  const finish = (event: PointerEvent<SVGCircleElement>) => {
+    dragging.current = false;
+    if (event.currentTarget.hasPointerCapture(event.pointerId))
+      event.currentTarget.releasePointerCapture(event.pointerId);
+  };
   const handle = useRef<SVGCircleElement>(null);
   const [radius, setRadius] = useState(22);
   useEffect(() => {
@@ -42,58 +62,81 @@ export function DragHandleControl({
     point.x = event.clientX;
     point.y = event.clientY;
     const mapped = point.matrixTransform(matrix.inverse());
-    onCommand({ ...map(mapped.x, mapped.y), target });
+    submit({ ...map(mapped.x, mapped.y), target });
   };
   return (
-    // biome-ignore lint/a11y/useSemanticElements: SVG picking supports pointer capture and keyboard commands.
-    <circle
-      cx={cx}
-      cy={cy}
-      ref={handle}
-      r={radius}
-      fill="transparent"
-      stroke="var(--accent)"
-      strokeDasharray="3 3"
-      style={{ cursor: "grab", touchAction: "none" }}
-      role="button"
-      tabIndex={0}
-      aria-label={label}
-      onPointerDown={(e) => {
-        dragging.current = true;
-        e.currentTarget.setPointerCapture(e.pointerId);
-        send(e);
-      }}
-      onPointerMove={(e) => {
-        if (dragging.current) send(e);
-      }}
-      onPointerUp={(e) => {
-        dragging.current = false;
-        e.currentTarget.releasePointerCapture(e.pointerId);
-      }}
-      onPointerCancel={() => {
-        dragging.current = false;
-      }}
-      onKeyDown={(e) => {
-        if (
-          !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)
-        )
-          return;
-        e.preventDefault();
-        const step = keyboardStep * (e.shiftKey ? 0.1 : 1);
-        onCommand({
-          ...map(
-            cx +
-              (e.key === "ArrowRight"
-                ? step
-                : e.key === "ArrowLeft"
-                  ? -step
-                  : 0),
-            cy +
-              (e.key === "ArrowDown" ? step : e.key === "ArrowUp" ? -step : 0),
-          ),
-          target,
-        });
-      }}
-    />
+    <g>
+      {/* biome-ignore lint/a11y/useSemanticElements: SVG handles use keyboard commands; HTML buttons cannot replace scene geometry. */}
+      <circle
+        cx={cx}
+        cy={cy}
+        ref={handle}
+        r={radius}
+        fill="transparent"
+        stroke="var(--accent)"
+        strokeDasharray="3 3"
+        style={{ cursor: "grab", touchAction: "none" }}
+        role="button"
+        tabIndex={0}
+        aria-label={label}
+        onPointerDown={(e) => {
+          dragging.current = true;
+          e.currentTarget.setPointerCapture(e.pointerId);
+          send(e);
+        }}
+        onPointerMove={(e) => {
+          if (dragging.current) send(e);
+        }}
+        onPointerUp={finish}
+        onPointerCancel={(event) => {
+          finish(event);
+          setFeedback("Movement stopped. The last accepted position is kept.");
+          report?.("Movement stopped. The last accepted position is kept.");
+        }}
+        onLostPointerCapture={() => {
+          dragging.current = false;
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Escape" && dragging.current) {
+            dragging.current = false;
+            setFeedback(
+              "Movement stopped. The last accepted position is kept.",
+            );
+            report?.("Movement stopped. The last accepted position is kept.");
+            return;
+          }
+          if (
+            !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)
+          )
+            return;
+          e.preventDefault();
+          const step = keyboardStep * (e.shiftKey ? 0.1 : 1);
+          submit({
+            ...map(
+              cx +
+                (e.key === "ArrowRight"
+                  ? step
+                  : e.key === "ArrowLeft"
+                    ? -step
+                    : 0),
+              cy +
+                (e.key === "ArrowDown"
+                  ? step
+                  : e.key === "ArrowUp"
+                    ? -step
+                    : 0),
+            ),
+            target,
+          });
+        }}
+      />
+      {feedback && !report && (
+        <foreignObject x="0" y="0" width="100%" height="70">
+          <output className="simulation-feedback" aria-live="polite">
+            {feedback}
+          </output>
+        </foreignObject>
+      )}
+    </g>
   );
 }

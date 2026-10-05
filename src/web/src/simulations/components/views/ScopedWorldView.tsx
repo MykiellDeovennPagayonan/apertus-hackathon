@@ -20,6 +20,9 @@ export default function ScopedWorldView({
   state: TownModelState;
   appearances: ComponentInstance[];
 }) {
+  const [rotation, setRotation] = useState(0);
+  const [zoom, setZoom] = useState(cameraPreset === "close" ? 0.65 : 1);
+  const [gestures, setGestures] = useState(false);
   const [camera, setCamera] = useState(0),
     day = Math.max(0, Math.sin(((s.time - 6) / 12) * Math.PI)),
     night = s.time < 6 || s.time >= 19;
@@ -34,9 +37,62 @@ export default function ScopedWorldView({
     );
   return (
     <section className="composition-town" aria-label="Town world">
-      <button type="button" onClick={() => setCamera((v) => v + 1)}>
-        Reset camera
-      </button>
+      <fieldset className="recipe-camera-controls" aria-label="Town camera">
+        <button
+          className="recipe-action recipe-action--secondary"
+          type="button"
+          onClick={() => setRotation((value) => value - 15)}
+        >
+          Rotate left
+        </button>
+        <button
+          className="recipe-action recipe-action--secondary"
+          type="button"
+          onClick={() => setRotation((value) => value + 15)}
+        >
+          Rotate right
+        </button>
+        <button
+          className="recipe-action recipe-action--secondary"
+          type="button"
+          disabled={zoom <= 0.5}
+          onClick={() => setZoom((value) => Math.max(0.5, value - 0.1))}
+        >
+          Zoom in
+        </button>
+        <button
+          className="recipe-action recipe-action--secondary"
+          type="button"
+          disabled={zoom >= 1.5}
+          onClick={() => setZoom((value) => Math.min(1.5, value + 0.1))}
+        >
+          Zoom out
+        </button>
+        <button
+          className="recipe-action recipe-action--quiet"
+          type="button"
+          onClick={() => {
+            setRotation(0);
+            setZoom(cameraPreset === "close" ? 0.65 : 1);
+            setCamera((value) => value + 1);
+          }}
+        >
+          Reset camera
+        </button>
+        <label className="catalog-toggle">
+          <span>Explore camera with gestures</span>
+          <input
+            type="checkbox"
+            checked={gestures}
+            onChange={(event) => setGestures(event.target.checked)}
+          />
+        </label>
+      </fieldset>
+      <p className="recipe-camera-help">
+        {gestures
+          ? "Drag inside the town to orbit; scroll or pinch to zoom. Turn gestures off to navigate the workspace."
+          : "Use the camera buttons, or turn on camera gestures. Camera changes do not change the town."}
+      </p>
       <Canvas
         key={`${camera}/${cameraPreset}`}
         shadows="percentage"
@@ -102,7 +158,11 @@ export default function ScopedWorldView({
               nearSchool={s.marketNearSchool}
             />
           ))}
-        <OrbitCameraControl />
+        <OrbitCameraControl
+          enabled={gestures}
+          rotation={rotation}
+          zoom={zoom}
+        />
       </Canvas>
     </section>
   );

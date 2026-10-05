@@ -6,9 +6,9 @@ import {
 } from "../../runtime/session";
 import { useTownStore } from "../../runtime/townSession";
 import type { DemoType } from "../../runtime/types";
-import type { Dataset } from "../traits/MeasurementProbe";
-import { EntityInspectorView } from "./EntityInspectorView";
-import { ResultsTableView } from "./ResultsTableView";
+import { DatasetDisplay } from "./DatasetDisplay";
+import { EntityInspectorView, presentInspection } from "./EntityInspectorView";
+
 export function DomainObservationViews({ demo }: { demo: DemoType }) {
   // Subscribe to authoritative domain outputs so inspector/table update after edits and ticks.
   useBridgeStore((s) => s.response);
@@ -17,41 +17,37 @@ export function DomainObservationViews({ demo }: { demo: DemoType }) {
   const definition = getActiveDefinition(),
     context = getExperimentContext();
   if (!definition || !context) return null;
-  const rows: Dataset["rows"] = [];
-  for (const instance of context.instances)
+  const rows: Record<string, unknown>[] = [];
+  for (const [index, instance] of context.instances.entries()) {
+    const object = instance.label || `Object ${index + 1}`;
     for (const [key, value] of Object.entries(instance.outputs)) {
-      if (typeof value === "number")
-        rows.push({ instance: instance.id, measurement: key, value });
-      if (Array.isArray(value))
-        value.forEach((v, i) => {
-          if (typeof v === "number")
-            rows.push({
-              instance: instance.id,
-              measurement: `${key}[${i}]`,
-              value: v,
-            });
-        });
-      if (typeof value === "string")
-        rows.push({ instance: instance.id, measurement: key, value });
+      if (!["number", "string", "boolean"].includes(typeof value)) continue;
+      const entry = presentInspection({ [key]: value }).entries[0];
+      rows.push({
+        object,
+        measurement: entry.label,
+        value,
+        unit:
+          entry.unit || (typeof value === "number" ? "Unit not specified" : ""),
+      });
     }
-  const dataset: Dataset = {
-    columns: [
-      { key: "instance", label: "Instance", unit: "", type: "string" },
-      {
-        key: "measurement",
-        label: "Measurement",
-        unit: "see assumptions",
-        type: "string",
-      },
-      { key: "value", label: "Value", unit: "", type: "string" },
-    ],
-    rows: rows.map((row) => ({ ...row, value: String(row.value) })),
-    assumption: definition.assumptions.join(" "),
-  };
+  }
   return (
     <div style={{ padding: 16 }}>
       {definition.components.views.includes("ResultsTableView") && (
-        <ResultsTableView dataset={dataset} />
+        <DatasetDisplay
+          label="Observations"
+          kind="DataTable"
+          value={rows}
+          presentation={{
+            columns: [
+              { key: "object", label: "Object", type: "string" },
+              { key: "measurement", label: "Measurement", type: "string" },
+              { key: "value", label: "Value" },
+              { key: "unit", label: "Unit", type: "string" },
+            ],
+          }}
+        />
       )}
       {definition.components.views.includes("EntityInspectorView") &&
         context.instances.map((i) => (

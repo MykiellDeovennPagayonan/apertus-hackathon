@@ -16,6 +16,7 @@ import {
 import { FractionBarVisual } from "../visuals/FractionBarVisual";
 import { GasContainerVisual } from "../visuals/GasContainerVisual";
 import { GasParticleVisual } from "../visuals/GasParticleVisual";
+import { useReducedMotion } from "./useCompactDiagram";
 
 type DisplayObject = Extract<SceneObject, { kind: "gas" | "fraction-bar" }>;
 function GasIllustration({
@@ -25,6 +26,7 @@ function GasIllustration({
   object: GasObject;
   active: boolean;
 }) {
+  const reducedMotion = useReducedMotion();
   const [particles, setParticles] = useState(() =>
     gasParticles(object.inputs.amount),
   );
@@ -32,7 +34,8 @@ function GasIllustration({
     setParticles(gasParticles(object.inputs.amount));
   }, [object.inputs.amount]);
   useEffect(() => {
-    if (!active || !object.inputs.playing || !object.particles) return;
+    if (reducedMotion || !active || !object.inputs.playing || !object.particles)
+      return;
     let frame = 0,
       previous: number | undefined;
     const tick = (now: number) => {
@@ -47,7 +50,7 @@ function GasIllustration({
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [active, object.inputs, object.particles]);
+  }, [active, object.inputs, object.particles, reducedMotion]);
   return (
     <svg
       x={object.display.x}
@@ -58,7 +61,7 @@ function GasIllustration({
       preserveAspectRatio="xMidYMid meet"
       style={{ "--accent": object.color } as CSSProperties}
     >
-      <title>{object.label}: gas container with representative particles</title>
+      <title>{`${object.label}: gas container with representative particles`}</title>
       <GasContainerVisual volume={object.inputs.volume}>
         {object.particles &&
           particles.map((p) => (

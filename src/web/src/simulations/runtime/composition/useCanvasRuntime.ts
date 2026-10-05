@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { actionSpecs } from "../../components/contracts/composition";
 import { compileTown } from "../../components/systems/ScheduledTripSystem";
+import { useReducedMotion } from "../../components/views/useCompactDiagram";
 import { validateValue } from "../parameterSchema";
 import {
   type CompositionScene,
@@ -14,6 +15,7 @@ import {
   updateRuntimeObject,
 } from "./runtimeState";
 export function useCanvasRuntime(scene: CompositionScene, hidden = false) {
+  const reducedMotion = useReducedMotion();
   const key = configurationKey(scene);
   const clock = scene.clock ?? {
     start: 0,
@@ -27,10 +29,17 @@ export function useCanvasRuntime(scene: CompositionScene, hidden = false) {
       objects: structuredClone(scene.objects),
       authored: scene.objects,
       time: clock.start,
-      playing: clock.playing,
+      playing: clock.playing && !reducedMotion,
       speed: clock.speed,
     }),
-    [key, scene.objects, clock.start, clock.playing, clock.speed],
+    [
+      key,
+      scene.objects,
+      clock.start,
+      clock.playing,
+      clock.speed,
+      reducedMotion,
+    ],
   );
   const [state, setState] = useState(initial);
   const accepted = state.key === key ? state : initial;

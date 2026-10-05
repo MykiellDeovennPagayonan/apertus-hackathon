@@ -20,6 +20,7 @@ export function SquareVisual({
       stroke={o.color}
       strokeWidth={o.width}
       vectorEffect="non-scaling-stroke"
+      pointerEvents="all"
       role="button"
       tabIndex={0}
       aria-label={`Select ${o.label}`}

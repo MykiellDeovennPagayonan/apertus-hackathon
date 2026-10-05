@@ -136,7 +136,7 @@ async function main() {
       .click();
     await page.getByRole("button", { name: "Build", exact: true }).click();
     const concentrations = page.locator(
-      '.recipe-lesson section[aria-label="concentration"] output',
+      '.recipe-lesson section[aria-label="Salt concentration"] output',
     );
     assert.equal(await concentrations.count(), 2);
     const forms = page

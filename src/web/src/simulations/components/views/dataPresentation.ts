@@ -145,6 +145,13 @@ export function outputDataPresentation(
   definition: string,
   output: string,
 ): DataPresentation {
+  if (definition === "models/TownNavigation" && output === "activity")
+    return {
+      columns: [
+        { key: "id", label: "Person", type: "string" },
+        { key: "activity", label: "Current activity", type: "string" },
+      ],
+    };
   if (output === "frequencies")
     return {
       columns: [
@@ -246,4 +253,41 @@ export function outputDataPresentation(
       ],
     };
   return {};
+}
+
+/** Join authoritative comparison samples by x, retaining missing samples as gaps. */
+export function comparisonData(
+  current: unknown,
+  previous: unknown,
+  keys = ["y"],
+): unknown {
+  if (current == null) return undefined;
+  if (
+    !Array.isArray(current) ||
+    !Array.isArray(previous) ||
+    current.length + previous.length > 2000
+  )
+    return "Invalid comparison samples";
+  const samples = new Map<number, Record<string, unknown>>();
+  for (const [rows, prior] of [
+    [current, false],
+    [previous, true],
+  ] as const) {
+    const seen = new Set<number>();
+    for (const row of rows) {
+      if (
+        !record(row) ||
+        typeof row.x !== "number" ||
+        !Number.isFinite(row.x) ||
+        seen.has(row.x)
+      )
+        return "Invalid comparison samples";
+      seen.add(row.x);
+      const sample = samples.get(row.x) ?? { x: row.x };
+      for (const key of keys)
+        sample[prior ? `comparison_${key}` : key] = row[key];
+      samples.set(row.x, sample);
+    }
+  }
+  return [...samples.values()].sort((a, b) => Number(a.x) - Number(b.x));
 }

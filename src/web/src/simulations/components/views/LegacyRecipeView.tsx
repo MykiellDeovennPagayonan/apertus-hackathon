@@ -1,6 +1,5 @@
 "use client";
-
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
 import { createStore } from "zustand/vanilla";
 import { insertRecipe } from "../../runtime/authoring/recipes";
 import { requireValue } from "../../runtime/authoring/requireValue";
@@ -15,6 +14,12 @@ import {
 } from "../../runtime/elementarySession";
 import { gasInitializer, useGasStore } from "../../runtime/gasSession";
 import { mathInitializer, useMathStore } from "../../runtime/mathSession";
+import {
+  advanceSessionTime,
+  getSessionAnimation,
+  setSessionAnimation,
+  subscribeSessionAnimation,
+} from "../../runtime/session";
 import type { DemoType } from "../../runtime/types";
 import { publicDefinition } from "../catalog";
 import {
@@ -26,6 +31,11 @@ import { RecipeLesson } from "./RecipeLesson";
 
 /** Old session entry points delegate to their existing authoritative commands and clock, while presentation uses public recipe nodes. */
 export function LegacyRecipeView({ demo }: { demo: DemoType }) {
+  const animationEnabled = useSyncExternalStore(
+    subscribeSessionAnimation,
+    getSessionAnimation,
+    () => false,
+  );
   const gas = useGasStore(),
     math = useMathStore(),
     elementary = useElementaryStore();
@@ -173,5 +183,13 @@ export function LegacyRecipeView({ demo }: { demo: DemoType }) {
     elementary.parameters,
     elementary.outputs,
   ]);
-  return <RecipeLesson document={document} runtime={runtime} />;
+  return (
+    <RecipeLesson
+      document={document}
+      runtime={runtime}
+      animationEnabled={animationEnabled}
+      onAnimationChange={setSessionAnimation}
+      onAdvanceTime={advanceSessionTime}
+    />
+  );
 }

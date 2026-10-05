@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import type { ActionResult } from "../../runtime/commands";
 import type { UIAction } from "../../runtime/types";
 import type { FractionComparisonBoard } from "../traits/MathBoards";
@@ -15,10 +16,12 @@ export function FractionBuilderScene({
   interactive?: boolean;
   compact?: boolean;
 }) {
-  const viewportCompact = useCompactDiagram();
+  const surface = useRef<SVGSVGElement>(null);
+  const viewportCompact = useCompactDiagram(surface);
   const compact = compactOverride ?? viewportCompact;
   return (
     <SVGWorldView
+      ref={surface}
       role="group"
       aria-label="Two equal-sized fraction bars. Tap pieces to shade or unshade."
       viewBox={compact ? "0 0 440 360" : "0 0 900 420"}

@@ -1,4 +1,9 @@
 import type { ModelInstance } from "../../../runtime/contribution";
+import { DatasetDisplay } from "../../views/DatasetDisplay";
+import {
+  comparisonData,
+  outputDataPresentation,
+} from "../../views/dataPresentation";
 
 export const chemistryNumber = (v: unknown) =>
   typeof v === "number"
@@ -119,97 +124,34 @@ export function MoleculeVisual({ instance }: { instance: ModelInstance }) {
     </figure>
   );
 }
-type Point = { x: number; y: number };
 export function ReactionCurveVisual({ instance }: { instance: ModelInstance }) {
-  const o = instance.outputs,
-    points = o.points as Point[],
-    products = o.productPoints as Point[],
-    previous = o.comparisonPoints as Point[];
-  const maxX = points.at(-1)?.x ?? 1,
-    maxY = Number(o.totalConcentration);
-  const x = (v: number) => 58 + (350 * v) / maxX,
-    y = (v: number) => 220 - (180 * v) / maxY;
-  const path = (data: Point[]) =>
-    data.map((p) => `${x(p.x)},${y(p.y)}`).join(" ");
+  const metadata = outputDataPresentation(instance.provider, "points");
   return (
-    <figure>
-      <svg
-        viewBox="0 0 450 285"
-        role="img"
-        aria-label={`Concentration curves at ${o.temperature} kelvin, compared with ${o.comparisonTemperature} kelvin; A decreases and B increases`}
-      >
-        <title>Analytical fixed-temperature concentration curves</title>
-        <path d="M58 35 V220 H414" fill="none" stroke="currentColor" />
-        {[0, 0.5, 1].map((f) => (
-          <g key={f}>
-            <text x="48" y={y(maxY * f) + 5} textAnchor="end">
-              {chemistryNumber(maxY * f)}
-            </text>
-            <text x={x(maxX * f)} y="243" textAnchor="middle">
-              {chemistryNumber(maxX * f)}
-            </text>
-          </g>
-        ))}
-        <text x="230" y="275" textAnchor="middle">
-          Time (s)
-        </text>
-        <text transform="translate(16 130) rotate(-90)" textAnchor="middle">
-          Concentration (mol/L)
-        </text>
-        <polyline
-          points={path(previous)}
-          fill="none"
-          stroke="#514381"
-          strokeWidth="2"
-          strokeDasharray="6 5"
-        />
-        <polyline
-          points={path(points)}
-          fill="none"
-          stroke="#285e56"
-          strokeWidth="3"
-        />
-        <polyline
-          points={path(products)}
-          fill="none"
-          stroke="#885410"
-          strokeWidth="3"
-        />
-        <circle
-          cx={x(Number(o.elapsed))}
-          cy={y(Number(o.concentrationA))}
-          r="5"
-          fill="#285e56"
-        />
-      </svg>
-      <figcaption>
-        A: green solid · B: amber solid · A at{" "}
-        {chemistryNumber(o.comparisonTemperature)} K: purple dashed. All curves
-        use the same scales.
-      </figcaption>
-      <div
-        className="chem-particles"
-        role="img"
-        aria-label="Illustrative reactant and product particles"
-      >
-        {Array.from({ length: 20 }, (_, i) => (
-          <span
-            // biome-ignore lint/suspicious/noArrayIndexKey: Fixed illustrative particle slots never reorder.
-            key={`particle-${i}`}
-            className={
-              i < Math.round((20 * Number(o.concentrationA)) / maxY)
-                ? "chem-particle-a"
-                : "chem-particle-b"
-            }
-          >
-            {i < Math.round((20 * Number(o.concentrationA)) / maxY) ? "A" : "B"}
-          </span>
-        ))}
-      </div>
-      <p className="chem-caption">
-        Particles illustrate proportions; the analytical model calculates
-        concentrations.
-      </p>
-    </figure>
+    <DatasetDisplay
+      kind="Chart"
+      label="Reaction progress: current and previous temperature"
+      value={comparisonData(
+        instance.outputs.points,
+        instance.outputs.comparisonPoints,
+      )}
+      presentation={{
+        ...metadata,
+        columns: [
+          { key: "x", label: "Model time", unit: "s", type: "number" },
+          {
+            key: "y",
+            label: "Current temperature",
+            unit: "mol/L",
+            type: "number",
+          },
+          {
+            key: "comparison_y",
+            label: "Previous temperature",
+            unit: "mol/L",
+            type: "number",
+          },
+        ],
+      }}
+    />
   );
 }

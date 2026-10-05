@@ -1,12 +1,31 @@
+import { useRef } from "react";
 import { dispatchCommand } from "../../runtime/session";
 import { MathObjectControl } from "../controls/MathObjectControl";
 import type { CountingBoard } from "../traits/MathBoards";
 import { CounterTokenVisual } from "../visuals/CounterTokenVisual";
 import { CountingBoxVisual } from "../visuals/CountingBoxVisual";
 import { SVGWorldView } from "./SVGWorldView";
-export function CountingScene({ board, onCommand = (command) => dispatchCommand(board.demo, command) }: { board: CountingBoard; onCommand?: (command: import("../../runtime/types").UIAction) => import("../../runtime/commands").ActionResult }) {
+import { useCompactDiagram } from "./useCompactDiagram";
+export function CountingScene({
+  board,
+  onCommand = (command) => dispatchCommand(board.demo, command),
+}: {
+  board: CountingBoard;
+  onCommand?: (
+    command: import("../../runtime/types").UIAction,
+  ) => import("../../runtime/commands").ActionResult;
+}) {
+  const surface = useRef<SVGSVGElement>(null);
+  const compact = useCompactDiagram(surface);
+  const outsideCount = board.tokens.filter((token) => token.zone === 0).length;
+  const insideCount = board.tokens.length - outsideCount;
+  const boxTop = 140 + Math.ceil(outsideCount / 5) * 62;
+  const boxHeight = 100 + Math.max(1, Math.ceil(insideCount / 5)) * 62;
   return (
     <SVGWorldView
+      ref={surface}
+      scrollable
+      className="math-scene-svg"
       role={board.sequence.looping ? "img" : "group"}
       aria-label={
         board.sequence.looping
@@ -15,8 +34,10 @@ export function CountingScene({ board, onCommand = (command) => dispatchCommand(
       }
       viewBox={
         board.mode === "count"
-          ? `0 0 600 ${Math.max(1, Math.ceil(board.tokens.length / 3)) * 120 + 60}`
-          : "0 0 900 440"
+          ? `0 0 ${compact ? 400 : 600} ${Math.max(1, Math.ceil(board.tokens.length / 3)) * 120 + 60}`
+          : compact
+            ? `0 0 400 ${boxTop + boxHeight + 20}`
+            : "0 0 900 440"
       }
       style={
         board.mode === "count"
@@ -24,7 +45,26 @@ export function CountingScene({ board, onCommand = (command) => dispatchCommand(
           : undefined
       }
     >
-      {board.mode === "place" && <CountingBoxVisual target={board.target} />}
+      {board.mode === "place" &&
+        (compact ? (
+          <g>
+            <rect
+              x="15"
+              y={boxTop}
+              width="370"
+              height={boxHeight}
+              rx="16"
+              fill="#eff7f1"
+              stroke="#237f63"
+              strokeDasharray="8 6"
+            />
+            <text x="30" y={boxTop + 35} className="math-scene-label">
+              Put {board.target} circles in this box
+            </text>
+          </g>
+        ) : (
+          <CountingBoxVisual target={board.target} />
+        ))}
       <text x={40} y={35} className="math-scene-label">
         {board.mode === "count"
           ? board.sequence.looping
@@ -41,12 +81,18 @@ export function CountingScene({ board, onCommand = (command) => dispatchCommand(
         const index = zoneTokens.findIndex((other) => other.id === t.id);
         const x =
           board.mode === "count"
-            ? 100 + (i % 3) * 200
-            : (t.zone === 1 ? 510 : 60) + (index % 5) * 73;
+            ? compact
+              ? 65 + (i % 3) * 135
+              : 100 + (i % 3) * 200
+            : compact
+              ? 65 + (index % 5) * 66
+              : (t.zone === 1 ? 510 : 60) + (index % 5) * 73;
         const y =
           board.mode === "count"
             ? 100 + Math.floor(i / 3) * 120
-            : 135 + Math.floor(index / 5) * 67;
+            : compact
+              ? (t.zone === 1 ? boxTop + 85 : 100) + Math.floor(index / 5) * 62
+              : 135 + Math.floor(index / 5) * 67;
         return (
           <MathObjectControl
             key={t.id}

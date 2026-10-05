@@ -7,7 +7,10 @@ import {
 } from "../../runtime/authoring/types";
 import type { ParameterSchema } from "../../runtime/parameterSchema";
 import { publicDefinition, publicDefinitions } from "../catalog";
-import { commandPresentation } from "../controls/commandPresentation";
+import {
+  acceptedCommandArguments,
+  commandPresentation,
+} from "../controls/commandPresentation";
 import { outputDataPresentation } from "../views/dataPresentation";
 import { spatialRecipes } from "./spatial";
 export function schemaDefault(schema: ParameterSchema): unknown {
@@ -55,7 +58,7 @@ export function modelRecipe(definition: string): CompositeRecipe {
   d.scopes.push({ id: scope, label: model.title });
   d.lesson = {
     title: model.title,
-    instruction: model.description.slice(0, 150),
+    instruction: model.description,
     explanation: model.assumptions.join("\n"),
   };
   const scene = {
@@ -71,9 +74,7 @@ export function modelRecipe(definition: string): CompositeRecipe {
     details = {
       ...emptyLayout("layout/details"),
       kind: "disclosure" as const,
-      label: model.tags.includes("dynamic-systems")
-        ? "Exact settings and model assumptions"
-        : "Model assumptions and measurements",
+      label: "More observations and model assumptions",
     };
   d.layout.kind = "split";
   d.layout.children = [scene, controls, details];
@@ -178,6 +179,12 @@ export function modelRecipe(definition: string): CompositeRecipe {
       args.value = structuredClone(model.defaults.task);
     if (key === "SET_FRACTION_COMPARISON" && Array.isArray(model.defaults.bars))
       args.value = { a: model.defaults.bars[0], b: model.defaults.bars[1] };
+    const acceptedDefaults = acceptedCommandArguments(
+      key,
+      model.defaults,
+      args,
+    );
+    if (acceptedDefaults) Object.assign(args, acceptedDefaults);
     const valueSchema =
       command.arguments.type === "object"
         ? command.arguments.properties.value
@@ -191,18 +198,31 @@ export function modelRecipe(definition: string): CompositeRecipe {
           : Object.keys(args).length
             ? "controls/Form"
             : "controls/Button";
+    const domainSecondary = [
+      "ROLL_SCALE_RESISTANCE",
+      "DIFF_SCALE_COEFFICIENT",
+      "ECO_SCALE_INITIAL_RABBITS",
+      "GROW_SET_SCENARIO",
+      "CHEM_RESTART_RATE",
+      "PHYS_RESTART",
+      "DIFF_RESTART",
+      "ECO_RESTART",
+      "PLANT_RESTART",
+      "TRAFFIC_RESTART",
+    ].includes(key);
     const secondary =
-      learningModel &&
-      [
-        "MOVE_TOKEN",
-        "COUNT_TOKEN",
-        "PLACE_TOKEN",
-        "REMOVE_TOKEN",
-        "SET_BAR_FRACTION",
-        "TOGGLE_FRACTION_PIECE",
-        "SUBDIVIDE_FRACTION",
-        "SET_LOOPING",
-      ].includes(key);
+      domainSecondary ||
+      (learningModel &&
+        [
+          "MOVE_TOKEN",
+          "COUNT_TOKEN",
+          "PLACE_TOKEN",
+          "REMOVE_TOKEN",
+          "SET_BAR_FRACTION",
+          "TOGGLE_FRACTION_PIECE",
+          "SUBDIVIDE_FRACTION",
+          "SET_LOOPING",
+        ].includes(key));
     add(widget, `control/${key}`, secondary ? advanced : controls, {
       label:
         key === "RESET" && model.tags.includes("natural-systems")
@@ -291,6 +311,164 @@ export function modelRecipe(definition: string): CompositeRecipe {
         quick.value === undefined ? {} : { value: quick.value };
     d.connections.push(connection);
   }
+  const primaryOutputs: Record<string, string[]> = {
+    "models/ratio": ["ratio", "percentage"],
+    "models/area-perimeter": ["area", "perimeter"],
+    "models/coordinates": ["x", "y"],
+    "models/Projectile": ["range", "maxHeight"],
+    "models/BridgeResponse": ["selected"],
+    "models/TownNavigation": ["time", "activity"],
+    "models/ScheduledTrip": ["time"],
+    "prefabs/math-foundations/Equation": ["equation", "substitution"],
+    "prefabs/math-foundations/Line": ["equation"],
+    "prefabs/math-foundations/Circle": ["circumference", "diameter", "ratio"],
+    "prefabs/chemistry/Conservation": ["equation", "balanced"],
+    "prefabs/chemistry/ReactionRate": ["concentrationA", "concentrationB"],
+    "prefabs/physical-systems/Pendulum": ["period", "angle"],
+    "prefabs/physical-systems/RollingTrack": ["speed", "distance"],
+    "prefabs/physical-systems/ResistiveCircuit": ["totalCurrent", "totalPower"],
+    "prefabs/natural-systems/DiffusionField": [
+      "centerConcentration",
+      "edgeConcentration",
+    ],
+    "prefabs/natural-systems/PredatorPrey": ["rabbits", "foxes"],
+    "prefabs/natural-systems/PlantGrowth": ["biomass", "limitingResources"],
+    "prefabs/dynamic-systems/CompoundGrowth": ["compoundTotal", "simpleTotal"],
+    "prefabs/dynamic-systems/RingTraffic": ["averageSpeed", "minimumGap"],
+    "prefabs/dynamic-systems/CheckoutQueue": ["averageWait", "waiting"],
+  };
+  const outputLabels: Record<string, string> = {
+    pressureKPa: "Pressure",
+    saltMass: "Dissolved salt",
+    volume: "Solution volume",
+    concentration: "Salt concentration",
+    range: "Distance travelled",
+    maxHeight: "Maximum height",
+    duration: "Duration",
+    elapsed: "Elapsed time",
+    samples: "Recorded observations",
+    trajectory: "Trajectory",
+    response: "Bridge response",
+    selected: "Selected member",
+    time: "Time",
+    population: "Population",
+    activity: "Current activity",
+    people: "People",
+    ratio: "Ratio",
+    percentage: "Percentage",
+    area: "Area",
+    perimeter: "Perimeter",
+    x: "Horizontal position",
+    y: "Vertical position",
+    equation: "Equation",
+    yAtZero: "Value at x = 0",
+    yAtOne: "Value at x = 1",
+    rise: "Rise",
+    run: "Run",
+    slope: "Slope",
+    intercept: "Vertical intercept",
+    intersection: "Intersection",
+    side: "Side length",
+    entrance: "Entrance",
+    closed: "Road closed",
+    status: "Status",
+    position: "Position",
+    fraction: "Fraction",
+    decimal: "Decimal value",
+    comparison: "Comparison",
+    solution: "Solution",
+    substitution: "Check by substitution",
+    leftCoefficient: "Coefficient",
+    leftConstant: "Constant",
+    right: "Right side",
+    marker: "Marker",
+    xMin: "Minimum x",
+    xMax: "Maximum x",
+    radius: "Radius",
+    diameter: "Diameter",
+    circumference: "Circumference",
+    balanced: "Reaction balance",
+    molecules: "Molecule counts",
+    temperature: "Temperature",
+    comparisonTemperature: "Previous temperature",
+    rateConstant: "Rate constant",
+    halfLife: "Half-life",
+    comparisonRate: "Previous rate",
+    comparisonHalfLife: "Previous half-life",
+    concentrationA: "Reactant concentration",
+    concentrationB: "Product concentration",
+    totalConcentration: "Total concentration",
+    productPoints: "Product concentration over time",
+    period: "Period",
+    angle: "Angle",
+    cycles: "Completed cycles",
+    lastPeriod: "Last complete period",
+    entrySpeed: "Starting speed",
+    deceleration: "Deceleration",
+    stopTime: "Stopping time",
+    stoppingDistance: "Stopping distance",
+    distance: "Distance",
+    speed: "Speed",
+    stopped: "Motion",
+    totalCurrent: "Total current",
+    equivalentResistance: "Equivalent resistance",
+    bulbVoltage: "Voltage per bulb",
+    bulbCurrent: "Current per bulb",
+    bulbPower: "Power per bulb",
+    totalPower: "Total power",
+    bulbReadings: "Bulb observations",
+    diffusionCoefficient: "Diffusion coefficient",
+    comparisonCoefficient: "Previous coefficient",
+    totalMass: "Total dye mass",
+    centerConcentration: "Centre concentration",
+    midwayConcentration: "Midway concentration",
+    edgeConcentration: "Edge concentration",
+    comparisonCenter: "Previous centre concentration",
+    stableTimestep: "Stable timestep",
+    gridSize: "Grid size",
+    rabbits: "Rabbits",
+    foxes: "Foxes",
+    rabbitDerivative: "Rabbit change rate",
+    foxDerivative: "Fox change rate",
+    initialRabbitDerivative: "Starting rabbit change rate",
+    initialFoxDerivative: "Starting fox change rate",
+    comparisonInitialRabbits: "Previous starting rabbits",
+    biomass: "Biomass",
+    growthRate: "Growth rate",
+    comparisonGrowthRate: "Previous growth rate",
+    comparisonLight: "Previous light",
+    limitingResources: "Limiting resources",
+    principal: "Starting balance",
+    annualRate: "Annual interest rate",
+    years: "Years",
+    compoundTotal: "Compound balance",
+    simpleTotal: "Simple balance",
+    compoundInterest: "Compound interest",
+    simpleInterest: "Simple interest",
+    compoundPoints: "Compound growth",
+    simplePoints: "Simple growth",
+    vehicleCount: "Vehicles",
+    averageSpeed: "Average speed",
+    minimumSpeed: "Slowest speed",
+    slowVehicles: "Slow vehicles",
+    minimumGap: "Smallest gap",
+    desiredHeadway: "Following time gap",
+    density: "Vehicle density",
+    disturbanceActive: "Braking disturbance",
+    vehicles: "Vehicle observations",
+    arrivals: "Customer arrivals",
+    completed: "Customers served",
+    waiting: "Customers waiting",
+    inService: "Customers being served",
+    averageWait: "Average wait",
+    maximumQueue: "Longest queue",
+    cashiers: "Open cashiers",
+    arrivalRate: "Arrival rate",
+    serviceRate: "Service rate",
+    seed: "Random seed",
+    feedback: "Activity feedback",
+    playing: "Playback",
+  };
   for (const [output, port] of Object.entries(model.outputs)) {
     if (
       port.kind === "attachment" ||
@@ -299,27 +477,33 @@ export function modelRecipe(definition: string): CompositeRecipe {
       output === "configuration" ||
       (learningModel && output === "playing" && !model.commands.SET_PLAYING) ||
       (output === "playing" &&
-        quickActions.some((quick) => /SET_(RATE_)?PLAYING$/.test(quick.action)))
+        quickActions.some(
+          (quick) =>
+            /SET_(RATE_)?PLAYING$/.test(quick.action) ||
+            quick.action === "PHYS_PLAY",
+        ))
     )
       continue;
     const display =
-      output === "frequencies"
-        ? "displays/Histogram"
-        : port.kind === "dataset"
-          ? "displays/Chart"
-          : port.kind === "grid" ||
-              (output === "field" &&
-                definition === "prefabs/natural-systems/DiffusionField")
-            ? "displays/Heatmap"
-            : ["atoms", "customers", "frequencies", "steps"].includes(output)
-              ? "displays/DataTable"
-              : output === "feedback"
-                ? "displays/StatusMessage"
-                : "displays/Readout";
+      output === "activity" && definition === "models/TownNavigation"
+        ? "displays/DataTable"
+        : output === "frequencies"
+          ? "displays/Histogram"
+          : port.kind === "dataset"
+            ? "displays/Chart"
+            : port.kind === "grid" ||
+                (output === "field" &&
+                  definition === "prefabs/natural-systems/DiffusionField")
+              ? "displays/Heatmap"
+              : ["atoms", "customers", "frequencies", "steps"].includes(output)
+                ? "displays/DataTable"
+                : output === "feedback"
+                  ? "displays/StatusMessage"
+                  : "displays/Readout";
     add(
       display,
       `display/${output}`,
-      output === "pressureKPa"
+      output === "pressureKPa" || primaryOutputs[definition]?.includes(output)
         ? scene
         : output === "feedback" ||
             output === "playing" ||
@@ -338,7 +522,7 @@ export function modelRecipe(definition: string): CompositeRecipe {
                   ? "Dye concentration"
                   : output === "points" || output === "comparisonPoints"
                     ? `${output === "comparisonPoints" ? "Comparison: " : ""}${outputDataPresentation(definition, output).yLabel ?? "Observations"}`
-                    : `${output} ${port.unit === "1" ? "" : port.unit}`,
+                    : outputLabels[output] || output,
         precision: 3,
         ...outputDataPresentation(definition, output),
       },
@@ -355,7 +539,7 @@ export function modelRecipe(definition: string): CompositeRecipe {
     variant: "body",
   });
   if (advanced.children.length) controls.children.push(advanced);
-  if (learningModel) {
+  {
     const actionIds = new Set(
       d.nodes
         .filter((node) => node.definition === "controls/Button")
@@ -378,11 +562,13 @@ export function modelRecipe(definition: string): CompositeRecipe {
       gap: 8,
       children: actions,
     };
-    controls.children = [
-      ...setup,
-      ...(actions.length ? [actionRow] : []),
-      ...others,
-    ];
+    controls.children = learningModel
+      ? [...setup, ...(actions.length ? [actionRow] : []), ...others]
+      : [
+          ...others.filter((child) => child.id !== advanced.id),
+          ...(actions.length ? [actionRow] : []),
+          ...others.filter((child) => child.id === advanced.id),
+        ];
   }
   const parameters =
     model.configuration.type === "object"

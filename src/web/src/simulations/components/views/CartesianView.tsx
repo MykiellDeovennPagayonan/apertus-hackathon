@@ -187,6 +187,13 @@ export function CartesianView({
     pending.current = o;
     onChange(o);
   };
+  const cancel = () => {
+    if (drag && pending.current) onChange(drag.object);
+    if (pan.current) setView({ source: boundsKey, ...pan.current.bounds });
+    pending.current = null;
+    pan.current = null;
+    setDrag(null);
+  };
   const end = () => {
     pan.current = null;
     if (pending.current) onCommit(pending.current);
@@ -251,6 +258,22 @@ export function CartesianView({
           next[part] = updated;
         else if (next.kind === "square" && part === "center")
           next.center = updated;
+        else if (next.kind === "square" && part === "size")
+          next.side = Math.max(
+            0.1,
+            Math.min(
+              100,
+              next.side +
+                (["ArrowUp", "ArrowRight"].includes(e.key) ? step : -step),
+            ),
+          );
+        else if (next.kind === "square" && part === "rotate")
+          next.rotation =
+            (((next.rotation +
+              (["ArrowUp", "ArrowRight"].includes(e.key) ? 5 : -5)) %
+              360) +
+              360) %
+            360;
         else return;
         onChange(next);
         onCommit(next);
@@ -281,10 +304,16 @@ export function CartesianView({
         viewBox="0 0 590 590"
         className="composition-cartesian"
         aria-label="Editable Cartesian plane"
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            event.preventDefault();
+            cancel();
+          }
+        }}
         onPointerMove={move}
         onPointerUp={end}
-        onPointerCancel={end}
-        onLostPointerCapture={end}
+        onPointerCancel={cancel}
+        onLostPointerCapture={cancel}
       >
         <title>
           Cartesian plane. Select an object, then drag its handles or use arrow
@@ -345,6 +374,7 @@ export function CartesianView({
             x2={px(0)}
             y1={top}
             y2={top + plotHeight}
+            pointerEvents="none"
             stroke="#777"
             strokeWidth={1.5}
           />
@@ -355,6 +385,7 @@ export function CartesianView({
             x2={left + plotWidth}
             y1={py(0)}
             y2={py(0)}
+            pointerEvents="none"
             stroke="#777"
             strokeWidth={1.5}
           />
