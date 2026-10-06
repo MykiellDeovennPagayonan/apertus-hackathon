@@ -70,15 +70,23 @@
 .composition-cartesian {
   display: block;
   width: 100%;
+  aspect-ratio: 1;
+  min-height: 280px;
   max-height: 650px;
   touch-action: none;
   font-size: 12px;
 }
 .composition-handle {
   fill: #fff;
-  stroke: #4367b2;
+  stroke: var(--accent, #285e56);
   stroke-width: 2;
   cursor: grab;
+  filter: drop-shadow(0 1px 2px #30362e35);
+}
+.composition-handle:hover,
+.composition-handle:focus-visible {
+  fill: color-mix(in srgb, var(--accent, #285e56) 18%, #fff);
+  stroke-width: 3;
 }
 .composition-cartesian [role="button"] {
   cursor: grab;
@@ -90,12 +98,6 @@
   overflow: hidden;
   border-radius: 6px;
   touch-action: none;
-}
-.composition-camera-reset {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  z-index: 2;
 }
 .composition-scene-hint {
   position: absolute;
@@ -207,22 +209,32 @@
 .composition-display-scene {
   min-width: 0;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 .composition-display {
   display: block;
   width: 100%;
   min-height: 260px;
   max-height: 580px;
-  background: #fffdf7;
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  background-color: #fffdf7;
+  background-image: radial-gradient(#d5cdbb80 0.7px, transparent 0.7px);
+  background-size: 18px 18px;
   touch-action: none;
+  flex: 1;
 }
 .composition-display-tools {
+  align-self: flex-end;
+}
+.composition-plane {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 8px;
+  min-height: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+.composition-plane-navigation {
+  align-self: flex-end;
 }
 .composition-display [role="button"] {
   cursor: grab;
@@ -231,6 +243,9 @@
   outline: none;
   stroke: #b75d45;
   stroke-width: 0.8px;
+}
+.composition-display [role="button"]:hover {
+  filter: brightness(0.97) saturate(1.08);
 }
 .composition-display .math-scene-label {
   font-size: 3px;

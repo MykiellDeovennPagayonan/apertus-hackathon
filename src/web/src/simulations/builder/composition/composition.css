@@ -302,6 +302,36 @@ never beside the workspace. */
   border-radius: 0;
   box-shadow: none;
 }
+.composition-builder.is-expanded .recipe-lesson.is-board-workspace > header {
+  display: block;
+  flex: none;
+  padding: 16px 24px;
+  border: 0;
+  background: transparent;
+}
+.composition-builder.is-expanded .recipe-lesson.is-board-workspace > header h1 {
+  margin: 0 0 6px;
+  font: 600 28px / 1.2 var(--font-sans);
+}
+.composition-builder.is-expanded .recipe-lesson.is-board-workspace > header p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.composition-builder.is-expanded .spatial-board.is-workspace {
+  background: transparent;
+}
+@media (max-width: 700px) {
+  .composition-builder.is-expanded .recipe-lesson.is-board-workspace > header {
+    padding: 12px 16px;
+  }
+  .composition-builder.is-expanded
+    .recipe-lesson.is-board-workspace
+    > header
+    h1 {
+    font-size: 22px;
+  }
+}
 .composition-graph .connection-workspace {
   display: flex;
   flex-direction: column;
@@ -1073,6 +1103,30 @@ never beside the workspace. */
   border-color: transparent;
   background: transparent;
   font-size: 13px;
+}
+.manual-builder .composition-tabs > .composition-appearance-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-color: var(--border);
+  background: var(--panel);
+}
+.composition-appearance-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+.manual-builder
+  .composition-tabs
+  > .composition-appearance-toggle[aria-pressed="true"] {
+  color: #fff;
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.composition-preview.is-appearance-preview .spatial-board {
+  border-radius: 0;
 }
 .toolbar-short-label {
   display: none;

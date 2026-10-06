@@ -16,6 +16,7 @@ import {
 import { FractionBarVisual } from "../visuals/FractionBarVisual";
 import { GasContainerVisual } from "../visuals/GasContainerVisual";
 import { GasParticleVisual } from "../visuals/GasParticleVisual";
+import { canvasAppearance, SceneToolbar } from "./SceneToolbar";
 import { useReducedMotion } from "./useCompactDiagram";
 
 type DisplayObject = Extract<SceneObject, { kind: "gas" | "fraction-bar" }>;
@@ -86,6 +87,7 @@ export function DisplayView({
   onSelect,
   onChange,
   onCommit,
+  onCanvasCommit,
   onPiece,
 }: {
   scene: CompositionScene;
@@ -96,6 +98,12 @@ export function DisplayView({
   onSelect: (id: string) => void;
   onChange: (o: SceneObject) => void;
   onCommit: (o: SceneObject) => void;
+  onCanvasCommit?: (
+    viewport: Pick<
+      CompositionScene["canvas"],
+      "xMin" | "xMax" | "yMin" | "yMax"
+    >,
+  ) => void;
   onPiece: (id: string, index: number) => ActionResult;
 }) {
   const svg = useRef<SVGSVGElement>(null);
@@ -105,9 +113,20 @@ export function DisplayView({
     [canvasKey],
   );
   const [view, setView] = useState(authoredView);
+  const initialAuthorView = useRef(authoredView);
   useEffect(() => {
     setView(authoredView);
   }, [authoredView]);
+  const applyView = (next: CompositionScene["canvas"], commit = authoring) => {
+    setView(next);
+    if (commit)
+      onCanvasCommit?.({
+        xMin: next.xMin,
+        xMax: next.xMax,
+        yMin: next.yMin,
+        yMax: next.yMax,
+      });
+  };
   const objects = scene.objects.filter(
     (o): o is DisplayObject => o.kind === "gas" || o.kind === "fraction-bar",
   );
@@ -117,9 +136,12 @@ export function DisplayView({
     start: { x: number; y: number };
     latest: DisplayObject;
   } | null>(null);
-  const pan = useRef<{ x: number; y: number; bounds: typeof view } | null>(
-    null,
-  );
+  const pan = useRef<{
+    x: number;
+    y: number;
+    bounds: typeof view;
+    latest: typeof view;
+  } | null>(null);
   const clip = useId().replace(/:/g, "");
   const point = (e: { clientX: number; clientY: number }) => {
     const node = svg.current,
@@ -223,41 +245,72 @@ export function DisplayView({
     onLostPointerCapture: () => end(true),
     onKeyDown: (e: KeyboardEvent<SVGElement>) => keyMove(e, o, resize),
   });
-  const zoom = (factor: number) =>
-    setView((b) => {
-      const w = clamp((b.xMax - b.xMin) * factor, 10, 300),
-        h = clamp((b.yMax - b.yMin) * factor, 10, 300),
-        cx = (b.xMax + b.xMin) / 2,
-        cy = (b.yMax + b.yMin) / 2;
-      return {
-        ...b,
-        xMin: cx - w / 2,
-        xMax: cx + w / 2,
-        yMin: cy - h / 2,
-        yMax: cy + h / 2,
-      };
+  const zoom = (factor: number) => {
+    const w = clamp((view.xMax - view.xMin) * factor, 10, 300),
+      h = clamp((view.yMax - view.yMin) * factor, 10, 300),
+      cx = (view.xMax + view.xMin) / 2,
+      cy = (view.yMax + view.yMin) / 2;
+    applyView({
+      ...view,
+      xMin: cx - w / 2,
+      xMax: cx + w / 2,
+      yMin: cy - h / 2,
+      yMax: cy + h / 2,
     });
+  };
+  const resetView = () =>
+    applyView(authoring ? initialAuthorView.current : authoredView);
+  const fitObjects = () => {
+    if (!objects.length) return resetView();
+    const xMin = Math.min(...objects.map((object) => object.display.x));
+    const xMax = Math.max(
+      ...objects.map((object) => object.display.x + object.display.width),
+    );
+    const yMin = Math.min(...objects.map((object) => object.display.y));
+    const yMax = Math.max(
+      ...objects.map((object) => object.display.y + object.display.height),
+    );
+    const padding = Math.max(5, Math.max(xMax - xMin, yMax - yMin) * 0.12);
+    applyView({
+      ...scene.canvas,
+      xMin: xMin - padding,
+      xMax: xMax + padding,
+      yMin: yMin - padding,
+      yMax: yMax + padding,
+    });
+  };
   return (
     <div className="composition-display-scene">
-      <div
-        className="composition-display-tools"
-        role="toolbar"
-        aria-label="Canvas navigation"
-      >
-        <button type="button" onClick={() => setView(scene.canvas)}>
-          Reset view
-        </button>
-        <button type="button" onClick={() => zoom(0.8)}>
-          Zoom in
-        </button>
-        <button type="button" onClick={() => zoom(1.25)}>
-          Zoom out
-        </button>
-      </div>
+      {scene.canvas.showNavigation === true && (
+        <SceneToolbar
+          label="Canvas navigation"
+          actions={[
+            { icon: "zoom-in", label: "Zoom in", onClick: () => zoom(0.8) },
+            {
+              icon: "zoom-out",
+              label: "Zoom out",
+              onClick: () => zoom(1.25),
+            },
+            {
+              icon: "reset",
+              label: "Reset view",
+              onClick: resetView,
+            },
+            {
+              icon: "fit",
+              label: "Fit objects in view",
+              disabled: objects.length === 0,
+              onClick: fitObjects,
+            },
+          ]}
+          className="composition-display-tools"
+        />
+      )}
       {/* biome-ignore lint/a11y/useSemanticElements: SVG is the interactive canvas, not an HTML fieldset. */}
       <svg
         ref={svg}
-        className="composition-display"
+        className="composition-display scene-frame"
+        style={canvasAppearance(scene.canvas)}
         viewBox={`${view.xMin} ${view.yMin} ${view.xMax - view.xMin} ${view.yMax - view.yMin}`}
         role="group"
         aria-label={
@@ -297,11 +350,20 @@ export function DisplayView({
           y={view.yMin}
           width={view.xMax - view.xMin}
           height={view.yMax - view.yMin}
-          fill={scene.canvas.grid ? `url(#${clip}-grid)` : "#fffdf7"}
+          fill={
+            scene.canvas.grid
+              ? `url(#${clip}-grid)`
+              : (scene.canvas.backgroundColor ?? "transparent")
+          }
           onPointerDown={(e) => {
             if (e.button !== 0) return;
             onSelect("");
-            pan.current = { x: e.clientX, y: e.clientY, bounds: view };
+            pan.current = {
+              x: e.clientX,
+              y: e.clientY,
+              bounds: view,
+              latest: view,
+            };
             e.currentTarget.setPointerCapture(e.pointerId);
           }}
           onPointerMove={(e) => {
@@ -314,15 +376,18 @@ export function DisplayView({
               ),
               dx = (e.clientX - p.x) / scale,
               dy = (e.clientY - p.y) / scale;
-            setView({
+            const next = {
               ...p.bounds,
               xMin: p.bounds.xMin - dx,
               xMax: p.bounds.xMax - dx,
               yMin: p.bounds.yMin - dy,
               yMax: p.bounds.yMax - dy,
-            });
+            };
+            p.latest = next;
+            setView(next);
           }}
           onPointerUp={() => {
+            if (pan.current && authoring) applyView(pan.current.latest);
             pan.current = null;
           }}
           onPointerCancel={() => {
@@ -436,11 +501,16 @@ export function DisplayView({
           })}
         </g>
       </svg>
-      <p className="composition-interaction-help">
-        {scene.kind === "physical"
-          ? "Pressure follows the ideal-gas model. Particles illustrate motion. Display size does not set volume."
-          : "Each bar represents one equal whole. Tap or use the keyboard on pieces to shade them. Display width does not change the fraction."}
-      </p>
+      {scene.canvas.showAbout === true && (
+        <details className="composition-interaction-help scene-guidance scene-help">
+          <summary>About this scene</summary>
+          <p>
+            {scene.kind === "physical"
+              ? "Pressure follows the ideal-gas model. Particles illustrate motion. Display size does not set volume."
+              : "Each bar represents one equal whole. Tap or use the keyboard on pieces to shade them. Display width does not change the fraction."}
+          </p>
+        </details>
+      )}
     </div>
   );
 }

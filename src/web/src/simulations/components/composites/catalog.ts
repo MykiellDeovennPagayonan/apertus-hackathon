@@ -117,7 +117,24 @@ export function modelRecipe(definition: string): CompositeRecipe {
     /Authored(Line|Square|GasContainer|FractionBar)$/.test(definition)
   ) {
     const kind = model.outputs.appearance.unit;
-    add(`canvases/${kind}`, "canvas", scene);
+    const modelNode = d.nodes.find((node) => node.id === "model");
+    const display = modelNode?.configuration.display as
+      | { x: number; y: number; width: number; height: number }
+      | undefined;
+    add(
+      `canvases/${kind}`,
+      "canvas",
+      scene,
+      display
+        ? {
+            xMin: display.x - 8,
+            xMax: display.x + display.width + 8,
+            yMin: display.y - 8,
+            yMax: display.y + display.height + 8,
+            grid: false,
+          }
+        : undefined,
+    );
     d.connections.push({
       id: "link/canvas",
       kind: "attachment",

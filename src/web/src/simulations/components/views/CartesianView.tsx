@@ -18,6 +18,7 @@ import { lineViewportPoints } from "../systems/LineGeometrySystem";
 import { squareCorners } from "../systems/SquareGeometrySystem";
 import { LineVisual } from "../visuals/LineVisual";
 import { SquareVisual } from "../visuals/SquareVisual";
+import { canvasAppearance, SceneToolbar } from "./SceneToolbar";
 
 type Props = {
   scene: CompositionScene;
@@ -26,6 +27,12 @@ type Props = {
   onSelect: (id: string) => void;
   onChange: (object: SceneObject) => void;
   onCommit: (object: SceneObject) => void;
+  onCanvasCommit?: (
+    viewport: Pick<
+      CompositionScene["canvas"],
+      "xMin" | "xMax" | "yMin" | "yMax"
+    >,
+  ) => void;
 };
 const clamp = (v: number) => Math.max(-1000, Math.min(1000, v));
 export function CartesianView({
@@ -35,9 +42,11 @@ export function CartesianView({
   onSelect,
   onChange,
   onCommit,
+  onCanvasCommit,
 }: Props) {
   const svg = useRef<SVGSVGElement>(null),
     clip = useId().replaceAll(":", "");
+  const [viewport, setViewport] = useState({ width: 590, height: 590 });
   const [drag, setDrag] = useState<{
     object: SceneObject;
     part: string;
@@ -56,31 +65,44 @@ export function CartesianView({
   }, [boundsKey]);
   const [view, setView] = useState({ source: boundsKey, ...authoredBounds });
   const bounds = view.source === boundsKey ? view : authoredBounds;
+  const initialAuthorBounds = useRef(authoredBounds);
+  const applyView = useCallback(
+    (next: typeof view, commit = authoring) => {
+      setView(next);
+      if (commit)
+        onCanvasCommit?.({
+          xMin: next.xMin,
+          xMax: next.xMax,
+          yMin: next.yMin,
+          yMax: next.yMax,
+        });
+    },
+    [authoring, onCanvasCommit],
+  );
   const { xMin, xMax, yMin, yMax } = bounds;
-  const size = 500,
-    pad = 45;
+  const pad = 45;
   const pan = useRef<{
     x: number;
     y: number;
     bounds: typeof authoredBounds;
+    latest: typeof view;
   } | null>(null);
   const zoom = useCallback(
-    (factor: number) =>
-      setView((current) => {
-        const b = current.source === boundsKey ? current : authoredBounds;
-        const cx = (b.xMin + b.xMax) / 2,
-          cy = (b.yMin + b.yMax) / 2;
-        const w = Math.max(0.5, Math.min(200, (b.xMax - b.xMin) * factor));
-        const h = Math.max(0.5, Math.min(200, (b.yMax - b.yMin) * factor));
-        return {
-          source: boundsKey,
-          xMin: cx - w / 2,
-          xMax: cx + w / 2,
-          yMin: cy - h / 2,
-          yMax: cy + h / 2,
-        };
-      }),
-    [boundsKey, authoredBounds],
+    (factor: number) => {
+      const b = bounds;
+      const cx = (b.xMin + b.xMax) / 2,
+        cy = (b.yMin + b.yMax) / 2;
+      const w = Math.max(0.5, Math.min(200, (b.xMax - b.xMin) * factor));
+      const h = Math.max(0.5, Math.min(200, (b.yMax - b.yMin) * factor));
+      applyView({
+        source: boundsKey,
+        xMin: cx - w / 2,
+        xMax: cx + w / 2,
+        yMin: cy - h / 2,
+        yMax: cy + h / 2,
+      });
+    },
+    [applyView, bounds, boundsKey],
   );
   useEffect(() => {
     const element = svg.current;
@@ -93,11 +115,28 @@ export function CartesianView({
     element?.addEventListener("wheel", wheel, { passive: false });
     return () => element?.removeEventListener("wheel", wheel);
   }, [zoom]);
-  const scale = size / Math.max(xMax - xMin, yMax - yMin);
+  useEffect(() => {
+    const element = svg.current;
+    if (!element) return;
+    const observer = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      if (width > 0 && height > 0) setViewport({ width, height });
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+  const canvasWidth = Math.max(280, viewport.width),
+    canvasHeight = Math.max(240, viewport.height),
+    availableWidth = Math.max(1, canvasWidth - pad * 2),
+    availableHeight = Math.max(1, canvasHeight - pad * 2),
+    scale = Math.min(
+      availableWidth / (xMax - xMin),
+      availableHeight / (yMax - yMin),
+    );
   const plotWidth = (xMax - xMin) * scale,
     plotHeight = (yMax - yMin) * scale;
-  const left = pad + (size - plotWidth) / 2,
-    top = pad + (size - plotHeight) / 2;
+  const left = (canvasWidth - plotWidth) / 2,
+    top = (canvasHeight - plotHeight) / 2;
   const px = (x: number) => left + (x - xMin) * scale;
   const py = (y: number) => top + (yMax - y) * scale;
   const point = (e: PointerEvent): Point => {
@@ -138,10 +177,10 @@ export function CartesianView({
       const start = pan.current,
         b = start.bounds;
       const dx =
-        ((e.clientX - start.x) / matrix.a / size) *
+        ((e.clientX - start.x) / matrix.a / Math.max(1, plotWidth)) *
         Math.max(b.xMax - b.xMin, b.yMax - b.yMin);
       const dy =
-        ((e.clientY - start.y) / matrix.d / size) *
+        ((e.clientY - start.y) / matrix.d / Math.max(1, plotHeight)) *
         Math.max(b.xMax - b.xMin, b.yMax - b.yMin);
       const cx = Math.max(-1000, Math.min(1000, (b.xMin + b.xMax) / 2 - dx));
       const cy = Math.max(-1000, Math.min(1000, (b.yMin + b.yMax) / 2 + dy));
@@ -152,6 +191,13 @@ export function CartesianView({
         yMin: cy - (b.yMax - b.yMin) / 2,
         yMax: cy + (b.yMax - b.yMin) / 2,
       });
+      pan.current.latest = {
+        source: boundsKey,
+        xMin: cx - (b.xMax - b.xMin) / 2,
+        xMax: cx + (b.xMax - b.xMin) / 2,
+        yMin: cy - (b.yMax - b.yMin) / 2,
+        yMax: cy + (b.yMax - b.yMin) / 2,
+      };
       return;
     }
     if (!drag) return;
@@ -195,6 +241,7 @@ export function CartesianView({
     setDrag(null);
   };
   const end = () => {
+    if (pan.current && authoring) applyView(pan.current.latest);
     pan.current = null;
     if (pending.current) onCommit(pending.current);
     pending.current = null;
@@ -215,6 +262,32 @@ export function CartesianView({
       .map((p) => `${px(p.x)},${py(p.y)}`)
       .join(" ");
   const corners = squareCorners;
+  const fitObjects = () => {
+    const points = scene.objects.flatMap((object) =>
+      object.kind === "line"
+        ? [object.a, object.b]
+        : object.kind === "square"
+          ? corners(object)
+          : [],
+    );
+    if (!points.length)
+      return applyView({
+        source: boundsKey,
+        ...(authoring ? initialAuthorBounds.current : authoredBounds),
+      });
+    const minX = Math.min(...points.map((point) => point.x));
+    const maxX = Math.max(...points.map((point) => point.x));
+    const minY = Math.min(...points.map((point) => point.y));
+    const maxY = Math.max(...points.map((point) => point.y));
+    const padding = Math.max(1, Math.max(maxX - minX, maxY - minY) * 0.15);
+    applyView({
+      source: boundsKey,
+      xMin: minX - padding,
+      xMax: maxX + padding,
+      yMin: minY - padding,
+      yMax: maxY + padding,
+    });
+  };
   const handle = (o: SceneObject, p: Point, part: string, label: string) => (
     <circle
       key={part}
@@ -282,27 +355,40 @@ export function CartesianView({
   );
   return (
     <div className="composition-plane">
-      <nav
-        className="composition-plane-navigation"
-        aria-label="Plane navigation"
-      >
-        <button type="button" onClick={() => zoom(0.8)}>
-          Zoom in
-        </button>
-        <button type="button" onClick={() => zoom(1.25)}>
-          Zoom out
-        </button>
-        <button
-          type="button"
-          onClick={() => setView({ source: boundsKey, ...authoredBounds })}
-        >
-          Reset view
-        </button>
-      </nav>
+      {scene.canvas.showNavigation === true && (
+        <SceneToolbar
+          label="Plane navigation"
+          actions={[
+            { icon: "zoom-in", label: "Zoom in", onClick: () => zoom(0.8) },
+            {
+              icon: "zoom-out",
+              label: "Zoom out",
+              onClick: () => zoom(1.25),
+            },
+            {
+              icon: "reset",
+              label: "Reset view",
+              onClick: () =>
+                applyView({
+                  source: boundsKey,
+                  ...(authoring ? initialAuthorBounds.current : authoredBounds),
+                }),
+            },
+            {
+              icon: "fit",
+              label: "Fit objects in view",
+              disabled: scene.objects.length === 0,
+              onClick: fitObjects,
+            },
+          ]}
+          className="composition-plane-navigation"
+        />
+      )}
       <svg
         ref={svg}
-        viewBox="0 0 590 590"
-        className="composition-cartesian"
+        viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
+        className="composition-cartesian scene-frame"
+        style={canvasAppearance(scene.canvas)}
         aria-label="Editable Cartesian plane"
         onKeyDown={(event) => {
           if (event.key === "Escape") {
@@ -329,11 +415,16 @@ export function CartesianView({
           y={top}
           width={plotWidth}
           height={plotHeight}
-          fill="#faf8f1"
-          stroke="#ccc5b6"
+          fill={scene.canvas.backgroundColor ?? "transparent"}
+          stroke={scene.canvas.borderColor ?? "none"}
           onPointerDown={(event) => {
             svg.current?.setPointerCapture(event.pointerId);
-            pan.current = { x: event.clientX, y: event.clientY, bounds };
+            pan.current = {
+              x: event.clientX,
+              y: event.clientY,
+              bounds,
+              latest: view,
+            };
           }}
         />
         {ticks(xMin, xMax).map((v) => (
@@ -453,6 +544,15 @@ export function CartesianView({
           y
         </text>
       </svg>
+      {scene.canvas.showAbout === true && (
+        <details className="composition-interaction-help scene-guidance scene-help">
+          <summary>About this scene</summary>
+          <p>
+            Drag the plane to navigate its coordinate space. Display size and
+            zoom do not change object values.
+          </p>
+        </details>
+      )}
     </div>
   );
 }

@@ -37,6 +37,11 @@ export interface CompositionScene {
     yMax: number;
     grid: boolean;
     snap: number;
+    /** Presentation chrome is opt-in so a canvas begins as content, not a card. */
+    backgroundColor?: string;
+    borderColor?: string;
+    showNavigation?: boolean;
+    showAbout?: boolean;
   };
   clock?: {
     start: number;

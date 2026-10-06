@@ -17,18 +17,14 @@ export function readLibrary(): SavedExperiment[] {
   return entries;
 }
 
-/** One atomic storage replacement under a cross-tab lock. Unknown legacy entries are retained. */
+/** One complete storage replacement, using a cross-tab lock when supported. Unknown legacy entries are retained. */
 export async function saveEntry(
   entry: SavedExperiment,
   expected?: SavedExperiment,
 ): Promise<SavedExperiment[]> {
   validateDocument(entry.document);
   const snapshot = structuredClone(entry);
-  if (!navigator.locks)
-    throw new Error(
-      "This browser cannot safely coordinate local saves. Export your experiment to keep a copy.",
-    );
-  return navigator.locks.request(LIBRARY_KEY, () => {
+  const write = () => {
     const entries = readLibrary();
     const current = entries.find((item) => item?.id === snapshot.id);
     if (current && JSON.stringify(current) !== JSON.stringify(expected)) {
@@ -47,5 +43,8 @@ export async function saveEntry(
     // setItem either replaces the complete record or throws; no partial document is written.
     localStorage.setItem(LIBRARY_KEY, JSON.stringify(next));
     return next;
-  });
+  };
+  return navigator.locks
+    ? navigator.locks.request(LIBRARY_KEY, write)
+    : write();
 }

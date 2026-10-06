@@ -1,17 +1,24 @@
+import { isDrawingItem, validateDrawing } from "./drawings";
 import type { AuthoredDocument, Layout } from "./types";
 export type Rect = { x: number; y: number; width: number; height: number };
 export type Camera = { centerX: number; centerY: number; zoom: number };
-export type BoardItem = {
+export type ComponentBoardItem = {
+  kind?: "component";
   id: string;
   layoutId: string;
   rect: Rect;
+  /** When set, author resizing preserves this presentation width/height ratio. */
+  aspectRatio?: number;
   zIndex: number;
   locked: boolean;
 };
+export type BoardItem = ComponentBoardItem | import("./drawings").DrawingItem;
 export type BoardPresentation = {
-  version: 1;
+  version: 1 | 2;
   mode: "board";
   items: BoardItem[];
+  /** Layout groups whose children have independent board placement. */
+  separatedLayouts?: string[];
   groups: { id: string; label: string; members: string[] }[];
   learnerArea?: Rect;
   startView: Rect;
@@ -31,6 +38,55 @@ export type BoardPresentation = {
 };
 export const clamp = (v: number, lo: number, hi: number) =>
   Math.max(lo, Math.min(hi, v));
+export function resizeBoardRect(
+  rect: Rect,
+  dx: number,
+  dy: number,
+  aspectRatio?: number,
+  snap = 1,
+  minimum = { width: 160, height: 160 },
+): Rect {
+  const round = (value: number) =>
+    snap > 0 ? Math.round(value / snap) * snap : value;
+  let width = clamp(round(rect.width + dx), minimum.width, 10000);
+  let height = clamp(round(rect.height + dy), minimum.height, 10000);
+  if (aspectRatio) {
+    if (Math.abs(dx) >= Math.abs(dy * aspectRatio))
+      height = width / aspectRatio;
+    else width = height * aspectRatio;
+    if (width < minimum.width) {
+      width = minimum.width;
+      height = width / aspectRatio;
+    }
+    if (height < minimum.height) {
+      height = minimum.height;
+      width = height * aspectRatio;
+    }
+    if (width > 10000) {
+      width = 10000;
+      height = width / aspectRatio;
+    }
+    if (height > 10000) {
+      height = 10000;
+      width = height * aspectRatio;
+    }
+  }
+  return { ...rect, width, height };
+}
+
+/** Small content such as a text card should size to its message, not a canvas. */
+export function boardItemMinimum(
+  d: AuthoredDocument,
+  layoutId: string | undefined,
+): { width: number; height: number } {
+  const layout = boardLayouts(d).find((candidate) => candidate.id === layoutId);
+  const definition = d.nodes.find(
+    (node) => node.id === layout?.node,
+  )?.definition;
+  return definition === "displays/Text" || definition === "displays/Box"
+    ? { width: 72, height: 48 }
+    : { width: 160, height: 160 };
+}
 export function extent(rects: Rect[]): Rect {
   if (!rects.length) return { x: 0, y: 0, width: 800, height: 600 };
   const x = Math.min(...rects.map((r) => r.x)) - 24,
@@ -88,6 +144,11 @@ export function boardLayouts(d: AuthoredDocument): Layout[] {
       )
         return [];
     }
+    if (
+      d.presentation?.mode === "board" &&
+      d.presentation.separatedLayouts?.includes(l.id)
+    )
+      return l.children.flatMap(collect);
     const semantic =
       l.node ||
       l.label ||
@@ -101,25 +162,133 @@ export function boardLayouts(d: AuthoredDocument): Layout[] {
   };
   return d.layout.children.length || d.layout.node ? collect(d.layout) : [];
 }
-function layoutSize(d: AuthoredDocument, l: Layout) {
+/** Dynamic containers retain their semantics; plain presentation groups can be separated. */
+export function canSeparateLayout(d: AuthoredDocument, l: Layout): boolean {
+  const definition = d.nodes.find((node) => node.id === l.node)?.definition;
+  const plainContainer =
+    !l.node ||
+    ["layout/Panel", "layout/Row", "layout/Column", "layout/Grid"].includes(
+      definition ?? "",
+    );
+  return (
+    l.children.length > 0 &&
+    plainContainer &&
+    ["panel", "row", "column", "grid"].includes(l.kind) &&
+    !l.visibleWhen &&
+    !l.disabledWhen &&
+    !l.theme &&
+    !l.font &&
+    !l.fontSize
+  );
+}
+export function separateBoardLayout(
+  d: AuthoredDocument,
+  layoutId: string,
+): void {
+  const p = d.presentation;
+  if (p?.mode !== "board") return;
+  const layout = boardLayouts(d).find((l) => l.id === layoutId);
+  const item = p.items.find((i) => i.layoutId === layoutId);
+  if (!layout || !item || !canSeparateLayout(d, layout) || item.locked) return;
+  p.separatedLayouts = [...(p.separatedLayouts ?? []), layoutId];
+  const children = boardLayouts(d).filter((l) => {
+    const contains = (parent: Layout): boolean =>
+      parent.children.some((child) => child.id === l.id || contains(child));
+    return contains(layout);
+  });
+  const sizes = children.map((child) => layoutSize(d, child));
+  const columnWidth = Math.max(320, ...sizes.map((size) => size.width)) + 24;
+  const rowHeight = Math.max(160, ...sizes.map((size) => size.height)) + 24;
+  const items = children.map((child, index) => ({
+    id: `board/${child.id}`,
+    layoutId: child.id,
+    rect: {
+      x: item.rect.x + (index % 2) * columnWidth,
+      y: item.rect.y + Math.floor(index / 2) * rowHeight,
+      ...layoutSize(d, child),
+    },
+    zIndex: item.zIndex + index,
+    locked: false,
+  }));
+  p.items = p.items.filter((i) => i.id !== item.id).concat(items);
+  p.groups = p.groups.map((g) => ({
+    ...g,
+    members: g.members.flatMap((id) =>
+      id === item.id ? items.map((i) => i.id) : [id],
+    ),
+  }));
+  p.immersive.overlays.forEach((o) => {
+    o.contentItemIds = o.contentItemIds.flatMap((id) =>
+      id === item.id ? items.map((i) => i.id) : [id],
+    );
+  });
+  p.startView = extent(p.items.map((i) => i.rect));
+}
+function layoutSize(
+  d: AuthoredDocument,
+  l: Layout,
+): { width: number; height: number } {
   const definition = d.nodes.find((n) => n.id === l.node)?.definition ?? "";
+  if (
+    l.children.length &&
+    !l.node &&
+    ["panel", "row", "column", "grid", "split", "stack"].includes(l.kind)
+  ) {
+    const children = l.children.map((child) => layoutSize(d, child));
+    const horizontal = ["row", "split", "grid"].includes(l.kind);
+    const gap = l.gap ?? 16;
+    return {
+      width: Math.min(
+        2000,
+        horizontal
+          ? children.reduce((sum, size) => sum + size.width, 0) +
+              gap * (children.length - 1)
+          : Math.max(...children.map((size) => size.width)),
+      ),
+      height: Math.min(
+        3000,
+        (horizontal
+          ? Math.max(...children.map((size) => size.height))
+          : children.reduce((sum, size) => sum + size.height, 0) +
+            gap * (children.length - 1)) + (l.label ? 48 : 24),
+      ),
+    };
+  }
   return {
-    width: definition.startsWith("controls/") ? 320 : 560,
-    height: definition.startsWith("canvases/")
-      ? 560
-      : definition.startsWith("controls/")
-        ? 200
-        : 440,
+    width:
+      definition === "displays/Text"
+        ? 320
+        : definition.startsWith("controls/")
+          ? 320
+          : definition.startsWith("canvases/")
+            ? 640
+            : 560,
+    height:
+      definition === "displays/Text"
+        ? 120
+        : definition.startsWith("canvases/")
+          ? 480
+          : definition.startsWith("controls/")
+            ? 160
+            : definition.startsWith("displays/")
+              ? 160
+              : l.kind === "disclosure"
+                ? 160
+                : 440,
   };
 }
 export function convertToBoard(d: AuthoredDocument): BoardPresentation {
-  const items = boardLayouts(d).map((l, i) => ({
+  const layouts = boardLayouts(d);
+  const sizes = layouts.map((layout) => layoutSize(d, layout));
+  const columnWidth = Math.max(320, ...sizes.map((size) => size.width)) + 24;
+  const rowHeight = Math.max(200, ...sizes.map((size) => size.height)) + 24;
+  const items = layouts.map((l, i) => ({
     id: `board/${l.id}`,
     layoutId: l.id,
     rect: {
-      x: (i % 2) * 584,
-      y: Math.floor(i / 2) * 584,
-      ...layoutSize(d, l),
+      x: (i % 2) * columnWidth,
+      y: Math.floor(i / 2) * rowHeight,
+      ...sizes[i],
     },
     zIndex: i,
     locked: false,
@@ -134,7 +303,10 @@ export function convertToBoard(d: AuthoredDocument): BoardPresentation {
     immersive: { startup: "board", allowReturnToBoard: true, overlays: [] },
   };
 }
-export function supportsScene(d: AuthoredDocument, layoutId: string): boolean {
+export function supportsScene(
+  d: AuthoredDocument,
+  layoutId: string | undefined,
+): boolean {
   const l = boardLayouts(d).find((l) => l.id === layoutId);
   const n = d.nodes.find((n) => n.id === l?.node);
   return !!n && ["canvases/town", "canvases/World"].includes(n.definition);
@@ -162,7 +334,7 @@ export function screenToWorld(
 }
 export function supportsOverlay(
   d: AuthoredDocument,
-  layoutId: string,
+  layoutId: string | undefined,
 ): boolean {
   const layout = boardLayouts(d).find((l) => l.id === layoutId);
   const supported = (l: Layout): boolean => {
@@ -178,9 +350,20 @@ export function supportsOverlay(
 export function reconcileBoard(d: AuthoredDocument) {
   const p = d.presentation;
   if (!p || p.mode !== "board") return;
+  const allLayouts = new Map<string, Layout>();
+  const collect = (l: Layout) => {
+    allLayouts.set(l.id, l);
+    l.children.forEach(collect);
+  };
+  collect(d.layout);
+  if (p.separatedLayouts)
+    p.separatedLayouts = p.separatedLayouts.filter((id) => {
+      const layout = allLayouts.get(id);
+      return !!layout && canSeparateLayout(d, layout);
+    });
   const layouts = boardLayouts(d),
     valid = new Set(layouts.map((l) => l.id));
-  p.items = p.items.filter((i) => valid.has(i.layoutId));
+  p.items = p.items.filter((i) => isDrawingItem(i) || valid.has(i.layoutId));
   for (const l of layouts)
     if (!p.items.some((i) => i.layoutId === l.id)) {
       const right = Math.max(0, ...p.items.map((i) => i.rect.x + i.rect.width));
@@ -216,7 +399,7 @@ export function validateBoard(d: AuthoredDocument, runnable = false) {
   };
   if (
     p.mode !== "board" ||
-    p.version !== 1 ||
+    ![1, 2].includes(p.version) ||
     !Array.isArray(p.items) ||
     !Array.isArray(p.groups)
   )
@@ -232,31 +415,62 @@ export function validateBoard(d: AuthoredDocument, runnable = false) {
     )
       fail("invalid rectangle");
   };
+  if (p.separatedLayouts !== undefined) {
+    const all = new Map<string, Layout>();
+    const collect = (l: Layout) => {
+      all.set(l.id, l);
+      l.children.forEach(collect);
+    };
+    collect(d.layout);
+    if (
+      !Array.isArray(p.separatedLayouts) ||
+      new Set(p.separatedLayouts).size !== p.separatedLayouts.length ||
+      p.separatedLayouts.some((id) => {
+        const layout = all.get(id);
+        return !layout || !canSeparateLayout(d, layout);
+      })
+    )
+      fail("invalid separated layout group");
+  }
   rect(p.startView);
   if (p.learnerArea) rect(p.learnerArea);
   const ids = new Set<string>(),
     hosts = new Set<string>(),
     layouts = new Set(boardLayouts(d).map((l) => l.id));
   for (const i of p.items) {
+    const minimum = isDrawingItem(i)
+      ? { width: 16, height: 16 }
+      : boardItemMinimum(d, i.layoutId);
     if (
       !i.id ||
+      (i.kind !== undefined &&
+        !["component", "text", "box"].includes(i.kind)) ||
       ids.has(i.id) ||
-      hosts.has(i.layoutId) ||
-      !layouts.has(i.layoutId) ||
+      (!isDrawingItem(i) &&
+        (hosts.has(i.layoutId) || !layouts.has(i.layoutId))) ||
+      (isDrawingItem(i) && p.version !== 2) ||
       !Number.isFinite(i.zIndex) ||
       typeof i.locked !== "boolean"
     )
       fail("invalid or duplicate content host");
     ids.add(i.id);
-    hosts.add(i.layoutId);
+    if (isDrawingItem(i)) validateDrawing(i);
+    else hosts.add(i.layoutId);
     rect(i.rect);
     if (
-      i.rect.width < 160 ||
-      i.rect.height < 160 ||
+      i.aspectRatio !== undefined &&
+      (!Number.isFinite(i.aspectRatio) ||
+        i.aspectRatio < 0.2 ||
+        i.aspectRatio > 5)
+    )
+      fail("content aspect ratio must be between 1:5 and 5:1");
+    if (
+      i.rect.width < minimum.width ||
+      i.rect.height < minimum.height ||
       i.rect.width > 10000 ||
       i.rect.height > 10000
     )
-      fail("content size must be between 160 and 10000 board units");
+      fail("content size is outside its supported range");
   }
   if (hosts.size !== layouts.size) fail("every layout needs one host");
   const grouped = new Set<string>();
@@ -341,4 +555,32 @@ export function validateBoard(d: AuthoredDocument, runnable = false) {
       content.add(`${o.sceneItemId}/${id}`);
     }
   }
+}
+
+/** Reorder selected items while preserving their relative order and positive layers. */
+export function reorderBoardItems(
+  p: BoardPresentation,
+  ids: string[],
+  action: "front" | "back" | "forward" | "backward",
+) {
+  const selected = new Set(ids);
+  let items = [...p.items].sort((a, b) => a.zIndex - b.zIndex);
+  if (action === "front" || action === "back") {
+    const moved = items.filter((i) => selected.has(i.id));
+    const rest = items.filter((i) => !selected.has(i.id));
+    items = action === "front" ? [...rest, ...moved] : [...moved, ...rest];
+  } else if (action === "forward") {
+    for (let j = items.length - 2; j >= 0; j--) {
+      if (selected.has(items[j].id) && !selected.has(items[j + 1].id))
+        [items[j], items[j + 1]] = [items[j + 1], items[j]];
+    }
+  } else {
+    for (let j = 1; j < items.length; j++) {
+      if (selected.has(items[j].id) && !selected.has(items[j - 1].id))
+        [items[j], items[j - 1]] = [items[j - 1], items[j]];
+    }
+  }
+  items.forEach((item, index) => {
+    item.zIndex = index;
+  });
 }

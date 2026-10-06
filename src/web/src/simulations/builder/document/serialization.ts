@@ -2,6 +2,7 @@ import {
   builtInRecipe,
   modelRecipe,
 } from "../../components/composites/catalog";
+import { migrateBoardDrawings } from "../../runtime/authoring/migrateDrawings";
 import { insertRecipe } from "../../runtime/authoring/recipes";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import { spatialRecipeDocument } from "../../runtime/authoring/spatialMigration";
@@ -19,11 +20,15 @@ export function parseDocument(source: string): ExperimentDocument {
   const input: unknown = JSON.parse(source);
   if (input && typeof input === "object" && "documentVersion" in input) {
     validateDocument(input);
+    if (input.authored) {
+      input.authored = migrateBoardDrawings(input.authored);
+      input.editor = structuredClone(input.authored.editor);
+    }
     return input;
   }
   if (input && typeof input === "object" && "formatVersion" in input) {
     validateAuthoredDocument(input);
-    return canonicalDocument(input);
+    return canonicalDocument(migrateBoardDrawings(input));
   }
   if (input && typeof input === "object" && "recipeVersion" in input) {
     const prefix = crypto.randomUUID();

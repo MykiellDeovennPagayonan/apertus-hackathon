@@ -178,9 +178,10 @@ export function remapDocument(
     for (const i of p.items) claim(i.id);
     for (const g of p.groups) claim(g.id);
     for (const o of p.immersive.overlays) claim(o.id);
+    if (p.separatedLayouts) p.separatedLayouts = p.separatedLayouts.map(ref);
     for (const i of p.items) {
       i.id = ref(i.id);
-      i.layoutId = ref(i.layoutId);
+      if (i.layoutId) i.layoutId = ref(i.layoutId);
     }
     for (const g of p.groups) {
       g.id = ref(g.id);
@@ -211,10 +212,16 @@ function append(d: AuthoredDocument, addition: AuthoredDocument) {
     addition.presentation?.mode === "board"
   ) {
     const incoming = structuredClone(addition.presentation);
+    if (incoming.version === 2) d.presentation.version = 2;
     for (const item of incoming.items) {
       item.rect.x += 40;
       item.rect.y += 40;
     }
+    if (incoming.separatedLayouts)
+      d.presentation.separatedLayouts = [
+        ...(d.presentation.separatedLayouts ?? []),
+        ...incoming.separatedLayouts,
+      ];
     d.presentation.items.push(...incoming.items);
     d.presentation.groups.push(...incoming.groups);
     d.presentation.immersive.overlays.push(...incoming.immersive.overlays);
@@ -481,6 +488,10 @@ export function selectionRecipe(
   d.lesson = structuredClone(document.lesson);
   if (document.presentation) {
     d.presentation = structuredClone(document.presentation);
+    if (d.presentation.mode === "board")
+      d.presentation.items = d.presentation.items.filter(
+        (item) => item.kind !== "text" && item.kind !== "box",
+      );
     reconcileBoard(d);
   }
   const r: CompositeRecipe = {

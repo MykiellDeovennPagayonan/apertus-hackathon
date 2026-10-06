@@ -4,9 +4,12 @@ const { emptyAuthoredDocument, emptyLayout } = load(
   "src/simulations/runtime/authoring/types.ts",
 );
 const {
+  boardItemMinimum,
   convertToBoard,
+  separateBoardLayout,
   constrain,
   fit,
+  resizeBoardRect,
   zoomAt,
   validateBoard,
   reconcileBoard,
@@ -37,6 +40,26 @@ assert.deepEqual(
   parseDocument(serializeDocument(canonicalDocument(d))).authored,
   d,
 );
+const sized = structuredClone(d);
+sized.presentation.items[0].aspectRatio = 16 / 9;
+const resized = resizeBoardRect(
+  sized.presentation.items[0].rect,
+  160,
+  5,
+  sized.presentation.items[0].aspectRatio,
+  8,
+);
+assert.equal(resized.width / resized.height, 16 / 9);
+validateAuthoredDocument(sized);
+assert.equal(
+  parseDocument(serializeDocument(canonicalDocument(sized))).authored
+    .presentation.items[0].aspectRatio,
+  16 / 9,
+  "aspect-ratio preferences survive document round trips",
+);
+const invalidRatio = structuredClone(sized);
+invalidRatio.presentation.items[0].aspectRatio = 12;
+assert.throws(() => validateAuthoredDocument(invalidRatio));
 const copied = remapDocument(d, (id) => `copy/${id}`);
 validateAuthoredDocument(copied);
 assert.equal(copied.presentation.items[0].layoutId, "copy/first");
@@ -78,6 +101,39 @@ assert.deepEqual(
   { centerX: 0, centerY: 850, zoom: 2 },
 );
 assert.equal(fit({ x: 0, y: 0, width: 800, height: 600 }, 400, 300).zoom, 0.5);
+const textDocument = emptyAuthoredDocument();
+textDocument.nodes.push({
+  id: "text",
+  definition: "displays/Text",
+  version: 1,
+  label: "Instructions",
+  scope: "main",
+  configuration: { text: "Read me", variant: "body" },
+});
+textDocument.layout.children.push({
+  ...emptyLayout("layout/text"),
+  node: "text",
+});
+textDocument.presentation = convertToBoard(textDocument);
+assert.deepEqual(boardItemMinimum(textDocument, "layout/text"), {
+  width: 72,
+  height: 48,
+});
+const compactText = resizeBoardRect(
+  textDocument.presentation.items[0].rect,
+  -1000,
+  -1000,
+  undefined,
+  0,
+  boardItemMinimum(textDocument, "layout/text"),
+);
+assert.deepEqual(
+  { width: compactText.width, height: compactText.height },
+  { width: 72, height: 48 },
+  "text cards can shrink to compact content-sized bounds",
+);
+textDocument.presentation.items[0].rect = compactText;
+validateBoard(textDocument);
 const runtime = new DocumentRuntime(d),
   before = structuredClone(runtime.getSnapshot());
 const moved = structuredClone(d);
@@ -96,7 +152,7 @@ validateBoard(pruned);
 assert.equal(pruned.presentation.items.length, 1);
 assert.equal(removeNodes(d, []).presentation.items.length, 2);
 console.log(
-  "Spatial board: geometry, validation, round trips, remapping, continuity, legacy compatibility passed",
+  "Spatial board: geometry, aspect ratios, validation, round trips, remapping, continuity, legacy compatibility passed",
 );
 
 for (const zoom of [0.1, 0.25, 1, 4]) {
@@ -142,3 +198,48 @@ assert.deepEqual(
   liveSnapshot,
   "Presentation edits preserve actual simulation state",
 );
+
+// Separation is presentation-only, preserves model identities and survives copies.
+const separated = emptyAuthoredDocument();
+separated.layout.children = [
+  {
+    ...emptyLayout("panel"),
+    kind: "panel",
+    label: "Controls",
+    children: [emptyLayout("child-a"), emptyLayout("child-b")],
+  },
+];
+separated.presentation = convertToBoard(separated);
+const originalLayout = structuredClone(separated.layout);
+separateBoardLayout(separated, "panel");
+assert.deepEqual(separated.layout, originalLayout);
+assert.deepEqual(separated.presentation.separatedLayouts, ["panel"]);
+assert.equal(separated.presentation.items.length, 2);
+validateAuthoredDocument(separated);
+assert.deepEqual(
+  parseDocument(serializeDocument(canonicalDocument(separated))).authored,
+  separated,
+);
+const separatedCopy = remapDocument(separated, (id) => `copy/${id}`);
+assert.deepEqual(separatedCopy.presentation.separatedLayouts, ["copy/panel"]);
+validateAuthoredDocument(separatedCopy);
+const dynamic = structuredClone(separated);
+dynamic.presentation = {
+  ...convertToBoard({ ...dynamic, presentation: undefined }),
+};
+dynamic.layout.children[0].kind = "tabs";
+separateBoardLayout(dynamic, "panel");
+assert.equal(
+  dynamic.presentation.separatedLayouts,
+  undefined,
+  "Tabs retain their navigation semantics",
+);
+console.log(
+  "Board separation: model/layout preservation, round trips, copied references and dynamic-container guard passed",
+);
+
+const emptied = structuredClone(separated);
+emptied.layout.children[0].children = [];
+reconcileBoard(emptied);
+assert.deepEqual(emptied.presentation.separatedLayouts, []);
+validateAuthoredDocument(emptied);

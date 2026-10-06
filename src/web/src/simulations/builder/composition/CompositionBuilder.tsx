@@ -1,9 +1,13 @@
 "use client";
+
 import Link from "next/link";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { SchemaForm } from "../../components/controls/SchemaForm";
 import { RecipeLesson } from "../../components/views/RecipeLesson";
-import { reconcileBoard } from "../../runtime/authoring/board";
+import {
+  reconcileBoard,
+  separateBoardLayout,
+} from "../../runtime/authoring/board";
 import { regenerateTruss } from "../../runtime/authoring/regenerateTruss";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import { object } from "../../runtime/parameterSchema";
@@ -14,10 +18,11 @@ import {
   validateRunnableDocument,
 } from "../document";
 import {
-  type ComponentClipboard,
-  deleteComponents,
-  pasteComponents,
-} from "../editor/selection";
+  type BoardClipboard,
+  deleteBoardDrawingContent,
+  pasteBoardContent,
+} from "../editor/boardClipboard";
+import { deleteComponents } from "../editor/selection";
 import { SaveCompositeDialog } from "../library/SaveCompositeDialog";
 import { ComponentSettings } from "./ComponentSettings";
 import { CompositeInterfaceEditor } from "./CompositeInterfaceEditor";
@@ -51,7 +56,6 @@ export default function CompositionBuilder({
   error,
   notice,
   fileMenu,
-  onSetup,
   expanded,
   onExpanded,
   onZoom,
@@ -70,12 +74,11 @@ export default function CompositionBuilder({
   error: string;
   notice: string;
   fileMenu: ReactNode;
-  onSetup: () => void;
   expanded: boolean;
   onExpanded: (v: boolean) => void;
   onZoom: (v: number) => void;
 }) {
-  const boardClipboard = useRef<ComponentClipboard | null>(null);
+  const boardClipboard = useRef<BoardClipboard | null>(null);
   const documentMenu = useRef<HTMLDetailsElement>(null);
   useEffect(() => {
     const close = (event: PointerEvent | KeyboardEvent) => {
@@ -108,6 +111,7 @@ export default function CompositionBuilder({
   const [selected, setSelected] = useState("");
   const [tab, setTab] = useState("Connections");
   const [mobile, setMobile] = useState(false);
+  const [appearancePreview, setAppearancePreview] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
   const noticeFailure = /Couldn't |could not|unsupported or invalid/i.test(
@@ -201,9 +205,6 @@ export default function CompositionBuilder({
               <div>
                 {history}
                 {fileMenu}
-                <button type="button" onClick={onSetup}>
-                  Back to setup
-                </button>
               </div>
             </details>
           </>
@@ -227,6 +228,7 @@ export default function CompositionBuilder({
               }
             }
             setSelected("");
+            setAppearancePreview(false);
             onExpanded(!expanded);
           }}
         >
@@ -275,6 +277,7 @@ export default function CompositionBuilder({
                 onClick={() => {
                   setTab(name);
                   setSelected("");
+                  setAppearancePreview(false);
                 }}
               >
                 {name}
@@ -288,6 +291,33 @@ export default function CompositionBuilder({
           >
             + Add component
           </button>
+          {tab === "Build" && (
+            <button
+              type="button"
+              className="composition-appearance-toggle"
+              aria-label={
+                appearancePreview
+                  ? "Show builder controls"
+                  : "Preview experiment appearance"
+              }
+              aria-pressed={appearancePreview}
+              title={
+                appearancePreview
+                  ? "Show builder controls"
+                  : "Hide builder controls and preview the experiment appearance"
+              }
+              onClick={() => {
+                setAppearancePreview((value) => !value);
+                setSelected("");
+              }}
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
+                <circle cx="12" cy="12" r="2.75" />
+              </svg>
+              <span>{appearancePreview ? "Editing view" : "Preview"}</span>
+            </button>
+          )}
           <details className="composition-view-menu">
             <summary>Lesson settings</summary>
             <div>
@@ -327,13 +357,21 @@ export default function CompositionBuilder({
         {
           <div
             hidden={!expanded && tab !== "Build"}
-            className={`composition-preview ${mobile ? "is-mobile" : ""} ${!expanded && !mobile && valid.authored?.presentation?.mode === "board" ? "is-board-workspace" : ""}`}
+            className={`composition-preview ${!expanded && mobile ? "is-mobile" : ""} ${appearancePreview ? "is-appearance-preview" : ""} ${expanded || (!mobile && valid.authored?.presentation?.mode === "board") ? "is-board-workspace" : ""}`}
           >
             <RecipeLesson
               document={requireValue(valid.authored)}
-              authoring={!expanded}
-              workspace={!expanded && !mobile}
-              onBoardAction={(action, layoutIds) => {
+              authoring={!expanded && !appearancePreview && tab === "Build"}
+              workspace={expanded || !mobile}
+              onBoardAction={(action, layoutIds, itemIds = []) => {
+                if (action === "separate") {
+                  change("Arrange group contents separately", (d) => {
+                    layoutIds.forEach((id) => {
+                      separateBoardLayout(d, id);
+                    });
+                  });
+                  return;
+                }
                 const ids: string[] = [];
                 const collect = (
                   layout: typeof document.layout,
@@ -350,6 +388,7 @@ export default function CompositionBuilder({
                   boardClipboard.current = {
                     document: structuredClone(doc),
                     ids,
+                    itemIds,
                   };
                   report("Content copied. Use Paste to place a copy.");
                   return;
@@ -361,6 +400,7 @@ export default function CompositionBuilder({
                 edit(
                   (d) => {
                     if (action === "delete") {
+                      deleteBoardDrawingContent(d, itemIds);
                       deleteComponents(d, ids);
                       if (d.authored) {
                         const prune = (layout: typeof document.layout) => {
@@ -377,10 +417,10 @@ export default function CompositionBuilder({
                         reconcileBoard(d.authored);
                       }
                     } else
-                      pasteComponents(
+                      pasteBoardContent(
                         d,
                         action === "duplicate"
-                          ? { document: doc, ids }
+                          ? { document: doc, ids, itemIds }
                           : requireValue(boardClipboard.current),
                       );
                   },
@@ -390,10 +430,14 @@ export default function CompositionBuilder({
                     : "Paste board content",
                 );
               }}
-              onPresentationChange={(presentation) =>
-                change("Edit board presentation", (d) => {
-                  d.presentation = presentation;
-                })
+              onPresentationChange={(presentation, group, action) =>
+                edit(
+                  (d) => {
+                    if (d.authored) d.authored.presentation = presentation;
+                  },
+                  group ?? null,
+                  action ?? "Edit board presentation",
+                )
               }
               selected={selected}
               onSelect={selectSettings}
@@ -406,8 +450,14 @@ export default function CompositionBuilder({
                   }
                 })
               }
+              onCanvasChange={(nodeId, viewport) =>
+                change("Set canvas starting view", (d) => {
+                  const target = d.nodes.find((node) => node.id === nodeId);
+                  if (target) Object.assign(target.configuration, viewport);
+                })
+              }
               onCapture={
-                expanded
+                expanded || appearancePreview
                   ? undefined
                   : (next) => change("Capture starting values", () => next)
               }

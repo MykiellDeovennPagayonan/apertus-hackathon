@@ -39,6 +39,13 @@ export function canonicalDocument(
     editor: structuredClone(authored.editor),
   };
 }
+
+/** A new manual experiment begins on the common spatial board with no domain preset. */
+export function createFreshDocument(): ExperimentDocument {
+  const authored = emptyAuthoredDocument();
+  authored.presentation = convertToBoard(authored);
+  return canonicalDocument(authored);
+}
 export function fromAssembly(assembly: Assembly): ExperimentDocument {
   return canonicalDocument(assemblyDocument(assembly));
 }

@@ -247,6 +247,7 @@ export function SpatialRecipeView({
   }, [runtime, document, demo, bridge, projectile, town]);
   return (
     <RecipeLesson
+      workspace={!controlsOnly}
       document={
         controlsOnly
           ? {

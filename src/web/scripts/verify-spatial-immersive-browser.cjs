@@ -115,6 +115,17 @@ const document = canonicalDocument(authored);
       .getByRole("button", { name: "Expand scene", exact: true })
       .click();
     await page.locator(".is-immersive canvas").waitFor();
+    await page.waitForFunction(() => {
+      const canvas = document.querySelector(".is-immersive canvas");
+      const host = canvas?.parentElement;
+      if (!canvas || !host) return false;
+      const scene = canvas.getBoundingClientRect();
+      const available = host.getBoundingClientRect();
+      return (
+        Math.abs(scene.width - available.width) < 2 &&
+        Math.abs(scene.height - available.height) < 2
+      );
+    });
     assert.ok(
       await original.evaluate((el) => el.isConnected),
       "Scene canvas remains mounted",

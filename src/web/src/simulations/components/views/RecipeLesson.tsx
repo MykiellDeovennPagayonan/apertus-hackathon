@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { convertToBoard } from "../../runtime/authoring/board";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import { BridgeScene } from "./BridgeScene";
 import { SpatialBoard } from "./board/SpatialBoard";
@@ -19,6 +20,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
   useSyncExternalStore,
@@ -98,6 +100,13 @@ type AuthorControls = {
   selected?: string;
   onSelect?: (id: string) => void;
   onAuthorChange?: (node: SceneObject) => void;
+  onCanvasChange?: (
+    nodeId: string,
+    viewport: Pick<
+      CompositionScene["canvas"],
+      "xMin" | "xMax" | "yMin" | "yMax"
+    >,
+  ) => void;
 };
 
 function EntityPickerControl({
@@ -557,7 +566,18 @@ function CanvasPresentation({
   const scene: CompositionScene = {
     version: 2,
     kind,
-    canvas: node.configuration as unknown as CompositionScene["canvas"],
+    canvas: author.authoring
+      ? {
+          ...(node.configuration as unknown as CompositionScene["canvas"]),
+          backgroundColor:
+            (node.configuration.backgroundColor as string | undefined) ??
+            "#fffdf7",
+          borderColor:
+            (node.configuration.borderColor as string | undefined) ?? "#d5cdbb",
+          showNavigation: true,
+          showAbout: true,
+        }
+      : (node.configuration as unknown as CompositionScene["canvas"]),
     objects,
     controls: [],
     measurements: [],
@@ -587,6 +607,9 @@ function CanvasPresentation({
         onCommit={(object) => {
           setDraft(null);
           if (author.authoring) author.onAuthorChange?.(object);
+        }}
+        onCanvasCommit={(viewport) => {
+          if (author.authoring) author.onCanvasChange?.(node.id, viewport);
         }}
         onPiece={(id, index) =>
           runtime.dispatch([
@@ -787,11 +810,15 @@ function NodeView({
       </div>
     );
   }
+  if (node.definition === "displays/Box")
+    return <div className="recipe-box-content" aria-hidden="true" />;
   if (node.definition === "displays/Text")
     return config.variant === "heading" ? (
-      <h2>{String(config.text)}</h2>
+      <h2 className="recipe-text-content is-heading">{String(config.text)}</h2>
     ) : (
-      <p className={config.variant === "callout" ? "recipe-callout" : ""}>
+      <p
+        className={`recipe-text-content${config.variant === "callout" ? " is-callout" : ""}`}
+      >
         {String(config.text)}
       </p>
     );
@@ -1251,6 +1278,7 @@ function LayoutView({
       : publicDefinition(node.definition).category === "displays" &&
           ![
             "displays/Text",
+            "displays/Box",
             "displays/Formula",
             "displays/Legend",
             "displays/DataTable",
@@ -1270,8 +1298,27 @@ function LayoutView({
         <section
           className={
             author.authoring
-              ? `recipe-author-item${author.selected === node.id ? " is-selected" : ""}`
+              ? `recipe-component-item recipe-author-item${node.definition === "displays/Text" ? " recipe-text-card" : ""}${author.selected === node.id ? " is-selected" : ""}`
+              : `recipe-component-item${node.definition === "displays/Text" ? " recipe-text-card" : ""}`
+          }
+          style={
+            node.definition === "displays/Text" ||
+            node.definition === "displays/Box"
+              ? {
+                  border: node.configuration.border
+                    ? `${Number(node.configuration.borderWidth ?? 1)}px solid ${String(node.configuration.borderColor ?? "#d5cdbb")}`
+                    : "none",
+                  borderRadius: Number(node.configuration.borderRadius ?? 0),
+                  background: String(
+                    node.configuration.backgroundColor ?? "transparent",
+                  ),
+                  opacity: Number(node.configuration.opacity ?? 1),
+                  boxShadow: "none",
+                }
               : undefined
+          }
+          data-decoration={
+            node.definition === "displays/Box" ? "box" : undefined
           }
           aria-label={
             author.authoring ? `${node.label} authoring controls` : undefined
@@ -1393,7 +1440,9 @@ function LayoutView({
       aria-disabled={disabled || undefined}
       {...(disabled ? { inert: "" as never } : {})}
     >
-      {layout.label && !boardHosted && <h3>{layout.label}</h3>}
+      {layout.label && (!boardHosted || !author.authoring) && (
+        <h3>{layout.label}</h3>
+      )}
       {content}
     </section>
   );
@@ -1411,6 +1460,7 @@ export function RecipeLesson({
   selected,
   onSelect,
   onAuthorChange,
+  onCanvasChange,
   onAnimationChange,
   onAdvanceTime,
   animationEnabled,
@@ -1425,11 +1475,14 @@ export function RecipeLesson({
   ) => import("../../runtime/commands").ActionResult;
   onCapture?: (document: AuthoredDocument) => void;
   onBoardAction?: (
-    action: "copy" | "paste" | "duplicate" | "delete",
+    action: "copy" | "paste" | "duplicate" | "delete" | "separate",
     layoutIds: string[],
+    itemIds?: string[],
   ) => void;
   onPresentationChange?: (
     presentation: AuthoredDocument["presentation"],
+    group?: string,
+    action?: string,
   ) => void;
 }) {
   const reducedMotion = useReducedMotion();
@@ -1439,9 +1492,22 @@ export function RecipeLesson({
   const ref = useRef<DocumentRuntime | null>(null);
   if (!ref.current) ref.current = supplied ?? new DocumentRuntime(document);
   const runtime = supplied ?? ref.current;
+  const lastRuntimeSource = useRef<string | null>(null);
+  const runtimeSource = JSON.stringify({
+    ...document,
+    presentation: undefined,
+    editor: undefined,
+  });
   useEffect(() => {
-    if (!supplied) runtime.updateDocument(document);
-  }, [runtime, document, supplied]);
+    if (!supplied && lastRuntimeSource.current !== runtimeSource) {
+      runtime.updateDocument(document);
+      lastRuntimeSource.current = runtimeSource;
+    }
+  }, [runtime, runtimeSource, document, supplied]);
+  useEffect(() => {
+    runtime.document.presentation = document.presentation;
+    runtime.document.editor = document.editor;
+  }, [runtime, document.presentation, document.editor]);
   const snapshot = useSyncExternalStore(
     runtime.subscribe,
     runtime.getSnapshot,
@@ -1465,7 +1531,13 @@ export function RecipeLesson({
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [runtime, document.nodes, supplied, animated]);
-  const boardWorkspace = workspace && document.presentation?.mode === "board";
+  const presentationDocument = useMemo(() => {
+    if (!workspace || authoring || document.presentation?.mode === "board")
+      return document;
+    return { ...document, presentation: convertToBoard(document) };
+  }, [document, workspace, authoring]);
+  const boardWorkspace =
+    workspace && presentationDocument.presentation?.mode === "board";
   const runtimeActions = (
     <>
       {reducedMotion &&
@@ -1530,7 +1602,7 @@ export function RecipeLesson({
     <MotionConfig reducedMotion="user">
       <MotionContext.Provider value={animated}>
         <main
-          className={`recipe-lesson ${workspace && document.presentation?.mode === "board" ? "is-board-workspace" : ""}`}
+          className={`recipe-lesson ${boardWorkspace ? "is-board-workspace" : ""}`}
           aria-label={document.lesson.title}
         >
           <header>
@@ -1538,13 +1610,24 @@ export function RecipeLesson({
             <p>{document.lesson.instruction}</p>
           </header>
           <AuthorContext.Provider
-            value={{ authoring, selected, onSelect, onAuthorChange }}
+            value={{
+              authoring,
+              selected,
+              onSelect,
+              onAuthorChange,
+              onCanvasChange,
+            }}
           >
             <SnapshotContext.Provider value={snapshot}>
               <SpatialBoard
-                document={document}
+                document={presentationDocument}
                 authoring={authoring}
                 workspace={workspace}
+                autoLayout={
+                  !!workspace &&
+                  !authoring &&
+                  document.presentation?.mode !== "board"
+                }
                 actions={boardWorkspace ? runtimeActions : undefined}
                 onEdit={onSelect}
                 onChange={onPresentationChange}
@@ -1554,7 +1637,7 @@ export function RecipeLesson({
                     layout={layout}
                     runtime={runtime}
                     boardHosted={
-                      authoring && document.presentation?.mode === "board"
+                      presentationDocument.presentation?.mode === "board"
                     }
                   />
                 )}

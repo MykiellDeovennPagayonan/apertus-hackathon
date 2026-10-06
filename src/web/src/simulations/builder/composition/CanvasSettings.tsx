@@ -83,6 +83,93 @@ export function CanvasSettings({
         />
         Show grid
       </label>
+      <fieldset className="canvas-appearance-settings">
+        <legend>Canvas appearance</legend>
+        <p>
+          Keep the canvas visually open, or add framing where the lesson needs
+          it.
+        </p>
+        <label className="composition-toggle">
+          <input
+            type="checkbox"
+            checked={canvas.settings.backgroundColor !== undefined}
+            onChange={(e) =>
+              update((c) => {
+                c.settings.backgroundColor = e.target.checked
+                  ? "#fffdf7"
+                  : undefined;
+              })
+            }
+          />
+          Add background
+        </label>
+        {canvas.settings.backgroundColor !== undefined && (
+          <label className="canvas-color-setting">
+            Background color
+            <input
+              type="color"
+              value={canvas.settings.backgroundColor}
+              onChange={(e) =>
+                update((c) => {
+                  c.settings.backgroundColor = e.target.value;
+                }, `${canvas.id}/backgroundColor`)
+              }
+            />
+          </label>
+        )}
+        <label className="composition-toggle">
+          <input
+            type="checkbox"
+            checked={canvas.settings.borderColor !== undefined}
+            onChange={(e) =>
+              update((c) => {
+                c.settings.borderColor = e.target.checked
+                  ? "#d5cdbb"
+                  : undefined;
+              })
+            }
+          />
+          Add border
+        </label>
+        {canvas.settings.borderColor !== undefined && (
+          <label className="canvas-color-setting">
+            Border color
+            <input
+              type="color"
+              value={canvas.settings.borderColor}
+              onChange={(e) =>
+                update((c) => {
+                  c.settings.borderColor = e.target.value;
+                }, `${canvas.id}/borderColor`)
+              }
+            />
+          </label>
+        )}
+        <label className="composition-toggle">
+          <input
+            type="checkbox"
+            checked={canvas.settings.showNavigation === true}
+            onChange={(e) =>
+              update((c) => {
+                c.settings.showNavigation = e.target.checked;
+              })
+            }
+          />
+          Show zoom and reset controls
+        </label>
+        <label className="composition-toggle">
+          <input
+            type="checkbox"
+            checked={canvas.settings.showAbout === true}
+            onChange={(e) =>
+              update((c) => {
+                c.settings.showAbout = e.target.checked;
+              })
+            }
+          />
+          Show “About this scene”
+        </label>
+      </fieldset>
       {canvas.kind === "cartesian" ? (
         <details>
           <summary>Axes and dragging</summary>

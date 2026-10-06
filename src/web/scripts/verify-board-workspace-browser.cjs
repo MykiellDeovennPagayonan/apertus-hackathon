@@ -114,11 +114,17 @@ const document = canonicalDocument(authored);
       .click();
     await page.getByLabel("Selection actions", { exact: true }).press("Escape");
     await page.getByLabel("Position and size", { exact: true }).click();
-    await page.getByLabel("width", { exact: true }).fill("620");
+    await page
+      .getByLabel("Aspect ratio", { exact: true })
+      .selectOption(String(4 / 3));
+    await page.getByLabel("width", { exact: true }).fill("640");
     await page
       .getByRole("button", { name: "Apply placement", exact: true })
       .click();
-    assert.equal((await draft()).presentation.items[0].rect.width, 620);
+    const resized = (await draft()).presentation.items[0];
+    assert.equal(resized.rect.width, 640);
+    assert.equal(resized.rect.height, 480);
+    assert.equal(resized.aspectRatio, 4 / 3);
     await page.getByLabel("Position and size", { exact: true }).press("Escape");
     await page.getByRole("button", { name: "Undo", exact: true }).click();
     const beforeNavigation = await draft();

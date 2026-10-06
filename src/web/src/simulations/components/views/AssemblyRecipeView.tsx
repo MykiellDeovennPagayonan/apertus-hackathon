@@ -57,6 +57,6 @@ export function AssemblyRecipeView() {
       });
   }, [runtime, instances]);
   return document && runtime ? (
-    <RecipeLesson document={document} runtime={runtime} />
+    <RecipeLesson workspace document={document} runtime={runtime} />
   ) : null;
 }

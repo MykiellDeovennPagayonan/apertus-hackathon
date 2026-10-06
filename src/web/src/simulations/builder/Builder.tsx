@@ -2,23 +2,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import CompositionBuilder from "./composition/CompositionBuilder";
 import {
-  createDocument,
   type ExperimentDocument,
   isRunnableDocument,
   parseDocument,
   serializeDocument,
-  validateDocument,
 } from "./document";
-import { createCanvasDocument } from "./document/canonical";
+import { createFreshDocument } from "./document/canonical";
 import { useDocumentHistory } from "./history/useDocumentHistory";
 import {
-  type DraftRecovery,
   editableDocument,
   persistDraft,
   readBuilderRecovery,
   usableEntries,
 } from "./persistence/recovery";
-import Setup from "./Setup";
 import "./builder.css";
 import {
   readLibrary,
@@ -34,9 +30,8 @@ export default function Builder() {
   const [valid, setValid] = useState<ExperimentDocument | null>(null);
   const [selected, setSelected] = useState("");
   const [expanded, setExpanded] = useState(false);
-  const [setupOpen, setSetupOpen] = useState(false);
-  const [pendingDraft, setPendingDraft] = useState<DraftRecovery | null>(null);
   const fileMenu = useRef<HTMLDetailsElement>(null);
+  const saveAction = useRef<() => void>(() => {});
   useEffect(() => {
     const closeOutside = (e: PointerEvent) => {
       if (e.target instanceof Node && !fileMenu.current?.contains(e.target))
@@ -44,6 +39,10 @@ export default function Builder() {
     };
     const closeEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") fileMenu.current?.removeAttribute("open");
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        saveAction.current();
+      }
     };
     document.addEventListener("pointerdown", closeOutside);
     document.addEventListener("keydown", closeEscape);
@@ -58,6 +57,7 @@ export default function Builder() {
   const [saved, setSaved] = useState<Saved[]>([]);
   const [saveId, setSaveId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [draftState, setDraftState] = useState("Saved locally");
   const storageBusy = useRef(false);
   const [recovery, setRecovery] = useState("");
   const [playingSaved, setPlayingSaved] = useState(false);
@@ -113,8 +113,24 @@ export default function Builder() {
       } else if (recovered.remix) {
         open(recovered.remix);
         window.history.replaceState(null, "", location.pathname);
-      } else if (recovered.draft) setPendingDraft(recovered.draft);
+      } else if (recovered.draft) {
+        try {
+          open(
+            recovered.draft.document,
+            recovered.draft.saveId ?? null,
+            recovered.draft.recovery ?? "",
+          );
+        } catch {
+          open(recovered.draft.valid, recovered.draft.saveId ?? null);
+          setRecovery(JSON.stringify(recovered.draft.document, null, 2));
+          setNotice(
+            "Recovered your last valid draft. The incomplete copy is available for repair.",
+          );
+        }
+        setSelected(recovered.draft.selected ?? "");
+      } else open(createFreshDocument());
     } catch (e) {
+      open(createFreshDocument());
       setError(message(e));
     }
     setReady(true);
@@ -122,6 +138,7 @@ export default function Builder() {
   useEffect(() => {
     if (!ready || !doc || !valid || playingSaved) return;
     try {
+      setDraftState("Saving locally…");
       persistDraft({
         document: doc,
         valid,
@@ -129,7 +146,9 @@ export default function Builder() {
         saveId,
         recovery,
       });
+      setDraftState("Saved locally");
     } catch {
+      setDraftState("Local save failed");
       setNotice(
         "Draft could not be stored locally. Export your experiment to keep a copy.",
       );
@@ -177,6 +196,7 @@ export default function Builder() {
       setSaving(false);
     }
   };
+  saveAction.current = save;
   const download = () => {
     if (!doc) return;
     try {
@@ -262,74 +282,7 @@ export default function Builder() {
     }
   };
   if (!ready) return <p>Opening builder…</p>;
-  const resumeDraft = () => {
-    if (!pendingDraft) return;
-    open(pendingDraft.valid, pendingDraft.saveId ?? null);
-    setRecovery(pendingDraft.recovery ?? "");
-    try {
-      validateDocument(pendingDraft.document);
-      const recovered = editableDocument(pendingDraft.document);
-      setDoc(recovered);
-      setValid(recovered);
-    } catch {
-      setRecovery(JSON.stringify(pendingDraft.document, null, 2));
-      setNotice(
-        "Recovered your last valid draft. The incomplete copy is available for repair.",
-      );
-    }
-    setSelected(pendingDraft.selected ?? "");
-  };
-  if (!doc || !valid || setupOpen)
-    return (
-      <Setup
-        initial={setupOpen && doc ? doc : undefined}
-        onCancel={setupOpen ? () => setSetupOpen(false) : undefined}
-        feedback={(error || notice) && <p role="alert">{error || notice}</p>}
-        onTemplate={(id) => open(createDocument(id))}
-        onCreate={async (canvas, layout) => {
-          if (setupOpen && doc && canvas === doc.template) {
-            edit((d) => {
-              d.presentation.layout = layout;
-              if (d.authored)
-                d.authored.layout.kind = layout === "bottom" ? "stack" : "grid";
-            });
-          } else {
-            if (setupOpen && !(await preserveCurrentDraft())) return;
-            open(createCanvasDocument(canvas, layout));
-          }
-          setSetupOpen(false);
-        }}
-      >
-        {!setupOpen && pendingDraft && (
-          <section className="setup-resume">
-            <h2>Your unfinished experiment</h2>
-            <p>
-              {pendingDraft.document.lesson?.title || "Untitled experiment"}
-            </p>
-            <button type="button" onClick={resumeDraft}>
-              Continue draft
-            </button>
-          </section>
-        )}
-        <details className="setup-secondary">
-          <summary>Open or import an experiment</summary>
-          {importField}
-          {library}
-        </details>
-        {recovery && (
-          <section>
-            <textarea
-              aria-label="Recover imported document"
-              value={recovery}
-              onChange={(e) => setRecovery(e.target.value)}
-            />
-            <button type="button" onClick={() => importText(recovery)}>
-              Retry import
-            </button>
-          </section>
-        )}
-      </Setup>
-    );
+  if (!doc || !valid) return <p>Opening builder…</p>;
   const setWorkspaceZoom = (zoom: number) => {
     if (!Number.isFinite(zoom) || zoom < 0.2 || zoom > 2) return;
     // Camera navigation is editor metadata, not a lesson edit or an undo step.
@@ -380,20 +333,9 @@ export default function Builder() {
         history={history}
         onSave={save}
         saving={saving}
-        saveState={
-          saveId &&
-          saved.some(
-            (entry) =>
-              entry.id === saveId &&
-              JSON.stringify(entry.document.authored) ===
-                JSON.stringify(doc.authored),
-          )
-            ? "Saved on this device"
-            : "Unsaved changes"
-        }
+        saveState={draftState}
         error={error}
         notice={notice}
-        onSetup={() => setSetupOpen(true)}
         onZoom={setWorkspaceZoom}
         expanded={expanded}
         onExpanded={(value) => {
@@ -411,14 +353,7 @@ export default function Builder() {
                 type="button"
                 onClick={async () => {
                   if (!(await preserveCurrentDraft())) return;
-                  setDoc(null);
-                  setValid(null);
-                  setPendingDraft({
-                    document: doc,
-                    valid,
-                    saveId: saveId ?? undefined,
-                  });
-                  setSelected("");
+                  open(createFreshDocument());
                 }}
               >
                 New experiment

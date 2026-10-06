@@ -1,8 +1,8 @@
 {
   "generatedBy": "src/web/scripts/builder/audit-public-catalog.cjs",
-  "originalSourceFiles": 255,
-  "sourceFiles": 261,
-  "exportRecords": 600,
+  "originalSourceFiles": 261,
+  "sourceFiles": 268,
+  "exportRecords": 613,
   "records": [
     {
       "source": "src/web/src/simulations/components/controls/SchemaForm.tsx",
@@ -93749,6 +93749,947 @@
       "identity": [],
       "verification": "TypeScript, component acceptance and browser regressions",
       "completion": "Covered by audit 012 work-done milestones"
+    },
+      {
+        "source": "src/web/src/simulations/components/views/ResponsiveThreeCanvas.tsx",
+        "export": "ResponsiveThreeCanvas",
+        "activeConsumers": [
+          {
+            "source": "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "ResponsiveThreeCanvas"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "ResponsiveThreeCanvas"
+            ]
+          }
+        ],
+        "responsibility": "display/layout/composite",
+        "finalOwner": {
+          "kind": "private implementation owned by static consumers",
+          "packages": [],
+          "consumers": [
+            "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "src/web/src/simulations/components/views/ScopedWorldView.tsx"
+          ],
+          "destination": "src/web/src/simulations/components/views/AuthoredTownView.tsx, src/web/src/simulations/components/views/ScopedWorldView.tsx"
+        },
+        "classification": "public implementation/private helper",
+        "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+        "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+        "commands": [],
+        "outputs": [],
+        "space": [],
+        "coupling": {
+          "singletonImports": [],
+          "singletonReads": false,
+          "builderImports": false
+        },
+        "dependencies": [
+          {
+            "source": "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "ResponsiveThreeCanvas"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "ResponsiveThreeCanvas"
+            ]
+          }
+        ],
+        "identity": [],
+        "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+        "destination": "public display/layout/composite owner; preserve serialized aliases",
+        "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+        "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+      },
+      {
+        "source": "src/web/src/simulations/components/views/SceneToolbar.tsx",
+        "export": "SceneIconName",
+        "activeConsumers": [
+          {
+            "source": "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/CartesianView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/DisplayView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneIconButton"
+            ]
+          }
+        ],
+        "responsibility": "display/layout/composite",
+        "finalOwner": {
+          "kind": "private implementation owned by static consumers",
+          "packages": [],
+          "consumers": [
+            "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "src/web/src/simulations/components/views/CartesianView.tsx",
+            "src/web/src/simulations/components/views/DisplayView.tsx",
+            "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+          ],
+          "destination": "src/web/src/simulations/components/views/AuthoredTownView.tsx, src/web/src/simulations/components/views/CartesianView.tsx, src/web/src/simulations/components/views/DisplayView.tsx, src/web/src/simulations/components/views/ScopedWorldView.tsx, src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+        },
+        "classification": "public implementation/private helper",
+        "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+        "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+        "commands": [],
+        "outputs": [],
+        "space": [],
+        "coupling": {
+          "singletonImports": [],
+          "singletonReads": false,
+          "builderImports": false
+        },
+        "dependencies": [
+          {
+            "source": "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/CartesianView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/DisplayView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneIconButton"
+            ]
+          }
+        ],
+        "identity": [],
+        "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+        "destination": "public display/layout/composite owner; preserve serialized aliases",
+        "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+        "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+      },
+      {
+        "source": "src/web/src/simulations/components/views/SceneToolbar.tsx",
+        "export": "SceneAction",
+        "activeConsumers": [
+          {
+            "source": "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/CartesianView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/DisplayView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneIconButton"
+            ]
+          }
+        ],
+        "responsibility": "display/layout/composite",
+        "finalOwner": {
+          "kind": "private implementation owned by static consumers",
+          "packages": [],
+          "consumers": [
+            "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "src/web/src/simulations/components/views/CartesianView.tsx",
+            "src/web/src/simulations/components/views/DisplayView.tsx",
+            "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+          ],
+          "destination": "src/web/src/simulations/components/views/AuthoredTownView.tsx, src/web/src/simulations/components/views/CartesianView.tsx, src/web/src/simulations/components/views/DisplayView.tsx, src/web/src/simulations/components/views/ScopedWorldView.tsx, src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+        },
+        "classification": "public implementation/private helper",
+        "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+        "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+        "commands": [],
+        "outputs": [],
+        "space": [],
+        "coupling": {
+          "singletonImports": [],
+          "singletonReads": false,
+          "builderImports": false
+        },
+        "dependencies": [
+          {
+            "source": "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/CartesianView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/DisplayView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneIconButton"
+            ]
+          }
+        ],
+        "identity": [],
+        "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+        "destination": "public display/layout/composite owner; preserve serialized aliases",
+        "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+        "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+      },
+      {
+        "source": "src/web/src/simulations/components/views/SceneToolbar.tsx",
+        "export": "SceneIcon",
+        "activeConsumers": [
+          {
+            "source": "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/CartesianView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/DisplayView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneIconButton"
+            ]
+          }
+        ],
+        "responsibility": "display/layout/composite",
+        "finalOwner": {
+          "kind": "private implementation owned by static consumers",
+          "packages": [],
+          "consumers": [
+            "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "src/web/src/simulations/components/views/CartesianView.tsx",
+            "src/web/src/simulations/components/views/DisplayView.tsx",
+            "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+          ],
+          "destination": "src/web/src/simulations/components/views/AuthoredTownView.tsx, src/web/src/simulations/components/views/CartesianView.tsx, src/web/src/simulations/components/views/DisplayView.tsx, src/web/src/simulations/components/views/ScopedWorldView.tsx, src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+        },
+        "classification": "public implementation/private helper",
+        "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+        "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+        "commands": [],
+        "outputs": [],
+        "space": [],
+        "coupling": {
+          "singletonImports": [],
+          "singletonReads": false,
+          "builderImports": false
+        },
+        "dependencies": [
+          {
+            "source": "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/CartesianView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/DisplayView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneIconButton"
+            ]
+          }
+        ],
+        "identity": [],
+        "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+        "destination": "public display/layout/composite owner; preserve serialized aliases",
+        "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+        "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+      },
+      {
+        "source": "src/web/src/simulations/components/views/SceneToolbar.tsx",
+        "export": "SceneIconButton",
+        "activeConsumers": [
+          {
+            "source": "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/CartesianView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/DisplayView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneIconButton"
+            ]
+          }
+        ],
+        "responsibility": "display/layout/composite",
+        "finalOwner": {
+          "kind": "private implementation owned by static consumers",
+          "packages": [],
+          "consumers": [
+            "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "src/web/src/simulations/components/views/CartesianView.tsx",
+            "src/web/src/simulations/components/views/DisplayView.tsx",
+            "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+          ],
+          "destination": "src/web/src/simulations/components/views/AuthoredTownView.tsx, src/web/src/simulations/components/views/CartesianView.tsx, src/web/src/simulations/components/views/DisplayView.tsx, src/web/src/simulations/components/views/ScopedWorldView.tsx, src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+        },
+        "classification": "public implementation/private helper",
+        "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+        "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+        "commands": [],
+        "outputs": [],
+        "space": [],
+        "coupling": {
+          "singletonImports": [],
+          "singletonReads": false,
+          "builderImports": false
+        },
+        "dependencies": [
+          {
+            "source": "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/CartesianView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/DisplayView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneIconButton"
+            ]
+          }
+        ],
+        "identity": [],
+        "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+        "destination": "public display/layout/composite owner; preserve serialized aliases",
+        "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+        "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+      },
+      {
+        "source": "src/web/src/simulations/components/views/SceneToolbar.tsx",
+        "export": "SceneToolbar",
+        "activeConsumers": [
+          {
+            "source": "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/CartesianView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/DisplayView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneIconButton"
+            ]
+          }
+        ],
+        "responsibility": "display/layout/composite",
+        "finalOwner": {
+          "kind": "private implementation owned by static consumers",
+          "packages": [],
+          "consumers": [
+            "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "src/web/src/simulations/components/views/CartesianView.tsx",
+            "src/web/src/simulations/components/views/DisplayView.tsx",
+            "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+          ],
+          "destination": "src/web/src/simulations/components/views/AuthoredTownView.tsx, src/web/src/simulations/components/views/CartesianView.tsx, src/web/src/simulations/components/views/DisplayView.tsx, src/web/src/simulations/components/views/ScopedWorldView.tsx, src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+        },
+        "classification": "public implementation/private helper",
+        "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+        "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+        "commands": [],
+        "outputs": [],
+        "space": [],
+        "coupling": {
+          "singletonImports": [],
+          "singletonReads": false,
+          "builderImports": false
+        },
+        "dependencies": [
+          {
+            "source": "src/web/src/simulations/components/views/AuthoredTownView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/CartesianView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/DisplayView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneToolbar"
+            ]
+          },
+          {
+            "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "SceneIconButton"
+            ]
+          }
+        ],
+        "identity": [],
+        "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+        "destination": "public display/layout/composite owner; preserve serialized aliases",
+        "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+        "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+      },
+      {
+        "source": "src/web/src/simulations/components/views/scene-ui.css",
+        "export": "(file)",
+        "activeConsumers": [
+          {
+            "source": "src/web/src/simulations/components/views/SceneToolbar.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "*"
+            ]
+          }
+        ],
+        "responsibility": "display/layout/composite",
+        "finalOwner": {
+          "kind": "private implementation owned by static consumers",
+          "packages": [],
+          "consumers": [
+            "src/web/src/simulations/components/views/SceneToolbar.tsx"
+          ],
+          "destination": "src/web/src/simulations/components/views/SceneToolbar.tsx"
+        },
+        "classification": "private presentation stylesheet",
+        "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+        "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+        "commands": [],
+        "outputs": [],
+        "space": [],
+        "coupling": {
+          "singletonImports": [],
+          "singletonReads": false,
+          "builderImports": false
+        },
+        "dependencies": [
+          {
+            "source": "src/web/src/simulations/components/views/SceneToolbar.tsx",
+            "typeOnly": false,
+            "symbols": [
+              "*"
+            ]
+          }
+        ],
+        "identity": [],
+        "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+        "destination": "public display/layout/composite owner; preserve serialized aliases",
+        "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+        "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+      },
+    {
+      "source": "src/web/src/simulations/components/views/board/DrawingEditor.tsx",
+      "export": "DrawingCommit",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "DrawingEditor"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "DrawingEditor"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/board/DrawingEditor.tsx",
+      "export": "drawingFont",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "DrawingEditor"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "DrawingEditor"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/board/DrawingEditor.tsx",
+      "export": "DrawingEditor",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "DrawingEditor"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/board/SpatialBoard.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/board/SpatialBoard.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "DrawingEditor"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/board/DrawingIcon.tsx",
+      "export": "DrawingIcon",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/board/DrawingEditor.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "DrawingIcon"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/board/DrawingInspector.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "DrawingIcon"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/board/DrawingEditor.tsx",
+          "src/web/src/simulations/components/views/board/DrawingInspector.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/board/DrawingEditor.tsx, src/web/src/simulations/components/views/board/DrawingInspector.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/board/DrawingEditor.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "DrawingIcon"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/board/DrawingInspector.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "DrawingIcon"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/board/DrawingInspector.tsx",
+      "export": "DrawingInspector",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/board/DrawingEditor.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "DrawingInspector"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/board/DrawingEditor.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/board/DrawingEditor.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/board/DrawingEditor.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "DrawingInspector"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/board/drawings.css",
+      "export": "(file)",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/board/DrawingEditor.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/board/DrawingEditor.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/board/DrawingEditor.tsx"
+      },
+      "classification": "private presentation stylesheet",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/board/DrawingEditor.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     }
   ]
 }

@@ -50,7 +50,9 @@
     ".next-parity/types/**/*.ts",
     ".next-parity/dev/types/**/*.ts",
     ".next-parity-build/types/**/*.ts",
-    ".next-parity-build/dev/types/**/*.ts"
+    ".next-parity-build/dev/types/**/*.ts",
+    ".next-drawing-tools/types/**/*.ts",
+    ".next-drawing-tools/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

@@ -21,6 +21,12 @@ export type CompositionCanvasProps = {
   onSelect: (id: string) => void;
   onChange: (o: SceneObject) => void;
   onCommit: (o: SceneObject) => void;
+  onCanvasCommit?: (
+    viewport: Pick<
+      CompositionScene["canvas"],
+      "xMin" | "xMax" | "yMin" | "yMax"
+    >,
+  ) => void;
   onPiece: (id: string, index: number) => ActionResult;
 };
 /** React/Three view providers are loaded only by presentation, never by schema lookup. */

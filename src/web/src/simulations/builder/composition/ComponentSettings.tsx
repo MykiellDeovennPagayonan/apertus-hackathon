@@ -3,6 +3,7 @@ import { SchemaForm } from "../../components/controls/SchemaForm";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import { emptyLayout, type Layout } from "../../runtime/authoring/types";
 import { DataDisplaySettings } from "./DataDisplaySettings";
+import { DecorationSettings } from "./DecorationSettings";
 import { ManualCanvasSettings } from "./ManualComponentSettings";
 import type { ComponentCatalog } from "./useComponentCatalog";
 export function ComponentSettings({
@@ -33,9 +34,11 @@ export function ComponentSettings({
               }
             />
           </label>
-          {/^canvases\/(cartesian|physical|diagram|town)$/.test(
-            current.definition,
-          ) ? (
+          {["displays/Text", "displays/Box"].includes(current.definition) ? (
+            <DecorationSettings node={current} catalog={catalog} />
+          ) : /^canvases\/(cartesian|physical|diagram|town)$/.test(
+              current.definition,
+            ) ? (
             <ManualCanvasSettings catalog={catalog} node={current} />
           ) : [
               "displays/DataTable",

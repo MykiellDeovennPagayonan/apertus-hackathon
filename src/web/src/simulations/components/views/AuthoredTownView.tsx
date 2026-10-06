@@ -13,6 +13,8 @@ import { AuthoredBuildingVisual3D } from "../visuals/BuildingVisual3D";
 import { CitizenBodyVisual } from "../visuals/CitizenVisual3D";
 import { GroundVisual3D } from "../visuals/GroundVisual3D";
 import { AuthoredRoadVisual3D } from "../visuals/RoadVisual3D";
+import { ResponsiveThreeCanvas } from "./ResponsiveThreeCanvas";
+import { canvasAppearance, SceneToolbar } from "./SceneToolbar";
 
 const floor = new Plane(new Vector3(0, 1, 0), 0);
 type Props = {
@@ -90,14 +92,24 @@ export default function AuthoredTownView({
     (e.target as Element).releasePointerCapture?.(e.pointerId);
   };
   return (
-    <section className="composition-town" aria-label="3D town scene">
-      <button
-        type="button"
-        className="composition-camera-reset"
-        onClick={() => setCameraKey((k) => k + 1)}
-      >
-        Reset camera
-      </button>
+    <section
+      className="composition-town scene-frame"
+      style={canvasAppearance(scene.canvas)}
+      aria-label="3D town scene"
+    >
+      {scene.canvas.showNavigation === true && (
+        <SceneToolbar
+          label="Scene camera"
+          overlay
+          actions={[
+            {
+              icon: "reset",
+              label: "Reset camera",
+              onClick: () => setCameraKey((k) => k + 1),
+            },
+          ]}
+        />
+      )}
       <Canvas
         key={cameraKey}
         shadows
@@ -105,7 +117,10 @@ export default function AuthoredTownView({
         camera={{ position: [size * 0.7, size * 0.8, size * 0.9], fov: 45 }}
         onPointerMissed={() => onSelect("")}
       >
-        <color attach="background" args={["#dbe6ea"]} />
+        <ResponsiveThreeCanvas />
+        {scene.canvas.backgroundColor && (
+          <color attach="background" args={[scene.canvas.backgroundColor]} />
+        )}
         <ambientLight intensity={1.2} />
         <directionalLight
           position={[15, 30, 20]}
@@ -236,9 +251,18 @@ export default function AuthoredTownView({
         )}
       </Canvas>
       {!ground && (
-        <p className="composition-scene-hint">
+        <p className="composition-scene-hint scene-guidance">
           Empty space. Add ground, then buildings and people.
         </p>
+      )}
+      {scene.canvas.showAbout === true && (
+        <details className="composition-interaction-help scene-guidance scene-help">
+          <summary>About this scene</summary>
+          <p>
+            Drag scene objects while editing. Camera movement changes only the
+            view of the scene.
+          </p>
+        </details>
       )}
     </section>
   );

@@ -151,9 +151,68 @@ export const genericDefinitions: PublicDefinition[] = [
     "displays/Text",
     "Text",
     "displays",
-    object({ text, variant: choice("heading", "body", "callout") }),
-    { text: "Text", variant: "body" },
+    object(
+      {
+        text,
+        variant: choice("heading", "body", "callout"),
+        border: boolean,
+        borderColor: text,
+        borderWidth: num(0, 20),
+        borderRadius: num(0, 200),
+        backgroundColor: text,
+        opacity: num(0, 1),
+      },
+      [
+        "border",
+        "borderColor",
+        "borderWidth",
+        "borderRadius",
+        "backgroundColor",
+        "opacity",
+      ],
+    ),
+    {
+      text: "Text",
+      variant: "body",
+      border: false,
+      borderColor: "#d5cdbb",
+      borderWidth: 1,
+      borderRadius: 0,
+      backgroundColor: "transparent",
+      opacity: 1,
+    },
   ),
+  {
+    ...base(
+      "displays/Box",
+      "Box",
+      "displays",
+      object({
+        border: boolean,
+        borderColor: text,
+        borderWidth: num(0, 20),
+        borderRadius: num(0, 200),
+        backgroundColor: text,
+        opacity: num(0, 1),
+      }),
+      {
+        border: false,
+        borderColor: "#d5cdbb",
+        borderWidth: 1,
+        borderRadius: 12,
+        backgroundColor: "#edf2e8",
+        opacity: 1,
+      },
+    ),
+    description:
+      "A decorative box. Resize, style, and layer it behind or in front of lesson content.",
+    discovery: {
+      kind: "component",
+      group: "layout",
+      summary: "A decorative box for backgrounds and visual grouping.",
+      placement: "Adds to the lesson page",
+    },
+  },
   ...[
     "Stack",
     "Row",
@@ -207,15 +266,24 @@ export const genericDefinitions: PublicDefinition[] = [
         } as Record<string, string>
       )[kind],
       "canvases",
-      object({
-        xMin: num(-10000, 10000),
-        xMax: num(-10000, 10000),
-        yMin: num(-10000, 10000),
-        yMax: num(-10000, 10000),
-        grid: boolean,
-        snap: num(0, 100),
-      }),
-      { xMin: -5, xMax: 5, yMin: -5, yMax: 5, grid: true, snap: 0.5 },
+      object(
+        {
+          xMin: num(-10000, 10000),
+          xMax: num(-10000, 10000),
+          yMin: num(-10000, 10000),
+          yMax: num(-10000, 10000),
+          grid: boolean,
+          snap: num(0, 100),
+          backgroundColor: text,
+          borderColor: text,
+          showNavigation: boolean,
+          showAbout: boolean,
+        },
+        ["backgroundColor", "borderColor", "showNavigation", "showAbout"],
+      ),
+      kind === "physical" || kind === "diagram"
+        ? { xMin: 0, xMax: 100, yMin: 0, yMax: 70, grid: false, snap: 0.5 }
+        : { xMin: -5, xMax: 5, yMin: -5, yMax: 5, grid: true, snap: 0.5 },
     ),
     inputs: {
       objects: {

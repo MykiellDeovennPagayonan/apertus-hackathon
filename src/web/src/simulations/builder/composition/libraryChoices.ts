@@ -11,6 +11,7 @@ export function libraryChoices(category: string, query: string) {
     discoverySections.findIndex((s) => s.id === definitionDiscovery(d).group);
   return [...publicDefinitions.values()]
     .filter((d) => {
+      if (["displays/Text", "displays/Box"].includes(d.id)) return false;
       const metadata = definitionDiscovery(d);
       const text =
         `${d.title} ${metadata.summary} ${d.tags.join(" ")}`.toLowerCase();

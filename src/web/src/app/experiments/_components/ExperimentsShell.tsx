@@ -67,6 +67,16 @@ export default function ExperimentsShell({
     null,
   );
   const controlsButton = useRef<HTMLButtonElement>(null);
+  const [hasAdditionalControls, setHasAdditionalControls] = useState(false);
+  useEffect(() => {
+    if (!controlsTarget) return;
+    const measure = () =>
+      setHasAdditionalControls(controlsTarget.childElementCount > 0);
+    const observer = new MutationObserver(measure);
+    observer.observe(controlsTarget, { childList: true });
+    measure();
+    return () => observer.disconnect();
+  }, [controlsTarget]);
   const [draft, setDraft] = useState("");
   const [lastRequest, setLastRequest] = useState<{
     prompt: string;
@@ -176,7 +186,7 @@ export default function ExperimentsShell({
     if (result.demo) {
       setDemo(result.demo);
       setPhase("ready");
-      if (plan.operation === "create") setControlsOpen(result.demo === "town");
+      if (plan.operation === "create") setControlsOpen(false);
     }
     setStatus(
       prompt
@@ -388,10 +398,7 @@ export default function ExperimentsShell({
   };
   return (
     <ControlsTarget.Provider value={controlsTarget}>
-      <div
-        ref={workspace}
-        className={`experiment-workspace${demo === "town" ? " experiment-workspace--3d" : ""}`}
-      >
+      <div ref={workspace} className="experiment-workspace">
         <div className="workspace-header">
           <header className="workspace-identity">
             <button type="button" onClick={goHome}>
@@ -411,16 +418,18 @@ export default function ExperimentsShell({
             </h1>
           </header>
           <nav className="workspace-toolbar" aria-label="Experiment tools">
-            <button
-              ref={controlsButton}
-              type="button"
-              aria-expanded={controlsOpen}
-              aria-controls="experiment-controls"
-              onClick={() => setControlsOpen(!controlsOpen)}
-            >
-              More settings{" "}
-              <span aria-hidden="true">{controlsOpen ? "−" : "+"}</span>
-            </button>
+            {hasAdditionalControls && (
+              <button
+                ref={controlsButton}
+                type="button"
+                aria-expanded={controlsOpen}
+                aria-controls="experiment-controls"
+                onClick={() => setControlsOpen(!controlsOpen)}
+              >
+                More settings{" "}
+                <span aria-hidden="true">{controlsOpen ? "−" : "+"}</span>
+              </button>
+            )}
             <button type="button" onClick={downloadRecipe}>
               Save recipe
             </button>

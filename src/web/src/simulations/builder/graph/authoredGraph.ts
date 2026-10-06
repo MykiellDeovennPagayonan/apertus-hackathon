@@ -69,7 +69,7 @@ export function authoredGraph(
   });
   const owner = (id: string) => collapsed.find((g) => g.members.includes(id));
   const blocks: GraphNode[] = [...d.nodes, ...d.resources]
-    .filter((n) => !owner(n.id))
+    .filter((n) => !owner(n.id) && n.definition !== "displays/Box")
     .map((n) => {
       const def = publicDefinition(n.definition);
       return {

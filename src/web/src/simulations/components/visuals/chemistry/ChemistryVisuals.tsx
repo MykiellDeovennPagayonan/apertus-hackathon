@@ -68,7 +68,7 @@ export function BeakerVisual({ instance }: { instance: ModelInstance }) {
           {chemistryNumber(concentration)} g/L
         </text>
       </svg>
-      <figcaption>
+      <figcaption className="scene-guidance">
         Adding water spreads the same salt through more solution. The beaker
         scale adapts to fit.
       </figcaption>
@@ -117,7 +117,7 @@ export function MoleculeVisual({ instance }: { instance: ModelInstance }) {
           </div>
         ))}
       </section>
-      <figcaption>
+      <figcaption className="scene-guidance">
         Each cluster is one molecule. Change how many clusters there are,
         keeping the atoms inside fixed.
       </figcaption>

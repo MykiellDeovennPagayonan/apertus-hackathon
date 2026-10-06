@@ -1,0 +1,116 @@
+.scene-toolbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  width: max-content;
+  max-width: 100%;
+  padding: 4px;
+  border: 1px solid color-mix(in srgb, var(--border, #d5cdbb) 82%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--panel, #fffbef) 94%, transparent);
+  box-shadow: 0 5px 18px #30362e12;
+}
+.scene-toolbar--overlay {
+  position: absolute;
+  z-index: 5;
+  top: 10px;
+  right: 10px;
+  backdrop-filter: blur(8px);
+}
+.scene-icon-button:disabled {
+  cursor: default;
+  opacity: 0.42;
+}
+.scene-icon-button svg {
+  pointer-events: none;
+}
+.scene-guidance {
+  margin: 10px 0 0;
+  padding: 11px 13px;
+  border: 1px solid color-mix(in srgb, var(--border, #d5cdbb) 78%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bg, #eee9dc) 48%, var(--panel, #fffbef));
+  color: var(--text-dim, var(--muted, #626c60));
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.scene-frame {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+}
+
+/* Keep form padding and plot sizing out of navigation controls. */
+.scene-icon-button.scene-icon-button,
+.manual-builder .scene-icon-button.scene-icon-button,
+.spatial-board .scene-icon-button.scene-icon-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text, #30362e);
+}
+.scene-icon-button.scene-icon-button svg,
+.board-item-tools button > svg,
+.spatial-board .board-resize > svg {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  max-height: 22px;
+  flex-shrink: 0;
+}
+.scene-icon-button.scene-icon-button:hover:not(:disabled) {
+  color: var(--accent, #285e56);
+  background: #285e5614;
+}
+.scene-icon-button.scene-icon-button[aria-pressed="true"] {
+  color: #fff;
+  background: var(--accent, #285e56);
+}
+.scene-icon-button:focus-visible {
+  outline: 3px solid var(--accent, #285e56);
+  outline-offset: 2px;
+}
+.scene-toolbar-grip.scene-toolbar-grip {
+  cursor: grab;
+  touch-action: none;
+  border-right: 1px solid var(--border);
+  border-radius: 6px 0 0 6px;
+}
+.scene-toolbar-grip:active {
+  cursor: grabbing;
+}
+.scene-help summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+.scene-help p {
+  margin: 8px 0 0;
+}
+@media (pointer: coarse), (max-width: 700px) {
+  .scene-icon-button.scene-icon-button,
+  .manual-builder .scene-icon-button.scene-icon-button,
+  .spatial-board .scene-icon-button.scene-icon-button {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    flex-basis: 44px;
+  }
+}
+.scene-toolbar {
+  flex-wrap: wrap;
+}

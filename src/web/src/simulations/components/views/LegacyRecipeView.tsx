@@ -68,12 +68,14 @@ export function LegacyRecipeView({ demo }: { demo: DemoType }) {
               initial as import("../traits/MathBoards").MathBoard,
             )
           : (structuredClone(initial) as Record<string, unknown>);
-    return insertRecipe(
+    const document = insertRecipe(
       emptyAuthoredDocument(),
       recipe,
       builtInRecipe,
       (key) => (key === "model" ? id : `${id}/${key}`),
     );
+    document.lesson = structuredClone(recipe.document.lesson);
+    return document;
   }, [demo, id, initial]);
   const runtime = useMemo(
     () =>
@@ -185,6 +187,7 @@ export function LegacyRecipeView({ demo }: { demo: DemoType }) {
   ]);
   return (
     <RecipeLesson
+      workspace
       document={document}
       runtime={runtime}
       animationEnabled={animationEnabled}

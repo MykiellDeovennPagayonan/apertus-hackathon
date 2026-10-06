@@ -1,3 +1,4 @@
+import { migrateBoardDrawings } from "../../runtime/authoring/migrateDrawings";
 import { migrateManualDocument } from "../document/canonical";
 import { composeLegacy } from "../document/migrations/composeLegacy";
 import { parseDocument } from "../document/serialization";
@@ -18,7 +19,10 @@ export type DraftRecovery = {
 export function editableDocument(document: ExperimentDocument) {
   if (document.authored) {
     validateDocument(document);
-    return structuredClone(document);
+    const next = structuredClone(document);
+    next.authored = migrateBoardDrawings(document.authored);
+    next.editor = structuredClone(next.authored.editor);
+    return next;
   }
   const next = composeLegacy(document);
   if (next.scene) upgradeWorkspace(next.scene);

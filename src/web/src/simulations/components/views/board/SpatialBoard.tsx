@@ -9,27 +9,39 @@ import {
 } from "react";
 import {
   type BoardPresentation,
+  boardItemMinimum,
   boardLayouts,
   type Camera,
+  canSeparateLayout,
   clamp,
   constrain,
   convertToBoard,
   extent,
   fit,
   type Rect,
+  reorderBoardItems,
+  resizeBoardRect,
+  screenToWorld,
   supportsOverlay,
   supportsScene,
   zoomAt,
 } from "../../../runtime/authoring/board";
+import { isDrawingItem } from "../../../runtime/authoring/drawings";
 import type {
   AuthoredDocument,
   Layout,
 } from "../../../runtime/authoring/types";
+import { SceneIcon, SceneIconButton } from "../SceneToolbar";
+import { DrawingEditor, type DrawingTool } from "./DrawingEditor";
 import "./board.css";
+const BOARD_CHROME =
+  ".drawing-toolbar, .drawing-inspector, .board-selection, .board-area-banner, .board-settings, .board-camera-tools, .board-workspace-tools";
+
 export function SpatialBoard({
   document,
   authoring,
   workspace,
+  autoLayout,
   onEdit,
   actions,
   onChange,
@@ -39,24 +51,97 @@ export function SpatialBoard({
   document: AuthoredDocument;
   authoring?: boolean;
   workspace?: boolean;
+  autoLayout?: boolean;
   onEdit?: (id: string) => void;
   actions?: ReactNode;
-  onChange?: (p: AuthoredDocument["presentation"]) => void;
+  onChange?: (
+    p: AuthoredDocument["presentation"],
+    group?: string,
+    action?: string,
+  ) => void;
   onAction?: (
-    action: "copy" | "paste" | "duplicate" | "delete",
+    action: "copy" | "paste" | "duplicate" | "delete" | "separate",
     layoutIds: string[],
+    itemIds?: string[],
   ) => void;
   render: (layout: Layout) => ReactNode;
 }) {
   const persisted =
     document.presentation?.mode === "board" ? document.presentation : null;
   const [conversion, setConversion] = useState<BoardPresentation | null>(null);
-  const p = persisted ?? conversion;
+  const sourcePresentation = persisted ?? conversion;
   const viewport = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 900, height: 600 });
+  const [naturalHeights, setNaturalHeights] = useState<Record<string, number>>(
+    {},
+  );
+  // Flow recipes enter the same spatial host at a readable scale. Their content
+  // determines the initial cards; authored board rectangles remain authoritative.
+  const p =
+    autoLayout && sourcePresentation
+      ? (() => {
+          const next = structuredClone(sourcePresentation);
+          const compact = size.width < 900;
+          const sceneWidth = compact ? Math.max(240, size.width - 32) : 640;
+          const controlWidth = compact ? sceneWidth : 360;
+          let y = 0,
+            rowHeight = 0;
+          const candidates = boardLayouts(document);
+          const containsFamily = (layout: Layout, family: string): boolean =>
+            document.nodes.some(
+              (node) =>
+                node.id === layout.node &&
+                node.definition.startsWith(`${family}/`),
+            ) || layout.children.some((child) => containsFamily(child, family));
+          next.items.forEach((item, index) => {
+            const layout = candidates.find(
+              (layout) => layout.id === item.layoutId,
+            );
+            const controls =
+              !!layout &&
+              containsFamily(layout, "controls") &&
+              !containsFamily(layout, "canvases") &&
+              !containsFamily(layout, "appearance");
+            const details = layout?.kind === "disclosure";
+            const previous = next.items[index - 1];
+            if (compact || !controls || !previous) {
+              y += rowHeight + (index ? 24 : 0);
+              rowHeight = 0;
+            }
+            item.rect = {
+              x: !compact && controls ? sceneWidth + 24 : 0,
+              y,
+              width: controls ? controlWidth : sceneWidth,
+              height:
+                naturalHeights[item.id] ??
+                (details ? 90 : controls ? 540 : 520),
+            };
+            rowHeight = Math.max(rowHeight, item.rect.height);
+          });
+          const firstRow = next.items.filter((item) => item.rect.y === 0);
+          next.startView = extent(firstRow.map((item) => item.rect));
+          next.navigation.minZoom = 0.2;
+          return next;
+        })()
+      : sourcePresentation;
   const [camera, setCamera] = useState<Camera | null>(null);
+  useEffect(() => {
+    if (autoLayout && size.width > 0) setCamera(null);
+  }, [autoLayout, size.width]);
+  const [marquee, setMarquee] = useState<Rect | null>(null);
+  const marqueeGesture = useRef<{
+    pointer: number;
+    x: number;
+    y: number;
+    camera: Camera;
+    bounds: DOMRect;
+    initial: string[];
+    additive: boolean;
+  } | null>(null);
+  const [rightPanning, setRightPanning] = useState(false);
   const [selection, setSelection] = useState<string[]>([]);
   const [preview, setPreview] = useState<Record<string, Rect>>({});
+  const [drawingTool, setDrawingTool] = useState<DrawingTool>("select");
   const [pan, setPan] = useState(false),
     [snap, setSnap] = useState(true);
   const [editArea, setEditArea] = useState(false);
@@ -99,14 +184,22 @@ export function SpatialBoard({
     y: number;
     camera: Camera;
     mode: "pan" | "move" | "resize" | "area-move" | "area-resize";
+    button: number;
     rects: Record<string, Rect>;
   } | null>(null);
   useEffect(() => {
     const cancelDrag = (event: KeyboardEvent) => {
-      if (event.key !== "Escape" || !gesture.current) return;
+      if (
+        event.key !== "Escape" ||
+        (!gesture.current && !marqueeGesture.current)
+      )
+        return;
       event.preventDefault();
       event.stopPropagation();
-      if (gesture.current.mode === "pan") setCamera(gesture.current.camera);
+      if (gesture.current?.mode === "pan") setCamera(gesture.current.camera);
+      marqueeGesture.current = null;
+      setMarquee(null);
+      setRightPanning(false);
       gesture.current = null;
       pinch.current = null;
       pointers.current.clear();
@@ -120,7 +213,7 @@ export function SpatialBoard({
     if (!p || !authoring) return;
     const added = p.items.find((i) => !lastItems.current.includes(i.id));
     lastItems.current = p.items.map((i) => i.id);
-    if (added)
+    if (added && !isDrawingItem(added))
       setCamera({
         centerX: added.rect.x + added.rect.width / 2,
         centerY: added.rect.y + added.rect.height / 2,
@@ -128,6 +221,81 @@ export function SpatialBoard({
       });
   }, [p, authoring]);
   const hasBoard = !!p;
+  useEffect(() => {
+    if (!autoLayout || !sourcePresentation || !viewport.current) return;
+    const observer = new ResizeObserver((entries) => {
+      setNaturalHeights((current) => {
+        const next = { ...current };
+        let changed = false;
+        for (const entry of entries) {
+          const element = entry.target as HTMLElement;
+          const host = element.closest<HTMLElement>(".board-item");
+          const id = host?.dataset.boardId;
+          if (!id) continue;
+          const content = element.parentElement;
+          const height = Math.ceil(
+            element.offsetHeight +
+              (content
+                ? parseFloat(getComputedStyle(content).paddingTop) +
+                  parseFloat(getComputedStyle(content).paddingBottom)
+                : 0) +
+              2,
+          );
+          if (Math.abs((next[id] ?? 0) - height) > 1) {
+            next[id] = height;
+            changed = true;
+          }
+        }
+        return changed ? next : current;
+      });
+    });
+    viewport.current
+      .querySelectorAll(".board-content > .recipe-layout")
+      .forEach((element) => {
+        if (!element.closest('[data-board-leaf="true"]'))
+          observer.observe(element);
+      });
+    return () => observer.disconnect();
+  }, [autoLayout, sourcePresentation]);
+  useEffect(() => {
+    if (!hasBoard || !viewport.current) return;
+    if (!document.nodes.some((node) => node.definition === "displays/Text"))
+      return;
+    const observer = new ResizeObserver((entries) => {
+      setNaturalHeights((current) => {
+        const next = { ...current };
+        let changed = false;
+        for (const entry of entries) {
+          const text = entry.target as HTMLElement;
+          const host = text.closest<HTMLElement>(".board-item");
+          const card = text.closest<HTMLElement>(".recipe-text-card");
+          const id = host?.dataset.boardId;
+          if (!id || !card) continue;
+          const style = getComputedStyle(card);
+          const height = Math.ceil(
+            text.offsetHeight +
+              parseFloat(style.paddingTop) +
+              parseFloat(style.paddingBottom) +
+              parseFloat(style.borderTopWidth) +
+              parseFloat(style.borderBottomWidth),
+          );
+          if (next[id] !== height) {
+            next[id] = height;
+            changed = true;
+          }
+        }
+        return changed ? next : current;
+      });
+    });
+    viewport.current
+      .querySelectorAll(
+        '[data-board-component="displays/Text"] .recipe-text-content',
+      )
+      .forEach((element) => {
+        observer.observe(element);
+      });
+    return () => observer.disconnect();
+  }, [hasBoard, document.nodes]);
   useEffect(() => {
     if (!hasBoard || !viewport.current) return;
     const observer = new ResizeObserver(([entry]) =>
@@ -183,7 +351,21 @@ export function SpatialBoard({
     );
   const area =
     preview.__area ?? p.learnerArea ?? extent(p.items.map((i) => i.rect));
-  const initial = fit(p.startView, size.width, size.height);
+  const initial = fit(
+    p.startView,
+    Math.max(1, size.width - 48),
+    Math.max(1, size.height - 96),
+  );
+  if (
+    autoLayout ||
+    (workspace && !authoring && p.navigation.mode !== "fixed")
+  ) {
+    initial.zoom = Math.min(1, Math.max(0.75, initial.zoom));
+    initial.centerX =
+      p.startView.x +
+      Math.min(p.startView.width, size.width / initial.zoom) / 2;
+    initial.centerY = p.startView.y + size.height / (2 * initial.zoom);
+  }
   if (authoring) initial.zoom = Math.min(1, initial.zoom);
   const base = camera ?? initial;
   const fixed = !authoring && p.navigation.mode === "fixed";
@@ -205,8 +387,28 @@ export function SpatialBoard({
         size.height,
       );
   const layouts = boardLayouts(document);
+  const allLayouts = new Map<string, Layout>();
+  const collectLayouts = (layout: Layout) => {
+    allLayouts.set(layout.id, layout);
+    layout.children.forEach(collectLayouts);
+  };
+  collectLayouts(document.layout);
+  const separatedLabels = (p.separatedLayouts ?? []).flatMap((id) => {
+    const layout = allLayouts.get(id);
+    if (!layout?.label) return [];
+    const contains = (parent: Layout, id: string): boolean =>
+      parent.children.some((child) => child.id === id || contains(child, id));
+    const rects = p.items
+      .filter((item) => contains(layout, item.layoutId ?? ""))
+      .map((item) => preview[item.id] ?? item.rect);
+    return rects.length
+      ? [{ id, label: layout.label, rect: extent(rects) }]
+      : [];
+  });
   const title = (id: string) => {
     const i = p.items.find((i) => i.id === id);
+    if (i && isDrawingItem(i))
+      return i.kind === "box" ? "Box" : i.text.slice(0, 40) || "Text";
     const l = layouts.find((l) => l.id === i?.layoutId);
     return (
       l?.label ||
@@ -229,6 +431,9 @@ export function SpatialBoard({
   };
   const selected = p.items.filter((i) => selection.includes(i.id));
   const cancel = () => {
+    marqueeGesture.current = null;
+    setMarquee(null);
+    setRightPanning(false);
     gesture.current = null;
     pinch.current = null;
     pointers.current.clear();
@@ -239,7 +444,12 @@ export function SpatialBoard({
     mode: "pan" | "move" | "resize" | "area-move" | "area-resize",
     id?: string,
   ) => {
-    if (event.button !== 0 || (mode === "pan" && fixed)) return;
+    if (
+      (event.button !== 0 && !(mode === "pan" && event.button === 2)) ||
+      (mode === "pan" && fixed)
+    )
+      return;
+    if (event.button === 2) setRightPanning(true);
     event.preventDefault();
     event.stopPropagation();
     if (mode === "pan") {
@@ -262,7 +472,7 @@ export function SpatialBoard({
       }
     }
     let ids = selection;
-    if (id && id !== "__area") {
+    if (id && id !== "__area" && mode !== "resize") {
       const group = p.groups.find((g) => g.members.includes(id));
       ids = event.shiftKey
         ? [...new Set([...selection, ...(group?.members ?? [id])])]
@@ -270,6 +480,10 @@ export function SpatialBoard({
           ? selection
           : (group?.members ?? [id]);
       setSelection(ids);
+    }
+    if (mode === "resize" && id) {
+      ids = [id];
+      setSelection([id]);
     }
     const rects =
       id === "__area"
@@ -285,11 +499,76 @@ export function SpatialBoard({
       y: event.clientY,
       camera: c,
       mode,
+      button: event.button,
       rects,
     };
     event.currentTarget.setPointerCapture(event.pointerId);
   };
+  const beginMarquee = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    event.stopPropagation();
+    event.currentTarget.focus({ preventScroll: true });
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - bounds.left,
+      y = event.clientY - bounds.top;
+    marqueeGesture.current = {
+      pointer: event.pointerId,
+      x,
+      y,
+      bounds,
+      camera: c,
+      initial: selection,
+      additive: event.shiftKey,
+    };
+    setMarquee({ x, y, width: 0, height: 0 });
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+  const marqueeRect = (
+    event: PointerEvent,
+    g: NonNullable<typeof marqueeGesture.current>,
+  ): Rect => {
+    const x = event.clientX - g.bounds.left,
+      y = event.clientY - g.bounds.top;
+    return {
+      x: Math.min(x, g.x),
+      y: Math.min(y, g.y),
+      width: Math.abs(x - g.x),
+      height: Math.abs(y - g.y),
+    };
+  };
+  const completeMarquee = (event: PointerEvent) => {
+    const g = marqueeGesture.current;
+    if (!g || g.pointer !== event.pointerId) return false;
+    const rect = marqueeRect(event, g);
+    const origin = screenToWorld({ x: rect.x, y: rect.y }, g.camera, size);
+    const width = rect.width / g.camera.zoom,
+      height = rect.height / g.camera.zoom;
+    const hits =
+      Math.hypot(rect.width, rect.height) < 4
+        ? []
+        : p.items
+            .filter(
+              (item) =>
+                item.rect.x < origin.x + width &&
+                item.rect.x + item.rect.width > origin.x &&
+                item.rect.y < origin.y + height &&
+                item.rect.y + item.rect.height > origin.y,
+            )
+            .map((item) => item.id);
+    const ids = new Set(g.additive ? [...g.initial, ...hits] : hits);
+    for (const group of p.groups)
+      if (group.members.some((id) => ids.has(id)))
+        for (const id of group.members) ids.add(id);
+    setSelection([...ids]);
+    cancel();
+    return true;
+  };
   const move = (event: PointerEvent) => {
+    if (marqueeGesture.current?.pointer === event.pointerId) {
+      setMarquee(marqueeRect(event, marqueeGesture.current));
+      return;
+    }
     if (pinch.current && pointers.current.has(event.pointerId)) {
       pointers.current.set(event.pointerId, {
         x: event.clientX,
@@ -328,30 +607,38 @@ export function SpatialBoard({
       const round = (v: number) => (snap ? Math.round(v / 8) * 8 : v);
       setPreview(
         Object.fromEntries(
-          Object.entries(g.rects).map(([id, r]) => [
-            id,
-            g.mode === "move" || g.mode === "area-move"
-              ? {
+          Object.entries(g.rects).map(([id, r]) => {
+            if (g.mode === "move" || g.mode === "area-move")
+              return [
+                id,
+                {
                   ...r,
                   x: clamp(r.x + round(dx), -999000, 999000),
                   y: clamp(r.y + round(dy), -999000, 999000),
-                }
-              : {
-                  ...r,
-                  width: clamp(round(r.width + dx), 240, 10000),
-                  height: clamp(round(r.height + dy), 160, 10000),
                 },
-          ]),
+              ];
+            const item = p.items.find((candidate) => candidate.id === id);
+            const ratio = item?.aspectRatio;
+            const minimum = item
+              ? boardItemMinimum(document, item.layoutId)
+              : undefined;
+            return [
+              id,
+              resizeBoardRect(r, dx, dy, ratio, snap ? 8 : 0, minimum),
+            ];
+          }),
         ),
       );
     }
   };
   const finish = (event: PointerEvent) => {
+    if (completeMarquee(event)) return;
     const g = gesture.current;
     if (
       authoring &&
       !pan &&
       g?.mode === "pan" &&
+      g.button === 0 &&
       !pinch.current &&
       Math.hypot(event.clientX - g.x, event.clientY - g.y) < 4
     )
@@ -405,7 +692,7 @@ export function SpatialBoard({
     overlays.find((o) => o.contentItemIds.includes(id));
   return (
     <section
-      className={`spatial-board ${workspace && !conversion ? "is-workspace" : ""} ${immersive ? "is-scene" : ""} ${size.width < 700 ? "is-compact" : ""}`}
+      className={`spatial-board ${workspace && !conversion ? "is-workspace" : ""} ${autoLayout ? "is-auto-layout" : ""} ${immersive ? "is-scene" : ""} ${size.width < 700 ? "is-compact" : ""}`}
       aria-label="Experiment board"
       onKeyDown={(event) => {
         if (event.key !== "Escape" || gesture.current) return;
@@ -508,36 +795,37 @@ export function SpatialBoard({
               role="toolbar"
               aria-label="Board navigation"
             >
-              <button
-                type="button"
+              <SceneIconButton
+                icon="pan"
+                label="Pan"
                 disabled={fixed}
-                aria-pressed={pan}
-                onClick={() => setPan(!pan)}
-              >
-                Pan
-              </button>
-              <button
-                type="button"
+                pressed={pan}
+                onClick={() => {
+                  setDrawingTool(pan ? "select" : "hand");
+                  setPan(!pan);
+                }}
+              />
+              <SceneIconButton
+                icon="zoom-out"
+                label="Zoom out"
                 disabled={fixed}
-                aria-label="Zoom out"
                 onClick={() => zoom(1 / 1.2)}
-              >
-                −
-              </button>
+              />
               <output aria-label="Board zoom">
                 {Math.round(c.zoom * 100)}%
               </output>
-              <button
-                type="button"
+              <SceneIconButton
+                icon="zoom-in"
+                label="Zoom in"
                 disabled={fixed}
-                aria-label="Zoom in"
                 onClick={() => zoom(1.2)}
-              >
-                +
-              </button>
-              <button type="button" disabled={fixed} onClick={fitContent}>
-                Fit content
-              </button>
+              />
+              <SceneIconButton
+                icon="fit"
+                label="Fit content"
+                disabled={fixed}
+                onClick={fitContent}
+              />
               <details className="board-navigation-help">
                 <summary aria-label="Board navigation help">?</summary>
                 <div>
@@ -545,14 +833,19 @@ export function SpatialBoard({
                     Starting view
                   </button>
                   <p>
-                    Drag empty space to pan. Use Alt + wheel or pinch to zoom.
-                    Interact with content directly.
+                    {authoring
+                      ? "In Select mode, drag empty space to select multiple items. Hold right-click or Space and drag to pan."
+                      : "Drag empty space to pan."}{" "}
+                    Use Alt + wheel or pinch to zoom. Interact with content
+                    directly.
                   </p>
-                  <p>
-                    Drag a component heading to move it. Shift + click headings
-                    to select several. Use arrow keys on a heading to position
-                    it.
-                  </p>
+                  {authoring && (
+                    <p>
+                      Drag a component heading to move it. Shift + click
+                      headings to select several. Use arrow keys on a heading to
+                      position it.
+                    </p>
+                  )}
                   {actions}
                 </div>
               </details>
@@ -943,7 +1236,7 @@ export function SpatialBoard({
         aria-label="Board workspace"
         // biome-ignore lint/a11y/noNoninteractiveTabindex: The board has keyboard pan and cancellation commands.
         tabIndex={0}
-        className={`board-viewport ${pan ? "is-panning" : ""} ${immersive && overlays.some((o) => !(collapsed[o.id] ?? o.collapsedByDefault)) ? "has-overlays" : ""}`}
+        className={`board-viewport ${pan || rightPanning ? "is-panning" : ""} ${rightPanning ? "is-right-panning" : ""} ${immersive && overlays.some((o) => !(collapsed[o.id] ?? o.collapsedByDefault)) ? "has-overlays" : ""}`}
         style={{
           backgroundSize: `${24 * c.zoom}px ${24 * c.zoom}px`,
           backgroundPosition: `${size.width / 2 - c.centerX * c.zoom}px ${size.height / 2 - c.centerY * c.zoom}px`,
@@ -959,10 +1252,34 @@ export function SpatialBoard({
                 details.open = false;
               });
           }
+          const target = e.target as HTMLElement;
+          if (target.closest(BOARD_CHROME)) return;
+          if (
+            authoring &&
+            !immersive &&
+            drawingTool === "select" &&
+            e.button === 2
+          ) {
+            begin(e, "pan");
+            return;
+          }
           if (pan && !immersive) begin(e, "pan");
         }}
         onPointerDown={(e) => {
-          if (e.target === e.currentTarget && !immersive) begin(e, "pan");
+          if (e.target === e.currentTarget && !immersive) {
+            if (authoring && drawingTool === "select" && !pan && !editArea)
+              beginMarquee(e);
+            else begin(e, "pan");
+          }
+        }}
+        onContextMenu={(e) => {
+          if (
+            authoring &&
+            !immersive &&
+            drawingTool === "select" &&
+            !(e.target as HTMLElement).closest(BOARD_CHROME)
+          )
+            e.preventDefault();
         }}
         onPointerMove={move}
         onPointerUp={finish}
@@ -1058,6 +1375,18 @@ export function SpatialBoard({
               transform: `translate(${size.width / 2 - c.centerX * c.zoom}px, ${size.height / 2 - c.centerY * c.zoom}px) scale(${c.zoom})`,
             }}
           >
+            {separatedLabels.map((group) => (
+              <span
+                key={group.id}
+                className="board-group-label"
+                style={{
+                  left: group.rect.x + 24,
+                  top: group.rect.y - (authoring ? 36 : 0),
+                }}
+              >
+                {group.label}
+              </span>
+            ))}
             {authoring && p.learnerArea && (editArea || !workspace) && (
               <div
                 className="board-area"
@@ -1084,7 +1413,7 @@ export function SpatialBoard({
                       aria-label="Resize learner area"
                       onPointerDown={(e) => begin(e, "area-resize", "__area")}
                     >
-                      ↘
+                      <SceneIcon name="resize" />
                     </button>
                   </>
                 )}
@@ -1095,7 +1424,20 @@ export function SpatialBoard({
         {p.items.map((i, index) => {
           const layout = layouts.find((l) => l.id === i.layoutId);
           if (!layout) return null;
-          const r = preview[i.id] ?? i.rect,
+          const definition = document.nodes.find(
+            (node) => node.id === layout.node,
+          )?.definition;
+          const baseRect = preview[i.id] ?? i.rect;
+          const r =
+              definition === "displays/Text"
+                ? {
+                    ...baseRect,
+                    height: Math.max(
+                      baseRect.height,
+                      naturalHeights[i.id] ?? 0,
+                    ),
+                  }
+                : baseRect,
             overlay = overlayFor(i.id),
             promoted = immersive === i.id;
           const hidden =
@@ -1159,8 +1501,39 @@ export function SpatialBoard({
           return (
             <section
               key={i.id}
-              onFocus={() => {
+              onFocus={(event) => {
                 if (immersive || fixed) return;
+                if (!authoring) {
+                  const viewportBounds =
+                    viewport.current?.getBoundingClientRect();
+                  if (!viewportBounds) return;
+                  const target = event.target as HTMLElement;
+                  const bounds = target.getBoundingClientRect();
+                  const margin = 24;
+                  const dx =
+                    bounds.width > viewportBounds.width - margin * 2 ||
+                    bounds.left < viewportBounds.left + margin
+                      ? bounds.left - viewportBounds.left - margin
+                      : Math.max(
+                          0,
+                          bounds.right - viewportBounds.right + margin,
+                        );
+                  const dy =
+                    bounds.height > viewportBounds.height - margin * 2 ||
+                    bounds.top < viewportBounds.top + margin
+                      ? bounds.top - viewportBounds.top - margin
+                      : Math.max(
+                          0,
+                          bounds.bottom - viewportBounds.bottom + margin,
+                        );
+                  if (dx || dy)
+                    setCamera({
+                      ...c,
+                      centerX: c.centerX + dx / c.zoom,
+                      centerY: c.centerY + dy / c.zoom,
+                    });
+                  return;
+                }
                 const left = size.width / 2 + (r.x - c.centerX) * c.zoom,
                   top = size.height / 2 + (r.y - c.centerY) * c.zoom;
                 if (
@@ -1177,7 +1550,18 @@ export function SpatialBoard({
                   setCamera({ ...framed, zoom: Math.min(c.zoom, framed.zoom) });
                 }
               }}
+              data-board-id={i.id}
+              data-board-scene={
+                !!layout.node &&
+                document.nodes.some(
+                  (n) =>
+                    n.id === layout.node &&
+                    n.definition.startsWith("canvases/"),
+                )
+              }
               data-board-leaf={!layout.children.length}
+              data-board-component={definition}
+              data-board-authoring={!!authoring}
               data-board-index={index}
               tabIndex={-1}
               aria-label={title(i.id)}
@@ -1229,7 +1613,7 @@ export function SpatialBoard({
                       }
                     }}
                   >
-                    ⠿ {title(i.id)}
+                    <SceneIcon name="move" /> <span>{title(i.id)}</span>
                     {i.locked ? " · Locked" : ""}
                   </button>
                   {layout.node && onEdit && (
@@ -1241,23 +1625,35 @@ export function SpatialBoard({
                         if (layout.node) onEdit(layout.node);
                       }}
                     >
-                      ✎
+                      <SceneIcon name="edit" />
                     </button>
+                  )}
+                  {supportsScene(document, i.layoutId) && (
+                    <SceneIconButton
+                      icon="expand"
+                      label="Expand scene"
+                      className="board-item-expand-header"
+                      onClick={(event) => {
+                        returnFocus.current = event.currentTarget;
+                        setImmersive(i.id);
+                      }}
+                    />
                   )}
                 </div>
               )}
-              {!immersive && supportsScene(document, i.layoutId) && (
-                <button
-                  type="button"
-                  className="board-expand"
-                  onClick={(e) => {
-                    returnFocus.current = e.currentTarget;
-                    setImmersive(i.id);
-                  }}
-                >
-                  Expand scene
-                </button>
-              )}
+              {!authoring &&
+                !immersive &&
+                supportsScene(document, i.layoutId) && (
+                  <SceneIconButton
+                    icon="expand"
+                    label="Expand scene"
+                    className="board-expand"
+                    onClick={(e) => {
+                      returnFocus.current = e.currentTarget;
+                      setImmersive(i.id);
+                    }}
+                  />
+                )}
               <div className="board-content">
                 <ContentBoundary>{render(layout)}</ContentBoundary>
               </div>
@@ -1274,169 +1670,260 @@ export function SpatialBoard({
                     }
                   }}
                 >
-                  ↘
+                  <SceneIcon name="resize" />
                 </button>
               )}
             </section>
           );
         })}
+        {marquee && (
+          <div
+            className="board-marquee"
+            aria-hidden="true"
+            style={{
+              left: marquee.x,
+              top: marquee.y,
+              width: marquee.width,
+              height: marquee.height,
+            }}
+          />
+        )}
+        <DrawingEditor
+          presentation={p}
+          camera={c}
+          size={size}
+          viewport={viewport}
+          authoring={authoring}
+          immersive={!!immersive}
+          learnerArea={area}
+          selection={selection}
+          onSelect={setSelection}
+          onCommit={(next, group, action) => {
+            if (conversion) setConversion(next);
+            else onChange?.(next, group, action);
+          }}
+          tool={drawingTool}
+          onToolChange={setDrawingTool}
+          onPanTool={setPan}
+          onAction={(action, ids) => {
+            const items = p.items.filter((item) => ids.includes(item.id));
+            onAction?.(
+              action,
+              items.flatMap((item) => (item.layoutId ? [item.layoutId] : [])),
+              ids,
+            );
+          }}
+        />
       </div>
-      {authoring && selected.length > 0 && !immersive && (
-        <div className="board-selection">
-          <strong>{selected.length} selected</strong>
-          <button type="button" onClick={() => setSelection([])}>
-            <span aria-hidden="true">×</span>
-            <span className="board-sr">Clear selection</span>
-          </button>
-          {onAction &&
-            (["copy", "duplicate", "delete"] as const).map((action) => (
-              <button
-                type="button"
-                key={action}
-                onClick={() =>
-                  onAction(
-                    action,
-                    selected.map((i) => i.layoutId),
-                  )
-                }
-              >
-                {action === "copy"
-                  ? "Copy"
-                  : action === "duplicate"
-                    ? "Duplicate"
-                    : "Delete"}
-              </button>
-            ))}
-          <details className="board-selection-actions" data-compact="true">
-            <summary aria-label="Selection actions">More</summary>
-            <div>
-              <button
-                type="button"
-                onClick={() =>
-                  update((n) => {
-                    n.items
-                      .filter((i) => selection.includes(i.id))
-                      .forEach((i) => {
-                        i.locked = !selected.every((i) => i.locked);
-                      });
-                  })
-                }
-              >
-                {selected.every((i) => i.locked) ? "Unlock" : "Lock"} placement
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  update((n) => {
-                    const top = Math.max(...n.items.map((i) => i.zIndex));
-                    n.items
-                      .filter((i) => selection.includes(i.id))
-                      .forEach((i, j) => {
-                        i.zIndex = top + j + 1;
-                      });
-                  })
-                }
-              >
-                Bring to front
-              </button>
-              {selected.length > 1 && (
-                <>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      update((n) => {
-                        const x = Math.min(...selected.map((i) => i.rect.x));
-                        n.items
-                          .filter((i) => selection.includes(i.id) && !i.locked)
-                          .forEach((i) => {
-                            i.rect.x = x;
-                          });
-                      })
-                    }
-                  >
-                    Align left
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      update((n) => {
-                        const items = n.items
-                          .filter((i) => selection.includes(i.id) && !i.locked)
-                          .sort((a, b) => a.rect.x - b.rect.x);
-                        if (items.length < 3) return;
-                        const first = items[0].rect.x,
-                          last = items[items.length - 1].rect.x;
-                        items.forEach((item, index) => {
-                          item.rect.x =
-                            first +
-                            ((last - first) * index) / (items.length - 1);
-                        });
-                      })
-                    }
-                  >
-                    Distribute horizontally
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      update((n) => {
-                        n.groups = n.groups.filter(
-                          (g) =>
-                            !g.members.some((id) => selection.includes(id)),
-                        );
-                        n.groups.push({
-                          id: `board-group/${crypto.randomUUID()}`,
-                          label: "Content group",
-                          members: selection,
-                        });
-                      })
-                    }
-                  >
-                    Group
-                  </button>
-                </>
-              )}
-              <button
-                type="button"
-                disabled={
-                  !p.groups.some((g) =>
-                    g.members.some((id) => selection.includes(id)),
-                  )
-                }
-                onClick={() =>
-                  update((n) => {
-                    n.groups = n.groups.filter(
-                      (g) => !g.members.some((id) => selection.includes(id)),
+      {authoring &&
+        selected.length > 0 &&
+        !immersive &&
+        !(selected.length === 1 && isDrawingItem(selected[0])) && (
+          <div className="board-selection">
+            <strong>{selected.length} selected</strong>
+            <button type="button" onClick={() => setSelection([])}>
+              <span aria-hidden="true">×</span>
+              <span className="board-sr">Clear selection</span>
+            </button>
+            {onAction &&
+              (["copy", "duplicate", "delete"] as const).map((action) => (
+                <button
+                  type="button"
+                  key={action}
+                  onClick={() =>
+                    onAction(
+                      action,
+                      selected.flatMap((i) => (i.layoutId ? [i.layoutId] : [])),
+                      selected.map((i) => i.id),
+                    )
+                  }
+                >
+                  {action === "copy"
+                    ? "Copy"
+                    : action === "duplicate"
+                      ? "Duplicate"
+                      : "Delete"}
+                </button>
+              ))}
+            <details className="board-selection-actions" data-compact="true">
+              <summary aria-label="Selection actions">More</summary>
+              <div>
+                {onAction &&
+                  selected.some((i) => {
+                    const layout = layouts.find((l) => l.id === i.layoutId);
+                    return (
+                      !i.locked && layout && canSeparateLayout(document, layout)
                     );
-                  })
-                }
-              >
-                Ungroup
-              </button>
-            </div>
-          </details>
-          <details className="board-placement-menu">
-            <summary aria-label="Position and size">Placement</summary>
-            {selected.map((i) => (
-              <Geometry
-                key={i.id}
-                label={title(i.id)}
-                rect={i.rect}
-                disabled={i.locked}
-                onApply={(r) =>
-                  update((n) => {
-                    const item = n.items.find((item) => item.id === i.id);
-                    if (item) item.rect = r;
-                  })
-                }
-              />
-            ))}
-          </details>
-        </div>
-      )}
+                  }) && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onAction(
+                          "separate",
+                          selected
+                            .filter((i) => {
+                              const layout = layouts.find(
+                                (l) => l.id === i.layoutId,
+                              );
+                              return (
+                                !i.locked &&
+                                layout &&
+                                canSeparateLayout(document, layout)
+                              );
+                            })
+                            .flatMap((i) => (i.layoutId ? [i.layoutId] : [])),
+                        );
+                        setSelection([]);
+                      }}
+                    >
+                      Arrange contents separately
+                    </button>
+                  )}
+                <button
+                  type="button"
+                  onClick={() =>
+                    update((n) => {
+                      n.items
+                        .filter((i) => selection.includes(i.id))
+                        .forEach((i) => {
+                          i.locked = !selected.every((i) => i.locked);
+                        });
+                    })
+                  }
+                >
+                  {selected.every((i) => i.locked) ? "Unlock" : "Lock"}{" "}
+                  placement
+                </button>
+                {(
+                  [
+                    ["front", "Bring to front"],
+                    ["back", "Send to back"],
+                    ["forward", "Bring forward"],
+                    ["backward", "Send backward"],
+                  ] as const
+                ).map(([action, label]) => (
+                  <button
+                    key={action}
+                    type="button"
+                    onClick={() =>
+                      update((n) => reorderBoardItems(n, selection, action))
+                    }
+                  >
+                    {label}
+                  </button>
+                ))}
+                {selected.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        update((n) => {
+                          const x = Math.min(...selected.map((i) => i.rect.x));
+                          n.items
+                            .filter(
+                              (i) => selection.includes(i.id) && !i.locked,
+                            )
+                            .forEach((i) => {
+                              i.rect.x = x;
+                            });
+                        })
+                      }
+                    >
+                      Align left
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        update((n) => {
+                          const items = n.items
+                            .filter(
+                              (i) => selection.includes(i.id) && !i.locked,
+                            )
+                            .sort((a, b) => a.rect.x - b.rect.x);
+                          if (items.length < 3) return;
+                          const first = items[0].rect.x,
+                            last = items[items.length - 1].rect.x;
+                          items.forEach((item, index) => {
+                            item.rect.x =
+                              first +
+                              ((last - first) * index) / (items.length - 1);
+                          });
+                        })
+                      }
+                    >
+                      Distribute horizontally
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        update((n) => {
+                          n.groups = n.groups.filter(
+                            (g) =>
+                              !g.members.some((id) => selection.includes(id)),
+                          );
+                          n.groups.push({
+                            id: `board-group/${crypto.randomUUID()}`,
+                            label: "Content group",
+                            members: selection,
+                          });
+                        })
+                      }
+                    >
+                      Group
+                    </button>
+                  </>
+                )}
+                <button
+                  type="button"
+                  disabled={
+                    !p.groups.some((g) =>
+                      g.members.some((id) => selection.includes(id)),
+                    )
+                  }
+                  onClick={() =>
+                    update((n) => {
+                      n.groups = n.groups.filter(
+                        (g) => !g.members.some((id) => selection.includes(id)),
+                      );
+                    })
+                  }
+                >
+                  Ungroup
+                </button>
+              </div>
+            </details>
+            <details className="board-placement-menu">
+              <summary aria-label="Position and size">Placement</summary>
+              {selected.map((i) => (
+                <Geometry
+                  key={i.id}
+                  label={title(i.id)}
+                  rect={i.rect}
+                  aspectRatio={i.aspectRatio}
+                  allowAspectRatio
+                  minimum={boardItemMinimum(document, i.layoutId)}
+                  disabled={i.locked}
+                  onApply={(r, aspectRatio) =>
+                    update((n) => {
+                      const item = n.items.find((item) => item.id === i.id);
+                      if (item) {
+                        item.rect = r;
+                        if (aspectRatio) item.aspectRatio = aspectRatio;
+                        else delete item.aspectRatio;
+                      }
+                    })
+                  }
+                />
+              ))}
+            </details>
+          </div>
+        )}
       {!immersive && (
         <p className="board-help">
-          Drag empty space to pan · Alt + wheel to zoom · Use content directly
+          {authoring
+            ? "Drag empty space to select · Shift adds to selection · Hold right-click to pan"
+            : "Drag empty space to pan"}{" "}
+          · Alt + wheel to zoom · Use content directly
           {authoring
             ? " · Shift + move handle to select several · Arrow keys on a move handle to position"
             : ""}
@@ -1450,26 +1937,45 @@ function Geometry({
   maxSize = 10000,
   label,
   rect,
+  aspectRatio,
+  allowAspectRatio = false,
+  minimum = { width: 160, height: 160 },
   onApply,
   disabled,
 }: {
   maxSize?: number;
   label: string;
   rect: Rect;
-  onApply: (r: Rect) => void;
+  aspectRatio?: number;
+  allowAspectRatio?: boolean;
+  minimum?: { width: number; height: number };
+  onApply: (r: Rect, aspectRatio?: number) => void;
   disabled?: boolean;
 }) {
+  const [draft, setDraft] = useState(rect);
+  const [ratio, setRatio] = useState(
+    aspectRatio ? String(aspectRatio) : "free",
+  );
+  useEffect(() => {
+    setDraft(rect);
+    setRatio(aspectRatio ? String(aspectRatio) : "free");
+  }, [rect, aspectRatio]);
+  const parsedRatio = ratio === "free" ? undefined : Number(ratio);
+  const setDimension = (key: "width" | "height", value: number) =>
+    setDraft((current) => {
+      const next = { ...current, [key]: value };
+      if (parsedRatio)
+        if (key === "width") next.height = Math.round(value / parsedRatio);
+        else next.width = Math.round(value * parsedRatio);
+      return next;
+    });
   return (
     <form
       key={JSON.stringify(rect)}
       className="board-geometry"
       onSubmit={(e) => {
         e.preventDefault();
-        const data = new FormData(e.currentTarget);
-        const r = Object.fromEntries(
-          ["x", "y", "width", "height"].map((k) => [k, Number(data.get(k))]),
-        ) as Rect;
-        onApply(r);
+        onApply(draft, parsedRatio);
       }}
     >
       <strong>{label}</strong>
@@ -1480,13 +1986,61 @@ function Geometry({
             required
             type="number"
             name={k}
-            defaultValue={rect[k]}
-            min={k === "width" || k === "height" ? 160 : -999000}
+            value={draft[k]}
+            min={
+              k === "width"
+                ? minimum.width
+                : k === "height"
+                  ? minimum.height
+                  : -999000
+            }
             max={k === "width" || k === "height" ? maxSize : 999000}
             disabled={disabled}
+            onChange={(event) => {
+              const value = Number(event.target.value);
+              if (k === "width" || k === "height") setDimension(k, value);
+              else setDraft((current) => ({ ...current, [k]: value }));
+            }}
           />
         </label>
       ))}
+      {allowAspectRatio && (
+        <label>
+          Aspect ratio
+          <select
+            aria-label="Aspect ratio"
+            value={ratio}
+            disabled={disabled}
+            onChange={(event) => {
+              const value = event.target.value;
+              setRatio(value);
+              if (value !== "free") {
+                const nextRatio = Number(value);
+                setDraft((current) => ({
+                  ...current,
+                  height: Math.max(
+                    minimum.height,
+                    Math.round(current.width / nextRatio),
+                  ),
+                }));
+              }
+            }}
+          >
+            <option value="free">Free</option>
+            {aspectRatio &&
+              ![1, 4 / 3, 3 / 2, 16 / 9, 3 / 4].includes(aspectRatio) && (
+                <option value={aspectRatio}>
+                  Current ({aspectRatio.toFixed(2)}:1)
+                </option>
+              )}
+            <option value="1">Square (1:1)</option>
+            <option value={4 / 3}>Standard (4:3)</option>
+            <option value={3 / 2}>Wide (3:2)</option>
+            <option value={16 / 9}>Cinema (16:9)</option>
+            <option value={3 / 4}>Portrait (3:4)</option>
+          </select>
+        </label>
+      )}
       <button type="submit" disabled={disabled}>
         Apply placement
       </button>

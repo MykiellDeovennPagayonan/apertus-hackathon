@@ -70,6 +70,7 @@ export function InstanceRecipeLesson({
   }, [instance, dispatch, learningGoal]);
   return (
     <RecipeLesson
+      workspace
       document={document}
       runtime={runtime}
       animationEnabled={animationEnabled}

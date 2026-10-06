@@ -115,6 +115,31 @@
 .board-content > .recipe-layout {
   min-height: 100%;
 }
+.board-item[data-board-leaf="true"] .board-content,
+.board-item[data-board-leaf="true"] .recipe-author-item,
+.board-item[data-board-leaf="true"] .recipe-layout,
+.board-item[data-board-leaf="true"] .composition-display-scene,
+.board-item[data-board-leaf="true"] .composition-plane {
+  height: 100%;
+}
+.board-item[data-board-leaf="true"] .recipe-author-item {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+.board-item[data-board-leaf="true"] .composition-town {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+}
+.board-item[data-board-leaf="true"] .composition-display,
+.board-item[data-board-leaf="true"] .composition-cartesian {
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+  aspect-ratio: auto;
+}
 .board-item-tools {
   display: flex;
   border-bottom: 1px solid var(--border);
@@ -133,6 +158,18 @@
   text-align: center;
   cursor: pointer;
 }
+.board-item-tools .board-item-expand-header {
+  position: static;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+  flex-shrink: 0;
+  padding: 0;
+  border-left: 1px solid var(--border);
+  border-radius: 0 12px 0 0;
+  cursor: pointer;
+}
 .spatial-board .board-resize {
   position: absolute;
   right: 0;
@@ -140,10 +177,30 @@
   cursor: nwse-resize;
   touch-action: none;
   z-index: 2;
+  width: 34px;
+  height: 34px;
+  min-height: 34px;
+  padding: 0;
+  border-radius: 10px 0 10px 0;
+  background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+  color: var(--accent);
+}
+.spatial-board .board-resize:hover {
+  background: var(--accent);
+  color: #fff;
 }
 .board-expand {
-  align-self: flex-end;
-  margin: 4px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 4;
+  width: 38px;
+  min-width: 38px;
+  height: 38px;
+  min-height: 38px;
+  padding: 0;
+  border-radius: 9px;
+  box-shadow: 0 4px 14px #30362e18;
 }
 .board-selection {
   padding: 8px;
@@ -200,6 +257,9 @@
 }
 .board-geometry input {
   width: 90px;
+}
+.board-geometry select {
+  width: 150px;
 }
 .board-settings input,
 .board-settings select,
@@ -344,6 +404,11 @@
 }
 .board-item.is-immersive .board-content > .recipe-layout,
 .board-item.is-immersive .composition-town {
+  height: 100%;
+  min-height: 0;
+}
+.board-item[data-board-scene="true"] .recipe-component-item {
+  flex: 1;
   height: 100%;
   min-height: 0;
 }
@@ -649,16 +714,8 @@
   background: transparent;
 }
 .is-workspace .board-resize {
-  min-height: 24px;
-  width: 24px;
-  padding: 2px;
-  border-radius: 6px 0 10px 0;
-  opacity: 0;
-}
-.is-workspace .board-item:hover .board-resize,
-.is-workspace .board-item:focus-within .board-resize,
-.is-workspace .board-item.is-selected .board-resize {
-  opacity: 1;
+  min-height: 30px;
+  width: 30px;
 }
 @media (max-width: 1100px) {
   .is-workspace .board-selection {
@@ -690,4 +747,225 @@
     min-height: 44px;
     width: 44px;
   }
+}
+
+/* A scene's rectangle is its drawing area. Authoring tools float outside it. */
+.spatial-board .board-item[data-board-scene="true"] {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+.spatial-board .board-item[data-board-scene="true"] > .board-content {
+  padding: 0;
+  overflow: visible;
+  height: 100%;
+}
+.spatial-board .board-item-tools {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  z-index: 6;
+  border: 0;
+  background: transparent;
+}
+.spatial-board .board-item-tools button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  min-height: 36px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  font-size: 13px;
+}
+.board-item-tools button > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.spatial-board .board-item-tools .board-item-edit {
+  padding: 0;
+  justify-content: center;
+}
+.board-item[data-board-leaf="true"] > .board-content > .recipe-layout,
+.board-item[data-board-leaf="true"] .recipe-author-item {
+  height: 100%;
+  min-height: 0;
+}
+.board-item[data-board-scene="true"] .composition-display-scene,
+.board-item[data-board-scene="true"] .composition-plane {
+  position: relative;
+  height: 100%;
+  min-height: 0;
+  gap: 0;
+}
+.spatial-board .board-item[data-board-scene="true"] .composition-display,
+.spatial-board .board-item[data-board-scene="true"] .composition-cartesian {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  min-height: 0;
+  max-height: none;
+}
+.board-item[data-board-scene="true"] .scene-toolbar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+  max-width: calc(100% - 24px);
+}
+.board-item[data-board-scene="true"] .scene-guidance {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 4;
+  margin: 0;
+  max-width: calc(100% - 24px);
+  padding: 8px 12px;
+  font-size: 13px;
+}
+.board-item[data-board-scene="true"] .scene-help[open] {
+  max-height: calc(100% - 84px);
+  overflow: auto;
+}
+.spatial-board .board-resize {
+  display: grid;
+  place-items: center;
+  right: -7px;
+  bottom: -7px;
+  width: 30px;
+  height: 30px;
+  min-height: 30px;
+  padding: 6px;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
+  border-radius: 9px;
+  background: var(--panel);
+  box-shadow: 0 3px 10px rgb(48 54 46 / 18%);
+  color: var(--accent);
+  z-index: 7;
+  opacity: 1;
+  transition:
+    background 120ms ease,
+    color 120ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+.spatial-board .board-resize:hover,
+.spatial-board .board-resize:focus-visible {
+  background: var(--accent);
+  color: white;
+  transform: scale(1.08);
+  box-shadow: 0 5px 14px rgb(48 54 46 / 24%);
+}
+.spatial-board .board-resize > svg {
+  width: 16px;
+  height: 16px;
+}
+/* Decorative content has one authored surface; editor outlines remain separate. */
+.spatial-board
+.board-item:is(
+  [data-board-component="displays/Text"],
+  [data-board-component="displays/Box"]
+) {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.spatial-board
+  .board-item:is(
+    [data-board-component="displays/Text"],
+    [data-board-component="displays/Box"]
+  )
+  > .board-content {
+  padding: 0;
+  overflow: visible;
+}
+.spatial-board
+  .board-item[data-board-component="displays/Text"]
+  .recipe-text-card {
+  padding: 8px;
+  overflow: visible;
+}
+.board-item[data-board-component="displays/Box"][data-board-authoring="false"] {
+  pointer-events: none;
+}
+.board-content > .recipe-panel {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.board-item[data-board-scene="true"] .recipe-camera-controls {
+  z-index: 5;
+}
+.is-workspace .board-toolbar .scene-icon-button.scene-icon-button {
+  padding: 0;
+}
+@media (max-width: 700px) {
+  .spatial-board .board-item-tools button {
+    min-height: 44px;
+  }
+}
+/* Unpositioned recipes receive natural-height cards in the spatial host. */
+.is-auto-layout .board-content > .recipe-layout {
+  min-height: 0;
+}
+.is-auto-layout .composition-display-scene {
+  position: relative;
+  height: 380px;
+  flex: none;
+}
+.is-auto-layout .composition-display-scene > .composition-display {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+}
+.is-auto-layout .composition-display-scene > .scene-toolbar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+}
+.is-auto-layout .composition-display-scene > .scene-guidance {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 4;
+  margin: 0;
+  padding: 8px 12px;
+  max-width: calc(100% - 24px);
+}
+.is-auto-layout .board-content .projectile-scene,
+.is-auto-layout .board-content .math-scene-svg {
+  max-height: 380px;
+}
+.is-auto-layout .board-content .composition-town {
+  height: 420px;
+  min-height: 0;
+  max-height: none;
+}
+.board-group-label {
+  position: absolute;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.board-marquee {
+  position: absolute;
+  z-index: 10005;
+  border: 1px solid #5964ce;
+  background: #5964ce18;
+  pointer-events: none;
+}
+.board-viewport.is-right-panning,
+.board-viewport.is-right-panning * {
+  cursor: grabbing;
 }

@@ -11,6 +11,8 @@ import { CitizenVisual3D } from "../visuals/CitizenVisual3D";
 import { MarketVisual3D } from "../visuals/MarketVisual3D";
 import { RoadVisual3D } from "../visuals/RoadVisual3D";
 import { TownSceneryVisual3D } from "../visuals/TownSceneryVisual3D";
+import { ResponsiveThreeCanvas } from "./ResponsiveThreeCanvas";
+import { SceneToolbar } from "./SceneToolbar";
 export default function ScopedWorldView({
   state: s,
   appearances,
@@ -36,49 +38,44 @@ export default function ScopedWorldView({
       (n) => n.definition === "appearance/TownScenery",
     );
   return (
-    <section className="composition-town" aria-label="Town world">
+    <section className="composition-town scene-frame" aria-label="Town world">
       <fieldset className="recipe-camera-controls" aria-label="Town camera">
-        <button
-          className="recipe-action recipe-action--secondary"
-          type="button"
-          onClick={() => setRotation((value) => value - 15)}
-        >
-          Rotate left
-        </button>
-        <button
-          className="recipe-action recipe-action--secondary"
-          type="button"
-          onClick={() => setRotation((value) => value + 15)}
-        >
-          Rotate right
-        </button>
-        <button
-          className="recipe-action recipe-action--secondary"
-          type="button"
-          disabled={zoom <= 0.5}
-          onClick={() => setZoom((value) => Math.max(0.5, value - 0.1))}
-        >
-          Zoom in
-        </button>
-        <button
-          className="recipe-action recipe-action--secondary"
-          type="button"
-          disabled={zoom >= 1.5}
-          onClick={() => setZoom((value) => Math.min(1.5, value + 0.1))}
-        >
-          Zoom out
-        </button>
-        <button
-          className="recipe-action recipe-action--quiet"
-          type="button"
-          onClick={() => {
-            setRotation(0);
-            setZoom(cameraPreset === "close" ? 0.65 : 1);
-            setCamera((value) => value + 1);
-          }}
-        >
-          Reset camera
-        </button>
+        <SceneToolbar
+          label="Town camera"
+          actions={[
+            {
+              icon: "rotate-left",
+              label: "Rotate left",
+              onClick: () => setRotation((value) => value - 15),
+            },
+            {
+              icon: "rotate-right",
+              label: "Rotate right",
+              onClick: () => setRotation((value) => value + 15),
+            },
+            {
+              icon: "zoom-in",
+              label: "Zoom in",
+              disabled: zoom <= 0.5,
+              onClick: () => setZoom((value) => Math.max(0.5, value - 0.1)),
+            },
+            {
+              icon: "zoom-out",
+              label: "Zoom out",
+              disabled: zoom >= 1.5,
+              onClick: () => setZoom((value) => Math.min(1.5, value + 0.1)),
+            },
+            {
+              icon: "reset",
+              label: "Reset camera",
+              onClick: () => {
+                setRotation(0);
+                setZoom(cameraPreset === "close" ? 0.65 : 1);
+                setCamera((value) => value + 1);
+              },
+            },
+          ]}
+        />
         <label className="catalog-toggle">
           <span>Explore camera with gestures</span>
           <input
@@ -88,7 +85,7 @@ export default function ScopedWorldView({
           />
         </label>
       </fieldset>
-      <p className="recipe-camera-help">
+      <p className="recipe-camera-help scene-guidance">
         {gestures
           ? "Drag inside the town to orbit; scroll or pinch to zoom. Turn gestures off to navigate the workspace."
           : "Use the camera buttons, or turn on camera gestures. Camera changes do not change the town."}
@@ -104,6 +101,7 @@ export default function ScopedWorldView({
           fov: TownExperiment.viewSettings.fov,
         }}
       >
+        <ResponsiveThreeCanvas />
         <color
           attach="background"
           args={[

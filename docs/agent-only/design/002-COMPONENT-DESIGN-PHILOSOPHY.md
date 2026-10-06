@@ -206,3 +206,15 @@ A redesign is ready for review when:
 - Browser captures and interaction checks cover representative real content.
 
 Assess the resulting experiment as well as the individual component. A beautiful control can still be misplaced, disconnected from its effect, or overwhelming when repeated. The goal is a coherent learning experience assembled from dependable, understandable parts.
+
+## 13. Spatial workspace implementation (2026-10-06)
+
+The builder and experiment now share the spatial board host. Authored scenes own their drawing rectangles; navigation tools and authoring headings float around them instead of consuming scene height. Scene resizing changes presentation only. Workspace zoom, scene camera navigation, and domain parameters remain separate operations.
+
+Plain panel, row, column, and grid groups offer **Arrange contents separately**. This preserves the original layout and model connections, records independent placement in the board presentation, and supports undo, reload, and copied references. Tabs, repeaters, conditional groups, and inherited theme or typography containers keep their existing semantics. Board groups can still move together, while resizing one selected scene affects only that scene.
+
+Flow recipes without saved board placement open in a spatial workspace with measured content heights and a readable first view. Narrow viewports stack content in the workspace; pan, zoom, and Find content provide navigation. The prompt has reserved space below the workspace. Saved board coordinates and learner boundaries remain authoritative. Scene toolbar positions are local view state and can be adjusted by dragging their move handle or using arrow keys; Escape restores their position.
+
+Verification covers independent scene sizing, icon dimensions, movable tools, separation, undo and redo, layout serialization and remapping, immersive scenes, responsive workspace bounds, and prompt clearance. Browser captures should continue to be reviewed alongside interaction checks.
+
+Builder **Try lesson** uses the workspace host for both saved boards and flow layouts, independently of the simulated mobile authoring preview. Scene component wrappers retain their drawing height in authoring and learner modes. Regression checks must enter through the builder button and compare actual canvas dimensions and rendered object geometry; checking only for a mounted SVG misses a canvas collapsed to zero height.
