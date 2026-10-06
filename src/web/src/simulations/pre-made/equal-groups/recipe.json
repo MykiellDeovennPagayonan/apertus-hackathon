@@ -1,0 +1,257 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-equal-groups",
+  "version": 1,
+  "title": "Equal groups",
+  "description": "How many circles can each basket receive equally?",
+  "tags": [
+    "mathematics",
+    "equal-groups",
+    "lab"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "models/equal-groups",
+        "version": 1,
+        "label": "Equal groups",
+        "scope": "scope/lab",
+        "configuration": {
+          "task": {
+            "mode": "share",
+            "total": 14,
+            "groups": 3,
+            "perGroup": 0
+          },
+          "looping": false
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/equal-groups",
+        "version": 1,
+        "label": "Equal groups scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "task",
+        "definition": "controls/GroupingActivity",
+        "version": 1,
+        "label": "Equal groups controls",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Equal groups controls"
+        }
+      },
+      {
+        "id": "result",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Your sharing",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Your sharing",
+          "precision": 2
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/task",
+        "kind": "command",
+        "from": {
+          "node": "task",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "SET_GROUPING_TASK"
+        }
+      },
+      {
+        "id": "link/result",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "board"
+        },
+        "to": {
+          "node": "result",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Equal groups"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "task"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Equal groups",
+      "instruction": "Choose circles and baskets. Share them equally.",
+      "explanation": "Circles are indivisible and distributed one at a time in basket order. Each basket receives the integer quotient; leftover circles remain in the tray. Tasks support 0\u201360 circles and 1\u20136 baskets. Changing a task clears the distribution."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 430
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 320
+        },
+        {
+          "id": "board/layout/result",
+          "layoutId": "layout/result",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 340,
+            "height": 164
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 180,
+            "width": 340,
+            "height": 250
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 498
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/task"
+        ],
+        [
+          "board/layout/result"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/equal-groups",
+      "version": 1
+    },
+    {
+      "id": "appearance/equal-groups",
+      "version": 1
+    },
+    {
+      "id": "controls/GroupingActivity",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Circles are indivisible and distributed one at a time in basket order. Each basket receives the integer quotient; leftover circles remain in the tray.",
+    "Tasks support 0\u201360 circles and 1\u20136 baskets. Changing a task clears the distribution."
+  ],
+  "catalog": {
+    "icon": "\u00d7",
+    "category": "mathematics",
+    "order": 6
+  }
+}

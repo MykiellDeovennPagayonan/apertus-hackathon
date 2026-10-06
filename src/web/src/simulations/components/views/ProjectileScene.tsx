@@ -1,5 +1,4 @@
 import { useId } from "react";
-import { ProjectileExperiment } from "../compositions/ProjectileExperiment";
 import { ProjectileStyles } from "../resources/ProjectileStyles";
 import { LauncherVisual } from "../visuals/LauncherVisual";
 import { ShapeVisual2D } from "../visuals/ShapeVisual2D";
@@ -7,12 +6,11 @@ import { TrajectoryVisual } from "../visuals/TrajectoryVisual";
 import { VelocityArrowVisual } from "../visuals/VelocityArrowVisual";
 import { SVGWorldView } from "./SVGWorldView";
 
-const {
-  width: W,
-  height: H,
-  groundY: GROUND_Y,
-  originX: ORIGIN_X,
-} = ProjectileExperiment.viewSettings;
+// Display coordinates belong to the reusable scene; physical distance uses the model scale.
+const W = 760,
+  H = 420,
+  GROUND_Y = 350,
+  ORIGIN_X = 55;
 
 export function ProjectileScene({
   state: s,
@@ -59,10 +57,6 @@ export function ProjectileScene({
                 Ball {index + 1} · {instance.launch.angle}° ·{" "}
                 {instance.launch.velocity} m/s
               </strong>
-              <span>
-                Range {instance.metrics.range.toFixed(1)} m · Height{" "}
-                {instance.metrics.maxHeight.toFixed(1)} m
-              </span>
             </div>
           ))}
         </section>
@@ -74,6 +68,18 @@ export function ProjectileScene({
         className="projectile-scene"
         style={{ width: "100%", height: "100%" }}
       >
+        <text x={ORIGIN_X} y={GROUND_Y + 30} fill="var(--muted)" fontSize={14}>
+          0 m
+        </text>
+        <text
+          x={W - 35}
+          y={GROUND_Y + 30}
+          textAnchor="end"
+          fill="var(--muted)"
+          fontSize={14}
+        >
+          Distance →
+        </text>
         {/* ground */}
         <line
           x1={0}

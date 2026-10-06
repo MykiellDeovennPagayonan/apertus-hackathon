@@ -3,9 +3,16 @@
 import dynamic from "next/dynamic";
 import { convertToBoard } from "../../runtime/authoring/board";
 import { requireValue } from "../../runtime/authoring/requireValue";
+import {
+  activityContract,
+  legacyActivities,
+  scalarControls,
+} from "../controls/controlContract";
+import { ScalarControl, UnconfiguredControl } from "../controls/ScalarControl";
 import { BridgeScene } from "./BridgeScene";
 import { SpatialBoard } from "./board/SpatialBoard";
 import { MemberInspector } from "./MemberInspector";
+import { ProbabilityScene } from "./ProbabilityScene";
 import { ProjectileScene } from "./ProjectileScene";
 
 const ScopedWorld = dynamic(() => import("./ScopedWorldView"), {
@@ -40,12 +47,14 @@ import { object } from "../../runtime/parameterSchema";
 import { publicDefinition } from "../catalog";
 import { schemaDefault } from "../composites/catalog";
 import { ActionButton } from "../controls/ActionButton";
+import { ActivityControl, TrialControl } from "../controls/ActivityControl";
 import {
   acceptedCommandArguments,
   commandPresentation,
 } from "../controls/commandPresentation";
 import { DragHandleControl } from "../controls/DragHandleControl";
 import { SchemaForm } from "../controls/SchemaForm";
+import { TaskControl } from "../controls/TaskControl";
 import type { MathBoard } from "../traits/MathBoards";
 import type { SceneObject } from "../traits/SceneObjects";
 import {
@@ -398,6 +407,7 @@ function Appearance({
   if (name === "equal-groups")
     return (
       <EqualGroupsScene
+        onCommand={onCommand}
         board={board as Extract<MathBoard, { demo: "equal-groups" }>}
       />
     );
@@ -426,10 +436,16 @@ function Appearance({
     );
   if (name === "probability")
     return (
-      <DatasetDisplay
-        value={instance.outputs.frequencies}
-        kind="Histogram"
-        label="Observed and expected frequencies"
+      <ProbabilityScene
+        frequencies={
+          instance.outputs.frequencies as {
+            outcome: string;
+            observed: number;
+            expected: number;
+          }[]
+        }
+        trials={Number(instance.state.trials)}
+        preset={String(instance.state.preset)}
       />
     );
   if (name === "coordinates") {
@@ -442,6 +458,16 @@ function Appearance({
         aria-label="Interactive coordinate plane"
       >
         <CoordinateAxesVisual />
+        <path
+          d={`M${220 + x * 18} 220V${220 - y * 18}H220`}
+          fill="none"
+          stroke="#ad7629"
+          strokeDasharray="5 4"
+          strokeWidth={2}
+        />
+        <text x={40} y={430} fontSize={18} fill="#285e56">
+          Point ({x}, {y}) · x first, then y
+        </text>
         <circle cx={220 + x * 18} cy={220 - y * 18} r={6} fill="#245bcb" />
         <DragHandleControl
           target={model.id}
@@ -658,9 +684,11 @@ function NodeView({
     config = node.configuration;
   if (def.category === "models") return null;
   if (def.category === "controls") {
-    const connection = runtime.document.connections.find(
+    const controlConnections = runtime.document.connections.filter(
       (c) => c.kind === "command" && c.from.node === node.id,
     );
+    const connection =
+      controlConnections.find((c) => !c.arguments) ?? controlConnections[0];
     const target = runtime.document.nodes.find(
       (n) => n.id === connection?.to.node,
     );
@@ -668,6 +696,15 @@ function NodeView({
       target && connection
         ? publicDefinition(target.definition).commands[connection.to.port]
         : undefined;
+    if (!command && scalarControls.has(node.definition))
+      return (
+        <UnconfiguredControl
+          node={node}
+          onConfigure={
+            author.authoring ? () => author.onSelect?.(node.id) : undefined
+          }
+        />
+      );
     if (!command)
       return (
         <div className="recipe-disconnected">
@@ -689,9 +726,10 @@ function NodeView({
         ? metadata.label
         : defaultLabel;
     if (
-      /SET_(RATE_)?PLAYING$/.test(commandKey) ||
-      commandKey === "set:playing" ||
-      commandKey === "PHYS_PLAY"
+      node.definition === "controls/Button" &&
+      (/SET_(RATE_)?PLAYING$/.test(commandKey) ||
+        commandKey === "set:playing" ||
+        commandKey === "PHYS_PLAY")
     ) {
       const playing =
         (snapshot.outputs[target?.id ?? ""]?.playing ??
@@ -762,6 +800,53 @@ function NodeView({
         />
       );
     }
+    const activity = activityContract(node.definition);
+    if (activity) {
+      const kind =
+        legacyActivities[node.definition.split("/")[1]] ??
+        node.definition.split("/")[1];
+      const state = snapshot.state[target?.id ?? ""] ?? {};
+      const submit = (args: Record<string, unknown>) =>
+        runtime.submit(node.id, args);
+      if (kind === "ArithmeticActivity" || kind === "CountingActivity") {
+        const board = snapshot.outputs[target?.id ?? ""]?.board as
+          | Extract<MathBoard, { demo: "arithmetic" | "counting" }>
+          | undefined;
+        return board ? (
+          <TaskControl board={board} onSubmit={submit} />
+        ) : (
+          <p>Connect to the matching activity.</p>
+        );
+      }
+      if (kind === "TrialsActivity")
+        return <TrialControl state={state} onSubmit={submit} />;
+      return (
+        <ActivityControl
+          kind={
+            kind as
+              | "GroupingActivity"
+              | "FractionComparisonActivity"
+              | "NumberLineActivity"
+          }
+          state={state}
+          onSubmit={submit}
+        />
+      );
+    }
+    if (scalarControls.has(node.definition))
+      return (
+        <ScalarControl
+          key={`${node.id}/${connection?.to.node}/${connection?.to.port}/${JSON.stringify(config)}`}
+          node={node}
+          command={command}
+          commandKey={commandKey}
+          label={label}
+          presentation={metadata.presentation}
+          submitLabel={metadata.submitLabel}
+          state={snapshot.state[target?.id ?? ""]}
+          onSubmit={(args) => runtime.submit(node.id, args)}
+        />
+      );
     let initial: unknown;
     try {
       initial = JSON.parse(String(config.initial));
@@ -777,7 +862,11 @@ function NodeView({
     return (
       <SchemaForm
         key={`${node.id}/${connection?.to.node}/${connection?.to.port}/${config.initial}`}
-        widget={node.definition.split("/")[1]}
+        widget={
+          node.definition === "controls/ExplorationTask"
+            ? "Slider"
+            : node.definition.split("/")[1]
+        }
         schema={
           node.definition === "controls/Button" ? object({}) : command.arguments
         }
@@ -794,7 +883,21 @@ function NodeView({
             : undefined
         }
         label={label}
-        presentation={metadata.presentation}
+        presentation={{
+          ...metadata.presentation,
+          ...Object.fromEntries(
+            (Array.isArray(config.fields) ? config.fields : []).map(
+              (field: { parameter: string; label: string; widget: string }) => [
+                field.parameter,
+                {
+                  ...metadata.presentation?.[field.parameter],
+                  label: field.label,
+                  widget: field.widget,
+                },
+              ],
+            ),
+          ),
+        }}
         submitLabel={metadata.submitLabel}
         actionIntent={metadata.actionIntent}
         mode={
@@ -940,6 +1043,47 @@ function NodeView({
         ? snapshot.outputs[binding.from.node]?.[binding.from.port]
         : undefined,
       kind = node.definition.split("/")[1];
+    if (kind === "TrialSummary") {
+      const rows = value as
+        | { outcome: string; observed: number; expected: number }[]
+        | undefined;
+      const total = Array.isArray(rows)
+        ? rows.reduce((sum, row) => sum + row.observed, 0)
+        : 0;
+      const first = rows?.[0];
+      return (
+        <section className="trial-summary" aria-live="polite">
+          <h3>{String(config.label)}</h3>
+          {first && total > 0 ? (
+            <>
+              <p>
+                Chance of{" "}
+                {first.outcome === "Heads"
+                  ? "Heads"
+                  : `rolling ${first.outcome}`}
+              </p>
+              <div className="trial-summary-values">
+                <div>
+                  <span>Observed</span>
+                  <strong>
+                    {((100 * first.observed) / total).toFixed(1)}%
+                  </strong>
+                </div>
+                <div>
+                  <span>Expected</span>
+                  <strong>
+                    {((100 * first.expected) / total).toFixed(1)}%
+                  </strong>
+                </div>
+              </div>
+              <p>{total.toLocaleString()} trials completed</p>
+            </>
+          ) : (
+            <p>Run trials to compare a sample with its expected probability.</p>
+          )}
+        </section>
+      );
+    }
     if (
       kind === "StatusMessage" ||
       binding?.from.port === "feedback" ||
@@ -988,13 +1132,35 @@ function NodeView({
       value &&
       typeof value === "object" &&
       "demo" in value &&
-      value.demo === "counting"
+      [
+        "counting",
+        "arithmetic",
+        "equal-groups",
+        "fraction-builder",
+        "fraction-number-line",
+      ].includes(String(value.demo))
     )
-      return <MathReadoutView board={value as MathBoard} />;
+      return (
+        <MathReadoutView
+          board={value as MathBoard}
+          label={String(config.label)}
+        />
+      );
     if (kind === "Readout") {
       const source = runtime.document.nodes.find(
         (candidate) => candidate.id === binding?.from.node,
       );
+      if (
+        source?.definition === "models/BridgeResponse" &&
+        binding?.from.port === "selected" &&
+        (!value || typeof value === "string")
+      )
+        return (
+          <section className="bridge-member-hint">
+            <h3>Explore the beams</h3>
+            <p>Tap any beam on the bridge to see how it carries the load.</p>
+          </section>
+        );
       const rawUnit =
         source && binding
           ? publicDefinition(source.definition).outputs[binding.from.port]?.unit
@@ -1052,6 +1218,17 @@ function NodeView({
       const source = runtime.document.nodes.find(
         (candidate) => candidate.id === binding?.from.node,
       );
+      if (
+        source?.definition === "models/BridgeResponse" &&
+        binding?.from.port === "selected" &&
+        (!value || typeof value === "string")
+      )
+        return (
+          <section className="bridge-member-hint">
+            <h3>Explore the beams</h3>
+            <p>Tap any beam on the bridge to see how it carries the load.</p>
+          </section>
+        );
       const rawUnit =
         source && binding
           ? publicDefinition(source.definition).outputs[binding.from.port]?.unit
@@ -1367,7 +1544,9 @@ function LayoutView({
               </button>
             </div>
           )}
-          {author.authoring && disconnected ? (
+          {author.authoring &&
+          disconnected &&
+          !scalarControls.has(node.definition) ? (
             <div className="recipe-disconnected">
               <strong>{node.label} needs a connection</strong>
               <p>Connect it in component settings to show learner content.</p>

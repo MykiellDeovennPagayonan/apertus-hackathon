@@ -323,14 +323,6 @@ export function DisplayView({
         }}
       >
         <defs>
-          <clipPath id={clip}>
-            <rect
-              x={view.xMin}
-              y={view.yMin}
-              width={view.xMax - view.xMin}
-              height={view.yMax - view.yMin}
-            />
-          </clipPath>
           <pattern
             id={`${clip}-grid`}
             width={5}
@@ -395,7 +387,9 @@ export function DisplayView({
             pan.current = null;
           }}
         />
-        <g clipPath={`url(#${clip})`}>
+        {/* The SVG viewport clips at the visible canvas edge. A viewBox clip
+            would cut objects inside the canvas when its aspect ratio differs. */}
+        <g>
           {objects.map((o) => {
             const titleHeight =
               o.kind === "fraction-bar" ? Math.min(4, o.display.height / 3) : 4;

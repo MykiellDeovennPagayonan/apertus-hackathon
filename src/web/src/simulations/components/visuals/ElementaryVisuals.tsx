@@ -3,18 +3,18 @@ export function RatioBarVisual({ ratio }: { ratio: number }) {
     remainder = ratio % 1;
   return (
     <svg
-      viewBox={`0 0 440 ${ratio > 1 && remainder ? 170 : 90}`}
+      viewBox="0 0 440 220"
       role="img"
       aria-label={`${(ratio * 100).toFixed(2)} percent`}
     >
-      <text x="20" y="22" fill="currentColor" fontSize="18">
+      <text x="20" y="40" fill="currentColor" fontSize="18">
         {ratio > 1
           ? `${whole} whole${whole === 1 ? "" : "s"} × 100%`
           : "One whole = 100%"}
       </text>
       <rect
         x="20"
-        y="36"
+        y="62"
         width="400"
         height="36"
         rx="5"
@@ -23,15 +23,23 @@ export function RatioBarVisual({ ratio }: { ratio: number }) {
       />
       <rect
         x="20"
-        y="36"
+        y="62"
         width={400 * Math.min(1, ratio)}
         height="36"
         rx="5"
         fill="var(--accent)"
       />
+      {ratio <= 1 && (
+        <text x="20" y="138" fill="currentColor" fontSize="22">
+          {(100 * ratio).toLocaleString(undefined, {
+            maximumFractionDigits: 2,
+          })}
+          % of one whole
+        </text>
+      )}
       {ratio > 1 && remainder > 0 && (
         <>
-          <text x="20" y="108" fill="currentColor" fontSize="18">
+          <text x="20" y="132" fill="currentColor" fontSize="18">
             Plus{" "}
             {(remainder * 100).toLocaleString(undefined, {
               maximumFractionDigits: 2,
@@ -40,7 +48,7 @@ export function RatioBarVisual({ ratio }: { ratio: number }) {
           </text>
           <rect
             x="20"
-            y="122"
+            y="156"
             width="400"
             height="36"
             rx="5"
@@ -49,7 +57,7 @@ export function RatioBarVisual({ ratio }: { ratio: number }) {
           />
           <rect
             x="20"
-            y="122"
+            y="156"
             width={400 * remainder}
             height="36"
             rx="5"
@@ -83,10 +91,19 @@ export function DimensionLabelVisual({
         y={y}
         width={w}
         height={h}
-        fill="var(--panel)"
-        stroke="var(--accent)"
-        strokeWidth="3"
+        fill="#e4eee6"
+        stroke="#ad7629"
+        strokeWidth="4"
       />
+      <text
+        x={240}
+        y={282}
+        textAnchor="middle"
+        fill="currentColor"
+        fontSize={16}
+      >
+        Shaded inside: area · Gold edge: perimeter
+      </text>
       <text
         x={x + w / 2}
         y={y - 14}

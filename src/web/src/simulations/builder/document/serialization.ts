@@ -2,8 +2,11 @@ import {
   builtInRecipe,
   modelRecipe,
 } from "../../components/composites/catalog";
-import { arrangeFocusedExperiment } from "../../components/composites/focused";
 import { convertToBoard, extent } from "../../runtime/authoring/board";
+import {
+  migrateControlDependencies,
+  migrateControls,
+} from "../../runtime/authoring/migrateControls";
 import { migrateBoardDrawings } from "../../runtime/authoring/migrateDrawings";
 import { insertRecipe } from "../../runtime/authoring/recipes";
 import { requireValue } from "../../runtime/authoring/requireValue";
@@ -13,6 +16,9 @@ import {
   emptyAuthoredDocument,
 } from "../../runtime/authoring/types";
 import { validateAuthoredDocument } from "../../runtime/authoring/validate";
+import { arrangeFocusedExperiment } from "../../runtime/recipes/compatibility/presentation";
+import { loadRecipe as loadAuthoredRecipe } from "../../runtime/recipes/loadRecipe";
+import { serializeRecipe as serializeAuthoredRecipe } from "../../runtime/recipes/serializeRecipe";
 import { parseRecipe, resolveRecipe } from "../../runtime/resolver";
 import { canonicalDocument, fromAssembly } from "./canonical";
 import { fromRecipe } from "./legacy";
@@ -21,28 +27,55 @@ import { validateDocument } from "./validateDocument";
 export function parseDocument(source: string): ExperimentDocument {
   const input: unknown = JSON.parse(source);
   if (input && typeof input === "object" && "documentVersion" in input) {
+    if ("authored" in input && input.authored) {
+      const original =
+        input.authored as import("../../runtime/authoring/types").AuthoredDocument;
+      input.authored = migrateControls(original);
+      const metadata =
+        "recipeMetadata" in input
+          ? (input.recipeMetadata as
+              | Omit<CompositeRecipe, "document">
+              | undefined)
+          : undefined;
+      if (Array.isArray(metadata?.dependencies))
+        metadata.dependencies = migrateControlDependencies(
+          original,
+          input.authored as import("../../runtime/authoring/types").AuthoredDocument,
+          metadata.dependencies,
+        );
+    }
     validateDocument(input);
     if (input.authored) {
-      input.authored = migrateBoardDrawings(input.authored);
+      input.authored = migrateBoardDrawings(migrateControls(input.authored));
       input.editor = structuredClone(input.authored.editor);
     }
     return input;
   }
   if (input && typeof input === "object" && "formatVersion" in input) {
-    validateAuthoredDocument(input);
-    return canonicalDocument(migrateBoardDrawings(input));
+    const migrated = migrateControls(
+      input as import("../../runtime/authoring/types").AuthoredDocument,
+    );
+    validateAuthoredDocument(migrated);
+    return canonicalDocument(migrateBoardDrawings(migrated));
   }
   if (input && typeof input === "object" && "recipeVersion" in input) {
-    const prefix = crypto.randomUUID();
-    const recipe = input as CompositeRecipe;
-    const authored = insertRecipe(
-      emptyAuthoredDocument(),
-      recipe,
-      builtInRecipe,
-      (id) => `${prefix}/${id}`,
-    );
-    authored.lesson = structuredClone(recipe.document.lesson);
-    return canonicalDocument(authored);
+    if ((input as CompositeRecipe).recipeVersion === 1) {
+      const prefix = crypto.randomUUID();
+      const recipe = input as CompositeRecipe;
+      const authored = insertRecipe(
+        emptyAuthoredDocument(),
+        recipe,
+        builtInRecipe,
+        (id) => `${prefix}/${id}`,
+      );
+      authored.lesson = structuredClone(recipe.document.lesson);
+      return canonicalDocument(authored);
+    }
+    const { recipe, document } = loadAuthoredRecipe(input);
+    const { document: _document, ...recipeMetadata } = recipe;
+    const result = canonicalDocument(document);
+    result.recipeMetadata = recipeMetadata;
+    return result;
   }
   const recipe = parseRecipe(source);
   const resolved = resolveRecipe(recipe);
@@ -121,5 +154,10 @@ export function parseDocument(source: string): ExperimentDocument {
 }
 export function serializeDocument(doc: ExperimentDocument) {
   validateDocument(doc);
+  if (doc.authored && doc.recipeMetadata)
+    return serializeAuthoredRecipe({
+      ...doc.recipeMetadata,
+      document: doc.authored,
+    });
   return JSON.stringify(doc, null, 2);
 }

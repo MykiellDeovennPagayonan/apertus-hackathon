@@ -4,6 +4,7 @@ import {
   discoverySections,
   searchRank,
 } from "../../components/catalog/discovery";
+import { retiredControls } from "../../components/controls/controlContract";
 /** Search ranking and browsing use discovery metadata, never runtime ID spelling. */
 export function libraryChoices(category: string, query: string) {
   const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
@@ -11,6 +12,7 @@ export function libraryChoices(category: string, query: string) {
     discoverySections.findIndex((s) => s.id === definitionDiscovery(d).group);
   return [...publicDefinitions.values()]
     .filter((d) => {
+      if (retiredControls.has(d.id)) return false;
       if (["displays/Text", "displays/Box"].includes(d.id)) return false;
       const metadata = definitionDiscovery(d);
       const text =
@@ -18,7 +20,7 @@ export function libraryChoices(category: string, query: string) {
       return (
         (category === "all" ||
           category === metadata.group ||
-          category === d.category) &&
+          (category === d.category && metadata.group !== "composites")) &&
         terms.every((term) => text.includes(term))
       );
     })

@@ -5,13 +5,14 @@ import type {
   TargetedCommand,
 } from "../../lib/planner/schema";
 import { parsePlan } from "../../lib/planner/schema";
+import { publicDefinition } from "../components/catalog";
 import { GRAVITIES } from "../components/resources/GravityPresets";
 import type { GasState } from "../components/traits/GasState";
 import type { MathBoard } from "../components/traits/MathBoards";
 import { modelProvider, validateAssemblyInstances } from "./assembly";
 import { assemblyInitializer, useAssemblyStore } from "./assemblySession";
 import { bridgeInitializer, useBridgeStore } from "./bridgeSession";
-import { operations, validateCommand } from "./capabilities";
+import { operations, templateNames, validateCommand } from "./capabilities";
 import { type ActionResult, rejected } from "./commands";
 import type { CompositionDefinition } from "./definition";
 import {
@@ -27,6 +28,10 @@ import {
   projectileInstance,
   useProjectileStore,
 } from "./projectileSession";
+import { recipeCommands } from "./recipes/compatibility";
+import { loadRecipe as loadAuthoredRecipe } from "./recipes/loadRecipe";
+import { listPremadeRecipes, premadeRecipe } from "./recipes/registry";
+import { serializeRecipe as serializeAuthoredRecipe } from "./recipes/serializeRecipe";
 import {
   parseRecipe,
   type Recipe,
@@ -46,6 +51,36 @@ let automaticMotion = false;
 const motionListeners = new Set<() => void>();
 let definition: CompositionDefinition | null = null,
   acceptedRecipe: Recipe | null = null;
+let authoredSession: ReturnType<typeof loadAuthoredRecipe> | null = null;
+let unsubscribeAuthored: (() => void) | undefined;
+export const getAuthoredSession = () => authoredSession;
+export function activatePremadeSession(slug: Exclude<DemoType, "assembly">) {
+  return activateAuthoredSession(loadAuthoredRecipe(premadeRecipe(slug)), slug);
+}
+function activateAuthoredSession(
+  candidate: ReturnType<typeof loadAuthoredRecipe>,
+  slug: DemoType,
+) {
+  disposeSession();
+  authoredSession = candidate;
+  active = slug;
+  sessionId = `experiment-${++sequence}`;
+  revision = 0;
+  const fingerprint = () =>
+    JSON.stringify(candidate.runtime.getSnapshot().state, (key, value) =>
+      ["elapsed", "samples"].includes(key) ? undefined : value,
+    );
+  let previousState = fingerprint();
+  unsubscribeAuthored = candidate.runtime.subscribe(() => {
+    const next = fingerprint();
+    if (next !== previousState) {
+      previousState = next;
+      revision++;
+    }
+  });
+  runClock(slug);
+  return candidate;
+}
 let recentChange: ExperimentContext["recentChange"];
 let correlationId: string | null = null;
 const planCorrelations = new WeakMap<object, string>();
@@ -57,11 +92,18 @@ export function getDiagnosticSnapshot() {
     correlationId,
     recipe: acceptedRecipe,
     context: getExperimentContext(),
-    state: active ? data(stores(active).live.getState()) : null,
+    state: authoredSession
+      ? authoredSession.runtime.getSnapshot()
+      : active
+        ? data(stores(active).live.getState())
+        : null,
   });
 }
 export function disposeSession() {
   if (typeof cancelAnimationFrame !== "undefined") cancelAnimationFrame(frame);
+  unsubscribeAuthored?.();
+  unsubscribeAuthored = undefined;
+  authoredSession = null;
   active = null;
   definition = null;
   acceptedRecipe = null;
@@ -189,6 +231,15 @@ export function advanceSessionTime(delta: number): ActionResult {
   if (!active || !Number.isFinite(delta) || delta < 0 || delta > 60)
     return rejected("Choose a finite timestep from zero to 60 seconds.");
   try {
+    if (authoredSession) {
+      let remaining = delta;
+      while (remaining > 0) {
+        const step = Math.min(remaining, 1);
+        authoredSession.runtime.step(step);
+        remaining -= step;
+      }
+      return { accepted: true };
+    }
     if (active === "assembly") useAssemblyStore.getState().step(delta);
     if (active === "projectile") useProjectileStore.getState().step(delta);
     if (active === "town") useTownStore.getState().step(delta);
@@ -347,6 +398,20 @@ export function dispatchBatch(
   if (active !== demo) return rejected("This experiment is not active");
   if (commands.length < 1 || commands.length > 8)
     return rejected("A batch requires 1–8 commands");
+  if (authoredSession) {
+    try {
+      if (commands.length === 1 && commands[0].type === "RESET")
+        return authoredSession.runtime.reset();
+      const translated = recipeCommands(authoredSession.runtime, commands);
+      if (!translated.length)
+        return rejected("This action is unavailable for the current recipe.");
+      return authoredSession.runtime.dispatch(translated);
+    } catch (error) {
+      return rejected(
+        error instanceof Error ? error.message : "Invalid recipe command",
+      );
+    }
+  }
   const changeTarget = commands.find(
     (command) => command.target && command.target !== "session",
   )?.target;
@@ -456,6 +521,49 @@ function plannerOutputs(outputs: Record<string, unknown>) {
   );
 }
 export function getExperimentContext(): ExperimentContext | null {
+  if (active && authoredSession) {
+    const demo = active;
+    const { runtime, recipe } = authoredSession;
+    const snapshot = runtime.getSnapshot();
+    const instances = runtime.document.nodes
+      .filter(
+        (node) =>
+          publicDefinition(node.definition).category === "models" &&
+          !["models/TrussJoint", "models/TrussMember"].includes(
+            node.definition,
+          ),
+      )
+      .map((node) => {
+        const state = snapshot.state[node.id] ?? {};
+        return {
+          id: node.id,
+          label: node.label,
+          parameters: plannerOutputs(state),
+          outputs: plannerOutputs(snapshot.outputs[node.id] ?? {}),
+          actions: Object.keys(operations[demo]).filter((action) => {
+            try {
+              return (
+                recipeCommands(runtime, [{ type: action, target: node.id }])
+                  .length > 0
+              );
+            } catch {
+              return false;
+            }
+          }),
+        };
+      });
+    return {
+      sessionId,
+      revision,
+      composition: {
+        ref: `compositions/${templateNames[active as Exclude<DemoType, "assembly">]}`,
+        version: 1,
+      },
+      instances,
+      views: ["RecipeLesson"],
+      assumptions: recipe.assumptions,
+    };
+  }
   if (!active || !definition) return null;
   const actions = Object.keys(operations[active]);
   let instances: ExperimentContext["instances"];
@@ -613,10 +721,31 @@ export function getActiveDefinition() {
 }
 /** Saves the accepted initial recipe, not a running checkpoint. */
 export function saveRecipe() {
+  if (authoredSession)
+    return serializeAuthoredRecipe(
+      authoredSession.recipe,
+      authoredSession.runtime.document,
+    );
   if (!acceptedRecipe) throw new Error("No active recipe");
   return serializeRecipe(acceptedRecipe);
 }
 export function loadRecipe(text: string) {
+  const input: unknown = JSON.parse(text);
+  if (
+    input &&
+    typeof input === "object" &&
+    "recipeVersion" in input &&
+    input.recipeVersion === 2
+  ) {
+    const candidate = loadAuthoredRecipe(input);
+    const entry = listPremadeRecipes().find(
+      ({ recipe }) => recipe.id === candidate.recipe.id,
+    );
+    return activateAuthoredSession(
+      candidate,
+      (entry?.slug ?? "assembly") as DemoType,
+    );
+  }
   const recipe = parseRecipe(text),
     resolved = resolveRecipe(recipe);
   return activateSession(resolved.demo, resolved, recipe);

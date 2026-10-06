@@ -1,4 +1,5 @@
 import { publicDefinition } from "../../components/catalog";
+import { validateControlConnection } from "../../components/controls/controlContract";
 import type { Joint, Member } from "../../components/traits/MemberEndpoints";
 import { validateValue } from "../parameterSchema";
 import { bridgeResponseFromParts } from "../trussModel";
@@ -326,6 +327,8 @@ export function validateConnection(d: AuthoredDocument, c: Connection) {
   if (c.kind === "command") {
     if (output.kind !== "event" || !b.commands[c.to.port])
       throw new Error(`${c.id}: expected event → supported command`);
+    // Fixed argument links are auxiliary actions (e.g. restarting a peer model).
+    if (!c.arguments) validateControlConnection(from, to, c.to.port, b);
     if (from.scope !== to.scope)
       throw new Error(
         `${c.id}: commands must stay in their explicit runtime scope`,

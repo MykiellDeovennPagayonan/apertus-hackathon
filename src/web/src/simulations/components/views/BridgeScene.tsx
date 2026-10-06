@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { useEffect, useId, useState } from "react";
-import { BridgeExperiment } from "../compositions/BridgeExperiment";
 import { DragHandleControl } from "../controls/DragHandleControl";
 import { BridgeStyles } from "../resources/BridgeStyles";
 import BridgeMember from "../visuals/BeamVisual";
@@ -13,15 +12,13 @@ import { SVGWorldView } from "./SVGWorldView";
 import { useReducedMotion } from "./useCompactDiagram";
 import "./bridge.css";
 
-const {
-  width: W,
-  height: H,
-  deckY: DECK_Y,
-  leftPad: LEFT_PAD,
-  revealStages: STAGES,
-  revealDelay,
-  revealInterval,
-} = BridgeExperiment.viewSettings;
+const W = 800,
+  H = 400,
+  DECK_Y = 240,
+  LEFT_PAD = 60;
+const STAGES = 6,
+  revealDelay = 300,
+  revealInterval = 260;
 
 export function BridgeScene({
   state: s,
@@ -60,11 +57,11 @@ export function BridgeScene({
 
   const truss = s.truss;
   const svgId = useId();
-  const spanPx = (W - LEFT_PAD * 2) * (s.spanScale === 1 ? 0.68 : 1);
+  const spanPx = (W - LEFT_PAD * 2) * (s.spanScale === 1 ? 0.9 : 1);
   const left = (W - spanPx) / 2;
   const toPx = (x: number, y: number) => ({
     x: left + x * (spanPx / (1.6 * s.spanScale)),
-    y: DECK_Y + y * 140,
+    y: DECK_Y + y * 180,
   });
   const jointPx = (id: string) => {
     const j = truss.joints.find((jj) => jj.id === id);
@@ -126,7 +123,7 @@ export function BridgeScene({
           width={W}
           height={H}
           fill={`url(#${svgId}-bridge-grid)`}
-          opacity="0.5"
+          opacity="0.15"
         />
         <path
           d="M0 323Q200 304 400 327T800 323V400H0Z"
@@ -141,8 +138,8 @@ export function BridgeScene({
             opacity="0.6"
           />
         ))}
-        <text x="30" y="65" fill="var(--text-dim)" fontSize="11">
-          STRUCTURAL LAB / {s.spanScale * 30} m span · {truss.panels} panels
+        <text x="30" y="50" fill="var(--text-dim)" fontSize="18">
+          Drag the truck or use the load position slider
         </text>
         {stage >= 1 && visualLayers.includes("appearance/BridgeSupport") && (
           <BridgeSupportVisual
@@ -224,7 +221,7 @@ export function BridgeScene({
           <motion.g
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            fontSize={11}
+            fontSize={16}
           >
             <BridgeSupportVisual
               left={left}
@@ -234,23 +231,21 @@ export function BridgeScene({
               shares={s.response.supportShares}
               markerId={`${svgId}-force-arrow`}
             />
-            <text x={LEFT_PAD} y={30} fill="var(--text-dim)">
-              Response score:
+            <text x={LEFT_PAD} y={370} fill="var(--text-dim)">
+              Beam load:
             </text>
             <LegendView
-              x={LEFT_PAD + 95}
-              y={26}
+              x={LEFT_PAD + 100}
+              y={366}
               horizontal
-              gap={55}
+              fontSize={16}
+              gap={75}
               entries={[
                 { label: "low", color: BridgeStyles.lowColor },
-                { label: "med", color: BridgeStyles.mediumColor },
+                { label: "medium", color: BridgeStyles.mediumColor },
                 { label: "high", color: BridgeStyles.highColor },
               ]}
             />
-            <text x={W - 30} y={30} textAnchor="end" fill="var(--text-dim)">
-              solid: compression · dashed: tension
-            </text>
           </motion.g>
         )}
       </SVGWorldView>

@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import {
+  type BoardItem,
   type BoardPresentation,
   boardItemMinimum,
   boardLayouts,
@@ -35,7 +36,7 @@ import { SceneIcon, SceneIconButton } from "../SceneToolbar";
 import { DrawingEditor, type DrawingTool } from "./DrawingEditor";
 import "./board.css";
 const BOARD_CHROME =
-  ".drawing-toolbar, .drawing-inspector, .board-selection, .board-area-banner, .board-settings, .board-camera-tools, .board-workspace-tools";
+  ".drawing-toolbar, .drawing-inspector, .board-toolbar, .board-selection, .board-area-banner, .board-settings, .board-camera-tools, .board-workspace-tools";
 
 export function SpatialBoard({
   document,
@@ -84,6 +85,67 @@ export function SpatialBoard({
     autoLayout && sourcePresentation
       ? (() => {
           const next = structuredClone(sourcePresentation);
+          // Authored responsive boards retain every item and each component's intended size.
+          // Narrow screens reflow, rather than shrinking the entire investigation into view.
+          if (!requestedAutoLayout) {
+            const width = Math.max(240, size.width - 32);
+            let top = 0;
+            const rows =
+              next.responsiveRows ?? next.items.map((item) => [item.id]);
+            for (const row of rows) {
+              const items = row
+                .map((id) => next.items.find((item) => item.id === id))
+                .filter((item): item is BoardItem => !!item);
+              const columnWidth =
+                (width - 16 * (items.length - 1)) / items.length;
+              const height = Math.max(
+                ...items.map((item) => {
+                  const layout = boardLayouts(document).find(
+                    (layout) => layout.id === item.layoutId,
+                  );
+                  const definition =
+                    document.nodes.find((node) => node.id === layout?.node)
+                      ?.definition ?? "";
+                  const scene =
+                    definition.startsWith("appearance/") ||
+                    definition.startsWith("canvases/");
+                  return scene
+                    ? Math.max(
+                        ("responsiveMinHeight" in item
+                          ? item.responsiveMinHeight
+                          : undefined) ?? 260,
+                        Math.min(
+                          430,
+                          (item.rect.height * columnWidth) / item.rect.width,
+                        ),
+                      )
+                    : Math.max(
+                        ("responsiveMinHeight" in item
+                          ? item.responsiveMinHeight
+                          : undefined) ?? item.rect.height,
+                        naturalHeights[item.id] ?? 0,
+                      );
+                }),
+              );
+              items.forEach((item, index) => {
+                item.rect = {
+                  x: index * (columnWidth + 16),
+                  y: top,
+                  width: columnWidth,
+                  height,
+                };
+              });
+              top += height + 16;
+            }
+            next.startView = {
+              x: -16,
+              y: -16,
+              width: width + 32,
+              height: Math.max(240, size.height - 32),
+            };
+            return next;
+          }
+
           const compact = size.width < 900;
           const sceneWidth = compact ? Math.max(240, size.width - 32) : 640;
           const controlWidth = compact ? sceneWidth : 360;
@@ -91,22 +153,6 @@ export function SpatialBoard({
             rowHeight = 0,
             sideHeight = 0;
           const candidates = boardLayouts(document);
-          const compactProjectile =
-            size.width < 700 &&
-            document.nodes.some(
-              (node) => node.definition === "appearance/Projectile",
-            );
-          if (compactProjectile)
-            next.items = next.items.filter((item) => {
-              const layout = candidates.find(
-                (candidate) => candidate.id === item.layoutId,
-              );
-              return !document.nodes.some(
-                (node) =>
-                  node.id === layout?.node &&
-                  node.definition === "displays/Readout",
-              );
-            });
           const containsFamily = (layout: Layout, family: string): boolean =>
             document.nodes.some(
               (node) =>
@@ -173,7 +219,21 @@ export function SpatialBoard({
           next.navigation.minZoom = 0.2;
           return next;
         })()
-      : sourcePresentation;
+      : !authoring && sourcePresentation?.responsive
+        ? {
+            ...sourcePresentation,
+            items: sourcePresentation.items.map((item) => ({
+              ...item,
+              rect: {
+                ...item.rect,
+                height: Math.max(
+                  item.rect.height,
+                  naturalHeights[item.id] ?? 0,
+                ),
+              },
+            })),
+          }
+        : sourcePresentation;
   const [camera, setCamera] = useState<Camera | null>(null);
   useEffect(() => {
     if (autoLayout && size.width > 0) setCamera(null);
@@ -194,6 +254,59 @@ export function SpatialBoard({
   const [drawingTool, setDrawingTool] = useState<DrawingTool>("select");
   const [pan, setPan] = useState(false),
     [snap, setSnap] = useState(true);
+  const pointerFocus = useRef(false);
+  const [activeItem, setActiveItem] = useState<string | null>(null);
+  useEffect(() => {
+    const activate = (event: Event) => {
+      if (event instanceof window.PointerEvent && event.button !== 0) return;
+      if (event.type === "focusin" && pointerFocus.current) return;
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      // Editing a selected component or using board actions keeps its tools open.
+      if (target.closest(`${BOARD_CHROME}, .component-dialog`)) return;
+      const item = target.closest<HTMLElement>(".board-item");
+      const id =
+        item && viewport.current?.contains(item)
+          ? item.dataset.boardId
+          : undefined;
+      setActiveItem(id ?? null);
+      if (!authoring || pan || drawingTool !== "select") return;
+      if (id) {
+        // Handles already select through their move/resize handlers.
+        if (target.closest(".board-item-tools, .board-resize")) return;
+        const ids = p?.groups.find((group) => group.members.includes(id))
+          ?.members ?? [id];
+        const additive = event instanceof window.PointerEvent && event.shiftKey;
+        setSelection((current) =>
+          additive
+            ? [...new Set([...current, ...ids])]
+            : current.includes(id)
+              ? current
+              : ids,
+        );
+      } else if (!(event instanceof window.PointerEvent && event.shiftKey)) {
+        setSelection([]);
+      }
+    };
+    const dismiss = (event: globalThis.KeyboardEvent) => {
+      if (
+        event.key !== "Escape" ||
+        (event.target instanceof Element &&
+          event.target.closest(".component-dialog"))
+      )
+        return;
+      setActiveItem(null);
+      setSelection([]);
+    };
+    window.addEventListener("pointerdown", activate, true);
+    window.addEventListener("focusin", activate);
+    window.addEventListener("keydown", dismiss, true);
+    return () => {
+      window.removeEventListener("pointerdown", activate, true);
+      window.removeEventListener("focusin", activate);
+      window.removeEventListener("keydown", dismiss, true);
+    };
+  }, [authoring, pan, drawingTool, p]);
   const [editArea, setEditArea] = useState(false);
   const [settings, setSettings] = useState(false),
     [search, setSearch] = useState("");
@@ -272,7 +385,12 @@ export function SpatialBoard({
   }, [p, authoring]);
   const hasBoard = !!p;
   useEffect(() => {
-    if (!autoLayout || !sourcePresentation || !viewport.current) return;
+    if (
+      (!autoLayout && (authoring || !sourcePresentation?.responsive)) ||
+      !sourcePresentation ||
+      !viewport.current
+    )
+      return;
     const observer = new ResizeObserver((entries) => {
       setNaturalHeights((current) => {
         const next = { ...current };
@@ -302,10 +420,15 @@ export function SpatialBoard({
     viewport.current
       .querySelectorAll(".board-content > .recipe-layout")
       .forEach((element) => {
+        if (
+          !requestedAutoLayout &&
+          element.closest('[data-board-scene="true"]')
+        )
+          return;
         observer.observe(element);
       });
     return () => observer.disconnect();
-  }, [autoLayout, sourcePresentation]);
+  }, [autoLayout, sourcePresentation, authoring, requestedAutoLayout]);
   useEffect(() => {
     if (!hasBoard || !viewport.current) return;
     if (!document.nodes.some((node) => node.definition === "displays/Text"))
@@ -412,7 +535,10 @@ export function SpatialBoard({
     autoLayout ||
     (workspace && !authoring && p.navigation.mode !== "fixed")
   ) {
-    initial.zoom = Math.min(1, Math.max(0.75, initial.zoom));
+    initial.zoom =
+      autoLayout && !requestedAutoLayout
+        ? 1
+        : Math.min(1, Math.max(0.75, initial.zoom));
     initial.centerX =
       p.startView.x +
       Math.min(p.startView.width, size.width / initial.zoom) / 2;
@@ -745,7 +871,7 @@ export function SpatialBoard({
     overlays.find((o) => o.contentItemIds.includes(id));
   return (
     <section
-      className={`spatial-board ${workspace && !conversion ? "is-workspace" : ""} ${autoLayout ? "is-auto-layout" : ""} ${immersive ? "is-scene" : ""} ${size.width < 700 ? "is-compact" : ""}`}
+      className={`spatial-board ${workspace && !conversion ? "is-workspace" : ""} ${requestedAutoLayout ? "is-auto-layout" : ""} ${!requestedAutoLayout && persisted?.responsive ? "is-responsive-layout" : ""} ${immersive ? "is-scene" : ""} ${size.width < 700 ? "is-compact" : ""}`}
       aria-label="Experiment board"
       onKeyDown={(event) => {
         if (event.key !== "Escape" || gesture.current) return;
@@ -1307,6 +1433,21 @@ export function SpatialBoard({
           }
           const target = e.target as HTMLElement;
           if (target.closest(BOARD_CHROME)) return;
+          // Focus without scrolling or reframing the board underneath a click.
+          // Keyboard focus still brings offscreen content into view below.
+          if (!pan && e.button === 0) {
+            const control = target.closest<HTMLElement>(
+              "button, input, select, textarea, a[href], summary, [tabindex]",
+            );
+            if (control && !control.matches(":disabled")) {
+              pointerFocus.current = true;
+              try {
+                control.focus({ preventScroll: true });
+              } finally {
+                pointerFocus.current = false;
+              }
+            }
+          }
           if (
             authoring &&
             !immersive &&
@@ -1555,7 +1696,7 @@ export function SpatialBoard({
             <section
               key={i.id}
               onFocus={(event) => {
-                if (immersive || fixed) return;
+                if (immersive || fixed || pointerFocus.current) return;
                 if (!authoring) {
                   const viewportBounds =
                     viewport.current?.getBoundingClientRect();
@@ -1604,19 +1745,23 @@ export function SpatialBoard({
                 }
               }}
               data-board-id={i.id}
+              data-tools-visible={
+                authoring ? selection.includes(i.id) : activeItem === i.id
+              }
               data-board-scene={
                 !!layout.node &&
                 document.nodes.some(
                   (n) =>
                     n.id === layout.node &&
-                    n.definition.startsWith("canvases/"),
+                    (n.definition.startsWith("canvases/") ||
+                      n.definition.startsWith("appearance/")),
                 )
               }
               data-board-leaf={!layout.children.length}
               data-board-component={definition}
               data-board-authoring={!!authoring}
               data-board-index={index}
-              tabIndex={-1}
+              tabIndex={authoring || layout.node ? 0 : -1}
               aria-label={title(i.id)}
               hidden={hidden}
               className={`board-item ${selection.includes(i.id) && authoring ? "is-selected" : ""} ${promoted ? "is-immersive" : ""} ${overlay ? `is-overlay anchor-${overlay.anchor}` : ""}`}

@@ -21,6 +21,7 @@ export type GraphNode = {
     | "Resource";
   description: string;
   displayKind?: string;
+  componentType?: string;
   inputs: GraphPort[];
   outputs: GraphPort[];
   x: number;

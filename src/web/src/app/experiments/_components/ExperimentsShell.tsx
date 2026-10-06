@@ -10,7 +10,9 @@ import { ControlsTarget } from "../../../simulations/components/views/ControlsOv
 import { ExperimentView } from "../../../simulations/components/views/ExperimentView";
 import { modelProvider } from "../../../simulations/runtime/assembly";
 import { templateNames } from "../../../simulations/runtime/capabilities";
+import { hasPremadeRecipe } from "../../../simulations/runtime/recipes/registry";
 import {
+  activatePremadeSession,
   disposeSession,
   executePlan,
   getActiveDefinition,
@@ -94,7 +96,7 @@ export default function ExperimentsShell({
   const selectedExperiment = searchParams.get("experiment");
   const focusedExperiment =
     demo === selectedExperiment &&
-    ["gas", "projectile", "counting"].includes(demo ?? "");
+    (demo === "gas" || hasPremadeRecipe(demo ?? ""));
 
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_EXPERIMENT_DIAGNOSTICS !== "true") return;
@@ -124,7 +126,7 @@ export default function ExperimentsShell({
     const composer = composerElement.current;
     const identity = workspace.current?.querySelector(".workspace-identity");
     const toolbar = workspace.current?.querySelector(
-      ".workspace-toolbar, .gas-experiment-tools",
+      focusedExperiment ? ".gas-experiment-tools" : ".workspace-toolbar",
     );
     const measure = () => {
       if (composer)
@@ -227,6 +229,22 @@ export default function ExperimentsShell({
           kind: "info",
           text: "Choose one of the premade experiments below.",
         });
+        return;
+      }
+      if (hasPremadeRecipe(selectedExperiment)) {
+        try {
+          activatePremadeSession(selectedExperiment);
+          setDemo(selectedExperiment);
+          setPhase("ready");
+          setControlsOpen(false);
+          setStatus(null);
+        } catch (error) {
+          setStatus({
+            kind: "error",
+            text: "Couldn't open this recipe.",
+            details: error instanceof Error ? error.message : "Invalid recipe",
+          });
+        }
         return;
       }
       applyPlan({

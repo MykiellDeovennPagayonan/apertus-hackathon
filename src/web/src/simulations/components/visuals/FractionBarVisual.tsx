@@ -10,12 +10,14 @@ export function FractionBarVisual({
   barWidth = 780,
   left = 55,
   height = 90,
+  labelSize,
 }: {
   bar: FractionBar;
   y: number;
   barWidth?: number;
   left?: number;
   height?: number;
+  labelSize?: number;
   label: string;
   interactive?: boolean;
   onPiece: (piece: number) => ActionResult;
@@ -23,7 +25,12 @@ export function FractionBarVisual({
   const width = barWidth / bar.value.d;
   return (
     <g>
-      <text x={left} y={y - 20} className="math-scene-label">
+      <text
+        x={left}
+        y={y - 20}
+        className="math-scene-label"
+        style={labelSize ? { fontSize: labelSize } : undefined}
+      >
         {label} · {bar.value.n}/{bar.value.d}
       </text>
       {bar.shaded.map((shaded, i) => (

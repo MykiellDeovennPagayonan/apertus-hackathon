@@ -52,7 +52,19 @@ export function DragHandleControl({
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(svg);
-    return () => observer.disconnect();
+    // An adaptive viewBox can change projection without changing the SVG's box.
+    const projection = new MutationObserver(measure);
+    projection.observe(svg, { attributes: true, attributeFilter: ["viewBox"] });
+    const boardItem = svg.closest(".board-item");
+    if (boardItem)
+      projection.observe(boardItem, {
+        attributes: true,
+        attributeFilter: ["style"],
+      });
+    return () => {
+      observer.disconnect();
+      projection.disconnect();
+    };
   }, []);
   const send = (event: PointerEvent<SVGCircleElement>) => {
     const svg = event.currentTarget.ownerSVGElement,

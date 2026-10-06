@@ -1,10 +1,10 @@
 import { create, type StateCreator } from "zustand";
-import { ProjectileExperiment } from "../components/compositions/ProjectileExperiment";
 import { Projectile } from "../components/prefabs/Projectile";
 import { GRAVITIES } from "../components/resources/GravityPresets";
 import { BallisticMotionSystem } from "../components/systems/BallisticMotionSystem";
 import type { MeasurementProbe } from "../components/traits/MeasurementProbe";
 import { type ActionResult, accepted, rejected, validNumber } from "./commands";
+import { ProjectileExperiment } from "./recipes/compatibility/compositions/ProjectileExperiment";
 import type { UIAction } from "./types";
 
 const defaults = ProjectileExperiment.defaults;

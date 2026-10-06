@@ -1,5 +1,6 @@
 import { validateRecipe } from "../../runtime/authoring/recipes";
 import type { CompositeRecipe } from "../../runtime/authoring/types";
+import { parseRecipe } from "../../runtime/recipes/schema";
 export const RECIPE_LIBRARY_KEY = "apertus-composites-v1";
 export type RecipeStore = Pick<Storage, "getItem" | "setItem">;
 export class RecipeRepository {
@@ -12,8 +13,7 @@ export class RecipeRepository {
       throw new Error(
         "Prebuilt library is unreadable; stored data has been retained.",
       );
-    for (const r of recipes) validateRecipe(r);
-    return recipes;
+    return recipes.map((recipe) => parseRecipe(recipe));
   }
   save(recipe: CompositeRecipe, expected?: CompositeRecipe) {
     validateRecipe(recipe);

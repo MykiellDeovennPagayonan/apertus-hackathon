@@ -2,8 +2,8 @@ import {
   builtInRecipe,
   modelRecipe,
 } from "../../components/composites/catalog";
-import { arrangeFocusedExperiment } from "../../components/composites/focused";
 import { bridgeRecipe, townRecipe } from "../../components/composites/spatial";
+import { arrangeFocusedExperiment } from "../recipes/compatibility/presentation";
 import { type Recipe, resolveRecipe } from "../resolver";
 import { insertRecipe, remapDocument } from "./recipes";
 import { requireValue } from "./requireValue";

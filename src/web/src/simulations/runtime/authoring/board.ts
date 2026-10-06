@@ -9,6 +9,8 @@ export type ComponentBoardItem = {
   rect: Rect;
   /** When set, author resizing preserves this presentation width/height ratio. */
   aspectRatio?: number;
+  /** Minimum scene height when a learner board reflows on a narrow screen. */
+  responsiveMinHeight?: number;
   zIndex: number;
   locked: boolean;
 };
@@ -17,6 +19,8 @@ export type BoardPresentation = {
   version: 1 | 2;
   /** Reflow independent lesson components on narrow learner screens. */
   responsive?: boolean;
+  /** Explicit item ordering and paired rows for narrow learner viewports. */
+  responsiveRows?: string[][];
   mode: "board";
   items: BoardItem[];
   /** Layout groups whose children have independent board placement. */
@@ -216,6 +220,7 @@ export function separateBoardLayout(
     locked: false,
   }));
   p.items = p.items.filter((i) => i.id !== item.id).concat(items);
+  reconcileResponsiveRows(p);
   p.groups = p.groups.map((g) => ({
     ...g,
     members: g.members.flatMap((id) =>
@@ -273,13 +278,16 @@ function layoutSize(
         ? 120
         : definition.startsWith("canvases/")
           ? 480
-          : definition.startsWith("controls/")
-            ? 160
-            : definition.startsWith("displays/")
+          : definition === "controls/Slider" ||
+              definition === "controls/NumberInput"
+            ? 240
+            : definition.startsWith("controls/")
               ? 160
-              : l.kind === "disclosure"
+              : definition.startsWith("displays/")
                 ? 160
-                : 440,
+                : l.kind === "disclosure"
+                  ? 160
+                  : 440,
   };
 }
 export function convertToBoard(d: AuthoredDocument): BoardPresentation {
@@ -381,6 +389,7 @@ export function reconcileBoard(d: AuthoredDocument) {
       });
     }
   const ids = new Set(p.items.map((i) => i.id));
+  reconcileResponsiveRows(p);
   p.groups = p.groups
     .map((g) => ({ ...g, members: g.members.filter((id) => ids.has(id)) }))
     .filter((g) => g.members.length > 1);
@@ -394,6 +403,16 @@ export function reconcileBoard(d: AuthoredDocument) {
     delete p.immersive.sceneItemId;
     p.immersive.startup = "board";
   }
+}
+function reconcileResponsiveRows(p: BoardPresentation) {
+  if (!p.responsiveRows) return;
+  const ids = new Set(p.items.map((item) => item.id));
+  p.responsiveRows = p.responsiveRows
+    .map((row) => row.filter((id) => ids.has(id)))
+    .filter((row) => row.length);
+  const arranged = new Set(p.responsiveRows.flat());
+  for (const item of p.items)
+    if (!arranged.has(item.id)) p.responsiveRows.push([item.id]);
 }
 export function validateBoard(d: AuthoredDocument, runnable = false) {
   const p = d.presentation;
@@ -437,6 +456,26 @@ export function validateBoard(d: AuthoredDocument, runnable = false) {
     )
       fail("invalid separated layout group");
   }
+  if (p.responsiveRows !== undefined) {
+    if (
+      !Array.isArray(p.responsiveRows) ||
+      p.responsiveRows.some(
+        (row) =>
+          !Array.isArray(row) ||
+          row.length < 1 ||
+          row.length > 2 ||
+          row.some((id) => typeof id !== "string"),
+      )
+    )
+      fail("invalid responsive rows");
+    const arranged = p.responsiveRows.flat();
+    if (
+      new Set(arranged).size !== arranged.length ||
+      arranged.length !== p.items.length ||
+      arranged.some((id) => !p.items.some((item) => item.id === id))
+    )
+      fail("responsive rows must place every board item exactly once");
+  }
   rect(p.startView);
   if (p.learnerArea) rect(p.learnerArea);
   const ids = new Set<string>(),
@@ -469,6 +508,14 @@ export function validateBoard(d: AuthoredDocument, runnable = false) {
         i.aspectRatio > 5)
     )
       fail("content aspect ratio must be between 1:5 and 5:1");
+    if (
+      "responsiveMinHeight" in i &&
+      i.responsiveMinHeight !== undefined &&
+      (!Number.isFinite(i.responsiveMinHeight) ||
+        i.responsiveMinHeight < 44 ||
+        i.responsiveMinHeight > 1000)
+    )
+      throw new Error(`${i.id}: invalid responsive minimum height`);
     if (
       i.rect.width < minimum.width ||
       i.rect.height < minimum.height ||

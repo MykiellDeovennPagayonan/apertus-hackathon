@@ -167,7 +167,12 @@ export type AuthoredDocument = {
   editor: { positions: Record<string, { x: number; y: number }>; zoom: number };
 };
 export type CompositeRecipe = {
-  recipeVersion: 1;
+  recipeVersion: 1 | 2;
+  catalog?: {
+    icon: string;
+    category: "physics" | "mathematics";
+    order: number;
+  };
   id: string;
   version: number;
   title: string;

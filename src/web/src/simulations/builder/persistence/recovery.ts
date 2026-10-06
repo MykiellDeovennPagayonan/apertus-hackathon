@@ -1,4 +1,3 @@
-import { migrateBoardDrawings } from "../../runtime/authoring/migrateDrawings";
 import { migrateManualDocument } from "../document/canonical";
 import { composeLegacy } from "../document/migrations/composeLegacy";
 import { parseDocument } from "../document/serialization";
@@ -18,11 +17,7 @@ export type DraftRecovery = {
 };
 export function editableDocument(document: ExperimentDocument) {
   if (document.authored) {
-    validateDocument(document);
-    const next = structuredClone(document);
-    next.authored = migrateBoardDrawings(document.authored);
-    next.editor = structuredClone(next.authored.editor);
-    return next;
+    return parseDocument(JSON.stringify(document));
   }
   const next = composeLegacy(document);
   if (next.scene) upgradeWorkspace(next.scene);
@@ -30,12 +25,15 @@ export function editableDocument(document: ExperimentDocument) {
   return migrateManualDocument(next);
 }
 export function usableEntries(entries: SavedExperiment[]) {
-  return entries.filter((entry) => {
+  return entries.flatMap((entry) => {
     try {
-      validateDocument(entry.document);
-      return typeof entry.id === "string";
+      const document = entry.document.authored
+        ? editableDocument(entry.document)
+        : entry.document;
+      validateDocument(document);
+      return typeof entry.id === "string" ? [{ ...entry, document }] : [];
     } catch {
-      return false;
+      return [];
     }
   });
 }
@@ -71,7 +69,7 @@ export function readBuilderRecovery(entries = readLibrary()) {
   }
   const raw = localStorage.getItem(DRAFT_KEY);
   const draft: DraftRecovery | undefined = raw ? JSON.parse(raw) : undefined;
-  if (draft) validateDocument(draft.valid);
+  if (draft) draft.valid = editableDocument(draft.valid);
   return {
     entries: usable,
     unreadable: entries.length !== usable.length,

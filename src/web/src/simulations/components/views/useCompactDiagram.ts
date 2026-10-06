@@ -12,7 +12,10 @@ const subscribe = (listener: () => void) => {
 };
 const snapshot = () => matchMedia("(max-width: 650px)").matches;
 /** Scene arrangement follows its allocated width, with a viewport fallback before measurement. */
-export function useCompactDiagram(element?: RefObject<SVGSVGElement | null>) {
+export function useCompactDiagram(
+  element?: RefObject<SVGSVGElement | null>,
+  threshold = 650,
+) {
   const viewport = useSyncExternalStore(subscribe, snapshot, () => false);
   const [width, setWidth] = useState<number>();
   useEffect(() => {
@@ -24,7 +27,7 @@ export function useCompactDiagram(element?: RefObject<SVGSVGElement | null>) {
     observer.observe(svg);
     return () => observer.disconnect();
   }, [element]);
-  return width && width > 0 ? width <= 650 : viewport;
+  return width && width > 0 ? width <= threshold : viewport;
 }
 const motionSubscribe = (listener: () => void) => {
   const query = matchMedia("(prefers-reduced-motion: reduce)");

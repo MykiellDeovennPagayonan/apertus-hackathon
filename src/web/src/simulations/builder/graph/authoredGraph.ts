@@ -75,6 +75,7 @@ export function authoredGraph(
       return {
         id: n.id,
         label: n.label,
+        componentType: def.title,
         kind: role[def.category],
         displayKind: def.discovery?.kind === "object" ? "Object" : undefined,
         description: def.description,

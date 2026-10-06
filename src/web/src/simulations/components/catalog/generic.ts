@@ -6,6 +6,10 @@ import {
   object,
   type ParameterSchema,
 } from "../../runtime/parameterSchema";
+import {
+  activityControlDefinitions,
+  basicControlDefinitions,
+} from "./controlDefinitions";
 
 const text: ParameterSchema = {
   type: "string",
@@ -42,34 +46,11 @@ export const base = (
   presentationProvider: id,
 });
 export const genericDefinitions: PublicDefinition[] = [
-  ...["NumberInput", "Form", "Slider", "Toggle", "Select", "Button"].map(
-    (name) => ({
-      ...base(
-        `controls/${name}`,
-        name === "NumberInput"
-          ? "Number input"
-          : name === "Button"
-            ? "Action button"
-            : name.replace(/([a-z])([A-Z])/g, "$1 $2"),
-        "controls",
-        object({
-          label: text,
-          mode: choice("submit", "immediate"),
-          initial: text,
-        }),
-        { label: name, mode: "submit", initial: "{}" },
-      ),
-      outputs: {
-        submit: {
-          kind: "event" as const,
-          unit: "",
-          cardinality: "many" as const,
-        },
-      },
-    }),
-  ),
+  ...basicControlDefinitions(base, text),
+  ...activityControlDefinitions(base, text),
   ...[
     "Readout",
+    "TrialSummary",
     "StatusMessage",
     "DataTable",
     "Chart",

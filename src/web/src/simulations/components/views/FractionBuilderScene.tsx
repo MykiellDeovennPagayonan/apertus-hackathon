@@ -35,6 +35,7 @@ export function FractionBuilderScene({
           barWidth={compact ? 380 : 780}
           left={compact ? 30 : 55}
           height={compact ? 78 : 90}
+          labelSize={compact ? 24 : 28}
           label={`Bar ${i === 0 ? "A" : "B"}`}
           onPiece={(piece) =>
             !interactive

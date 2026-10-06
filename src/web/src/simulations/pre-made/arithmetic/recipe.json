@@ -1,0 +1,242 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-arithmetic",
+  "version": 1,
+  "title": "Addition & subtraction",
+  "description": "Explore sums and differences by moving circles.",
+  "tags": [
+    "mathematics",
+    "arithmetic",
+    "lab"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "models/arithmetic",
+        "version": 1,
+        "label": "Arithmetic",
+        "scope": "scope/lab",
+        "configuration": {
+          "task": {
+            "operation": "add",
+            "a": 3,
+            "b": 2
+          },
+          "looping": false
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/arithmetic",
+        "version": 1,
+        "label": "Arithmetic appearance",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/SET_ARITHMETIC_TASK",
+        "definition": "controls/ArithmeticActivity",
+        "version": 1,
+        "label": "Arithmetic controls",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Arithmetic controls"
+        }
+      },
+      {
+        "id": "result",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Your calculation",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Your calculation",
+          "precision": 0
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/control/SET_ARITHMETIC_TASK",
+        "kind": "command",
+        "from": {
+          "node": "control/SET_ARITHMETIC_TASK",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "SET_ARITHMETIC_TASK"
+        }
+      },
+      {
+        "id": "link/result",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "board"
+        },
+        "to": {
+          "node": "result",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Arithmetic"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "result"
+        },
+        {
+          "id": "layout/control/SET_ARITHMETIC_TASK",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "control/SET_ARITHMETIC_TASK"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Addition & subtraction",
+      "instruction": "Choose your numbers. Press Add circles or Take away circles to see what happens.",
+      "explanation": "Each circle stands for one. Addition brings circles together; subtraction takes circles away. Changing a number starts a fresh calculation. Results use whole numbers from 0 to 20."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 442
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 400
+        },
+        {
+          "id": "board/layout/result",
+          "layoutId": "layout/result",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 320,
+            "height": 164
+          },
+          "zIndex": 1,
+          "locked": false
+        },
+        {
+          "id": "board/layout/control/SET_ARITHMETIC_TASK",
+          "layoutId": "layout/control/SET_ARITHMETIC_TASK",
+          "rect": {
+            "x": 644,
+            "y": 180,
+            "width": 320,
+            "height": 262
+          },
+          "zIndex": 2,
+          "locked": false
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1012,
+        "height": 490
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/arithmetic",
+      "version": 1
+    },
+    {
+      "id": "appearance/arithmetic",
+      "version": 1
+    },
+    {
+      "id": "controls/ArithmeticActivity",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "The board owns tokens and exact fraction state. Token interactions invoke its declared commands."
+  ],
+  "catalog": {
+    "icon": "+",
+    "category": "mathematics",
+    "order": 4
+  }
+}

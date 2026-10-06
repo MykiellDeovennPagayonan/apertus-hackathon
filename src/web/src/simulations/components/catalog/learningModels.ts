@@ -73,7 +73,14 @@ export const learningDefinitions: PublicDefinition[] = Object.keys(
           {
             kind:
               key === "frequencies" ? ("dataset" as const) : ("value" as const),
-            unit: key === "area" ? "m²" : key === "perimeter" ? "m" : "1",
+            unit:
+              key === "area"
+                ? "m²"
+                : key === "perimeter"
+                  ? "m"
+                  : key === "percentage"
+                    ? "%"
+                    : "1",
             crossScope: true,
           },
         ]),
@@ -95,7 +102,13 @@ export const learningDefinitions: PublicDefinition[] = Object.keys(
           key,
           {
             ...o,
-            ...(["SET_LOOPING", "SET_TICK_DIVISIONS"].includes(key)
+            ...([
+              "SET_LOOPING",
+              "SET_TICK_DIVISIONS",
+              "MOVE_POINT",
+              "SET_RATIO",
+              "SET_DIMENSIONS",
+            ].includes(key)
               ? { submission: "continuous" as const }
               : {}),
           },

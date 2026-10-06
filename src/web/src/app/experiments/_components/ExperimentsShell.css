@@ -176,7 +176,7 @@
   justify-content: flex-start;
 }
 
-/* Reserve real space for navigation and the composer; scroll the experiment within it. */
+/* The experiment fills the screen; navigation and the composer float above it. */
 .experiment-workspace {
   position: fixed;
   inset: 0;
@@ -188,12 +188,7 @@
 }
 .workspace-stage {
   position: absolute;
-  inset: var(--workspace-top, 112px) 0
-    calc(
-      var(--composer-height, 64px) +
-      var(--composer-bottom) +
-      var(--content-gap)
-    );
+  inset: 0;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -395,6 +390,12 @@
   gap: 4px;
   padding: 6px;
   pointer-events: auto;
+}
+.experiment-workspace :is(.workspace-identity, .workspace-toolbar) {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 .workspace-toolbar button,
 .workspace-toolbar a {
@@ -1337,6 +1338,12 @@
   z-index: 4;
 }
 .experiment-workspace .recipe-lesson.is-board-workspace > header {
+  position: absolute;
+  top: var(--workspace-top, 112px);
+  left: 0;
+  right: 0;
+  z-index: 2;
+  pointer-events: none;
   display: block;
   flex: none;
   padding: 12px 24px 16px;
@@ -1344,8 +1351,17 @@
   background: transparent;
 }
 .experiment-workspace .recipe-lesson.is-board-workspace > header h1 {
+  display: none;
   font: 600 28px / 1.2 var(--font-sans);
   margin: 0 0 6px;
+}
+.experiment-workspace .is-workspace .is-floating .board-camera-tools,
+.experiment-workspace .is-workspace .board-selection {
+  bottom: calc(var(--composer-height, 64px) + var(--composer-bottom) + 12px);
+}
+.experiment-workspace .is-workspace .is-floating .board-workspace-tools {
+  top: calc(var(--workspace-top, 112px) + 60px);
+  bottom: auto;
 }
 .experiment-workspace .recipe-lesson.is-board-workspace > header p {
   font-size: 14px;

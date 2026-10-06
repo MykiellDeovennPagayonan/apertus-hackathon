@@ -1,0 +1,348 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-area-perimeter",
+  "version": 1,
+  "title": "Area & perimeter",
+  "description": "How do side lengths change the inside area and the outside perimeter?",
+  "tags": [
+    "mathematics",
+    "area-perimeter",
+    "lab"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "models/area-perimeter",
+        "version": 1,
+        "label": "Area & perimeter",
+        "scope": "scope/lab",
+        "configuration": {
+          "width": 6,
+          "height": 4
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/area-perimeter",
+        "version": 1,
+        "label": "Area & perimeter scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/width",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Width \u00b7 m",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Width \u00b7 m",
+          "mode": "immediate",
+          "initial": "{\"value\": {\"width\": 6, \"height\": 4}}",
+          "parameter": "value.width",
+          "step": 0.1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/height",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Height \u00b7 m",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Height \u00b7 m",
+          "mode": "immediate",
+          "initial": "{\"value\": {\"width\": 6, \"height\": 4}}",
+          "parameter": "value.height",
+          "step": 0.1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/area",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Area inside \u00b7 m\u00b2",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Area inside",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/perimeter",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Perimeter around \u00b7 m",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Perimeter around",
+          "precision": 2
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/area",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "area"
+        },
+        "to": {
+          "node": "result/area",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/perimeter",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "perimeter"
+        },
+        "to": {
+          "node": "result/perimeter",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/width",
+        "kind": "command",
+        "from": {
+          "node": "input/width",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "SET_DIMENSIONS"
+        }
+      },
+      {
+        "id": "link/input/height",
+        "kind": "command",
+        "from": {
+          "node": "input/height",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "SET_DIMENSIONS"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Area & perimeter"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/area",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/area"
+        },
+        {
+          "id": "layout/result/perimeter",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/perimeter"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Rectangle dimensions",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/width",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/width"
+            },
+            {
+              "id": "layout/input/height",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/height"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Area & perimeter",
+      "instruction": "Change the side lengths. Watch area and perimeter respond.",
+      "explanation": "Side lengths describe a rectangle in metres and range from 0.1 to 100. Area is width times height in square metres; perimeter is twice their sum in metres. The drawing preserves the side-length proportion while adapting its scale to fit."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 350
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 180
+        },
+        {
+          "id": "board/layout/result/area",
+          "layoutId": "layout/result/area",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 162,
+            "height": 150
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/result/perimeter",
+          "layoutId": "layout/result/perimeter",
+          "rect": {
+            "x": 822,
+            "y": 0,
+            "width": 162,
+            "height": 150
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 180,
+            "width": 340,
+            "height": 320
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/task"
+        ],
+        [
+          "board/layout/result/area",
+          "board/layout/result/perimeter"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/area-perimeter",
+      "version": 1
+    },
+    {
+      "id": "appearance/area-perimeter",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Side lengths describe a rectangle in metres and range from 0.1 to 100. Area is width times height in square metres; perimeter is twice their sum in metres.",
+    "The drawing preserves the side-length proportion while adapting its scale to fit."
+  ],
+  "catalog": {
+    "icon": "\u25ad",
+    "category": "mathematics",
+    "order": 10
+  }
+}

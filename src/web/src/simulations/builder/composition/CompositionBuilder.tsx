@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import { publicDefinition } from "../../components/catalog";
 import { SchemaForm } from "../../components/controls/SchemaForm";
 import { RecipeLesson } from "../../components/views/RecipeLesson";
 import {
@@ -467,6 +468,11 @@ export default function CompositionBuilder({
       </div>
       <ComponentDialog
         open={!expanded && !!selected}
+        subtitle={
+          current
+            ? `${publicDefinition(current.definition).category === "controls" ? "Control" : publicDefinition(current.definition).category} · ${publicDefinition(current.definition).title}`
+            : undefined
+        }
         title={
           current?.label ??
           document.groups.find((g) => g.id === selected)?.label ??

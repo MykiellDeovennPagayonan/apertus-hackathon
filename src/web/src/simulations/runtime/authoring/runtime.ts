@@ -1,4 +1,11 @@
 import { publicDefinition } from "../../components/catalog";
+import { schemaDefault } from "../../components/composites/catalog";
+import { acceptedCommandArguments } from "../../components/controls/commandPresentation";
+import {
+  scalarControls,
+  validateScalarValue,
+  writeParameter,
+} from "../../components/controls/controlContract";
 import { fractionValue } from "../../components/systems/ComposedFractionSystem";
 import { compare } from "../../components/systems/fractionMath";
 import { lineIntersection } from "../../components/systems/LineIntersectionSystem";
@@ -237,30 +244,79 @@ export class DocumentRuntime {
     }
   };
   submit = (node: string, args: Record<string, unknown>): ActionResult => {
-    const commands = this.document.connections
-      .filter((c) => c.kind === "command" && c.from.node === node)
-      .map((c) => {
-        const arguments_ = structuredClone(c.arguments ?? args);
-        for (const [key, binding] of Object.entries(c.argumentBindings ?? {})) {
-          let value: unknown =
-            this.snapshot.outputs[binding.from.node]?.[binding.from.port];
-          for (const field of binding.path ?? [])
-            value =
-              value && typeof value === "object" && Object.hasOwn(value, field)
-                ? (value as Record<string, unknown>)[field]
-                : undefined;
-          if (binding.transform === "not") value = !value;
-          if (binding.transform === "multiply")
-            value = Number(value) * (binding.operand ?? 1);
-          if (binding.transform === "atLeast")
-            value = Math.max(Number(value), binding.operand ?? 0);
-          arguments_[key] = value;
-        }
-        return { node: c.to.node, command: c.to.port, arguments: arguments_ };
-      });
-    if (!commands.length)
-      return { accepted: false, error: "Connect this control to a command." };
-    return this.dispatch(commands);
+    try {
+      const control = this.document.nodes.find((n) => n.id === node);
+      const commands = this.document.connections
+        .filter((c) => c.kind === "command" && c.from.node === node)
+        .map((c) => {
+          let submitted = args;
+          if (control && !c.arguments) {
+            const target = this.document.nodes.find((n) => n.id === c.to.node);
+            if (!target) throw new Error("Missing control target");
+            const schema = publicDefinition(target.definition).commands[
+              c.to.port
+            ].arguments;
+            if (scalarControls.has(control.definition)) {
+              const binding = validateScalarValue(control, schema, args.value);
+              let initial: Record<string, unknown>;
+              try {
+                initial = JSON.parse(String(control.configuration.initial));
+                validateValue(schema, initial);
+              } catch {
+                initial = schemaDefault(schema) as Record<string, unknown>;
+              }
+              // Read siblings at submission time so dragging or another control cannot be overwritten.
+              const current =
+                acceptedCommandArguments(
+                  c.to.port,
+                  this.snapshot.state[target.id],
+                  initial,
+                ) ?? initial;
+              submitted = writeParameter(current, binding.path, args.value);
+            } else if (
+              control.definition === "controls/Button" &&
+              !Object.keys(args).length
+            ) {
+              try {
+                submitted = JSON.parse(String(control.configuration.initial));
+              } catch {
+                throw new Error(
+                  "Configure this action's arguments before running it.",
+                );
+              }
+            }
+          }
+          const arguments_ = structuredClone(c.arguments ?? submitted);
+          for (const [key, binding] of Object.entries(
+            c.argumentBindings ?? {},
+          )) {
+            let value: unknown =
+              this.snapshot.outputs[binding.from.node]?.[binding.from.port];
+            for (const field of binding.path ?? [])
+              value =
+                value &&
+                typeof value === "object" &&
+                Object.hasOwn(value, field)
+                  ? (value as Record<string, unknown>)[field]
+                  : undefined;
+            if (binding.transform === "not") value = !value;
+            if (binding.transform === "multiply")
+              value = Number(value) * (binding.operand ?? 1);
+            if (binding.transform === "atLeast")
+              value = Math.max(Number(value), binding.operand ?? 0);
+            arguments_[key] = value;
+          }
+          return { node: c.to.node, command: c.to.port, arguments: arguments_ };
+        });
+      if (!commands.length)
+        return { accepted: false, error: "Connect this control to a command." };
+      return this.dispatch(commands);
+    } catch (error) {
+      return {
+        accepted: false,
+        error: error instanceof Error ? error.message : "Invalid control value",
+      };
+    }
   };
   step(delta: number) {
     if (!Number.isFinite(delta) || delta <= 0 || delta > 1) return;

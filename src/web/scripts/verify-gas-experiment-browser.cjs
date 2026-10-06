@@ -108,6 +108,9 @@ async function main() {
         const main = document
           .querySelector(".recipe-lesson")
           .getBoundingClientRect();
+        const canvas = document
+          .querySelector(".board-viewport")
+          .getBoundingClientRect();
         return {
           left: control.left,
           right: control.right,
@@ -115,12 +118,30 @@ async function main() {
           top: control.top,
           stageTop: stage.top,
           stageBottom: stage.bottom,
+          canvasTop: canvas.top,
+          canvasBottom: canvas.bottom,
           mainWidth: main.width,
           viewport: innerWidth,
           overflow: document.documentElement.scrollWidth > innerWidth,
         };
       });
       assert.equal(geometry.overflow, false, name);
+      assert.ok(
+        Math.abs(geometry.stageTop) <= 1,
+        `${name}: stage starts at screen top`,
+      );
+      assert.ok(
+        Math.abs(geometry.stageBottom - height) <= 1,
+        `${name}: stage fills screen height`,
+      );
+      assert.ok(
+        Math.abs(geometry.canvasTop) <= 1,
+        `${name}: canvas extends behind navigation`,
+      );
+      assert.ok(
+        Math.abs(geometry.canvasBottom - height) <= 1,
+        `${name}: canvas extends behind composer`,
+      );
       assert.ok(geometry.left >= 0 && geometry.right <= width, name);
       assert.ok(
         geometry.top >= geometry.stageTop &&
@@ -128,6 +149,16 @@ async function main() {
         name,
       );
       assert.ok(geometry.mainWidth <= geometry.viewport, name);
+      const pressureFits = await pressure.evaluate((element) => {
+        const content = element.closest(".board-content");
+        const card = content.getBoundingClientRect();
+        const value = element.getBoundingClientRect();
+        return (
+          content.scrollHeight <= content.clientHeight + 1 &&
+          value.bottom <= card.bottom + 1
+        );
+      });
+      assert.ok(pressureFits, `${name}: pressure value fits without scrolling`);
       await page.screenshot({ path: `${captures}/${name}.png` });
     }
     await page.setViewportSize({ width: 1280, height: 900 });
@@ -148,7 +179,7 @@ async function main() {
       await page.getByRole("slider", { name: "Volume", exact: true }).count(),
       1,
     );
-    const builderNumber = page.getByRole("spinbutton", {
+    const builderNumber = page.getByRole("textbox", {
       name: "Exact volume",
       exact: true,
     });

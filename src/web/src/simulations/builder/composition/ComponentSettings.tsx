@@ -1,7 +1,11 @@
 import { publicDefinition } from "../../components/catalog";
+import { hasControlSettings } from "../../components/controls/controlContract";
 import { SchemaForm } from "../../components/controls/SchemaForm";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import { emptyLayout, type Layout } from "../../runtime/authoring/types";
+import { interchangeableControls } from "../editor/controlTypeCommands";
+import { ControlSettings } from "./ControlSettings";
+import { ControlTypeSettings } from "./ControlTypeSettings";
 import { DataDisplaySettings } from "./DataDisplaySettings";
 import { DecorationSettings } from "./DecorationSettings";
 import { ManualCanvasSettings } from "./ManualComponentSettings";
@@ -19,22 +23,37 @@ export function ComponentSettings({
     <div className="composition-settings-fields">
       {current ? (
         <>
-          <label>
-            Label
-            <input
-              value={current.label}
-              onChange={(e) =>
-                change("Rename component", (d) => {
-                  requireValue(
-                    [...d.nodes, ...d.resources].find(
-                      (n) => n.id === current.id,
-                    ),
-                  ).label = e.target.value;
-                })
-              }
+          {interchangeableControls.includes(current.definition) && (
+            <ControlTypeSettings
+              key={`${current.id}/${current.definition}`}
+              node={current}
+              catalog={catalog}
             />
-          </label>
-          {["displays/Text", "displays/Box"].includes(current.definition) ? (
+          )}
+          {!hasControlSettings(current.definition) && (
+            <label>
+              Label
+              <input
+                value={current.label}
+                onChange={(e) =>
+                  change("Rename component", (d) => {
+                    requireValue(
+                      [...d.nodes, ...d.resources].find(
+                        (n) => n.id === current.id,
+                      ),
+                    ).label = e.target.value;
+                  })
+                }
+              />
+            </label>
+          )}
+          {hasControlSettings(current.definition) ? (
+            <ControlSettings
+              key={`${current.id}/${JSON.stringify(current.configuration)}/${JSON.stringify(document.connections.filter((c) => c.from.node === current.id))}`}
+              node={current}
+              catalog={catalog}
+            />
+          ) : ["displays/Text", "displays/Box"].includes(current.definition) ? (
             <DecorationSettings node={current} catalog={catalog} />
           ) : /^canvases\/(cartesian|physical|diagram|town)$/.test(
               current.definition,

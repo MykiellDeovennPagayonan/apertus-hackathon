@@ -1,1 +1,0 @@
-export { FractionNumberLineExperiment } from "./compositions";

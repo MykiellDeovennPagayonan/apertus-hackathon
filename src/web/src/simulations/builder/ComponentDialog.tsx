@@ -4,6 +4,7 @@ import { type ReactNode, useEffect, useRef } from "react";
 export function ComponentDialog({
   open,
   title,
+  subtitle,
   onClose,
   children,
   wide = false,
@@ -13,6 +14,7 @@ export function ComponentDialog({
 }: {
   open: boolean;
   title: string;
+  subtitle?: string;
   onClose: () => void;
   children: ReactNode;
   wide?: boolean;
@@ -55,7 +57,10 @@ export function ComponentDialog({
       }}
     >
       <header>
-        <h2>{title}</h2>
+        <div>
+          <h2>{title}</h2>
+          {subtitle && <p className="component-dialog-type">{subtitle}</p>}
+        </div>
         <button type="button" aria-label={`Close ${title}`} onClick={onClose}>
           ×
         </button>

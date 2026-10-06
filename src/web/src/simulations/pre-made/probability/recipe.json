@@ -1,0 +1,253 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-probability",
+  "version": 1,
+  "title": "Probability trials",
+  "description": "How close do repeated random trials get to the expected probability?",
+  "tags": [
+    "mathematics",
+    "probability",
+    "lab"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "models/probability",
+        "version": 1,
+        "label": "Probability trials",
+        "scope": "scope/lab",
+        "configuration": {
+          "preset": "coin",
+          "seed": 42,
+          "trials": 100
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/probability",
+        "version": 1,
+        "label": "Probability trials scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "task",
+        "definition": "controls/TrialsActivity",
+        "version": 1,
+        "label": "Random trial controls",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Random trial controls"
+        }
+      },
+      {
+        "id": "summary",
+        "definition": "displays/TrialSummary",
+        "version": 1,
+        "label": "Observed vs expected",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Observed vs expected",
+          "precision": 1
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/task",
+        "kind": "command",
+        "from": {
+          "node": "task",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "SET_DISTRIBUTION"
+        }
+      },
+      {
+        "id": "link/summary",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "frequencies"
+        },
+        "to": {
+          "node": "summary",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Probability trials"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/summary",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "summary"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "task"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Probability trials",
+      "instruction": "Run trials. Compare what happened with what you expected.",
+      "explanation": "Trials use a reproducible seeded uniform pseudo-random generator for a fair coin or six-sided die. Seeds are authored and new samples advance the seed. Each run replaces the previous sample with 1\u201310,000 trials. Expected counts may be fractional; percentages divide counts by the completed sample size."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 430
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 350
+        },
+        {
+          "id": "board/layout/summary",
+          "layoutId": "layout/summary",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 340,
+            "height": 164
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 180,
+            "width": 340,
+            "height": 270
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 240
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 498
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/task"
+        ],
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/summary"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/probability",
+      "version": 1
+    },
+    {
+      "id": "appearance/probability",
+      "version": 1
+    },
+    {
+      "id": "controls/TrialsActivity",
+      "version": 1
+    },
+    {
+      "id": "displays/TrialSummary",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Trials use a reproducible seeded uniform pseudo-random generator for a fair coin or six-sided die. Seeds are authored and new samples advance the seed.",
+    "Each run replaces the previous sample with 1\u201310,000 trials. Expected counts may be fractional; percentages divide counts by the completed sample size."
+  ],
+  "catalog": {
+    "icon": "\u2684",
+    "category": "mathematics",
+    "order": 12
+  }
+}

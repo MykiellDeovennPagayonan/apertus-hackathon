@@ -24,6 +24,10 @@ export interface ResultRecord {
 }
 export interface ExperimentDocument {
   documentVersion: 1 | 2 | 3;
+  recipeMetadata?: Omit<
+    import("../../runtime/authoring/types").CompositeRecipe,
+    "document"
+  >;
   authored?: import("../../runtime/authoring/types").AuthoredDocument;
   scene?: CompositionScene;
   template: TemplateId;

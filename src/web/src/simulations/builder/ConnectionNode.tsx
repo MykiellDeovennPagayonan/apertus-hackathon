@@ -147,6 +147,7 @@ export function ConnectionNode({
                   : node.kind === "Placement"
                     ? "Layout"
                     : node.kind)}
+            {node.componentType && ` · ${node.componentType}`}
           </small>
           <strong title={node.label}>{node.label}</strong>
           <span>{node.description}</span>

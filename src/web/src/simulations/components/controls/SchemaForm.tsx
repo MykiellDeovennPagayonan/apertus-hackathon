@@ -1,13 +1,13 @@
 "use client";
 
-import { type CSSProperties, useId, useState } from "react";
+import { useId, useState } from "react";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import type { ActionResult } from "../../runtime/commands";
 import {
   type ParameterSchema,
   validateValue,
 } from "../../runtime/parameterSchema";
-import { formatDataNumber } from "../views/dataPresentation";
+import { NumberField } from "./NumberField";
 
 const fieldNames: Record<string, string> = {
   a: "First value",
@@ -39,6 +39,9 @@ export type FieldPresentation = Record<
     help?: string;
     choices?: Record<string, string>;
     step?: number;
+    widget?: string;
+    showNumber?: boolean;
+    exactLabel?: boolean;
   }
 >;
 
@@ -52,18 +55,20 @@ function Field({
   path = "",
   presentation = {},
   errorId,
+  onValidityChange,
 }: {
   widget?: string;
   schema: ParameterSchema;
   value: unknown;
-  onChange: (v: unknown) => void;
+  onChange: (v: unknown) => ActionResult | undefined;
   label: string;
   id: string;
   path?: string;
   presentation?: FieldPresentation;
   errorId?: string;
+  onValidityChange?: (id: string, valid: boolean) => void;
 }) {
-  const [numericDraft, setNumericDraft] = useState<string | null>(null);
+  widget = presentation[path]?.widget ?? widget;
   if (schema.type === "object") {
     const fields = Object.entries(schema.properties);
     if (!fields.length) return null;
@@ -79,6 +84,7 @@ function Field({
               path={`${path}.${key}`}
               presentation={presentation}
               errorId={errorId}
+              onValidityChange={onValidityChange}
               widget={widget}
               schema={child}
               value={(value as Record<string, unknown>)?.[key]}
@@ -113,6 +119,7 @@ function Field({
               path={`${path}.${index}`}
               presentation={presentation}
               errorId={errorId}
+              onValidityChange={onValidityChange}
               value={item}
               onChange={(next) =>
                 onChange(
@@ -172,77 +179,32 @@ function Field({
     !label.toLowerCase().split(/\s+/).includes(candidateUnit.toLowerCase())
       ? candidateUnit
       : undefined;
-  if (numeric && widget === "Slider")
+  if (numeric && (schema.type === "number" || schema.type === "integer"))
     return (
-      <div className="catalog-slider">
-        <div className="catalog-slider-heading">
-          <label htmlFor={`${id}-range`}>{label}</label>
-          <label className="catalog-exact-value" htmlFor={`${id}-number`}>
-            <span className="sr-only">Exact {label.toLowerCase()}</span>
-            <input
-              id={`${id}-number`}
-              aria-describedby={errorId}
-              aria-invalid={!!errorId || undefined}
-              aria-label={`Exact ${label.toLowerCase()}`}
-              type="number"
-              min={schema.minimum}
-              max={schema.maximum}
-              step={schema.type === "integer" ? 1 : "any"}
-              value={numericDraft ?? String(value ?? "")}
-              onChange={(event) => {
-                const raw = event.target.value;
-                setNumericDraft(raw);
-                onChange(raw.trim() ? Number(raw) : raw);
-              }}
-              onBlur={() => {
-                if (numericDraft?.trim() && Number(numericDraft) === value)
-                  setNumericDraft(null);
-              }}
-              onKeyDown={(event) => {
-                if (event.key === "Escape") {
-                  setNumericDraft(null);
-                  onChange(value);
-                }
-              }}
-            />
-            {unit && <span>{unit}</span>}
-          </label>
-        </div>
-        <div className="catalog-slider-inputs">
-          <input
-            id={`${id}-range`}
-            aria-describedby={errorId}
-            aria-invalid={!!errorId || undefined}
-            type="range"
-            style={
-              {
-                "--slider-fill": `${Math.max(0, Math.min(100, ((Number(value) - schema.minimum) / (schema.maximum - schema.minimum)) * 100))}%`,
-              } as CSSProperties
-            }
-            min={schema.minimum}
-            max={schema.maximum}
-            step={
-              presentation[path]?.step ??
-              (schema.type === "integer" ? 1 : "any")
-            }
-            value={String(value ?? schema.minimum)}
-            onChange={(event) => {
-              setNumericDraft(null);
-              onChange(Number(event.target.value));
-            }}
-          />
-        </div>
-        <div className="catalog-slider-limits" aria-hidden="true">
-          <span>
-            {formatDataNumber(schema.minimum)}
-            {unit && ` ${unit}`}
-          </span>
-          <span>
-            {formatDataNumber(schema.maximum)}
-            {unit && ` ${unit}`}
-          </span>
-        </div>
-      </div>
+      <NumberField
+        label={label}
+        inputLabel={
+          widget === "Slider" && presentation[path]?.exactLabel !== false
+            ? `Exact ${label.toLowerCase()}`
+            : label
+        }
+        rangeLabel={label}
+        value={Number(value ?? schema.minimum)}
+        min={schema.minimum}
+        max={schema.maximum}
+        integer={schema.type === "integer"}
+        step={
+          presentation[path]?.step ?? (schema.type === "integer" ? 1 : "any")
+        }
+        presentation={widget === "Slider" ? "slider" : "field"}
+        showNumber={presentation[path]?.showNumber !== false}
+        unit={unit}
+        limits={widget === "Slider"}
+        onValidityChange={(valid) => onValidityChange?.(id, valid)}
+        onChange={(next) => {
+          return onChange(next) ?? { accepted: true };
+        }}
+      />
     );
   return (
     <label className="catalog-field" htmlFor={id}>
@@ -255,10 +217,14 @@ function Field({
         aria-describedby={errorId}
         aria-invalid={!!errorId || undefined}
         aria-label={label}
-        type={numeric ? "number" : "text"}
-        min={numeric ? schema.minimum : undefined}
-        max={numeric ? schema.maximum : undefined}
-        step={schema.type === "integer" ? 1 : "any"}
+        type="text"
+        inputMode={
+          numeric
+            ? schema.type === "integer"
+              ? "numeric"
+              : "decimal"
+            : undefined
+        }
         value={String(value ?? "")}
         onChange={(event) => {
           const raw = event.target.value;
@@ -304,6 +270,16 @@ export function SchemaForm({
     currentForDraft?.(draft as Record<string, unknown>) ?? providedCurrent;
   const revision = currentRevision ?? JSON.stringify(current);
   const [dirty, setDirty] = useState(false);
+  const [discardRevision, setDiscardRevision] = useState(0);
+  const [validity, setValidity] = useState<Record<string, boolean>>({});
+  const fieldValidity = (field: string, valid: boolean) => {
+    setValidity((previous) => ({ ...previous, [field]: valid }));
+    if (mode === "submit" && !valid) {
+      if (!dirty) setDraftOrigin(revision);
+      setDirty(true);
+    }
+  };
+  const invalid = Object.values(validity).some((valid) => !valid);
   const [draftOrigin, setDraftOrigin] = useState<string>();
   const value = current && !dirty ? current : draft;
   const [feedback, setFeedback] = useState("");
@@ -348,13 +324,20 @@ export function SchemaForm({
   };
   const update = (next: unknown) => {
     if (mode === "immediate") {
-      if (commit(next)) setValue(next);
-      return;
+      const accepted = commit(next);
+      if (accepted) setValue(next);
+      return accepted
+        ? ({ accepted: true } as const)
+        : ({
+            accepted: false,
+            error: "Change was rejected. Review the values.",
+          } as const);
     }
     setFeedback("");
     if (!dirty) setDraftOrigin(revision);
     setDirty(true);
     setValue(next);
+    return { accepted: true } as const;
   };
   return (
     <form
@@ -362,7 +345,7 @@ export function SchemaForm({
       className={`catalog-form catalog-form--${isAction ? "action" : (widget?.split("/").at(-1)?.toLowerCase() ?? "form")}`}
       onSubmit={(event) => {
         event.preventDefault();
-        if (commit(value)) setDirty(false);
+        if (!invalid && commit(value)) setDirty(false);
       }}
     >
       {isAction ? (
@@ -379,12 +362,14 @@ export function SchemaForm({
           )}
           {schema.type !== "object" ? (
             <Field
+              key={discardRevision}
               id={`${id}-field`}
               schema={schema}
               value={value}
               label={label}
               widget={widget}
               onChange={update}
+              onValidityChange={fieldValidity}
               errorId={
                 feedbackTone === "error" && feedback
                   ? `${id}-feedback`
@@ -393,10 +378,12 @@ export function SchemaForm({
             />
           ) : singleValue ? (
             <Field
+              key={discardRevision}
               id={`${id}-value`}
               widget={widget}
               path="value"
               presentation={presentation}
+              onValidityChange={fieldValidity}
               errorId={
                 feedbackTone === "error" && feedback
                   ? `${id}-feedback`
@@ -421,11 +408,12 @@ export function SchemaForm({
             <div className="catalog-field-grid catalog-field-grid--root">
               {entries.map(([key, child]) => (
                 <Field
-                  key={key}
+                  key={`${key}/${discardRevision}`}
                   id={`${id}-${key}`}
                   widget={widget}
                   path={key}
                   presentation={presentation}
+                  onValidityChange={fieldValidity}
                   errorId={
                     feedbackTone === "error" && feedback
                       ? `${id}-feedback`
@@ -448,6 +436,7 @@ export function SchemaForm({
             <button
               className="recipe-action recipe-action--primary"
               type="submit"
+              disabled={invalid}
             >
               {submitLabel ?? "Apply changes"}
             </button>
@@ -479,6 +468,8 @@ export function SchemaForm({
           onClick={() => {
             setDirty(false);
             setFeedback("");
+            setValidity({});
+            setDiscardRevision((previous) => previous + 1);
           }}
         >
           Discard edits

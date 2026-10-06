@@ -16,7 +16,7 @@ export function validateRecipe(r: CompositeRecipe) {
   assertData(r);
   if (
     !r ||
-    r.recipeVersion !== 1 ||
+    ![1, 2].includes(r.recipeVersion) ||
     typeof r.id !== "string" ||
     !r.id ||
     !Number.isInteger(r.version) ||
@@ -59,6 +59,48 @@ export function validateRecipe(r: CompositeRecipe) {
       !r.discovery.placement.trim())
   )
     throw new Error("recipe: invalid discovery metadata");
+  if (r.recipeVersion === 2) {
+    if (r.nested.length)
+      throw new Error("Current recipes must be fully expanded");
+    const used = new Set(
+      [...r.document.nodes, ...r.document.resources].map(
+        (node) => `${node.definition}@${node.version}`,
+      ),
+    );
+    const declared = r.dependencies.map(
+      (dependency) => `${dependency.id}@${dependency.version}`,
+    );
+    if (
+      declared.length !== new Set(declared).size ||
+      declared.some((key) => !used.has(key))
+    )
+      throw new Error(
+        "Current recipe dependencies must have exactly one entry per used definition version",
+      );
+
+    if (r.document.lesson.title !== r.title)
+      throw new Error("Recipe and lesson titles must agree");
+    if (
+      r.catalog &&
+      (typeof r.catalog.icon !== "string" ||
+        !r.catalog.icon.trim() ||
+        !["physics", "mathematics"].includes(r.catalog.category) ||
+        !Number.isInteger(r.catalog.order))
+    )
+      throw new Error("Invalid recipe catalog metadata");
+    for (const parameter of r.parameters) {
+      const child = [...r.document.nodes, ...r.document.resources].find(
+        (n) => n.id === parameter.node,
+      );
+      if (
+        JSON.stringify(child?.configuration[parameter.field]) !==
+        JSON.stringify(parameter.default)
+      )
+        throw new Error(
+          `${parameter.name}: default differs from authored configuration`,
+        );
+    }
+  }
   validateAuthoredDocument(r.document);
   for (const dep of r.dependencies) publicDefinition(dep.id, dep.version);
   for (const n of [...r.document.nodes, ...r.document.resources])
@@ -179,6 +221,8 @@ export function remapDocument(
     for (const g of p.groups) claim(g.id);
     for (const o of p.immersive.overlays) claim(o.id);
     if (p.separatedLayouts) p.separatedLayouts = p.separatedLayouts.map(ref);
+    if (p.responsiveRows)
+      p.responsiveRows = p.responsiveRows.map((row) => row.map(ref));
     for (const i of p.items) {
       i.id = ref(i.id);
       if (i.layoutId) i.layoutId = ref(i.layoutId);
@@ -221,6 +265,12 @@ function append(d: AuthoredDocument, addition: AuthoredDocument) {
       d.presentation.separatedLayouts = [
         ...(d.presentation.separatedLayouts ?? []),
         ...incoming.separatedLayouts,
+      ];
+    if (d.presentation.responsiveRows || incoming.responsiveRows)
+      d.presentation.responsiveRows = [
+        ...(d.presentation.responsiveRows ??
+          d.presentation.items.map((item) => [item.id])),
+        ...(incoming.responsiveRows ?? incoming.items.map((item) => [item.id])),
       ];
     d.presentation.items.push(...incoming.items);
     d.presentation.groups.push(...incoming.groups);

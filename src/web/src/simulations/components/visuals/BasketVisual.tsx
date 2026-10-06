@@ -25,8 +25,21 @@ export function BasketVisual({
         stroke="#af9870"
         strokeWidth={2}
       />
-      <text x={x + 15} y={y + 27} className="math-scene-label">
-        {label} · {count}
+      <text
+        x={x + width / 2}
+        y={y - 8}
+        textAnchor="middle"
+        className="math-scene-label"
+      >
+        {label}
+      </text>
+      <text
+        x={x + width / 2}
+        y={y + 27}
+        textAnchor="middle"
+        className="math-scene-label"
+      >
+        {count}
       </text>
     </g>
   );

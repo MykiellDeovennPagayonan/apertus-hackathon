@@ -1,0 +1,305 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-ratio",
+  "version": 1,
+  "title": "Ratios & percentages",
+  "description": "What percentage of the whole is selected?",
+  "tags": [
+    "mathematics",
+    "ratio",
+    "lab"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "models/ratio",
+        "version": 1,
+        "label": "Ratios & percentages",
+        "scope": "scope/lab",
+        "configuration": {
+          "numerator": 3,
+          "denominator": 4
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/ratio",
+        "version": 1,
+        "label": "Ratios & percentages scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/numerator",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Selected amount",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Selected amount",
+          "mode": "immediate",
+          "initial": "{\"value\": {\"numerator\": 3, \"denominator\": 4}}",
+          "parameter": "value.numerator",
+          "step": 0.1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/denominator",
+        "definition": "controls/NumberInput",
+        "version": 1,
+        "label": "Whole amount",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Whole amount",
+          "mode": "immediate",
+          "initial": "{\"value\": {\"numerator\": 3, \"denominator\": 4}}",
+          "parameter": "value.denominator",
+          "step": 0.1
+        }
+      },
+      {
+        "id": "result/percentage",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Percentage of the whole",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Percentage of the whole",
+          "precision": 2
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/percentage",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "percentage"
+        },
+        "to": {
+          "node": "result/percentage",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/numerator",
+        "kind": "command",
+        "from": {
+          "node": "input/numerator",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "SET_RATIO"
+        }
+      },
+      {
+        "id": "link/input/denominator",
+        "kind": "command",
+        "from": {
+          "node": "input/denominator",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "SET_RATIO"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Ratios & percentages"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/percentage",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/percentage"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Ratio values",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/numerator",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/numerator"
+            },
+            {
+              "id": "layout/input/denominator",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/denominator"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Ratios & percentages",
+      "instruction": "Change the selected amount. Watch the percentage respond.",
+      "explanation": "The reference whole must be positive. The selected amount divided by the reference whole defines the ratio; multiplying by 100 gives its percentage. Selected amounts can exceed the reference whole. Complete multiples and a remaining part are shown separately."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 300
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 180
+        },
+        {
+          "id": "board/layout/result/percentage",
+          "layoutId": "layout/result/percentage",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 340,
+            "height": 164
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 180,
+            "width": 340,
+            "height": 250
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 498
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/task"
+        ],
+        [
+          "board/layout/result/percentage"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/ratio",
+      "version": 1
+    },
+    {
+      "id": "appearance/ratio",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "controls/NumberInput",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "The reference whole must be positive. The selected amount divided by the reference whole defines the ratio; multiplying by 100 gives its percentage.",
+    "Selected amounts can exceed the reference whole. Complete multiples and a remaining part are shown separately."
+  ],
+  "catalog": {
+    "icon": "%",
+    "category": "mathematics",
+    "order": 9
+  }
+}

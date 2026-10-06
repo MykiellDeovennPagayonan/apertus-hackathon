@@ -5,6 +5,7 @@ export function LegendView({
   width = 20,
   gap = 18,
   horizontal = false,
+  fontSize = 11,
 }: {
   entries: { label: string; color: string; dash?: string }[];
   x: number;
@@ -12,9 +13,10 @@ export function LegendView({
   width?: number;
   gap?: number;
   horizontal?: boolean;
+  fontSize?: number;
 }) {
   return (
-    <g fontSize={11} fill="var(--text-dim)">
+    <g fontSize={fontSize} fill="var(--text-dim)">
       {entries.map((e, i) => (
         <g key={e.label}>
           <line

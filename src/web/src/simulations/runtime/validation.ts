@@ -1,4 +1,3 @@
-import { elementaryCompositions } from "../components/compositions/ElementaryExperiments";
 import { GasPressureExperiment } from "../components/compositions/GasPressureExperiment";
 import { Building } from "../components/prefabs/Building";
 import { Citizen } from "../components/prefabs/Citizen";
@@ -7,13 +6,6 @@ import { Market } from "../components/prefabs/Market";
 import { Projectile } from "../components/prefabs/Projectile";
 import { buildTruss } from "../components/prefabs/TrussAssembly";
 import type { GasState } from "../components/traits/GasState";
-import { ArithmeticExperiment } from "../pre-made/arithmetic";
-import { BridgeExperiment } from "../pre-made/bridge";
-import { CountingExperiment } from "../pre-made/counting";
-import { EqualGroupsExperiment } from "../pre-made/equal-groups";
-import { FractionBuilderExperiment } from "../pre-made/fraction-builder";
-import { FractionNumberLineExperiment } from "../pre-made/fraction-number-line";
-import { ProjectileExperiment } from "../pre-made/projectile";
 import { TownExperiment } from "../pre-made/town";
 import { compileAssembly } from "./assembly";
 import { templateNames, templateParameters } from "./capabilities";
@@ -24,6 +16,14 @@ import { elementaryOutputs, isElementaryDemo } from "./elementarySession";
 import { isMathDemo, mathActions, stageMathBoard } from "./mathModel";
 import { validateValue } from "./parameterSchema";
 import { systemProviders } from "./providers";
+import { ArithmeticExperiment } from "./recipes/compatibility/compositions/ArithmeticExperiment";
+import { BridgeExperiment } from "./recipes/compatibility/compositions/BridgeExperiment";
+import { CountingExperiment } from "./recipes/compatibility/compositions/CountingExperiment";
+import { elementaryCompositions } from "./recipes/compatibility/compositions/ElementaryExperiments";
+import { EqualGroupsExperiment } from "./recipes/compatibility/compositions/EqualGroupsExperiment";
+import { FractionBuilderExperiment } from "./recipes/compatibility/compositions/FractionBuilderExperiment";
+import { FractionNumberLineExperiment } from "./recipes/compatibility/compositions/FractionNumberLineExperiment";
+import { ProjectileExperiment } from "./recipes/compatibility/compositions/ProjectileExperiment";
 import type { DemoType } from "./types";
 export const compositions = {
   gas: GasPressureExperiment,
