@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { type CSSProperties, useId, useState } from "react";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import type { ActionResult } from "../../runtime/commands";
 import {
@@ -34,7 +34,12 @@ function usefulUnit(schema: ParameterSchema) {
 
 export type FieldPresentation = Record<
   string,
-  { label?: string; help?: string; choices?: Record<string, string> }
+  {
+    label?: string;
+    help?: string;
+    choices?: Record<string, string>;
+    step?: number;
+  }
 >;
 
 function Field({
@@ -172,28 +177,6 @@ function Field({
       <div className="catalog-slider">
         <div className="catalog-slider-heading">
           <label htmlFor={`${id}-range`}>{label}</label>
-          <span className="catalog-current-value">
-            {typeof value === "number"
-              ? formatDataNumber(value)
-              : String(value ?? "")}
-            {unit && <small>{unit}</small>}
-          </span>
-        </div>
-        <div className="catalog-slider-inputs">
-          <input
-            id={`${id}-range`}
-            aria-describedby={errorId}
-            aria-invalid={!!errorId || undefined}
-            type="range"
-            min={schema.minimum}
-            max={schema.maximum}
-            step={schema.type === "integer" ? 1 : "any"}
-            value={String(value ?? schema.minimum)}
-            onChange={(event) => {
-              setNumericDraft(null);
-              onChange(Number(event.target.value));
-            }}
-          />
           <label className="catalog-exact-value" htmlFor={`${id}-number`}>
             <span className="sr-only">Exact {label.toLowerCase()}</span>
             <input
@@ -224,6 +207,40 @@ function Field({
             />
             {unit && <span>{unit}</span>}
           </label>
+        </div>
+        <div className="catalog-slider-inputs">
+          <input
+            id={`${id}-range`}
+            aria-describedby={errorId}
+            aria-invalid={!!errorId || undefined}
+            type="range"
+            style={
+              {
+                "--slider-fill": `${Math.max(0, Math.min(100, ((Number(value) - schema.minimum) / (schema.maximum - schema.minimum)) * 100))}%`,
+              } as CSSProperties
+            }
+            min={schema.minimum}
+            max={schema.maximum}
+            step={
+              presentation[path]?.step ??
+              (schema.type === "integer" ? 1 : "any")
+            }
+            value={String(value ?? schema.minimum)}
+            onChange={(event) => {
+              setNumericDraft(null);
+              onChange(Number(event.target.value));
+            }}
+          />
+        </div>
+        <div className="catalog-slider-limits" aria-hidden="true">
+          <span>
+            {formatDataNumber(schema.minimum)}
+            {unit && ` ${unit}`}
+          </span>
+          <span>
+            {formatDataNumber(schema.maximum)}
+            {unit && ` ${unit}`}
+          </span>
         </div>
       </div>
     );

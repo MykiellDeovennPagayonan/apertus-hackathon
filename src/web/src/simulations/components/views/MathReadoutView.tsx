@@ -60,7 +60,14 @@ export function mathReadout(board: MathBoard): {
 export function MathReadoutView({ board }: { board: MathBoard }) {
   const output = mathReadout(board);
   return (
-    <div className="math-readout" aria-live="polite" aria-atomic="true">
+    <div
+      className={`math-readout${board.demo === "counting" ? " math-readout--counting" : ""}`}
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {board.demo === "counting" && (
+        <span className="math-count-label">Circles counted</span>
+      )}
       <div className="math-equation">{output.equation}</div>
       <p>{output.detail}</p>
       {board.feedback && <p className="math-feedback">{board.feedback}</p>}

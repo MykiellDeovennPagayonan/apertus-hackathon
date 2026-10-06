@@ -117,11 +117,13 @@ A prefab declares parameters, initial traits, resource/behavior/visual reference
 
 ### `compositions/`: complete experiment recipes
 
+**Convention update (2026-10-06):** [Implementation 013](../../../../../docs/agent-only/implementation/013-PREMADE-JSON-RECIPE-CONVENTION.md) defines the approved target: every premade has only `pre-made/<slug>/recipe.json`, consumed through one generic registry and loader. The composition/re-export examples below describe legacy code awaiting migration; they are not instructions for new premades.
+
 Put full experiment definitions here: `ProjectileExperiment.ts`, `AngleComparisonExperiment.ts`, `BridgeExperiment.ts` and `TownExperiment.ts`.
 
 A composition selects world/model settings, systems, prefab instances and overrides, references, views, controls, measurements and assumptions. This is where the initial 22 citizens, 10 t bridge load, or 45° projectile setup is assembled from library definitions.
 
-These recipes also live in the main library. `pre-made/<simulation>/compositions/index.ts` re-exports them. Defaults, configuration, JSX and functions must not be duplicated in the premade folders.
+Legacy compositions live in the main library and are re-exported by `pre-made/<simulation>/compositions/index.ts` until migration removes those trees. Authored premade JSON belongs at exactly `pre-made/<slug>/recipe.json`, with no other directory contents. Gas Pressure's current `gas-pressure.recipe.json` is an intermediate extraction that still needs the standard filename and generic loading path. Shared component implementations, loading, and validation stay outside the premade directory; the experiment runtime and builder consume the same recipe.
 
 ## How premade simulations use the library
 
@@ -151,7 +153,7 @@ These exports make component selection easy to browse. The composition is the au
 
 ## Dependency and ownership rules
 
-- Main-library components never import from `pre-made/` or an old demo store. Premade folders import from the main library; components may import compatible dependencies within the library.
+- Target boundary: only `runtime/recipes/premadeRegistry.generated.ts` directly imports premade JSON in production. Components, resource defaults, planner code, routes, and builder code consume shared APIs or supplied configuration. Existing direct imports and re-export trees are migration debt tracked by implementation 013.
 - Keep definitions and model functions independent of React and rendering backends. Use `.tsx` for actual React presentation/control code and `.ts` for data/model contracts.
 - Compositions/prefabs hold data and known provider references. Executable providers are trusted implementations; arbitrary executable content does not belong in resources or recipes.
 - Each mutable field has one normal execution owner. Construction, validated configuration edits and reset are coordinated lifecycle exceptions.

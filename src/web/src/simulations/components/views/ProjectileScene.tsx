@@ -31,13 +31,16 @@ export function ProjectileScene({
 }) {
   const markerId = useId();
 
-  const { duration: T, range: R, maxHeight: Hmax } = s.primary.metrics;
-  const compareR = Math.max(...s.instances.map((i) => i.metrics.range)),
-    compareH = Math.max(...s.instances.map((i) => i.metrics.maxHeight));
+  const { duration: T } = s.primary.metrics;
+  // Keep a stable world scale while changing angle.
+  const referenceRange = Math.max(
+    ...s.instances.map((i) => i.launch.velocity ** 2 / i.gravity),
+    1,
+  );
   const scale = Math.min(
     12,
-    (W - ORIGIN_X - 60) / Math.max(R, compareR, 1),
-    (GROUND_Y - 65) / Math.max(Hmax, compareH, 1),
+    (W - ORIGIN_X - 60) / referenceRange,
+    (GROUND_Y - 65) / (referenceRange / 2),
   );
 
   const ball = s.primary.transform.position;
@@ -48,20 +51,22 @@ export function ProjectileScene({
 
   return (
     <>
-      <section className="projectile-legend" aria-label="Flight comparison">
-        {s.instances.map((instance, index) => (
-          <div key={instance.id} className={index ? "is-comparison" : ""}>
-            <strong>
-              Ball {index + 1} · {instance.launch.angle}° ·{" "}
-              {instance.launch.velocity} m/s
-            </strong>
-            <span>
-              Range {instance.metrics.range.toFixed(1)} m · Height{" "}
-              {instance.metrics.maxHeight.toFixed(1)} m
-            </span>
-          </div>
-        ))}
-      </section>
+      {s.instances.length > 1 && (
+        <section className="projectile-legend" aria-label="Flight comparison">
+          {s.instances.map((instance, index) => (
+            <div key={instance.id} className={index ? "is-comparison" : ""}>
+              <strong>
+                Ball {index + 1} · {instance.launch.angle}° ·{" "}
+                {instance.launch.velocity} m/s
+              </strong>
+              <span>
+                Range {instance.metrics.range.toFixed(1)} m · Height{" "}
+                {instance.metrics.maxHeight.toFixed(1)} m
+              </span>
+            </div>
+          ))}
+        </section>
+      )}
       <SVGWorldView
         aria-label="Simulation diagram"
         role="img"
@@ -91,7 +96,6 @@ export function ProjectileScene({
           visualLayers.includes("appearance/Trajectory") ? (
             <TrajectoryVisual
               key={instance.id}
-              metrics={instance.metrics}
               velocity={instance.launch.velocity}
               angle={instance.launch.angle}
               gravity={instance.gravity}

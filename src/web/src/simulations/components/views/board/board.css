@@ -969,3 +969,24 @@
 .board-viewport.is-right-panning * {
   cursor: grabbing;
 }
+
+/* Gas illustrations keep their wide physical proportions within a recipe group. */
+.is-auto-layout .composition-display-scene:has([data-gas-volume]) {
+  height: clamp(192px, 33.6vh, 336px);
+}
+
+/* Flow items measure their content before receiving independent board bounds. */
+.is-auto-layout .board-item[data-board-leaf="true"]
+  > .board-content
+  > .recipe-layout {
+  height: auto;
+}
+.is-auto-layout .board-item[data-board-scene="true"] .recipe-component-item {
+  height: auto;
+  flex: none;
+}
+@media (max-width: 600px) and (max-height: 650px) {
+  .is-auto-layout .composition-display-scene:has([data-gas-volume]) {
+    height: 120px;
+  }
+}

@@ -325,7 +325,15 @@ for (const [id, title, target] of [
     category: id.startsWith("canvases") ? "canvases" : "appearance",
     runtimeProvider: undefined,
     presentationProvider: id,
-    inputs: { model: { kind: "attachment", unit: target } },
+    inputs: {
+      model: {
+        kind: "attachment",
+        unit: target,
+        ...(id === "appearance/Projectile"
+          ? { cardinality: "many" as const }
+          : {}),
+      },
+    },
     outputs: {},
     commands: {},
     placement: ["lesson"],

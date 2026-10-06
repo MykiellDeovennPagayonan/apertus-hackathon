@@ -6,6 +6,7 @@ export function CounterTokenVisual({
   ordinal,
   active = false,
   color = "#245bcb",
+  inactiveColor = "#eef2fb",
   radius = 23,
 }: {
   id: string;
@@ -14,6 +15,7 @@ export function CounterTokenVisual({
   ordinal?: number | null;
   active?: boolean;
   color?: string;
+  inactiveColor?: string;
   radius?: number;
 }) {
   return (
@@ -25,7 +27,7 @@ export function CounterTokenVisual({
       <ShapeVisual2D
         identity={id}
         r={radius}
-        fill={active ? color : "#eef2fb"}
+        fill={active ? color : inactiveColor}
         stroke={color}
         strokeWidth={2}
       />

@@ -54,6 +54,9 @@ export default function Builder() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [ready, setReady] = useState(false);
+  const initialRecovery = useRef<ReturnType<typeof readBuilderRecovery> | null>(
+    null,
+  );
   const [saved, setSaved] = useState<Saved[]>([]);
   const [saveId, setSaveId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -105,7 +108,9 @@ export default function Builder() {
         setNotice(
           "Some saved experiments use unsupported or invalid documents. Their stored copies have been preserved.",
         );
-      const recovered = readBuilderRecovery(entries);
+      // Development effect replay must reopen the same recipe after its URL is cleaned.
+      const recovered = initialRecovery.current ?? readBuilderRecovery(entries);
+      initialRecovery.current = recovered;
       if (recovered.lesson) {
         open(recovered.lesson.document, recovered.lesson.id);
         setPlayingSaved(true);

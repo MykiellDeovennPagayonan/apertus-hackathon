@@ -49,32 +49,13 @@ async function main() {
     await volume.focus();
     await page.keyboard.press("ArrowLeft");
     await page.waitForFunction(() =>
-      document.querySelector(".learning-pressure").textContent.includes("2.63"),
+      document
+        .querySelector(".recipe-measurement")
+        .textContent.includes("2.63"),
     );
     assert.equal(await volume.inputValue(), "0.95");
-    const pauseMotion = stage.getByRole("button", {
-      name: "Pause motion",
-      exact: true,
-    });
-    await pauseMotion.hover();
-    assert.equal(
-      await pauseMotion.evaluate((button) => getComputedStyle(button).color),
-      "rgb(255, 251, 239)",
-    );
-    assert.equal(
-      await pauseMotion.evaluate(
-        (button) => getComputedStyle(button).backgroundColor,
-      ),
-      "rgb(31, 76, 70)",
-    );
-    await clearance();
-    await page
-      .getByRole("textbox")
-      .fill(Array(10).fill("Expand the composer").join("\n"));
-    await page.waitForFunction(
-      () => document.querySelector("textarea").clientHeight > 100,
-    );
-    await clearance();
+    assert.equal(await stage.getByRole("slider").count(), 1);
+    assert.equal(await page.locator(".workspace-composer").count(), 0);
     await open("area-perimeter");
     await stage
       .getByRole("spinbutton", { name: "Width (m)", exact: true })
@@ -131,20 +112,19 @@ async function main() {
     }
     await page.setViewportSize({ width: 1024, height: 603 });
     await open("projectile");
-    await stage
-      .getByRole("combobox", { name: "Selected ball" })
-      .selectOption({ label: "Ball 2" });
-    const angle = stage.getByRole("slider", { name: "Angle", exact: true });
+    const angle = stage.getByRole("slider", {
+      name: "Ball 1 angle",
+      exact: true,
+    });
+    assert.equal(await stage.getByRole("slider").count(), 2);
+    const firstHeight = stage.locator(
+      '.recipe-measurement[aria-label="Ball 1 height"]',
+    );
+    const heightBefore = await firstHeight.textContent();
     await angle.focus();
     await page.keyboard.press("ArrowRight");
-    assert.match(
-      await stage.locator(".projectile-legend").textContent(),
-      /Ball 1 · 30°/,
-    );
-    assert.match(
-      await stage.locator(".projectile-legend").textContent(),
-      /Ball 2 · 61°/,
-    );
+    assert.equal(await angle.inputValue(), "31");
+    assert.notEqual(await firstHeight.textContent(), heightBefore);
     await open("ratio");
     await stage.getByRole("spinbutton", { name: "Selected parts" }).fill("6");
     assert.match(
@@ -159,9 +139,6 @@ async function main() {
     assert.notEqual(await stage.locator("tbody").textContent(), first);
     assert.equal(await stage.locator("tbody tr").count(), 6);
     await open("counting");
-    await stage
-      .getByRole("combobox", { name: "Mode", exact: true })
-      .selectOption("try");
     await stage.getByRole("button", { name: /Circle 1,/ }).click();
     assert.match(
       await stage.locator(".math-readout").textContent(),
@@ -226,7 +203,7 @@ async function main() {
     await clearance();
     assert.deepEqual(errors, []);
     console.log(
-      "Primary interactions passed for all 13 experiments, including precise coordinates, touch targets, invalid input, independent projectiles, resampling, and composer clearance.",
+      "Primary interactions passed for all 13 experiments, including precise coordinates, touch targets, invalid input, focused projectile motion, resampling, and composer clearance.",
     );
   } finally {
     await browser.close();

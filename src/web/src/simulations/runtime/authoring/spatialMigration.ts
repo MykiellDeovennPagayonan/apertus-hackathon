@@ -2,6 +2,7 @@ import {
   builtInRecipe,
   modelRecipe,
 } from "../../components/composites/catalog";
+import { arrangeFocusedExperiment } from "../../components/composites/focused";
 import { bridgeRecipe, townRecipe } from "../../components/composites/spatial";
 import { type Recipe, resolveRecipe } from "../resolver";
 import { insertRecipe, remapDocument } from "./recipes";
@@ -114,12 +115,14 @@ export function spatialRecipeDocument(recipe: Recipe): AuthoredDocument {
     d.lesson = {
       title:
         resolved.instances.length > 1
-          ? "Projectile Comparison"
-          : "Projectile Lab",
-      instruction: "Explore launch angle, speed and gravity.",
+          ? "Projectile motion"
+          : "Projectile motion",
+      instruction:
+        "Change the launch angle. See how far and how high the ball travels.",
       explanation: resolved.assumptions.join("\n"),
     };
   } else throw new Error(`${resolved.demo}: not a spatial recipe`);
+  if (resolved.demo === "projectile") arrangeFocusedExperiment(d, "projectile");
   d.compatibility = {
     source: structuredClone(recipe) as unknown as Record<string, unknown>,
     notices: [],

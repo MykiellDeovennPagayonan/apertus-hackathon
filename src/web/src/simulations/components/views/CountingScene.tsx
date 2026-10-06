@@ -65,15 +65,13 @@ export function CountingScene({
         ) : (
           <CountingBoxVisual target={board.target} />
         ))}
-      <text x={40} y={35} className="math-scene-label">
-        {board.mode === "count"
-          ? board.sequence.looping
-            ? "Count along"
-            : "Tap each circle once"
-          : board.sequence.looping
+      {board.mode !== "count" && (
+        <text x={40} y={35} className="math-scene-label">
+          {board.sequence.looping
             ? "Watch the circles go in"
             : "Tap a circle to move it"}
-      </text>
+        </text>
+      )}
       {board.tokens.map((t, i) => {
         const zoneTokens = board.tokens.filter(
           (other) => other.zone === t.zone,
@@ -111,6 +109,8 @@ export function CountingScene({
             }
           >
             <CounterTokenVisual
+              color="#285e56"
+              inactiveColor="#e5eee7"
               radius={board.mode === "count" ? 40 : 23}
               id={t.id}
               x={x}

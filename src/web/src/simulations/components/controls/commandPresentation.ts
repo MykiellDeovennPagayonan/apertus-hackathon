@@ -128,6 +128,8 @@ export function commandPresentation(command: string, definition: string) {
     "value.n": { label: "Shaded parts" },
     "value.d": { label: "Total parts" },
   };
+  if (definition === "prefabs/AuthoredGasContainer" && command === "set:volume")
+    presentation.value = { step: 0.05 };
   if (definition.includes("fraction")) {
     if (command === "SET_FRACTION_COMPARISON")
       presentation.value = {

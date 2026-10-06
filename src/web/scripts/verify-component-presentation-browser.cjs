@@ -29,9 +29,6 @@ async function openFixture(browser, authored) {
   await page.goto(
     `${process.env.UX_TEST_URL || "http://127.0.0.1:43002"}/experiments/builder`,
   );
-  await page
-    .getByRole("button", { name: "Continue draft", exact: true })
-    .click();
   await page.getByRole("button", { name: "Build", exact: true }).click();
   await page.locator(".recipe-lesson").waitFor();
   return { page, errors };
@@ -194,12 +191,7 @@ async function openFixture(browser, authored) {
     );
     await exact.press("Escape");
     assert.equal(await exact.inputValue(), "1.5");
-    await gasLesson
-      .getByRole("button", {
-        name: "Restore starting values",
-        exact: true,
-      })
-      .click();
+    await exact.fill(initial);
     assert.equal(await exact.inputValue(), initial);
     const measurement = gasLesson.locator(".recipe-measurement");
     assert.equal(await measurement.locator("small").textContent(), "kPa");

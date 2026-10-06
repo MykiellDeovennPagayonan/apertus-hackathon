@@ -199,6 +199,152 @@
   overscroll-behavior: contain;
   scrollbar-gutter: stable both-edges;
 }
+.experiment-workspace--gas .workspace-stage {
+  display: flex;
+  flex-direction: column;
+}
+.experiment-workspace--gas .workspace-identity {
+  max-width: none;
+  padding: 0 8px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.experiment-workspace--gas .workspace-identity h1 {
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Focused premades keep the quiet gas navigation while retaining their composer. */
+.experiment-workspace--focused .workspace-identity {
+  max-width: none;
+  padding: 0 8px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.experiment-workspace--focused .workspace-identity h1 {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+.experiment-workspace--focused .workspace-stage {
+  display: flex;
+  flex-direction: column;
+}
+.experiment-workspace--focused .recipe-lesson.is-board-workspace > header h1 {
+  display: none;
+}
+.experiment-workspace--focused .recipe-lesson.is-board-workspace > header {
+  padding-inline: 24px;
+}
+.experiment-workspace--focused .recipe-lesson.is-board-workspace > header p {
+  max-width: 620px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #687064;
+}
+.experiment-workspace--focused .board-item {
+  border-color: #d9d3c5;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px #30362e0a;
+}
+.experiment-workspace--focused
+  .board-item[data-board-component="appearance/Projectile"],
+.experiment-workspace--focused
+  .board-item[data-board-component="appearance/counting"] {
+  background: #fffcf4;
+}
+.experiment-workspace--focused
+  .board-item[data-board-component="displays/Readout"]
+  .board-content {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+}
+.experiment-workspace--focused
+  .board-item[data-board-component="controls/Slider"]
+  .board-content {
+  padding: 12px 16px;
+}
+.experiment-workspace--focused
+  .board-item[data-board-component="controls/Button"]
+  .board-content {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+.experiment-workspace--focused
+  .board-item[data-board-component="controls/Button"]
+  button {
+  width: 100%;
+  min-height: 46px;
+  border-color: #285e56;
+  border-radius: 9px;
+  background: #285e56;
+  color: #fffdf7;
+  font-weight: 650;
+}
+
+@media (max-width: 700px) {
+  .experiment-workspace--focused .recipe-lesson.is-board-workspace > header {
+    padding-inline: 16px;
+  }
+  .experiment-workspace--focused .board-item {
+    border-radius: 12px;
+    box-shadow: 0 4px 18px #30362e0a;
+  }
+  .experiment-workspace--focused .board-camera-tools {
+    display: none;
+  }
+}
+.gas-experiment-tools {
+  position: relative;
+  pointer-events: auto;
+  font-size: 13px;
+}
+.gas-experiment-tools summary {
+  padding: 12px;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--accent);
+  border-radius: 10px;
+}
+.gas-experiment-tools summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.gas-experiment-tools nav {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 190px;
+  padding: 8px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px #30362e14;
+}
+.gas-experiment-tools :is(button, a) {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  text-align: left;
+  min-height: 44px;
+  border-radius: 8px;
+  color: var(--accent);
+}
+.gas-experiment-tools :is(button, a):hover {
+  background: #e6ecdf;
+}
+.gas-experiment-tools p {
+  margin: 8px 12px;
+  line-height: 1.5;
+}
 .workspace-header {
   position: absolute;
   z-index: 3;
@@ -1213,4 +1359,8 @@
   .experiment-workspace .recipe-lesson.is-board-workspace > header h1 {
     font-size: 22px;
   }
+}
+
+.experiment-workspace--gas .recipe-lesson.is-board-workspace > header h1 {
+  display: none;
 }

@@ -11,13 +11,13 @@ export const premadeExperiments: Record<
 > = {
   gas: {
     title: "Gas pressure",
-    description: "Explore pressure, volume and temperature.",
+    description: "Squeeze a gas and discover how volume changes pressure.",
     icon: "◌",
     parameters: {},
   },
   projectile: {
     title: "Projectile motion",
-    description: "Compare launches at 30° and 60° on the Moon.",
+    description: "Compare two launch angles on the same flight diagram.",
     icon: "↗",
     parameters: { angles: [30, 60], speed: 20, gravityPreset: "Moon" },
   },
@@ -35,9 +35,9 @@ export const premadeExperiments: Record<
   },
   counting: {
     title: "Counting circles",
-    description: "Count objects and move them into a box.",
+    description: "Tap the circles and count them one by one.",
     icon: "●",
-    parameters: {},
+    parameters: { looping: false, task: { mode: "count", target: 5 } },
   },
   arithmetic: {
     title: "Addition & subtraction",

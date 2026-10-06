@@ -2,6 +2,8 @@ import {
   builtInRecipe,
   modelRecipe,
 } from "../../components/composites/catalog";
+import { arrangeFocusedExperiment } from "../../components/composites/focused";
+import { convertToBoard, extent } from "../../runtime/authoring/board";
 import { migrateBoardDrawings } from "../../runtime/authoring/migrateDrawings";
 import { insertRecipe } from "../../runtime/authoring/recipes";
 import { requireValue } from "../../runtime/authoring/requireValue";
@@ -32,16 +34,49 @@ export function parseDocument(source: string): ExperimentDocument {
   }
   if (input && typeof input === "object" && "recipeVersion" in input) {
     const prefix = crypto.randomUUID();
-    return canonicalDocument(
-      insertRecipe(
-        emptyAuthoredDocument(),
-        input as CompositeRecipe,
-        builtInRecipe,
-        (id) => `${prefix}/${id}`,
-      ),
+    const recipe = input as CompositeRecipe;
+    const authored = insertRecipe(
+      emptyAuthoredDocument(),
+      recipe,
+      builtInRecipe,
+      (id) => `${prefix}/${id}`,
     );
+    authored.lesson = structuredClone(recipe.document.lesson);
+    return canonicalDocument(authored);
   }
   const recipe = parseRecipe(source);
+  const resolved = resolveRecipe(recipe);
+  if (resolved.demo === "gas") {
+    const gas = modelRecipe("prefabs/AuthoredGasContainer");
+    const model = requireValue(
+      gas.document.nodes.find((node) => node.id === "model"),
+    );
+    model.configuration.inputs = structuredClone(
+      resolved.instances[0].parameters,
+    );
+    const authored = insertRecipe(
+      emptyAuthoredDocument(),
+      gas,
+      builtInRecipe,
+      (id) => `gas-experiment/${id}`,
+    );
+    authored.lesson = structuredClone(gas.document.lesson);
+    authored.compatibility = {
+      source: structuredClone(recipe) as unknown as Record<string, unknown>,
+      notices: [],
+    };
+    authored.presentation = convertToBoard(authored);
+    const rectangles = [
+      { x: 0, y: 0, width: 768, height: 360 },
+      { x: 792, y: 0, width: 360, height: 160 },
+      { x: 792, y: 184, width: 360, height: 160 },
+    ];
+    authored.presentation.items.forEach((item, index) => {
+      item.rect = rectangles[index];
+    });
+    authored.presentation.startView = extent(rectangles);
+    return canonicalDocument(authored);
+  }
   if (["projectile", "bridge", "town"].includes(resolveRecipe(recipe).demo))
     return canonicalDocument(spatialRecipeDocument(recipe));
   if (
@@ -73,9 +108,15 @@ export function parseDocument(source: string): ExperimentDocument {
         .configuration,
       recipe.parameters,
     );
-    return canonicalDocument(
-      insertRecipe(emptyAuthoredDocument(), r, builtInRecipe, (id) => id),
+    const authored = insertRecipe(
+      emptyAuthoredDocument(),
+      r,
+      builtInRecipe,
+      (id) => `imported/${id}`,
     );
+    authored.lesson = structuredClone(r.document.lesson);
+    if (kind === "counting") arrangeFocusedExperiment(authored, "counting");
+    return canonicalDocument(authored);
   }
 }
 export function serializeDocument(doc: ExperimentDocument) {

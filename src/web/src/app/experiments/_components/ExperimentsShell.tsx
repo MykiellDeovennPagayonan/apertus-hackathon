@@ -92,6 +92,9 @@ export default function ExperimentsShell({
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedExperiment = searchParams.get("experiment");
+  const focusedExperiment =
+    demo === selectedExperiment &&
+    ["gas", "projectile", "counting"].includes(demo ?? "");
 
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_EXPERIMENT_DIAGNOSTICS !== "true") return;
@@ -117,15 +120,18 @@ export default function ExperimentsShell({
   }, [controlsOpen]);
 
   useEffect(() => {
-    if (phase !== "ready" || !composerElement.current) return;
+    if (phase !== "ready") return;
     const composer = composerElement.current;
     const identity = workspace.current?.querySelector(".workspace-identity");
-    const toolbar = workspace.current?.querySelector(".workspace-toolbar");
+    const toolbar = workspace.current?.querySelector(
+      ".workspace-toolbar, .gas-experiment-tools",
+    );
     const measure = () => {
-      workspace.current?.style.setProperty(
-        "--composer-height",
-        `${composer.getBoundingClientRect().height}px`,
-      );
+      if (composer)
+        workspace.current?.style.setProperty(
+          "--composer-height",
+          `${composer.getBoundingClientRect().height}px`,
+        );
       const bottom = Math.max(
         identity?.getBoundingClientRect().bottom ?? 96,
         toolbar?.getBoundingClientRect().bottom ?? 96,
@@ -137,11 +143,11 @@ export default function ExperimentsShell({
     };
     measure();
     const observer = new ResizeObserver(measure);
-    observer.observe(composer);
+    if (composer) observer.observe(composer);
     if (identity) observer.observe(identity);
     if (toolbar) observer.observe(toolbar);
     return () => observer.disconnect();
-  }, [phase]);
+  }, [phase, focusedExperiment]);
 
   useEffect(() => {
     if (status?.kind !== "success") return;
@@ -398,7 +404,10 @@ export default function ExperimentsShell({
   };
   return (
     <ControlsTarget.Provider value={controlsTarget}>
-      <div ref={workspace} className="experiment-workspace">
+      <div
+        ref={workspace}
+        className={`experiment-workspace${demo === "gas" ? " experiment-workspace--gas" : focusedExperiment ? " experiment-workspace--focused" : ""}`}
+      >
         <div className="workspace-header">
           <header className="workspace-identity">
             <button type="button" onClick={goHome}>
@@ -417,56 +426,82 @@ export default function ExperimentsShell({
                 : ""}
             </h1>
           </header>
-          <nav className="workspace-toolbar" aria-label="Experiment tools">
-            {hasAdditionalControls && (
-              <button
-                ref={controlsButton}
-                type="button"
-                aria-expanded={controlsOpen}
-                aria-controls="experiment-controls"
-                onClick={() => setControlsOpen(!controlsOpen)}
-              >
-                More settings{" "}
-                <span aria-hidden="true">{controlsOpen ? "−" : "+"}</span>
+          {focusedExperiment ? (
+            <details className="gas-experiment-tools">
+              <summary>Experiment options</summary>
+              <nav aria-label="Experiment tools">
+                <button type="button" onClick={downloadRecipe}>
+                  Save recipe
+                </button>
+                <Link
+                  href="/experiments/builder?remix=1"
+                  onClick={() =>
+                    sessionStorage.setItem(
+                      "apertus-builder-remix",
+                      saveRecipe(),
+                    )
+                  }
+                >
+                  Remix in builder
+                </Link>
+                {status && <output>{status.text}</output>}
+              </nav>
+            </details>
+          ) : (
+            <nav className="workspace-toolbar" aria-label="Experiment tools">
+              {hasAdditionalControls && (
+                <button
+                  ref={controlsButton}
+                  type="button"
+                  aria-expanded={controlsOpen}
+                  aria-controls="experiment-controls"
+                  onClick={() => setControlsOpen(!controlsOpen)}
+                >
+                  More settings{" "}
+                  <span aria-hidden="true">{controlsOpen ? "−" : "+"}</span>
+                </button>
+              )}
+              <button type="button" onClick={downloadRecipe}>
+                Save recipe
               </button>
-            )}
-            <button type="button" onClick={downloadRecipe}>
-              Save recipe
-            </button>
-            <Link href="/experiments/builder">Build manually</Link>
-            {([
-              "gas",
-              "counting",
-              "arithmetic",
-              "equal-groups",
-              "fraction-builder",
-              "fraction-number-line",
-              "ratio",
-              "area-perimeter",
-              "coordinates",
-              "probability",
-              "town",
-              "projectile",
-              "bridge",
-            ].includes(demo ?? "") ||
-              (demo === "assembly" &&
-                Boolean(getActiveDefinition()?.assembly?.instances.length) &&
-                getActiveDefinition()?.assembly?.instances.every((instance) =>
-                  /prefabs\/(chemistry|math-foundations|physical-systems|natural-systems|dynamic-systems)\//.test(
-                    instance.prefab.ref,
-                  ),
-                ))) && (
-              <Link
-                href="/experiments/builder?remix=1"
-                onClick={() =>
-                  sessionStorage.setItem("apertus-builder-remix", saveRecipe())
-                }
-              >
-                Remix in builder
-              </Link>
-            )}
-            <Link href="/">Home</Link>
-          </nav>
+              <Link href="/experiments/builder">Build manually</Link>
+              {([
+                "gas",
+                "counting",
+                "arithmetic",
+                "equal-groups",
+                "fraction-builder",
+                "fraction-number-line",
+                "ratio",
+                "area-perimeter",
+                "coordinates",
+                "probability",
+                "town",
+                "projectile",
+                "bridge",
+              ].includes(demo ?? "") ||
+                (demo === "assembly" &&
+                  Boolean(getActiveDefinition()?.assembly?.instances.length) &&
+                  getActiveDefinition()?.assembly?.instances.every((instance) =>
+                    /prefabs\/(chemistry|math-foundations|physical-systems|natural-systems|dynamic-systems)\//.test(
+                      instance.prefab.ref,
+                    ),
+                  ))) && (
+                <Link
+                  href="/experiments/builder?remix=1"
+                  onClick={() =>
+                    sessionStorage.setItem(
+                      "apertus-builder-remix",
+                      saveRecipe(),
+                    )
+                  }
+                >
+                  Remix in builder
+                </Link>
+              )}
+              <Link href="/">Home</Link>
+            </nav>
+          )}
         </div>
         <aside
           id="experiment-controls"

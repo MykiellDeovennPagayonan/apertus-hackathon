@@ -12,6 +12,8 @@ import {
   commandPresentation,
 } from "../controls/commandPresentation";
 import { outputDataPresentation } from "../views/dataPresentation";
+import { presentFocusedExperiment } from "./focused";
+import { loadGasPressureRecipe } from "./gas";
 import { spatialRecipes } from "./spatial";
 export function schemaDefault(schema: ParameterSchema): unknown {
   switch (schema.type) {
@@ -52,6 +54,8 @@ export function createPublicNode(
   };
 }
 export function modelRecipe(definition: string): CompositeRecipe {
+  if (definition === "prefabs/AuthoredGasContainer")
+    return loadGasPressureRecipe();
   const model = publicDefinition(definition),
     d = emptyAuthoredDocument(),
     scope = "scope/lab";
@@ -587,6 +591,9 @@ export function modelRecipe(definition: string): CompositeRecipe {
           ...others.filter((child) => child.id === advanced.id),
         ];
   }
+  if (definition === "models/Projectile")
+    presentFocusedExperiment(d, "projectile");
+  if (definition === "models/counting") presentFocusedExperiment(d, "counting");
   const parameters =
     model.configuration.type === "object"
       ? Object.entries(model.configuration.properties)

@@ -21,7 +21,6 @@ import {
   subscribeSessionAnimation,
 } from "../../runtime/session";
 import type { DemoType } from "../../runtime/types";
-import { publicDefinition } from "../catalog";
 import {
   builtInRecipe,
   learningConfiguration,
@@ -60,7 +59,10 @@ export function LegacyRecipeView({ demo }: { demo: DemoType }) {
     ).configuration =
       demo === "gas"
         ? {
-            ...structuredClone(publicDefinition(definition).defaults),
+            ...structuredClone(
+              requireValue(recipe.document.nodes.find((n) => n.id === "model"))
+                .configuration,
+            ),
             inputs: structuredClone(initial),
           }
         : demo === (initial as { demo?: string }).demo

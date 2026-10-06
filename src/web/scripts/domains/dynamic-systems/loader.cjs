@@ -8,6 +8,7 @@ const cache = new Map();
 
 function load(relative) {
   const file = path.resolve(root, relative);
+  if (file.endsWith(".json")) return require(file);
   if (cache.has(file)) return cache.get(file).exports;
   const module = { exports: {} };
   cache.set(file, module);
@@ -34,6 +35,7 @@ function load(relative) {
   const source = ts.transpileModule(input, {
     compilerOptions: {
       module: ts.ModuleKind.CommonJS,
+      esModuleInterop: true,
       target: ts.ScriptTarget.ES2022,
       jsx: ts.JsxEmit.ReactJSX,
     },

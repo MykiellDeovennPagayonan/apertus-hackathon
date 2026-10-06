@@ -41,7 +41,7 @@ export function SpatialBoard({
   document,
   authoring,
   workspace,
-  autoLayout,
+  autoLayout: requestedAutoLayout,
   onEdit,
   actions,
   onChange,
@@ -72,6 +72,9 @@ export function SpatialBoard({
   const sourcePresentation = persisted ?? conversion;
   const viewport = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 900, height: 600 });
+  const autoLayout =
+    requestedAutoLayout ||
+    (!authoring && !!persisted?.responsive && size.width < 700);
   const [naturalHeights, setNaturalHeights] = useState<Record<string, number>>(
     {},
   );
@@ -85,8 +88,25 @@ export function SpatialBoard({
           const sceneWidth = compact ? Math.max(240, size.width - 32) : 640;
           const controlWidth = compact ? sceneWidth : 360;
           let y = 0,
-            rowHeight = 0;
+            rowHeight = 0,
+            sideHeight = 0;
           const candidates = boardLayouts(document);
+          const compactProjectile =
+            size.width < 700 &&
+            document.nodes.some(
+              (node) => node.definition === "appearance/Projectile",
+            );
+          if (compactProjectile)
+            next.items = next.items.filter((item) => {
+              const layout = candidates.find(
+                (candidate) => candidate.id === item.layoutId,
+              );
+              return !document.nodes.some(
+                (node) =>
+                  node.id === layout?.node &&
+                  node.definition === "displays/Readout",
+              );
+            });
           const containsFamily = (layout: Layout, family: string): boolean =>
             document.nodes.some(
               (node) =>
@@ -102,23 +122,53 @@ export function SpatialBoard({
               containsFamily(layout, "controls") &&
               !containsFamily(layout, "canvases") &&
               !containsFamily(layout, "appearance");
+            const readout = document.nodes.some(
+              (node) =>
+                node.id === layout?.node &&
+                node.definition === "displays/Readout",
+            );
+            const besideScene = controls || readout;
             const details = layout?.kind === "disclosure";
             const previous = next.items[index - 1];
-            if (compact || !controls || !previous) {
+            if (compact || !besideScene || !previous) {
               y += rowHeight + (index ? 24 : 0);
               rowHeight = 0;
+              sideHeight = 0;
             }
             item.rect = {
-              x: !compact && controls ? sceneWidth + 24 : 0,
-              y,
-              width: controls ? controlWidth : sceneWidth,
+              x: !compact && besideScene && previous ? sceneWidth + 24 : 0,
+              y: y + (!compact && besideScene && previous ? sideHeight : 0),
+              width: besideScene
+                ? compact
+                  ? sceneWidth
+                  : controlWidth
+                : sceneWidth,
               height:
                 naturalHeights[item.id] ??
-                (details ? 90 : controls ? 540 : 520),
+                (details ? 90 : readout ? 120 : controls ? 540 : 520),
             };
-            rowHeight = Math.max(rowHeight, item.rect.height);
+            rowHeight = Math.max(rowHeight, item.rect.y - y + item.rect.height);
+            if (!compact && besideScene && previous)
+              sideHeight += item.rect.height + 24;
           });
-          const firstRow = next.items.filter((item) => item.rect.y === 0);
+          // Keep the first scene and its independent controls/results in the opening view.
+          let openingCount = 1;
+          while (openingCount < next.items.length) {
+            const layout = candidates.find(
+              (candidate) => candidate.id === next.items[openingCount].layoutId,
+            );
+            const companion =
+              !!layout &&
+              (containsFamily(layout, "controls") ||
+                document.nodes.some(
+                  (node) =>
+                    node.id === layout.node &&
+                    node.definition === "displays/Readout",
+                ));
+            if (!companion) break;
+            openingCount++;
+          }
+          const firstRow = next.items.slice(0, openingCount);
           next.startView = extent(firstRow.map((item) => item.rect));
           next.navigation.minZoom = 0.2;
           return next;
@@ -252,8 +302,7 @@ export function SpatialBoard({
     viewport.current
       .querySelectorAll(".board-content > .recipe-layout")
       .forEach((element) => {
-        if (!element.closest('[data-board-leaf="true"]'))
-          observer.observe(element);
+        observer.observe(element);
       });
     return () => observer.disconnect();
   }, [autoLayout, sourcePresentation]);
@@ -349,8 +398,11 @@ export function SpatialBoard({
         {render(document.layout)}
       </>
     );
-  const area =
+  const contentArea =
     preview.__area ?? p.learnerArea ?? extent(p.items.map((i) => i.rect));
+  const area = autoLayout
+    ? { ...contentArea, height: contentArea.height + 96 }
+    : contentArea;
   const initial = fit(
     p.startView,
     Math.max(1, size.width - 48),

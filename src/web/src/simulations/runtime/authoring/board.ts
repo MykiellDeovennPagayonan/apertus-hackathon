@@ -15,6 +15,8 @@ export type ComponentBoardItem = {
 export type BoardItem = ComponentBoardItem | import("./drawings").DrawingItem;
 export type BoardPresentation = {
   version: 1 | 2;
+  /** Reflow independent lesson components on narrow learner screens. */
+  responsive?: boolean;
   mode: "board";
   items: BoardItem[];
   /** Layout groups whose children have independent board placement. */
@@ -83,6 +85,9 @@ export function boardItemMinimum(
   const definition = d.nodes.find(
     (node) => node.id === layout?.node,
   )?.definition;
+  if (definition === "controls/Button") return { width: 160, height: 48 };
+  if (definition === "displays/Readout") return { width: 128, height: 96 };
+  if (definition === "controls/Slider") return { width: 160, height: 128 };
   return definition === "displays/Text" || definition === "displays/Box"
     ? { width: 72, height: 48 }
     : { width: 160, height: 160 };

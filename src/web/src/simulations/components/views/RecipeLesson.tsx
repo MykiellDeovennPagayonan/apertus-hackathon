@@ -304,14 +304,29 @@ function Appearance({
     );
   }
   if (node.definition === "appearance/Projectile") {
-    const instance = snapshot.outputs[model.id]
-      ?.data as unknown as import("../../runtime/projectileSession").ProjectileInstance;
+    const models = runtime.document.connections
+      .filter(
+        (link) =>
+          link.kind === "attachment" &&
+          link.to.node === node.id &&
+          link.to.port === "model",
+      )
+      .map((link) => link.from.node);
+    const instances = models
+      .map(
+        (id) =>
+          snapshot.outputs[id]
+            ?.data as unknown as import("../../runtime/projectileSession").ProjectileInstance,
+      )
+      .filter(Boolean);
+    const instance = instances[0];
+    if (!instance) return <p>The flight is ready to launch.</p>;
     return (
       <ProjectileScene
         visualLayers={visualLayers}
         state={{
           primary: instance,
-          instances: [instance],
+          instances,
           angle: instance.launch.angle,
           velocity: instance.launch.velocity,
           gravity: instance.gravity,
@@ -806,7 +821,13 @@ function NodeView({
     return (
       <div className="recipe-scene-content">
         <Appearance node={node} runtime={runtime} />
-        {board && <MathReadoutView board={board} />}
+        {board &&
+          !runtime.document.connections.some(
+            (link) =>
+              link.kind === "value" &&
+              link.from.node === modelBinding?.from.node &&
+              link.from.port === "board",
+          ) && <MathReadoutView board={board} />}
       </div>
     );
   }
@@ -962,6 +983,14 @@ function NodeView({
         </output>
       );
     }
+    if (
+      kind === "Readout" &&
+      value &&
+      typeof value === "object" &&
+      "demo" in value &&
+      value.demo === "counting"
+    )
+      return <MathReadoutView board={value as MathBoard} />;
     if (kind === "Readout") {
       const source = runtime.document.nodes.find(
         (candidate) => candidate.id === binding?.from.node,
@@ -987,13 +1016,13 @@ function NodeView({
         );
       return (
         <section className="recipe-measurement" aria-label={label}>
+          <span className="recipe-measurement-label">{label}</span>
           <output className="recipe-measurement-value">
             {value === ""
               ? "Unavailable"
               : display(value, Number(config.precision))}
             <small>{unit}</small>
           </output>
-          <span className="recipe-measurement-label">{label}</span>
         </section>
       );
     }
@@ -1317,6 +1346,7 @@ function LayoutView({
                 }
               : undefined
           }
+          data-component-definition={node.definition}
           data-decoration={
             node.definition === "displays/Box" ? "box" : undefined
           }

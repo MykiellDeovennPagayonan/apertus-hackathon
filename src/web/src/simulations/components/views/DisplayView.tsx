@@ -55,9 +55,9 @@ function GasIllustration({
   return (
     <svg
       x={object.display.x}
-      y={object.display.y + 4}
+      y={object.display.y}
       width={object.display.width}
-      height={object.display.height - 4}
+      height={object.display.height}
       viewBox="0 0 600 290"
       preserveAspectRatio="xMidYMid meet"
       style={{ "--accent": object.color } as CSSProperties}
@@ -403,21 +403,11 @@ export function DisplayView({
             return (
               <g key={o.id} data-display-object={o.id}>
                 {o.kind === "gas" ? (
-                  <>
-                    <text
-                      x={o.display.x}
-                      y={o.display.y + titleHeight * 0.75}
-                      fontSize={Math.min(2.8, titleHeight * 0.7)}
-                      fill={o.color}
-                    >
-                      {o.label}
-                    </text>
-                    <GasIllustration
-                      object={o}
-                      active={active}
-                      key={resetToken}
-                    />
-                  </>
+                  <GasIllustration
+                    object={o}
+                    active={active}
+                    key={resetToken}
+                  />
                 ) : (
                   <>
                     <text
