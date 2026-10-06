@@ -7,7 +7,9 @@ const runtime = load("src/simulations/runtime/session.ts");
 const { defaultAssembly, compileAssembly, assemblyModels, assemblyCapability } =
   load("src/simulations/runtime/assembly.ts");
 const { useAssemblyStore } = load("src/simulations/runtime/assemblySession.ts");
-const { parseConfiguration } = load("src/lib/planner/creation.ts");
+const { parseConfiguration } = load(
+  "scripts/compatibility/legacyConfiguration.ts",
+);
 const { validatePhysicalComparison } = load(
   "src/simulations/domains/physical-systems/index.ts",
 );

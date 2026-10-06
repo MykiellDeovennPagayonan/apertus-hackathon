@@ -7,6 +7,7 @@ import {
   object,
   type ParameterSchema,
 } from "../../runtime/parameterSchema";
+import { bridgeTeaching } from "./teaching";
 
 const identity: ParameterSchema = { type: "string", maxLength: 160 };
 const value = (unit: string, kind: Port["kind"] = "value"): Port => ({
@@ -168,6 +169,7 @@ const bridge = model(
   { spanScale: 1, dense: false },
 );
 bridge.lifecycle.capture = false;
+bridge.teaching = bridgeTeaching;
 bridge.inputs = {
   joints: {
     ...value("truss/joint"),

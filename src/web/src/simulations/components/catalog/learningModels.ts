@@ -7,6 +7,8 @@ import {
 import { mathActions } from "../../runtime/mathModel";
 import { object } from "../../runtime/parameterSchema";
 import type { MathDemo } from "../traits/MathBoards";
+import { scopedLearningContracts } from "./scopedLearningContracts";
+import { arithmeticTeaching, rectangleTeaching } from "./teaching";
 
 export const learningDefaults: Record<string, Record<string, unknown>> = {
   counting: { task: { mode: "count", target: 5 }, looping: false },
@@ -43,7 +45,9 @@ const titles: Record<string, string> = {
 export const learningDefinitions: PublicDefinition[] = Object.keys(
   learningDefaults,
 ).map((demo) => {
-  const op = operations[demo as keyof typeof operations];
+  const scoped =
+    scopedLearningContracts[demo as keyof typeof scopedLearningContracts];
+  const op = scoped?.commands ?? operations[demo as keyof typeof operations];
   const outputNames =
     demo in mathActions
       ? ["board", "feedback", "playing"]
@@ -61,9 +65,17 @@ export const learningDefinitions: PublicDefinition[] = Object.keys(
     description: titles[demo],
     category: "models",
     tags: ["mathematics", demo],
-    configuration: templateParameters(
-      `compositions/${templateNames[demo as keyof typeof templateNames]}`,
-    ),
+    teaching:
+      demo === "arithmetic"
+        ? arithmeticTeaching
+        : demo === "area-perimeter"
+          ? rectangleTeaching
+          : undefined,
+    configuration:
+      scoped?.configuration ??
+      templateParameters(
+        `compositions/${templateNames[demo as keyof typeof templateNames]}`,
+      ),
     defaults: learningDefaults[demo],
     inputs: {},
     outputs: {

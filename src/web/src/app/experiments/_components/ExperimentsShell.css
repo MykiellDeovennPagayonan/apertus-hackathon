@@ -293,7 +293,8 @@
     border-radius: 12px;
     box-shadow: 0 4px 18px #30362e0a;
   }
-  .experiment-workspace--focused .board-camera-tools {
+  :is(.experiment-workspace--focused, .experiment-workspace--gas)
+    .board-camera-tools {
     display: none;
   }
 }
@@ -1316,7 +1317,7 @@
 
 /* Experiment navigation and the prompt frame one spatial workspace. */
 .experiment-workspace .workspace-stage:has(.is-board-workspace) {
-  overflow: hidden;
+  overflow: clip;
   scrollbar-gutter: auto;
 }
 .experiment-workspace .workspace-stage > .recipe-lesson.is-board-workspace {
@@ -1326,10 +1327,34 @@
   padding: 0;
   margin: 0;
   gap: 0;
-  overflow: hidden;
+  overflow: clip;
 }
 .experiment-workspace .spatial-board.is-workspace {
   background: transparent;
+  overflow: clip;
+}
+.experiment-workspace--focused .board-viewport {
+  overflow: clip;
+  clip-path: inset(
+    calc(
+        var(--workspace-top, 112px) +
+        var(--lesson-heading-height, 60px) +
+        12px
+      )
+      0 calc(var(--composer-height, 64px) + var(--composer-bottom) + 72px) 0
+  );
+}
+@media (max-width: 700px) {
+  .experiment-workspace--focused .board-viewport {
+    clip-path: inset(
+      calc(
+          var(--workspace-top, 112px) +
+          var(--lesson-heading-height, 60px) +
+          12px
+        )
+        0 calc(var(--composer-height, 64px) + var(--composer-bottom) + 8px) 0
+    );
+  }
 }
 .experiment-workspace .board-viewport {
   background-image: radial-gradient(#d5cdbb70 1px, transparent 1px);
@@ -1360,8 +1385,42 @@
   bottom: calc(var(--composer-height, 64px) + var(--composer-bottom) + 12px);
 }
 .experiment-workspace .is-workspace .is-floating .board-workspace-tools {
-  top: calc(var(--workspace-top, 112px) + 60px);
+  top: calc(
+    var(--workspace-top, 112px) +
+    var(--lesson-heading-height, 60px) +
+    12px
+  );
   bottom: auto;
+}
+/* This host measures its own header and composer. Keep compact board navigation
+   in that reserved space instead of the embedded learner's top row. */
+.experiment-workspace .recipe-lesson:has(
+    :is(.activity-control, .scalar-control--parameter)
+  )
+  .spatial-board.is-compact
+  .board-toolbar.is-floating {
+  height: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.experiment-workspace
+  .recipe-lesson:has(:is(.activity-control, .scalar-control--parameter))
+  .spatial-board.is-compact
+  .is-floating
+  .board-workspace-tools {
+  position: absolute;
+  top: calc(
+    var(--workspace-top, 112px) +
+    var(--lesson-heading-height, 60px) +
+    12px
+  );
+  right: 12px;
+  bottom: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
 }
 .experiment-workspace .recipe-lesson.is-board-workspace > header p {
   font-size: 14px;

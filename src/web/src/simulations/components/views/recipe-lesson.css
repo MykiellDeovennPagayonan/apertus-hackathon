@@ -1212,7 +1212,7 @@ fieldset.math-stepper {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
-.task-control .experiment-number input {
+.recipe-lesson .task-control .experiment-number input[type="text"] {
   min-height: 44px;
   font-size: 22px;
   font-variant-numeric: tabular-nums;
@@ -1818,4 +1818,26 @@ fieldset.math-stepper {
   .scalar-control--parameter {
     padding: 0;
   }
+}
+
+.recipe-explanation {
+  pointer-events: auto;
+  font-size: 14px;
+  max-width: 72ch;
+}
+.recipe-explanation summary {
+  cursor: pointer;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  color: var(--text-dim);
+}
+.recipe-explanation[open] {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+.recipe-explanation p {
+  white-space: pre-line;
 }

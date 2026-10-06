@@ -1,27 +1,29 @@
-import { correlatePlan } from "../../simulations/runtime/session";
-import type { DemoType } from "../../simulations/runtime/types";
-import { type ExperimentContext, parsePlan } from "./schema";
-export async function requestPlan(
-  prompt: string,
-  demo: DemoType | null,
-  context: ExperimentContext | null,
+import {
+  type GenerationRequest,
+  parseGenerationRequest,
+  parseGenerationResult,
+} from "./schema";
+/** The browser checks both JSON identity and response correlation before activation. */
+export async function requestGeneration(
+  input: GenerationRequest,
   signal: AbortSignal,
-  onPlanReceived?: () => void,
+  onResultReceived?: () => void,
 ) {
+  const request = parseGenerationRequest(input);
   const response = await fetch("/api/apertus", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt, demo, context }),
+    body: JSON.stringify(request),
     signal,
+    cache: "no-store",
   });
-  const data = await response.json();
-  if (!response.ok)
-    throw new Error(
-      typeof data.error === "string" ? data.error : "Apertus request failed.",
-    );
-  onPlanReceived?.();
-  const plan = parsePlan(data, demo, context);
-  const id = response.headers.get("X-Request-ID");
-  if (id) correlatePlan(plan, id);
-  return plan;
+  const data: unknown = await response.json();
+  if (signal.aborted) throw new DOMException("Request cancelled", "AbortError");
+  const result = parseGenerationResult(data, request);
+  if (response.headers.get("X-Request-ID") !== request.requestId)
+    throw new Error("Response correlation does not match the current request.");
+  if (!response.ok && result.status !== "failed")
+    throw new Error("Generation request failed.");
+  onResultReceived?.();
+  return result;
 }

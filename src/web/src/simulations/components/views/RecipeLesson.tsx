@@ -1817,6 +1817,12 @@ export function RecipeLesson({
           <header>
             <h1>{document.lesson.title}</h1>
             <p>{document.lesson.instruction}</p>
+            {document.lesson.explanation && (
+              <details className="recipe-explanation">
+                <summary>About this lesson and its limits</summary>
+                <p>{document.lesson.explanation}</p>
+              </details>
+            )}
           </header>
           <AuthorContext.Provider
             value={{

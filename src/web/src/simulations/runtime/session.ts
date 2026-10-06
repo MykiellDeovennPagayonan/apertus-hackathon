@@ -1,10 +1,4 @@
 import { createStore, type StateCreator, type StoreApi } from "zustand/vanilla";
-import type {
-  ExperimentContext,
-  Plan,
-  TargetedCommand,
-} from "../../lib/planner/schema";
-import { parsePlan } from "../../lib/planner/schema";
 import { publicDefinition } from "../components/catalog";
 import { GRAVITIES } from "../components/resources/GravityPresets";
 import type { GasState } from "../components/traits/GasState";
@@ -21,6 +15,8 @@ import {
   useElementaryStore,
 } from "./elementarySession";
 import { gasInitializer, useGasStore } from "./gasSession";
+import type { ExperimentContext, Plan, TargetedCommand } from "./legacyPlan";
+import { parsePlan } from "./legacyPlan";
 import { isMathDemo } from "./mathModel";
 import { mathInitializer, useMathStore } from "./mathSession";
 import {
@@ -28,6 +24,12 @@ import {
   projectileInstance,
   useProjectileStore,
 } from "./projectileSession";
+import {
+  activateRecipeSession,
+  disposeRecipeSession,
+  getRecipeSession,
+  type RecipeSession,
+} from "./recipeSession";
 import { recipeCommands } from "./recipes/compatibility";
 import { loadRecipe as loadAuthoredRecipe } from "./recipes/loadRecipe";
 import { listPremadeRecipes, premadeRecipe } from "./recipes/registry";
@@ -51,9 +53,8 @@ let automaticMotion = false;
 const motionListeners = new Set<() => void>();
 let definition: CompositionDefinition | null = null,
   acceptedRecipe: Recipe | null = null;
-let authoredSession: ReturnType<typeof loadAuthoredRecipe> | null = null;
-let unsubscribeAuthored: (() => void) | undefined;
-export const getAuthoredSession = () => authoredSession;
+let authoredSession: RecipeSession | null = null;
+export const getAuthoredSession = getRecipeSession;
 export function activatePremadeSession(slug: Exclude<DemoType, "assembly">) {
   return activateAuthoredSession(loadAuthoredRecipe(premadeRecipe(slug)), slug);
 }
@@ -62,25 +63,13 @@ function activateAuthoredSession(
   slug: DemoType,
 ) {
   disposeSession();
-  authoredSession = candidate;
+  authoredSession = activateRecipeSession(candidate.recipe);
   active = slug;
-  sessionId = `experiment-${++sequence}`;
+  sessionId = authoredSession.sessionId;
   revision = 0;
-  const fingerprint = () =>
-    JSON.stringify(candidate.runtime.getSnapshot().state, (key, value) =>
-      ["elapsed", "samples"].includes(key) ? undefined : value,
-    );
-  let previousState = fingerprint();
-  unsubscribeAuthored = candidate.runtime.subscribe(() => {
-    const next = fingerprint();
-    if (next !== previousState) {
-      previousState = next;
-      revision++;
-    }
-  });
-  runClock(slug);
-  return candidate;
+  return authoredSession;
 }
+
 let recentChange: ExperimentContext["recentChange"];
 let correlationId: string | null = null;
 const planCorrelations = new WeakMap<object, string>();
@@ -88,6 +77,8 @@ export function correlatePlan(plan: Plan, id: string) {
   planCorrelations.set(plan, id);
 }
 export function getDiagnosticSnapshot() {
+  const canonical = getRecipeSession();
+  if (canonical) return canonical.snapshot();
   return structuredClone({
     correlationId,
     recipe: acceptedRecipe,
@@ -101,8 +92,7 @@ export function getDiagnosticSnapshot() {
 }
 export function disposeSession() {
   if (typeof cancelAnimationFrame !== "undefined") cancelAnimationFrame(frame);
-  unsubscribeAuthored?.();
-  unsubscribeAuthored = undefined;
+  disposeRecipeSession();
   authoredSession = null;
   active = null;
   definition = null;
@@ -216,6 +206,7 @@ function commitCandidate(pair: ReturnType<typeof stores>) {
 }
 /** Presentation clock policy; domain playing state and calculations remain authoritative. */
 export function setSessionAnimation(enabled: boolean) {
+  getRecipeSession()?.setAnimation(enabled);
   if (automaticMotion === enabled) return;
   automaticMotion = enabled;
   for (const listener of motionListeners) listener();
@@ -253,6 +244,7 @@ export function advanceSessionTime(delta: number): ActionResult {
   }
 }
 function runClock(demo: DemoType) {
+  if (getRecipeSession()) return;
   setSessionAnimation(false);
   let previous: number | undefined;
   const identity = sessionId;
@@ -721,6 +713,8 @@ export function getActiveDefinition() {
 }
 /** Saves the accepted initial recipe, not a running checkpoint. */
 export function saveRecipe() {
+  const canonical = getRecipeSession();
+  if (canonical) return canonical.serialize();
   if (authoredSession)
     return serializeAuthoredRecipe(
       authoredSession.recipe,

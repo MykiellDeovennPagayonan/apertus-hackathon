@@ -7,6 +7,17 @@ export function serializeRecipe(
 ) {
   const candidate = structuredClone(recipe);
   candidate.document = structuredClone(document);
+  for (const group of candidate.document.groups)
+    for (const parameter of group.parameters) {
+      const node = [
+        ...candidate.document.nodes,
+        ...candidate.document.resources,
+      ].find((node) => node.id === parameter.node);
+      if (node)
+        parameter.default = structuredClone(
+          node.configuration[parameter.field],
+        );
+    }
   candidate.title = document.lesson.title;
   candidate.dependencies = [
     ...new Map(

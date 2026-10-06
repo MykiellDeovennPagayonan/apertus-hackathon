@@ -8,7 +8,9 @@ const { renderToStaticMarkup } = require("react-dom/server");
 const { chromium } = require("playwright");
 const { load } = require("./integration-loader.cjs");
 const { compileAssembly } = load("src/simulations/runtime/assembly.ts");
-const { parseConfiguration } = load("src/lib/planner/creation.ts");
+const { parseConfiguration } = load(
+  "scripts/compatibility/legacyConfiguration.ts",
+);
 const { PhysicalSystemsContent } = load(
   "src/simulations/components/views/physical-systems/PhysicalSystemsView.tsx",
 );

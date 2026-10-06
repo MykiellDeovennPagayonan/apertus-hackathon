@@ -32,6 +32,13 @@ export class DocumentRuntime {
   document: AuthoredDocument;
   private snapshot: Snapshot;
   private listeners = new Set<() => void>();
+  private interactionListeners = new Set<() => void>();
+  subscribeInteractions = (listener: () => void) => {
+    this.interactionListeners.add(listener);
+    return () => {
+      this.interactionListeners.delete(listener);
+    };
+  };
   constructor(
     document: AuthoredDocument,
     private delegate?: (commands: ScopedCommand[]) => ActionResult,
@@ -235,6 +242,7 @@ export class DocumentRuntime {
         staged.state[n.id] = state;
       }
       this.commit(staged);
+      for (const listener of this.interactionListeners) listener();
       return { accepted: true };
     } catch (e) {
       return {

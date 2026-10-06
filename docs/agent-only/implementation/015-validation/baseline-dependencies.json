@@ -1,0 +1,4037 @@
+{
+  "source": "Initial clean HEAD reconstructed by TypeScript AST; no working-tree replacements used.",
+  "commit": "cafdbe09825c3ce07359622745f9826f7219ff52",
+  "roots": [
+    "src/lib/planner/index.ts",
+    "src/lib/planner/schema.ts",
+    "src/lib/planner/browser.ts",
+    "src/app/api/apertus/route.ts",
+    "src/simulations/runtime/session.ts",
+    "src/simulations/builder/editor/compositeCommands.ts",
+    "src/simulations/builder/editor/insertionPlan.ts",
+    "src/simulations/builder/editor/connectionCommands.ts"
+  ],
+  "modules": 217,
+  "edges": [
+    {
+      "from": "src/lib/planner/index.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/types.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/MathBoards.ts",
+      "to": "src/simulations/components/traits/VisualBinding.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/VisualBinding.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/definition.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/planner/index.ts",
+      "to": "src/lib/apertus/arguments.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/arguments.ts",
+      "to": "src/simulations/components/resources/LearningPolicies.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/resources/LearningPolicies.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/resources/LearningPolicies.ts",
+      "to": "src/simulations/pre-made/gas/gas-pressure.recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/arguments.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/capabilities.ts",
+      "to": "src/simulations/runtime/assembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/assembly.ts",
+      "to": "src/simulations/domains/chemistry/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/domains/chemistry/index.ts",
+      "to": "src/simulations/components/resources/chemistry/definitions.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/domains/chemistry/index.ts",
+      "to": "src/simulations/components/systems/chemistry/models.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/chemistry/models.ts",
+      "to": "src/simulations/components/resources/chemistry/definitions.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/chemistry/models.ts",
+      "to": "src/simulations/components/traits/chemistry/ChemistryState.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/domains/chemistry/index.ts",
+      "to": "src/simulations/runtime/contribution.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/contribution.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/contribution.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/domains/chemistry/index.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/assembly.ts",
+      "to": "src/simulations/domains/dynamic-systems/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/domains/dynamic-systems/index.ts",
+      "to": "src/simulations/components/prefabs/dynamic-systems/objects.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/dynamic-systems/objects.ts",
+      "to": "src/simulations/components/systems/dynamic-systems/models.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/dynamic-systems/models.ts",
+      "to": "src/simulations/components/traits/dynamic-systems/state.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/prefabs/dynamic-systems/objects.ts",
+      "to": "src/simulations/components/traits/dynamic-systems/state.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/domains/dynamic-systems/index.ts",
+      "to": "src/simulations/components/resources/dynamic-systems/defaults.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/domains/dynamic-systems/index.ts",
+      "to": "src/simulations/components/systems/dynamic-systems/models.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/domains/dynamic-systems/index.ts",
+      "to": "src/simulations/runtime/contribution.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/domains/dynamic-systems/index.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/assembly.ts",
+      "to": "src/simulations/domains/math-foundations/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/domains/math-foundations/index.ts",
+      "to": "src/simulations/components/contracts/LineParameters.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/contracts/LineParameters.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/contracts/LineParameters.ts",
+      "to": "src/simulations/components/contracts/PropertyContract.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/domains/math-foundations/index.ts",
+      "to": "src/simulations/components/systems/math-foundations/models.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/math-foundations/models.ts",
+      "to": "src/simulations/components/systems/LineGeometrySystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/LineGeometrySystem.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/domains/math-foundations/index.ts",
+      "to": "src/simulations/runtime/contribution.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/domains/math-foundations/index.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/assembly.ts",
+      "to": "src/simulations/domains/natural-systems/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/domains/natural-systems/index.ts",
+      "to": "src/simulations/components/resources/natural-systems/defaults.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/domains/natural-systems/index.ts",
+      "to": "src/simulations/components/systems/natural-systems/models.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/natural-systems/models.ts",
+      "to": "src/simulations/components/traits/natural-systems/state.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/domains/natural-systems/index.ts",
+      "to": "src/simulations/runtime/contribution.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/domains/natural-systems/index.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/assembly.ts",
+      "to": "src/simulations/domains/physical-systems/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/domains/physical-systems/index.ts",
+      "to": "src/simulations/components/prefabs/physical-systems/objects.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/physical-systems/objects.ts",
+      "to": "src/simulations/components/resources/physical-systems/defaults.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/physical-systems/objects.ts",
+      "to": "src/simulations/components/systems/physical-systems/models.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/physical-systems/models.ts",
+      "to": "src/simulations/components/traits/physical-systems/state.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/prefabs/physical-systems/objects.ts",
+      "to": "src/simulations/components/traits/physical-systems/state.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/domains/physical-systems/index.ts",
+      "to": "src/simulations/components/resources/physical-systems/defaults.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/domains/physical-systems/index.ts",
+      "to": "src/simulations/components/systems/physical-systems/models.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/domains/physical-systems/index.ts",
+      "to": "src/simulations/components/traits/physical-systems/state.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/domains/physical-systems/index.ts",
+      "to": "src/simulations/runtime/contribution.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/domains/physical-systems/index.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/assembly.ts",
+      "to": "src/simulations/runtime/contribution.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/assembly.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/assembly.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/capabilities.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/capabilities.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/apertus/arguments.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/arguments.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/apertus/arguments.ts",
+      "to": "src/lib/laya/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/apertus/arguments.ts",
+      "to": "src/lib/planner/schema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/schema.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/schema.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/schema.ts",
+      "to": "src/simulations/runtime/resolver.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/resolver.ts",
+      "to": "src/simulations/components/resources/GravityPresets.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/resolver.ts",
+      "to": "src/simulations/runtime/assembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/resolver.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/resolver.ts",
+      "to": "src/simulations/runtime/contribution.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/resolver.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/resolver.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/resolver.ts",
+      "to": "src/simulations/runtime/validation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/components/compositions/GasPressureExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/compositions/GasPressureExperiment.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/compositions/GasPressureExperiment.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/compositions/GasPressureExperiment.ts",
+      "to": "src/simulations/components/resources/LearningPolicies.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/components/prefabs/Building.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/Building.ts",
+      "to": "src/simulations/components/traits/Building.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/Building.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/components/prefabs/Citizen.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/Citizen.ts",
+      "to": "src/simulations/components/resources/TownLayout.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/resources/TownLayout.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/resources/TownLayout.ts",
+      "to": "src/simulations/components/traits/Building.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/prefabs/Citizen.ts",
+      "to": "src/simulations/components/resources/WalkingProfile.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/Citizen.ts",
+      "to": "src/simulations/components/traits/Resident.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/Resident.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/Resident.ts",
+      "to": "src/simulations/components/traits/BehaviorBinding.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/BehaviorBinding.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/Resident.ts",
+      "to": "src/simulations/components/traits/BehaviorState.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/BehaviorState.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/Resident.ts",
+      "to": "src/simulations/components/traits/NavigationAgent.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/NavigationAgent.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/NavigationAgent.ts",
+      "to": "src/simulations/components/traits/Resident.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/components/prefabs/GasContainer.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/GasContainer.ts",
+      "to": "src/simulations/components/systems/GasParticleIllustrationSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/GasParticleIllustrationSystem.ts",
+      "to": "src/simulations/components/traits/GasState.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/GasState.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/GasContainer.ts",
+      "to": "src/simulations/components/systems/IdealGasSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/IdealGasSystem.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/IdealGasSystem.ts",
+      "to": "src/simulations/components/traits/GasState.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/GasContainer.ts",
+      "to": "src/simulations/components/traits/GasState.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/components/prefabs/Market.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/Market.ts",
+      "to": "src/simulations/components/resources/TownLayout.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/Market.ts",
+      "to": "src/simulations/components/prefabs/Building.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/components/prefabs/Projectile.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/Projectile.ts",
+      "to": "src/simulations/components/systems/BallisticMotionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/Projectile.ts",
+      "to": "src/simulations/components/traits/LaunchSettings.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/LaunchSettings.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/components/prefabs/TrussAssembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/TrussAssembly.ts",
+      "to": "src/simulations/components/traits/MemberEndpoints.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/MemberEndpoints.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/prefabs/TrussAssembly.ts",
+      "to": "src/simulations/components/prefabs/BridgeLoad.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/BridgeLoad.ts",
+      "to": "src/simulations/components/traits/BridgeLoad.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/traits/BridgeLoad.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/prefabs/TrussAssembly.ts",
+      "to": "src/simulations/components/prefabs/Joint.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/Joint.ts",
+      "to": "src/simulations/components/traits/MemberEndpoints.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/prefabs/TrussAssembly.ts",
+      "to": "src/simulations/components/prefabs/Member.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/Member.ts",
+      "to": "src/simulations/components/traits/MemberEndpoints.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/components/traits/GasState.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/pre-made/town/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/pre-made/town/index.ts",
+      "to": "src/simulations/pre-made/town/compositions/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/pre-made/town/compositions/index.ts",
+      "to": "src/simulations/components/compositions/TownExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/compositions/TownExperiment.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/compositions/TownExperiment.ts",
+      "to": "src/simulations/components/resources/TownLayout.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/assembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/catalog.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/catalog.ts",
+      "to": "src/simulations/components/registry.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/registry.ts",
+      "to": "src/simulations/runtime/catalog.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/registry.ts",
+      "to": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "to": "src/simulations/components/contracts/Observation.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/contracts/Observation.ts",
+      "to": "src/simulations/components/systems/ScheduledTripSystem.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/ScheduledTripSystem.ts",
+      "to": "src/simulations/runtime/composition/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/index.ts",
+      "to": "src/simulations/components/contracts/composition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/contracts/composition.ts",
+      "to": "src/simulations/components/contracts/ActionContract.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/contracts/ActionContract.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/contracts/composition.ts",
+      "to": "src/simulations/components/contracts/ActionContract.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/contracts/composition.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/contracts/composition.ts",
+      "to": "src/simulations/components/registry.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/contracts/composition.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/contracts/composition.ts",
+      "to": "src/simulations/components/contracts/OutputContract.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/contracts/composition.ts",
+      "to": "src/simulations/components/registry.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/contracts/composition.ts",
+      "to": "src/simulations/components/systems/ComposedFractionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/ComposedFractionSystem.ts",
+      "to": "src/simulations/components/prefabs/MathBoards.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/MathBoards.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/prefabs/MathBoards.ts",
+      "to": "src/simulations/components/prefabs/CounterToken.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/prefabs/CounterToken.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/ComposedFractionSystem.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/ComposedFractionSystem.ts",
+      "to": "src/simulations/components/systems/FractionBuilderSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/FractionBuilderSystem.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/FractionBuilderSystem.ts",
+      "to": "src/simulations/components/prefabs/MathBoards.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/FractionBuilderSystem.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/FractionBuilderSystem.ts",
+      "to": "src/simulations/components/systems/fractionMath.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/fractionMath.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/FractionBuilderSystem.ts",
+      "to": "src/simulations/components/systems/mathSequence.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/mathSequence.ts",
+      "to": "src/simulations/components/resources/MathAppearance.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/mathSequence.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/composition/index.ts",
+      "to": "src/simulations/components/contracts/PropertyContract.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/index.ts",
+      "to": "src/simulations/components/registry.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/index.ts",
+      "to": "src/simulations/components/systems/BuildingGeometrySystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/BuildingGeometrySystem.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/composition/index.ts",
+      "to": "src/simulations/components/systems/LineIntersectionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/LineIntersectionSystem.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/composition/index.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/index.ts",
+      "to": "src/simulations/runtime/composition/createScene.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/createScene.ts",
+      "to": "src/simulations/runtime/composition/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/composition/types.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/composition/index.ts",
+      "to": "src/simulations/runtime/composition/types.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/index.ts",
+      "to": "src/simulations/runtime/composition/validateBindings.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateBindings.ts",
+      "to": "src/simulations/components/contracts/composition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateBindings.ts",
+      "to": "src/simulations/components/contracts/objectFields.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/contracts/objectFields.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateBindings.ts",
+      "to": "src/simulations/components/contracts/PropertyContract.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateBindings.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateBindings.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateBindings.ts",
+      "to": "src/simulations/runtime/composition/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/composition/index.ts",
+      "to": "src/simulations/runtime/composition/validateScene.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateScene.ts",
+      "to": "src/simulations/runtime/composition/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateScene.ts",
+      "to": "src/simulations/runtime/composition/validateSingleScene.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateSingleScene.ts",
+      "to": "src/simulations/components/contracts/composition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateSingleScene.ts",
+      "to": "src/simulations/components/contracts/objectFields.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateSingleScene.ts",
+      "to": "src/simulations/components/registry.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateSingleScene.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateSingleScene.ts",
+      "to": "src/simulations/runtime/records.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateSingleScene.ts",
+      "to": "src/simulations/runtime/composition/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateSingleScene.ts",
+      "to": "src/simulations/runtime/composition/validateBindings.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateScene.ts",
+      "to": "src/simulations/runtime/composition/validateWorkspace.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateWorkspace.ts",
+      "to": "src/simulations/components/behaviors/ScheduledTrip.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/behaviors/ScheduledTrip.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/behaviors/ScheduledTrip.ts",
+      "to": "src/simulations/components/contracts/objectFields.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateWorkspace.ts",
+      "to": "src/simulations/components/contracts/composition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateWorkspace.ts",
+      "to": "src/simulations/components/registry.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateWorkspace.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateWorkspace.ts",
+      "to": "src/simulations/runtime/records.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateWorkspace.ts",
+      "to": "src/simulations/runtime/composition/projectCanvas.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/projectCanvas.ts",
+      "to": "src/simulations/components/contracts/composition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/projectCanvas.ts",
+      "to": "src/simulations/runtime/composition/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateWorkspace.ts",
+      "to": "src/simulations/runtime/composition/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateWorkspace.ts",
+      "to": "src/simulations/runtime/composition/validateBindings.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/composition/validateWorkspace.ts",
+      "to": "src/simulations/runtime/composition/validateSingleScene.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/ScheduledTripSystem.ts",
+      "to": "src/simulations/runtime/records.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/ScheduledTripSystem.ts",
+      "to": "src/simulations/components/systems/RouteFollowingSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/RouteFollowingSystem.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/ScheduledTripSystem.ts",
+      "to": "src/simulations/components/systems/RouteSearchSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/RouteSearchSystem.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/ScheduledTripSystem.ts",
+      "to": "src/simulations/components/systems/ScheduleSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/contracts/Observation.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "to": "src/simulations/components/contracts/OutputContract.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "to": "src/simulations/components/contracts/PropertyContract.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/registry.ts",
+      "to": "src/simulations/components/definitions/Building.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Building.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Building.ts",
+      "to": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/definitions/Building.ts",
+      "to": "src/simulations/components/contracts/numericField.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/contracts/numericField.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/definitions/Building.ts",
+      "to": "src/simulations/components/contracts/objectFields.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Building.ts",
+      "to": "src/simulations/components/systems/BuildingGeometrySystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/registry.ts",
+      "to": "src/simulations/components/definitions/FractionBar.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/FractionBar.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/FractionBar.ts",
+      "to": "src/simulations/components/contracts/ActionContract.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/FractionBar.ts",
+      "to": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/definitions/FractionBar.ts",
+      "to": "src/simulations/components/contracts/objectFields.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/FractionBar.ts",
+      "to": "src/simulations/components/systems/ComposedFractionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/FractionBar.ts",
+      "to": "src/simulations/components/systems/FractionObservationSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/FractionObservationSystem.ts",
+      "to": "src/simulations/components/contracts/Observation.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/FractionObservationSystem.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/FractionObservationSystem.ts",
+      "to": "src/simulations/components/systems/ComposedFractionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/FractionObservationSystem.ts",
+      "to": "src/simulations/components/systems/fractionMath.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/registry.ts",
+      "to": "src/simulations/components/definitions/GasContainer.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/GasContainer.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/GasContainer.ts",
+      "to": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/definitions/GasContainer.ts",
+      "to": "src/simulations/components/contracts/objectFields.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/GasContainer.ts",
+      "to": "src/simulations/components/contracts/PropertyContract.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/definitions/GasContainer.ts",
+      "to": "src/simulations/components/resources/LearningPolicies.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/GasContainer.ts",
+      "to": "src/simulations/components/systems/IdealGasSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/GasContainer.ts",
+      "to": "src/simulations/components/traits/GasState.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/registry.ts",
+      "to": "src/simulations/components/definitions/Ground.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Ground.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Ground.ts",
+      "to": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/definitions/Ground.ts",
+      "to": "src/simulations/components/contracts/objectFields.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/registry.ts",
+      "to": "src/simulations/components/definitions/Line.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Line.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Line.ts",
+      "to": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/definitions/Line.ts",
+      "to": "src/simulations/components/contracts/LineParameters.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Line.ts",
+      "to": "src/simulations/components/contracts/objectFields.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Line.ts",
+      "to": "src/simulations/components/systems/LineGeometrySystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Line.ts",
+      "to": "src/simulations/components/systems/LineObservationSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/LineObservationSystem.ts",
+      "to": "src/simulations/components/contracts/Observation.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/LineObservationSystem.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/LineObservationSystem.ts",
+      "to": "src/simulations/components/systems/LineGeometrySystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/LineObservationSystem.ts",
+      "to": "src/simulations/components/systems/LineIntersectionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/registry.ts",
+      "to": "src/simulations/components/definitions/Person.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Person.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Person.ts",
+      "to": "src/simulations/components/behaviors/ScheduledTrip.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Person.ts",
+      "to": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/definitions/Person.ts",
+      "to": "src/simulations/components/contracts/numericField.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Person.ts",
+      "to": "src/simulations/components/contracts/objectFields.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Person.ts",
+      "to": "src/simulations/components/systems/TownObservationSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/TownObservationSystem.ts",
+      "to": "src/simulations/components/contracts/Observation.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/TownObservationSystem.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/registry.ts",
+      "to": "src/simulations/components/definitions/Road.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Road.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Road.ts",
+      "to": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/definitions/Road.ts",
+      "to": "src/simulations/components/contracts/objectFields.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/registry.ts",
+      "to": "src/simulations/components/definitions/Square.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Square.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Square.ts",
+      "to": "src/simulations/components/contracts/ComponentDefinition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/definitions/Square.ts",
+      "to": "src/simulations/components/contracts/numericField.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Square.ts",
+      "to": "src/simulations/components/contracts/objectFields.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/definitions/Square.ts",
+      "to": "src/simulations/components/systems/SquareGeometrySystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/SquareGeometrySystem.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/registry.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/registry.ts",
+      "to": "src/simulations/components/contracts/PropertyContract.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/catalog.ts",
+      "to": "src/simulations/components/traits/MeasurementProbe.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/traits/MeasurementProbe.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/catalog.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/catalog.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/catalog.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/catalog.ts",
+      "to": "src/simulations/runtime/mathCatalog.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathCatalog.ts",
+      "to": "src/simulations/runtime/catalog.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/mathCatalog.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/catalog.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/catalog.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/commands.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/elementarySession.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/elementarySession.ts",
+      "to": "src/simulations/components/systems/ElementarySystems.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/ElementarySystems.ts",
+      "to": "src/simulations/components/traits/ElementaryBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/elementarySession.ts",
+      "to": "src/simulations/components/traits/ElementaryBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/elementarySession.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/elementarySession.ts",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/elementarySession.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/elementarySession.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/mathModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathModel.ts",
+      "to": "src/simulations/components/prefabs/MathBoards.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathModel.ts",
+      "to": "src/simulations/components/systems/ArithmeticSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/ArithmeticSystem.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/ArithmeticSystem.ts",
+      "to": "src/simulations/components/prefabs/CounterToken.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/ArithmeticSystem.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/ArithmeticSystem.ts",
+      "to": "src/simulations/components/systems/mathSequence.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathModel.ts",
+      "to": "src/simulations/components/systems/CountingSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/CountingSystem.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/CountingSystem.ts",
+      "to": "src/simulations/components/prefabs/CounterToken.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/CountingSystem.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/CountingSystem.ts",
+      "to": "src/simulations/components/systems/mathSequence.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathModel.ts",
+      "to": "src/simulations/components/systems/EqualGroupingSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/EqualGroupingSystem.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/EqualGroupingSystem.ts",
+      "to": "src/simulations/components/prefabs/CounterToken.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/EqualGroupingSystem.ts",
+      "to": "src/simulations/components/prefabs/MathBoards.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/EqualGroupingSystem.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/EqualGroupingSystem.ts",
+      "to": "src/simulations/components/systems/mathSequence.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathModel.ts",
+      "to": "src/simulations/components/systems/FractionBuilderSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathModel.ts",
+      "to": "src/simulations/components/systems/FractionNumberLineSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/FractionNumberLineSystem.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/FractionNumberLineSystem.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/FractionNumberLineSystem.ts",
+      "to": "src/simulations/components/systems/fractionMath.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/FractionNumberLineSystem.ts",
+      "to": "src/simulations/components/systems/mathSequence.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathModel.ts",
+      "to": "src/simulations/components/systems/mathSequence.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathModel.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/mathModel.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathModel.ts",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathModel.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/providers.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/ArithmeticSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/BallisticMotionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/BehaviorRunnerSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/BehaviorRunnerSystem.ts",
+      "to": "src/simulations/components/behaviors/DailyRoutine.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/behaviors/DailyRoutine.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/behaviors/DailyRoutine.ts",
+      "to": "src/simulations/components/resources/DailySchedule.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/BehaviorRunnerSystem.ts",
+      "to": "src/simulations/components/prefabs/Citizen.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/BehaviorRunnerSystem.ts",
+      "to": "src/simulations/components/traits/Resident.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/BehaviorRunnerSystem.ts",
+      "to": "src/simulations/components/systems/ScheduleSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/CountingSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/ElementarySystems.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/EqualGroupingSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/FractionBuilderSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/FractionNumberLineSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/GasParticleIllustrationSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/HeuristicBridgeResponseSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/HeuristicBridgeResponseSystem.ts",
+      "to": "src/simulations/components/traits/MemberEndpoints.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/IdealGasSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/MeasurementSamplingSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/MeasurementSamplingSystem.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/MeasurementSamplingSystem.ts",
+      "to": "src/simulations/components/traits/MeasurementProbe.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/MeasurementSamplingSystem.ts",
+      "to": "src/simulations/components/traits/MeasurementProbe.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/MeasurementSamplingSystem.ts",
+      "to": "src/simulations/components/systems/BallisticMotionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/NavigationSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/NavigationSystem.ts",
+      "to": "src/simulations/components/systems/townNavigation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/townNavigation.ts",
+      "to": "src/simulations/components/resources/TownLayout.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/townNavigation.ts",
+      "to": "src/simulations/components/traits/Building.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/townNavigation.ts",
+      "to": "src/simulations/components/systems/NavigationSystem.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/townNavigation.ts",
+      "to": "src/simulations/components/systems/RouteSearchSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/townNavigation.ts",
+      "to": "src/simulations/components/resources/WalkingProfile.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/providers.ts",
+      "to": "src/simulations/components/systems/PathFollowingSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/PathFollowingSystem.ts",
+      "to": "src/simulations/components/resources/WalkingProfile.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/PathFollowingSystem.ts",
+      "to": "src/simulations/components/traits/Resident.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/systems/PathFollowingSystem.ts",
+      "to": "src/simulations/components/systems/RouteFollowingSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/systems/PathFollowingSystem.ts",
+      "to": "src/simulations/components/systems/townNavigation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/compositions/ArithmeticExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/ArithmeticExperiment.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/ArithmeticExperiment.ts",
+      "to": "src/simulations/runtime/mathModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/compositions/BridgeExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/BridgeExperiment.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/compositions/CountingExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/CountingExperiment.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/CountingExperiment.ts",
+      "to": "src/simulations/runtime/mathModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/compositions/ElementaryExperiments.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/ElementaryExperiments.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/ElementaryExperiments.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/ElementaryExperiments.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/compositions/EqualGroupsExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/EqualGroupsExperiment.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/EqualGroupsExperiment.ts",
+      "to": "src/simulations/runtime/mathModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/compositions/FractionBuilderExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/FractionBuilderExperiment.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/FractionBuilderExperiment.ts",
+      "to": "src/simulations/runtime/mathModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/compositions/FractionNumberLineExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/FractionNumberLineExperiment.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/FractionNumberLineExperiment.ts",
+      "to": "src/simulations/runtime/mathModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/compositions/ProjectileExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/compositions/ProjectileExperiment.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/validation.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/planner/schema.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/planner/schema.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/arguments.ts",
+      "to": "src/lib/apertus/educationalExamples.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/educationalExamples.ts",
+      "to": "src/simulations/components/resources/LearningPolicies.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/educationalExamples.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/apertus/educationalExamples.ts",
+      "to": "src/lib/planner/schema.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/apertus/arguments.ts",
+      "to": "src/lib/apertus/transport.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/transport.ts",
+      "to": "src/lib/planner/errors.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/transport.ts",
+      "to": "src/lib/apertus/config.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/index.ts",
+      "to": "src/lib/apertus/client.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/client.ts",
+      "to": "src/simulations/components/resources/LearningPolicies.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/client.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/apertus/client.ts",
+      "to": "src/lib/planner/schema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/client.ts",
+      "to": "src/lib/apertus/catalogSelection.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/catalogSelection.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/catalogSelection.ts",
+      "to": "src/simulations/runtime/catalog.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/catalogSelection.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/apertus/catalogSelection.ts",
+      "to": "src/simulations/runtime/validation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/client.ts",
+      "to": "src/lib/apertus/transport.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/apertus/client.ts",
+      "to": "src/lib/planner/errors.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/index.ts",
+      "to": "src/lib/laya/client.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/laya/client.ts",
+      "to": "src/lib/laya/config.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/laya/client.ts",
+      "to": "src/lib/laya/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/planner/index.ts",
+      "to": "src/lib/laya/config.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/index.ts",
+      "to": "src/lib/laya/planner.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/laya/planner.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/laya/planner.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/laya/planner.ts",
+      "to": "src/lib/planner/schema.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/laya/planner.ts",
+      "to": "src/lib/laya/decisions.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/laya/decisions.ts",
+      "to": "src/lib/laya/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/laya/planner.ts",
+      "to": "src/lib/laya/questions.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/laya/questions.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/laya/questions.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/laya/questions.ts",
+      "to": "src/lib/planner/schema.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/laya/questions.ts",
+      "to": "src/lib/laya/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/laya/planner.ts",
+      "to": "src/lib/laya/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/planner/index.ts",
+      "to": "src/lib/laya/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/planner/index.ts",
+      "to": "src/lib/planner/creation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/creation.ts",
+      "to": "src/simulations/components/resources/LearningPolicies.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/creation.ts",
+      "to": "src/simulations/runtime/assembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/creation.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/creation.ts",
+      "to": "src/simulations/runtime/catalog.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/creation.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/creation.ts",
+      "to": "src/simulations/runtime/resolver.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/creation.ts",
+      "to": "src/simulations/runtime/validation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/creation.ts",
+      "to": "src/lib/apertus/transport.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/creation.ts",
+      "to": "src/lib/laya/decisions.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/creation.ts",
+      "to": "src/lib/laya/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/planner/creation.ts",
+      "to": "src/lib/planner/errors.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/creation.ts",
+      "to": "src/lib/planner/schema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/index.ts",
+      "to": "src/lib/planner/errors.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/index.ts",
+      "to": "src/lib/planner/schema.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/planner/browser.ts",
+      "to": "src/simulations/runtime/session.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/lib/planner/schema.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/lib/planner/schema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/index.ts",
+      "to": "src/simulations/runtime/assembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/index.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/index.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/types.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/catalog/index.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/index.ts",
+      "to": "src/simulations/components/registry.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/index.ts",
+      "to": "src/simulations/components/catalog/authoring.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/authoring.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/catalog/authoring.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/authoring.ts",
+      "to": "src/simulations/components/catalog/generic.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/generic.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/catalog/generic.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/generic.ts",
+      "to": "src/simulations/components/catalog/controlDefinitions.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/controlDefinitions.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/catalog/controlDefinitions.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/controlDefinitions.ts",
+      "to": "src/simulations/components/controls/controlContract.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/controls/controlContract.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/controls/controlContract.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/controlDefinitions.ts",
+      "to": "src/simulations/components/catalog/generic.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/catalog/index.ts",
+      "to": "src/simulations/components/catalog/discovery.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/discovery.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/catalog/index.ts",
+      "to": "src/simulations/components/catalog/generic.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/index.ts",
+      "to": "src/simulations/components/catalog/learningModels.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/learningModels.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/catalog/learningModels.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/learningModels.ts",
+      "to": "src/simulations/runtime/mathModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/learningModels.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/learningModels.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/catalog/index.ts",
+      "to": "src/simulations/components/catalog/operations.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/operations.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/catalog/operations.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/index.ts",
+      "to": "src/simulations/components/catalog/spatial.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/spatial.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/catalog/spatial.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/catalog/spatial.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/components/resources/GravityPresets.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/components/traits/GasState.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/assembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/assemblySession.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/assemblySession.ts",
+      "to": "src/simulations/runtime/assembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/assemblySession.ts",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/assemblySession.ts",
+      "to": "src/simulations/runtime/contribution.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/assemblySession.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/assemblySession.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/bridgeSession.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/bridgeSession.ts",
+      "to": "src/simulations/components/prefabs/TrussAssembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/bridgeSession.ts",
+      "to": "src/simulations/components/systems/HeuristicBridgeResponseSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/bridgeSession.ts",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/bridgeSession.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/compositions/BridgeExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/definition.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/elementarySession.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/gasSession.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/gasSession.ts",
+      "to": "src/simulations/components/prefabs/GasContainer.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/gasSession.ts",
+      "to": "src/simulations/components/resources/LearningPolicies.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/gasSession.ts",
+      "to": "src/simulations/components/systems/GasParticleIllustrationSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/gasSession.ts",
+      "to": "src/simulations/components/systems/IdealGasSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/gasSession.ts",
+      "to": "src/simulations/components/traits/GasState.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/gasSession.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/gasSession.ts",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/gasSession.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/mathModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/mathSession.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathSession.ts",
+      "to": "src/simulations/components/prefabs/MathBoards.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathSession.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/mathSession.ts",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathSession.ts",
+      "to": "src/simulations/runtime/mathModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/mathSession.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/projectileSession.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/projectileSession.ts",
+      "to": "src/simulations/components/prefabs/Projectile.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/projectileSession.ts",
+      "to": "src/simulations/components/resources/GravityPresets.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/projectileSession.ts",
+      "to": "src/simulations/components/systems/BallisticMotionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/projectileSession.ts",
+      "to": "src/simulations/components/traits/MeasurementProbe.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/projectileSession.ts",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/projectileSession.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/compositions/ProjectileExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/projectileSession.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/index.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/index.ts",
+      "to": "src/simulations/components/resources/GravityPresets.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/index.ts",
+      "to": "src/simulations/runtime/authoring/runtime.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/components/composites/catalog.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/catalog.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/catalog.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/composites/catalog.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/catalog.ts",
+      "to": "src/simulations/components/controls/commandPresentation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/controls/commandPresentation.ts",
+      "to": "src/simulations/components/controls/SchemaForm.tsx",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/controls/SchemaForm.tsx",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/controls/SchemaForm.tsx",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/controls/SchemaForm.tsx",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/controls/SchemaForm.tsx",
+      "to": "src/simulations/components/controls/NumberField.tsx",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/controls/NumberField.tsx",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/composites/catalog.ts",
+      "to": "src/simulations/components/views/dataPresentation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/catalog.ts",
+      "to": "src/simulations/components/composites/gas.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/gas.ts",
+      "to": "src/simulations/runtime/authoring/recipes.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/recipes.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/recipes.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/recipes.ts",
+      "to": "src/simulations/runtime/authoring/board.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/board.ts",
+      "to": "src/simulations/runtime/authoring/drawings.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/drawings.ts",
+      "to": "src/simulations/runtime/authoring/board.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/board.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/recipes.ts",
+      "to": "src/simulations/runtime/authoring/references.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/references.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/references.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/recipes.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/recipes.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/recipes.ts",
+      "to": "src/simulations/runtime/authoring/validate.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/validate.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/validate.ts",
+      "to": "src/simulations/components/controls/controlContract.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/validate.ts",
+      "to": "src/simulations/components/traits/MemberEndpoints.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/validate.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/validate.ts",
+      "to": "src/simulations/runtime/trussModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/trussModel.ts",
+      "to": "src/simulations/components/prefabs/TrussAssembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/trussModel.ts",
+      "to": "src/simulations/components/systems/HeuristicBridgeResponseSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/trussModel.ts",
+      "to": "src/simulations/components/traits/MemberEndpoints.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/validate.ts",
+      "to": "src/simulations/runtime/authoring/board.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/validate.ts",
+      "to": "src/simulations/runtime/authoring/references.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/validate.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/validate.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/composites/gas.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/composites/gas.ts",
+      "to": "src/simulations/pre-made/gas/gas-pressure.recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/catalog.ts",
+      "to": "src/simulations/components/composites/spatial.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/spatial.ts",
+      "to": "src/simulations/runtime/assembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/spatial.ts",
+      "to": "src/simulations/runtime/authoring/adapters.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/adapters.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/adapters.ts",
+      "to": "src/simulations/components/composites/catalog.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/adapters.ts",
+      "to": "src/simulations/runtime/contribution.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/adapters.ts",
+      "to": "src/simulations/runtime/authoring/recipes.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/adapters.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/adapters.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/adapters.ts",
+      "to": "src/simulations/runtime/authoring/validate.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/spatial.ts",
+      "to": "src/simulations/runtime/authoring/recipes.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/spatial.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/spatial.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/components/composites/spatial.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/spatial.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/spatial.ts",
+      "to": "src/simulations/components/compositions/TownExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/spatial.ts",
+      "to": "src/simulations/components/prefabs/TrussAssembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/components/composites/spatial.ts",
+      "to": "src/simulations/components/composites/catalog.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/components/controls/commandPresentation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/components/controls/controlContract.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/components/systems/ComposedFractionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/components/systems/fractionMath.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/components/systems/LineIntersectionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/runtime/authoring/providers.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/components/registry.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/components/systems/ComposedFractionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/components/systems/ElementarySystems.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/components/traits/ElementaryBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/components/traits/MathBoards.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/runtime/assembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/runtime/mathModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/runtime/authoring/dataProviders.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/dataProviders.ts",
+      "to": "src/simulations/components/catalog/authoring.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/dataProviders.ts",
+      "to": "src/simulations/runtime/authoring/providers.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/dataProviders.ts",
+      "to": "src/simulations/runtime/authoring/validate.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/components/prefabs/Building.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/components/prefabs/Citizen.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/components/prefabs/Market.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/components/resources/WalkingProfile.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/components/systems/BallisticMotionSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/components/systems/HeuristicBridgeResponseSystem.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/components/systems/ScheduledTripSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/components/traits/Building.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/components/traits/MemberEndpoints.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/runtime/composition/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/runtime/townModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townModel.ts",
+      "to": "src/simulations/components/compositions/TownExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townModel.ts",
+      "to": "src/simulations/components/prefabs/Building.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townModel.ts",
+      "to": "src/simulations/components/prefabs/Citizen.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townModel.ts",
+      "to": "src/simulations/components/prefabs/Market.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townModel.ts",
+      "to": "src/simulations/components/resources/TownLayout.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townModel.ts",
+      "to": "src/simulations/components/systems/BehaviorRunnerSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townModel.ts",
+      "to": "src/simulations/components/systems/NavigationSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townModel.ts",
+      "to": "src/simulations/components/systems/PathFollowingSystem.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townModel.ts",
+      "to": "src/simulations/components/systems/townNavigation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townModel.ts",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/runtime/trussModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/runtime/authoring/providers.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialProviders.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/providers.ts",
+      "to": "src/simulations/runtime/authoring/validate.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/authoring/runtime.ts",
+      "to": "src/simulations/runtime/authoring/validate.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/index.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/recipes/loadRecipe.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/loadRecipe.ts",
+      "to": "src/simulations/runtime/authoring/runtime.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/loadRecipe.ts",
+      "to": "src/simulations/runtime/recipes/schema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/schema.ts",
+      "to": "src/simulations/runtime/authoring/migrateControls.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/migrateControls.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/migrateControls.ts",
+      "to": "src/simulations/components/controls/controlContract.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/migrateControls.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/migrateControls.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/recipes/schema.ts",
+      "to": "src/simulations/runtime/authoring/recipes.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/schema.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/recipes/registry.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/registry.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/recipes/registry.ts",
+      "to": "src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+      "to": "src/simulations/pre-made/area-perimeter/recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+      "to": "src/simulations/pre-made/arithmetic/recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+      "to": "src/simulations/pre-made/bridge/recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+      "to": "src/simulations/pre-made/coordinates/recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+      "to": "src/simulations/pre-made/counting/recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+      "to": "src/simulations/pre-made/equal-groups/recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+      "to": "src/simulations/pre-made/fraction-builder/recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+      "to": "src/simulations/pre-made/fraction-number-line/recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+      "to": "src/simulations/pre-made/probability/recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+      "to": "src/simulations/pre-made/projectile/recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+      "to": "src/simulations/pre-made/ratio/recipe.json",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/registry.ts",
+      "to": "src/simulations/runtime/recipes/schema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/recipes/serializeRecipe.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/serializeRecipe.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/recipes/serializeRecipe.ts",
+      "to": "src/simulations/runtime/recipes/schema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/resolver.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/townSession.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townSession.ts",
+      "to": "src/simulations/components/compositions/TownExperiment.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townSession.ts",
+      "to": "src/simulations/components/prefabs/Building.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/townSession.ts",
+      "to": "src/simulations/components/prefabs/Market.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townSession.ts",
+      "to": "src/simulations/components/traits/Resident.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/townSession.ts",
+      "to": "src/simulations/runtime/commands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/townSession.ts",
+      "to": "src/simulations/runtime/townModel.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/runtime/session.ts",
+      "to": "src/simulations/runtime/validation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/browser.ts",
+      "to": "src/simulations/runtime/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/lib/planner/browser.ts",
+      "to": "src/lib/planner/schema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/app/api/apertus/route.ts",
+      "to": "src/lib/planner/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/app/api/apertus/route.ts",
+      "to": "src/lib/planner/diagnostics.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/diagnostics.ts",
+      "to": "src/lib/apertus/config.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/lib/planner/diagnostics.ts",
+      "to": "src/lib/laya/config.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/app/api/apertus/route.ts",
+      "to": "src/lib/planner/errors.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/app/api/apertus/route.ts",
+      "to": "src/lib/planner/schema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/app/api/apertus/route.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/compositeCommands.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/compositeCommands.ts",
+      "to": "src/simulations/components/composites/catalog.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/compositeCommands.ts",
+      "to": "src/simulations/runtime/authoring/board.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/compositeCommands.ts",
+      "to": "src/simulations/runtime/authoring/recipes.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/compositeCommands.ts",
+      "to": "src/simulations/runtime/authoring/references.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/compositeCommands.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/compositeCommands.ts",
+      "to": "src/simulations/runtime/authoring/validate.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/insertionPlan.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/insertionPlan.ts",
+      "to": "src/simulations/runtime/authoring/runtime.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/insertionPlan.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/editor/insertionPlan.ts",
+      "to": "src/simulations/builder/editor/compositeCommands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/connectionCommands.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/connectionCommands.ts",
+      "to": "src/simulations/components/composites/catalog.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/connectionCommands.ts",
+      "to": "src/simulations/runtime/authoring/board.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/connectionCommands.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/connectionCommands.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/editor/connectionCommands.ts",
+      "to": "src/simulations/runtime/authoring/validate.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/connectionCommands.ts",
+      "to": "src/simulations/builder/document.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document.ts",
+      "to": "src/simulations/runtime/records.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document.ts",
+      "to": "src/simulations/builder/document/legacy.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/legacy.ts",
+      "to": "src/simulations/runtime/records.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/legacy.ts",
+      "to": "src/simulations/runtime/resolver.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/legacy.ts",
+      "to": "src/simulations/builder/descriptors.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/descriptors.ts",
+      "to": "src/simulations/components/contracts/LineParameters.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/descriptors.ts",
+      "to": "src/simulations/runtime/assembly.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/descriptors.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/descriptors.ts",
+      "to": "src/simulations/runtime/resolver.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document/legacy.ts",
+      "to": "src/simulations/builder/document/migrations/composeLegacy.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/migrations/composeLegacy.ts",
+      "to": "src/simulations/components/contracts/composition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/migrations/composeLegacy.ts",
+      "to": "src/simulations/components/resources/TownLayout.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/migrations/composeLegacy.ts",
+      "to": "src/simulations/runtime/composition/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/migrations/composeLegacy.ts",
+      "to": "src/simulations/runtime/composition/projectCanvas.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/migrations/composeLegacy.ts",
+      "to": "src/simulations/runtime/records.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/migrations/composeLegacy.ts",
+      "to": "src/simulations/runtime/resolver.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/migrations/composeLegacy.ts",
+      "to": "src/simulations/builder/editor/workspaceCommands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/workspaceCommands.ts",
+      "to": "src/simulations/components/contracts/composition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/workspaceCommands.ts",
+      "to": "src/simulations/components/registry.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/workspaceCommands.ts",
+      "to": "src/simulations/components/traits/SceneObjects.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/editor/workspaceCommands.ts",
+      "to": "src/simulations/runtime/composition/projectCanvas.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/workspaceCommands.ts",
+      "to": "src/simulations/runtime/composition/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document/migrations/composeLegacy.ts",
+      "to": "src/simulations/builder/document/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document/types.ts",
+      "to": "src/simulations/runtime/composition/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document/types.ts",
+      "to": "src/simulations/runtime/resolver.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document/types.ts",
+      "to": "src/simulations/builder/descriptors.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document/legacy.ts",
+      "to": "src/simulations/builder/document/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document/legacy.ts",
+      "to": "src/simulations/builder/document/validateDocument.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/validateDocument.ts",
+      "to": "src/simulations/runtime/authoring/validate.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/validateDocument.ts",
+      "to": "src/simulations/runtime/capabilities.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/validateDocument.ts",
+      "to": "src/simulations/runtime/composition/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/validateDocument.ts",
+      "to": "src/simulations/runtime/parameterSchema.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/validateDocument.ts",
+      "to": "src/simulations/runtime/records.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/validateDocument.ts",
+      "to": "src/simulations/runtime/resolver.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/validateDocument.ts",
+      "to": "src/simulations/builder/descriptors.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/validateDocument.ts",
+      "to": "src/simulations/builder/editor/workspaceCommands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/validateDocument.ts",
+      "to": "src/simulations/builder/document/legacy.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/validateDocument.ts",
+      "to": "src/simulations/builder/document/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document.ts",
+      "to": "src/simulations/builder/document/serialization.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/components/composites/catalog.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/runtime/authoring/board.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/runtime/authoring/migrateControls.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/runtime/authoring/migrateDrawings.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/migrateDrawings.ts",
+      "to": "src/simulations/runtime/authoring/board.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/migrateDrawings.ts",
+      "to": "src/simulations/runtime/authoring/drawings.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/migrateDrawings.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/runtime/authoring/recipes.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/runtime/authoring/spatialMigration.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialMigration.ts",
+      "to": "src/simulations/components/composites/catalog.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialMigration.ts",
+      "to": "src/simulations/components/composites/spatial.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialMigration.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/presentation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/presentation.ts",
+      "to": "src/simulations/runtime/authoring/board.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/recipes/compatibility/presentation.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialMigration.ts",
+      "to": "src/simulations/runtime/resolver.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialMigration.ts",
+      "to": "src/simulations/runtime/authoring/recipes.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialMigration.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialMigration.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/runtime/authoring/spatialMigration.ts",
+      "to": "src/simulations/runtime/authoring/validate.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/runtime/authoring/validate.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/runtime/recipes/compatibility/presentation.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/runtime/recipes/loadRecipe.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/runtime/recipes/serializeRecipe.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/runtime/resolver.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/builder/document/canonical.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/components/composites/catalog.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/components/registry.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/runtime/authoring/adapters.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/runtime/authoring/board.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/runtime/authoring/validate.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/runtime/composition/projectCanvas.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/runtime/contribution.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/builder/editor/workspaceCommands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/builder/document/legacy.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/builder/document/migrations/composeLegacy.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/canonical.ts",
+      "to": "src/simulations/builder/document/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/builder/document/legacy.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/builder/document/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/document/serialization.ts",
+      "to": "src/simulations/builder/document/validateDocument.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document.ts",
+      "to": "src/simulations/builder/document/types.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/document.ts",
+      "to": "src/simulations/builder/document/validateDocument.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/editor/connectionCommands.ts",
+      "to": "src/simulations/builder/graph/authoredGraph.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/graph/authoredGraph.ts",
+      "to": "src/simulations/components/catalog/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/graph/authoredGraph.ts",
+      "to": "src/simulations/runtime/authoring/requireValue.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/graph/authoredGraph.ts",
+      "to": "src/simulations/runtime/authoring/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/graph/authoredGraph.ts",
+      "to": "src/simulations/builder/document.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/graph/authoredGraph.ts",
+      "to": "src/simulations/builder/graph/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/editor/connectionCommands.ts",
+      "to": "src/simulations/builder/graph/deriveGraph.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/graph/deriveGraph.ts",
+      "to": "src/simulations/components/contracts/composition.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/graph/deriveGraph.ts",
+      "to": "src/simulations/lessons/formatHour.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/graph/deriveGraph.ts",
+      "to": "src/simulations/runtime/composition/index.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/graph/deriveGraph.ts",
+      "to": "src/simulations/runtime/composition/projectCanvas.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/graph/deriveGraph.ts",
+      "to": "src/simulations/runtime/records.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/graph/deriveGraph.ts",
+      "to": "src/simulations/builder/document.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/graph/deriveGraph.ts",
+      "to": "src/simulations/builder/editor/workspaceCommands.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/graph/deriveGraph.ts",
+      "to": "src/simulations/builder/graph/authoredGraph.ts",
+      "typeOnly": false
+    },
+    {
+      "from": "src/simulations/builder/graph/deriveGraph.ts",
+      "to": "src/simulations/builder/graph/types.ts",
+      "typeOnly": true
+    },
+    {
+      "from": "src/simulations/builder/editor/connectionCommands.ts",
+      "to": "src/simulations/builder/graph/types.ts",
+      "typeOnly": true
+    }
+  ]
+}

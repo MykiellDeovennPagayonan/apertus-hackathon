@@ -30,6 +30,20 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env) {
     return value;
   }
   return {
+    structuredOutput:
+      env.APERTUS_STRUCTURED_OUTPUT === "strict-json"
+        ? "strict-json"
+        : env.APERTUS_STRUCTURED_OUTPUT === undefined ||
+            env.APERTUS_STRUCTURED_OUTPUT === "auto"
+          ? "auto"
+          : (() => {
+              throw new Error(
+                "APERTUS_STRUCTURED_OUTPUT must be auto or strict-json.",
+              );
+            })(),
+    contextTokens: env.APERTUS_CONTEXT_TOKENS
+      ? integer("APERTUS_CONTEXT_TOKENS", 8192, 1000000)
+      : null,
     provider,
     baseUrl: baseUrl.replace(/\/+$/, ""),
     model,

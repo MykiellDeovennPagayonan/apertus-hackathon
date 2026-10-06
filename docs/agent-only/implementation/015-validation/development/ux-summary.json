@@ -1,0 +1,3434 @@
+[
+  {
+    "case": "arithmetic",
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 900
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/experiments/builder?remix=1",
+      "http://127.0.0.1:43100/experiments/builder",
+      "http://127.0.0.1:43100/experiments/builder",
+      "http://127.0.0.1:43100/experiments/builder"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 239,
+            "y": 274.6875,
+            "width": 618,
+            "height": 440,
+            "top": 274.6875,
+            "right": 857,
+            "bottom": 714.6875,
+            "left": 239
+          },
+          "width": 618,
+          "height": 440,
+          "scrollWidth": 618,
+          "scrollHeight": 440
+        },
+        {
+          "id": "board/A/layout/result",
+          "rect": {
+            "x": 883,
+            "y": 274.6875,
+            "width": 318,
+            "height": 162,
+            "top": 274.6875,
+            "right": 1201,
+            "bottom": 436.6875,
+            "left": 883
+          },
+          "width": 318,
+          "height": 162,
+          "scrollWidth": 318,
+          "scrollHeight": 162
+        },
+        {
+          "id": "board/A/layout/control/SET_ARITHMETIC_TASK",
+          "rect": {
+            "x": 883,
+            "y": 454.6875,
+            "width": 318,
+            "height": 260,
+            "top": 454.6875,
+            "right": 1201,
+            "bottom": 714.6875,
+            "left": 883
+          },
+          "width": 318,
+          "height": 260,
+          "scrollWidth": 318,
+          "scrollHeight": 260
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 891,
+            "y": 557.1875,
+            "width": 143,
+            "height": 53,
+            "top": 557.1875,
+            "right": 1034,
+            "bottom": 610.1875,
+            "left": 891
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 1050,
+            "y": 557.1875,
+            "width": 143,
+            "height": 53,
+            "top": 557.1875,
+            "right": 1193,
+            "bottom": 610.1875,
+            "left": 1050
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": false
+        }
+      ],
+      "scenes": [
+        {
+          "x": 259,
+          "y": 364.28125,
+          "width": 578,
+          "height": 270.40625,
+          "top": 364.28125,
+          "right": 837,
+          "bottom": 634.6875,
+          "left": 259
+        }
+      ]
+    }
+  },
+  {
+    "case": "arithmetic",
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 900
+    },
+    "motion": "no-preference",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 239,
+            "y": 274.6875,
+            "width": 618,
+            "height": 440,
+            "top": 274.6875,
+            "right": 857,
+            "bottom": 714.6875,
+            "left": 239
+          },
+          "width": 618,
+          "height": 440,
+          "scrollWidth": 618,
+          "scrollHeight": 440
+        },
+        {
+          "id": "board/A/layout/result",
+          "rect": {
+            "x": 883,
+            "y": 274.6875,
+            "width": 318,
+            "height": 162,
+            "top": 274.6875,
+            "right": 1201,
+            "bottom": 436.6875,
+            "left": 883
+          },
+          "width": 318,
+          "height": 162,
+          "scrollWidth": 318,
+          "scrollHeight": 162
+        },
+        {
+          "id": "board/A/layout/control/SET_ARITHMETIC_TASK",
+          "rect": {
+            "x": 883,
+            "y": 454.6875,
+            "width": 318,
+            "height": 260,
+            "top": 454.6875,
+            "right": 1201,
+            "bottom": 714.6875,
+            "left": 883
+          },
+          "width": 318,
+          "height": 260,
+          "scrollWidth": 318,
+          "scrollHeight": 260
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 891,
+            "y": 557.1875,
+            "width": 143,
+            "height": 53,
+            "top": 557.1875,
+            "right": 1034,
+            "bottom": 610.1875,
+            "left": 891
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 1050,
+            "y": 557.1875,
+            "width": 143,
+            "height": 53,
+            "top": 557.1875,
+            "right": 1193,
+            "bottom": 610.1875,
+            "left": 1050
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": false
+        }
+      ],
+      "scenes": [
+        {
+          "x": 259,
+          "y": 364.28125,
+          "width": 578,
+          "height": 270.40625,
+          "top": 364.28125,
+          "right": 837,
+          "bottom": 634.6875,
+          "left": 259
+        }
+      ]
+    }
+  },
+  {
+    "case": "rectangles",
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 900
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/experiments/builder?remix=1",
+      "http://127.0.0.1:43100/experiments/builder",
+      "http://127.0.0.1:43100/experiments/builder",
+      "http://127.0.0.1:43100/experiments/builder"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 157,
+            "y": 277,
+            "width": 550,
+            "height": 158,
+            "top": 277,
+            "right": 707,
+            "bottom": 435,
+            "left": 157
+          },
+          "width": 550,
+          "height": 158,
+          "scrollWidth": 550,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/result/area",
+          "rect": {
+            "x": 157,
+            "y": 617,
+            "width": 264,
+            "height": 94,
+            "top": 617,
+            "right": 421,
+            "bottom": 711,
+            "left": 157
+          },
+          "width": 264,
+          "height": 94,
+          "scrollWidth": 264,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/A/layout/result/perimeter",
+          "rect": {
+            "x": 443,
+            "y": 617,
+            "width": 264,
+            "height": 94,
+            "top": 617,
+            "right": 707,
+            "bottom": 711,
+            "left": 443
+          },
+          "width": 264,
+          "height": 94,
+          "scrollWidth": 264,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/A/layout/input/width",
+          "rect": {
+            "x": 157,
+            "y": 457,
+            "width": 264,
+            "height": 162,
+            "top": 457,
+            "right": 421,
+            "bottom": 619,
+            "left": 157
+          },
+          "width": 264,
+          "height": 162,
+          "scrollWidth": 264,
+          "scrollHeight": 162
+        },
+        {
+          "id": "board/A/layout/input/height",
+          "rect": {
+            "x": 443,
+            "y": 457,
+            "width": 264,
+            "height": 162,
+            "top": 457,
+            "right": 707,
+            "bottom": 619,
+            "left": 443
+          },
+          "width": 264,
+          "height": 162,
+          "scrollWidth": 264,
+          "scrollHeight": 162
+        },
+        {
+          "id": "board/B/layout/appearance",
+          "rect": {
+            "x": 733,
+            "y": 277,
+            "width": 550,
+            "height": 158,
+            "top": 277,
+            "right": 1283,
+            "bottom": 435,
+            "left": 733
+          },
+          "width": 550,
+          "height": 158,
+          "scrollWidth": 550,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/B/layout/result/area",
+          "rect": {
+            "x": 733,
+            "y": 617,
+            "width": 264,
+            "height": 94,
+            "top": 617,
+            "right": 997,
+            "bottom": 711,
+            "left": 733
+          },
+          "width": 264,
+          "height": 94,
+          "scrollWidth": 264,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/B/layout/result/perimeter",
+          "rect": {
+            "x": 1019,
+            "y": 617,
+            "width": 264,
+            "height": 94,
+            "top": 617,
+            "right": 1283,
+            "bottom": 711,
+            "left": 1019
+          },
+          "width": 264,
+          "height": 94,
+          "scrollWidth": 264,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/B/layout/input/width",
+          "rect": {
+            "x": 733,
+            "y": 457,
+            "width": 264,
+            "height": 162,
+            "top": 457,
+            "right": 997,
+            "bottom": 619,
+            "left": 733
+          },
+          "width": 264,
+          "height": 162,
+          "scrollWidth": 264,
+          "scrollHeight": 162
+        },
+        {
+          "id": "board/B/layout/input/height",
+          "rect": {
+            "x": 1019,
+            "y": 457,
+            "width": 264,
+            "height": 162,
+            "top": 457,
+            "right": 1283,
+            "bottom": 619,
+            "left": 1019
+          },
+          "width": 264,
+          "height": 162,
+          "scrollWidth": 264,
+          "scrollHeight": 162
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 309,
+            "y": 477,
+            "width": 88,
+            "height": 48,
+            "top": 477,
+            "right": 397,
+            "bottom": 525,
+            "left": 309
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 595,
+            "y": 477,
+            "width": 88,
+            "height": 48,
+            "top": 477,
+            "right": 683,
+            "bottom": 525,
+            "left": 595
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 885,
+            "y": 477,
+            "width": 88,
+            "height": 48,
+            "top": 477,
+            "right": 973,
+            "bottom": 525,
+            "left": 885
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 1171,
+            "y": 477,
+            "width": 88,
+            "height": 48,
+            "top": 477,
+            "right": 1259,
+            "bottom": 525,
+            "left": 1171
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": false
+        }
+      ],
+      "scenes": [
+        {
+          "x": 157,
+          "y": 277,
+          "width": 550,
+          "height": 158,
+          "top": 277,
+          "right": 707,
+          "bottom": 435,
+          "left": 157
+        },
+        {
+          "x": 733,
+          "y": 277,
+          "width": 550,
+          "height": 158,
+          "top": 277,
+          "right": 1283,
+          "bottom": 435,
+          "left": 733
+        }
+      ]
+    }
+  },
+  {
+    "case": "bridge",
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 900
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/experiments/builder?remix=1",
+      "http://127.0.0.1:43100/experiments/builder",
+      "http://127.0.0.1:43100/experiments/builder",
+      "http://127.0.0.1:43100/experiments/builder"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 238,
+            "y": 317.0625,
+            "width": 620,
+            "height": 360,
+            "top": 317.0625,
+            "right": 858,
+            "bottom": 677.0625,
+            "left": 238
+          },
+          "width": 620,
+          "height": 360,
+          "scrollWidth": 620,
+          "scrollHeight": 360
+        },
+        {
+          "id": "board/A/layout/control/MOVE_LOAD",
+          "rect": {
+            "x": 883,
+            "y": 574.0625,
+            "width": 318,
+            "height": 158,
+            "top": 574.0625,
+            "right": 1201,
+            "bottom": 732.0625,
+            "left": 883
+          },
+          "width": 318,
+          "height": 158,
+          "scrollWidth": 318,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/control/SET_LOAD",
+          "rect": {
+            "x": 883,
+            "y": 750.0625,
+            "width": 318,
+            "height": 158,
+            "top": 750.0625,
+            "right": 1201,
+            "bottom": 908.0625,
+            "left": 883
+          },
+          "width": 318,
+          "height": 158,
+          "scrollWidth": 318,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/display/selected",
+          "rect": {
+            "x": 883,
+            "y": 318.0625,
+            "width": 318,
+            "height": 238,
+            "top": 318.0625,
+            "right": 1201,
+            "bottom": 556.0625,
+            "left": 883
+          },
+          "width": 318,
+          "height": 238,
+          "scrollWidth": 318,
+          "scrollHeight": 238
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 1097,
+            "y": 586.0625,
+            "width": 88,
+            "height": 56,
+            "top": 586.0625,
+            "right": 1185,
+            "bottom": 642.0625,
+            "left": 1097
+          },
+          "fontSize": 24,
+          "minimumFontSize": 24,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 1084.34375,
+            "y": 762.0625,
+            "width": 88,
+            "height": 56,
+            "top": 762.0625,
+            "right": 1172.34375,
+            "bottom": 818.0625,
+            "left": 1084.34375
+          },
+          "fontSize": 24,
+          "minimumFontSize": 24,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 239,
+          "y": 318.0625,
+          "width": 618,
+          "height": 309,
+          "top": 318.0625,
+          "right": 857,
+          "bottom": 627.0625,
+          "left": 239
+        }
+      ]
+    }
+  },
+  {
+    "case": "arithmetic",
+    "viewport": {
+      "name": "standard",
+      "width": 1280,
+      "height": 900
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 159,
+            "y": 274.6875,
+            "width": 618,
+            "height": 440,
+            "top": 274.6875,
+            "right": 777,
+            "bottom": 714.6875,
+            "left": 159
+          },
+          "width": 618,
+          "height": 440,
+          "scrollWidth": 618,
+          "scrollHeight": 440
+        },
+        {
+          "id": "board/A/layout/result",
+          "rect": {
+            "x": 803,
+            "y": 274.6875,
+            "width": 318,
+            "height": 162,
+            "top": 274.6875,
+            "right": 1121,
+            "bottom": 436.6875,
+            "left": 803
+          },
+          "width": 318,
+          "height": 162,
+          "scrollWidth": 318,
+          "scrollHeight": 162
+        },
+        {
+          "id": "board/A/layout/control/SET_ARITHMETIC_TASK",
+          "rect": {
+            "x": 803,
+            "y": 454.6875,
+            "width": 318,
+            "height": 260,
+            "top": 454.6875,
+            "right": 1121,
+            "bottom": 714.6875,
+            "left": 803
+          },
+          "width": 318,
+          "height": 260,
+          "scrollWidth": 318,
+          "scrollHeight": 260
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 811,
+            "y": 557.1875,
+            "width": 143,
+            "height": 53,
+            "top": 557.1875,
+            "right": 954,
+            "bottom": 610.1875,
+            "left": 811
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 970,
+            "y": 557.1875,
+            "width": 143,
+            "height": 53,
+            "top": 557.1875,
+            "right": 1113,
+            "bottom": 610.1875,
+            "left": 970
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": false
+        }
+      ],
+      "scenes": [
+        {
+          "x": 179,
+          "y": 364.28125,
+          "width": 578,
+          "height": 270.40625,
+          "top": 364.28125,
+          "right": 757,
+          "bottom": 634.6875,
+          "left": 179
+        }
+      ]
+    }
+  },
+  {
+    "case": "arithmetic",
+    "viewport": {
+      "name": "standard",
+      "width": 1280,
+      "height": 900
+    },
+    "motion": "no-preference",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 159,
+            "y": 274.6875,
+            "width": 618,
+            "height": 440,
+            "top": 274.6875,
+            "right": 777,
+            "bottom": 714.6875,
+            "left": 159
+          },
+          "width": 618,
+          "height": 440,
+          "scrollWidth": 618,
+          "scrollHeight": 440
+        },
+        {
+          "id": "board/A/layout/result",
+          "rect": {
+            "x": 803,
+            "y": 274.6875,
+            "width": 318,
+            "height": 162,
+            "top": 274.6875,
+            "right": 1121,
+            "bottom": 436.6875,
+            "left": 803
+          },
+          "width": 318,
+          "height": 162,
+          "scrollWidth": 318,
+          "scrollHeight": 162
+        },
+        {
+          "id": "board/A/layout/control/SET_ARITHMETIC_TASK",
+          "rect": {
+            "x": 803,
+            "y": 454.6875,
+            "width": 318,
+            "height": 260,
+            "top": 454.6875,
+            "right": 1121,
+            "bottom": 714.6875,
+            "left": 803
+          },
+          "width": 318,
+          "height": 260,
+          "scrollWidth": 318,
+          "scrollHeight": 260
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 811,
+            "y": 557.1875,
+            "width": 143,
+            "height": 53,
+            "top": 557.1875,
+            "right": 954,
+            "bottom": 610.1875,
+            "left": 811
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 970,
+            "y": 557.1875,
+            "width": 143,
+            "height": 53,
+            "top": 557.1875,
+            "right": 1113,
+            "bottom": 610.1875,
+            "left": 970
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": false
+        }
+      ],
+      "scenes": [
+        {
+          "x": 179,
+          "y": 364.28125,
+          "width": 578,
+          "height": 270.40625,
+          "top": 364.28125,
+          "right": 757,
+          "bottom": 634.6875,
+          "left": 179
+        }
+      ]
+    }
+  },
+  {
+    "case": "rectangles",
+    "viewport": {
+      "name": "standard",
+      "width": 1280,
+      "height": 900
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 77,
+            "y": 277,
+            "width": 550,
+            "height": 158,
+            "top": 277,
+            "right": 627,
+            "bottom": 435,
+            "left": 77
+          },
+          "width": 550,
+          "height": 158,
+          "scrollWidth": 550,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/result/area",
+          "rect": {
+            "x": 77,
+            "y": 617,
+            "width": 264,
+            "height": 94,
+            "top": 617,
+            "right": 341,
+            "bottom": 711,
+            "left": 77
+          },
+          "width": 264,
+          "height": 94,
+          "scrollWidth": 264,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/A/layout/result/perimeter",
+          "rect": {
+            "x": 363,
+            "y": 617,
+            "width": 264,
+            "height": 94,
+            "top": 617,
+            "right": 627,
+            "bottom": 711,
+            "left": 363
+          },
+          "width": 264,
+          "height": 94,
+          "scrollWidth": 264,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/A/layout/input/width",
+          "rect": {
+            "x": 77,
+            "y": 457,
+            "width": 264,
+            "height": 162,
+            "top": 457,
+            "right": 341,
+            "bottom": 619,
+            "left": 77
+          },
+          "width": 264,
+          "height": 162,
+          "scrollWidth": 264,
+          "scrollHeight": 162
+        },
+        {
+          "id": "board/A/layout/input/height",
+          "rect": {
+            "x": 363,
+            "y": 457,
+            "width": 264,
+            "height": 162,
+            "top": 457,
+            "right": 627,
+            "bottom": 619,
+            "left": 363
+          },
+          "width": 264,
+          "height": 162,
+          "scrollWidth": 264,
+          "scrollHeight": 162
+        },
+        {
+          "id": "board/B/layout/appearance",
+          "rect": {
+            "x": 653,
+            "y": 277,
+            "width": 550,
+            "height": 158,
+            "top": 277,
+            "right": 1203,
+            "bottom": 435,
+            "left": 653
+          },
+          "width": 550,
+          "height": 158,
+          "scrollWidth": 550,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/B/layout/result/area",
+          "rect": {
+            "x": 653,
+            "y": 617,
+            "width": 264,
+            "height": 94,
+            "top": 617,
+            "right": 917,
+            "bottom": 711,
+            "left": 653
+          },
+          "width": 264,
+          "height": 94,
+          "scrollWidth": 264,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/B/layout/result/perimeter",
+          "rect": {
+            "x": 939,
+            "y": 617,
+            "width": 264,
+            "height": 94,
+            "top": 617,
+            "right": 1203,
+            "bottom": 711,
+            "left": 939
+          },
+          "width": 264,
+          "height": 94,
+          "scrollWidth": 264,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/B/layout/input/width",
+          "rect": {
+            "x": 653,
+            "y": 457,
+            "width": 264,
+            "height": 162,
+            "top": 457,
+            "right": 917,
+            "bottom": 619,
+            "left": 653
+          },
+          "width": 264,
+          "height": 162,
+          "scrollWidth": 264,
+          "scrollHeight": 162
+        },
+        {
+          "id": "board/B/layout/input/height",
+          "rect": {
+            "x": 939,
+            "y": 457,
+            "width": 264,
+            "height": 162,
+            "top": 457,
+            "right": 1203,
+            "bottom": 619,
+            "left": 939
+          },
+          "width": 264,
+          "height": 162,
+          "scrollWidth": 264,
+          "scrollHeight": 162
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 229,
+            "y": 477,
+            "width": 88,
+            "height": 48,
+            "top": 477,
+            "right": 317,
+            "bottom": 525,
+            "left": 229
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 515,
+            "y": 477,
+            "width": 88,
+            "height": 48,
+            "top": 477,
+            "right": 603,
+            "bottom": 525,
+            "left": 515
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 805,
+            "y": 477,
+            "width": 88,
+            "height": 48,
+            "top": 477,
+            "right": 893,
+            "bottom": 525,
+            "left": 805
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 1091,
+            "y": 477,
+            "width": 88,
+            "height": 48,
+            "top": 477,
+            "right": 1179,
+            "bottom": 525,
+            "left": 1091
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": false
+        }
+      ],
+      "scenes": [
+        {
+          "x": 77,
+          "y": 277,
+          "width": 550,
+          "height": 158,
+          "top": 277,
+          "right": 627,
+          "bottom": 435,
+          "left": 77
+        },
+        {
+          "x": 653,
+          "y": 277,
+          "width": 550,
+          "height": 158,
+          "top": 277,
+          "right": 1203,
+          "bottom": 435,
+          "left": 653
+        }
+      ]
+    }
+  },
+  {
+    "case": "bridge",
+    "viewport": {
+      "name": "standard",
+      "width": 1280,
+      "height": 900
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 158,
+            "y": 317.0625,
+            "width": 620,
+            "height": 360,
+            "top": 317.0625,
+            "right": 778,
+            "bottom": 677.0625,
+            "left": 158
+          },
+          "width": 620,
+          "height": 360,
+          "scrollWidth": 620,
+          "scrollHeight": 360
+        },
+        {
+          "id": "board/A/layout/control/MOVE_LOAD",
+          "rect": {
+            "x": 803,
+            "y": 574.0625,
+            "width": 318,
+            "height": 158,
+            "top": 574.0625,
+            "right": 1121,
+            "bottom": 732.0625,
+            "left": 803
+          },
+          "width": 318,
+          "height": 158,
+          "scrollWidth": 318,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/control/SET_LOAD",
+          "rect": {
+            "x": 803,
+            "y": 750.0625,
+            "width": 318,
+            "height": 158,
+            "top": 750.0625,
+            "right": 1121,
+            "bottom": 908.0625,
+            "left": 803
+          },
+          "width": 318,
+          "height": 158,
+          "scrollWidth": 318,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/display/selected",
+          "rect": {
+            "x": 803,
+            "y": 318.0625,
+            "width": 318,
+            "height": 238,
+            "top": 318.0625,
+            "right": 1121,
+            "bottom": 556.0625,
+            "left": 803
+          },
+          "width": 318,
+          "height": 238,
+          "scrollWidth": 318,
+          "scrollHeight": 238
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 1017,
+            "y": 586.0625,
+            "width": 88,
+            "height": 56,
+            "top": 586.0625,
+            "right": 1105,
+            "bottom": 642.0625,
+            "left": 1017
+          },
+          "fontSize": 24,
+          "minimumFontSize": 24,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 1004.34375,
+            "y": 762.0625,
+            "width": 88,
+            "height": 56,
+            "top": 762.0625,
+            "right": 1092.34375,
+            "bottom": 818.0625,
+            "left": 1004.34375
+          },
+          "fontSize": 24,
+          "minimumFontSize": 24,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 159,
+          "y": 318.0625,
+          "width": 618,
+          "height": 309,
+          "top": 318.0625,
+          "right": 777,
+          "bottom": 627.0625,
+          "left": 159
+        }
+      ]
+    }
+  },
+  {
+    "case": "arithmetic",
+    "viewport": {
+      "name": "short",
+      "width": 1024,
+      "height": 600
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 1024,
+        "height": 600
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 31,
+            "y": 274.6875,
+            "width": 618,
+            "height": 440,
+            "top": 274.6875,
+            "right": 649,
+            "bottom": 714.6875,
+            "left": 31
+          },
+          "width": 618,
+          "height": 440,
+          "scrollWidth": 618,
+          "scrollHeight": 440
+        },
+        {
+          "id": "board/A/layout/result",
+          "rect": {
+            "x": 675,
+            "y": 274.6875,
+            "width": 318,
+            "height": 162,
+            "top": 274.6875,
+            "right": 993,
+            "bottom": 436.6875,
+            "left": 675
+          },
+          "width": 318,
+          "height": 162,
+          "scrollWidth": 318,
+          "scrollHeight": 162
+        },
+        {
+          "id": "board/A/layout/control/SET_ARITHMETIC_TASK",
+          "rect": {
+            "x": 675,
+            "y": 454.6875,
+            "width": 318,
+            "height": 260,
+            "top": 454.6875,
+            "right": 993,
+            "bottom": 714.6875,
+            "left": 675
+          },
+          "width": 318,
+          "height": 260,
+          "scrollWidth": 318,
+          "scrollHeight": 260
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 683,
+            "y": 557.1875,
+            "width": 143,
+            "height": 53,
+            "top": 557.1875,
+            "right": 826,
+            "bottom": 610.1875,
+            "left": 683
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 842,
+            "y": 557.1875,
+            "width": 143,
+            "height": 53,
+            "top": 557.1875,
+            "right": 985,
+            "bottom": 610.1875,
+            "left": 842
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 51,
+          "y": 364.28125,
+          "width": 578,
+          "height": 270.40625,
+          "top": 364.28125,
+          "right": 629,
+          "bottom": 634.6875,
+          "left": 51
+        }
+      ]
+    }
+  },
+  {
+    "case": "arithmetic",
+    "viewport": {
+      "name": "short",
+      "width": 1024,
+      "height": 600
+    },
+    "motion": "no-preference",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 1024,
+        "height": 600
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 31,
+            "y": 274.6875,
+            "width": 618,
+            "height": 440,
+            "top": 274.6875,
+            "right": 649,
+            "bottom": 714.6875,
+            "left": 31
+          },
+          "width": 618,
+          "height": 440,
+          "scrollWidth": 618,
+          "scrollHeight": 440
+        },
+        {
+          "id": "board/A/layout/result",
+          "rect": {
+            "x": 675,
+            "y": 274.6875,
+            "width": 318,
+            "height": 162,
+            "top": 274.6875,
+            "right": 993,
+            "bottom": 436.6875,
+            "left": 675
+          },
+          "width": 318,
+          "height": 162,
+          "scrollWidth": 318,
+          "scrollHeight": 162
+        },
+        {
+          "id": "board/A/layout/control/SET_ARITHMETIC_TASK",
+          "rect": {
+            "x": 675,
+            "y": 454.6875,
+            "width": 318,
+            "height": 260,
+            "top": 454.6875,
+            "right": 993,
+            "bottom": 714.6875,
+            "left": 675
+          },
+          "width": 318,
+          "height": 260,
+          "scrollWidth": 318,
+          "scrollHeight": 260
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 683,
+            "y": 557.1875,
+            "width": 143,
+            "height": 53,
+            "top": 557.1875,
+            "right": 826,
+            "bottom": 610.1875,
+            "left": 683
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 842,
+            "y": 557.1875,
+            "width": 143,
+            "height": 53,
+            "top": 557.1875,
+            "right": 985,
+            "bottom": 610.1875,
+            "left": 842
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 51,
+          "y": 364.28125,
+          "width": 578,
+          "height": 270.40625,
+          "top": 364.28125,
+          "right": 629,
+          "bottom": 634.6875,
+          "left": 51
+        }
+      ]
+    }
+  },
+  {
+    "case": "rectangles",
+    "viewport": {
+      "name": "short",
+      "width": 1024,
+      "height": 600
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 1024,
+        "height": 600
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 25,
+            "y": 274.6875,
+            "width": 550,
+            "height": 158,
+            "top": 274.6875,
+            "right": 575,
+            "bottom": 432.6875,
+            "left": 25
+          },
+          "width": 550,
+          "height": 158,
+          "scrollWidth": 550,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/result/area",
+          "rect": {
+            "x": 25,
+            "y": 614.6875,
+            "width": 264,
+            "height": 94,
+            "top": 614.6875,
+            "right": 289,
+            "bottom": 708.6875,
+            "left": 25
+          },
+          "width": 264,
+          "height": 94,
+          "scrollWidth": 264,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/A/layout/result/perimeter",
+          "rect": {
+            "x": 311,
+            "y": 614.6875,
+            "width": 264,
+            "height": 94,
+            "top": 614.6875,
+            "right": 575,
+            "bottom": 708.6875,
+            "left": 311
+          },
+          "width": 264,
+          "height": 94,
+          "scrollWidth": 264,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/A/layout/input/width",
+          "rect": {
+            "x": 25,
+            "y": 454.6875,
+            "width": 264,
+            "height": 198,
+            "top": 454.6875,
+            "right": 289,
+            "bottom": 652.6875,
+            "left": 25
+          },
+          "width": 264,
+          "height": 198,
+          "scrollWidth": 264,
+          "scrollHeight": 198
+        },
+        {
+          "id": "board/A/layout/input/height",
+          "rect": {
+            "x": 311,
+            "y": 454.6875,
+            "width": 264,
+            "height": 198,
+            "top": 454.6875,
+            "right": 575,
+            "bottom": 652.6875,
+            "left": 311
+          },
+          "width": 264,
+          "height": 198,
+          "scrollWidth": 264,
+          "scrollHeight": 198
+        },
+        {
+          "id": "board/B/layout/appearance",
+          "rect": {
+            "x": 601,
+            "y": 274.6875,
+            "width": 550,
+            "height": 158,
+            "top": 274.6875,
+            "right": 1151,
+            "bottom": 432.6875,
+            "left": 601
+          },
+          "width": 550,
+          "height": 158,
+          "scrollWidth": 550,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/B/layout/result/area",
+          "rect": {
+            "x": 601,
+            "y": 614.6875,
+            "width": 264,
+            "height": 94,
+            "top": 614.6875,
+            "right": 865,
+            "bottom": 708.6875,
+            "left": 601
+          },
+          "width": 264,
+          "height": 94,
+          "scrollWidth": 264,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/B/layout/result/perimeter",
+          "rect": {
+            "x": 887,
+            "y": 614.6875,
+            "width": 264,
+            "height": 94,
+            "top": 614.6875,
+            "right": 1151,
+            "bottom": 708.6875,
+            "left": 887
+          },
+          "width": 264,
+          "height": 94,
+          "scrollWidth": 264,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/B/layout/input/width",
+          "rect": {
+            "x": 601,
+            "y": 454.6875,
+            "width": 264,
+            "height": 198,
+            "top": 454.6875,
+            "right": 865,
+            "bottom": 652.6875,
+            "left": 601
+          },
+          "width": 264,
+          "height": 198,
+          "scrollWidth": 264,
+          "scrollHeight": 198
+        },
+        {
+          "id": "board/B/layout/input/height",
+          "rect": {
+            "x": 887,
+            "y": 454.6875,
+            "width": 264,
+            "height": 198,
+            "top": 454.6875,
+            "right": 1151,
+            "bottom": 652.6875,
+            "left": 887
+          },
+          "width": 264,
+          "height": 198,
+          "scrollWidth": 264,
+          "scrollHeight": 198
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 177,
+            "y": 474.6875,
+            "width": 88,
+            "height": 64,
+            "top": 474.6875,
+            "right": 265,
+            "bottom": 538.6875,
+            "left": 177
+          },
+          "fontSize": 32,
+          "minimumFontSize": 24,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 463,
+            "y": 474.6875,
+            "width": 88,
+            "height": 64,
+            "top": 474.6875,
+            "right": 551,
+            "bottom": 538.6875,
+            "left": 463
+          },
+          "fontSize": 32,
+          "minimumFontSize": 24,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 753,
+            "y": 474.6875,
+            "width": 88,
+            "height": 64,
+            "top": 474.6875,
+            "right": 841,
+            "bottom": 538.6875,
+            "left": 753
+          },
+          "fontSize": 32,
+          "minimumFontSize": 24,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 1039,
+            "y": 474.6875,
+            "width": 88,
+            "height": 64,
+            "top": 474.6875,
+            "right": 1127,
+            "bottom": 538.6875,
+            "left": 1039
+          },
+          "fontSize": 32,
+          "minimumFontSize": 24,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 25,
+          "y": 274.6875,
+          "width": 550,
+          "height": 158,
+          "top": 274.6875,
+          "right": 575,
+          "bottom": 432.6875,
+          "left": 25
+        },
+        {
+          "x": 601,
+          "y": 274.6875,
+          "width": 550,
+          "height": 158,
+          "top": 274.6875,
+          "right": 1151,
+          "bottom": 432.6875,
+          "left": 601
+        }
+      ]
+    }
+  },
+  {
+    "case": "bridge",
+    "viewport": {
+      "name": "short",
+      "width": 1024,
+      "height": 600
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 1024,
+        "height": 600
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 30,
+            "y": 317.0625,
+            "width": 620,
+            "height": 360,
+            "top": 317.0625,
+            "right": 650,
+            "bottom": 677.0625,
+            "left": 30
+          },
+          "width": 620,
+          "height": 360,
+          "scrollWidth": 620,
+          "scrollHeight": 360
+        },
+        {
+          "id": "board/A/layout/control/MOVE_LOAD",
+          "rect": {
+            "x": 675,
+            "y": 574.0625,
+            "width": 318,
+            "height": 158,
+            "top": 574.0625,
+            "right": 993,
+            "bottom": 732.0625,
+            "left": 675
+          },
+          "width": 318,
+          "height": 158,
+          "scrollWidth": 318,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/control/SET_LOAD",
+          "rect": {
+            "x": 675,
+            "y": 750.0625,
+            "width": 318,
+            "height": 158,
+            "top": 750.0625,
+            "right": 993,
+            "bottom": 908.0625,
+            "left": 675
+          },
+          "width": 318,
+          "height": 158,
+          "scrollWidth": 318,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/display/selected",
+          "rect": {
+            "x": 675,
+            "y": 318.0625,
+            "width": 318,
+            "height": 238,
+            "top": 318.0625,
+            "right": 993,
+            "bottom": 556.0625,
+            "left": 675
+          },
+          "width": 318,
+          "height": 238,
+          "scrollWidth": 318,
+          "scrollHeight": 238
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 889,
+            "y": 586.0625,
+            "width": 88,
+            "height": 56,
+            "top": 586.0625,
+            "right": 977,
+            "bottom": 642.0625,
+            "left": 889
+          },
+          "fontSize": 24,
+          "minimumFontSize": 24,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 876.34375,
+            "y": 762.0625,
+            "width": 88,
+            "height": 56,
+            "top": 762.0625,
+            "right": 964.34375,
+            "bottom": 818.0625,
+            "left": 876.34375
+          },
+          "fontSize": 24,
+          "minimumFontSize": 24,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 31,
+          "y": 318.0625,
+          "width": 618,
+          "height": 309,
+          "top": 318.0625,
+          "right": 649,
+          "bottom": 627.0625,
+          "left": 31
+        }
+      ]
+    }
+  },
+  {
+    "case": "arithmetic",
+    "viewport": {
+      "name": "phone",
+      "width": 390,
+      "height": 844
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 17,
+            "y": 288.375,
+            "width": 356,
+            "height": 398,
+            "top": 288.375,
+            "right": 373,
+            "bottom": 686.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 398,
+          "scrollWidth": 356,
+          "scrollHeight": 398
+        },
+        {
+          "id": "board/A/layout/result",
+          "rect": {
+            "x": 17,
+            "y": 982.375,
+            "width": 356,
+            "height": 165,
+            "top": 982.375,
+            "right": 373,
+            "bottom": 1147.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 165,
+          "scrollWidth": 356,
+          "scrollHeight": 165
+        },
+        {
+          "id": "board/A/layout/control/SET_ARITHMETIC_TASK",
+          "rect": {
+            "x": 17,
+            "y": 704.375,
+            "width": 356,
+            "height": 260,
+            "top": 704.375,
+            "right": 373,
+            "bottom": 964.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 260,
+          "scrollWidth": 356,
+          "scrollHeight": 260
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 25,
+            "y": 806.875,
+            "width": 162,
+            "height": 53,
+            "top": 806.875,
+            "right": 187,
+            "bottom": 859.875,
+            "left": 25
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 203,
+            "y": 806.875,
+            "width": 162,
+            "height": 53,
+            "top": 806.875,
+            "right": 365,
+            "bottom": 859.875,
+            "left": 203
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 37,
+          "y": 377.96875,
+          "width": 316,
+          "height": 228.40625,
+          "top": 377.96875,
+          "right": 353,
+          "bottom": 606.375,
+          "left": 37
+        }
+      ]
+    }
+  },
+  {
+    "case": "arithmetic",
+    "viewport": {
+      "name": "phone",
+      "width": 390,
+      "height": 844
+    },
+    "motion": "no-preference",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 17,
+            "y": 288.375,
+            "width": 356,
+            "height": 398,
+            "top": 288.375,
+            "right": 373,
+            "bottom": 686.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 398,
+          "scrollWidth": 356,
+          "scrollHeight": 398
+        },
+        {
+          "id": "board/A/layout/result",
+          "rect": {
+            "x": 17,
+            "y": 982.375,
+            "width": 356,
+            "height": 165,
+            "top": 982.375,
+            "right": 373,
+            "bottom": 1147.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 165,
+          "scrollWidth": 356,
+          "scrollHeight": 165
+        },
+        {
+          "id": "board/A/layout/control/SET_ARITHMETIC_TASK",
+          "rect": {
+            "x": 17,
+            "y": 704.375,
+            "width": 356,
+            "height": 260,
+            "top": 704.375,
+            "right": 373,
+            "bottom": 964.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 260,
+          "scrollWidth": 356,
+          "scrollHeight": 260
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 25,
+            "y": 806.875,
+            "width": 162,
+            "height": 53,
+            "top": 806.875,
+            "right": 187,
+            "bottom": 859.875,
+            "left": 25
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 203,
+            "y": 806.875,
+            "width": 162,
+            "height": 53,
+            "top": 806.875,
+            "right": 365,
+            "bottom": 859.875,
+            "left": 203
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 37,
+          "y": 377.96875,
+          "width": 316,
+          "height": 228.40625,
+          "top": 377.96875,
+          "right": 353,
+          "bottom": 606.375,
+          "left": 37
+        }
+      ]
+    }
+  },
+  {
+    "case": "rectangles",
+    "viewport": {
+      "name": "phone",
+      "width": 390,
+      "height": 844
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 17,
+            "y": 288.375,
+            "width": 356,
+            "height": 278,
+            "top": 288.375,
+            "right": 373,
+            "bottom": 566.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 278,
+          "scrollWidth": 356,
+          "scrollHeight": 278
+        },
+        {
+          "id": "board/A/layout/result/area",
+          "rect": {
+            "x": 17,
+            "y": 996.375,
+            "width": 356,
+            "height": 94,
+            "top": 996.375,
+            "right": 373,
+            "bottom": 1090.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 94,
+          "scrollWidth": 356,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/A/layout/result/perimeter",
+          "rect": {
+            "x": 17,
+            "y": 1108.375,
+            "width": 356,
+            "height": 94,
+            "top": 1108.375,
+            "right": 373,
+            "bottom": 1202.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 94,
+          "scrollWidth": 356,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/A/layout/input/width",
+          "rect": {
+            "x": 17,
+            "y": 584.375,
+            "width": 356,
+            "height": 188,
+            "top": 584.375,
+            "right": 373,
+            "bottom": 772.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 188,
+          "scrollWidth": 356,
+          "scrollHeight": 188
+        },
+        {
+          "id": "board/A/layout/input/height",
+          "rect": {
+            "x": 17,
+            "y": 790.375,
+            "width": 356,
+            "height": 188,
+            "top": 790.375,
+            "right": 373,
+            "bottom": 978.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 188,
+          "scrollWidth": 356,
+          "scrollHeight": 188
+        },
+        {
+          "id": "board/B/layout/appearance",
+          "rect": {
+            "x": 17,
+            "y": 1220.375,
+            "width": 356,
+            "height": 278,
+            "top": 1220.375,
+            "right": 373,
+            "bottom": 1498.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 278,
+          "scrollWidth": 356,
+          "scrollHeight": 278
+        },
+        {
+          "id": "board/B/layout/result/area",
+          "rect": {
+            "x": 17,
+            "y": 1928.375,
+            "width": 356,
+            "height": 94,
+            "top": 1928.375,
+            "right": 373,
+            "bottom": 2022.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 94,
+          "scrollWidth": 356,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/B/layout/result/perimeter",
+          "rect": {
+            "x": 17,
+            "y": 2040.375,
+            "width": 356,
+            "height": 94,
+            "top": 2040.375,
+            "right": 373,
+            "bottom": 2134.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 94,
+          "scrollWidth": 356,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/B/layout/input/width",
+          "rect": {
+            "x": 17,
+            "y": 1516.375,
+            "width": 356,
+            "height": 188,
+            "top": 1516.375,
+            "right": 373,
+            "bottom": 1704.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 188,
+          "scrollWidth": 356,
+          "scrollHeight": 188
+        },
+        {
+          "id": "board/B/layout/input/height",
+          "rect": {
+            "x": 17,
+            "y": 1722.375,
+            "width": 356,
+            "height": 188,
+            "top": 1722.375,
+            "right": 373,
+            "bottom": 1910.375,
+            "left": 17
+          },
+          "width": 356,
+          "height": 188,
+          "scrollWidth": 356,
+          "scrollHeight": 188
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 33,
+            "y": 638.375,
+            "width": 324,
+            "height": 48,
+            "top": 638.375,
+            "right": 357,
+            "bottom": 686.375,
+            "left": 33
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 33,
+            "y": 844.375,
+            "width": 324,
+            "height": 48,
+            "top": 844.375,
+            "right": 357,
+            "bottom": 892.375,
+            "left": 33
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 33,
+            "y": 1570.375,
+            "width": 324,
+            "height": 48,
+            "top": 1570.375,
+            "right": 357,
+            "bottom": 1618.375,
+            "left": 33
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 33,
+            "y": 1776.375,
+            "width": 324,
+            "height": 48,
+            "top": 1776.375,
+            "right": 357,
+            "bottom": 1824.375,
+            "left": 33
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 17,
+          "y": 288.375,
+          "width": 356,
+          "height": 278,
+          "top": 288.375,
+          "right": 373,
+          "bottom": 566.375,
+          "left": 17
+        },
+        {
+          "x": 17,
+          "y": 1220.375,
+          "width": 356,
+          "height": 278,
+          "top": 1220.375,
+          "right": 373,
+          "bottom": 1498.375,
+          "left": 17
+        }
+      ]
+    }
+  },
+  {
+    "case": "bridge",
+    "viewport": {
+      "name": "phone",
+      "width": 390,
+      "height": 844
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 16,
+            "y": 330.75,
+            "width": 358,
+            "height": 280,
+            "top": 330.75,
+            "right": 374,
+            "bottom": 610.75,
+            "left": 16
+          },
+          "width": 358,
+          "height": 280,
+          "scrollWidth": 358,
+          "scrollHeight": 280
+        },
+        {
+          "id": "board/A/layout/control/MOVE_LOAD",
+          "rect": {
+            "x": 17,
+            "y": 627.75,
+            "width": 356,
+            "height": 158,
+            "top": 627.75,
+            "right": 373,
+            "bottom": 785.75,
+            "left": 17
+          },
+          "width": 356,
+          "height": 158,
+          "scrollWidth": 356,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/control/SET_LOAD",
+          "rect": {
+            "x": 17,
+            "y": 803.75,
+            "width": 356,
+            "height": 158,
+            "top": 803.75,
+            "right": 373,
+            "bottom": 961.75,
+            "left": 17
+          },
+          "width": 356,
+          "height": 158,
+          "scrollWidth": 356,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/display/selected",
+          "rect": {
+            "x": 17,
+            "y": 979.75,
+            "width": 356,
+            "height": 238,
+            "top": 979.75,
+            "right": 373,
+            "bottom": 1217.75,
+            "left": 17
+          },
+          "width": 356,
+          "height": 238,
+          "scrollWidth": 356,
+          "scrollHeight": 238
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 269,
+            "y": 639.75,
+            "width": 88,
+            "height": 56,
+            "top": 639.75,
+            "right": 357,
+            "bottom": 695.75,
+            "left": 269
+          },
+          "fontSize": 24,
+          "minimumFontSize": 24,
+          "occluded": false
+        },
+        {
+          "rect": {
+            "x": 256.34375,
+            "y": 815.75,
+            "width": 88,
+            "height": 56,
+            "top": 815.75,
+            "right": 344.34375,
+            "bottom": 871.75,
+            "left": 256.34375
+          },
+          "fontSize": 24,
+          "minimumFontSize": 24,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 17,
+          "y": 331.75,
+          "width": 356,
+          "height": 178,
+          "top": 331.75,
+          "right": 373,
+          "bottom": 509.75,
+          "left": 17
+        }
+      ]
+    }
+  },
+  {
+    "case": "arithmetic",
+    "viewport": {
+      "name": "narrow",
+      "width": 320,
+      "height": 568
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 17,
+            "y": 288.375,
+            "width": 286,
+            "height": 398,
+            "top": 288.375,
+            "right": 303,
+            "bottom": 686.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 398,
+          "scrollWidth": 286,
+          "scrollHeight": 398
+        },
+        {
+          "id": "board/A/layout/result",
+          "rect": {
+            "x": 17,
+            "y": 982.375,
+            "width": 286,
+            "height": 165,
+            "top": 982.375,
+            "right": 303,
+            "bottom": 1147.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 165,
+          "scrollWidth": 286,
+          "scrollHeight": 165
+        },
+        {
+          "id": "board/A/layout/control/SET_ARITHMETIC_TASK",
+          "rect": {
+            "x": 17,
+            "y": 704.375,
+            "width": 286,
+            "height": 260,
+            "top": 704.375,
+            "right": 303,
+            "bottom": 964.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 260,
+          "scrollWidth": 286,
+          "scrollHeight": 260
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 25,
+            "y": 806.875,
+            "width": 127,
+            "height": 53,
+            "top": 806.875,
+            "right": 152,
+            "bottom": 859.875,
+            "left": 25
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 168,
+            "y": 806.875,
+            "width": 127,
+            "height": 53,
+            "top": 806.875,
+            "right": 295,
+            "bottom": 859.875,
+            "left": 168
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 37,
+          "y": 397.5625,
+          "width": 246,
+          "height": 208.8125,
+          "top": 397.5625,
+          "right": 283,
+          "bottom": 606.375,
+          "left": 37
+        }
+      ]
+    }
+  },
+  {
+    "case": "arithmetic",
+    "viewport": {
+      "name": "narrow",
+      "width": 320,
+      "height": 568
+    },
+    "motion": "no-preference",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 17,
+            "y": 288.375,
+            "width": 286,
+            "height": 398,
+            "top": 288.375,
+            "right": 303,
+            "bottom": 686.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 398,
+          "scrollWidth": 286,
+          "scrollHeight": 398
+        },
+        {
+          "id": "board/A/layout/result",
+          "rect": {
+            "x": 17,
+            "y": 982.375,
+            "width": 286,
+            "height": 165,
+            "top": 982.375,
+            "right": 303,
+            "bottom": 1147.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 165,
+          "scrollWidth": 286,
+          "scrollHeight": 165
+        },
+        {
+          "id": "board/A/layout/control/SET_ARITHMETIC_TASK",
+          "rect": {
+            "x": 17,
+            "y": 704.375,
+            "width": 286,
+            "height": 260,
+            "top": 704.375,
+            "right": 303,
+            "bottom": 964.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 260,
+          "scrollWidth": 286,
+          "scrollHeight": 260
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 25,
+            "y": 806.875,
+            "width": 127,
+            "height": 53,
+            "top": 806.875,
+            "right": 152,
+            "bottom": 859.875,
+            "left": 25
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 168,
+            "y": 806.875,
+            "width": 127,
+            "height": 53,
+            "top": 806.875,
+            "right": 295,
+            "bottom": 859.875,
+            "left": 168
+          },
+          "fontSize": 22,
+          "minimumFontSize": 20,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 37,
+          "y": 397.5625,
+          "width": 246,
+          "height": 208.8125,
+          "top": 397.5625,
+          "right": 283,
+          "bottom": 606.375,
+          "left": 37
+        }
+      ]
+    }
+  },
+  {
+    "case": "rectangles",
+    "viewport": {
+      "name": "narrow",
+      "width": 320,
+      "height": 568
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 17,
+            "y": 288.375,
+            "width": 286,
+            "height": 278,
+            "top": 288.375,
+            "right": 303,
+            "bottom": 566.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 278,
+          "scrollWidth": 286,
+          "scrollHeight": 278
+        },
+        {
+          "id": "board/A/layout/result/area",
+          "rect": {
+            "x": 17,
+            "y": 996.375,
+            "width": 286,
+            "height": 94,
+            "top": 996.375,
+            "right": 303,
+            "bottom": 1090.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 94,
+          "scrollWidth": 286,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/A/layout/result/perimeter",
+          "rect": {
+            "x": 17,
+            "y": 1108.375,
+            "width": 286,
+            "height": 94,
+            "top": 1108.375,
+            "right": 303,
+            "bottom": 1202.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 94,
+          "scrollWidth": 286,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/A/layout/input/width",
+          "rect": {
+            "x": 17,
+            "y": 584.375,
+            "width": 286,
+            "height": 188,
+            "top": 584.375,
+            "right": 303,
+            "bottom": 772.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 188,
+          "scrollWidth": 286,
+          "scrollHeight": 188
+        },
+        {
+          "id": "board/A/layout/input/height",
+          "rect": {
+            "x": 17,
+            "y": 790.375,
+            "width": 286,
+            "height": 188,
+            "top": 790.375,
+            "right": 303,
+            "bottom": 978.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 188,
+          "scrollWidth": 286,
+          "scrollHeight": 188
+        },
+        {
+          "id": "board/B/layout/appearance",
+          "rect": {
+            "x": 17,
+            "y": 1220.375,
+            "width": 286,
+            "height": 278,
+            "top": 1220.375,
+            "right": 303,
+            "bottom": 1498.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 278,
+          "scrollWidth": 286,
+          "scrollHeight": 278
+        },
+        {
+          "id": "board/B/layout/result/area",
+          "rect": {
+            "x": 17,
+            "y": 1928.375,
+            "width": 286,
+            "height": 94,
+            "top": 1928.375,
+            "right": 303,
+            "bottom": 2022.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 94,
+          "scrollWidth": 286,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/B/layout/result/perimeter",
+          "rect": {
+            "x": 17,
+            "y": 2040.375,
+            "width": 286,
+            "height": 94,
+            "top": 2040.375,
+            "right": 303,
+            "bottom": 2134.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 94,
+          "scrollWidth": 286,
+          "scrollHeight": 94
+        },
+        {
+          "id": "board/B/layout/input/width",
+          "rect": {
+            "x": 17,
+            "y": 1516.375,
+            "width": 286,
+            "height": 188,
+            "top": 1516.375,
+            "right": 303,
+            "bottom": 1704.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 188,
+          "scrollWidth": 286,
+          "scrollHeight": 188
+        },
+        {
+          "id": "board/B/layout/input/height",
+          "rect": {
+            "x": 17,
+            "y": 1722.375,
+            "width": 286,
+            "height": 188,
+            "top": 1722.375,
+            "right": 303,
+            "bottom": 1910.375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 188,
+          "scrollWidth": 286,
+          "scrollHeight": 188
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 33,
+            "y": 638.375,
+            "width": 254,
+            "height": 48,
+            "top": 638.375,
+            "right": 287,
+            "bottom": 686.375,
+            "left": 33
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 33,
+            "y": 844.375,
+            "width": 254,
+            "height": 48,
+            "top": 844.375,
+            "right": 287,
+            "bottom": 892.375,
+            "left": 33
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 33,
+            "y": 1570.375,
+            "width": 254,
+            "height": 48,
+            "top": 1570.375,
+            "right": 287,
+            "bottom": 1618.375,
+            "left": 33
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 33,
+            "y": 1776.375,
+            "width": 254,
+            "height": 48,
+            "top": 1776.375,
+            "right": 287,
+            "bottom": 1824.375,
+            "left": 33
+          },
+          "fontSize": 26,
+          "minimumFontSize": 24,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 17,
+          "y": 288.375,
+          "width": 286,
+          "height": 278,
+          "top": 288.375,
+          "right": 303,
+          "bottom": 566.375,
+          "left": 17
+        },
+        {
+          "x": 17,
+          "y": 1220.375,
+          "width": 286,
+          "height": 278,
+          "top": 1220.375,
+          "right": 303,
+          "bottom": 1498.375,
+          "left": 17
+        }
+      ]
+    }
+  },
+  {
+    "case": "bridge",
+    "viewport": {
+      "name": "narrow",
+      "width": 320,
+      "height": 568
+    },
+    "motion": "reduce",
+    "evidence": "deterministic-UX-replay",
+    "status": "passed",
+    "visualReview": "pending",
+    "navigation": [
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/experiments?experiment=arithmetic",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [],
+    "geometry": {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pageOverflow": false,
+      "nativeNumbers": 0,
+      "cards": [
+        {
+          "id": "board/A/layout/appearance",
+          "rect": {
+            "x": 16,
+            "y": 352.4375,
+            "width": 288,
+            "height": 280,
+            "top": 352.4375,
+            "right": 304,
+            "bottom": 632.4375,
+            "left": 16
+          },
+          "width": 288,
+          "height": 280,
+          "scrollWidth": 288,
+          "scrollHeight": 280
+        },
+        {
+          "id": "board/A/layout/control/MOVE_LOAD",
+          "rect": {
+            "x": 17,
+            "y": 649.4375,
+            "width": 286,
+            "height": 158,
+            "top": 649.4375,
+            "right": 303,
+            "bottom": 807.4375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 158,
+          "scrollWidth": 286,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/control/SET_LOAD",
+          "rect": {
+            "x": 17,
+            "y": 825.4375,
+            "width": 286,
+            "height": 158,
+            "top": 825.4375,
+            "right": 303,
+            "bottom": 983.4375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 158,
+          "scrollWidth": 286,
+          "scrollHeight": 158
+        },
+        {
+          "id": "board/A/layout/display/selected",
+          "rect": {
+            "x": 17,
+            "y": 1001.4375,
+            "width": 286,
+            "height": 238,
+            "top": 1001.4375,
+            "right": 303,
+            "bottom": 1239.4375,
+            "left": 17
+          },
+          "width": 286,
+          "height": 238,
+          "scrollWidth": 286,
+          "scrollHeight": 238
+        }
+      ],
+      "inputs": [
+        {
+          "rect": {
+            "x": 199,
+            "y": 661.4375,
+            "width": 88,
+            "height": 56,
+            "top": 661.4375,
+            "right": 287,
+            "bottom": 717.4375,
+            "left": 199
+          },
+          "fontSize": 24,
+          "minimumFontSize": 24,
+          "occluded": null
+        },
+        {
+          "rect": {
+            "x": 186.34375,
+            "y": 837.4375,
+            "width": 88,
+            "height": 56,
+            "top": 837.4375,
+            "right": 274.34375,
+            "bottom": 893.4375,
+            "left": 186.34375
+          },
+          "fontSize": 24,
+          "minimumFontSize": 24,
+          "occluded": null
+        }
+      ],
+      "scenes": [
+        {
+          "x": 17,
+          "y": 353.4375,
+          "width": 286,
+          "height": 143,
+          "top": 353.4375,
+          "right": 303,
+          "bottom": 496.4375,
+          "left": 17
+        }
+      ]
+    }
+  }
+]

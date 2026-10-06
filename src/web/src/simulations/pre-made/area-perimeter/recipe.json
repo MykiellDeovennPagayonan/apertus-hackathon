@@ -4,11 +4,7 @@
   "version": 1,
   "title": "Area & perimeter",
   "description": "How do side lengths change the inside area and the outside perimeter?",
-  "tags": [
-    "mathematics",
-    "area-perimeter",
-    "lab"
-  ],
+  "tags": ["mathematics", "area-perimeter", "lab"],
   "document": {
     "formatVersion": 3,
     "nodes": [
@@ -302,21 +298,39 @@
       },
       "responsive": true,
       "responsiveRows": [
-        [
-          "board/layout/appearance"
-        ],
-        [
-          "board/layout/task"
-        ],
-        [
-          "board/layout/result/area",
-          "board/layout/result/perimeter"
-        ]
+        ["board/layout/appearance"],
+        ["board/layout/task"],
+        ["board/layout/result/area", "board/layout/result/perimeter"]
       ]
     }
   },
   "nested": [],
-  "parameters": [],
+  "parameters": [
+    {
+      "name": "width",
+      "node": "model",
+      "field": "width",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 100,
+        "unit": "m"
+      },
+      "default": 6
+    },
+    {
+      "name": "height",
+      "node": "model",
+      "field": "height",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 100,
+        "unit": "m"
+      },
+      "default": 4
+    }
+  ],
   "externalPorts": [],
   "dependencies": [
     {

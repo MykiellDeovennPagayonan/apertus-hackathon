@@ -1,9 +1,9 @@
-import { publicDefinition } from "../../components/catalog";
-import { schemaDefault } from "../../components/composites/catalog";
-import { reconcileBoard } from "../../runtime/authoring/board";
+import {
+  connectAuthored,
+  disconnectAuthored,
+} from "../../runtime/authoring/connections";
 import { requireValue } from "../../runtime/authoring/requireValue";
-import type { Connection, Endpoint } from "../../runtime/authoring/types";
-import { validateAuthoredDocument } from "../../runtime/authoring/validate";
+import type { Endpoint } from "../../runtime/authoring/types";
 import type { ExperimentDocument } from "../document";
 import { resolveGraphEndpoint } from "../graph/authoredGraph";
 import {
@@ -22,65 +22,13 @@ export function connectDocument(
     connectPorts(requireValue(doc.scene), source, target);
     return;
   }
-  const from = resolveGraphEndpoint(doc, source),
-    to = resolveGraphEndpoint(doc, target),
-    d = doc.authored;
-  const node = [...d.nodes, ...d.resources].find((n) => n.id === from.node);
-  if (!node) throw new Error("Choose an existing component");
-  const output = publicDefinition(node.definition).outputs[from.port];
-  const kind: Connection["kind"] =
-    output?.kind === "event"
-      ? "command"
-      : output?.kind === "attachment"
-        ? "attachment"
-        : "value";
-  if (
-    d.connections.some(
-      (c) =>
-        c.from.node === from.node &&
-        c.from.port === from.port &&
-        c.to.node === to.node &&
-        c.to.port === to.port,
-    )
-  )
-    return;
-  if (
-    kind === "command" &&
-    publicDefinition(node.definition).category === "controls" &&
-    node.configuration.initial === "{}"
-  ) {
-    const targetNode = d.nodes.find((n) => n.id === to.node);
-    const command =
-      targetNode && publicDefinition(targetNode.definition).commands[to.port];
-    if (command)
-      node.configuration.initial = JSON.stringify(
-        schemaDefault(command.arguments),
-      );
-  }
-  // Explicit placement onto another canvas joins the object's runtime scope.
-  // Controls and owned views travel together so command bindings remain valid.
-  const destination = d.nodes.find((n) => n.id === to.node);
-  if (kind === "attachment" && destination && to.port === "objects") {
-    const canvas = publicDefinition(destination.definition);
-    if (
-      canvas.category === "canvases" &&
-      canvas.inputs.objects?.unit === output?.unit &&
-      node.scope !== destination.scope
-    ) {
-      const previousScope = node.scope;
-      for (const member of [...d.nodes, ...d.resources])
-        if (member.scope === previousScope) member.scope = destination.scope;
-      d.scopes = d.scopes.filter((scope) => scope.id !== previousScope);
-    }
-  }
-  d.connections.push({
-    id: `connection-${crypto.randomUUID()}`,
-    from,
-    to,
-    kind,
-  });
-  reconcileBoard(d);
-  validateAuthoredDocument(d);
+  doc.authored = connectAuthored(
+    doc.authored,
+    resolveGraphEndpoint(doc, source),
+    resolveGraphEndpoint(doc, target),
+    `connection-${crypto.randomUUID()}`,
+    true,
+  );
 }
 export function documentConnectionError(
   doc: ExperimentDocument,
@@ -105,13 +53,5 @@ export function disconnectDocument(doc: ExperimentDocument, wire: GraphWire) {
       port: wire.fromPort,
     }),
     to = resolveGraphEndpoint(doc, { node: wire.to, port: wire.toPort });
-  doc.authored.connections = doc.authored.connections.filter(
-    (c) =>
-      !(
-        c.from.node === from.node &&
-        c.from.port === from.port &&
-        c.to.node === to.node &&
-        c.to.port === to.port
-      ),
-  );
+  doc.authored = disconnectAuthored(doc.authored, from, to);
 }

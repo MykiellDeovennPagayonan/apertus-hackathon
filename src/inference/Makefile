@@ -18,7 +18,7 @@ smoke:
 
 # Requires this inference server; unit tests use a separate deterministic provider.
 planner-smoke:
-	cd ../web && pnpm test:apertus:live
+	cd ../web && GENERATION_RUNS=1 pnpm test:generation:live
 
 run-apertus: run
 

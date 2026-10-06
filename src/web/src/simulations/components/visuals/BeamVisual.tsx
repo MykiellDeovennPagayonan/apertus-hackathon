@@ -72,13 +72,9 @@ export function BeamVisual({
             ? BridgeStyles.tensionDash
             : undefined
         }
-        initial={{ opacity: 0 }}
+        initial={false}
         animate={{
           opacity: 1,
-          x1: pa.x,
-          x2: pb.x,
-          y1: pa.y + dropA,
-          y2: pb.y + dropB,
         }}
         transition={{ duration: 0.3 }}
         style={{ cursor: "pointer" }}

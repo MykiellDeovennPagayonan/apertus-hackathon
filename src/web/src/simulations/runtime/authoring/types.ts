@@ -21,6 +21,13 @@ export type PublicDefinition = {
   title: string;
   description: string;
   discovery?: DiscoveryMetadata;
+  teaching?: {
+    concepts: readonly string[];
+    keywords: readonly string[];
+    interactions: readonly string[];
+    observations: readonly string[];
+    limitations: readonly string[];
+  };
   category:
     | "models"
     | "controls"

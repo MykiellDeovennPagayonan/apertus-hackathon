@@ -73,6 +73,10 @@ export function SpatialBoard({
   const sourcePresentation = persisted ?? conversion;
   const viewport = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 900, height: 600 });
+  const [chromeClearance, setChromeClearance] = useState({
+    top: 24,
+    bottom: 24,
+  });
   const autoLayout =
     requestedAutoLayout ||
     (!authoring && !!persisted?.responsive && size.width < 700);
@@ -385,6 +389,49 @@ export function SpatialBoard({
   }, [p, authoring]);
   const hasBoard = !!p;
   useEffect(() => {
+    if (!workspace || !hasBoard || !viewport.current) return;
+    const board = viewport.current;
+    const host = board.closest(".experiment-workspace");
+    if (!host) return;
+    const header = host.querySelector(".recipe-lesson > header");
+    const composer = host.querySelector(".workspace-composer");
+    const tools = host.querySelector(".board-workspace-tools");
+    const measure = () => {
+      const bounds = board.getBoundingClientRect();
+      const heading = header?.getBoundingClientRect();
+      const focused = host.classList.contains("experiment-workspace--focused");
+      const prompt = composer?.getBoundingClientRect();
+      const top = heading
+        ? Math.max(
+            0,
+            // Reserve the closed navigation row before its first measurement.
+            // Opening its menu overlays the board without changing the camera.
+            heading.bottom - bounds.top + (focused ? 80 : 20),
+          )
+        : 24;
+      const bottom = prompt ? Math.max(0, bounds.bottom - prompt.top + 80) : 24;
+      setChromeClearance((current) =>
+        current.top === top && current.bottom === bottom
+          ? current
+          : { top, bottom },
+      );
+    };
+    const resize = new ResizeObserver(measure);
+    for (const element of [board, header, composer, tools])
+      if (element) resize.observe(element);
+    // Shell CSS variables change positions without changing element sizes.
+    const mutation = new MutationObserver(measure);
+    mutation.observe(host, {
+      attributes: true,
+      attributeFilter: ["style", "class"],
+    });
+    measure();
+    return () => {
+      resize.disconnect();
+      mutation.disconnect();
+    };
+  }, [workspace, hasBoard]);
+  useEffect(() => {
     if (
       (!autoLayout && (authoring || !sourcePresentation?.responsive)) ||
       !sourcePresentation ||
@@ -526,6 +573,15 @@ export function SpatialBoard({
   const area = autoLayout
     ? { ...contentArea, height: contentArea.height + 96 }
     : contentArea;
+  const { top: topClearance, bottom: bottomClearance } = chromeClearance;
+  const navigationArea =
+    workspace && p.navigation.mode !== "fixed"
+      ? {
+          ...area,
+          y: area.y - topClearance,
+          height: area.height + topClearance + bottomClearance,
+        }
+      : area;
   const initial = fit(
     p.startView,
     Math.max(1, size.width - 48),
@@ -536,13 +592,18 @@ export function SpatialBoard({
     (workspace && !authoring && p.navigation.mode !== "fixed")
   ) {
     initial.zoom =
-      autoLayout && !requestedAutoLayout
+      (autoLayout && !requestedAutoLayout) || p.responsive
         ? 1
         : Math.min(1, Math.max(0.75, initial.zoom));
     initial.centerX =
       p.startView.x +
       Math.min(p.startView.width, size.width / initial.zoom) / 2;
-    initial.centerY = p.startView.y + size.height / (2 * initial.zoom);
+    const contentTop = Math.min(...p.items.map((item) => item.rect.y));
+    const startingTop = Math.min(
+      p.startView.y,
+      contentTop - topClearance / initial.zoom,
+    );
+    initial.centerY = startingTop + size.height / (2 * initial.zoom);
   }
   if (authoring) initial.zoom = Math.min(1, initial.zoom);
   const base = camera ?? initial;
@@ -560,7 +621,7 @@ export function SpatialBoard({
                 p.navigation.maxZoom,
               ),
             },
-        area,
+        navigationArea,
         size.width,
         size.height,
       );
@@ -1704,6 +1765,32 @@ export function SpatialBoard({
                   const target = event.target as HTMLElement;
                   const bounds = target.getBoundingClientRect();
                   const margin = 24;
+                  const host = viewport.current?.closest(
+                    ".experiment-workspace",
+                  );
+                  const header = host
+                    ?.querySelector(".recipe-lesson > header")
+                    ?.getBoundingClientRect();
+                  const composer = host
+                    ?.querySelector(".workspace-composer")
+                    ?.getBoundingClientRect();
+                  const navigation = host
+                    ?.querySelector(".board-camera-tools")
+                    ?.getBoundingClientRect();
+                  const usableTop = Math.max(
+                    viewportBounds.top,
+                    header?.bottom ?? viewportBounds.top,
+                    host
+                      ?.querySelector(".board-workspace-tools")
+                      ?.getBoundingClientRect().bottom ?? viewportBounds.top,
+                  );
+                  const usableBottom = Math.min(
+                    viewportBounds.bottom,
+                    composer?.top ?? viewportBounds.bottom,
+                    navigation && navigation.height > 0
+                      ? navigation.top
+                      : viewportBounds.bottom,
+                  );
                   const dx =
                     bounds.width > viewportBounds.width - margin * 2 ||
                     bounds.left < viewportBounds.left + margin
@@ -1713,13 +1800,10 @@ export function SpatialBoard({
                           bounds.right - viewportBounds.right + margin,
                         );
                   const dy =
-                    bounds.height > viewportBounds.height - margin * 2 ||
-                    bounds.top < viewportBounds.top + margin
-                      ? bounds.top - viewportBounds.top - margin
-                      : Math.max(
-                          0,
-                          bounds.bottom - viewportBounds.bottom + margin,
-                        );
+                    bounds.height > usableBottom - usableTop - margin * 2 ||
+                    bounds.top < usableTop + margin
+                      ? bounds.top - usableTop - margin
+                      : Math.max(0, bounds.bottom - usableBottom + margin);
                   if (dx || dy)
                     setCamera({
                       ...c,

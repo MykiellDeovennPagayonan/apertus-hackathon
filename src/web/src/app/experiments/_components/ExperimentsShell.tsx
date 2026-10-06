@@ -2,74 +2,85 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { flushSync } from "react-dom";
-import { requestPlan } from "../../../lib/planner/browser";
-import type { Plan } from "../../../lib/planner/schema";
-import { isDemo } from "../../../lib/planner/schema";
+import { requestGeneration } from "../../../lib/planner/browser";
+import type { GenerationRequest } from "../../../lib/planner/schema";
 import { ControlsTarget } from "../../../simulations/components/views/ControlsOverlay";
 import { ExperimentView } from "../../../simulations/components/views/ExperimentView";
-import { modelProvider } from "../../../simulations/runtime/assembly";
+import { RecipeLesson } from "../../../simulations/components/views/RecipeLesson";
 import { templateNames } from "../../../simulations/runtime/capabilities";
+import { isDemo } from "../../../simulations/runtime/legacyPlan";
+import {
+  acceptGenerationResult,
+  activateRecipeSession,
+  getRecipeSession,
+  type RecipeSession,
+} from "../../../simulations/runtime/recipeSession";
 import { hasPremadeRecipe } from "../../../simulations/runtime/recipes/registry";
 import {
   activatePremadeSession,
   disposeSession,
   executePlan,
-  getActiveDefinition,
   getDiagnosticSnapshot,
-  getExperimentContext,
   saveRecipe,
 } from "../../../simulations/runtime/session";
 import type { DemoType } from "../../../simulations/runtime/types";
 import CommandBar, { type ComposerStatus } from "../../_components/CommandBar";
 import LandingPage from "../../_components/LandingPage";
 import { premadeExperiments } from "../_lib/premadeExperiments";
+import { persistRecipe, reopenAcceptedRecipe } from "../_lib/recipePersistence";
 import ExperimentCatalog from "./ExperimentCatalog";
 import "../../_components/LandingPage.css";
 import "./ExperimentsShell.css";
-
-const CHIPS: Partial<Record<DemoType, string[]>> = {
-  assembly: ["Reset"],
-  gas: ["Heat it up", "Add more gas", "Why did the pressure increase?"],
-  ratio: ["Show 25 percent", "Set the ratio to 3 out of 5"],
-  "area-perimeter": ["Make a rectangle 6 metres by 4 metres"],
-  coordinates: ["Move the point to -3, 4"],
-  probability: ["Roll a die 1000 times with seed 42"],
-  counting: ["Count 8 circles", "Put 6 circles in the box", "Reset"],
-  arithmetic: ["Add 3 and 2", "Subtract 2 from 5", "Play"],
-  "equal-groups": ["Make 3 groups of 4", "Share 14 between 3 groups", "Play"],
-  "fraction-builder": ["Show 3/4", "Compare 1/2 and 2/4", "Split bar A into 2"],
-  "fraction-number-line": [
-    "Place 5/4",
-    "Add 1/2 and 1/4",
-    "Subtract 1/4 from 3/2",
-  ],
-  projectile: [
-    "Compare it with 30 degrees",
-    "What if gravity was like the Moon?",
-    "Show velocity vectors",
-  ],
-  bridge: [
-    "Move the weight to the left",
-    "Remove the middle member",
-    "Make the bridge twice as long",
-  ],
-  town: ["Make it nighttime", "Close the main road", "Make the market busy"],
-};
-
-type Phase = "catalog" | "ready";
 
 export default function ExperimentsShell({
   landing = false,
 }: {
   landing?: boolean;
 }) {
+  const [draft, setDraft] = useState("");
+  const [lastRequest, setLastRequest] = useState<{
+    prompt: string;
+    details: string;
+  } | null>(null);
+  const [demo, setDemo] = useState<DemoType | null>(null);
+  const [lesson, setLesson] = useState<RecipeSession | null>(null);
+  const [ready, setReady] = useState(false);
+  const [status, setStatus] = useState<ComposerStatus | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [, refresh] = useState(0);
   const [controlsOpen, setControlsOpen] = useState(false);
   const [controlsTarget, setControlsTarget] = useState<HTMLElement | null>(
     null,
   );
-  const controlsButton = useRef<HTMLButtonElement>(null);
   const [hasAdditionalControls, setHasAdditionalControls] = useState(false);
+  const controlsButton = useRef<HTMLButtonElement>(null);
+  const importInput = useRef<HTMLInputElement>(null);
+  const options = useRef<HTMLDetailsElement>(null);
+  const workspace = useRef<HTMLDivElement>(null);
+  const composerElement = useRef<HTMLDivElement>(null);
+  const pending = useRef<{
+    controller: AbortController;
+    request: GenerationRequest;
+  } | null>(null);
+  const startupRevision = useRef(0);
+  const selectedExperiment = useSearchParams().get("experiment");
+  const router = useRouter();
+  const focused = !!lesson || demo === "gas";
+  const syncSession = useCallback(() => {
+    setLesson(getRecipeSession());
+    refresh((n) => n + 1);
+  }, []);
+  useEffect(() => lesson?.subscribe(() => refresh((n) => n + 1)), [lesson]);
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_EXPERIMENT_DIAGNOSTICS !== "true") return;
+    Object.defineProperty(window, "__experimentSnapshot", {
+      value: () => getRecipeSession()?.snapshot() ?? getDiagnosticSnapshot(),
+      configurable: true,
+    });
+    return () => {
+      Reflect.deleteProperty(window, "__experimentSnapshot");
+    };
+  }, []);
   useEffect(() => {
     if (!controlsTarget) return;
     const measure = () =>
@@ -79,54 +90,29 @@ export default function ExperimentsShell({
     measure();
     return () => observer.disconnect();
   }, [controlsTarget]);
-  const [draft, setDraft] = useState("");
-  const [lastRequest, setLastRequest] = useState<{
-    prompt: string;
-    details: string;
-  } | null>(null);
-  const workspace = useRef<HTMLDivElement>(null);
-  const composerElement = useRef<HTMLDivElement>(null);
-  const [phase, setPhase] = useState<Phase>("catalog");
-  const [demo, setDemo] = useState<DemoType | null>(null);
-  const [status, setStatus] = useState<ComposerStatus | null>(null);
-  const pending = useRef<AbortController | null>(null);
-  const [busy, setBusy] = useState(false);
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const selectedExperiment = searchParams.get("experiment");
-  const focusedExperiment =
-    demo === selectedExperiment &&
-    (demo === "gas" || hasPremadeRecipe(demo ?? ""));
-
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_EXPERIMENT_DIAGNOSTICS !== "true") return;
-    Object.defineProperty(window, "__experimentSnapshot", {
-      value: getDiagnosticSnapshot,
-      configurable: true,
-    });
-    return () => {
-      Reflect.deleteProperty(window, "__experimentSnapshot");
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!controlsOpen) return;
     const onEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setControlsOpen(false);
-        controlsButton.current?.focus();
+        if (controlsOpen) {
+          setControlsOpen(false);
+          controlsButton.current?.focus();
+        }
+        if (options.current?.open) {
+          options.current.open = false;
+          options.current.querySelector("summary")?.focus();
+        }
       }
     };
     document.addEventListener("keydown", onEscape);
     return () => document.removeEventListener("keydown", onEscape);
   }, [controlsOpen]);
-
+  // biome-ignore lint/correctness/useExhaustiveDependencies: A replacement session replaces the measured lesson header even while ready stays true.
   useEffect(() => {
-    if (phase !== "ready") return;
+    if (!ready) return;
     const composer = composerElement.current;
-    const identity = workspace.current?.querySelector(".workspace-identity");
-    const toolbar = workspace.current?.querySelector(
-      focusedExperiment ? ".gas-experiment-tools" : ".workspace-toolbar",
+    const header = workspace.current?.querySelector(".workspace-header");
+    const lessonHeader = workspace.current?.querySelector(
+      ".recipe-lesson > header",
     );
     const measure = () => {
       if (composer)
@@ -134,187 +120,190 @@ export default function ExperimentsShell({
           "--composer-height",
           `${composer.getBoundingClientRect().height}px`,
         );
-      const bottom = Math.max(
-        identity?.getBoundingClientRect().bottom ?? 96,
-        toolbar?.getBoundingClientRect().bottom ?? 96,
-      );
+      const bottom = Math.max(96, header?.getBoundingClientRect().bottom ?? 96);
       workspace.current?.style.setProperty(
         "--workspace-top",
         `${bottom + 16}px`,
       );
+      workspace.current?.style.setProperty(
+        "--lesson-heading-height",
+        `${lessonHeader?.getBoundingClientRect().height ?? 60}px`,
+      );
+      refresh((value) => value + 1);
     };
     measure();
     const observer = new ResizeObserver(measure);
-    if (composer) observer.observe(composer);
-    if (identity) observer.observe(identity);
-    if (toolbar) observer.observe(toolbar);
+    for (const element of [composer, header, lessonHeader])
+      if (element) observer.observe(element);
     return () => observer.disconnect();
-  }, [phase, focusedExperiment]);
-
+  }, [ready, lesson, focused]);
   useEffect(() => {
     if (status?.kind !== "success") return;
     const timer = window.setTimeout(() => setStatus(null), 5000);
     return () => window.clearTimeout(timer);
   }, [status]);
-
-  const applyPlan = useCallback((plan: Plan, prompt?: string) => {
-    const result = executePlan(plan);
-    if (!result.accepted) {
-      setStatus({
-        kind: "error",
-        text: "Couldn't apply those changes.",
-        details: result.error,
-        retry: true,
-      });
-      return;
-    }
-    if (plan.operation === "clarify" || plan.operation === "unsupported") {
-      setStatus({
-        kind: "info",
-        text:
-          plan.operation === "clarify"
-            ? "A little more detail is needed."
-            : "That request isn't supported yet.",
-        details: plan.message,
-      });
-      return;
-    }
-    if (prompt) {
-      setLastRequest({ prompt, details: plan.message });
-      setDraft("");
-    }
-    if (plan.operation === "explain") {
-      setStatus({
-        kind: "info",
-        text: "Your explanation is ready.",
-        details: plan.message,
-      });
-      return;
-    }
-    if (result.demo) {
-      setDemo(result.demo);
-      setPhase("ready");
-      if (plan.operation === "create") setControlsOpen(false);
-    }
-    setStatus(
-      prompt
-        ? {
-            kind: "success",
-            text:
-              plan.operation === "create"
-                ? "Ready — explore your experiment."
-                : "Changes applied.",
-            details: plan.message,
-          }
-        : null,
-    );
-  }, []);
-
   useEffect(() => {
-    const startup = window.setTimeout(() => {
-      pending.current?.abort();
+    const revision = ++startupRevision.current;
+    const timer = window.setTimeout(() => {
+      pending.current?.controller.abort();
+      pending.current = null;
       setBusy(false);
+      disposeSession();
+      setDemo(null);
+      setLesson(null);
+      setReady(false);
+      setStatus(null);
       if (!selectedExperiment) {
-        disposeSession();
-        setDemo(null);
-        setPhase("catalog");
-        setStatus(null);
+        if (landing)
+          try {
+            const saved = reopenAcceptedRecipe();
+            if (saved) {
+              activateRecipeSession(JSON.parse(saved));
+              syncSession();
+              setReady(true);
+            }
+          } catch (error) {
+            setStatus({
+              kind: "info",
+              text: "Your saved lesson could not be reopened.",
+              details:
+                error instanceof Error
+                  ? error.message
+                  : "Use a downloaded recipe to recover.",
+            });
+          }
         return;
       }
       if (!isDemo(selectedExperiment) || selectedExperiment === "assembly") {
-        disposeSession();
-        setDemo(null);
-        setPhase("catalog");
-        setStatus({
-          kind: "info",
-          text: "Choose one of the premade experiments below.",
-        });
+        setStatus({ kind: "info", text: "Choose a premade experiment below." });
         return;
       }
-      if (hasPremadeRecipe(selectedExperiment)) {
-        try {
+      try {
+        if (hasPremadeRecipe(selectedExperiment))
           activatePremadeSession(selectedExperiment);
-          setDemo(selectedExperiment);
-          setPhase("ready");
-          setControlsOpen(false);
-          setStatus(null);
-        } catch (error) {
-          setStatus({
-            kind: "error",
-            text: "Couldn't open this recipe.",
-            details: error instanceof Error ? error.message : "Invalid recipe",
+        else {
+          const result = executePlan({
+            schemaVersion: 1,
+            operation: "create",
+            composition: {
+              ref: `compositions/${templateNames[selectedExperiment]}`,
+              version: 1,
+            },
+            parameters: premadeExperiments[selectedExperiment].parameters,
+            message: "Premade experiment loaded.",
           });
+          if (!result.accepted) throw new Error(result.error);
         }
-        return;
+        if (revision === startupRevision.current) {
+          setDemo(selectedExperiment);
+          syncSession();
+          setReady(true);
+        }
+      } catch (error) {
+        setStatus({
+          kind: "error",
+          text: "Couldn't open this lesson.",
+          details: error instanceof Error ? error.message : "Invalid recipe",
+        });
       }
-      applyPlan({
-        schemaVersion: 1,
-        operation: "create",
-        composition: {
-          ref: `compositions/${templateNames[selectedExperiment]}`,
-          version: 1,
-        },
-        parameters: premadeExperiments[selectedExperiment].parameters,
-        message: "Premade experiment loaded.",
-      });
     }, 0);
     return () => {
-      window.clearTimeout(startup);
-      pending.current?.abort();
+      window.clearTimeout(timer);
+      pending.current?.controller.abort();
+      pending.current = null;
       disposeSession();
     };
-  }, [selectedExperiment, applyPlan]);
+  }, [selectedExperiment, landing, syncSession]);
 
+  const persist = async (session: RecipeSession) => {
+    const revision = session.authoredRevision;
+    try {
+      await persistRecipe(session);
+      return true;
+    } catch (error) {
+      if (
+        getRecipeSession() === session &&
+        revision === session.authoredRevision
+      )
+        setStatus({
+          kind: "error",
+          text: "Your lesson is ready, but it couldn't be saved in this browser. Use Save recipe to download it.",
+          details:
+            error instanceof Error
+              ? error.message
+              : "Browser storage is unavailable.",
+        });
+      return false;
+    }
+  };
   const onPrompt = async (text: string) => {
-    if (pending.current && !pending.current.signal.aborted) return;
-    pending.current?.abort();
+    pending.current?.controller.abort();
     const controller = new AbortController();
-    pending.current = controller;
+    const request: GenerationRequest = {
+      protocolVersion: 1,
+      requestId: crypto.randomUUID(),
+      prompt: text,
+      viewport: { width: window.innerWidth, height: window.innerHeight },
+      active: getRecipeSession()?.requestContext() ?? null,
+    };
+    const owner = { controller, request };
+    pending.current = owner;
     setDraft(text);
     setBusy(true);
     setStatus({
       kind: "working",
-      text:
-        phase === "ready"
-          ? "Working out the changes…"
-          : "Thinking through your request…",
+      text: ready ? "Working out the changes…" : "Building your lesson…",
     });
-    const currentDemo = phase === "ready" ? demo : null;
-    const context = getExperimentContext();
     try {
-      const plan = await requestPlan(
-        text,
-        currentDemo,
-        context,
-        controller.signal,
-        () => {
-          if (!controller.signal.aborted)
-            flushSync(() =>
-              setStatus({
-                kind: "working",
-                text: currentDemo
-                  ? "Checking the changes…"
-                  : "Preparing your experiment…",
-              }),
-            );
-        },
-      );
-      if (!controller.signal.aborted) {
-        flushSync(() =>
-          setStatus({
-            kind: "working",
-            text:
-              plan.operation === "create"
-                ? "Setting up the scene and parameters…"
-                : plan.operation === "edit"
-                  ? "Applying changes…"
-                  : "Preparing a response…",
-          }),
-        );
-        applyPlan(plan, text);
+      const result = await requestGeneration(request, controller.signal, () => {
+        if (pending.current === owner && !controller.signal.aborted)
+          setStatus({ kind: "working", text: "Checking your lesson…" });
+      });
+      if (pending.current !== owner || controller.signal.aborted) return;
+      if (result.status === "failed") {
+        setStatus({
+          kind: "error",
+          text: result.message,
+          retry: result.retryable,
+        });
+        return;
       }
+      if (result.status === "unsupported") {
+        setStatus({
+          kind: "info",
+          text: "That request isn't supported yet.",
+          details: result.message,
+        });
+        return;
+      }
+      const session = acceptGenerationResult(result, request, disposeSession);
+      syncSession();
+      setDemo(null);
+      setReady(true);
+      setControlsOpen(false);
+      setDraft("");
+      const details =
+        result.status === "runtime_action"
+          ? result.message
+          : result.coverage.explanation || session.document.lesson.instruction;
+      setLastRequest({ prompt: text, details });
+      setStatus({
+        kind:
+          result.status !== "runtime_action" &&
+          result.coverage.level === "partial"
+            ? "info"
+            : "success",
+        text:
+          result.status === "created"
+            ? "Ready — explore your lesson."
+            : result.status === "updated"
+              ? "Starting lesson updated. Unchanged activities keep their progress."
+              : "Action applied.",
+        details,
+      });
+      if (result.status !== "runtime_action") void persist(session);
     } catch (error) {
-      if (!controller.signal.aborted)
+      if (pending.current === owner && !controller.signal.aborted)
         setStatus({
           kind: "error",
           text: "Couldn't complete your request.",
@@ -322,78 +311,114 @@ export default function ExperimentsShell({
           retry: true,
         });
     } finally {
-      if (pending.current === controller) {
+      if (pending.current === owner) {
         pending.current = null;
         setBusy(false);
       }
     }
   };
-
+  const cancel = () => {
+    pending.current?.controller.abort();
+    pending.current = null;
+    setBusy(false);
+    setStatus({ kind: "info", text: "Stopped — your prompt is still here." });
+  };
+  const goHome = () => {
+    pending.current?.controller.abort();
+    pending.current = null;
+    setBusy(false);
+    disposeSession();
+    setLesson(null);
+    setDemo(null);
+    setReady(false);
+    setStatus(null);
+    if (selectedExperiment) router.replace("/experiments");
+  };
   const downloadRecipe = () => {
     try {
       const url = URL.createObjectURL(
         new Blob([saveRecipe()], { type: "application/json" }),
       );
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "apertus-experiment.json";
-      a.click();
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "apertus-experiment.json";
+      anchor.click();
       URL.revokeObjectURL(url);
-      setStatus({ kind: "success", text: "Recipe saved." });
+      setStatus({ kind: "success", text: "Recipe download started." });
     } catch (error) {
       setStatus({
         kind: "error",
-        text: "Couldn't save the recipe.",
+        text: "Couldn't export this recipe.",
         details: error instanceof Error ? error.message : "Please try again.",
       });
     }
   };
-
-  const goHome = () => {
-    pending.current?.abort();
-    setBusy(false);
-    if (selectedExperiment) {
-      router.replace("/experiments");
-    } else {
-      disposeSession();
-      setPhase("catalog");
-      setDemo(null);
-      setStatus(null);
+  const remix = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    try {
+      sessionStorage.setItem("apertus-builder-remix", saveRecipe());
+    } catch (error) {
+      event.preventDefault();
+      setStatus({
+        kind: "error",
+        text: "Couldn't prepare Remix. Download the recipe and import it in the builder.",
+        details:
+          error instanceof Error
+            ? error.message
+            : "Browser storage is unavailable.",
+      });
     }
   };
-
-  const cancel = () => {
-    pending.current?.abort();
-    pending.current = null;
-    setBusy(false);
-    setStatus({ kind: "info", text: "Stopped — your prompt is still here." });
+  const importRecipe = async (file: File) => {
+    try {
+      if (file.size > 1_100_000) throw new Error("Recipe file is too large.");
+      const source: unknown = JSON.parse(await file.text());
+      const session = activateRecipeSession(source, undefined, disposeSession);
+      pending.current?.controller.abort();
+      pending.current = null;
+      setBusy(false);
+      syncSession();
+      setDemo(null);
+      setReady(true);
+      setStatus({ kind: "success", text: "Recipe opened." });
+      const saved = await persist(session);
+      if (saved && selectedExperiment && getRecipeSession() === session)
+        router.replace("/");
+    } catch (error) {
+      setStatus({
+        kind: "error",
+        text: "Couldn't open this recipe.",
+        details: error instanceof Error ? error.message : "Invalid recipe",
+      });
+    }
   };
   const composer = (
     <CommandBar
-      placeholder={
-        phase === "ready" ? "Ask for a change…" : "Describe an experiment…"
-      }
+      placeholder={ready ? "Ask for a change…" : "Describe an experiment…"}
       chips={
-        phase === "ready" && demo
-          ? CHIPS[demo]
+        ready
+          ? [
+              "Reset this lesson",
+              "Change the starting values",
+              "Add another observation",
+            ]
           : [
-              "Show me how division works",
-              "Show me how throwing a ball works",
-              "Show me how gas pressure works",
+              "Help me learn addition with circles",
+              "Compare two rectangles and their areas",
+              "Help me learn how a truss bridge carries a load",
             ]
       }
       disabled={busy}
       status={status}
       value={draft}
       onChange={setDraft}
-      landing={phase === "catalog"}
+      landing={!ready}
       lastRequest={lastRequest}
       onSubmit={onPrompt}
       onStop={cancel}
-      submitLabel={phase === "ready" ? "Apply" : "Create"}
+      submitLabel={ready ? "Apply" : "Create"}
     />
   );
-  if (phase === "catalog") {
+  if (!ready) {
     if (landing)
       return (
         <LandingPage>
@@ -416,15 +441,11 @@ export default function ExperimentsShell({
       </div>
     );
   }
-  const closeControls = () => {
-    setControlsOpen(false);
-    controlsButton.current?.focus();
-  };
   return (
     <ControlsTarget.Provider value={controlsTarget}>
       <div
         ref={workspace}
-        className={`experiment-workspace${demo === "gas" ? " experiment-workspace--gas" : focusedExperiment ? " experiment-workspace--focused" : ""}`}
+        className={`experiment-workspace${demo === "gas" ? " experiment-workspace--gas" : focused ? " experiment-workspace--focused" : ""}`}
       >
         <div className="workspace-header">
           <header className="workspace-identity">
@@ -432,41 +453,57 @@ export default function ExperimentsShell({
               ← {landing ? "Back to the lab" : "Experiments"}
             </button>
             <h1>
-              {demo
-                ? demo === "assembly"
-                  ? getActiveDefinition()?.assembly?.title
-                    ? modelProvider(
-                        getActiveDefinition()?.assembly?.instances[0].prefab
-                          .ref ?? "",
-                      ).name
-                    : "Interactive lesson"
-                  : premadeExperiments[demo].title
-                : ""}
+              {lesson?.document.lesson.title ??
+                (demo && demo !== "assembly"
+                  ? premadeExperiments[demo].title
+                  : "Interactive lesson")}
             </h1>
           </header>
-          {focusedExperiment ? (
-            <details className="gas-experiment-tools">
-              <summary>Experiment options</summary>
-              <nav aria-label="Experiment tools">
-                <button type="button" onClick={downloadRecipe}>
-                  Save recipe
-                </button>
-                <Link
-                  href="/experiments/builder?remix=1"
-                  onClick={() =>
-                    sessionStorage.setItem(
-                      "apertus-builder-remix",
-                      saveRecipe(),
-                    )
-                  }
-                >
-                  Remix in builder
-                </Link>
-                {status && <output>{status.text}</output>}
-              </nav>
-            </details>
-          ) : (
-            <nav className="workspace-toolbar" aria-label="Experiment tools">
+          <details className="gas-experiment-tools" ref={options}>
+            <summary>Experiment options</summary>
+            <nav aria-label="Experiment tools">
+              <button type="button" onClick={downloadRecipe}>
+                Save recipe
+              </button>
+              {lesson && (
+                <>
+                  <button type="button" onClick={() => lesson.runtime.reset()}>
+                    Reset lesson
+                  </button>
+                  <button type="button" onClick={() => void persist(lesson)}>
+                    Save to library
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => importInput.current?.click()}
+                  >
+                    Open recipe
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!lesson.canUndo}
+                    onClick={() => {
+                      lesson.undo();
+                      void persist(lesson);
+                    }}
+                  >
+                    Undo lesson change
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!lesson.canRedo}
+                    onClick={() => {
+                      lesson.redo();
+                      void persist(lesson);
+                    }}
+                  >
+                    Redo lesson change
+                  </button>
+                </>
+              )}
+              <Link href="/experiments/builder?remix=1" onClick={remix}>
+                Remix in builder
+              </Link>
               {hasAdditionalControls && (
                 <button
                   ref={controlsButton}
@@ -475,52 +512,24 @@ export default function ExperimentsShell({
                   aria-controls="experiment-controls"
                   onClick={() => setControlsOpen(!controlsOpen)}
                 >
-                  More settings{" "}
-                  <span aria-hidden="true">{controlsOpen ? "−" : "+"}</span>
+                  More settings
                 </button>
               )}
-              <button type="button" onClick={downloadRecipe}>
-                Save recipe
-              </button>
-              <Link href="/experiments/builder">Build manually</Link>
-              {([
-                "gas",
-                "counting",
-                "arithmetic",
-                "equal-groups",
-                "fraction-builder",
-                "fraction-number-line",
-                "ratio",
-                "area-perimeter",
-                "coordinates",
-                "probability",
-                "town",
-                "projectile",
-                "bridge",
-              ].includes(demo ?? "") ||
-                (demo === "assembly" &&
-                  Boolean(getActiveDefinition()?.assembly?.instances.length) &&
-                  getActiveDefinition()?.assembly?.instances.every((instance) =>
-                    /prefabs\/(chemistry|math-foundations|physical-systems|natural-systems|dynamic-systems)\//.test(
-                      instance.prefab.ref,
-                    ),
-                  ))) && (
-                <Link
-                  href="/experiments/builder?remix=1"
-                  onClick={() =>
-                    sessionStorage.setItem(
-                      "apertus-builder-remix",
-                      saveRecipe(),
-                    )
-                  }
-                >
-                  Remix in builder
-                </Link>
-              )}
-              <Link href="/">Home</Link>
             </nav>
-          )}
+          </details>
         </div>
+        <input
+          ref={importInput}
+          type="file"
+          accept="application/json,.json"
+          hidden
+          aria-label="Open recipe file"
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            if (file) void importRecipe(file);
+            event.target.value = "";
+          }}
+        />
         <aside
           id="experiment-controls"
           className="workspace-controls"
@@ -531,7 +540,10 @@ export default function ExperimentsShell({
             <h2>More settings</h2>
             <button
               type="button"
-              onClick={closeControls}
+              onClick={() => {
+                setControlsOpen(false);
+                controlsButton.current?.focus();
+              }}
               aria-label="Close controls"
             >
               ✕
@@ -540,7 +552,18 @@ export default function ExperimentsShell({
           <div ref={setControlsTarget} className="workspace-controls__body" />
         </aside>
         <div className="workspace-stage">
-          {demo && <ExperimentView demo={demo} />}
+          {lesson ? (
+            <RecipeLesson
+              workspace
+              document={lesson.document}
+              runtime={lesson.runtime}
+              animationEnabled={lesson.animationEnabled}
+              onAnimationChange={lesson.setAnimation}
+              onAdvanceTime={lesson.advanceTime}
+            />
+          ) : (
+            demo && <ExperimentView demo={demo} />
+          )}
         </div>
         <div ref={composerElement} className="workspace-composer">
           {composer}

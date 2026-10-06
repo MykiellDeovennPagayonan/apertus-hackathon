@@ -4,11 +4,7 @@
   "version": 1,
   "title": "Addition & subtraction",
   "description": "Explore sums and differences by moving circles.",
-  "tags": [
-    "mathematics",
-    "arithmetic",
-    "lab"
-  ],
+  "tags": ["mathematics", "arithmetic", "lab"],
   "document": {
     "formatVersion": 3,
     "nodes": [
@@ -211,7 +207,49 @@
     }
   },
   "nested": [],
-  "parameters": [],
+  "parameters": [
+    {
+      "name": "task",
+      "node": "model",
+      "field": "task",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "enum",
+            "values": ["add", "subtract"]
+          },
+          "a": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 20,
+            "unit": "circles"
+          },
+          "b": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 20,
+            "unit": "circles"
+          }
+        },
+        "optional": []
+      },
+      "default": {
+        "operation": "add",
+        "a": 3,
+        "b": 2
+      }
+    },
+    {
+      "name": "looping",
+      "node": "model",
+      "field": "looping",
+      "schema": {
+        "type": "boolean"
+      },
+      "default": false
+    }
+  ],
   "externalPorts": [],
   "dependencies": [
     {

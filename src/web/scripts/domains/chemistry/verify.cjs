@@ -7,9 +7,9 @@ const { compileAssembly, defaultAssembly, assemblyCapability } = load(
 const runtime = load("src/simulations/runtime/session.ts");
 const { useAssemblyStore } = load("src/simulations/runtime/assemblySession.ts");
 const { parseConfiguration, parseTeachingIntent } = load(
-  "src/lib/planner/creation.ts",
+  "scripts/compatibility/legacyConfiguration.ts",
 );
-const { validateContext } = load("src/lib/planner/schema.ts");
+const { validateContext } = load("src/simulations/runtime/legacyPlan.ts");
 const ref = (name) => `prefabs/chemistry/${name}`;
 const near = (actual, expected) =>
   assert.ok(

@@ -1,0 +1,80 @@
+[
+  {
+    "case": "arithmetic",
+    "evidence": "deterministic-browser-fixture",
+    "status": "passed",
+    "navigation": [
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": []
+  },
+  {
+    "case": "rectangles",
+    "evidence": "deterministic-browser-fixture",
+    "status": "passed",
+    "navigation": [
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": []
+  },
+  {
+    "case": "bridge",
+    "evidence": "deterministic-browser-fixture",
+    "status": "passed",
+    "navigation": [
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": []
+  },
+  {
+    "case": "lifecycle",
+    "evidence": "deterministic-failure-fixture",
+    "status": "passed",
+    "intentionalAborts": [
+      {
+        "requestId": "341166cc-b7b2-4409-85ad-85a73939eb1f",
+        "reason": "User pressed Stop"
+      }
+    ],
+    "navigation": [
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": [
+      {
+        "url": "http://127.0.0.1:43100/api/apertus",
+        "reason": "net::ERR_ABORTED"
+      }
+    ]
+  },
+  {
+    "case": "storage-recovery",
+    "evidence": "deterministic-failure-fixture",
+    "status": "passed",
+    "intentionalAborts": [],
+    "navigation": [
+      "http://127.0.0.1:43100/",
+      "http://127.0.0.1:43100/"
+    ],
+    "browserErrors": [],
+    "consoleErrors": [],
+    "networkFailures": []
+  }
+]
