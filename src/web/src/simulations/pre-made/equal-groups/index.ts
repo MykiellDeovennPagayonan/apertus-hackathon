@@ -1,1 +1,0 @@
-export { EqualGroupsExperiment } from "./compositions";

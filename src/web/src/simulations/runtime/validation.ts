@@ -1,17 +1,13 @@
-import { elementaryCompositions } from "../components/compositions/ElementaryExperiments";
+import { GasPressureExperiment } from "../components/compositions/GasPressureExperiment";
 import { Building } from "../components/prefabs/Building";
 import { Citizen } from "../components/prefabs/Citizen";
+import { GasContainer } from "../components/prefabs/GasContainer";
 import { Market } from "../components/prefabs/Market";
 import { Projectile } from "../components/prefabs/Projectile";
 import { buildTruss } from "../components/prefabs/TrussAssembly";
-import { ArithmeticExperiment } from "../pre-made/arithmetic";
-import { BridgeExperiment } from "../pre-made/bridge";
-import { CountingExperiment } from "../pre-made/counting";
-import { EqualGroupsExperiment } from "../pre-made/equal-groups";
-import { FractionBuilderExperiment } from "../pre-made/fraction-builder";
-import { FractionNumberLineExperiment } from "../pre-made/fraction-number-line";
-import { ProjectileExperiment } from "../pre-made/projectile";
+import type { GasState } from "../components/traits/GasState";
 import { TownExperiment } from "../pre-made/town";
+import { compileAssembly } from "./assembly";
 import { templateNames, templateParameters } from "./capabilities";
 import { definitions } from "./catalog";
 import { validNumber } from "./commands";
@@ -20,8 +16,17 @@ import { elementaryOutputs, isElementaryDemo } from "./elementarySession";
 import { isMathDemo, mathActions, stageMathBoard } from "./mathModel";
 import { validateValue } from "./parameterSchema";
 import { systemProviders } from "./providers";
+import { ArithmeticExperiment } from "./recipes/compatibility/compositions/ArithmeticExperiment";
+import { BridgeExperiment } from "./recipes/compatibility/compositions/BridgeExperiment";
+import { CountingExperiment } from "./recipes/compatibility/compositions/CountingExperiment";
+import { elementaryCompositions } from "./recipes/compatibility/compositions/ElementaryExperiments";
+import { EqualGroupsExperiment } from "./recipes/compatibility/compositions/EqualGroupsExperiment";
+import { FractionBuilderExperiment } from "./recipes/compatibility/compositions/FractionBuilderExperiment";
+import { FractionNumberLineExperiment } from "./recipes/compatibility/compositions/FractionNumberLineExperiment";
+import { ProjectileExperiment } from "./recipes/compatibility/compositions/ProjectileExperiment";
 import type { DemoType } from "./types";
 export const compositions = {
+  gas: GasPressureExperiment,
   ...elementaryCompositions,
   counting: CountingExperiment,
   arithmetic: ArithmeticExperiment,
@@ -34,6 +39,13 @@ export const compositions = {
   town: TownExperiment,
 };
 export function stageComposition(composition: CompositionDefinition) {
+  if (composition.demo === "assembly") {
+    if (!composition.assembly) throw new Error("Missing generated assembly");
+    const compiled = compileAssembly(composition.assembly);
+    if (JSON.stringify(compiled.definition) !== JSON.stringify(composition))
+      throw new Error("Generated definition differs from compiled assembly");
+    return compiled.instances;
+  }
   if (!definitions.has(`compositions/${composition.id}`))
     throw new Error(`${composition.id}: unknown composition definition`);
   const canonical = compositions[composition.demo];
@@ -163,6 +175,21 @@ export function stageComposition(composition: CompositionDefinition) {
       elementaryOutputs(composition.demo, p);
       return { id: instance.id, ...p };
     }
+    if (composition.demo === "gas") {
+      if (
+        instance.prefab !== "GasContainer" ||
+        composition.instances.length !== 1
+      )
+        throw new Error("Gas requires one container assembly");
+      const container = GasContainer(instance.id, p as unknown as GasState);
+      if (
+        seen.has(container.sample.id) ||
+        !composition.components.prefabs.includes("GasSample")
+      )
+        throw new Error("Invalid gas sample expansion");
+      seen.add(container.sample.id);
+      return container;
+    }
     switch (instance.prefab) {
       case "Projectile":
         if (
@@ -274,6 +301,8 @@ export function stageComposition(composition: CompositionDefinition) {
   return staged;
 }
 export function resolveComposition(demo: DemoType) {
+  if (demo === "assembly")
+    throw new Error("Generated experiments require an assembly recipe");
   const composition = compositions[demo];
   if (!composition) throw new Error(`Unknown composition: ${demo}`);
   stageComposition(composition);

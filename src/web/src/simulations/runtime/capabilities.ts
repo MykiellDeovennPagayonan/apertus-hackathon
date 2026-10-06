@@ -1,4 +1,10 @@
 import {
+  arithmeticTask,
+  rectangleDimensions,
+  scopedLearningContracts,
+} from "../components/catalog/scopedLearningContracts";
+import { registeredAssemblyActions } from "./assembly";
+import {
   boolean,
   choice,
   identity,
@@ -40,11 +46,7 @@ export const taskSchemas = {
     mode: choice("count", "place"),
     target: num(0, 20, "circles", true),
   }),
-  arithmetic: object({
-    operation: choice("add", "subtract"),
-    a: num(0, 20, "circles", true),
-    b: num(0, 20, "circles", true),
-  }),
+  arithmetic: arithmeticTask,
   "equal-groups": object({
     mode: choice("build", "share"),
     groups: num(1, 6, "baskets", true),
@@ -58,6 +60,17 @@ export const taskSchemas = {
   }),
 };
 export const operations: Record<DemoType, Record<string, OperationMetadata>> = {
+  assembly: {
+    ...registeredAssemblyActions(),
+    RESET: playback.RESET,
+  },
+  gas: {
+    SET_VOLUME: operation(num(0.25, 2, "L")),
+    SET_TEMPERATURE: operation(num(100, 600, "K")),
+    SET_AMOUNT: operation(num(0.1, 5, "mmol")),
+    SET_PLAYING: operation(boolean),
+    RESET: playback.RESET,
+  },
   projectile: {
     SET_ANGLE: operation(num(0, 90, "degrees"), "relaunch", "instance"),
     COMPARE_ANGLE: operation(num(0, 90, "degrees"), "relaunch"),
@@ -160,10 +173,7 @@ export const operations: Record<DemoType, Record<string, OperationMetadata>> = {
     RESET: playback.RESET,
   },
   "area-perimeter": {
-    SET_DIMENSIONS: operation(
-      object({ width: num(0.1, 100, "m"), height: num(0.1, 100, "m") }),
-      "rebuild",
-    ),
+    SET_DIMENSIONS: operation(rectangleDimensions, "rebuild"),
     RESET: playback.RESET,
   },
   coordinates: {
@@ -202,7 +212,8 @@ export function validateCommand(demo: DemoType, command: UIAction) {
     command.type,
   );
 }
-export const templateNames: Record<DemoType, string> = {
+export const templateNames: Record<Exclude<DemoType, "assembly">, string> = {
+  gas: "GasPressureExperiment",
   projectile: "ProjectileExperiment",
   bridge: "BridgeExperiment",
   town: "TownExperiment",
@@ -217,6 +228,7 @@ export const templateNames: Record<DemoType, string> = {
   probability: "ProbabilityExperiment",
 };
 export function templateDemo(ref: string): DemoType {
+  if (ref === "assemblies/GeneratedExperiment") return "assembly";
   const entry = Object.entries(templateNames).find(
     ([, id]) => ref === `compositions/${id}`,
   );
@@ -232,8 +244,22 @@ export function templateDemo(ref: string): DemoType {
 }
 export function templateParameters(ref: string): ParameterSchema {
   const demo = templateDemo(ref);
+  if (demo === "arithmetic" || demo === "area-perimeter")
+    return scopedLearningContracts[demo].configuration;
+  if (demo === "assembly") return object({});
+  if (demo === "gas")
+    return object(
+      {
+        amount: num(0.1, 5, "mmol"),
+        temperature: num(100, 600, "K"),
+        volume: num(0.25, 2, "L"),
+        playing: boolean,
+      },
+      ["amount", "temperature", "volume", "playing"],
+    );
   if (demo === "projectile") {
     const props = {
+      playing: boolean,
       angle: num(0, 90, "degrees"),
       speed: num(5, 40, "m/s"),
       gravityPreset: choice("Moon", "Earth", "Mars", "Jupiter"),
@@ -288,11 +314,9 @@ export function templateParameters(ref: string): ParameterSchema {
   const action =
     demo === "ratio"
       ? "SET_RATIO"
-      : demo === "area-perimeter"
-        ? "SET_DIMENSIONS"
-        : demo === "coordinates"
-          ? "MOVE_POINT"
-          : "SET_DISTRIBUTION";
+      : demo === "coordinates"
+        ? "MOVE_POINT"
+        : "SET_DISTRIBUTION";
   const schema = operations[demo][action].arguments;
   const value = schema.type === "object" ? schema.properties.value : object({});
   return value.type === "object"

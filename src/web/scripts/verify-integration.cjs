@@ -1,7 +1,9 @@
 const assert = require("node:assert/strict");
 const { load } = require("./test-loader.cjs");
 const runtime = load("src/simulations/runtime/session.ts");
-const { parsePlan, validateContext } = load("src/lib/apertus/schema.ts");
+const { parsePlan, validateContext } = load(
+  "src/simulations/runtime/legacyPlan.ts",
+);
 const { useProjectileStore } = load(
   "src/simulations/runtime/projectileSession.ts",
 );
@@ -16,7 +18,7 @@ const { resolveRecipe, parseRecipe } = load(
 );
 const { definitions } = load("src/simulations/runtime/catalog.ts");
 const { stageComposition } = load("src/simulations/runtime/validation.ts");
-const { selectCapabilities } = load("src/lib/apertus/catalogSelection.ts");
+
 const { MeasurementSamplingSystem } = load(
   "src/simulations/components/systems/MeasurementSamplingSystem.ts",
 );
@@ -421,22 +423,6 @@ assert.throws(() =>
     1,
   ),
 );
-assert.ok(
-  selectCapabilities("show 3/4", null).some(
-    (d) => d.ref === "compositions/FractionBuilderExperiment",
-  ),
-);
-assert.ok(
-  selectCapabilities("share 14 between 3 groups", null).some(
-    (d) => d.ref === "systems/EqualGroupingSystem",
-  ),
-);
-assert.ok(
-  selectCapabilities("compare launches on the Moon", null).some(
-    (d) => d.ref === "traits/LaunchSettings",
-  ),
-);
-assert.equal(selectCapabilities("run a chemical reaction", null).length, 0);
 const React = require("react"),
   { renderToStaticMarkup } = require("react-dom/server");
 for (const [ref, params, view] of [
@@ -458,10 +444,31 @@ for (const [ref, params, view] of [
 ]) {
   fresh(create(ref, params));
   const Component = load(`src/simulations/components/views/${view}.tsx`)[view];
-  const html = renderToStaticMarkup(React.createElement(Component));
+  // Zustand's server renderer reads the initial snapshot. Seed that snapshot
+  // with this fixture, otherwise every elementary case silently renders ratio.
+  const store =
+    view === "ElementaryExperimentView"
+      ? useElementaryStore
+      : useProjectileStore;
+  const initial = store.getInitialState();
+  const saved = { ...initial };
+  let html;
+  try {
+    Object.assign(initial, store.getState());
+    html = renderToStaticMarkup(React.createElement(Component));
+  } finally {
+    Object.assign(initial, saved);
+  }
   assert.ok(!html.includes("NaN"));
-  assert.ok(html.includes("<table"));
-  if (ref === "RatioExperiment") assert.ok(html.includes("75"));
+  if (ref === "RatioExperiment") {
+    assert.ok(html.includes("75%"));
+    assert.ok(html.includes("Selected parts"));
+    assert.ok(!html.includes("<table"));
+  } else
+    assert.ok(
+      html.includes("<table"),
+      `${ref} should render its results table: ${html.slice(0, 300)}`,
+    );
 }
 runtime.disposeSession();
 console.log(

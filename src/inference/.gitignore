@@ -1,2 +1,4 @@
 .venv/
+.venv-laya/
 __pycache__/
+.pytest_cache/

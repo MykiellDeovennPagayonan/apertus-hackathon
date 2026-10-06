@@ -2,7 +2,6 @@ import { dispatchCommand } from "../../runtime/session";
 import type { CountingBoard } from "../traits/MathBoards";
 import { ActionButton } from "./ActionButton";
 import { IntegerStepper } from "./IntegerStepper";
-import { MathPlayback } from "./MathPlayback";
 import { OptionSelect } from "./OptionSelect";
 import { GrownUpControls } from "./YoungLearnerControls";
 export function CountingControls({ board }: { board: CountingBoard }) {
@@ -34,7 +33,6 @@ export function CountingControls({ board }: { board: CountingBoard }) {
       >
         Check my count
       </ActionButton>
-      <MathPlayback board={board} />
     </GrownUpControls>
   );
 }

@@ -1,26 +1,70 @@
 export function RatioBarVisual({ ratio }: { ratio: number }) {
+  const whole = Math.floor(ratio),
+    remainder = ratio % 1;
   return (
     <svg
-      viewBox="0 0 600 110"
+      viewBox="0 0 440 220"
       role="img"
       aria-label={`${(ratio * 100).toFixed(2)} percent`}
-      style={{ width: "100%" }}
     >
+      <text x="20" y="40" fill="currentColor" fontSize="18">
+        {ratio > 1
+          ? `${whole} whole${whole === 1 ? "" : "s"} × 100%`
+          : "One whole = 100%"}
+      </text>
       <rect
         x="20"
-        y="30"
-        width="560"
-        height="50"
+        y="62"
+        width="400"
+        height="36"
+        rx="5"
         fill="var(--panel)"
-        stroke="currentColor"
+        stroke="var(--accent)"
       />
       <rect
         x="20"
-        y="30"
-        width={560 * Math.min(1, ratio)}
-        height="50"
+        y="62"
+        width={400 * Math.min(1, ratio)}
+        height="36"
+        rx="5"
         fill="var(--accent)"
       />
+      {ratio <= 1 && (
+        <text x="20" y="138" fill="currentColor" fontSize="22">
+          {(100 * ratio).toLocaleString(undefined, {
+            maximumFractionDigits: 2,
+          })}
+          % of one whole
+        </text>
+      )}
+      {ratio > 1 && remainder > 0 && (
+        <>
+          <text x="20" y="132" fill="currentColor" fontSize="18">
+            Plus{" "}
+            {(remainder * 100).toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}
+            % of another whole
+          </text>
+          <rect
+            x="20"
+            y="156"
+            width="400"
+            height="36"
+            rx="5"
+            fill="var(--panel)"
+            stroke="var(--accent)"
+          />
+          <rect
+            x="20"
+            y="156"
+            width={400 * remainder}
+            height="36"
+            rx="5"
+            fill="var(--accent)"
+          />
+        </>
+      )}
     </svg>
   );
 }
@@ -31,27 +75,45 @@ export function DimensionLabelVisual({
   width: number;
   height: number;
 }) {
-  const scale = Math.min(450 / width, 210 / height);
+  const scale = Math.min(40, 340 / width, 200 / height);
+  const w = width * scale,
+    h = height * scale,
+    x = (440 - w) / 2,
+    y = (300 - h) / 2;
   return (
     <svg
-      viewBox="0 0 600 320"
+      viewBox="0 0 480 300"
       role="img"
       aria-label={`Rectangle ${width} by ${height} metres`}
-      style={{ width: "100%" }}
     >
       <rect
-        x="70"
-        y="50"
-        width={width * scale}
-        height={height * scale}
-        fill="var(--panel)"
-        stroke="var(--accent)"
-        strokeWidth="3"
+        x={x}
+        y={y}
+        width={w}
+        height={h}
+        fill="#e4eee6"
+        stroke="#ad7629"
+        strokeWidth="4"
       />
-      <text x="70" y="35">
+      <text
+        x={240}
+        y={282}
+        textAnchor="middle"
+        fill="currentColor"
+        fontSize={16}
+      >
+        Shaded inside: area · Gold edge: perimeter
+      </text>
+      <text
+        x={x + w / 2}
+        y={y - 14}
+        textAnchor="middle"
+        fill="currentColor"
+        fontSize="20"
+      >
         {width} m
       </text>
-      <text x={80 + width * scale} y="90">
+      <text x={x + w + 10} y={y + h / 2 + 6} fill="currentColor" fontSize="20">
         {height} m
       </text>
     </svg>
@@ -59,23 +121,35 @@ export function DimensionLabelVisual({
 }
 export function CoordinateAxesVisual() {
   return (
-    <g stroke="var(--border)">
+    <g>
       {Array.from({ length: 21 }, (_, i) => (
-        <g key={`grid-${i - 10}`}>
-          <line x1={40 + i * 24} x2={40 + i * 24} y1="20" y2="260" />
-          <line x1="40" x2="520" y1={20 + i * 12} y2={20 + i * 12} />
+        <g key={`grid-${i - 10}`} stroke="var(--border)">
+          <line x1={40 + i * 18} x2={40 + i * 18} y1="40" y2="400" />
+          <line x1="40" x2="400" y1={40 + i * 18} y2={40 + i * 18} />
         </g>
       ))}
-      <path d="M40 140H520M280 20V260" stroke="currentColor" strokeWidth="2" />
-      <text x="530" y="145" stroke="none" fill="currentColor">
-        x
-      </text>
-      <text x="285" y="15" stroke="none" fill="currentColor">
-        y
-      </text>
-      <text x="285" y="155" stroke="none" fill="currentColor">
-        0
-      </text>
+      <path d="M40 220H400M220 40V400" stroke="currentColor" strokeWidth="2" />
+      {[-10, -5, 5, 10].map((n) => (
+        <g key={n} fill="currentColor" fontSize="18">
+          <text x={220 + n * 18} y="240" textAnchor="middle">
+            {n}
+          </text>
+          <text x="210" y={225 - n * 18} textAnchor="end">
+            {n}
+          </text>
+        </g>
+      ))}
+      <g fill="currentColor" fontSize="18">
+        <text x="414" y="226">
+          x
+        </text>
+        <text x="226" y="24">
+          y
+        </text>
+        <text x="228" y="239">
+          0
+        </text>
+      </g>
     </g>
   );
 }

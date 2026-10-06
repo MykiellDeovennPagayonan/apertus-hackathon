@@ -1,10 +1,13 @@
 import { GRAVITIES } from "../components/resources/GravityPresets";
+import { compileAssembly } from "./assembly";
 import { templateDemo, templateParameters } from "./capabilities";
+import type { Assembly } from "./contribution";
 import type { CompositionDefinition } from "./definition";
 import { validateValue } from "./parameterSchema";
 import { compositions, stageComposition } from "./validation";
 export interface Recipe {
   schemaVersion: 1;
+  assembly?: Assembly;
   composition: { ref: string; version: 1 };
   parameters: Record<string, unknown>;
   instances?: {
@@ -22,7 +25,22 @@ export interface Recipe {
 export function resolveRecipe(recipe: Recipe): CompositionDefinition {
   if (recipe.schemaVersion !== 1 || recipe.composition.version !== 1)
     throw new Error("Unsupported recipe version");
+  if (recipe.composition.ref === "assemblies/GeneratedExperiment") {
+    validateValue(
+      { type: "object", properties: {} },
+      recipe.parameters,
+      "parameters",
+    );
+    if (!recipe.assembly || recipe.instances || recipe.views)
+      throw new Error(
+        "Generated assembly requires its versioned assembly envelope only",
+      );
+    return compileAssembly(recipe.assembly).definition;
+  }
+  if (recipe.assembly)
+    throw new Error("Assembly cannot bind to a legacy composition");
   const demo = templateDemo(recipe.composition.ref);
+  if (demo === "assembly") throw new Error("Missing assembly path");
   validateValue(
     templateParameters(recipe.composition.ref),
     recipe.parameters,
@@ -51,6 +69,7 @@ export function resolveRecipe(recipe: Recipe): CompositionDefinition {
       velocity: speed,
       gravity,
       gravityName,
+      playing: p.playing ?? true,
       compareAngle: angles[1] ?? null,
     };
     composition.instances = angles.map((angle, i) => ({
@@ -166,6 +185,7 @@ export function parseRecipe(text: string): Recipe {
     Object.keys(r).some(
       (k) =>
         ![
+          "assembly",
           "schemaVersion",
           "composition",
           "parameters",

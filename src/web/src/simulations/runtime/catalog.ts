@@ -1,3 +1,4 @@
+import { registerComponentDefinitions } from "../components/registry";
 import { measurementProbeSchema } from "../components/traits/MeasurementProbe";
 import type { OperationMetadata } from "./capabilities";
 import { operations, templateNames, templateParameters } from "./capabilities";
@@ -6,6 +7,7 @@ import { registerMathDefinitions } from "./mathCatalog";
 import type { ParameterSchema } from "./parameterSchema";
 import type { DemoType } from "./types";
 export interface Definition {
+  composition?: import("../components/contracts/ComponentDefinition").ComponentDefinition;
   id: string;
   kind: ComponentKind;
   version: number;
@@ -188,6 +190,15 @@ for (const [id, required] of Object.entries(dependencies)) {
 registerMathDefinitions(definitions);
 
 const additions: [string, ComponentKind][] = [
+  ["GasContainer", "prefabs"],
+  ["GasSample", "prefabs"],
+  ["GasState", "traits"],
+  ["GasMetrics", "traits"],
+  ["IdealGasSystem", "systems"],
+  ["GasParticleIllustrationSystem", "systems"],
+  ["GasContainerVisual", "visuals"],
+  ["GasParticleVisual", "visuals"],
+  ["PressureReadout", "views"],
   ["ResultsTableView", "views"],
   ["ComparisonView", "views"],
   ["TimeSeriesView", "views"],
@@ -222,7 +233,8 @@ for (const [id, kind] of additions)
       ? { target: "svg" as const }
       : {}),
   });
-const descriptions: Record<DemoType, string> = {
+const descriptions: Record<Exclude<DemoType, "assembly">, string> = {
+  gas: "Equilibrium ideal-gas pressure P=nRT/V with illustrative particles; explore volume, temperature and amount",
   projectile:
     "Analytic ground-to-ground projectile launches, independent comparisons and angle sweeps",
   bridge: "Truss bridge load placement and heuristic response scores",
@@ -247,7 +259,7 @@ for (const [demo, id] of Object.entries(templateNames)) {
     version: 1,
   };
   Object.assign(definition, {
-    description: descriptions[demo as DemoType],
+    description: descriptions[demo as Exclude<DemoType, "assembly">],
     parameters: templateParameters(ref),
     operations: operations[demo as DemoType],
   });
@@ -260,6 +272,12 @@ for (const id of ["AngleComparisonExperiment", "ProjectileSweepExperiment"])
     operations: operations.projectile,
   });
 for (const [id, required, writes] of [
+  [
+    "IdealGasSystem",
+    ["traits/GasState", "traits/GasMetrics"],
+    ["sample.metrics.pressurePa", "sample.metrics.pressureKPa"],
+  ],
+  ["GasParticleIllustrationSystem", ["traits/GasState"], ["particles"]],
   ["RatioSystem", ["traits/RatioState"], ["ratio.outputs"]],
   [
     "RectangleMetricsSystem",
@@ -282,6 +300,13 @@ const outputContracts: Record<
   string,
   { name: string; unit: string; fidelity: string }[]
 > = {
+  gas: [
+    {
+      name: "pressureKPa",
+      unit: "kPa",
+      fidelity: "equilibrium ideal gas; illustrative particles",
+    },
+  ],
   projectile: [
     { name: "range", unit: "m", fidelity: "analytic ground-to-ground" },
     { name: "maxHeight", unit: "m", fidelity: "analytic" },
@@ -378,6 +403,8 @@ for (const definition of definitions.values())
     definition.description = `${definition.id}: trusted ${definition.kind} capability, version ${definition.version}`;
 
 const scopes: Record<string, string[]> = {
+  IdealGasSystem: ["GasContainer"],
+  GasParticleIllustrationSystem: ["GasContainer"],
   BallisticMotionSystem: ["Projectile"],
   MeasurementSamplingSystem: ["Projectile"],
   HeuristicBridgeResponseSystem: ["TrussAssembly"],
@@ -412,3 +439,5 @@ Object.assign(definitions.get("traits/MeasurementProbe") ?? {}, {
     "Pause adds no samples; relaunch/reset starts at time zero; keeps the first bounded samples",
   ],
 });
+
+registerComponentDefinitions(definitions);

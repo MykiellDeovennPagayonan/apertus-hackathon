@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import type { ActionResult } from "../../runtime/commands";
+import { MathObjectControl } from "../controls/MathObjectControl";
 import { BridgeStyles } from "../resources/BridgeStyles";
 import type { Joint, Member } from "../traits/MemberEndpoints";
 import type { MemberResponse } from "../traits/MemberResponse";
@@ -12,7 +14,7 @@ interface Props {
   response: MemberResponse;
   sag: number;
   selected: boolean;
-  onSelect: (id: string) => void;
+  onSelect: ((id: string) => ActionResult) | ((id: string) => void);
 }
 
 export function BeamVisual({
@@ -42,38 +44,52 @@ export function BeamVisual({
         : BridgeStyles.lowColor;
 
   return (
-    <motion.line
-      x1={pa.x}
-      y1={pa.y + dropA}
-      x2={pb.x}
-      y2={pb.y + dropB}
-      stroke={selected ? BridgeStyles.selectedColor : hue}
-      strokeWidth={
-        selected
-          ? BridgeStyles.selectedWidth
-          : member.kind === "deck"
-            ? BridgeStyles.deckWidth
-            : BridgeStyles.memberWidth
-      }
-      strokeLinecap="round"
-      strokeDasharray={
-        response.classification === "tension"
-          ? BridgeStyles.tensionDash
-          : undefined
-      }
-      initial={{ opacity: 0 }}
-      animate={{
-        opacity: 1,
-        x1: pa.x,
-        x2: pb.x,
-        y1: pa.y + dropA,
-        y2: pb.y + dropB,
-      }}
-      transition={{ duration: 0.3 }}
-      style={{ cursor: "pointer" }}
-      onClick={() => onSelect(member.id)}
-      data-force={response.classification}
-    />
+    <MathObjectControl
+      label={`Inspect member ${
+        member.id
+          .split("/")
+          .at(-1)
+          ?.replace(/([a-z])([0-9])/gi, "$1 $2") || "member"
+      }`}
+      onCommand={() => onSelect(member.id) ?? { accepted: true }}
+    >
+      <motion.line
+        x1={pa.x}
+        y1={pa.y + dropA}
+        x2={pb.x}
+        y2={pb.y + dropB}
+        stroke={selected ? BridgeStyles.selectedColor : hue}
+        strokeWidth={
+          selected
+            ? BridgeStyles.selectedWidth
+            : member.kind === "deck"
+              ? BridgeStyles.deckWidth
+              : BridgeStyles.memberWidth
+        }
+        strokeLinecap="round"
+        strokeDasharray={
+          response.classification === "tension"
+            ? BridgeStyles.tensionDash
+            : undefined
+        }
+        initial={false}
+        animate={{
+          opacity: 1,
+        }}
+        transition={{ duration: 0.3 }}
+        style={{ cursor: "pointer" }}
+        data-force={response.classification}
+      />
+      <line
+        x1={pa.x}
+        y1={pa.y + dropA}
+        x2={pb.x}
+        y2={pb.y + dropB}
+        stroke="transparent"
+        strokeWidth="24"
+        vectorEffect="non-scaling-stroke"
+      />
+    </MathObjectControl>
   );
 }
 

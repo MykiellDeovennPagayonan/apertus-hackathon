@@ -1,0 +1,267 @@
+.dynamic-systems-assembly {
+  display: grid;
+  gap: 24px;
+}
+.dynamic-systems-experiment h2 {
+  margin: 0 0 8px;
+  font:
+    24px / 1.25 Georgia,
+    serif;
+}
+.dynamic-systems-experiment figure {
+  margin: 0;
+}
+.dynamic-systems-experiment svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 390px;
+}
+.dynamic-systems-experiment figcaption {
+  margin-top: 8px;
+  color: #606658;
+  text-align: center;
+  font-size: 13px;
+}
+.dynamic-chart svg line {
+  stroke: #9a927f;
+  stroke-width: 1;
+}
+.dynamic-chart svg text {
+  fill: currentColor;
+  font-size: 13px;
+}
+.dynamic-line {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.dynamic-line--compound {
+  stroke: #285e56;
+}
+.dynamic-line--simple {
+  stroke: #b56b2b;
+  stroke-dasharray: 8 6;
+}
+.dynamic-key {
+  display: inline-block;
+  width: 18px;
+  height: 3px;
+  margin: 0 4px 3px 12px;
+  background: #285e56;
+}
+.dynamic-key--simple {
+  background: #b56b2b;
+}
+.traffic-road {
+  fill: none;
+  stroke: #7c7c72;
+  stroke-width: 48;
+}
+.traffic-road-inner {
+  fill: #f3eddf;
+  stroke: #fffbe8;
+  stroke-width: 3;
+}
+.traffic-car {
+  fill: #285e56;
+  stroke: #fffbe8;
+  stroke-width: 2;
+}
+.traffic-car.is-slow {
+  fill: #d67b24;
+}
+.traffic-visual text {
+  fill: #4e554b;
+  font-size: 15px;
+}
+.queue-visual {
+  display: grid;
+  gap: 24px;
+  min-height: 290px;
+  place-content: center;
+}
+.queue-stations {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+.queue-cashier {
+  display: grid;
+  min-width: 126px;
+  padding: 16px;
+  border: 2px solid #b9b2a2;
+  border-radius: 14px;
+  color: #777;
+  text-align: center;
+  background: #ede9df;
+}
+.queue-cashier > span {
+  font-size: 38px;
+}
+.queue-cashier.is-open {
+  border-color: #285e56;
+  color: #285e56;
+  background: #edf4ee;
+}
+.queue-customers {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 6px;
+  min-height: 90px;
+}
+.queue-customers > div {
+  display: grid;
+  align-content: end;
+  width: 30px;
+  height: calc(44px + var(--wait) * 0.45px);
+  padding-bottom: 4px;
+  border-radius: 18px;
+  color: #fffbef;
+  text-align: center;
+  background: #b56b2b;
+}
+.queue-customers small {
+  font-size: 9px;
+}
+.dynamic-panel-title {
+  margin: 0 0 8px;
+  font:
+    21px / 1.25 Georgia,
+    serif;
+}
+.dynamic-coach {
+  margin: 0 0 14px;
+  color: #555e51;
+  font-size: 14px;
+}
+.dynamic-systems-experiment button,
+.dynamic-systems-experiment input {
+  min-height: 44px;
+  border: 1px solid var(--border, #797a6c);
+  border-radius: 9px;
+  padding: 8px 10px;
+  background: var(--panel, #fffbef);
+  color: inherit;
+  font: inherit;
+}
+.dynamic-systems-experiment button {
+  cursor: pointer;
+}
+.dynamic-systems-experiment button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.dynamic-systems-experiment .dynamic-primary {
+  width: 100%;
+  border-color: var(--accent, #285e56);
+  background: var(--accent, #285e56);
+  color: #fffbef;
+  font-weight: 650;
+}
+.dynamic-results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.dynamic-results > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 9px;
+  border-radius: 10px;
+  background: #f3eddf;
+}
+.dynamic-results span {
+  color: #606658;
+  font-size: 11px;
+}
+.dynamic-results strong {
+  color: var(--accent, #285e56);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.dynamic-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.dynamic-actions button {
+  flex: 1 1 72px;
+  font-size: 13px;
+}
+.dynamic-reset {
+  width: 100%;
+  margin-top: 14px;
+  color: var(--accent, #285e56);
+}
+.dynamic-feedback {
+  display: block;
+  min-height: 20px;
+}
+.dynamic-details > summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--accent, #285e56);
+  cursor: pointer;
+}
+.dynamic-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 14px;
+  padding: 14px 0;
+}
+.dynamic-input label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+.dynamic-input > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+.dynamic-input input {
+  width: 100%;
+  min-width: 0;
+}
+.dynamic-input small {
+  color: #606658;
+  font-size: 12px;
+}
+.dynamic-assumptions {
+  color: #606658;
+  font-size: 14px;
+}
+.dynamic-assumptions p {
+  margin: 6px 0;
+}
+@media (max-width: 520px) {
+  .dynamic-results {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .queue-cashier {
+    min-width: 106px;
+    padding: 10px;
+  }
+  .queue-customers {
+    gap: 3px;
+    overflow: hidden;
+  }
+  .queue-customers > div {
+    width: 23px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dynamic-systems-experiment * {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+    animation-duration: 0.01ms;
+  }
+}

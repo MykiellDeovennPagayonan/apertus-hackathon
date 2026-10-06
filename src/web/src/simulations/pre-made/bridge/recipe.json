@@ -1,0 +1,1100 @@
+{
+  "recipeVersion": 2,
+  "id": "recipes/BridgeLab",
+  "version": 1,
+  "title": "Truss bridge",
+  "description": "Move a load and explore how a bridge responds.",
+  "tags": ["spatial", "mechanics"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "models/BridgeResponse",
+        "version": 1,
+        "label": "Bridge response",
+        "scope": "scope/lab",
+        "configuration": {
+          "spanScale": 1,
+          "dense": false
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/Bridge",
+        "version": 1,
+        "label": "Bridge scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "appearance/Beam",
+        "definition": "appearance/Beam",
+        "version": 1,
+        "label": "Truss beams",
+        "scope": "scope/lab",
+        "configuration": {
+          "visible": true
+        }
+      },
+      {
+        "id": "appearance/Joint",
+        "definition": "appearance/Joint",
+        "version": 1,
+        "label": "Truss joints",
+        "scope": "scope/lab",
+        "configuration": {
+          "visible": true
+        }
+      },
+      {
+        "id": "appearance/BridgeSupport",
+        "definition": "appearance/BridgeSupport",
+        "version": 1,
+        "label": "Bridge supports",
+        "scope": "scope/lab",
+        "configuration": {
+          "visible": true
+        }
+      },
+      {
+        "id": "appearance/LoadTruck",
+        "definition": "appearance/LoadTruck",
+        "version": 1,
+        "label": "Load truck",
+        "scope": "scope/lab",
+        "configuration": {
+          "visible": true
+        }
+      },
+      {
+        "id": "display/selected",
+        "definition": "displays/Inspector",
+        "version": 1,
+        "label": "Readout",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Selected member",
+          "precision": 3
+        }
+      },
+      {
+        "id": "generated/b0",
+        "definition": "models/TrussJoint",
+        "version": 1,
+        "label": "Truss joint",
+        "scope": "scope/lab",
+        "configuration": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": "generated/b1",
+        "definition": "models/TrussJoint",
+        "version": 1,
+        "label": "Truss joint",
+        "scope": "scope/lab",
+        "configuration": {
+          "x": 0.2,
+          "y": 0
+        }
+      },
+      {
+        "id": "generated/t1",
+        "definition": "models/TrussJoint",
+        "version": 1,
+        "label": "Truss joint",
+        "scope": "scope/lab",
+        "configuration": {
+          "x": 0.2,
+          "y": -1
+        }
+      },
+      {
+        "id": "generated/b2",
+        "definition": "models/TrussJoint",
+        "version": 1,
+        "label": "Truss joint",
+        "scope": "scope/lab",
+        "configuration": {
+          "x": 0.4,
+          "y": 0
+        }
+      },
+      {
+        "id": "generated/t2",
+        "definition": "models/TrussJoint",
+        "version": 1,
+        "label": "Truss joint",
+        "scope": "scope/lab",
+        "configuration": {
+          "x": 0.4,
+          "y": -1
+        }
+      },
+      {
+        "id": "generated/b3",
+        "definition": "models/TrussJoint",
+        "version": 1,
+        "label": "Truss joint",
+        "scope": "scope/lab",
+        "configuration": {
+          "x": 0.6,
+          "y": 0
+        }
+      },
+      {
+        "id": "generated/t3",
+        "definition": "models/TrussJoint",
+        "version": 1,
+        "label": "Truss joint",
+        "scope": "scope/lab",
+        "configuration": {
+          "x": 0.6,
+          "y": -1
+        }
+      },
+      {
+        "id": "generated/b4",
+        "definition": "models/TrussJoint",
+        "version": 1,
+        "label": "Truss joint",
+        "scope": "scope/lab",
+        "configuration": {
+          "x": 0.8,
+          "y": 0
+        }
+      },
+      {
+        "id": "generated/t4",
+        "definition": "models/TrussJoint",
+        "version": 1,
+        "label": "Truss joint",
+        "scope": "scope/lab",
+        "configuration": {
+          "x": 0.8,
+          "y": -1
+        }
+      },
+      {
+        "id": "generated/b5",
+        "definition": "models/TrussJoint",
+        "version": 1,
+        "label": "Truss joint",
+        "scope": "scope/lab",
+        "configuration": {
+          "x": 1,
+          "y": 0
+        }
+      },
+      {
+        "id": "generated/deck0",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "deck0",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/b0",
+          "b": "generated/b1",
+          "kind": "deck",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/deck1",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "deck1",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/b1",
+          "b": "generated/b2",
+          "kind": "deck",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/deck2",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "deck2",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/b2",
+          "b": "generated/b3",
+          "kind": "deck",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/deck3",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "deck3",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/b3",
+          "b": "generated/b4",
+          "kind": "deck",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/deck4",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "deck4",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/b4",
+          "b": "generated/b5",
+          "kind": "deck",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/top1",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "top1",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/t1",
+          "b": "generated/t2",
+          "kind": "top",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/top2",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "top2",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/t2",
+          "b": "generated/t3",
+          "kind": "top",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/top3",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "top3",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/t3",
+          "b": "generated/t4",
+          "kind": "top",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/vert1",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "vert1",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/b1",
+          "b": "generated/t1",
+          "kind": "vertical",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/vert2",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "vert2",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/b2",
+          "b": "generated/t2",
+          "kind": "vertical",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/vert3",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "vert3",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/b3",
+          "b": "generated/t3",
+          "kind": "vertical",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/vert4",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "vert4",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/b4",
+          "b": "generated/t4",
+          "kind": "vertical",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/endL",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "endL",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/b0",
+          "b": "generated/t1",
+          "kind": "diagonal",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/endR",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "endR",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/b5",
+          "b": "generated/t4",
+          "kind": "diagonal",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/diag1",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "diag1",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/t1",
+          "b": "generated/b2",
+          "kind": "diagonal",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/diag2",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "diag2",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/b2",
+          "b": "generated/t3",
+          "kind": "diagonal",
+          "present": true
+        }
+      },
+      {
+        "id": "generated/diag3",
+        "definition": "models/TrussMember",
+        "version": 1,
+        "label": "diag3",
+        "scope": "scope/lab",
+        "configuration": {
+          "a": "generated/t3",
+          "b": "generated/b4",
+          "kind": "diagonal",
+          "present": true
+        }
+      },
+      {
+        "id": "load",
+        "definition": "models/BridgeLoad",
+        "version": 1,
+        "label": "Bridge load",
+        "scope": "scope/lab",
+        "configuration": {
+          "position": 0.5,
+          "magnitude": 10
+        }
+      },
+      {
+        "id": "control/MOVE_LOAD",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Slider",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Move load",
+          "initial": "{\"value\":0.5}",
+          "mode": "immediate"
+        }
+      },
+      {
+        "id": "control/SET_LOAD",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Slider",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Load (t)",
+          "initial": "{\"value\":10}",
+          "mode": "immediate"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/appearance/Beam",
+        "kind": "attachment",
+        "from": {
+          "node": "appearance/Beam",
+          "port": "scene"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "visuals"
+        }
+      },
+      {
+        "id": "link/appearance/Joint",
+        "kind": "attachment",
+        "from": {
+          "node": "appearance/Joint",
+          "port": "scene"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "visuals"
+        }
+      },
+      {
+        "id": "link/appearance/BridgeSupport",
+        "kind": "attachment",
+        "from": {
+          "node": "appearance/BridgeSupport",
+          "port": "scene"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "visuals"
+        }
+      },
+      {
+        "id": "link/appearance/LoadTruck",
+        "kind": "attachment",
+        "from": {
+          "node": "appearance/LoadTruck",
+          "port": "scene"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "visuals"
+        }
+      },
+      {
+        "id": "link/output/selected",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "selected"
+        },
+        "to": {
+          "node": "display/selected",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/generated/b0/model/joints",
+        "kind": "value",
+        "from": {
+          "node": "generated/b0",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "joints"
+        }
+      },
+      {
+        "id": "link/generated/b1/model/joints",
+        "kind": "value",
+        "from": {
+          "node": "generated/b1",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "joints"
+        }
+      },
+      {
+        "id": "link/generated/t1/model/joints",
+        "kind": "value",
+        "from": {
+          "node": "generated/t1",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "joints"
+        }
+      },
+      {
+        "id": "link/generated/b2/model/joints",
+        "kind": "value",
+        "from": {
+          "node": "generated/b2",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "joints"
+        }
+      },
+      {
+        "id": "link/generated/t2/model/joints",
+        "kind": "value",
+        "from": {
+          "node": "generated/t2",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "joints"
+        }
+      },
+      {
+        "id": "link/generated/b3/model/joints",
+        "kind": "value",
+        "from": {
+          "node": "generated/b3",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "joints"
+        }
+      },
+      {
+        "id": "link/generated/t3/model/joints",
+        "kind": "value",
+        "from": {
+          "node": "generated/t3",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "joints"
+        }
+      },
+      {
+        "id": "link/generated/b4/model/joints",
+        "kind": "value",
+        "from": {
+          "node": "generated/b4",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "joints"
+        }
+      },
+      {
+        "id": "link/generated/t4/model/joints",
+        "kind": "value",
+        "from": {
+          "node": "generated/t4",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "joints"
+        }
+      },
+      {
+        "id": "link/generated/b5/model/joints",
+        "kind": "value",
+        "from": {
+          "node": "generated/b5",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "joints"
+        }
+      },
+      {
+        "id": "link/generated/deck0/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/deck0",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/deck1/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/deck1",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/deck2/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/deck2",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/deck3/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/deck3",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/deck4/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/deck4",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/top1/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/top1",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/top2/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/top2",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/top3/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/top3",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/vert1/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/vert1",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/vert2/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/vert2",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/vert3/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/vert3",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/vert4/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/vert4",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/endL/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/endL",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/endR/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/endR",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/diag1/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/diag1",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/diag2/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/diag2",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/generated/diag3/model/members",
+        "kind": "value",
+        "from": {
+          "node": "generated/diag3",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "members"
+        }
+      },
+      {
+        "id": "link/load/model/load",
+        "kind": "value",
+        "from": {
+          "node": "load",
+          "port": "data"
+        },
+        "to": {
+          "node": "model",
+          "port": "load"
+        }
+      },
+      {
+        "id": "link/control/MOVE_LOAD",
+        "kind": "command",
+        "from": {
+          "node": "control/MOVE_LOAD",
+          "port": "submit"
+        },
+        "to": {
+          "node": "load",
+          "port": "MOVE_LOAD"
+        }
+      },
+      {
+        "id": "link/control/SET_LOAD",
+        "kind": "command",
+        "from": {
+          "node": "control/SET_LOAD",
+          "port": "submit"
+        },
+        "to": {
+          "node": "load",
+          "port": "SET_LOAD"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Bridge response"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/control/MOVE_LOAD",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "control/MOVE_LOAD"
+        },
+        {
+          "id": "layout/control/SET_LOAD",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "control/SET_LOAD"
+        },
+        {
+          "id": "layout/display/selected",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "display/selected"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Truss bridge",
+      "instruction": "Move the truck with the slider. Watch which beams carry more load, then tap a beam to inspect it.",
+      "explanation": "Conceptual heuristic scores, not structural deflection or a general structural solver.\nOnly generated five/eight panel topology, span scales 1 or 2, and one absent middle diagonal are supported."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 760,
+            "height": 430
+          },
+          "zIndex": 0,
+          "locked": false
+        },
+        {
+          "id": "board/layout/control/MOVE_LOAD",
+          "layoutId": "layout/control/MOVE_LOAD",
+          "rect": {
+            "x": 784,
+            "y": 0,
+            "width": 320,
+            "height": 152
+          },
+          "zIndex": 1,
+          "locked": false
+        },
+        {
+          "id": "board/layout/control/SET_LOAD",
+          "layoutId": "layout/control/SET_LOAD",
+          "rect": {
+            "x": 784,
+            "y": 168,
+            "width": 320,
+            "height": 152
+          },
+          "zIndex": 2,
+          "locked": false
+        },
+        {
+          "id": "board/layout/display/selected",
+          "layoutId": "layout/display/selected",
+          "rect": {
+            "x": 784,
+            "y": 336,
+            "width": 320,
+            "height": 164
+          },
+          "zIndex": 3,
+          "locked": false
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1152,
+        "height": 548
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "position",
+      "node": "load",
+      "field": "position",
+      "schema": {
+        "type": "number",
+        "minimum": 0.05,
+        "maximum": 0.95,
+        "unit": ""
+      },
+      "default": 0.5
+    },
+    {
+      "name": "magnitude",
+      "node": "load",
+      "field": "magnitude",
+      "schema": {
+        "type": "number",
+        "minimum": 2,
+        "maximum": 30,
+        "unit": "t"
+      },
+      "default": 10
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/BridgeResponse",
+      "version": 1
+    },
+    {
+      "id": "appearance/Bridge",
+      "version": 1
+    },
+    {
+      "id": "appearance/Beam",
+      "version": 1
+    },
+    {
+      "id": "appearance/Joint",
+      "version": 1
+    },
+    {
+      "id": "appearance/BridgeSupport",
+      "version": 1
+    },
+    {
+      "id": "appearance/LoadTruck",
+      "version": 1
+    },
+    {
+      "id": "displays/Inspector",
+      "version": 1
+    },
+    {
+      "id": "models/TrussJoint",
+      "version": 1
+    },
+    {
+      "id": "models/TrussMember",
+      "version": 1
+    },
+    {
+      "id": "models/BridgeLoad",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Conceptual heuristic scores, not structural deflection or a general structural solver.",
+    "Only generated five/eight panel topology, span scales 1 or 2, and one absent middle diagonal are supported."
+  ],
+  "catalog": {
+    "icon": "\u25b3",
+    "category": "physics",
+    "order": 2
+  }
+}

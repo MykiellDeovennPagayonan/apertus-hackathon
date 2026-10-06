@@ -1,74 +1,260 @@
 .command-bar {
-  border-top: 1px solid var(--border);
-  background: var(--panel);
-  padding: 16px 24px 18px;
   position: relative;
+  width: min(100%, 760px);
+  margin-inline: auto;
+  text-align: left;
 }
-
-.command-bar__confirm {
-  position: relative;
-  margin-bottom: 10px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 12px;
-  color: var(--ok);
-}
-
 .command-bar__form {
   display: flex;
+  align-items: flex-end;
   gap: 8px;
-}
-
-.command-bar__input {
-  flex: 1;
-  min-width: 0;
-  background: var(--bg);
+  min-height: 64px;
+  padding: 10px;
+  background: #fffbeff5;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 14px;
-  outline: none;
+  border-radius: 22px;
+  box-shadow: 0 6px 28px #30362e12;
+  backdrop-filter: blur(16px);
+  transition: border-color 0.15s;
 }
-
-.command-bar__input:focus {
+.command-bar__form:focus-within {
   border-color: var(--accent);
 }
-
+.command-bar__input {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  min-height: 42px;
+  max-height: 160px;
+  resize: none;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 8px;
+  background: transparent;
+  color: var(--text);
+  font: 16px / 22px var(--font-sans);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.command-bar__input:focus-visible {
+  outline: none;
+}
 .command-bar__input::placeholder {
   color: var(--text-dim);
 }
-
-.command-bar__send {
-  background: var(--accent);
-  color: #fffbed;
-  border-radius: 8px;
-  padding: 0 16px;
-  font-size: 22px;
-}
-
-.command-bar__send:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-
-.command-bar__chips {
+.command-bar__actions {
   display: flex;
-  gap: 8px;
-  margin-top: 8px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
 }
-
-.command-bar__chip {
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 4px 12px;
+.command-bar__send {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  border-radius: 14px;
+  padding: 10px 14px;
+  background: var(--accent);
+  color: var(--panel);
+  font-size: 13px;
+  font-weight: 600;
+}
+.command-bar__send:disabled {
+  background: #e6e8de;
+  color: #7b8275;
+}
+.command-bar__send:not(:disabled):hover {
+  background: #204b44;
+}
+.command-bar__stop {
+  background: var(--text);
+}
+.command-bar__ideas {
+  min-height: 42px;
+  padding: 8px;
+  border-radius: 10px;
+  color: var(--accent);
   font-size: 12px;
+}
+.command-bar__ideas:hover,
+.command-bar__ideas[aria-expanded="true"] {
+  background: #e6ecdf;
+}
+.command-bar__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px 8px;
+  font-size: 12px;
+}
+.command-bar__meta:empty {
+  display: none;
+}
+.command-bar__status {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  gap: 8px;
+  align-items: center;
+}
+.command-bar__status output {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--text);
+  line-height: 1.5;
+}
+.command-bar__status button,
+.command-bar__last {
+  flex-shrink: 0;
+  color: var(--accent);
+  padding: 4px 0;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.command-bar__last {
+  margin-left: auto;
+  text-decoration: none;
   color: var(--text-dim);
 }
-
-.command-bar__chip:hover {
-  border-color: var(--accent);
-  color: var(--text);
+.command-bar__activity {
+  display: none;
+}
+.command-bar__status--working .command-bar__activity {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  animation: composer-spin 1s linear infinite;
+}
+.command-bar__status--error output {
+  color: var(--danger);
+}
+.command-bar__examples {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 25px;
+  font-size: 12px;
+  color: var(--text-dim);
+  flex-wrap: wrap;
+}
+.command-bar__examples button {
+  color: var(--accent);
+  padding: 6px 2px;
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 4px;
+}
+.command-bar__examples button:hover {
+  text-decoration-color: var(--accent);
+}
+.command-bar__popover {
+  position: absolute;
+  z-index: 5;
+  bottom: calc(100% + 12px);
+  right: 0;
+  width: min(380px, 100%);
+  max-height: min(320px, 45dvh);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--panel);
+  padding: 14px;
+  box-shadow: 0 8px 30px #30362e20;
+  font-size: 13px;
+}
+.command-bar--landing .command-bar__popover {
+  bottom: auto;
+  top: calc(100% + 8px);
+}
+.command-bar__popover-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.command-bar__popover-heading button {
+  min-width: 32px;
+  min-height: 32px;
+  font-size: 22px;
+}
+.command-bar__popover p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+.command-bar__response {
+  color: var(--text-dim);
+}
+.command-bar__reuse {
+  margin-top: 8px;
+  padding: 8px 0;
+  color: var(--accent);
+  text-decoration: underline;
+}
+.command-bar__suggestion {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: left;
+  color: var(--accent);
+}
+.command-bar__suggestion:hover {
+  background: #e6ecdf;
+}
+@keyframes composer-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 600px) {
+  .command-bar__input {
+    max-height: 120px;
+  }
+  .command-bar__form {
+    gap: 2px;
+    padding: 8px;
+  }
+  .command-bar__send {
+    padding: 10px;
+    gap: 6px;
+  }
+  .command-bar__ideas {
+    padding: 6px;
+  }
+  .command-bar__meta {
+    padding-inline: 4px;
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+  .command-bar__examples {
+    gap: 10px;
+    margin-top: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .command-bar__activity {
+    animation: none;
+  }
+}
+.command-bar__input:placeholder-shown {
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

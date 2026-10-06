@@ -1,0 +1,348 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-coordinates",
+  "version": 1,
+  "title": "Coordinate plotting",
+  "description": "How do x and y locate a point?",
+  "tags": [
+    "mathematics",
+    "coordinates",
+    "lab"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "models/coordinates",
+        "version": 1,
+        "label": "Coordinate plotting",
+        "scope": "scope/lab",
+        "configuration": {
+          "x": 2,
+          "y": 3
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/coordinates",
+        "version": 1,
+        "label": "Coordinate plotting scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/x",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "X coordinate",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "X coordinate",
+          "mode": "immediate",
+          "initial": "{\"value\": {\"x\": 2, \"y\": 3}}",
+          "parameter": "value.x",
+          "step": 0.1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/y",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Y coordinate",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Y coordinate",
+          "mode": "immediate",
+          "initial": "{\"value\": {\"x\": 2, \"y\": 3}}",
+          "parameter": "value.y",
+          "step": 0.1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/x",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "x \u00b7 horizontal",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "x \u00b7 horizontal",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/y",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "y \u00b7 vertical",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "y \u00b7 vertical",
+          "precision": 2
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/x",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "x"
+        },
+        "to": {
+          "node": "result/x",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/y",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "y"
+        },
+        "to": {
+          "node": "result/y",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/x",
+        "kind": "command",
+        "from": {
+          "node": "input/x",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MOVE_POINT"
+        }
+      },
+      {
+        "id": "link/input/y",
+        "kind": "command",
+        "from": {
+          "node": "input/y",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MOVE_POINT"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Coordinate plotting"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/x",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/x"
+        },
+        {
+          "id": "layout/result/y",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/y"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Point position",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/x",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/x"
+            },
+            {
+              "id": "layout/input/y",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/y"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Coordinate plotting",
+      "instruction": "Drag the point. Watch its x and y coordinates change.",
+      "explanation": "Cartesian coordinates are dimensionless and bounded from \u221210 to 10. x increases right and y increases up. Exact fields accept decimals. Dragging resolves to tenths; arrow keys move one unit."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 430
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/result/x",
+          "layoutId": "layout/result/x",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 162,
+            "height": 150
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/result/y",
+          "layoutId": "layout/result/y",
+          "rect": {
+            "x": 822,
+            "y": 0,
+            "width": 162,
+            "height": 150
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 180,
+            "width": 340,
+            "height": 320
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/task"
+        ],
+        [
+          "board/layout/result/x",
+          "board/layout/result/y"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/coordinates",
+      "version": 1
+    },
+    {
+      "id": "appearance/coordinates",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Cartesian coordinates are dimensionless and bounded from \u221210 to 10. x increases right and y increases up.",
+    "Exact fields accept decimals. Dragging resolves to tenths; arrow keys move one unit."
+  ],
+  "catalog": {
+    "icon": "\u2316",
+    "category": "mathematics",
+    "order": 11
+  }
+}

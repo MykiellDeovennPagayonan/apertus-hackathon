@@ -1,11 +1,14 @@
-import { dispatchCommand } from "../../runtime/session";
+import type { ActionResult } from "../../runtime/commands";
+import type { UIAction } from "../../runtime/types";
 import type { FractionComparisonBoard } from "../traits/MathBoards";
 import { ActionButton } from "./ActionButton";
 import { FractionInputControl } from "./FractionInputControl";
 export function FractionBuilderControls({
   board,
+  onCommand,
 }: {
   board: FractionComparisonBoard;
+  onCommand: (command: UIAction) => ActionResult;
 }) {
   return (
     <>
@@ -16,7 +19,7 @@ export function FractionBuilderControls({
             proper
             value={bar.value}
             onChange={(fraction) =>
-              dispatchCommand(board.demo, {
+              onCommand({
                 type: "SET_BAR_FRACTION",
                 value: { bar: i, fraction },
               })
@@ -28,7 +31,7 @@ export function FractionBuilderControls({
                 key={factor}
                 disabled={bar.value.d * factor > 12}
                 onCommand={() =>
-                  dispatchCommand(board.demo, {
+                  onCommand({
                     type: "SUBDIVIDE_FRACTION",
                     value: { bar: i, factor },
                   })
@@ -44,9 +47,7 @@ export function FractionBuilderControls({
         Changing the denominator clears that bar. Splitting pieces preserves the
         shaded amount.
       </p>
-      <ActionButton
-        onCommand={() => dispatchCommand(board.demo, { type: "RESET" })}
-      >
+      <ActionButton onCommand={() => onCommand({ type: "RESET" })}>
         Reset
       </ActionButton>
     </>

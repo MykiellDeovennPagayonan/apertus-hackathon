@@ -28,7 +28,9 @@ export function mathReadout(board: MathBoard): {
             : `${board.total} ÷ ${board.groups} = ${done ? `${board.quotient}${board.remainder ? ` remainder ${board.remainder}` : ""}` : "?"}`,
         detail: done
           ? `${board.quotient} in every basket${board.remainder ? ` · ${board.remainder} left over` : ""}`
-          : "Sharing in progress — each basket gets a turn.",
+          : board.sequence.playing
+            ? "Sharing in progress — each basket gets a turn."
+            : "Press Share to give each basket an equal number.",
       };
     }
     case "fraction-builder":
@@ -55,13 +57,28 @@ export function mathReadout(board: MathBoard): {
     }
   }
 }
-export function MathReadoutView({ board }: { board: MathBoard }) {
+export function MathReadoutView({
+  board,
+  label,
+}: {
+  board: MathBoard;
+  label?: string;
+}) {
   const output = mathReadout(board);
   return (
-    <div className="math-readout" aria-live="polite" aria-atomic="true">
+    <div
+      className={`math-readout math-readout--${board.demo}`}
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {(label || board.demo === "counting") && (
+        <span className="math-count-label">{label || "Circles counted"}</span>
+      )}
       <div className="math-equation">{output.equation}</div>
       <p>{output.detail}</p>
-      {board.feedback && <p className="math-feedback">{board.feedback}</p>}
+      {board.feedback && !["arithmetic", "counting"].includes(board.demo) && (
+        <p className="math-feedback">{board.feedback}</p>
+      )}
     </div>
   );
 }

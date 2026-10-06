@@ -11,6 +11,7 @@ export type ComponentKind =
   | "compositions";
 export type Selections = Record<ComponentKind, readonly string[]>;
 export interface CompositionDefinition {
+  assembly?: import("./contribution").Assembly;
   defaults: Record<string, unknown>;
   layout: "scene-and-graph" | "scene-and-inspector" | "scene-and-controls";
   viewSettings: Record<string, number | number[]>;

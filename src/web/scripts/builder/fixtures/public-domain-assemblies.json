@@ -1,0 +1,5210 @@
+[
+  {
+    "provider": "prefabs/math-foundations/Equation",
+    "assembly": {
+      "version": 1,
+      "title": "Solve an equation",
+      "learningGoal": "Solve a linear equation ax + b = c with exact rational, equivalence-preserving subtraction and division, signed symbolic tokens and step history.",
+      "instances": [
+        {
+          "id": "object/first",
+          "label": "Solve an equation",
+          "prefab": {
+            "ref": "prefabs/math-foundations/Equation",
+            "version": 1
+          },
+          "parameters": {}
+        }
+      ],
+      "observations": [
+        {
+          "id": "observe/equation",
+          "instance": "object/first",
+          "output": "equation",
+          "unit": "1"
+        },
+        {
+          "id": "observe/solution",
+          "instance": "object/first",
+          "output": "solution",
+          "unit": "1"
+        },
+        {
+          "id": "observe/substitution",
+          "instance": "object/first",
+          "output": "substitution",
+          "unit": "1"
+        },
+        {
+          "id": "observe/leftCoefficient",
+          "instance": "object/first",
+          "output": "leftCoefficient",
+          "unit": "1"
+        },
+        {
+          "id": "observe/leftConstant",
+          "instance": "object/first",
+          "output": "leftConstant",
+          "unit": "1"
+        },
+        {
+          "id": "observe/right",
+          "instance": "object/first",
+          "output": "right",
+          "unit": "1"
+        }
+      ],
+      "connections": [
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "equation"
+          },
+          "to": "observe/equation"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "solution"
+          },
+          "to": "observe/solution"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "substitution"
+          },
+          "to": "observe/substitution"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "leftCoefficient"
+          },
+          "to": "observe/leftCoefficient"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "leftConstant"
+          },
+          "to": "observe/leftConstant"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "right"
+          },
+          "to": "observe/right"
+        }
+      ],
+      "controls": [
+        {
+          "instance": "object/first",
+          "action": "SUBTRACT_BOTH"
+        },
+        {
+          "instance": "object/first",
+          "action": "DIVIDE_BOTH"
+        },
+        {
+          "instance": "object/first",
+          "action": "UNDO"
+        }
+      ],
+      "views": [
+        {
+          "ref": "views/AssemblyScene",
+          "observations": [
+            "observe/equation",
+            "observe/solution",
+            "observe/substitution",
+            "observe/leftCoefficient",
+            "observe/leftConstant",
+            "observe/right"
+          ]
+        },
+        {
+          "ref": "views/AssemblyTable",
+          "observations": [
+            "observe/equation",
+            "observe/solution",
+            "observe/substitution",
+            "observe/leftCoefficient",
+            "observe/leftConstant",
+            "observe/right"
+          ]
+        }
+      ]
+    },
+    "instances": [
+      {
+        "id": "object/first",
+        "label": "Solve an equation",
+        "provider": "prefabs/math-foundations/Equation",
+        "parameters": {
+          "coefficient": 2,
+          "constant": 3,
+          "right": 11
+        },
+        "state": {
+          "a": {
+            "n": 2,
+            "d": 1
+          },
+          "b": {
+            "n": 3,
+            "d": 1
+          },
+          "c": {
+            "n": 11,
+            "d": 1
+          },
+          "original": {
+            "a": {
+              "n": 2,
+              "d": 1
+            },
+            "b": {
+              "n": 3,
+              "d": 1
+            },
+            "c": {
+              "n": 11,
+              "d": 1
+            }
+          },
+          "history": []
+        },
+        "outputs": {
+          "equation": "2x + 3 = 11",
+          "solution": "4",
+          "substitution": true,
+          "leftCoefficient": "2",
+          "leftConstant": "3",
+          "right": "11",
+          "steps": []
+        }
+      }
+    ]
+  },
+  {
+    "provider": "prefabs/math-foundations/Line",
+    "assembly": {
+      "version": 1,
+      "title": "Explore line slope",
+      "learningGoal": "Independent bounded linear function y=mx+b with an authoritative point dataset and rise/run marker; multiple instances compare lines.",
+      "instances": [
+        {
+          "id": "object/first",
+          "label": "Explore line slope",
+          "prefab": {
+            "ref": "prefabs/math-foundations/Line",
+            "version": 1
+          },
+          "parameters": {}
+        }
+      ],
+      "observations": [
+        {
+          "id": "observe/equation",
+          "instance": "object/first",
+          "output": "equation",
+          "unit": "1"
+        },
+        {
+          "id": "observe/points",
+          "instance": "object/first",
+          "output": "points",
+          "unit": "math units"
+        },
+        {
+          "id": "observe/yAtZero",
+          "instance": "object/first",
+          "output": "yAtZero",
+          "unit": "math units"
+        },
+        {
+          "id": "observe/yAtOne",
+          "instance": "object/first",
+          "output": "yAtOne",
+          "unit": "math units"
+        },
+        {
+          "id": "observe/rise",
+          "instance": "object/first",
+          "output": "rise",
+          "unit": "1"
+        },
+        {
+          "id": "observe/run",
+          "instance": "object/first",
+          "output": "run",
+          "unit": "1"
+        }
+      ],
+      "connections": [
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "equation"
+          },
+          "to": "observe/equation"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "points"
+          },
+          "to": "observe/points"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "yAtZero"
+          },
+          "to": "observe/yAtZero"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "yAtOne"
+          },
+          "to": "observe/yAtOne"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "rise"
+          },
+          "to": "observe/rise"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "run"
+          },
+          "to": "observe/run"
+        }
+      ],
+      "controls": [
+        {
+          "instance": "object/first",
+          "action": "SET_SLOPE"
+        },
+        {
+          "instance": "object/first",
+          "action": "SET_INTERCEPT"
+        }
+      ],
+      "views": [
+        {
+          "ref": "views/AssemblyScene",
+          "observations": [
+            "observe/equation",
+            "observe/points",
+            "observe/yAtZero",
+            "observe/yAtOne",
+            "observe/rise",
+            "observe/run"
+          ]
+        },
+        {
+          "ref": "views/AssemblyTable",
+          "observations": [
+            "observe/equation",
+            "observe/points",
+            "observe/yAtZero",
+            "observe/yAtOne",
+            "observe/rise",
+            "observe/run"
+          ]
+        }
+      ]
+    },
+    "instances": [
+      {
+        "id": "object/first",
+        "label": "Explore line slope",
+        "provider": "prefabs/math-foundations/Line",
+        "parameters": {
+          "slope": 1,
+          "intercept": 0,
+          "xMin": -5,
+          "xMax": 5
+        },
+        "state": {
+          "slope": 1,
+          "intercept": 0,
+          "xMin": -5,
+          "xMax": 5
+        },
+        "outputs": {
+          "equation": "y = x",
+          "points": [
+            {
+              "x": -5,
+              "y": -5
+            },
+            {
+              "x": -4.5,
+              "y": -4.5
+            },
+            {
+              "x": -4,
+              "y": -4
+            },
+            {
+              "x": -3.5,
+              "y": -3.5
+            },
+            {
+              "x": -3,
+              "y": -3
+            },
+            {
+              "x": -2.5,
+              "y": -2.5
+            },
+            {
+              "x": -2,
+              "y": -2
+            },
+            {
+              "x": -1.5,
+              "y": -1.5
+            },
+            {
+              "x": -1,
+              "y": -1
+            },
+            {
+              "x": -0.5,
+              "y": -0.5
+            },
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 0.5,
+              "y": 0.5
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 1.5,
+              "y": 1.5
+            },
+            {
+              "x": 2,
+              "y": 2
+            },
+            {
+              "x": 2.5,
+              "y": 2.5
+            },
+            {
+              "x": 3,
+              "y": 3
+            },
+            {
+              "x": 3.5,
+              "y": 3.5
+            },
+            {
+              "x": 4,
+              "y": 4
+            },
+            {
+              "x": 4.5,
+              "y": 4.5
+            },
+            {
+              "x": 5,
+              "y": 5
+            }
+          ],
+          "yAtZero": 0,
+          "yAtOne": 1,
+          "rise": 1,
+          "run": 1,
+          "marker": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": 1
+            }
+          ],
+          "xMin": -5,
+          "xMax": 5
+        }
+      }
+    ]
+  },
+  {
+    "provider": "prefabs/math-foundations/Circle",
+    "assembly": {
+      "version": 1,
+      "title": "Why π stays constant",
+      "learningGoal": "Circle geometry with positive radius, calculated diameter and circumference, an unrolling illustration and invariant C/d ratio.",
+      "instances": [
+        {
+          "id": "object/first",
+          "label": "Why π stays constant",
+          "prefab": {
+            "ref": "prefabs/math-foundations/Circle",
+            "version": 1
+          },
+          "parameters": {}
+        }
+      ],
+      "observations": [
+        {
+          "id": "observe/radius",
+          "instance": "object/first",
+          "output": "radius",
+          "unit": "unit"
+        },
+        {
+          "id": "observe/diameter",
+          "instance": "object/first",
+          "output": "diameter",
+          "unit": "unit"
+        },
+        {
+          "id": "observe/circumference",
+          "instance": "object/first",
+          "output": "circumference",
+          "unit": "unit"
+        },
+        {
+          "id": "observe/ratio",
+          "instance": "object/first",
+          "output": "ratio",
+          "unit": "1"
+        }
+      ],
+      "connections": [
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "radius"
+          },
+          "to": "observe/radius"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "diameter"
+          },
+          "to": "observe/diameter"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "circumference"
+          },
+          "to": "observe/circumference"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "ratio"
+          },
+          "to": "observe/ratio"
+        }
+      ],
+      "controls": [
+        {
+          "instance": "object/first",
+          "action": "SET_RADIUS"
+        }
+      ],
+      "views": [
+        {
+          "ref": "views/AssemblyScene",
+          "observations": [
+            "observe/radius",
+            "observe/diameter",
+            "observe/circumference",
+            "observe/ratio"
+          ]
+        },
+        {
+          "ref": "views/AssemblyTable",
+          "observations": [
+            "observe/radius",
+            "observe/diameter",
+            "observe/circumference",
+            "observe/ratio"
+          ]
+        }
+      ]
+    },
+    "instances": [
+      {
+        "id": "object/first",
+        "label": "Why π stays constant",
+        "provider": "prefabs/math-foundations/Circle",
+        "parameters": {
+          "radius": 1
+        },
+        "state": {
+          "radius": 1
+        },
+        "outputs": {
+          "radius": 1,
+          "diameter": 2,
+          "circumference": 6.283185307179586,
+          "ratio": 3.141592653589793
+        }
+      }
+    ]
+  },
+  {
+    "provider": "prefabs/chemistry/Dilution",
+    "assembly": {
+      "version": 1,
+      "title": "Diluting salt water",
+      "learningGoal": "Salt-water dilution in a beaker. Adding water keeps the dissolved salt mass constant, increases solution volume, and lowers salt concentration. Compare independent beakers.",
+      "instances": [
+        {
+          "id": "object/first",
+          "label": "Diluting salt water",
+          "prefab": {
+            "ref": "prefabs/chemistry/Dilution",
+            "version": 1
+          },
+          "parameters": {}
+        }
+      ],
+      "observations": [
+        {
+          "id": "observe/saltMass",
+          "instance": "object/first",
+          "output": "saltMass",
+          "unit": "g"
+        },
+        {
+          "id": "observe/volume",
+          "instance": "object/first",
+          "output": "volume",
+          "unit": "L"
+        },
+        {
+          "id": "observe/concentration",
+          "instance": "object/first",
+          "output": "concentration",
+          "unit": "g/L"
+        }
+      ],
+      "connections": [
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "saltMass"
+          },
+          "to": "observe/saltMass"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "volume"
+          },
+          "to": "observe/volume"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "concentration"
+          },
+          "to": "observe/concentration"
+        }
+      ],
+      "controls": [
+        {
+          "instance": "object/first",
+          "action": "CHEM_ADD_WATER"
+        }
+      ],
+      "views": [
+        {
+          "ref": "views/AssemblyScene",
+          "observations": [
+            "observe/saltMass",
+            "observe/volume",
+            "observe/concentration"
+          ]
+        },
+        {
+          "ref": "views/AssemblyTable",
+          "observations": [
+            "observe/saltMass",
+            "observe/volume",
+            "observe/concentration"
+          ]
+        }
+      ]
+    },
+    "instances": [
+      {
+        "id": "object/first",
+        "label": "Diluting salt water",
+        "provider": "prefabs/chemistry/Dilution",
+        "parameters": {
+          "saltMass": 10,
+          "volume": 1
+        },
+        "state": {
+          "saltMass": 10,
+          "volume": 1
+        },
+        "outputs": {
+          "saltMass": 10,
+          "volume": 1,
+          "concentration": 10
+        }
+      }
+    ]
+  },
+  {
+    "provider": "prefabs/chemistry/Conservation",
+    "assembly": {
+      "version": 1,
+      "title": "Balancing chemical equations",
+      "learningGoal": "Conservation of atoms in chemical reactions: editable coefficients and molecule pictures show why a chemical equation needs balancing. Count each element on both sides. Registered water and carbon-dioxide reactions only.",
+      "instances": [
+        {
+          "id": "object/first",
+          "label": "Balancing chemical equations",
+          "prefab": {
+            "ref": "prefabs/chemistry/Conservation",
+            "version": 1
+          },
+          "parameters": {}
+        }
+      ],
+      "observations": [
+        {
+          "id": "observe/equation",
+          "instance": "object/first",
+          "output": "equation",
+          "unit": "1"
+        },
+        {
+          "id": "observe/balanced",
+          "instance": "object/first",
+          "output": "balanced",
+          "unit": "1"
+        },
+        {
+          "id": "observe/atoms",
+          "instance": "object/first",
+          "output": "atoms",
+          "unit": "atoms"
+        },
+        {
+          "id": "observe/molecules",
+          "instance": "object/first",
+          "output": "molecules",
+          "unit": "molecules"
+        }
+      ],
+      "connections": [
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "equation"
+          },
+          "to": "observe/equation"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "balanced"
+          },
+          "to": "observe/balanced"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "atoms"
+          },
+          "to": "observe/atoms"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "molecules"
+          },
+          "to": "observe/molecules"
+        }
+      ],
+      "controls": [
+        {
+          "instance": "object/first",
+          "action": "CHEM_SET_COEFFICIENTS"
+        },
+        {
+          "instance": "object/first",
+          "action": "CHEM_BALANCE"
+        }
+      ],
+      "views": [
+        {
+          "ref": "views/AssemblyScene",
+          "observations": [
+            "observe/equation",
+            "observe/balanced",
+            "observe/atoms",
+            "observe/molecules"
+          ]
+        },
+        {
+          "ref": "views/AssemblyTable",
+          "observations": [
+            "observe/equation",
+            "observe/balanced",
+            "observe/atoms",
+            "observe/molecules"
+          ]
+        }
+      ]
+    },
+    "instances": [
+      {
+        "id": "object/first",
+        "label": "Balancing chemical equations",
+        "provider": "prefabs/chemistry/Conservation",
+        "parameters": {
+          "reactionId": "water",
+          "coefficients": [
+            1,
+            1,
+            1
+          ]
+        },
+        "state": {
+          "reactionId": "water",
+          "coefficients": [
+            1,
+            1,
+            1
+          ]
+        },
+        "outputs": {
+          "equation": "H₂ + O₂ → H₂O",
+          "balanced": false,
+          "atoms": [
+            {
+              "element": "H",
+              "left": 2,
+              "right": 2,
+              "conserved": true
+            },
+            {
+              "element": "O",
+              "left": 2,
+              "right": 1,
+              "conserved": false
+            }
+          ],
+          "molecules": [
+            {
+              "formula": "H₂",
+              "side": "left",
+              "count": 1,
+              "atoms": {
+                "H": 2,
+                "O": 0
+              }
+            },
+            {
+              "formula": "O₂",
+              "side": "left",
+              "count": 1,
+              "atoms": {
+                "H": 0,
+                "O": 2
+              }
+            },
+            {
+              "formula": "H₂O",
+              "side": "right",
+              "count": 1,
+              "atoms": {
+                "H": 2,
+                "O": 1
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "provider": "prefabs/chemistry/ReactionRate",
+    "assembly": {
+      "version": 1,
+      "title": "Temperature and reaction rate",
+      "learningGoal": "Chemical reaction rate for A to B (A → B). Temperature in kelvin changes the first-order Arrhenius rate and half-life; observe reactant A and product B concentrations over time, conserving A+B. Compare independent reaction runs at different temperatures. Changing one run's temperature restarts that run at t=0.",
+      "instances": [
+        {
+          "id": "object/first",
+          "label": "Temperature and reaction rate",
+          "prefab": {
+            "ref": "prefabs/chemistry/ReactionRate",
+            "version": 1
+          },
+          "parameters": {}
+        }
+      ],
+      "observations": [
+        {
+          "id": "observe/temperature",
+          "instance": "object/first",
+          "output": "temperature",
+          "unit": "K"
+        },
+        {
+          "id": "observe/comparisonTemperature",
+          "instance": "object/first",
+          "output": "comparisonTemperature",
+          "unit": "K"
+        },
+        {
+          "id": "observe/rateConstant",
+          "instance": "object/first",
+          "output": "rateConstant",
+          "unit": "s^-1"
+        },
+        {
+          "id": "observe/halfLife",
+          "instance": "object/first",
+          "output": "halfLife",
+          "unit": "s"
+        },
+        {
+          "id": "observe/comparisonRate",
+          "instance": "object/first",
+          "output": "comparisonRate",
+          "unit": "s^-1"
+        },
+        {
+          "id": "observe/comparisonHalfLife",
+          "instance": "object/first",
+          "output": "comparisonHalfLife",
+          "unit": "s"
+        },
+        {
+          "id": "observe/elapsed",
+          "instance": "object/first",
+          "output": "elapsed",
+          "unit": "s"
+        },
+        {
+          "id": "observe/concentrationA",
+          "instance": "object/first",
+          "output": "concentrationA",
+          "unit": "mol/L"
+        },
+        {
+          "id": "observe/concentrationB",
+          "instance": "object/first",
+          "output": "concentrationB",
+          "unit": "mol/L"
+        },
+        {
+          "id": "observe/totalConcentration",
+          "instance": "object/first",
+          "output": "totalConcentration",
+          "unit": "mol/L"
+        },
+        {
+          "id": "observe/playing",
+          "instance": "object/first",
+          "output": "playing",
+          "unit": "1"
+        },
+        {
+          "id": "observe/points",
+          "instance": "object/first",
+          "output": "points",
+          "unit": "mol/L"
+        },
+        {
+          "id": "observe/productPoints",
+          "instance": "object/first",
+          "output": "productPoints",
+          "unit": "mol/L"
+        },
+        {
+          "id": "observe/comparisonPoints",
+          "instance": "object/first",
+          "output": "comparisonPoints",
+          "unit": "mol/L"
+        }
+      ],
+      "connections": [
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "temperature"
+          },
+          "to": "observe/temperature"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "comparisonTemperature"
+          },
+          "to": "observe/comparisonTemperature"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "rateConstant"
+          },
+          "to": "observe/rateConstant"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "halfLife"
+          },
+          "to": "observe/halfLife"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "comparisonRate"
+          },
+          "to": "observe/comparisonRate"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "comparisonHalfLife"
+          },
+          "to": "observe/comparisonHalfLife"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "elapsed"
+          },
+          "to": "observe/elapsed"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "concentrationA"
+          },
+          "to": "observe/concentrationA"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "concentrationB"
+          },
+          "to": "observe/concentrationB"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "totalConcentration"
+          },
+          "to": "observe/totalConcentration"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "playing"
+          },
+          "to": "observe/playing"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "points"
+          },
+          "to": "observe/points"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "productPoints"
+          },
+          "to": "observe/productPoints"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "comparisonPoints"
+          },
+          "to": "observe/comparisonPoints"
+        }
+      ],
+      "controls": [
+        {
+          "instance": "object/first",
+          "action": "CHEM_SET_TEMPERATURE"
+        },
+        {
+          "instance": "object/first",
+          "action": "CHEM_RESTART_RATE"
+        },
+        {
+          "instance": "object/first",
+          "action": "CHEM_SET_RATE_PLAYING"
+        },
+        {
+          "instance": "object/first",
+          "action": "CHEM_STEP_RATE"
+        }
+      ],
+      "views": [
+        {
+          "ref": "views/AssemblyScene",
+          "observations": [
+            "observe/temperature",
+            "observe/comparisonTemperature",
+            "observe/rateConstant",
+            "observe/halfLife",
+            "observe/comparisonRate",
+            "observe/comparisonHalfLife",
+            "observe/elapsed",
+            "observe/concentrationA",
+            "observe/concentrationB",
+            "observe/totalConcentration",
+            "observe/playing",
+            "observe/points",
+            "observe/productPoints",
+            "observe/comparisonPoints"
+          ]
+        },
+        {
+          "ref": "views/AssemblyTable",
+          "observations": [
+            "observe/temperature",
+            "observe/comparisonTemperature",
+            "observe/rateConstant",
+            "observe/halfLife",
+            "observe/comparisonRate",
+            "observe/comparisonHalfLife",
+            "observe/elapsed",
+            "observe/concentrationA",
+            "observe/concentrationB",
+            "observe/totalConcentration",
+            "observe/playing",
+            "observe/points",
+            "observe/productPoints",
+            "observe/comparisonPoints"
+          ]
+        }
+      ]
+    },
+    "instances": [
+      {
+        "id": "object/first",
+        "label": "Temperature and reaction rate",
+        "provider": "prefabs/chemistry/ReactionRate",
+        "parameters": {
+          "initialConcentration": 1,
+          "temperature": 300,
+          "referenceRate": 0.1,
+          "activationEnergy": 40000,
+          "duration": 30
+        },
+        "state": {
+          "initialConcentration": 1,
+          "temperature": 300,
+          "referenceRate": 0.1,
+          "activationEnergy": 40000,
+          "duration": 30,
+          "elapsed": 0,
+          "comparisonTemperature": 300,
+          "playing": false
+        },
+        "outputs": {
+          "temperature": 300,
+          "comparisonTemperature": 300,
+          "playing": false,
+          "rateConstant": 0.1,
+          "halfLife": 6.931471805599452,
+          "comparisonRate": 0.1,
+          "comparisonHalfLife": 6.931471805599452,
+          "elapsed": 0,
+          "concentrationA": 1,
+          "concentrationB": 0,
+          "totalConcentration": 1,
+          "points": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1.25,
+              "y": 0.8824969025845955
+            },
+            {
+              "x": 2.5,
+              "y": 0.7788007830714049
+            },
+            {
+              "x": 3.75,
+              "y": 0.6872892787909721
+            },
+            {
+              "x": 5,
+              "y": 0.6065306597126334
+            },
+            {
+              "x": 6.25,
+              "y": 0.5352614285189903
+            },
+            {
+              "x": 7.5,
+              "y": 0.4723665527410147
+            },
+            {
+              "x": 8.75,
+              "y": 0.4168620196785084
+            },
+            {
+              "x": 10,
+              "y": 0.36787944117144233
+            },
+            {
+              "x": 11.25,
+              "y": 0.32465246735834974
+            },
+            {
+              "x": 12.5,
+              "y": 0.2865047968601901
+            },
+            {
+              "x": 13.75,
+              "y": 0.25283959580474646
+            },
+            {
+              "x": 15,
+              "y": 0.22313016014842982
+            },
+            {
+              "x": 16.25,
+              "y": 0.19691167520419406
+            },
+            {
+              "x": 17.5,
+              "y": 0.1737739434504451
+            },
+            {
+              "x": 18.75,
+              "y": 0.15335496684492847
+            },
+            {
+              "x": 20,
+              "y": 0.1353352832366127
+            },
+            {
+              "x": 21.25,
+              "y": 0.11943296826671962
+            },
+            {
+              "x": 22.5,
+              "y": 0.10539922456186433
+            },
+            {
+              "x": 23.75,
+              "y": 0.09301448921066349
+            },
+            {
+              "x": 25,
+              "y": 0.0820849986238988
+            },
+            {
+              "x": 26.25,
+              "y": 0.07243975703425146
+            },
+            {
+              "x": 27.5,
+              "y": 0.06392786120670757
+            },
+            {
+              "x": 28.75,
+              "y": 0.05641613950377735
+            },
+            {
+              "x": 30,
+              "y": 0.049787068367863944
+            }
+          ],
+          "productPoints": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 1.25,
+              "y": 0.11750309741540454
+            },
+            {
+              "x": 2.5,
+              "y": 0.22119921692859512
+            },
+            {
+              "x": 3.75,
+              "y": 0.3127107212090279
+            },
+            {
+              "x": 5,
+              "y": 0.3934693402873666
+            },
+            {
+              "x": 6.25,
+              "y": 0.4647385714810097
+            },
+            {
+              "x": 7.5,
+              "y": 0.5276334472589853
+            },
+            {
+              "x": 8.75,
+              "y": 0.5831379803214916
+            },
+            {
+              "x": 10,
+              "y": 0.6321205588285577
+            },
+            {
+              "x": 11.25,
+              "y": 0.6753475326416503
+            },
+            {
+              "x": 12.5,
+              "y": 0.7134952031398099
+            },
+            {
+              "x": 13.75,
+              "y": 0.7471604041952535
+            },
+            {
+              "x": 15,
+              "y": 0.7768698398515702
+            },
+            {
+              "x": 16.25,
+              "y": 0.8030883247958059
+            },
+            {
+              "x": 17.5,
+              "y": 0.8262260565495549
+            },
+            {
+              "x": 18.75,
+              "y": 0.8466450331550716
+            },
+            {
+              "x": 20,
+              "y": 0.8646647167633873
+            },
+            {
+              "x": 21.25,
+              "y": 0.8805670317332803
+            },
+            {
+              "x": 22.5,
+              "y": 0.8946007754381357
+            },
+            {
+              "x": 23.75,
+              "y": 0.9069855107893365
+            },
+            {
+              "x": 25,
+              "y": 0.9179150013761012
+            },
+            {
+              "x": 26.25,
+              "y": 0.9275602429657486
+            },
+            {
+              "x": 27.5,
+              "y": 0.9360721387932924
+            },
+            {
+              "x": 28.75,
+              "y": 0.9435838604962227
+            },
+            {
+              "x": 30,
+              "y": 0.950212931632136
+            }
+          ],
+          "comparisonPoints": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1.25,
+              "y": 0.8824969025845955
+            },
+            {
+              "x": 2.5,
+              "y": 0.7788007830714049
+            },
+            {
+              "x": 3.75,
+              "y": 0.6872892787909721
+            },
+            {
+              "x": 5,
+              "y": 0.6065306597126334
+            },
+            {
+              "x": 6.25,
+              "y": 0.5352614285189903
+            },
+            {
+              "x": 7.5,
+              "y": 0.4723665527410147
+            },
+            {
+              "x": 8.75,
+              "y": 0.4168620196785084
+            },
+            {
+              "x": 10,
+              "y": 0.36787944117144233
+            },
+            {
+              "x": 11.25,
+              "y": 0.32465246735834974
+            },
+            {
+              "x": 12.5,
+              "y": 0.2865047968601901
+            },
+            {
+              "x": 13.75,
+              "y": 0.25283959580474646
+            },
+            {
+              "x": 15,
+              "y": 0.22313016014842982
+            },
+            {
+              "x": 16.25,
+              "y": 0.19691167520419406
+            },
+            {
+              "x": 17.5,
+              "y": 0.1737739434504451
+            },
+            {
+              "x": 18.75,
+              "y": 0.15335496684492847
+            },
+            {
+              "x": 20,
+              "y": 0.1353352832366127
+            },
+            {
+              "x": 21.25,
+              "y": 0.11943296826671962
+            },
+            {
+              "x": 22.5,
+              "y": 0.10539922456186433
+            },
+            {
+              "x": 23.75,
+              "y": 0.09301448921066349
+            },
+            {
+              "x": 25,
+              "y": 0.0820849986238988
+            },
+            {
+              "x": 26.25,
+              "y": 0.07243975703425146
+            },
+            {
+              "x": 27.5,
+              "y": 0.06392786120670757
+            },
+            {
+              "x": 28.75,
+              "y": 0.05641613950377735
+            },
+            {
+              "x": 30,
+              "y": 0.049787068367863944
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "provider": "prefabs/natural-systems/DiffusionField",
+    "assembly": {
+      "version": 1,
+      "title": "Dye diffusion in water",
+      "learningGoal": "A central dye deposit spreads through a bounded square concentration field under Fickian diffusion. Compare coefficients at equal simulation times.",
+      "instances": [
+        {
+          "id": "object/first",
+          "label": "Dye diffusion in water",
+          "prefab": {
+            "ref": "prefabs/natural-systems/DiffusionField",
+            "version": 1
+          },
+          "parameters": {}
+        }
+      ],
+      "observations": [
+        {
+          "id": "observe/diffusionCoefficient",
+          "instance": "object/first",
+          "output": "diffusionCoefficient",
+          "unit": "m^2/s"
+        },
+        {
+          "id": "observe/comparisonCoefficient",
+          "instance": "object/first",
+          "output": "comparisonCoefficient",
+          "unit": "m^2/s"
+        },
+        {
+          "id": "observe/elapsed",
+          "instance": "object/first",
+          "output": "elapsed",
+          "unit": "s"
+        },
+        {
+          "id": "observe/totalMass",
+          "instance": "object/first",
+          "output": "totalMass",
+          "unit": "mass units"
+        },
+        {
+          "id": "observe/centerConcentration",
+          "instance": "object/first",
+          "output": "centerConcentration",
+          "unit": "mass units/m^2"
+        },
+        {
+          "id": "observe/midwayConcentration",
+          "instance": "object/first",
+          "output": "midwayConcentration",
+          "unit": "mass units/m^2"
+        },
+        {
+          "id": "observe/edgeConcentration",
+          "instance": "object/first",
+          "output": "edgeConcentration",
+          "unit": "mass units/m^2"
+        },
+        {
+          "id": "observe/comparisonCenter",
+          "instance": "object/first",
+          "output": "comparisonCenter",
+          "unit": "mass units/m^2"
+        },
+        {
+          "id": "observe/stableTimestep",
+          "instance": "object/first",
+          "output": "stableTimestep",
+          "unit": "s"
+        },
+        {
+          "id": "observe/field",
+          "instance": "object/first",
+          "output": "field",
+          "unit": "mass units/m^2"
+        },
+        {
+          "id": "observe/gridSize",
+          "instance": "object/first",
+          "output": "gridSize",
+          "unit": "cells"
+        },
+        {
+          "id": "observe/playing",
+          "instance": "object/first",
+          "output": "playing",
+          "unit": "1"
+        }
+      ],
+      "connections": [
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "diffusionCoefficient"
+          },
+          "to": "observe/diffusionCoefficient"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "comparisonCoefficient"
+          },
+          "to": "observe/comparisonCoefficient"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "elapsed"
+          },
+          "to": "observe/elapsed"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "totalMass"
+          },
+          "to": "observe/totalMass"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "centerConcentration"
+          },
+          "to": "observe/centerConcentration"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "midwayConcentration"
+          },
+          "to": "observe/midwayConcentration"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "edgeConcentration"
+          },
+          "to": "observe/edgeConcentration"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "comparisonCenter"
+          },
+          "to": "observe/comparisonCenter"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "stableTimestep"
+          },
+          "to": "observe/stableTimestep"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "field"
+          },
+          "to": "observe/field"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "gridSize"
+          },
+          "to": "observe/gridSize"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "playing"
+          },
+          "to": "observe/playing"
+        }
+      ],
+      "controls": [
+        {
+          "instance": "object/first",
+          "action": "DIFF_SCALE_COEFFICIENT"
+        },
+        {
+          "instance": "object/first",
+          "action": "DIFF_SET_COEFFICIENT"
+        },
+        {
+          "instance": "object/first",
+          "action": "DIFF_SET_PLAYING"
+        },
+        {
+          "instance": "object/first",
+          "action": "DIFF_RESTART"
+        },
+        {
+          "instance": "object/first",
+          "action": "DIFF_STEP"
+        }
+      ],
+      "views": [
+        {
+          "ref": "views/AssemblyScene",
+          "observations": [
+            "observe/diffusionCoefficient",
+            "observe/comparisonCoefficient",
+            "observe/elapsed",
+            "observe/totalMass",
+            "observe/centerConcentration",
+            "observe/midwayConcentration",
+            "observe/edgeConcentration",
+            "observe/comparisonCenter",
+            "observe/stableTimestep",
+            "observe/field",
+            "observe/gridSize",
+            "observe/playing"
+          ]
+        },
+        {
+          "ref": "views/AssemblyTable",
+          "observations": [
+            "observe/diffusionCoefficient",
+            "observe/comparisonCoefficient",
+            "observe/elapsed",
+            "observe/totalMass",
+            "observe/centerConcentration",
+            "observe/midwayConcentration",
+            "observe/edgeConcentration",
+            "observe/comparisonCenter",
+            "observe/stableTimestep",
+            "observe/field",
+            "observe/gridSize",
+            "observe/playing"
+          ]
+        }
+      ]
+    },
+    "instances": [
+      {
+        "id": "object/first",
+        "label": "Dye diffusion in water",
+        "provider": "prefabs/natural-systems/DiffusionField",
+        "parameters": {
+          "diffusionCoefficient": 0.05,
+          "width": 1,
+          "gridSize": 15,
+          "dyeMass": 1,
+          "duration": 8
+        },
+        "state": {
+          "diffusionCoefficient": 0.05,
+          "comparisonCoefficient": 0.05,
+          "width": 1,
+          "gridSize": 15,
+          "dyeMass": 1,
+          "duration": 8,
+          "elapsed": 0,
+          "playing": false,
+          "field": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            225,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "comparisonField": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            225,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "outputs": {
+          "diffusionCoefficient": 0.05,
+          "comparisonCoefficient": 0.05,
+          "elapsed": 0,
+          "totalMass": 1,
+          "centerConcentration": 225,
+          "midwayConcentration": 0,
+          "edgeConcentration": 0,
+          "comparisonCenter": 225,
+          "stableTimestep": 0.021333333333333333,
+          "field": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              225,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "gridSize": 15,
+          "playing": false
+        }
+      }
+    ]
+  },
+  {
+    "provider": "prefabs/natural-systems/PredatorPrey",
+    "assembly": {
+      "version": 1,
+      "title": "Fox and rabbit populations",
+      "learningGoal": "A Lotka–Volterra continuous population model for rabbits and foxes, integrated with fixed-step fourth-order Runge–Kutta. Compare initial rabbit populations while preserving all rates.",
+      "instances": [
+        {
+          "id": "object/first",
+          "label": "Fox and rabbit populations",
+          "prefab": {
+            "ref": "prefabs/natural-systems/PredatorPrey",
+            "version": 1
+          },
+          "parameters": {}
+        }
+      ],
+      "observations": [
+        {
+          "id": "observe/elapsed",
+          "instance": "object/first",
+          "output": "elapsed",
+          "unit": "days"
+        },
+        {
+          "id": "observe/rabbits",
+          "instance": "object/first",
+          "output": "rabbits",
+          "unit": "population"
+        },
+        {
+          "id": "observe/foxes",
+          "instance": "object/first",
+          "output": "foxes",
+          "unit": "population"
+        },
+        {
+          "id": "observe/rabbitDerivative",
+          "instance": "object/first",
+          "output": "rabbitDerivative",
+          "unit": "population/day"
+        },
+        {
+          "id": "observe/foxDerivative",
+          "instance": "object/first",
+          "output": "foxDerivative",
+          "unit": "population/day"
+        },
+        {
+          "id": "observe/initialRabbitDerivative",
+          "instance": "object/first",
+          "output": "initialRabbitDerivative",
+          "unit": "population/day"
+        },
+        {
+          "id": "observe/initialFoxDerivative",
+          "instance": "object/first",
+          "output": "initialFoxDerivative",
+          "unit": "population/day"
+        },
+        {
+          "id": "observe/comparisonInitialRabbits",
+          "instance": "object/first",
+          "output": "comparisonInitialRabbits",
+          "unit": "population"
+        },
+        {
+          "id": "observe/points",
+          "instance": "object/first",
+          "output": "points",
+          "unit": "population"
+        },
+        {
+          "id": "observe/comparisonPoints",
+          "instance": "object/first",
+          "output": "comparisonPoints",
+          "unit": "population"
+        },
+        {
+          "id": "observe/playing",
+          "instance": "object/first",
+          "output": "playing",
+          "unit": "1"
+        }
+      ],
+      "connections": [
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "elapsed"
+          },
+          "to": "observe/elapsed"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "rabbits"
+          },
+          "to": "observe/rabbits"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "foxes"
+          },
+          "to": "observe/foxes"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "rabbitDerivative"
+          },
+          "to": "observe/rabbitDerivative"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "foxDerivative"
+          },
+          "to": "observe/foxDerivative"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "initialRabbitDerivative"
+          },
+          "to": "observe/initialRabbitDerivative"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "initialFoxDerivative"
+          },
+          "to": "observe/initialFoxDerivative"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "comparisonInitialRabbits"
+          },
+          "to": "observe/comparisonInitialRabbits"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "points"
+          },
+          "to": "observe/points"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "comparisonPoints"
+          },
+          "to": "observe/comparisonPoints"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "playing"
+          },
+          "to": "observe/playing"
+        }
+      ],
+      "controls": [
+        {
+          "instance": "object/first",
+          "action": "ECO_SET_INITIAL_RABBITS"
+        },
+        {
+          "instance": "object/first",
+          "action": "ECO_SCALE_INITIAL_RABBITS"
+        },
+        {
+          "instance": "object/first",
+          "action": "ECO_SET_PLAYING"
+        },
+        {
+          "instance": "object/first",
+          "action": "ECO_RESTART"
+        },
+        {
+          "instance": "object/first",
+          "action": "ECO_STEP"
+        }
+      ],
+      "views": [
+        {
+          "ref": "views/AssemblyScene",
+          "observations": [
+            "observe/elapsed",
+            "observe/rabbits",
+            "observe/foxes",
+            "observe/rabbitDerivative",
+            "observe/foxDerivative",
+            "observe/initialRabbitDerivative",
+            "observe/initialFoxDerivative",
+            "observe/comparisonInitialRabbits",
+            "observe/points",
+            "observe/comparisonPoints",
+            "observe/playing"
+          ]
+        },
+        {
+          "ref": "views/AssemblyTable",
+          "observations": [
+            "observe/elapsed",
+            "observe/rabbits",
+            "observe/foxes",
+            "observe/rabbitDerivative",
+            "observe/foxDerivative",
+            "observe/initialRabbitDerivative",
+            "observe/initialFoxDerivative",
+            "observe/comparisonInitialRabbits",
+            "observe/points",
+            "observe/comparisonPoints",
+            "observe/playing"
+          ]
+        }
+      ]
+    },
+    "instances": [
+      {
+        "id": "object/first",
+        "label": "Fox and rabbit populations",
+        "provider": "prefabs/natural-systems/PredatorPrey",
+        "parameters": {
+          "initialRabbits": 40,
+          "initialFoxes": 9,
+          "rabbitGrowth": 0.5,
+          "predationRate": 0.02,
+          "conversionRate": 0.01,
+          "foxDeathRate": 0.3,
+          "duration": 30,
+          "integrationStep": 0.01
+        },
+        "state": {
+          "initialRabbits": 40,
+          "comparisonInitialRabbits": 40,
+          "initialFoxes": 9,
+          "rabbitGrowth": 0.5,
+          "predationRate": 0.02,
+          "conversionRate": 0.01,
+          "foxDeathRate": 0.3,
+          "duration": 30,
+          "integrationStep": 0.01,
+          "elapsed": 0,
+          "rabbits": 40,
+          "foxes": 9,
+          "comparisonRabbits": 40,
+          "comparisonFoxes": 9,
+          "playing": false
+        },
+        "outputs": {
+          "elapsed": 0,
+          "rabbits": 40,
+          "foxes": 9,
+          "rabbitDerivative": 12.8,
+          "foxDerivative": 0.9000000000000004,
+          "initialRabbitDerivative": 12.8,
+          "initialFoxDerivative": 0.9000000000000004,
+          "comparisonInitialRabbits": 40,
+          "points": [
+            {
+              "x": 0,
+              "rabbits": 40,
+              "foxes": 9
+            },
+            {
+              "x": 1.0714285714285714,
+              "rabbits": 55.446945245724166,
+              "foxes": 10.851343965847834
+            },
+            {
+              "x": 2.142857142857143,
+              "rabbits": 71.87758165166872,
+              "foxes": 15.59395887185914
+            },
+            {
+              "x": 3.2142857142857144,
+              "rabbits": 79.75843615443615,
+              "foxes": 25.843237165702337
+            },
+            {
+              "x": 4.285714285714286,
+              "rabbits": 66.3171747048198,
+              "foxes": 41.84164108095245
+            },
+            {
+              "x": 5.357142857142857,
+              "rabbits": 39.95888313843423,
+              "foxes": 53.62481580203091
+            },
+            {
+              "x": 6.428571428571429,
+              "rabbits": 21.272762789209526,
+              "foxes": 53.41220874077855
+            },
+            {
+              "x": 7.5,
+              "rabbits": 12.435634734731709,
+              "foxes": 46.09386437072855
+            },
+            {
+              "x": 8.571428571428571,
+              "rabbits": 8.696469491367663,
+              "foxes": 37.31984997496396
+            },
+            {
+              "x": 9.642857142857142,
+              "rabbits": 7.284952880368166,
+              "foxes": 29.438270677860814
+            },
+            {
+              "x": 10.714285714285714,
+              "rabbits": 7.113536532863879,
+              "foxes": 23.03748350258635
+            },
+            {
+              "x": 11.785714285714286,
+              "rabbits": 7.8424002829083985,
+              "foxes": 18.084373827207656
+            },
+            {
+              "x": 12.857142857142858,
+              "rabbits": 9.482935867816272,
+              "foxes": 14.375811990035901
+            },
+            {
+              "x": 13.928571428571429,
+              "rabbits": 12.274348334852505,
+              "foxes": 11.69875589142287
+            },
+            {
+              "x": 15,
+              "rabbits": 16.666034460081807,
+              "foxes": 9.888774891119217
+            },
+            {
+              "x": 16.071428571428573,
+              "rabbits": 23.325950741031086,
+              "foxes": 8.862533896807724
+            },
+            {
+              "x": 17.142857142857142,
+              "rabbits": 33.085764390055765,
+              "foxes": 8.666508656625144
+            },
+            {
+              "x": 18.214285714285715,
+              "rabbits": 46.60206986121978,
+              "foxes": 9.597562692962734
+            },
+            {
+              "x": 19.285714285714285,
+              "rabbits": 63.13847787630249,
+              "foxes": 12.509881246897635
+            },
+            {
+              "x": 20.357142857142858,
+              "rabbits": 77.3967889921001,
+              "foxes": 19.386837234505407
+            },
+            {
+              "x": 21.428571428571427,
+              "rabbits": 76.58162336944186,
+              "foxes": 32.72170378004828
+            },
+            {
+              "x": 22.5,
+              "rabbits": 54.44061783827682,
+              "foxes": 48.524011878781025
+            },
+            {
+              "x": 23.571428571428573,
+              "rabbits": 30.012568379818717,
+              "foxes": 54.88528529161804
+            },
+            {
+              "x": 24.642857142857142,
+              "rabbits": 16.35444131235481,
+              "foxes": 50.55106686224386
+            },
+            {
+              "x": 25.714285714285715,
+              "rabbits": 10.329923982679608,
+              "foxes": 42.095319734048886
+            },
+            {
+              "x": 26.785714285714285,
+              "rabbits": 7.858819285593845,
+              "foxes": 33.5784189654723
+            },
+            {
+              "x": 27.857142857142858,
+              "rabbits": 7.084893481140363,
+              "foxes": 26.34856404060109
+            },
+            {
+              "x": 28.928571428571427,
+              "rabbits": 7.337625095070619,
+              "foxes": 20.62401947276414
+            },
+            {
+              "x": 30,
+              "rabbits": 8.463435020015638,
+              "foxes": 16.262780736462666
+            }
+          ],
+          "comparisonPoints": [
+            {
+              "x": 0,
+              "rabbits": 40,
+              "foxes": 9
+            },
+            {
+              "x": 1.0714285714285714,
+              "rabbits": 55.446945245724166,
+              "foxes": 10.851343965847834
+            },
+            {
+              "x": 2.142857142857143,
+              "rabbits": 71.87758165166872,
+              "foxes": 15.59395887185914
+            },
+            {
+              "x": 3.2142857142857144,
+              "rabbits": 79.75843615443615,
+              "foxes": 25.843237165702337
+            },
+            {
+              "x": 4.285714285714286,
+              "rabbits": 66.3171747048198,
+              "foxes": 41.84164108095245
+            },
+            {
+              "x": 5.357142857142857,
+              "rabbits": 39.95888313843423,
+              "foxes": 53.62481580203091
+            },
+            {
+              "x": 6.428571428571429,
+              "rabbits": 21.272762789209526,
+              "foxes": 53.41220874077855
+            },
+            {
+              "x": 7.5,
+              "rabbits": 12.435634734731709,
+              "foxes": 46.09386437072855
+            },
+            {
+              "x": 8.571428571428571,
+              "rabbits": 8.696469491367663,
+              "foxes": 37.31984997496396
+            },
+            {
+              "x": 9.642857142857142,
+              "rabbits": 7.284952880368166,
+              "foxes": 29.438270677860814
+            },
+            {
+              "x": 10.714285714285714,
+              "rabbits": 7.113536532863879,
+              "foxes": 23.03748350258635
+            },
+            {
+              "x": 11.785714285714286,
+              "rabbits": 7.8424002829083985,
+              "foxes": 18.084373827207656
+            },
+            {
+              "x": 12.857142857142858,
+              "rabbits": 9.482935867816272,
+              "foxes": 14.375811990035901
+            },
+            {
+              "x": 13.928571428571429,
+              "rabbits": 12.274348334852505,
+              "foxes": 11.69875589142287
+            },
+            {
+              "x": 15,
+              "rabbits": 16.666034460081807,
+              "foxes": 9.888774891119217
+            },
+            {
+              "x": 16.071428571428573,
+              "rabbits": 23.325950741031086,
+              "foxes": 8.862533896807724
+            },
+            {
+              "x": 17.142857142857142,
+              "rabbits": 33.085764390055765,
+              "foxes": 8.666508656625144
+            },
+            {
+              "x": 18.214285714285715,
+              "rabbits": 46.60206986121978,
+              "foxes": 9.597562692962734
+            },
+            {
+              "x": 19.285714285714285,
+              "rabbits": 63.13847787630249,
+              "foxes": 12.509881246897635
+            },
+            {
+              "x": 20.357142857142858,
+              "rabbits": 77.3967889921001,
+              "foxes": 19.386837234505407
+            },
+            {
+              "x": 21.428571428571427,
+              "rabbits": 76.58162336944186,
+              "foxes": 32.72170378004828
+            },
+            {
+              "x": 22.5,
+              "rabbits": 54.44061783827682,
+              "foxes": 48.524011878781025
+            },
+            {
+              "x": 23.571428571428573,
+              "rabbits": 30.012568379818717,
+              "foxes": 54.88528529161804
+            },
+            {
+              "x": 24.642857142857142,
+              "rabbits": 16.35444131235481,
+              "foxes": 50.55106686224386
+            },
+            {
+              "x": 25.714285714285715,
+              "rabbits": 10.329923982679608,
+              "foxes": 42.095319734048886
+            },
+            {
+              "x": 26.785714285714285,
+              "rabbits": 7.858819285593845,
+              "foxes": 33.5784189654723
+            },
+            {
+              "x": 27.857142857142858,
+              "rabbits": 7.084893481140363,
+              "foxes": 26.34856404060109
+            },
+            {
+              "x": 28.928571428571427,
+              "rabbits": 7.337625095070619,
+              "foxes": 20.62401947276414
+            },
+            {
+              "x": 30,
+              "rabbits": 8.463435020015638,
+              "foxes": 16.262780736462666
+            }
+          ],
+          "playing": false
+        }
+      }
+    ]
+  },
+  {
+    "provider": "prefabs/natural-systems/PlantGrowth",
+    "assembly": {
+      "version": 1,
+      "title": "Plant limiting resources",
+      "learningGoal": "A bounded educational resource-response model where the least available normalized resource limits linear illustrative biomass growth.",
+      "instances": [
+        {
+          "id": "object/first",
+          "label": "Plant limiting resources",
+          "prefab": {
+            "ref": "prefabs/natural-systems/PlantGrowth",
+            "version": 1
+          },
+          "parameters": {}
+        }
+      ],
+      "observations": [
+        {
+          "id": "observe/elapsed",
+          "instance": "object/first",
+          "output": "elapsed",
+          "unit": "days"
+        },
+        {
+          "id": "observe/biomass",
+          "instance": "object/first",
+          "output": "biomass",
+          "unit": "illustrative biomass units"
+        },
+        {
+          "id": "observe/growthRate",
+          "instance": "object/first",
+          "output": "growthRate",
+          "unit": "illustrative biomass units/day"
+        },
+        {
+          "id": "observe/comparisonGrowthRate",
+          "instance": "object/first",
+          "output": "comparisonGrowthRate",
+          "unit": "illustrative biomass units/day"
+        },
+        {
+          "id": "observe/comparisonLight",
+          "instance": "object/first",
+          "output": "comparisonLight",
+          "unit": "normalized"
+        },
+        {
+          "id": "observe/limitingResources",
+          "instance": "object/first",
+          "output": "limitingResources",
+          "unit": "resource names"
+        },
+        {
+          "id": "observe/points",
+          "instance": "object/first",
+          "output": "points",
+          "unit": "illustrative biomass units"
+        },
+        {
+          "id": "observe/comparisonPoints",
+          "instance": "object/first",
+          "output": "comparisonPoints",
+          "unit": "illustrative biomass units"
+        },
+        {
+          "id": "observe/playing",
+          "instance": "object/first",
+          "output": "playing",
+          "unit": "1"
+        }
+      ],
+      "connections": [
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "elapsed"
+          },
+          "to": "observe/elapsed"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "biomass"
+          },
+          "to": "observe/biomass"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "growthRate"
+          },
+          "to": "observe/growthRate"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "comparisonGrowthRate"
+          },
+          "to": "observe/comparisonGrowthRate"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "comparisonLight"
+          },
+          "to": "observe/comparisonLight"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "limitingResources"
+          },
+          "to": "observe/limitingResources"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "points"
+          },
+          "to": "observe/points"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "comparisonPoints"
+          },
+          "to": "observe/comparisonPoints"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "playing"
+          },
+          "to": "observe/playing"
+        }
+      ],
+      "controls": [
+        {
+          "instance": "object/first",
+          "action": "PLANT_SET_LIGHT"
+        },
+        {
+          "instance": "object/first",
+          "action": "PLANT_SET_WATER"
+        },
+        {
+          "instance": "object/first",
+          "action": "PLANT_SET_NUTRIENTS"
+        },
+        {
+          "instance": "object/first",
+          "action": "PLANT_SET_PLAYING"
+        },
+        {
+          "instance": "object/first",
+          "action": "PLANT_RESTART"
+        },
+        {
+          "instance": "object/first",
+          "action": "PLANT_STEP"
+        }
+      ],
+      "views": [
+        {
+          "ref": "views/AssemblyScene",
+          "observations": [
+            "observe/elapsed",
+            "observe/biomass",
+            "observe/growthRate",
+            "observe/comparisonGrowthRate",
+            "observe/comparisonLight",
+            "observe/limitingResources",
+            "observe/points",
+            "observe/comparisonPoints",
+            "observe/playing"
+          ]
+        },
+        {
+          "ref": "views/AssemblyTable",
+          "observations": [
+            "observe/elapsed",
+            "observe/biomass",
+            "observe/growthRate",
+            "observe/comparisonGrowthRate",
+            "observe/comparisonLight",
+            "observe/limitingResources",
+            "observe/points",
+            "observe/comparisonPoints",
+            "observe/playing"
+          ]
+        }
+      ]
+    },
+    "instances": [
+      {
+        "id": "object/first",
+        "label": "Plant limiting resources",
+        "provider": "prefabs/natural-systems/PlantGrowth",
+        "parameters": {
+          "initialBiomass": 1,
+          "maximumGrowthRate": 1,
+          "light": 0.4,
+          "water": 0.6,
+          "nutrients": 0.8,
+          "duration": 10
+        },
+        "state": {
+          "initialBiomass": 1,
+          "maximumGrowthRate": 1,
+          "light": 0.4,
+          "water": 0.6,
+          "nutrients": 0.8,
+          "comparisonLight": 0.4,
+          "duration": 10,
+          "elapsed": 0,
+          "playing": false
+        },
+        "outputs": {
+          "elapsed": 0,
+          "biomass": 1,
+          "growthRate": 0.4,
+          "comparisonGrowthRate": 0.4,
+          "comparisonLight": 0.4,
+          "limitingResources": [
+            "light"
+          ],
+          "points": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 0.3448275862068966,
+              "y": 1.1379310344827587
+            },
+            {
+              "x": 0.6896551724137931,
+              "y": 1.2758620689655173
+            },
+            {
+              "x": 1.0344827586206897,
+              "y": 1.4137931034482758
+            },
+            {
+              "x": 1.3793103448275863,
+              "y": 1.5517241379310347
+            },
+            {
+              "x": 1.7241379310344827,
+              "y": 1.6896551724137931
+            },
+            {
+              "x": 2.0689655172413794,
+              "y": 1.8275862068965518
+            },
+            {
+              "x": 2.413793103448276,
+              "y": 1.9655172413793105
+            },
+            {
+              "x": 2.7586206896551726,
+              "y": 2.1034482758620694
+            },
+            {
+              "x": 3.103448275862069,
+              "y": 2.2413793103448274
+            },
+            {
+              "x": 3.4482758620689653,
+              "y": 2.3793103448275863
+            },
+            {
+              "x": 3.793103448275862,
+              "y": 2.517241379310345
+            },
+            {
+              "x": 4.137931034482759,
+              "y": 2.6551724137931036
+            },
+            {
+              "x": 4.482758620689655,
+              "y": 2.793103448275862
+            },
+            {
+              "x": 4.827586206896552,
+              "y": 2.931034482758621
+            },
+            {
+              "x": 5.172413793103448,
+              "y": 3.0689655172413794
+            },
+            {
+              "x": 5.517241379310345,
+              "y": 3.2068965517241383
+            },
+            {
+              "x": 5.862068965517241,
+              "y": 3.3448275862068964
+            },
+            {
+              "x": 6.206896551724138,
+              "y": 3.4827586206896552
+            },
+            {
+              "x": 6.551724137931035,
+              "y": 3.620689655172414
+            },
+            {
+              "x": 6.896551724137931,
+              "y": 3.7586206896551726
+            },
+            {
+              "x": 7.241379310344827,
+              "y": 3.896551724137931
+            },
+            {
+              "x": 7.586206896551724,
+              "y": 4.03448275862069
+            },
+            {
+              "x": 7.931034482758621,
+              "y": 4.172413793103448
+            },
+            {
+              "x": 8.275862068965518,
+              "y": 4.310344827586207
+            },
+            {
+              "x": 8.620689655172415,
+              "y": 4.448275862068966
+            },
+            {
+              "x": 8.96551724137931,
+              "y": 4.586206896551724
+            },
+            {
+              "x": 9.310344827586206,
+              "y": 4.724137931034482
+            },
+            {
+              "x": 9.655172413793103,
+              "y": 4.862068965517242
+            },
+            {
+              "x": 10,
+              "y": 5
+            }
+          ],
+          "comparisonPoints": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 0.3448275862068966,
+              "y": 1.1379310344827587
+            },
+            {
+              "x": 0.6896551724137931,
+              "y": 1.2758620689655173
+            },
+            {
+              "x": 1.0344827586206897,
+              "y": 1.4137931034482758
+            },
+            {
+              "x": 1.3793103448275863,
+              "y": 1.5517241379310347
+            },
+            {
+              "x": 1.7241379310344827,
+              "y": 1.6896551724137931
+            },
+            {
+              "x": 2.0689655172413794,
+              "y": 1.8275862068965518
+            },
+            {
+              "x": 2.413793103448276,
+              "y": 1.9655172413793105
+            },
+            {
+              "x": 2.7586206896551726,
+              "y": 2.1034482758620694
+            },
+            {
+              "x": 3.103448275862069,
+              "y": 2.2413793103448274
+            },
+            {
+              "x": 3.4482758620689653,
+              "y": 2.3793103448275863
+            },
+            {
+              "x": 3.793103448275862,
+              "y": 2.517241379310345
+            },
+            {
+              "x": 4.137931034482759,
+              "y": 2.6551724137931036
+            },
+            {
+              "x": 4.482758620689655,
+              "y": 2.793103448275862
+            },
+            {
+              "x": 4.827586206896552,
+              "y": 2.931034482758621
+            },
+            {
+              "x": 5.172413793103448,
+              "y": 3.0689655172413794
+            },
+            {
+              "x": 5.517241379310345,
+              "y": 3.2068965517241383
+            },
+            {
+              "x": 5.862068965517241,
+              "y": 3.3448275862068964
+            },
+            {
+              "x": 6.206896551724138,
+              "y": 3.4827586206896552
+            },
+            {
+              "x": 6.551724137931035,
+              "y": 3.620689655172414
+            },
+            {
+              "x": 6.896551724137931,
+              "y": 3.7586206896551726
+            },
+            {
+              "x": 7.241379310344827,
+              "y": 3.896551724137931
+            },
+            {
+              "x": 7.586206896551724,
+              "y": 4.03448275862069
+            },
+            {
+              "x": 7.931034482758621,
+              "y": 4.172413793103448
+            },
+            {
+              "x": 8.275862068965518,
+              "y": 4.310344827586207
+            },
+            {
+              "x": 8.620689655172415,
+              "y": 4.448275862068966
+            },
+            {
+              "x": 8.96551724137931,
+              "y": 4.586206896551724
+            },
+            {
+              "x": 9.310344827586206,
+              "y": 4.724137931034482
+            },
+            {
+              "x": 9.655172413793103,
+              "y": 4.862068965517242
+            },
+            {
+              "x": 10,
+              "y": 5
+            }
+          ],
+          "playing": false
+        }
+      }
+    ]
+  },
+  {
+    "provider": "prefabs/dynamic-systems/CompoundGrowth",
+    "assembly": {
+      "version": 1,
+      "title": "Compound and simple interest",
+      "learningGoal": "Compare annual compound growth P(1+r)^t with simple interest P(1+rt) for a starting balance, annual rate, and whole-year duration. Use $100, 5%, and 10 years when the learner does not specify values.",
+      "instances": [
+        {
+          "id": "object/first",
+          "label": "Compound and simple interest",
+          "prefab": {
+            "ref": "prefabs/dynamic-systems/CompoundGrowth",
+            "version": 1
+          },
+          "parameters": {}
+        }
+      ],
+      "observations": [
+        {
+          "id": "observe/principal",
+          "instance": "object/first",
+          "output": "principal",
+          "unit": "currency units"
+        },
+        {
+          "id": "observe/annualRate",
+          "instance": "object/first",
+          "output": "annualRate",
+          "unit": "1/year"
+        },
+        {
+          "id": "observe/years",
+          "instance": "object/first",
+          "output": "years",
+          "unit": "years"
+        },
+        {
+          "id": "observe/compoundTotal",
+          "instance": "object/first",
+          "output": "compoundTotal",
+          "unit": "currency units"
+        },
+        {
+          "id": "observe/simpleTotal",
+          "instance": "object/first",
+          "output": "simpleTotal",
+          "unit": "currency units"
+        },
+        {
+          "id": "observe/compoundInterest",
+          "instance": "object/first",
+          "output": "compoundInterest",
+          "unit": "currency units"
+        },
+        {
+          "id": "observe/simpleInterest",
+          "instance": "object/first",
+          "output": "simpleInterest",
+          "unit": "currency units"
+        },
+        {
+          "id": "observe/compoundPoints",
+          "instance": "object/first",
+          "output": "compoundPoints",
+          "unit": "currency units"
+        },
+        {
+          "id": "observe/simplePoints",
+          "instance": "object/first",
+          "output": "simplePoints",
+          "unit": "currency units"
+        }
+      ],
+      "connections": [
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "principal"
+          },
+          "to": "observe/principal"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "annualRate"
+          },
+          "to": "observe/annualRate"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "years"
+          },
+          "to": "observe/years"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "compoundTotal"
+          },
+          "to": "observe/compoundTotal"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "simpleTotal"
+          },
+          "to": "observe/simpleTotal"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "compoundInterest"
+          },
+          "to": "observe/compoundInterest"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "simpleInterest"
+          },
+          "to": "observe/simpleInterest"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "compoundPoints"
+          },
+          "to": "observe/compoundPoints"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "simplePoints"
+          },
+          "to": "observe/simplePoints"
+        }
+      ],
+      "controls": [
+        {
+          "instance": "object/first",
+          "action": "GROW_SET_SCENARIO"
+        },
+        {
+          "instance": "object/first",
+          "action": "GROW_SET_PRINCIPAL"
+        },
+        {
+          "instance": "object/first",
+          "action": "GROW_SET_RATE"
+        },
+        {
+          "instance": "object/first",
+          "action": "GROW_SET_YEARS"
+        }
+      ],
+      "views": [
+        {
+          "ref": "views/AssemblyScene",
+          "observations": [
+            "observe/principal",
+            "observe/annualRate",
+            "observe/years",
+            "observe/compoundTotal",
+            "observe/simpleTotal",
+            "observe/compoundInterest",
+            "observe/simpleInterest",
+            "observe/compoundPoints",
+            "observe/simplePoints"
+          ]
+        },
+        {
+          "ref": "views/AssemblyTable",
+          "observations": [
+            "observe/principal",
+            "observe/annualRate",
+            "observe/years",
+            "observe/compoundTotal",
+            "observe/simpleTotal",
+            "observe/compoundInterest",
+            "observe/simpleInterest",
+            "observe/compoundPoints",
+            "observe/simplePoints"
+          ]
+        }
+      ]
+    },
+    "instances": [
+      {
+        "id": "object/first",
+        "label": "Compound and simple interest",
+        "provider": "prefabs/dynamic-systems/CompoundGrowth",
+        "parameters": {
+          "principal": 100,
+          "annualRate": 0.05,
+          "years": 10
+        },
+        "state": {
+          "principal": 100,
+          "annualRate": 0.05,
+          "years": 10
+        },
+        "outputs": {
+          "principal": 100,
+          "annualRate": 0.05,
+          "years": 10,
+          "compoundTotal": 162.88946267774423,
+          "simpleTotal": 150,
+          "compoundInterest": 62.889462677744234,
+          "simpleInterest": 50,
+          "compoundPoints": [
+            {
+              "x": 0,
+              "y": 100
+            },
+            {
+              "x": 1,
+              "y": 105
+            },
+            {
+              "x": 2,
+              "y": 110.25
+            },
+            {
+              "x": 3,
+              "y": 115.76250000000002
+            },
+            {
+              "x": 4,
+              "y": 121.55062500000003
+            },
+            {
+              "x": 5,
+              "y": 127.62815625000003
+            },
+            {
+              "x": 6,
+              "y": 134.00956406250003
+            },
+            {
+              "x": 7,
+              "y": 140.71004226562505
+            },
+            {
+              "x": 8,
+              "y": 147.7455443789063
+            },
+            {
+              "x": 9,
+              "y": 155.13282159785163
+            },
+            {
+              "x": 10,
+              "y": 162.88946267774423
+            }
+          ],
+          "simplePoints": [
+            {
+              "x": 0,
+              "y": 100
+            },
+            {
+              "x": 1,
+              "y": 105
+            },
+            {
+              "x": 2,
+              "y": 110.00000000000001
+            },
+            {
+              "x": 3,
+              "y": 114.99999999999999
+            },
+            {
+              "x": 4,
+              "y": 120
+            },
+            {
+              "x": 5,
+              "y": 125
+            },
+            {
+              "x": 6,
+              "y": 130
+            },
+            {
+              "x": 7,
+              "y": 135
+            },
+            {
+              "x": 8,
+              "y": 140
+            },
+            {
+              "x": 9,
+              "y": 145
+            },
+            {
+              "x": 10,
+              "y": 150
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "provider": "prefabs/dynamic-systems/RingTraffic",
+    "assembly": {
+      "version": 1,
+      "title": "Stop-and-go traffic on a closed road",
+      "learningGoal": "Seeded vehicles follow the Intelligent Driver Model on a periodic closed road. A brief brake disturbance changes authoritative vehicle speeds and can grow into a backward-travelling slow region without an accident. Compare a lower-density independent ring when requested.",
+      "instances": [
+        {
+          "id": "object/first",
+          "label": "Stop-and-go traffic on a closed road",
+          "prefab": {
+            "ref": "prefabs/dynamic-systems/RingTraffic",
+            "version": 1
+          },
+          "parameters": {}
+        }
+      ],
+      "observations": [
+        {
+          "id": "observe/elapsed",
+          "instance": "object/first",
+          "output": "elapsed",
+          "unit": "s"
+        },
+        {
+          "id": "observe/playing",
+          "instance": "object/first",
+          "output": "playing",
+          "unit": "1"
+        },
+        {
+          "id": "observe/vehicleCount",
+          "instance": "object/first",
+          "output": "vehicleCount",
+          "unit": "vehicles"
+        },
+        {
+          "id": "observe/averageSpeed",
+          "instance": "object/first",
+          "output": "averageSpeed",
+          "unit": "m/s"
+        },
+        {
+          "id": "observe/minimumSpeed",
+          "instance": "object/first",
+          "output": "minimumSpeed",
+          "unit": "m/s"
+        },
+        {
+          "id": "observe/slowVehicles",
+          "instance": "object/first",
+          "output": "slowVehicles",
+          "unit": "vehicles"
+        },
+        {
+          "id": "observe/minimumGap",
+          "instance": "object/first",
+          "output": "minimumGap",
+          "unit": "m"
+        },
+        {
+          "id": "observe/desiredHeadway",
+          "instance": "object/first",
+          "output": "desiredHeadway",
+          "unit": "s"
+        },
+        {
+          "id": "observe/density",
+          "instance": "object/first",
+          "output": "density",
+          "unit": "vehicles/km"
+        },
+        {
+          "id": "observe/disturbanceActive",
+          "instance": "object/first",
+          "output": "disturbanceActive",
+          "unit": "1"
+        },
+        {
+          "id": "observe/vehicles",
+          "instance": "object/first",
+          "output": "vehicles",
+          "unit": "vehicle state"
+        },
+        {
+          "id": "observe/points",
+          "instance": "object/first",
+          "output": "points",
+          "unit": "m/s"
+        }
+      ],
+      "connections": [
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "elapsed"
+          },
+          "to": "observe/elapsed"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "playing"
+          },
+          "to": "observe/playing"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "vehicleCount"
+          },
+          "to": "observe/vehicleCount"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "averageSpeed"
+          },
+          "to": "observe/averageSpeed"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "minimumSpeed"
+          },
+          "to": "observe/minimumSpeed"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "slowVehicles"
+          },
+          "to": "observe/slowVehicles"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "minimumGap"
+          },
+          "to": "observe/minimumGap"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "desiredHeadway"
+          },
+          "to": "observe/desiredHeadway"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "density"
+          },
+          "to": "observe/density"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "disturbanceActive"
+          },
+          "to": "observe/disturbanceActive"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "vehicles"
+          },
+          "to": "observe/vehicles"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "points"
+          },
+          "to": "observe/points"
+        }
+      ],
+      "controls": [
+        {
+          "instance": "object/first",
+          "action": "TRAFFIC_BRAKE"
+        },
+        {
+          "instance": "object/first",
+          "action": "TRAFFIC_SET_HEADWAY"
+        },
+        {
+          "instance": "object/first",
+          "action": "TRAFFIC_SET_PLAYING"
+        },
+        {
+          "instance": "object/first",
+          "action": "TRAFFIC_STEP"
+        },
+        {
+          "instance": "object/first",
+          "action": "TRAFFIC_RESTART"
+        }
+      ],
+      "views": [
+        {
+          "ref": "views/AssemblyScene",
+          "observations": [
+            "observe/elapsed",
+            "observe/playing",
+            "observe/vehicleCount",
+            "observe/averageSpeed",
+            "observe/minimumSpeed",
+            "observe/slowVehicles",
+            "observe/minimumGap",
+            "observe/desiredHeadway",
+            "observe/density",
+            "observe/disturbanceActive",
+            "observe/vehicles",
+            "observe/points"
+          ]
+        },
+        {
+          "ref": "views/AssemblyTable",
+          "observations": [
+            "observe/elapsed",
+            "observe/playing",
+            "observe/vehicleCount",
+            "observe/averageSpeed",
+            "observe/minimumSpeed",
+            "observe/slowVehicles",
+            "observe/minimumGap",
+            "observe/desiredHeadway",
+            "observe/density",
+            "observe/disturbanceActive",
+            "observe/vehicles",
+            "observe/points"
+          ]
+        }
+      ]
+    },
+    "instances": [
+      {
+        "id": "object/first",
+        "label": "Stop-and-go traffic on a closed road",
+        "provider": "prefabs/dynamic-systems/RingTraffic",
+        "parameters": {
+          "vehicleCount": 22,
+          "roadLength": 260,
+          "desiredSpeed": 22,
+          "desiredHeadway": 1.1,
+          "minimumGap": 2,
+          "maximumAcceleration": 1.2,
+          "comfortableBraking": 2,
+          "seed": 117,
+          "playing": false
+        },
+        "state": {
+          "vehicleCount": 22,
+          "roadLength": 260,
+          "desiredSpeed": 22,
+          "desiredHeadway": 1.1,
+          "minimumGap": 2,
+          "maximumAcceleration": 1.2,
+          "comfortableBraking": 2,
+          "seed": 117,
+          "playing": false,
+          "elapsed": 0,
+          "disturbanceRemaining": 0,
+          "vehicles": [
+            {
+              "id": 0,
+              "position": 0,
+              "speed": 18.720566757079215
+            },
+            {
+              "id": 1,
+              "position": 11.818181818181818,
+              "speed": 18.571437971228733
+            },
+            {
+              "id": 2,
+              "position": 23.636363636363637,
+              "speed": 19.400915328226983
+            },
+            {
+              "id": 3,
+              "position": 35.45454545454545,
+              "speed": 18.921764172893017
+            },
+            {
+              "id": 4,
+              "position": 47.27272727272727,
+              "speed": 19.4806342824921
+            },
+            {
+              "id": 5,
+              "position": 59.09090909090909,
+              "speed": 19.07477619842626
+            },
+            {
+              "id": 6,
+              "position": 70.9090909090909,
+              "speed": 19.513098364435137
+            },
+            {
+              "id": 7,
+              "position": 82.72727272727273,
+              "speed": 18.56821274441667
+            },
+            {
+              "id": 8,
+              "position": 94.54545454545455,
+              "speed": 18.74919848903082
+            },
+            {
+              "id": 9,
+              "position": 106.36363636363636,
+              "speed": 18.67501393583603
+            },
+            {
+              "id": 10,
+              "position": 118.18181818181819,
+              "speed": 19.072431622082366
+            },
+            {
+              "id": 11,
+              "position": 130,
+              "speed": 18.77744181317277
+            },
+            {
+              "id": 12,
+              "position": 141.8181818181818,
+              "speed": 18.541112085208297
+            },
+            {
+              "id": 13,
+              "position": 153.63636363636363,
+              "speed": 19.312760676546024
+            },
+            {
+              "id": 14,
+              "position": 165.45454545454547,
+              "speed": 19.10586582535878
+            },
+            {
+              "id": 15,
+              "position": 177.27272727272728,
+              "speed": 18.589943153718487
+            },
+            {
+              "id": 16,
+              "position": 189.0909090909091,
+              "speed": 18.72326703756116
+            },
+            {
+              "id": 17,
+              "position": 200.9090909090909,
+              "speed": 18.495284602912143
+            },
+            {
+              "id": 18,
+              "position": 212.72727272727272,
+              "speed": 19.694186923848466
+            },
+            {
+              "id": 19,
+              "position": 224.54545454545456,
+              "speed": 18.587570335613563
+            },
+            {
+              "id": 20,
+              "position": 236.36363636363637,
+              "speed": 18.80637815765105
+            },
+            {
+              "id": 21,
+              "position": 248.1818181818182,
+              "speed": 18.6477448894456
+            }
+          ],
+          "speedHistory": [
+            {
+              "x": 0,
+              "y": 18.91043660759926
+            }
+          ]
+        },
+        "outputs": {
+          "elapsed": 0,
+          "playing": false,
+          "vehicleCount": 22,
+          "averageSpeed": 18.91043660759926,
+          "minimumSpeed": 18.495284602912143,
+          "slowVehicles": 0,
+          "minimumGap": 7.818181818181813,
+          "desiredHeadway": 1.1,
+          "density": 84.61538461538461,
+          "disturbanceActive": false,
+          "vehicles": [
+            {
+              "id": 0,
+              "position": 0,
+              "speed": 18.720566757079215
+            },
+            {
+              "id": 1,
+              "position": 11.818181818181818,
+              "speed": 18.571437971228733
+            },
+            {
+              "id": 2,
+              "position": 23.636363636363637,
+              "speed": 19.400915328226983
+            },
+            {
+              "id": 3,
+              "position": 35.45454545454545,
+              "speed": 18.921764172893017
+            },
+            {
+              "id": 4,
+              "position": 47.27272727272727,
+              "speed": 19.4806342824921
+            },
+            {
+              "id": 5,
+              "position": 59.09090909090909,
+              "speed": 19.07477619842626
+            },
+            {
+              "id": 6,
+              "position": 70.9090909090909,
+              "speed": 19.513098364435137
+            },
+            {
+              "id": 7,
+              "position": 82.72727272727273,
+              "speed": 18.56821274441667
+            },
+            {
+              "id": 8,
+              "position": 94.54545454545455,
+              "speed": 18.74919848903082
+            },
+            {
+              "id": 9,
+              "position": 106.36363636363636,
+              "speed": 18.67501393583603
+            },
+            {
+              "id": 10,
+              "position": 118.18181818181819,
+              "speed": 19.072431622082366
+            },
+            {
+              "id": 11,
+              "position": 130,
+              "speed": 18.77744181317277
+            },
+            {
+              "id": 12,
+              "position": 141.8181818181818,
+              "speed": 18.541112085208297
+            },
+            {
+              "id": 13,
+              "position": 153.63636363636363,
+              "speed": 19.312760676546024
+            },
+            {
+              "id": 14,
+              "position": 165.45454545454547,
+              "speed": 19.10586582535878
+            },
+            {
+              "id": 15,
+              "position": 177.27272727272728,
+              "speed": 18.589943153718487
+            },
+            {
+              "id": 16,
+              "position": 189.0909090909091,
+              "speed": 18.72326703756116
+            },
+            {
+              "id": 17,
+              "position": 200.9090909090909,
+              "speed": 18.495284602912143
+            },
+            {
+              "id": 18,
+              "position": 212.72727272727272,
+              "speed": 19.694186923848466
+            },
+            {
+              "id": 19,
+              "position": 224.54545454545456,
+              "speed": 18.587570335613563
+            },
+            {
+              "id": 20,
+              "position": 236.36363636363637,
+              "speed": 18.80637815765105
+            },
+            {
+              "id": 21,
+              "position": 248.1818181818182,
+              "speed": 18.6477448894456
+            }
+          ],
+          "points": [
+            {
+              "x": 0,
+              "y": 18.91043660759926
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "provider": "prefabs/dynamic-systems/CheckoutQueue",
+    "assembly": {
+      "version": 1,
+      "title": "One or two checkout cashiers",
+      "learningGoal": "A seeded FIFO checkout scheduler compares one or two cashiers over a fixed horizon. Changing cashier count reuses exactly the same pre-generated customer arrival times and service durations.",
+      "instances": [
+        {
+          "id": "object/first",
+          "label": "One or two checkout cashiers",
+          "prefab": {
+            "ref": "prefabs/dynamic-systems/CheckoutQueue",
+            "version": 1
+          },
+          "parameters": {}
+        }
+      ],
+      "observations": [
+        {
+          "id": "observe/arrivals",
+          "instance": "object/first",
+          "output": "arrivals",
+          "unit": "customers"
+        },
+        {
+          "id": "observe/completed",
+          "instance": "object/first",
+          "output": "completed",
+          "unit": "customers"
+        },
+        {
+          "id": "observe/waiting",
+          "instance": "object/first",
+          "output": "waiting",
+          "unit": "customers"
+        },
+        {
+          "id": "observe/inService",
+          "instance": "object/first",
+          "output": "inService",
+          "unit": "customers"
+        },
+        {
+          "id": "observe/averageWait",
+          "instance": "object/first",
+          "output": "averageWait",
+          "unit": "min"
+        },
+        {
+          "id": "observe/maximumQueue",
+          "instance": "object/first",
+          "output": "maximumQueue",
+          "unit": "customers"
+        },
+        {
+          "id": "observe/cashiers",
+          "instance": "object/first",
+          "output": "cashiers",
+          "unit": "cashiers"
+        },
+        {
+          "id": "observe/duration",
+          "instance": "object/first",
+          "output": "duration",
+          "unit": "min"
+        },
+        {
+          "id": "observe/arrivalRate",
+          "instance": "object/first",
+          "output": "arrivalRate",
+          "unit": "/min"
+        },
+        {
+          "id": "observe/serviceRate",
+          "instance": "object/first",
+          "output": "serviceRate",
+          "unit": "/min/cashier"
+        },
+        {
+          "id": "observe/seed",
+          "instance": "object/first",
+          "output": "seed",
+          "unit": "1"
+        },
+        {
+          "id": "observe/customers",
+          "instance": "object/first",
+          "output": "customers",
+          "unit": "customer schedule"
+        },
+        {
+          "id": "observe/points",
+          "instance": "object/first",
+          "output": "points",
+          "unit": "min"
+        }
+      ],
+      "connections": [
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "arrivals"
+          },
+          "to": "observe/arrivals"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "completed"
+          },
+          "to": "observe/completed"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "waiting"
+          },
+          "to": "observe/waiting"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "inService"
+          },
+          "to": "observe/inService"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "averageWait"
+          },
+          "to": "observe/averageWait"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "maximumQueue"
+          },
+          "to": "observe/maximumQueue"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "cashiers"
+          },
+          "to": "observe/cashiers"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "duration"
+          },
+          "to": "observe/duration"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "arrivalRate"
+          },
+          "to": "observe/arrivalRate"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "serviceRate"
+          },
+          "to": "observe/serviceRate"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "seed"
+          },
+          "to": "observe/seed"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "customers"
+          },
+          "to": "observe/customers"
+        },
+        {
+          "type": "observation-source",
+          "from": {
+            "instance": "object/first",
+            "output": "points"
+          },
+          "to": "observe/points"
+        }
+      ],
+      "controls": [
+        {
+          "instance": "object/first",
+          "action": "QUEUE_SET_CASHIERS"
+        },
+        {
+          "instance": "object/first",
+          "action": "QUEUE_SET_ARRIVAL_RATE"
+        },
+        {
+          "instance": "object/first",
+          "action": "QUEUE_SET_SERVICE_RATE"
+        }
+      ],
+      "views": [
+        {
+          "ref": "views/AssemblyScene",
+          "observations": [
+            "observe/arrivals",
+            "observe/completed",
+            "observe/waiting",
+            "observe/inService",
+            "observe/averageWait",
+            "observe/maximumQueue",
+            "observe/cashiers",
+            "observe/duration",
+            "observe/arrivalRate",
+            "observe/serviceRate",
+            "observe/seed",
+            "observe/customers",
+            "observe/points"
+          ]
+        },
+        {
+          "ref": "views/AssemblyTable",
+          "observations": [
+            "observe/arrivals",
+            "observe/completed",
+            "observe/waiting",
+            "observe/inService",
+            "observe/averageWait",
+            "observe/maximumQueue",
+            "observe/cashiers",
+            "observe/duration",
+            "observe/arrivalRate",
+            "observe/serviceRate",
+            "observe/seed",
+            "observe/customers",
+            "observe/points"
+          ]
+        }
+      ]
+    },
+    "instances": [
+      {
+        "id": "object/first",
+        "label": "One or two checkout cashiers",
+        "provider": "prefabs/dynamic-systems/CheckoutQueue",
+        "parameters": {
+          "arrivalRate": 0.8,
+          "serviceRate": 1,
+          "duration": 60,
+          "cashiers": 1,
+          "seed": 604
+        },
+        "state": {
+          "arrivalRate": 0.8,
+          "serviceRate": 1,
+          "duration": 60,
+          "cashiers": 1,
+          "seed": 604,
+          "customers": [
+            {
+              "id": 0,
+              "arrival": 0.7580236951165303,
+              "service": 4.713128625850827
+            },
+            {
+              "id": 1,
+              "arrival": 0.8277231399838059,
+              "service": 0.15680319801341072
+            },
+            {
+              "id": 2,
+              "arrival": 3.633933674231729,
+              "service": 1.07348559144711
+            },
+            {
+              "id": 3,
+              "arrival": 4.317917564899821,
+              "service": 0.40274324214261065
+            },
+            {
+              "id": 4,
+              "arrival": 4.402212058637214,
+              "service": 2.581321180559659
+            },
+            {
+              "id": 5,
+              "arrival": 8.397397216172788,
+              "service": 1.736931487119911
+            },
+            {
+              "id": 6,
+              "arrival": 8.545834831516807,
+              "service": 0.1155563111412508
+            },
+            {
+              "id": 7,
+              "arrival": 8.997955928781124,
+              "service": 0.24097785322520968
+            },
+            {
+              "id": 8,
+              "arrival": 9.8502195220975,
+              "service": 0.6612549910696865
+            },
+            {
+              "id": 9,
+              "arrival": 10.820110723962111,
+              "service": 1.2778422128943119
+            },
+            {
+              "id": 10,
+              "arrival": 13.42285635716784,
+              "service": 1.7224897341258998
+            },
+            {
+              "id": 11,
+              "arrival": 13.799575629693333,
+              "service": 2.012751986566532
+            },
+            {
+              "id": 12,
+              "arrival": 15.444903560996696,
+              "service": 0.7327494167271711
+            },
+            {
+              "id": 13,
+              "arrival": 15.55579053523875,
+              "service": 0.6055337676719975
+            },
+            {
+              "id": 14,
+              "arrival": 16.381377410288042,
+              "service": 1.2326098809729706
+            },
+            {
+              "id": 15,
+              "arrival": 18.2006482144494,
+              "service": 1.2949097279408577
+            },
+            {
+              "id": 16,
+              "arrival": 19.77932299835504,
+              "service": 1.21761472484976
+            },
+            {
+              "id": 17,
+              "arrival": 21.258734777879766,
+              "service": 1.6981767452035286
+            },
+            {
+              "id": 18,
+              "arrival": 23.19905554744522,
+              "service": 0.7889789407066815
+            },
+            {
+              "id": 19,
+              "arrival": 24.6196619669802,
+              "service": 0.02993622544296551
+            },
+            {
+              "id": 20,
+              "arrival": 29.371179428656703,
+              "service": 1.0395706787296226
+            },
+            {
+              "id": 21,
+              "arrival": 30.03863593417214,
+              "service": 0.40987088773891833
+            },
+            {
+              "id": 22,
+              "arrival": 30.559032743389796,
+              "service": 1.8662202154458527
+            },
+            {
+              "id": 23,
+              "arrival": 39.705190611946335,
+              "service": 1.198603362014046
+            },
+            {
+              "id": 24,
+              "arrival": 41.349490445817125,
+              "service": 0.48314075083529495
+            },
+            {
+              "id": 25,
+              "arrival": 41.805291025185134,
+              "service": 0.4095799310287752
+            },
+            {
+              "id": 26,
+              "arrival": 43.333911270898334,
+              "service": 3.972490220448992
+            },
+            {
+              "id": 27,
+              "arrival": 43.98935233337851,
+              "service": 0.28282881052611214
+            },
+            {
+              "id": 28,
+              "arrival": 44.47329238007912,
+              "service": 0.9463027200118819
+            },
+            {
+              "id": 29,
+              "arrival": 45.36963402597639,
+              "service": 1.9794109922484013
+            },
+            {
+              "id": 30,
+              "arrival": 47.53024295232891,
+              "service": 1.2824919024945332
+            },
+            {
+              "id": 31,
+              "arrival": 47.86313449941643,
+              "service": 0.5093041282465988
+            },
+            {
+              "id": 32,
+              "arrival": 48.639009362890334,
+              "service": 0.16866636509534239
+            },
+            {
+              "id": 33,
+              "arrival": 50.46630319898763,
+              "service": 0.43126078168244086
+            },
+            {
+              "id": 34,
+              "arrival": 52.28098472469722,
+              "service": 0.6817717887217823
+            },
+            {
+              "id": 35,
+              "arrival": 52.773130791098325,
+              "service": 6.685084601145586
+            },
+            {
+              "id": 36,
+              "arrival": 52.7937254245858,
+              "service": 1.2019253431650292
+            },
+            {
+              "id": 37,
+              "arrival": 52.82063705920887,
+              "service": 1.7590097655520318
+            },
+            {
+              "id": 38,
+              "arrival": 54.133854996224095,
+              "service": 0.13594348799800537
+            },
+            {
+              "id": 39,
+              "arrival": 56.10088272824835,
+              "service": 2.213603030401729
+            },
+            {
+              "id": 40,
+              "arrival": 58.606272967451176,
+              "service": 5.2665194597563545
+            }
+          ]
+        },
+        "outputs": {
+          "arrivals": 41,
+          "completed": 35,
+          "waiting": 5,
+          "inService": 1,
+          "averageWait": 2.459079922634814,
+          "maximumQueue": 5,
+          "cashiers": 1,
+          "duration": 60,
+          "arrivalRate": 0.8,
+          "serviceRate": 1,
+          "seed": 604,
+          "customers": [
+            {
+              "id": 0,
+              "arrival": 0.7580236951165303,
+              "service": 4.713128625850827,
+              "start": 0.7580236951165303,
+              "finish": 5.471152320967358,
+              "wait": 0,
+              "cashier": 0
+            },
+            {
+              "id": 1,
+              "arrival": 0.8277231399838059,
+              "service": 0.15680319801341072,
+              "start": 5.471152320967358,
+              "finish": 5.627955518980769,
+              "wait": 4.643429180983552,
+              "cashier": 0
+            },
+            {
+              "id": 2,
+              "arrival": 3.633933674231729,
+              "service": 1.07348559144711,
+              "start": 5.627955518980769,
+              "finish": 6.701441110427878,
+              "wait": 1.9940218447490397,
+              "cashier": 0
+            },
+            {
+              "id": 3,
+              "arrival": 4.317917564899821,
+              "service": 0.40274324214261065,
+              "start": 6.701441110427878,
+              "finish": 7.104184352570489,
+              "wait": 2.3835235455280577,
+              "cashier": 0
+            },
+            {
+              "id": 4,
+              "arrival": 4.402212058637214,
+              "service": 2.581321180559659,
+              "start": 7.104184352570489,
+              "finish": 9.685505533130149,
+              "wait": 2.7019722939332755,
+              "cashier": 0
+            },
+            {
+              "id": 5,
+              "arrival": 8.397397216172788,
+              "service": 1.736931487119911,
+              "start": 9.685505533130149,
+              "finish": 11.42243702025006,
+              "wait": 1.288108316957361,
+              "cashier": 0
+            },
+            {
+              "id": 6,
+              "arrival": 8.545834831516807,
+              "service": 0.1155563111412508,
+              "start": 11.42243702025006,
+              "finish": 11.537993331391311,
+              "wait": 2.876602188733253,
+              "cashier": 0
+            },
+            {
+              "id": 7,
+              "arrival": 8.997955928781124,
+              "service": 0.24097785322520968,
+              "start": 11.537993331391311,
+              "finish": 11.778971184616521,
+              "wait": 2.540037402610187,
+              "cashier": 0
+            },
+            {
+              "id": 8,
+              "arrival": 9.8502195220975,
+              "service": 0.6612549910696865,
+              "start": 11.778971184616521,
+              "finish": 12.440226175686208,
+              "wait": 1.928751662519021,
+              "cashier": 0
+            },
+            {
+              "id": 9,
+              "arrival": 10.820110723962111,
+              "service": 1.2778422128943119,
+              "start": 12.440226175686208,
+              "finish": 13.71806838858052,
+              "wait": 1.6201154517240965,
+              "cashier": 0
+            },
+            {
+              "id": 10,
+              "arrival": 13.42285635716784,
+              "service": 1.7224897341258998,
+              "start": 13.71806838858052,
+              "finish": 15.440558122706419,
+              "wait": 0.2952120314126798,
+              "cashier": 0
+            },
+            {
+              "id": 11,
+              "arrival": 13.799575629693333,
+              "service": 2.012751986566532,
+              "start": 15.440558122706419,
+              "finish": 17.45331010927295,
+              "wait": 1.6409824930130856,
+              "cashier": 0
+            },
+            {
+              "id": 12,
+              "arrival": 15.444903560996696,
+              "service": 0.7327494167271711,
+              "start": 17.45331010927295,
+              "finish": 18.186059526000122,
+              "wait": 2.0084065482762554,
+              "cashier": 0
+            },
+            {
+              "id": 13,
+              "arrival": 15.55579053523875,
+              "service": 0.6055337676719975,
+              "start": 18.186059526000122,
+              "finish": 18.79159329367212,
+              "wait": 2.6302689907613725,
+              "cashier": 0
+            },
+            {
+              "id": 14,
+              "arrival": 16.381377410288042,
+              "service": 1.2326098809729706,
+              "start": 18.79159329367212,
+              "finish": 20.024203174645088,
+              "wait": 2.410215883384076,
+              "cashier": 0
+            },
+            {
+              "id": 15,
+              "arrival": 18.2006482144494,
+              "service": 1.2949097279408577,
+              "start": 20.024203174645088,
+              "finish": 21.319112902585946,
+              "wait": 1.8235549601956862,
+              "cashier": 0
+            },
+            {
+              "id": 16,
+              "arrival": 19.77932299835504,
+              "service": 1.21761472484976,
+              "start": 21.319112902585946,
+              "finish": 22.536727627435706,
+              "wait": 1.5397899042309078,
+              "cashier": 0
+            },
+            {
+              "id": 17,
+              "arrival": 21.258734777879766,
+              "service": 1.6981767452035286,
+              "start": 22.536727627435706,
+              "finish": 24.234904372639235,
+              "wait": 1.2779928495559396,
+              "cashier": 0
+            },
+            {
+              "id": 18,
+              "arrival": 23.19905554744522,
+              "service": 0.7889789407066815,
+              "start": 24.234904372639235,
+              "finish": 25.023883313345916,
+              "wait": 1.0358488251940159,
+              "cashier": 0
+            },
+            {
+              "id": 19,
+              "arrival": 24.6196619669802,
+              "service": 0.02993622544296551,
+              "start": 25.023883313345916,
+              "finish": 25.053819538788883,
+              "wait": 0.40422134636571627,
+              "cashier": 0
+            },
+            {
+              "id": 20,
+              "arrival": 29.371179428656703,
+              "service": 1.0395706787296226,
+              "start": 29.371179428656703,
+              "finish": 30.410750107386324,
+              "wait": 0,
+              "cashier": 0
+            },
+            {
+              "id": 21,
+              "arrival": 30.03863593417214,
+              "service": 0.40987088773891833,
+              "start": 30.410750107386324,
+              "finish": 30.820620995125243,
+              "wait": 0.3721141732141824,
+              "cashier": 0
+            },
+            {
+              "id": 22,
+              "arrival": 30.559032743389796,
+              "service": 1.8662202154458527,
+              "start": 30.820620995125243,
+              "finish": 32.686841210571096,
+              "wait": 0.2615882517354464,
+              "cashier": 0
+            },
+            {
+              "id": 23,
+              "arrival": 39.705190611946335,
+              "service": 1.198603362014046,
+              "start": 39.705190611946335,
+              "finish": 40.90379397396038,
+              "wait": 0,
+              "cashier": 0
+            }
+          ],
+          "points": [
+            {
+              "x": 0.7580236951165303,
+              "y": 0
+            },
+            {
+              "x": 0.8277231399838059,
+              "y": 4.643429180983552
+            },
+            {
+              "x": 3.633933674231729,
+              "y": 1.9940218447490397
+            },
+            {
+              "x": 4.317917564899821,
+              "y": 2.3835235455280577
+            },
+            {
+              "x": 4.402212058637214,
+              "y": 2.7019722939332755
+            },
+            {
+              "x": 8.397397216172788,
+              "y": 1.288108316957361
+            },
+            {
+              "x": 8.545834831516807,
+              "y": 2.876602188733253
+            },
+            {
+              "x": 8.997955928781124,
+              "y": 2.540037402610187
+            },
+            {
+              "x": 9.8502195220975,
+              "y": 1.928751662519021
+            },
+            {
+              "x": 10.820110723962111,
+              "y": 1.6201154517240965
+            },
+            {
+              "x": 13.42285635716784,
+              "y": 0.2952120314126798
+            },
+            {
+              "x": 13.799575629693333,
+              "y": 1.6409824930130856
+            },
+            {
+              "x": 15.444903560996696,
+              "y": 2.0084065482762554
+            },
+            {
+              "x": 15.55579053523875,
+              "y": 2.6302689907613725
+            },
+            {
+              "x": 16.381377410288042,
+              "y": 2.410215883384076
+            },
+            {
+              "x": 18.2006482144494,
+              "y": 1.8235549601956862
+            },
+            {
+              "x": 19.77932299835504,
+              "y": 1.5397899042309078
+            },
+            {
+              "x": 21.258734777879766,
+              "y": 1.2779928495559396
+            },
+            {
+              "x": 23.19905554744522,
+              "y": 1.0358488251940159
+            },
+            {
+              "x": 24.6196619669802,
+              "y": 0.40422134636571627
+            },
+            {
+              "x": 29.371179428656703,
+              "y": 0
+            },
+            {
+              "x": 30.03863593417214,
+              "y": 0.3721141732141824
+            },
+            {
+              "x": 30.559032743389796,
+              "y": 0.2615882517354464
+            },
+            {
+              "x": 39.705190611946335,
+              "y": 0
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

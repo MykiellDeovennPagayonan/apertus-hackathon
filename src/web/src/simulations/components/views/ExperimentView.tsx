@@ -1,56 +1,46 @@
 "use client";
-import dynamic from "next/dynamic";
+import { useSyncExternalStore } from "react";
 import { isElementaryDemo } from "../../runtime/elementarySession";
 import { isMathDemo } from "../../runtime/mathModel";
-import { getActiveDefinition } from "../../runtime/session";
+import {
+  advanceSessionTime,
+  getActiveDefinition,
+  getAuthoredSession,
+  getSessionAnimation,
+  setSessionAnimation,
+  subscribeSessionAnimation,
+} from "../../runtime/session";
 import type { DemoType } from "../../runtime/types";
-import { BridgeControls } from "../controls/BridgeControls";
-import { ProjectileControls } from "../controls/ProjectileControls";
-import { TownControls } from "../controls/TownControls";
-import { BridgeScene } from "./BridgeScene";
-import { DomainObservationViews } from "./DomainObservationViews";
-import { ElementaryExperimentView } from "./ElementaryExperimentView";
-import { MathExperimentView } from "./MathExperimentView";
-import { ProjectileObservationViews } from "./ProjectileObservationViews";
-import { ProjectileScene } from "./ProjectileScene";
-import { XYGraphView } from "./XYGraphView";
-
-const ThreeWorldView = dynamic(() => import("./ThreeWorldView"), {
-  ssr: false,
-  loading: () => <div aria-live="polite">Loading the town…</div>,
-});
+import { LegacyRecipeView } from "./LegacyRecipeView";
+import { AssemblyView } from "./math-foundations/AssemblyView";
+import { RecipeLesson } from "./RecipeLesson";
+import { SpatialRecipeView } from "./SpatialRecipeView";
 export function ExperimentView({ demo }: { demo: DemoType }) {
-  if (isMathDemo(demo)) return <MathExperimentView demo={demo} />;
-  if (isElementaryDemo(demo)) return <ElementaryExperimentView />;
-  const views = getActiveDefinition()?.components.views ?? [];
-  if (demo === "projectile")
-    return (
-      <div className="projectile-demo">
-        <div className="projectile-demo__scene">
-          {views.includes("SVGWorldView") && <ProjectileScene />}
-        </div>
-        <div className="projectile-demo__bottom">
-          <ProjectileControls />
-          {views.includes("XYGraphView") && <XYGraphView />}
-        </div>
-        <ProjectileObservationViews />
-      </div>
-    );
-  if (demo === "bridge")
-    return (
-      <>
-        {views.includes("SVGWorldView") && <BridgeScene />}
-        <BridgeControls />
-        <DomainObservationViews demo={demo} />
-      </>
-    );
-  return (
-    <div className="town-demo">
-      <div className="town-demo__scene">
-        {views.includes("ThreeWorldView") && <ThreeWorldView />}
-      </div>
-      <TownControls />
-      <DomainObservationViews demo={demo} />
-    </div>
+  const animationEnabled = useSyncExternalStore(
+    subscribeSessionAnimation,
+    getSessionAnimation,
+    () => false,
   );
+  const authored = getAuthoredSession();
+  if (authored)
+    return (
+      <RecipeLesson
+        workspace
+        document={authored.document}
+        runtime={authored.runtime}
+        animationEnabled={animationEnabled}
+        onAnimationChange={setSessionAnimation}
+        onAdvanceTime={advanceSessionTime}
+      />
+    );
+  // Session teardown can publish a store update before the next activation.
+  // Keep that transition empty instead of assembling a legacy model from a
+  // different session's starting values.
+  if (!getActiveDefinition()) return <output>Loading experiment…</output>;
+  if (demo === "assembly") return <AssemblyView />;
+  if (demo === "gas" || isMathDemo(demo) || isElementaryDemo(demo))
+    return <LegacyRecipeView demo={demo} />;
+  if (demo === "projectile" || demo === "bridge" || demo === "town")
+    return <SpatialRecipeView demo={demo} />;
+  return null;
 }

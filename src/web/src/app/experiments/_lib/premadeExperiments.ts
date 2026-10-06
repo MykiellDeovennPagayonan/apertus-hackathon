@@ -1,7 +1,8 @@
+import { listPremadeRecipes } from "../../../simulations/runtime/recipes/registry";
 import type { DemoType } from "../../../simulations/runtime/types";
 
-export const premadeExperiments: Record<
-  DemoType,
+const entries: Record<
+  Exclude<DemoType, "assembly">,
   {
     title: string;
     description: string;
@@ -9,17 +10,30 @@ export const premadeExperiments: Record<
     parameters: Record<string, unknown>;
   }
 > = {
-  projectile: {
-    title: "Projectile motion",
-    description: "Compare launches at 30° and 60° on the Moon.",
-    icon: "↗",
-    parameters: { angles: [30, 60], speed: 20, gravityPreset: "Moon" },
-  },
-  bridge: {
-    title: "Truss bridge",
-    description: "Move a load and explore how a bridge responds.",
-    icon: "△",
-    parameters: { loadPos: 0.5, loadTons: 10 },
+  ...(Object.fromEntries(
+    listPremadeRecipes().map(({ slug, recipe }) => [
+      slug,
+      {
+        title: recipe.title,
+        description: recipe.description,
+        icon: recipe.catalog.icon,
+        parameters: {},
+      },
+    ]),
+  ) as Record<
+    Exclude<DemoType, "assembly" | "gas" | "town">,
+    {
+      title: string;
+      description: string;
+      icon: string;
+      parameters: Record<string, unknown>;
+    }
+  >),
+  gas: {
+    title: "Gas pressure",
+    description: "Squeeze a gas and discover how volume changes pressure.",
+    icon: "◌",
+    parameters: {},
   },
   town: {
     title: "Living town",
@@ -27,66 +41,18 @@ export const premadeExperiments: Record<
     icon: "⌂",
     parameters: {},
   },
-  counting: {
-    title: "Counting circles",
-    description: "Count objects and move them into a box.",
-    icon: "●",
-    parameters: {},
-  },
-  arithmetic: {
-    title: "Addition & subtraction",
-    description: "Explore sums and differences with circles.",
-    icon: "+",
-    parameters: {},
-  },
-  "equal-groups": {
-    title: "Equal groups",
-    description: "Share 14 objects across 3 groups and find the remainder.",
-    icon: "×",
-    parameters: {
-      task: { mode: "share", total: 14, groups: 3, perGroup: 0 },
-      looping: false,
-    },
-  },
-  "fraction-builder": {
-    title: "Fraction builder",
-    description: "Build three quarters and compare parts of a whole.",
-    icon: "½",
-    parameters: {
-      bars: [
-        { n: 3, d: 4 },
-        { n: 0, d: 4 },
-      ],
-    },
-  },
-  "fraction-number-line": {
-    title: "Fraction number line",
-    description: "Place, add, and subtract fractions on a number line.",
-    icon: "↝",
-    parameters: {},
-  },
-  ratio: {
-    title: "Ratios & percentages",
-    description: "See how parts of a whole become percentages.",
-    icon: "%",
-    parameters: {},
-  },
-  "area-perimeter": {
-    title: "Area & perimeter",
-    description: "Measure a 6 by 4 metre rectangle, then change its size.",
-    icon: "▭",
-    parameters: { width: 6, height: 4 },
-  },
-  coordinates: {
-    title: "Coordinate plotting",
-    description: "Drag a point and explore its position on a graph.",
-    icon: "⌖",
-    parameters: {},
-  },
-  probability: {
-    title: "Probability trials",
-    description: "Run coin and die trials and compare their frequencies.",
-    icon: "⚄",
-    parameters: {},
-  },
 };
+
+// Preserve legacy catalog positions; migrated order comes from recipe metadata.
+const order = new Map<string, number>([
+  ...listPremadeRecipes().map(
+    ({ slug, recipe }) => [slug, recipe.catalog.order] as [string, number],
+  ),
+  ["gas", 4.5],
+  ["town", 5],
+]);
+export const premadeExperiments = Object.fromEntries(
+  Object.entries(entries).sort(
+    ([a], [b]) => (order.get(a) ?? Infinity) - (order.get(b) ?? Infinity),
+  ),
+) as typeof entries;

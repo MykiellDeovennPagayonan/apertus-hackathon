@@ -1,5 +1,6 @@
-import { useState } from "react";
 import type { ActionResult } from "../../runtime/commands";
+import { ActionButton } from "./ActionButton";
+import { NumberField } from "./NumberField";
 export function IntegerStepper({
   label,
   value,
@@ -13,64 +14,29 @@ export function IntegerStepper({
   max: number;
   onChange: (value: number) => ActionResult;
 }) {
-  const [error, setError] = useState("");
-  const commit = (n: number) => {
-    const result =
-      Number.isInteger(n) && n >= min && n <= max
-        ? onChange(n)
-        : {
-            accepted: false as const,
-            error: `Choose a whole number from ${min} to ${max}.`,
-          };
-    setError(result.accepted ? "" : result.error);
-    return result.accepted;
-  };
   return (
-    <div className="math-input">
-      <label>
-        <span>{label}</span>
-        <span className="math-stepper">
-          <button
-            type="button"
-            aria-label={`Decrease ${label}`}
-            disabled={value <= min}
-            onClick={() => commit(value - 1)}
-          >
-            −
-          </button>
-          <input
-            key={value}
-            type="number"
-            min={min}
-            max={max}
-            step={1}
-            defaultValue={value}
-            aria-label={label}
-            onBlur={(e) => {
-              const ok =
-                e.currentTarget.value !== "" &&
-                commit(Number(e.currentTarget.value));
-              if (!ok) e.currentTarget.value = String(value);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") e.currentTarget.blur();
-            }}
-          />
-          <button
-            type="button"
-            aria-label={`Increase ${label}`}
-            disabled={value >= max}
-            onClick={() => commit(value + 1)}
-          >
-            +
-          </button>
-        </span>
-      </label>
-      {error && (
-        <span className="math-error" role="alert">
-          {error}
-        </span>
-      )}
-    </div>
+    <fieldset className="math-input math-stepper" aria-label={label}>
+      <ActionButton
+        disabled={value <= min}
+        onCommand={() => onChange(value - 1)}
+      >
+        Decrease {label.toLowerCase()}
+      </ActionButton>
+      <NumberField
+        label={label}
+        value={value}
+        min={min}
+        max={max}
+        step={1}
+        integer
+        onChange={onChange}
+      />
+      <ActionButton
+        disabled={value >= max}
+        onCommand={() => onChange(value + 1)}
+      >
+        Increase {label.toLowerCase()}
+      </ActionButton>
+    </fieldset>
   );
 }

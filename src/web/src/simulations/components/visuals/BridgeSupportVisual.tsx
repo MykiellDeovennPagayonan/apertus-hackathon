@@ -33,8 +33,9 @@ export function BridgeSupportVisual({
               y={DECK_Y + 62}
               textAnchor={i ? "end" : "start"}
               fill="var(--accent)"
+              fontSize={16}
             >
-              {shares[i].toFixed(1)} t conceptual share
+              {shares[i].toFixed(1)} t
             </text>
           </g>
         ))}
