@@ -23,6 +23,10 @@ export function startTrace(id: string, prompt: string) {
       mode: process.env.PLANNER_MODE ?? "hybrid",
       apertus: {
         model: a.model,
+        provider: a.provider,
+        baseUrl: a.baseUrl,
+        structuredOutput: a.structuredOutput,
+        contextCapacity: a.contextTokens,
         maxTokens: a.maxTokens,
         temperature: 0,
         timeout: a.timeout,

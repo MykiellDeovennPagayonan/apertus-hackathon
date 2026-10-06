@@ -1315,7 +1315,7 @@
   min-width: 0;
 }
 
-/* Experiment navigation and the prompt frame one spatial workspace. */
+/* The board owns the viewport; navigation and the prompt float above it. */
 .experiment-workspace .workspace-stage:has(.is-board-workspace) {
   overflow: clip;
   scrollbar-gutter: auto;
@@ -1335,26 +1335,6 @@
 }
 .experiment-workspace--focused .board-viewport {
   overflow: clip;
-  clip-path: inset(
-    calc(
-        var(--workspace-top, 112px) +
-        var(--lesson-heading-height, 60px) +
-        12px
-      )
-      0 calc(var(--composer-height, 64px) + var(--composer-bottom) + 72px) 0
-  );
-}
-@media (max-width: 700px) {
-  .experiment-workspace--focused .board-viewport {
-    clip-path: inset(
-      calc(
-          var(--workspace-top, 112px) +
-          var(--lesson-heading-height, 60px) +
-          12px
-        )
-        0 calc(var(--composer-height, 64px) + var(--composer-bottom) + 8px) 0
-    );
-  }
 }
 .experiment-workspace .board-viewport {
   background-image: radial-gradient(#d5cdbb70 1px, transparent 1px);
@@ -1422,6 +1402,12 @@
   border-radius: 10px;
   background: var(--panel);
 }
+.experiment-workspace:has(.gas-experiment-tools[open])
+  .is-workspace
+  .is-floating
+  .board-workspace-tools {
+  visibility: hidden;
+}
 .experiment-workspace .recipe-lesson.is-board-workspace > header p {
   font-size: 14px;
   margin: 0;
@@ -1433,6 +1419,17 @@
   }
   .experiment-workspace .recipe-lesson.is-board-workspace > header h1 {
     font-size: 22px;
+  }
+}
+
+/* Preserve actual-scale controls and scenes when vertical space is scarce.
+   The authored activity repeats the actionable prompt in its first card. */
+@media (max-height: 650px) {
+  .experiment-workspace .recipe-lesson.is-board-workspace > header {
+    display: none;
+  }
+  .experiment-workspace .is-workspace .is-floating .board-workspace-tools {
+    display: none;
   }
 }
 

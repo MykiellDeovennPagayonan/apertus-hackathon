@@ -137,10 +137,34 @@ async function exactField(page, recipe, target, field, focus = true) {
   await locator.waitFor({ state: "visible" });
   return locator;
 }
-async function assertOpeningState(page, result, c) {
+async function assertRectangleReadouts(page, s, node, expected) {
+  for (const [output, unit] of [
+    ["area", "m²"],
+    ["perimeter", "m"],
+  ]) {
+    const links = s.recipe.document.connections.filter(
+      (c) => c.from.node === node.id && c.from.port === output,
+    );
+    assert.equal(
+      links.length,
+      1,
+      `One independently bound ${output} observation`,
+    );
+    const observation = s.recipe.document.nodes.find(
+      (n) => n.id === links[0].to.node,
+    );
+    assert.equal(observation.definition, "displays/Readout");
+    const value = component(page, s.recipe, observation).locator(
+      ".recipe-measurement-value",
+    );
+    assert.equal(Number.parseFloat(await value.innerText()), expected[output]);
+    assert.equal(await value.locator("small").innerText(), unit);
+  }
+}
+async function assertOpeningState(page, result, c, correlate = true) {
   const s = await poll(
     page,
-    (s) => !!s.recipe && s.requestId === result.requestId,
+    (s) => !!s.recipe && (!correlate || s.requestId === result.requestId),
     "Accepted request did not activate",
   );
   const nodes = models(s.recipe, c.definition);
@@ -166,6 +190,7 @@ async function assertOpeningState(page, result, c) {
     assert.equal(state.b, 4);
     assert.equal(state.sequence.cursor, 0);
     assert.equal(state.sequence.playing, false);
+    assert.equal(await page.locator(".math-equation").innerText(), "7 + 4 = ?");
     await page.getByRole("button", { name: /^Add \d+ circles?$/ }).waitFor();
     assert.equal(
       await page
@@ -196,6 +221,7 @@ async function assertOpeningState(page, result, c) {
       });
       assert.equal(s.state.state[n.id].width, c.expected[alias].width);
       assert.equal(s.state.state[n.id].height, c.expected[alias].height);
+      await assertRectangleReadouts(page, s, n, c.expected[alias]);
       const width = await exactField(page, s.recipe, n, "value.width", false);
       assert.equal(await width.inputValue(), String(c.expected[alias].width));
     }
@@ -205,6 +231,7 @@ async function assertOpeningState(page, result, c) {
     assert.deepEqual(s.state.outputs[n.id].response.supportShares, [5, 5]);
     assert.equal(s.state.state[loadNode.id].magnitude, 10);
     assert.equal(s.state.state[loadNode.id].position, 0.5);
+    assert.match(await page.locator(".bridge-demo").innerText(), /10\s*t/);
     assert.match(
       await page.locator(".recipe-lesson > header").innerText(),
       /deflection|millimet|unavailable/i,
@@ -268,6 +295,43 @@ async function exerciseAndAssert(page, c, dir) {
   const recipe = s.recipe;
   const model = models(recipe, c.definition)[0];
   if (c.id === "arithmetic") {
+    let animation;
+    if (
+      await page.evaluate(
+        () => !matchMedia("(prefers-reduced-motion: reduce)").matches,
+      )
+    ) {
+      animation = page.evaluate(async (id) => {
+        const read = () => window.__experimentSnapshot().state.state[id];
+        const identities = JSON.stringify(read().tokens.map((t) => t.id));
+        const circles = [
+          ...document.querySelectorAll(".arithmetic-scene .math-token"),
+        ];
+        const cursors = [0];
+        const deadline = performance.now() + 15000;
+        while (performance.now() < deadline) {
+          const state = read();
+          if (JSON.stringify(state.tokens.map((t) => t.id)) !== identities)
+            throw Error("Token identities changed during addition");
+          if (circles.some((e) => !e.isConnected))
+            throw Error("Circle DOM identity changed during addition");
+          const previous = cursors.at(-1);
+          if (state.sequence.cursor > previous + 1)
+            throw Error("Normal motion skipped an addition step");
+          if (state.sequence.cursor !== previous)
+            cursors.push(state.sequence.cursor);
+          if (state.sequence.cursor === 4)
+            return {
+              cursors,
+              identities: JSON.parse(identities),
+              stableDOMCircles: circles.length,
+            };
+          await new Promise(requestAnimationFrame);
+        }
+        throw Error("Normal motion did not complete");
+      }, model.id);
+      animation.catch(() => {});
+    }
     await page.getByRole("button", { name: /^Add \d+ circles?$/ }).focus();
     await page.getByRole("button", { name: /^Add \d+ circles?$/ }).click();
     await poll(
@@ -277,6 +341,15 @@ async function exerciseAndAssert(page, c, dir) {
         s.state.state[model.id].sequence.cursor === 4,
       "Addition did not complete",
     );
+    assert.equal(
+      await page.locator(".math-equation").innerText(),
+      "7 + 4 = 11",
+    );
+    if (animation)
+      fs.writeFileSync(
+        path.join(dir, "arithmetic-motion.json"),
+        JSON.stringify(await animation, null, 2),
+      );
     await capture(page, dir, "completed");
     const first = page.getByRole("textbox", {
       name: "First number",
@@ -299,8 +372,15 @@ async function exerciseAndAssert(page, c, dir) {
     await add.press("Enter");
     await poll(
       page,
-      (s) => s.state.state[model.id].result === 12,
+      (s) =>
+        s.state.state[model.id].result === 12 &&
+        s.state.state[model.id].sequence.cursor === 4 &&
+        !s.state.state[model.id].sequence.playing,
       "Keyboard addition failed",
+    );
+    assert.equal(
+      await page.locator(".math-equation").innerText(),
+      "8 + 4 = 12",
     );
   } else if (c.id === "rectangles") {
     const A = nodeByLabel(recipe, c.definition, "A"),
@@ -325,6 +405,12 @@ async function exerciseAndAssert(page, c, dir) {
         s.state.outputs[A.id].area === 28,
       "B height edit failed",
     );
+    s = await snapshot(page);
+    assert.equal(s.state.state[A.id].height, 4);
+    assert.deepEqual(s.state.outputs[A.id], { area: 28, perimeter: 22 });
+    assert.deepEqual(s.state.outputs[B.id], { area: 24, perimeter: 22 });
+    await assertRectangleReadouts(page, s, A, { area: 28, perimeter: 22 });
+    await assertRectangleReadouts(page, s, B, { area: 24, perimeter: 22 });
     await width.focus();
     await width.fill("-");
     await capture(page, dir, "invalid");
@@ -335,6 +421,13 @@ async function exerciseAndAssert(page, c, dir) {
     await width.press("Tab");
   } else {
     const loadNode = models(recipe, "models/BridgeLoad")[0];
+    const initialResponses = structuredClone(
+      s.state.outputs[model.id].response.responses,
+    );
+    const initialTruck = await page
+      .locator(".bridge-demo text")
+      .filter({ hasText: /^10 t$/ })
+      .evaluate((e) => e.getCTM().e);
     const field = await exactField(page, recipe, loadNode, "MOVE_LOAD");
     await field.fill("0.25");
     await poll(
@@ -342,14 +435,75 @@ async function exerciseAndAssert(page, c, dir) {
       (s) =>
         s.state.state[loadNode.id].position === 0.25 &&
         s.state.state[loadNode.id].magnitude === 10 &&
-        s.state.outputs[model.id].response.supportShares[0] === 7.5,
+        s.state.outputs[model.id].response.supportShares[0] === 7.5 &&
+        s.state.outputs[model.id].response.supportShares[1] === 2.5,
       "Load control or support shares disagree",
     );
+    assert.notDeepEqual(
+      (await snapshot(page)).state.outputs[model.id].response.responses,
+      initialResponses,
+    );
+    await page.waitForFunction((x) => {
+      const label = [...document.querySelectorAll(".bridge-demo text")].find(
+        (e) => e.textContent.trim() === "10 t",
+      );
+      return label && label.getCTM().e < x - 5;
+    }, initialTruck);
+    const viewport = page.viewportSize();
+    if (viewport.width >= 700 && viewport.height < 700) {
+      await page.locator('summary[aria-label="Board navigation help"]').click();
+      await page.getByRole("button", { name: "Starting view" }).click();
+      await settleLayout(page);
+    }
     const beams = page.locator(
       '.bridge-member[role="button"], [role="button"][aria-label^="Beam"], [role="button"][aria-label^="Inspect"]',
     );
     assert.ok(await beams.count(), "No accessible beam");
-    const beam = beams.first();
+    const pointerTarget = await beams.evaluateAll((elements) => {
+      for (let index = elements.length - 1; index >= 0; index--) {
+        const element = elements[index];
+        const line =
+          element.querySelector("line:not([stroke='transparent'])") ||
+          element.querySelector("line");
+        if (!(line instanceof SVGGeometryElement)) continue;
+        const matrix = line.getScreenCTM();
+        if (!matrix) continue;
+        for (const fraction of [0.5, 0.35, 0.65, 0.2, 0.8]) {
+          const point = line
+            .getPointAtLength(line.getTotalLength() * fraction)
+            .matrixTransform(matrix);
+          if (
+            document
+              .elementFromPoint(point.x, point.y)
+              ?.closest('[role="button"]') === element
+          )
+            return { index, x: point.x, y: point.y };
+        }
+      }
+      return null;
+    });
+    assert.ok(
+      pointerTarget,
+      "No unobstructed pointer target on the first beam",
+    );
+    const pointerBeam = beams.nth(pointerTarget.index);
+    await pointerBeam.focus();
+    if (page.viewportSize().width < 700) {
+      const bounds = await pointerBeam.boundingBox();
+      assert.ok(bounds, "Pointer beam has no touch bounds");
+      await pointerBeam.tap({
+        position: {
+          x: pointerTarget.x - bounds.x,
+          y: pointerTarget.y - bounds.y,
+        },
+      });
+    } else await page.mouse.click(pointerTarget.x, pointerTarget.y);
+    await poll(
+      page,
+      (s) => !!s.state.state[model.id].selectedMember,
+      "Pointer beam inspection failed",
+    );
+    const beam = beams.nth(1);
     await beam.focus();
     await beam.press("Enter");
     await poll(
@@ -359,6 +513,25 @@ async function exerciseAndAssert(page, c, dir) {
     );
     const selected = (await snapshot(page)).state.state[model.id]
       .selectedMember;
+    const humanName = selected
+      .split("/")
+      .at(-1)
+      .replace(/([a-z])([0-9])/gi, "$1 $2");
+    assert.equal(
+      await beam.getAttribute("aria-label"),
+      `Inspect member ${humanName}`,
+    );
+    assert.equal(
+      (
+        await page.locator(".bridge-demo__inspector b").innerText()
+      ).toLowerCase(),
+      humanName.toLowerCase(),
+    );
+    assert.deepEqual(
+      recipe.document,
+      (await snapshot(page)).recipe.document,
+      "Beam inspection preserves authored controls and layout",
+    );
     assert.match(
       await page.locator(".bridge-demo__inspector").innerText(),
       /tension|compression|low|medium|high|conceptual/i,
@@ -462,7 +635,25 @@ async function geometry(
       })),
       scenes: [
         ...document.querySelectorAll('[data-board-scene="true"] svg[viewBox]'),
-      ].map(rect),
+      ].map((element) => {
+        const bounds = element.getBoundingClientRect();
+        const chrome = [
+          document.querySelector(".recipe-lesson > header"),
+          document.querySelector(".workspace-composer"),
+        ]
+          .filter(Boolean)
+          .map((item) => item.getBoundingClientRect());
+        return {
+          ...rect(element),
+          chromeOccluded: chrome.some(
+            (item) =>
+              bounds.left < item.right &&
+              bounds.right > item.left &&
+              bounds.top < item.bottom &&
+              bounds.bottom > item.top,
+          ),
+        };
+      }),
     };
   });
   assert.equal(data.nativeNumbers, 0);
@@ -488,11 +679,18 @@ async function geometry(
           "Primary field is covered by chrome",
         );
     }
-  for (const scene of data.scenes)
+  for (const scene of data.scenes) {
     assert.ok(
       scene.width > sceneMinimum.width && scene.height > sceneMinimum.height,
       "Scene collapsed",
     );
+    if (strict)
+      assert.equal(
+        scene.chromeOccluded,
+        false,
+        "Scene is covered by shell chrome",
+      );
+  }
   return data;
 }
 function recordPage(page, record) {
@@ -544,17 +742,19 @@ async function saveEvidence(page, record, dir) {
     const url = new URL("/api/planner-diagnostics", base);
     url.searchParams.set("id", record.requestId);
     const response = await page.request.get(url.href);
+    const trace = await response.json().catch(() => null);
     fs.writeFileSync(
       path.join(dir, "planner-trace.json"),
       JSON.stringify(
         {
           status: response.status(),
-          trace: await response.json().catch(() => null),
+          trace,
         },
         null,
         2,
       ),
     );
+    return { status: response.status(), trace };
   }
 }
 async function exportRecipe(page, dir) {

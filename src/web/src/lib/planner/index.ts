@@ -1,4 +1,3 @@
-import { publicDefinition } from "../../simulations/components/catalog";
 import {
   finalizeRecipe,
   type ToolRequest,
@@ -9,7 +8,12 @@ import {
 } from "../../simulations/runtime/authoring/runtime";
 import { AuthoringTransaction } from "../../simulations/runtime/authoring/transaction";
 import { emptyAuthoredDocument } from "../../simulations/runtime/authoring/types";
-import { validateValue } from "../../simulations/runtime/parameterSchema";
+import {
+  choice,
+  object,
+  type ParameterSchema,
+  validateValue,
+} from "../../simulations/runtime/parameterSchema";
 import { premadeRecipe } from "../../simulations/runtime/recipes/registry";
 import { toJsonSchema } from "../apertus/structuredSchema";
 import { requestStructured } from "../apertus/transport";
@@ -23,27 +27,27 @@ import {
   selectedContract,
 } from "./catalog";
 import { verifyExplicitQuantities } from "./constraints";
-import { stageMessages } from "./context";
+import { parseStageJson, stageMessages } from "./context";
 import { coverageFor, verifyCoverage } from "./coverage";
 import { PlannerError } from "./errors";
 import {
   type Coverage,
-  exactKeys,
   type GenerationRequest,
   type GenerationResult,
-  intentSchema,
+  intentResponseSchema,
+  intentSources,
   parseGenerationRequest,
   parseGenerationResult,
-  parseIntent,
-  record,
+  parseIntentResponse,
   type TeachingIntent,
 } from "./schema";
 import {
-  creationSchema,
+  creationResponseSchema,
   followupContract,
   followupModeSchema,
   parseAuthoredFollowup,
-  parseCreation,
+  type parseCreation,
+  parseCreationResponse,
   selectionSchema,
 } from "./stages";
 
@@ -59,6 +63,7 @@ async function stage<T>(
   intent?: TeachingIntent,
   relevant?: unknown,
   maxTokens = 768,
+  verify?: (result: T) => void,
 ) {
   budget.check();
   const messages = stageMessages(
@@ -75,14 +80,24 @@ async function stage<T>(
   });
   return requestStructured(
     messages,
-    (content) => parse(JSON.parse(content)),
-    "Return only this stage's schema, preserving the original constraints. Do not repeat valid prior operations.",
+    (content) =>
+      parse(
+        parseStageJson(content, schema.type === "array" ? "array" : "object"),
+      ),
+    `Return only this stage's schema, preserving the original constraints. Do not repeat valid prior operations.${
+      task === "runtime_command_arguments"
+        ? " Return only the selected command's argument object. The application owns the command envelope. Close each nested argument object before the root object."
+        : task === "authoring_arguments"
+          ? " For operations, close the arguments object with }, then the operation object with }, then the operations array with ], and finally the root object with }."
+          : ""
+    }`,
     budget.signal,
     {
       budget,
       schema,
       maxTokens,
       stage: task,
+      verify,
       onEvent: (event, data) => budget.trace?.(`${task}.${event}`, data),
     },
   );
@@ -231,87 +246,112 @@ async function followup(
         "That change is outside the supported teaching contracts. Your current lesson is still available.",
     };
   if (mode === "runtime") {
-    const schema = followupContract(current.recipe.document, false);
-    const response = await stage(
-      "runtime_arguments",
+    const options = handles.flatMap((handle) =>
+      Object.entries(handle.commands).map(([command, contract], index) => ({
+        id: `${handle.target}:${index + 1}`,
+        node: handle.target,
+        label: handle.label,
+        definition: handle.definition,
+        command,
+        description: contract.description,
+        arguments: contract.arguments,
+      })),
+    );
+    const selectionShape = object({
+      selections: {
+        type: "array",
+        minItems: 1,
+        maxItems: 3,
+        items: choice(...options.map((option) => option.id)),
+      },
+    });
+    const selectedIds = await stage(
+      "runtime_command_selection",
       request,
       budget,
-      schema,
+      toJsonSchema(selectionShape),
       {
         policy:
-          "Read accepted runtime values to preserve sibling fields. Send only scoped declared commands.",
-        targets: handles.map(
-          ({ configurationSchema, configuration, ...rest }) => rest,
-        ),
+          "Select only the declared runtime commands needed to perform the request now. Value changes are runtime actions unless the request says start, initial, or default. Preserve the current operation when only arithmetic numbers change. Do not select RESET unless explicitly requested.",
+        options,
       },
       (value) => {
-        record(value);
-        exactKeys(value, ["status", "commands", "message"]);
-        if (
-          !["runtime", "unsupported"].includes(String(value.status)) ||
-          typeof value.message !== "string" ||
-          !value.message.trim() ||
-          value.message.length > 500 ||
-          !Array.isArray(value.commands) ||
-          value.commands.length > 8 ||
-          (value.status === "runtime" && !value.commands.length) ||
-          (value.status === "unsupported" && value.commands.length)
-        )
-          throw new Error("Invalid runtime outcome");
-        for (const command of value.commands) {
-          record(command);
-          exactKeys(command, ["node", "command", "arguments"]);
-          const node = current.recipe.document.nodes.find(
-            (n) => n.id === command.node,
-          );
-          const contract =
-            node &&
-            publicDefinition(node.definition).commands[String(command.command)];
-          if (
-            !contract ||
-            !handles.some((handle) => handle.target === command.node)
-          )
-            throw new Error("Unknown runtime command");
-          validateValue(contract.arguments, command.arguments);
-        }
-        const commands = value.commands as ScopedCommand[];
-        const candidate = new DocumentRuntime(current.recipe.document);
-        const snapshot = candidate.getSnapshot();
-        for (const handle of handles) {
-          const state = current.runtimeContext[handle.target];
-          if (state && typeof state === "object" && !Array.isArray(state))
-            snapshot.state[handle.target] = {
-              ...snapshot.state[handle.target],
-              ...(structuredClone(state) as Record<string, unknown>),
-            };
-        }
-        candidate.adoptSnapshot(snapshot);
-        const accepted = candidate.dispatch(commands);
-        if (!accepted.accepted) throw new Error(accepted.error);
-        return value as {
-          status: "runtime" | "unsupported";
-          commands: ScopedCommand[];
-          message: string;
-        };
+        validateValue(selectionShape, value);
+        const selections = (value as { selections: string[] }).selections;
+        if (new Set(selections).size !== selections.length)
+          throw new Error("Runtime command selections must be unique");
+        return selections;
       },
       undefined,
       current.runtimeContext,
+      128,
     );
-    if (response.status === "unsupported")
-      return {
-        protocolVersion: 1,
-        status: "unsupported",
-        requestId: request.requestId,
-        message: response.message,
-      };
+    const commands: ScopedCommand[] = [];
+    for (const selectedId of selectedIds) {
+      const selected = options.find((option) => option.id === selectedId);
+      if (!selected) throw new Error("Unknown runtime command selection");
+      const fullSchema = selected.arguments;
+      const unwrapped =
+        fullSchema.type === "object" &&
+        Object.keys(fullSchema.properties).length === 1 &&
+        fullSchema.properties.value?.type === "object"
+          ? fullSchema.properties.value
+          : null;
+      const responseSchema: ParameterSchema = unwrapped ?? fullSchema;
+      const generated = await stage(
+        "runtime_command_arguments",
+        request,
+        budget,
+        toJsonSchema(responseSchema),
+        {
+          policy:
+            "Return only the selected command's arguments. Copy every required sibling field from currentState when the request changes only some fields. Preserve the current arithmetic operation when only its numbers change.",
+          selected: {
+            node: selected.node,
+            label: selected.label,
+            definition: selected.definition,
+            command: selected.command,
+            description: selected.description,
+          },
+          currentState: current.runtimeContext[selected.node],
+        },
+        (value) => {
+          validateValue(responseSchema, value);
+          const arguments_ = unwrapped ? { value } : value;
+          validateValue(fullSchema, arguments_);
+          return arguments_ as Record<string, unknown>;
+        },
+        undefined,
+        undefined,
+        192,
+      );
+      commands.push({
+        node: selected.node,
+        command: selected.command,
+        arguments: generated,
+      });
+    }
+    const candidate = new DocumentRuntime(current.recipe.document);
+    const snapshot = candidate.getSnapshot();
+    for (const handle of handles) {
+      const state = current.runtimeContext[handle.target];
+      if (state && typeof state === "object" && !Array.isArray(state))
+        snapshot.state[handle.target] = {
+          ...snapshot.state[handle.target],
+          ...(structuredClone(state) as Record<string, unknown>),
+        };
+    }
+    candidate.adoptSnapshot(snapshot);
+    const accepted = candidate.dispatch(commands);
+    if (!accepted.accepted) throw new Error(accepted.error);
     return {
       protocolVersion: 1,
       status: "runtime_action",
       requestId: request.requestId,
       expectedSessionId: current.sessionId,
       expectedInteractionRevision: current.interactionRevision,
-      commands: response.commands,
-      message: response.message,
+      commands,
+      message: "Applied the requested change.",
     };
   }
   const draft = new AuthoringTransaction(
@@ -439,12 +479,29 @@ export async function planPrompt(
       "teaching_intent",
       request,
       budget,
-      toJsonSchema(intentSchema),
+      toJsonSchema(intentResponseSchema(request.prompt)),
       {
         policy:
-          "Describe the goal, concepts, actions and observations. Copy exact original sourceText for each explicit quantity, unit, negation and starting constraint. Do not claim supported capabilities.",
+          "Describe the goal, concepts, actions and observations concisely. Use 1–3 short entries per concepts/interactions/observations list; do not invent extra interactions or feedback. explicitConstraints is ALWAYS an array of {meaning, sourceId} objects. Select sourceId from constraintSources for each explicit quantity, unit, negation or starting constraint. The application attaches the exact original text; do not return sourceText. Multiple constraints may refer to the same source. Do not claim supported capabilities.",
+        constraintSources: intentSources(request.prompt),
       },
-      (value) => parseIntent(value, request.prompt),
+      (value) => parseIntentResponse(value, request.prompt),
+      undefined,
+      {
+        exampleRequest:
+          "Explore how changing a value changes the result. Start at 5.",
+        exampleResponse: {
+          goal: "Explore the relationship between a value and its result",
+          concepts: ["relationship"],
+          interactions: ["change the value"],
+          observations: ["result"],
+          explicitConstraints: [
+            { meaning: "Initial value", sourceId: "source-1" },
+          ],
+          suggestedStructure: "single",
+        },
+      },
+      768,
     );
     const selected = await select(request, intent, budget);
     if (!selected)
@@ -490,7 +547,10 @@ export async function planPrompt(
         immersive: { startup: "board", allowReturnToBoard: true, overlays: [] },
       };
       const draft = new AuthoringTransaction(request.requestId, document);
-      const lesson = configuration.lesson ?? source.document.lesson;
+      const lesson =
+        coverage.level === "partial"
+          ? source.document.lesson
+          : (configuration.lesson ?? source.document.lesson);
       const authoredLesson = {
         ...lesson,
         instruction:
@@ -545,24 +605,48 @@ export async function planPrompt(
       verifyCoverage(recipe, selected);
       return { draft, recipe, coverage };
     };
+    const selectedDetails = selectedContract(selected.recipeSlug);
+    const contract = {
+      recipe: selectedDetails.recipe,
+      version: selectedDetails.version,
+      title: selectedDetails.title,
+      parameters: selectedDetails.parameters,
+      startingValues: selectedDetails.startingValues,
+      limitations: selectedDetails.limitations,
+      existingInteractions: selected.interactionNames,
+      existingObservations: selected.observationNames,
+      supportedConcepts: selected.supports,
+    };
     const configuration = await stage(
       "configure_selected_recipe",
       request,
       budget,
-      toJsonSchema(creationSchema(selected.recipeSlug)),
+      toJsonSchema(creationResponseSchema(selected.recipeSlug)),
       {
-        ...selectedContract(selected.recipeSlug),
+        ...contract,
         policy:
-          "Return one instance per independent model. Comparison aliases A/B must retain their identity. Preserve explicit values exactly, converting units only when equivalent. Arithmetic task is complete, looping false and initial activity idle. Bridge overrides position/magnitude target the connected load. Do not invent deflection. Report truthful covered/omitted concepts. Omit lesson to retain the authored wording. Set extend:true only when the request needs an additional compatible control, observation, component, or structural regeneration beyond the supplied recipe.",
+          "Return one instance per independent model. When the request names instances A and B, use aliases exactly A and B, not rectangle_A/rectangle_B or longer names. Preserve explicit values exactly, converting units only when equivalent. Arithmetic task is complete, looping false and initial activity idle. Bridge overrides position/magnitude target the connected load. Each covered entry MUST be copied exactly from supportedConcepts. Put unavailable requested quantities in omitted, including exact deflection in millimetres. Deflection calculation is NOT supported. Explain only actual capabilities and omissions. Omit lesson to retain authored wording. Set extend:true only when the request needs an additional compatible control, observation, component, or structural regeneration beyond the supplied recipe.",
       },
-      (value) => {
-        const parsed = parseCreation(value, selected.recipeSlug);
-        construct(parsed, false);
-        return parsed;
-      },
+      (value) => parseCreationResponse(value, selected.recipeSlug),
       intent,
-      undefined,
+      {
+        policy:
+          "Return ONE JSON object with instances, coverageLevel, covered, omitted, explanation. The coverage fields are flat, not a nested coverage object. Begin with { and end with }. The example shows structure and registered defaults only; replace quantities with originalRequest. Omit lesson and extend unless additional wording or components are requested. Partial coverage uses registered wording plus the limitation, so omit lesson for partial results.",
+        exampleResponse: {
+          instances: (intent.suggestedStructure === "comparison"
+            ? ["A", "B"]
+            : ["A"]
+          ).map((alias) => ({ alias, overrides: contract.startingValues })),
+          coverageLevel: "full",
+          covered: [selected.supports[0]],
+          omitted: [],
+          explanation: "",
+        },
+      },
       1024,
+      (parsed) => {
+        construct(parsed, false);
+      },
     );
     let { draft, recipe, coverage } = construct(configuration, true);
     if (configuration.extend) {

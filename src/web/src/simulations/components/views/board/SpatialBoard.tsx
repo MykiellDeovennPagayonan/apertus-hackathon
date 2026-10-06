@@ -79,7 +79,9 @@ export function SpatialBoard({
   });
   const autoLayout =
     requestedAutoLayout ||
-    (!authoring && !!persisted?.responsive && size.width < 700);
+    (!authoring &&
+      !!persisted?.responsive &&
+      (size.width < 700 || size.height < 700));
   const [naturalHeights, setNaturalHeights] = useState<Record<string, number>>(
     {},
   );
@@ -92,11 +94,18 @@ export function SpatialBoard({
           // Authored responsive boards retain every item and each component's intended size.
           // Narrow screens reflow, rather than shrinking the entire investigation into view.
           if (!requestedAutoLayout) {
-            const width = Math.max(240, size.width - 32);
+            const width = Math.max(
+              240,
+              size.width >= 700
+                ? Math.min(720, size.width - 32)
+                : size.width - 32,
+            );
+            const rowGap = size.width >= 700 ? 96 : size.width <= 340 ? 16 : 80;
             let top = 0;
+            let openingHeight = 0;
             const rows =
               next.responsiveRows ?? next.items.map((item) => [item.id]);
-            for (const row of rows) {
+            for (const [rowIndex, row] of rows.entries()) {
               const items = row
                 .map((id) => next.items.find((item) => item.id === id))
                 .filter((item): item is BoardItem => !!item);
@@ -139,13 +148,14 @@ export function SpatialBoard({
                   height,
                 };
               });
-              top += height + 16;
+              if (rowIndex === 0) openingHeight = height;
+              top += height + rowGap;
             }
             next.startView = {
               x: -16,
               y: -16,
               width: width + 32,
-              height: Math.max(240, size.height - 32),
+              height: openingHeight + 32,
             };
             return next;
           }
@@ -394,22 +404,30 @@ export function SpatialBoard({
     const host = board.closest(".experiment-workspace");
     if (!host) return;
     const header = host.querySelector(".recipe-lesson > header");
+    const navigation = host.querySelector(".workspace-header");
     const composer = host.querySelector(".workspace-composer");
     const tools = host.querySelector(".board-workspace-tools");
     const measure = () => {
       const bounds = board.getBoundingClientRect();
       const heading = header?.getBoundingClientRect();
+      const navigationBounds = navigation?.getBoundingClientRect();
       const focused = host.classList.contains("experiment-workspace--focused");
       const prompt = composer?.getBoundingClientRect();
-      const top = heading
-        ? Math.max(
-            0,
-            // Reserve the closed navigation row before its first measurement.
-            // Opening its menu overlays the board without changing the camera.
-            heading.bottom - bounds.top + (focused ? 80 : 20),
-          )
+      const compact = bounds.width < 700 || bounds.height < 700;
+      const cameraMargin = compact ? 4 : 80;
+      const chromeBottom = Math.max(
+        heading?.height ? heading.bottom : bounds.top,
+        navigationBounds?.bottom ?? bounds.top,
+      );
+      const top = Math.max(
+        0,
+        chromeBottom -
+          bounds.top +
+          (focused ? cameraMargin : Math.min(20, cameraMargin)),
+      );
+      const bottom = prompt
+        ? Math.max(0, bounds.bottom - prompt.top + cameraMargin)
         : 24;
-      const bottom = prompt ? Math.max(0, bounds.bottom - prompt.top + 80) : 24;
       setChromeClearance((current) =>
         current.top === top && current.bottom === bottom
           ? current
@@ -417,9 +435,8 @@ export function SpatialBoard({
       );
     };
     const resize = new ResizeObserver(measure);
-    for (const element of [board, header, composer, tools])
+    for (const element of [board, header, navigation, composer, tools])
       if (element) resize.observe(element);
-    // Shell CSS variables change positions without changing element sizes.
     const mutation = new MutationObserver(measure);
     mutation.observe(host, {
       attributes: true,
@@ -582,14 +599,24 @@ export function SpatialBoard({
           height: area.height + topClearance + bottomClearance,
         }
       : area;
-  const initial = fit(
-    p.startView,
-    Math.max(1, size.width - 48),
-    Math.max(1, size.height - 96),
-  );
+  const freeCanvas =
+    workspace && chromeClearance.top === 0 && chromeClearance.bottom === 0;
+  const initial = freeCanvas
+    ? fit(autoLayout ? p.startView : area, size.width, size.height)
+    : fit(
+        p.startView,
+        Math.max(1, size.width - 48),
+        Math.max(1, size.height - topClearance - bottomClearance),
+      );
+  if (freeCanvas && !autoLayout && p.navigation.mode !== "fixed")
+    initial.zoom = clamp(
+      initial.zoom / 1.2,
+      p.navigation.minZoom,
+      p.navigation.maxZoom,
+    );
   if (
-    autoLayout ||
-    (workspace && !authoring && p.navigation.mode !== "fixed")
+    !freeCanvas &&
+    (autoLayout || (workspace && !authoring && p.navigation.mode !== "fixed"))
   ) {
     initial.zoom =
       (autoLayout && !requestedAutoLayout) || p.responsive
@@ -608,23 +635,17 @@ export function SpatialBoard({
   if (authoring) initial.zoom = Math.min(1, initial.zoom);
   const base = camera ?? initial;
   const fixed = !authoring && p.navigation.mode === "fixed";
+  const navigable = fixed
+    ? initial
+    : {
+        ...base,
+        zoom: clamp(base.zoom, p.navigation.minZoom, p.navigation.maxZoom),
+      };
   const c = authoring
     ? base
-    : constrain(
-        fixed
-          ? initial
-          : {
-              ...base,
-              zoom: clamp(
-                base.zoom,
-                p.navigation.minZoom,
-                p.navigation.maxZoom,
-              ),
-            },
-        navigationArea,
-        size.width,
-        size.height,
-      );
+    : freeCanvas
+      ? navigable
+      : constrain(navigable, navigationArea, size.width, size.height);
   const layouts = boardLayouts(document);
   const allLayouts = new Map<string, Layout>();
   const collectLayouts = (layout: Layout) => {
@@ -1478,6 +1499,9 @@ export function SpatialBoard({
         tabIndex={0}
         className={`board-viewport ${pan || rightPanning ? "is-panning" : ""} ${rightPanning ? "is-right-panning" : ""} ${immersive && overlays.some((o) => !(collapsed[o.id] ?? o.collapsedByDefault)) ? "has-overlays" : ""}`}
         style={{
+          clipPath: workspace
+            ? `inset(${topClearance}px 0px ${bottomClearance}px 0px)`
+            : undefined,
           backgroundSize: `${24 * c.zoom}px ${24 * c.zoom}px`,
           backgroundPosition: `${size.width / 2 - c.centerX * c.zoom}px ${size.height / 2 - c.centerY * c.zoom}px`,
         }}
@@ -1509,31 +1533,26 @@ export function SpatialBoard({
               }
             }
           }
-          if (
-            authoring &&
-            !immersive &&
-            drawingTool === "select" &&
-            e.button === 2
-          ) {
+          if (!immersive && e.button === 2) {
             begin(e, "pan");
             return;
           }
-          if (pan && !immersive) begin(e, "pan");
+          if (pan && !immersive && e.button === 0) begin(e, "pan");
         }}
         onPointerDown={(e) => {
-          if (e.target === e.currentTarget && !immersive) {
-            if (authoring && drawingTool === "select" && !pan && !editArea)
-              beginMarquee(e);
-            else begin(e, "pan");
-          }
+          if (
+            e.target === e.currentTarget &&
+            e.button === 0 &&
+            !immersive &&
+            authoring &&
+            drawingTool === "select" &&
+            !pan &&
+            !editArea
+          )
+            beginMarquee(e);
         }}
         onContextMenu={(e) => {
-          if (
-            authoring &&
-            !immersive &&
-            drawingTool === "select" &&
-            !(e.target as HTMLElement).closest(BOARD_CHROME)
-          )
+          if (!immersive && !(e.target as HTMLElement).closest(BOARD_CHROME))
             e.preventDefault();
         }}
         onPointerMove={move}
@@ -1555,7 +1574,7 @@ export function SpatialBoard({
               e.clientX - r.left - size.width / 2,
               e.clientY - r.top - size.height / 2,
             );
-          else
+          else if (pan)
             setCamera({
               ...c,
               centerX: c.centerX + e.deltaX / c.zoom,
@@ -1577,6 +1596,7 @@ export function SpatialBoard({
             e.target === e.currentTarget &&
             !fixed &&
             !immersive &&
+            pan &&
             ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)
           ) {
             e.preventDefault();

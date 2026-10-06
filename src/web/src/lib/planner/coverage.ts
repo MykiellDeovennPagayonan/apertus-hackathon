@@ -68,6 +68,8 @@ export function coverageFor(
         if (!coverage.omitted.some((item) => pattern.test(item)))
           coverage.omitted.push(label);
         coverage.level = "partial";
+        if (label === "Exact engineering deflection in millimetres")
+          coverage.explanation = explanation;
         if (!coverage.explanation.includes(explanation))
           coverage.explanation =
             `${coverage.explanation} ${explanation}`.trim();

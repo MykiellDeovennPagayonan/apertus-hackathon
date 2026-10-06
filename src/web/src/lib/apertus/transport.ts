@@ -25,7 +25,7 @@ export async function requestStructured<T>(
   parse: (content: string) => T,
   repairInstructions: string,
   signal?: AbortSignal,
-  options: StructuredOptions = {},
+  options: StructuredOptions & { verify?: (result: T) => void } = {},
 ): Promise<T> {
   let config: ReturnType<typeof readConfig>;
   try {
@@ -69,6 +69,11 @@ export async function requestStructured<T>(
         max_tokens: tokens,
         stream: false,
         messages: current,
+        // MLX accepts tokenizer arguments separately from the OpenAI schema.
+        // Small authoring stages reserve their output for arguments, not deliberation.
+        ...(config.provider === "local"
+          ? { chat_template_kwargs: { enable_thinking: false } }
+          : {}),
         ...(schema
           ? {
               response_format: {
@@ -222,6 +227,31 @@ export async function requestStructured<T>(
         const content = await call(current, schema, maxTokens, attempt > 0);
         try {
           const result = parse(content);
+          options.onEvent?.("schemaValidated", {
+            stage: options.stage,
+            attempt,
+          });
+          try {
+            options.verify?.(result);
+          } catch (error) {
+            issue =
+              error instanceof Error ? error.message : "Semantic mismatch";
+            options.onEvent?.("semanticFailure", {
+              stage: options.stage,
+              attempt,
+              reason: issue,
+              content: content.slice(0, 2000),
+            });
+            if (
+              attempt === 1 ||
+              (options.budget && options.budget.repairs >= 2)
+            )
+              throw new PlannerError(
+                `Apertus returned invalid stage arguments: ${issue}`,
+                502,
+              );
+            continue;
+          }
           options.onEvent?.("response", {
             stage: options.stage,
             attempt,
@@ -229,6 +259,7 @@ export async function requestStructured<T>(
           });
           return result;
         } catch (error) {
+          if (error instanceof PlannerError) throw error;
           issue = error instanceof Error ? error.message : "Schema mismatch";
           options.onEvent?.("schemaFailure", {
             stage: options.stage,

@@ -210,9 +210,68 @@ export function parseGenerationRequest(value: unknown): GenerationRequest {
     throw new Error("Request too large");
   return structuredClone(value) as GenerationRequest;
 }
-export function parseIntent(value: unknown, prompt: string): TeachingIntent {
+export function parseIntentShape(value: unknown): TeachingIntent {
   validateValue(intentSchema, value, "intent");
-  const intent = value as TeachingIntent;
+  return structuredClone(value as TeachingIntent);
+}
+export function intentSources(prompt: string) {
+  const sources: { id: string; text: string }[] = [];
+  let start = 0;
+  while (start < prompt.length) {
+    let end = Math.min(start + 500, prompt.length);
+    if (end < prompt.length) {
+      const space = prompt.lastIndexOf(" ", end);
+      if (space > start) end = space;
+    }
+    sources.push({
+      id: `source-${sources.length + 1}`,
+      text: prompt.slice(start, end),
+    });
+    start = end;
+  }
+  return sources;
+}
+export function intentResponseSchema(prompt: string): ParameterSchema {
+  if (intentSchema.type !== "object")
+    throw new Error("Intent contract must be an object");
+  return object({
+    ...intentSchema.properties,
+    explicitConstraints: {
+      type: "array",
+      minItems: 0,
+      maxItems: 12,
+      items: object({
+        meaning: text(),
+        sourceId: {
+          type: "enum",
+          values: intentSources(prompt).map((s) => s.id),
+        },
+      }),
+    },
+  });
+}
+export function parseIntentResponse(
+  value: unknown,
+  prompt: string,
+): TeachingIntent {
+  validateValue(intentResponseSchema(prompt), value, "intent");
+  const response = value as Omit<TeachingIntent, "explicitConstraints"> & {
+    explicitConstraints: { meaning: string; sourceId: string }[];
+  };
+  const sources = new Map(intentSources(prompt).map((s) => [s.id, s.text]));
+  return parseIntent(
+    {
+      ...response,
+      explicitConstraints: response.explicitConstraints.map((c) => ({
+        meaning: c.meaning,
+        sourceText: sources.get(c.sourceId),
+      })),
+    },
+    prompt,
+  );
+}
+export function parseIntent(value: unknown, prompt: string): TeachingIntent {
+  const intent = parseIntentShape(value);
   for (const constraint of intent.explicitConstraints)
     if (!prompt.includes(constraint.sourceText))
       throw new Error(

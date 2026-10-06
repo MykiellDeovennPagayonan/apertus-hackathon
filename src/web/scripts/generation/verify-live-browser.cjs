@@ -3,6 +3,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { cases } = require("./cases.cjs");
 const h = require("./helpers.cjs");
+const { metrics, assertTrace, summary } = require("./live-metrics.cjs");
 const runs = Number(process.env.GENERATION_RUNS || 5);
 assert.ok(Number.isInteger(runs) && runs >= 1 && runs <= 10);
 (async () => {
@@ -23,7 +24,8 @@ assert.ok(Number.isInteger(runs) && runs >= 1 && runs <= 10);
         fs.mkdirSync(dir, { recursive: true });
         const context = await browser.newContext({
           viewport: { width: 1440, height: 900 },
-          reducedMotion: "reduce",
+          reducedMotion:
+            run === 1 && c.id === "arithmetic" ? "no-preference" : "reduce",
         });
         const page = await context.newPage();
         const record = {
@@ -31,10 +33,27 @@ assert.ok(Number.isInteger(runs) && runs >= 1 && runs <= 10);
           case: c.id,
           prompt: c.prompt,
           evidence: "live-model",
+          motion: run === 1 && c.id === "arithmetic" ? "normal" : "reduced",
           status: "running",
         };
         records.push(record);
+        console.log(`Live attempt ${run}/${runs}: ${c.id}`);
         h.recordPage(page, record);
+        page.on("request", (r) => {
+          if (
+            new URL(r.url()).pathname !== "/api/apertus" ||
+            r.method() !== "POST"
+          )
+            return;
+          const request = r.postDataJSON();
+          if (request?.prompt !== c.prompt) return;
+          record.request = request;
+          record.requestId = request.requestId;
+          fs.writeFileSync(
+            path.join(dir, "request.json"),
+            JSON.stringify(request, null, 2),
+          );
+        });
         await context.tracing.start({
           screenshots: true,
           snapshots: true,
@@ -66,6 +85,14 @@ assert.ok(Number.isInteger(runs) && runs >= 1 && runs <= 10);
           record.result = result;
           record.httpStatus = response.status();
           record.requestId = response.headers()["x-request-id"];
+          fs.writeFileSync(
+            path.join(dir, "request.json"),
+            JSON.stringify(request, null, 2),
+          );
+          fs.writeFileSync(
+            path.join(dir, "response.json"),
+            JSON.stringify(result, null, 2),
+          );
           assert.equal(response.status(), 200);
           assert.equal(record.requestId, request.requestId);
           h.assertCanonicalResult(result, c, request);
@@ -74,6 +101,15 @@ assert.ok(Number.isInteger(runs) && runs >= 1 && runs <= 10);
           record.geometry = await h.geometry(page);
           await h.exerciseAndAssert(page, c, dir);
           await h.exportRecipe(page, dir);
+          await page.reload();
+          await h.poll(
+            page,
+            (s) => !!s.recipe,
+            "Saved live recipe failed to reopen",
+          );
+          assert.deepEqual((await h.snapshot(page)).recipe, result.recipe);
+          await h.assertOpeningState(page, result, c, false);
+          await h.capture(page, dir, "reloaded");
           assert.ok(
             record.navigation.every(
               (url) => !new URL(url).pathname.includes("/builder"),
@@ -89,7 +125,16 @@ assert.ok(Number.isInteger(runs) && runs >= 1 && runs <= 10);
           await h.capture(page, dir, "failure").catch(() => {});
         } finally {
           try {
-            await h.saveEvidence(page, record, dir);
+            const evidence = await h.saveEvidence(page, record, dir);
+            if (evidence?.trace) record.metrics = metrics(evidence.trace);
+            if (record.status === "passed") {
+              assert.equal(
+                evidence?.status,
+                200,
+                "Live acceptance requires diagnostics",
+              );
+              record.metrics = assertTrace(evidence.trace, record);
+            }
           } catch (error) {
             record.status = "failed";
             record.evidenceError = String(error);
@@ -102,6 +147,13 @@ assert.ok(Number.isInteger(runs) && runs >= 1 && runs <= 10);
           }
         }
         fs.writeFileSync(
+          path.join(dir, "record.json"),
+          JSON.stringify(record, null, 2),
+        );
+        console.log(
+          `${c.id}: ${record.status}${record.error ? ` — ${record.error.split("\n")[0]}` : ""}`,
+        );
+        fs.writeFileSync(
           path.join(h.out, "summary.json"),
           JSON.stringify(records, null, 2),
         );
@@ -111,6 +163,10 @@ assert.ok(Number.isInteger(runs) && runs >= 1 && runs <= 10);
     fs.writeFileSync(
       path.join(h.out, "summary.json"),
       JSON.stringify(records, null, 2),
+    );
+    fs.writeFileSync(
+      path.join(h.out, "metrics.json"),
+      JSON.stringify(summary(records), null, 2),
     );
   }
   assert.equal(records.length, runs * cases.length);

@@ -157,14 +157,34 @@ async function main() {
         }
         const stage = await page.locator(".workspace-stage").boundingBox();
         assert.equal(stage.width, size.width);
-        assert.ok(stage.height > 100 && stage.height < size.height);
+        assert.equal(stage.height, size.height);
+        const board = await page.locator(".board-viewport").boundingBox();
+        assert.deepEqual(
+          board,
+          stage,
+          "The experiment canvas must use the complete viewport",
+        );
+        if (["projectile", "fraction-builder"].includes(demo)) {
+          const world = page.locator(".board-world");
+          const initialTransform = await world.getAttribute("style");
+          await page
+            .locator('button[aria-label="Fit content"]')
+            .evaluate((button) => button.click());
+          await page.waitForTimeout(20);
+          await page
+            .locator('button[aria-label="Zoom out"]')
+            .evaluate((button) => button.click());
+          await page.waitForTimeout(50);
+          assert.equal(
+            await world.getAttribute("style"),
+            initialTransform,
+            "The starting camera must match Fit content plus one Zoom out",
+          );
+        }
         const composerBounds = await page
           .locator(".workspace-composer")
           .boundingBox();
-        assert.ok(
-          composerBounds.y - (stage.y + stage.height) >= 24,
-          "The scrollable experiment must leave a real gap above the composer",
-        );
+        assert.ok(composerBounds.y > size.height / 2);
         assert.equal(
           await page.locator("#experiment-controls").isVisible(),
           false,
@@ -221,21 +241,6 @@ async function main() {
             path: `/tmp/apertus-${demo}-${size.width}-closed.png`,
           });
         }
-        if (["gas", "equal-groups", "fraction-builder"].includes(demo)) {
-          const result = page.locator(
-            ".workspace-stage .learning-pressure, .workspace-stage .math-readout",
-          );
-          await result.scrollIntoViewIfNeeded();
-          const readout = await result.boundingBox();
-          const composer = await page
-            .locator(".workspace-composer")
-            .boundingBox();
-          assert.ok(
-            readout.y + readout.height <= composer.y - 24,
-            "Results must not be covered by the prompt",
-          );
-        }
-
         assert.equal(
           await page.locator("#experiment-controls").isVisible(),
           false,

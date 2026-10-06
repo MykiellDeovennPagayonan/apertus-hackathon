@@ -1040,8 +1040,8 @@ Each finding records severity, case/state/viewport, reproduction, actual behavio
 - [ ] Phase 1: shared pure operations, contracts, independent state, rollback, and serialization pass.
 - [ ] Phase 2: retrieval, optional Laya, focused schema returns, coverage, context/call budgets, and arrangements pass.
 - [ ] Phase 3: home→learner automatic activation, scoped follow-ups, save/reload, cancellation, revisions, and legacy cleanup pass.
-- [ ] Phase 4: TypeScript/build pass; actual three prompts pass; final 15 live attempts retained; first-attempt and repaired correctness reported separately.
-- [ ] Phase 5: all required viewport/state checks pass; captures inspected; no critical findings; save/remix/Try lesson work; gas protected sources unchanged and shared regression checks pass.
+- [x] Phase 4: TypeScript/build pass; actual three prompts pass; final 15 live attempts retained; first-attempt and repaired correctness reported separately. See [local Phase 4 report](015-validation/phase-4/20261006-local/report.md).
+- [x] Phase 5: all required viewport/state checks pass; captures inspected; no critical findings; save/remix/Try lesson work; gas protected sources unchanged and shared regression checks pass. See [Phase 5 signoff](015-validation/phase-5/20261007-signoff/report.md).
 - [ ] Old scoped planner paths physically removed or explicitly isolated with verified remaining consumers; no old broad fallback in the new generation path.
 - [ ] No duplicate recipe metadata/defaults, component schemas, loader, renderer, or model implementation introduced.
 - [ ] The finished result contains actual expanded authored composition/presentation and remains manually editable.

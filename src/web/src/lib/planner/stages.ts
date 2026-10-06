@@ -18,7 +18,11 @@ import {
 } from "../../simulations/runtime/parameterSchema";
 import { premadeRecipe } from "../../simulations/runtime/recipes/registry";
 import { type JsonSchema, toJsonSchema } from "../apertus/structuredSchema";
-import { activeHandles, compatibleComponents } from "./catalog";
+import {
+  activeHandles,
+  capabilityCards,
+  compatibleComponents,
+} from "./catalog";
 import { type Coverage, coverageSchema, exactKeys, record } from "./schema";
 
 const text: ParameterSchema = { type: "string", maxLength: 500 };
@@ -66,6 +70,48 @@ export function parseCreation(value: unknown, slug: string): CreationArguments {
 }
 
 type AllowedOperation = { tool: ToolRequest["tool"]; schema: ParameterSchema };
+export function creationResponseSchema(slug: string): ParameterSchema {
+  const schema = creationSchema(slug);
+  if (schema.type !== "object" || coverageSchema.type !== "object")
+    throw new Error("Creation contracts must be objects");
+  const card = capabilityCards().find((c) => c.recipeSlug === slug);
+  const covered = coverageSchema.properties.covered;
+  if (!card || covered.type !== "array")
+    throw new Error("Missing teaching evidence");
+  return object(
+    {
+      instances: schema.properties.instances,
+      coverageLevel: coverageSchema.properties.level,
+      covered: { ...covered, items: choice(...card.supports) },
+      omitted: coverageSchema.properties.omitted,
+      explanation: coverageSchema.properties.explanation,
+      lesson: schema.properties.lesson,
+      extend: schema.properties.extend,
+    },
+    ["lesson", "extend"],
+  );
+}
+export function parseCreationResponse(
+  value: unknown,
+  slug: string,
+): CreationArguments {
+  validateValue(creationResponseSchema(slug), value, "creationArguments");
+  const response = value as Record<string, unknown>;
+  return parseCreation(
+    {
+      instances: response.instances,
+      coverage: {
+        level: response.coverageLevel,
+        covered: response.covered,
+        omitted: response.omitted,
+        explanation: response.explanation,
+      },
+      ...(response.lesson === undefined ? {} : { lesson: response.lesson }),
+      ...(response.extend === undefined ? {} : { extend: response.extend }),
+    },
+    slug,
+  );
+}
 export function allowedOperations(
   document: AuthoredDocument,
 ): AllowedOperation[] {

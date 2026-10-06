@@ -544,7 +544,23 @@ function mockInference(queue, calls, layaChoice = null) {
       });
     }
     calls.push(body);
-    const value = queue.shift();
+    const queued = queue.shift();
+    const stageMessage = body.messages.find((m) => m.role === "user")?.content;
+    const task = stageMessage?.startsWith("{")
+      ? JSON.parse(stageMessage).task
+      : undefined;
+    const value =
+      task === "configure_selected_recipe" && queued?.coverage
+        ? {
+            ...Object.fromEntries(
+              Object.entries(queued).filter(([key]) => key !== "coverage"),
+            ),
+            coverageLevel: queued.coverage.level,
+            covered: queued.coverage.covered,
+            omitted: queued.coverage.omitted,
+            explanation: queued.coverage.explanation,
+          }
+        : queued;
     assert.notEqual(value, undefined, "Unexpected model call");
     return Response.json({
       model: "fixture-apertus",
@@ -617,6 +633,15 @@ function mockInference(queue, calls, layaChoice = null) {
         intent,
         {
           instances: c.overrides,
+          ...(c.id === "bridge"
+            ? {
+                lesson: {
+                  title: "Unsupported engineering result",
+                  instruction: "Show a fabricated unavailable measurement.",
+                  explanation: "Invented engineering output.",
+                },
+              }
+            : {}),
           coverage: {
             level: "full",
             covered: intent.concepts,
@@ -654,12 +679,25 @@ function mockInference(queue, calls, layaChoice = null) {
         (t) => t.event === "selection.laya" && t.data.status === "skipped",
       ),
     );
-    if (c.id === "bridge")
+    if (c.id === "bridge") {
       assert.ok(
         result.recipe.document.lesson.explanation.includes(
           result.coverage.explanation,
         ),
       );
+      assert.equal(
+        result.recipe.document.lesson.title,
+        premadeRecipe("bridge").document.lesson.title,
+      );
+      assert.ok(
+        !result.recipe.document.lesson.instruction.includes("fabricated"),
+      );
+      assert.ok(
+        !result.recipe.document.lesson.explanation.includes(
+          "Invented engineering",
+        ),
+      );
+    }
   }
   const calls = [];
   mockInference(
@@ -780,17 +818,8 @@ function mockInference(queue, calls, layaChoice = null) {
   mockInference(
     [
       { mode: "runtime" },
-      {
-        status: "runtime",
-        commands: [
-          {
-            node: "A/model",
-            command: "SET_DIMENSIONS",
-            arguments: { value: { width: 7, height: 4 } },
-          },
-        ],
-        message: "Changed A now",
-      },
+      { selections: ["A/model:1"] },
+      { width: 7, height: 4 },
     ],
     actionCalls,
   );
@@ -800,6 +829,37 @@ function mockInference(queue, calls, layaChoice = null) {
     active: { ...session.requestContext(), recipe: rectangle.recipe },
   });
   assert.equal(action.status, "runtime_action");
+  const arithmeticFollowupSession = activateRecipeSession(authored[0].recipe);
+  const arithmeticFollowupCalls = [];
+  mockInference(
+    [
+      { mode: "runtime" },
+      { selections: ["A/model:6"] },
+      { operation: "add", a: 7, b: 8 },
+    ],
+    arithmeticFollowupCalls,
+  );
+  const arithmeticFollowup = await planPrompt({
+    ...request,
+    requestId: "arithmetic-followup-7-and-8",
+    prompt: "what if its 7 and 8?",
+    active: arithmeticFollowupSession.requestContext(),
+  });
+  assert.equal(arithmeticFollowup.status, "runtime_action");
+  assert.deepEqual(arithmeticFollowup.commands, [
+    {
+      node: "A/model",
+      command: "SET_ARITHMETIC_TASK",
+      arguments: { value: { operation: "add", a: 7, b: 8 } },
+    },
+  ]);
+  assert.deepEqual(
+    arithmeticFollowupCalls.map(
+      (call) => JSON.parse(call.messages[1].content).task,
+    ),
+    ["followup_mode", "runtime_command_selection", "runtime_command_arguments"],
+  );
+  disposeRecipeSession(arithmeticFollowupSession);
   const semanticCalls = [];
   mockInference(
     [
