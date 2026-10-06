@@ -26,6 +26,12 @@ export interface DomainModel {
   requiredObservations: readonly string[];
   maximumInstances: number;
   graphOutput?: string;
+  /** Educational structure defaults, still selected and configured by the models. */
+  creationDefaults?: {
+    structure: "single" | "comparison";
+    objects: readonly { label: string; parameters: Record<string, unknown> }[];
+    explanation: string;
+  };
   /** Domain-owned mapping; equation steps retain original configuration. */
   configuration?(state: Record<string, unknown>): Record<string, unknown>;
   initialize(parameters: Record<string, unknown>): Record<string, unknown>;
@@ -42,6 +48,7 @@ export interface DomainContribution {
   namespace: string;
   version: 1;
   models: readonly DomainModel[];
+  validateInstances?(instances: readonly ModelInstance[]): void;
 }
 export interface Assembly {
   version: 1;

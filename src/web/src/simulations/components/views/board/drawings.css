@@ -1,0 +1,361 @@
+.drawing-toolbar {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10010;
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel, #fffdf7);
+  box-shadow: 0 3px 16px #30362e12;
+  pointer-events: auto;
+}
+.spatial-board .drawing-toolbar button {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 23px;
+  color: var(--text);
+  cursor: pointer;
+}
+.spatial-board .drawing-toolbar button[aria-pressed="true"],
+.drawing-inspector button[aria-pressed="true"] {
+  background: #e2e7ff;
+  color: #3540a0;
+  outline: 1px solid #8990e0;
+}
+.drawing-create-surface {
+  position: absolute;
+  inset: 0;
+  z-index: 9990;
+  cursor: crosshair;
+  touch-action: none;
+}
+.drawing-create-surface[data-drawing-tool="text"] {
+  cursor: text;
+}
+.board-drawing {
+  position: absolute;
+  pointer-events: none;
+}
+.drawing-box {
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+  touch-action: none;
+}
+.drawing-text-surface {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  border: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  touch-action: none;
+}
+.drawing-text-content {
+  padding: 4px;
+  box-sizing: border-box;
+  min-height: 100%;
+  user-select: none;
+}
+.spatial-board textarea.drawing-text-editor {
+  display: block;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 4px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  box-sizing: border-box;
+  touch-action: auto;
+}
+.drawing-selection {
+  position: absolute;
+  z-index: 10000;
+  pointer-events: none;
+  outline: 1px solid #8990e0;
+}
+.spatial-board button.drawing-selection-body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+  cursor: move;
+  touch-action: none;
+}
+.spatial-board button.drawing-handle {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  min-height: 0;
+  padding: 0;
+  border: 1px solid #8990e0;
+  border-radius: 2px;
+  background: #fff;
+  pointer-events: auto;
+  touch-action: none;
+}
+.handle-nw {
+  left: 0;
+  top: 0;
+  cursor: nwse-resize;
+}
+.handle-n {
+  left: 50%;
+  top: 0;
+  cursor: ns-resize;
+}
+.handle-ne {
+  left: 100%;
+  top: 0;
+  cursor: nesw-resize;
+}
+.handle-e {
+  left: 100%;
+  top: 50%;
+  cursor: ew-resize;
+}
+.handle-se {
+  left: 100%;
+  top: 100%;
+  cursor: nwse-resize;
+}
+.handle-s {
+  left: 50%;
+  top: 100%;
+  cursor: ns-resize;
+}
+.handle-sw {
+  left: 0;
+  top: 100%;
+  cursor: nesw-resize;
+}
+.handle-w {
+  left: 0;
+  top: 50%;
+  cursor: ew-resize;
+}
+.drawing-inspector {
+  position: absolute;
+  left: 12px;
+  top: 70px;
+  width: 254px;
+  max-height: calc(100% - 146px);
+  overflow-y: auto;
+  z-index: 10010;
+  padding: 14px;
+  background: var(--panel, #fffdf7);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 3px 16px #30362e12;
+  font:
+    12px system-ui,
+    sans-serif;
+  color: var(--text);
+  pointer-events: auto;
+}
+.drawing-inspector-title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+.drawing-inspector fieldset {
+  border: 0;
+  margin: 0 0 14px;
+  padding: 0;
+  min-width: 0;
+}
+.drawing-inspector .drawing-appearance-fields {
+  margin: 0;
+}
+.drawing-inspector legend {
+  margin-bottom: 64px;
+  padding: 0;
+}
+.drawing-inspector label {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.drawing-inspector label > span {
+  color: var(--muted);
+}
+.drawing-inspector input[type="number"],
+.drawing-inspector select {
+  width: 100%;
+  min-height: 30px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  font: inherit;
+}
+.drawing-inspector input[type="range"] {
+  width: 100%;
+  padding: 0;
+}
+.drawing-palette > div,
+.drawing-choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.spatial-board .drawing-palette button,
+.drawing-palette input[type="color"] {
+  width: 22px;
+  height: 22px;
+  min-height: 0;
+  padding: 0;
+  border: 1px solid #30362e22;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.drawing-palette input[type="color"] {
+  margin-left: 4px;
+}
+.drawing-palette button.is-transparent {
+  background-image: repeating-conic-gradient(#ddd 0% 25%, #fff 0% 50%);
+  background-size: 8px 8px;
+}
+.spatial-board .drawing-choice-row button {
+  min-width: 32px;
+  min-height: 32px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: #30362e08;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+}
+.drawing-inspector details {
+  margin-bottom: 14px;
+}
+.drawing-inspector summary {
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+@media (max-width: 699px) {
+  .drawing-inspector {
+    top: auto;
+    bottom: 64px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-height: 38%;
+  }
+}
+
+.spatial-board .drawing-inspector input[type="color"] {
+  width: 22px;
+  height: 22px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  flex: 0 0 22px;
+  border: 1px solid #30362e22;
+  border-radius: 4px;
+}
+.spatial-board .drawing-inspector select,
+.spatial-board .drawing-inspector input[type="number"] {
+  width: 100%;
+}
+.spatial-board .drawing-choice-row button {
+  display: grid;
+  place-items: center;
+}
+.spatial-board .drawing-toolbar button {
+  display: grid;
+  place-items: center;
+}
+.spatial-board.is-compact .drawing-toolbar {
+  top: 56px;
+}
+
+/* Canvas hit targets must stay invisible under shared button states. */
+.manual-builder .spatial-board button.drawing-selection-body,
+.manual-builder
+  .spatial-board
+  button.drawing-selection-body:hover:not(:disabled),
+.manual-builder .spatial-board button.drawing-selection-body:active {
+  background: transparent;
+  box-shadow: none;
+  min-height: 0;
+}
+.manual-builder .spatial-board .drawing-inspector input[type="color"] {
+  width: 26px;
+  height: 26px;
+  min-height: 0;
+  padding: 2px;
+  flex: 0 0 26px;
+  appearance: none;
+}
+.drawing-inspector input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.drawing-inspector input[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: 2px;
+}
+.drawing-inspector input[type="color"]::-moz-color-swatch {
+  border: 0;
+  border-radius: 2px;
+}
+.manual-builder .spatial-board .drawing-palette button[data-color-swatch] {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  outline: none;
+}
+.manual-builder .spatial-board .drawing-palette button[data-selected="true"] {
+  outline: 2px solid #5964ce;
+  outline-offset: 2px;
+}
+.drawing-swatch-check {
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  text-shadow:
+    0 1px 2px black,
+    0 0 2px black;
+}
+.drawing-sizing-help {
+  margin: -4px 0 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.manual-builder .drawing-inspector label.drawing-custom-color {
+  display: flex;
+  justify-content: flex-start;
+  margin: 10px 0 0;
+}
+.manual-builder
+  .spatial-board
+  .drawing-inspector
+  input[data-custom-selected="true"] {
+  outline: 2px solid #5964ce;
+  outline-offset: 2px;
+}

@@ -1,3 +1,8 @@
+import {
+  arithmeticTask,
+  rectangleDimensions,
+  scopedLearningContracts,
+} from "../components/catalog/scopedLearningContracts";
 import { registeredAssemblyActions } from "./assembly";
 import {
   boolean,
@@ -41,11 +46,7 @@ export const taskSchemas = {
     mode: choice("count", "place"),
     target: num(0, 20, "circles", true),
   }),
-  arithmetic: object({
-    operation: choice("add", "subtract"),
-    a: num(0, 20, "circles", true),
-    b: num(0, 20, "circles", true),
-  }),
+  arithmetic: arithmeticTask,
   "equal-groups": object({
     mode: choice("build", "share"),
     groups: num(1, 6, "baskets", true),
@@ -172,10 +173,7 @@ export const operations: Record<DemoType, Record<string, OperationMetadata>> = {
     RESET: playback.RESET,
   },
   "area-perimeter": {
-    SET_DIMENSIONS: operation(
-      object({ width: num(0.1, 100, "m"), height: num(0.1, 100, "m") }),
-      "rebuild",
-    ),
+    SET_DIMENSIONS: operation(rectangleDimensions, "rebuild"),
     RESET: playback.RESET,
   },
   coordinates: {
@@ -246,6 +244,8 @@ export function templateDemo(ref: string): DemoType {
 }
 export function templateParameters(ref: string): ParameterSchema {
   const demo = templateDemo(ref);
+  if (demo === "arithmetic" || demo === "area-perimeter")
+    return scopedLearningContracts[demo].configuration;
   if (demo === "assembly") return object({});
   if (demo === "gas")
     return object(
@@ -314,11 +314,9 @@ export function templateParameters(ref: string): ParameterSchema {
   const action =
     demo === "ratio"
       ? "SET_RATIO"
-      : demo === "area-perimeter"
-        ? "SET_DIMENSIONS"
-        : demo === "coordinates"
-          ? "MOVE_POINT"
-          : "SET_DISTRIBUTION";
+      : demo === "coordinates"
+        ? "MOVE_POINT"
+        : "SET_DISTRIBUTION";
   const schema = operations[demo][action].arguments;
   const value = schema.type === "object" ? schema.properties.value : object({});
   return value.type === "object"

@@ -57,13 +57,28 @@ export function mathReadout(board: MathBoard): {
     }
   }
 }
-export function MathReadoutView({ board }: { board: MathBoard }) {
+export function MathReadoutView({
+  board,
+  label,
+}: {
+  board: MathBoard;
+  label?: string;
+}) {
   const output = mathReadout(board);
   return (
-    <div className="math-readout" aria-live="polite" aria-atomic="true">
+    <div
+      className={`math-readout math-readout--${board.demo}`}
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {(label || board.demo === "counting") && (
+        <span className="math-count-label">{label || "Circles counted"}</span>
+      )}
       <div className="math-equation">{output.equation}</div>
       <p>{output.detail}</p>
-      {board.feedback && <p className="math-feedback">{board.feedback}</p>}
+      {board.feedback && !["arithmetic", "counting"].includes(board.demo) && (
+        <p className="math-feedback">{board.feedback}</p>
+      )}
     </div>
   );
 }

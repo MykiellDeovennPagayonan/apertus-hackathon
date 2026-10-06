@@ -1,5 +1,6 @@
 // biome-ignore-all lint/suspicious/noArrayIndexKey: Fixed procedural crossing stripes never reorder.
 import { TownLayout } from "../resources/TownLayout";
+import type { RoadObject } from "../traits/SceneObjects";
 import { Block } from "./townGeometry";
 export function RoadVisual3D({ closed }: { closed: boolean }) {
   return (
@@ -76,6 +77,15 @@ export function RoadVisual3D({ closed }: { closed: boolean }) {
           ))}
         </group>
       )}
+    </>
+  );
+}
+
+export function AuthoredRoadVisual3D({ object: o }: { object: RoadObject }) {
+  return (
+    <>
+      <planeGeometry args={[o.width, o.depth]} />
+      <meshStandardMaterial color={o.closed ? "#a45445" : o.color} />
     </>
   );
 }

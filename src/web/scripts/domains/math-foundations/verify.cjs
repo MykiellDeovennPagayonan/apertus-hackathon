@@ -1,13 +1,13 @@
 const assert = require("node:assert/strict");
 const { load } = require("../../test-loader.cjs");
 const runtime = load("src/simulations/runtime/session.ts");
-const { defaultAssembly, compileAssembly, assemblyModels } = load(
+const { defaultAssembly, compileAssembly } = load(
   "src/simulations/runtime/assembly.ts",
 );
 const { useAssemblyStore } = load("src/simulations/runtime/assemblySession.ts");
-const { parsePlan, validateContext } = load("src/lib/planner/schema.ts");
-const { planCreation, parseConfiguration, parseTeachingIntent } = load(
-  "src/lib/planner/creation.ts",
+const { validateContext } = load("src/simulations/runtime/legacyPlan.ts");
+const { parseConfiguration, parseTeachingIntent } = load(
+  "scripts/compatibility/legacyConfiguration.ts",
 );
 const math = load(
   "src/simulations/components/systems/math-foundations/models.ts",
@@ -283,24 +283,26 @@ annotatedEquationWire.objects[0].observations = [
   "substitution: true",
 ];
 assert.deepEqual(
-  parseConfiguration(JSON.stringify(annotatedEquationWire), ref("Equation"))
-    .plan.assembly.observations.map((observation) => observation.output),
+  parseConfiguration(
+    JSON.stringify(annotatedEquationWire),
+    ref("Equation"),
+  ).plan.assembly.observations.map((observation) => observation.output),
   ["equation", "solution", "substitution"],
 );
 const inventedObservationWire = structuredClone(equationWire);
 inventedObservationWire.objects[0].observations = ["balance: equal"];
 assert.throws(() =>
-  parseConfiguration(
-    JSON.stringify(inventedObservationWire),
-    ref("Equation"),
-  ),
+  parseConfiguration(JSON.stringify(inventedObservationWire), ref("Equation")),
 );
 assert.deepEqual(
   parseConfiguration(`${JSON.stringify(equationWire)}]`, ref("Equation")),
   equationConfig,
 );
 assert.throws(() =>
-  parseConfiguration(`${JSON.stringify(equationWire)} arbitrary`, ref("Equation")),
+  parseConfiguration(
+    `${JSON.stringify(equationWire)} arbitrary`,
+    ref("Equation"),
+  ),
 );
 assert.equal(equationConfig.plan.message, equationWire.learningGoal);
 assert.equal(
@@ -359,100 +361,7 @@ assert.throws(() =>
   parseConfiguration(JSON.stringify(unsupported), ref("Equation")),
 );
 // Fresh inference contract fixtures, not acceptance/live evidence or production responses.
-const originalFetch = global.fetch,
-  originalProvider = process.env.APERTUS_PROVIDER;
-(async () => {
-  process.env.APERTUS_PROVIDER = "local";
-  for (const model of assemblyModels) {
-    const a =
-      model.presentation === "line" ? comparison : defaultAssembly(model.ref);
-    const queue = [
-      {
-        schemaVersion: 1,
-        kind: "create",
-        learningGoal: model.name,
-        representation: model.ref,
-        relationship: "Vary inputs and observe",
-        initialExample: "Registered defaults",
-        interactions: ["Adjust inputs"],
-        observations: ["Compare outputs"],
-        playing: false,
-        explanation: model.description,
-        assumptions: [...model.assumptions],
-      },
-      {
-        schemaVersion: 1,
-        outcome: "configuration",
-        confirmedComposition: model.ref,
-        assembly: a,
-        message: "Assemble independent objects.",
-      },
-    ];
-    let calls = 0;
-    const events = [],
-      decisions = [];
-    global.fetch = async () => {
-      calls++;
-      return new Response(
-        JSON.stringify({
-          model: "mock-apertus",
-          choices: [{ message: { content: JSON.stringify(queue.shift()) } }],
-        }),
-        { status: 200 },
-      );
-    };
-    const provider = async (request) => {
-      const [id, q] = Object.entries(request.questions)[0];
-      const choice =
-        id === "observation"
-          ? "graph"
-          : id === "structure"
-            ? a.instances.length > 1
-              ? "comparison"
-              : "single"
-            : model.ref;
-      decisions.push(id);
-      return {
-        model: "mock-laya",
-        answers: {
-          [id]: {
-            choice,
-            probabilities: Object.fromEntries(
-              Object.keys(q.criteria).map((k) => [k, k === choice ? 1 : 0]),
-            ),
-          },
-        },
-      };
-    };
-    const result = await planCreation(
-      "A short educational question",
-      provider,
-      0.9,
-      new AbortController().signal,
-      (event, data) => events.push({ event, data }),
-    );
-    assert.equal(calls, 2);
-    assert.ok(result.assembly);
-    assert.deepEqual(result.assembly, a);
-    parsePlan(result);
-    assert.ok(events.some((e) => e.event === "stagedValidation"));
-    assert.ok(decisions.includes("assembly"));
-    if (model.maximumInstances > 1)
-      assert.ok(decisions.includes("structure"));
-    if (model.presentation === "line")
-      assert.ok(decisions.includes("observation"));
-  }
-  console.log(
-    "Agent A assembly, independent numerical, structural, lifecycle, atomicity, schema and mocked planner checks passed. Live acceptance remains separate.",
-  );
-})()
-  .catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-  })
-  .finally(() => {
-    global.fetch = originalFetch;
-    if (originalProvider === undefined) delete process.env.APERTUS_PROVIDER;
-    else process.env.APERTUS_PROVIDER = originalProvider;
-    runtime.disposeSession();
-  });
+runtime.disposeSession();
+console.log(
+  "Math foundation assemblies: independent numerical, structural, lifecycle, atomicity and historical configuration fixtures passed. Live generation is verified by scripts/generation.",
+);

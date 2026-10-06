@@ -15,7 +15,9 @@
 
 # next.js
 /.next/
+/.next-*/
 /.next-browser-tests/
+/.next-graph/
 /.next-build-check/
 /out/
 

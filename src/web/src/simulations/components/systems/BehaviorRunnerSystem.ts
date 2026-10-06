@@ -1,6 +1,7 @@
 import { DailyRoutine } from "../behaviors/DailyRoutine";
 import { buildingPos, jitter, marketPos } from "../prefabs/Citizen";
 import type { Citizen, P2 } from "../traits/Resident";
+import { dayHour, firstScheduleRule } from "./ScheduleSystem";
 export interface MoveTo {
   type: "MoveTo";
   entity: string;
@@ -18,7 +19,7 @@ export function BehaviorRunnerSystem(
 ): MoveTo | undefined {
   if (c.binding.behavior !== DailyRoutine.id)
     throw new Error(`${c.id}: unavailable behavior`);
-  const h = ((time % 24) + 24) % 24,
+  const h = dayHour(time),
     s = DailyRoutine.schedule;
   const observations = {
     night: h < s.homeBefore || h >= s.homeAfter,
@@ -28,7 +29,7 @@ export function BehaviorRunnerSystem(
     afternoon: h < s.workEnd,
     always: true,
   };
-  const rule = DailyRoutine.rules.find((r) => observations[r.observation]);
+  const rule = firstScheduleRule(DailyRoutine.rules, observations);
   if (!rule) return;
   const activity =
     rule.target === "lunchChoice"

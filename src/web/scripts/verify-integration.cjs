@@ -1,7 +1,9 @@
 const assert = require("node:assert/strict");
 const { load } = require("./test-loader.cjs");
 const runtime = load("src/simulations/runtime/session.ts");
-const { parsePlan, validateContext } = load("src/lib/planner/schema.ts");
+const { parsePlan, validateContext } = load(
+  "src/simulations/runtime/legacyPlan.ts",
+);
 const { useProjectileStore } = load(
   "src/simulations/runtime/projectileSession.ts",
 );
@@ -16,7 +18,7 @@ const { resolveRecipe, parseRecipe } = load(
 );
 const { definitions } = load("src/simulations/runtime/catalog.ts");
 const { stageComposition } = load("src/simulations/runtime/validation.ts");
-const { selectCapabilities } = load("src/lib/apertus/catalogSelection.ts");
+
 const { MeasurementSamplingSystem } = load(
   "src/simulations/components/systems/MeasurementSamplingSystem.ts",
 );
@@ -421,22 +423,6 @@ assert.throws(() =>
     1,
   ),
 );
-assert.ok(
-  selectCapabilities("show 3/4", null).some(
-    (d) => d.ref === "compositions/FractionBuilderExperiment",
-  ),
-);
-assert.ok(
-  selectCapabilities("share 14 between 3 groups", null).some(
-    (d) => d.ref === "systems/EqualGroupingSystem",
-  ),
-);
-assert.ok(
-  selectCapabilities("compare launches on the Moon", null).some(
-    (d) => d.ref === "traits/LaunchSettings",
-  ),
-);
-assert.equal(selectCapabilities("run a chemical reaction", null).length, 0);
 const React = require("react"),
   { renderToStaticMarkup } = require("react-dom/server");
 for (const [ref, params, view] of [

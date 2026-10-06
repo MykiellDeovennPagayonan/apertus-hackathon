@@ -5,12 +5,14 @@ const ts = require("typescript");
 const cache = new Map();
 function load(relative) {
   const file = path.resolve(__dirname, "..", relative);
+  if (file.endsWith(".json")) return require(file);
   if (cache.has(file)) return cache.get(file).exports;
   const module = { exports: {} };
   cache.set(file, module);
   const source = ts.transpileModule(fs.readFileSync(file, "utf8"), {
     compilerOptions: {
       module: ts.ModuleKind.CommonJS,
+      esModuleInterop: true,
       target: ts.ScriptTarget.ES2022,
       jsx: ts.JsxEmit.ReactJSX,
     },
@@ -154,7 +156,7 @@ const { resolveComposition, stageComposition } = load(
   "src/simulations/runtime/validation.ts",
 );
 const { AngleComparisonExperiment } = load(
-  "src/simulations/components/compositions/AngleComparisonExperiment.ts",
+  "src/simulations/runtime/recipes/compatibility/compositions/AngleComparisonExperiment.ts",
 );
 for (const demo of [
   "projectile",
@@ -170,28 +172,37 @@ for (const demo of [
   assert.doesNotThrow(() => JSON.stringify(composition));
   const staged = stageComposition(composition);
   assert.equal(staged.length, composition.instances.length);
-  // Premade selections must cover the authoritative recipe. Implementations stay in the library.
-  for (const [kind, names] of Object.entries(composition.components)) {
-    const file = path.resolve(
-      __dirname,
-      "..",
-      `src/simulations/pre-made/${demo}/${kind}/index.ts`,
-    );
-    const ast = ts.createSourceFile(
-      file,
-      fs.readFileSync(file, "utf8"),
-      ts.ScriptTarget.Latest,
-    );
-    assert.ok(
-      ast.statements.every(ts.isExportDeclaration),
-      `${file} must contain exports only`,
-    );
-    const selected = ast.statements.flatMap(
-      (node) => node.exportClause?.elements?.map((e) => e.name.text) ?? [],
-    );
-    for (const name of names)
-      assert.ok(selected.includes(name), `${demo}/${kind} is missing ${name}`);
-  }
+  // Migrated premades own only validated JSON. Legacy re-export coverage stays checked below.
+  const recipePath = path.resolve(
+    __dirname,
+    `../src/simulations/pre-made/${demo}/recipe.json`,
+  );
+  if (!fs.existsSync(recipePath))
+    // Premade selections must cover the authoritative recipe. Implementations stay in the library.
+    for (const [kind, names] of Object.entries(composition.components)) {
+      const file = path.resolve(
+        __dirname,
+        "..",
+        `src/simulations/pre-made/${demo}/${kind}/index.ts`,
+      );
+      const ast = ts.createSourceFile(
+        file,
+        fs.readFileSync(file, "utf8"),
+        ts.ScriptTarget.Latest,
+      );
+      assert.ok(
+        ast.statements.every(ts.isExportDeclaration),
+        `${file} must contain exports only`,
+      );
+      const selected = ast.statements.flatMap(
+        (node) => node.exportClause?.elements?.map((e) => e.name.text) ?? [],
+      );
+      for (const name of names)
+        assert.ok(
+          selected.includes(name),
+          `${demo}/${kind} is missing ${name}`,
+        );
+    }
   const invalid = structuredClone(composition);
   invalid.instances.push(structuredClone(invalid.instances[0]));
   assert.throws(() => stageComposition(invalid), /duplicate instance/);
@@ -453,8 +464,12 @@ const duplicateViews = renderToStaticMarkup(
   React.createElement(
     React.Fragment,
     null,
-    React.createElement(ProjectileScene),
-    React.createElement(ProjectileScene),
+    React.createElement(ProjectileScene, {
+      state: useProjectileStore.getState(),
+    }),
+    React.createElement(ProjectileScene, {
+      state: useProjectileStore.getState(),
+    }),
   ),
 );
 const markerIds = Array.from(

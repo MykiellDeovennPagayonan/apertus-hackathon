@@ -1,253 +1,409 @@
+import { publicDefinition } from "../../simulations/components/catalog";
+import type { ScopedCommand } from "../../simulations/runtime/authoring/runtime";
+import type { CompositeRecipe } from "../../simulations/runtime/authoring/types";
 import {
-  operations,
-  templateDemo,
-} from "../../simulations/runtime/capabilities";
-import { validateValue } from "../../simulations/runtime/parameterSchema";
-import { parseRecipe, type Recipe } from "../../simulations/runtime/resolver";
-import type { DemoType } from "../../simulations/runtime/types";
+  assertData,
+  validateAuthoredDocument,
+} from "../../simulations/runtime/authoring/validate";
+import {
+  num,
+  object,
+  type ParameterSchema,
+  validateValue,
+} from "../../simulations/runtime/parameterSchema";
+import { parseRecipe } from "../../simulations/runtime/recipes/schema";
 
-export { operations as commandSpecs } from "../../simulations/runtime/capabilities";
-export function isDemo(value: unknown): value is DemoType {
-  return typeof value === "string" && Object.hasOwn(operations, value);
-}
-export interface ExperimentContext {
-  sessionId: string;
-  revision: number;
-  composition: { ref: string; version: 1 };
-  instances: {
-    id: string;
-    label: string;
-    parameters: Record<string, unknown>;
-    outputs: Record<string, unknown>;
-    actions: string[];
-  }[];
-  views: string[];
-  assumptions: string[];
-  recentChange?: {
-    before: Record<string, unknown>;
-    after: Record<string, unknown>;
-  };
-}
-export type TargetedCommand = {
-  target: string;
-  action: string;
-  arguments: Record<string, unknown>;
+export const REQUEST_BYTE_LIMIT = 1_100_000;
+const text = (maxLength = 500, minLength = 1): ParameterSchema => ({
+  type: "string",
+  minLength,
+  maxLength,
+});
+const strings = (maxItems = 12): ParameterSchema => ({
+  type: "array",
+  minItems: 0,
+  maxItems,
+  items: text(),
+});
+export type Coverage = {
+  level: "full" | "partial";
+  covered: string[];
+  omitted: string[];
+  explanation: string;
 };
-export type Plan =
-  | (Recipe & { operation: "create"; message: string })
+export type TeachingIntent = {
+  goal: string;
+  concepts: string[];
+  interactions: string[];
+  observations: string[];
+  explicitConstraints: { meaning: string; sourceText: string }[];
+  suggestedStructure: "single" | "comparison";
+};
+export const intentSchema = object({
+  goal: text(),
+  concepts: strings(8),
+  interactions: strings(8),
+  observations: strings(8),
+  explicitConstraints: {
+    type: "array",
+    minItems: 0,
+    maxItems: 12,
+    items: object({ meaning: text(), sourceText: text() }),
+  },
+  suggestedStructure: { type: "enum", values: ["single", "comparison"] },
+});
+export const coverageSchema = object({
+  level: { type: "enum", values: ["full", "partial"] },
+  covered: strings(),
+  omitted: strings(),
+  explanation: text(1500, 0),
+});
+export type GenerationRequest = {
+  protocolVersion: 1;
+  requestId: string;
+  prompt: string;
+  viewport: { width: number; height: number };
+  active: null | {
+    sessionId: string;
+    authoredRevision: number;
+    interactionRevision: number;
+    recipe: CompositeRecipe;
+    runtimeContext: Record<string, unknown>;
+  };
+};
+export type GenerationResult =
   | {
-      schemaVersion: 1;
-      operation: "edit";
-      sessionId: string;
-      expectedRevision: number;
-      commands: TargetedCommand[];
+      protocolVersion: 1;
+      status: "created" | "updated";
+      requestId: string;
+      expectedSessionId: string | null;
+      expectedAuthoredRevision: number | null;
+      expectedInteractionRevision?: number;
+      recipe: CompositeRecipe;
+      coverage: Coverage;
+    }
+  | {
+      protocolVersion: 1;
+      status: "runtime_action";
+      requestId: string;
+      expectedSessionId: string;
+      expectedInteractionRevision: number;
+      commands: ScopedCommand[];
       message: string;
     }
-  | { schemaVersion: 1; operation: "explain"; message: string }
-  | { schemaVersion: 1; operation: "clarify"; message: string }
-  | { schemaVersion: 1; operation: "unsupported"; message: string };
-const record = (value: unknown): value is Record<string, unknown> =>
-  !!value && typeof value === "object" && !Array.isArray(value);
-function keys(data: Record<string, unknown>, allowed: string[]) {
-  if (Object.keys(data).some((k) => !allowed.includes(k)))
-    throw new Error("Unknown plan field");
+  | {
+      protocolVersion: 1;
+      status: "unsupported";
+      requestId: string;
+      message: string;
+    }
+  | {
+      protocolVersion: 1;
+      status: "failed";
+      requestId: string;
+      message: string;
+      retryable: boolean;
+    };
+
+export function record(
+  value: unknown,
+): asserts value is Record<string, unknown> {
+  if (!value || typeof value !== "object" || Array.isArray(value))
+    throw new Error("Expected a JSON object");
 }
-/** Bound nesting and all data that can enter model instructions. */
-export function validateContext(value: unknown): ExperimentContext | null {
-  if (value === null || value === undefined) return null;
-  if (!record(value)) throw new Error("Invalid experiment context");
-  let nodes = 0;
-  const bounded = (v: unknown, depth = 0): void => {
-    if (++nodes > 800 || depth > 6)
-      throw new Error("Context exceeds nesting or node limits");
-    if (v === null || typeof v === "boolean") return;
-    if (typeof v === "number" && Number.isFinite(v)) return;
+export function exactKeys(value: Record<string, unknown>, allowed: string[]) {
+  if (Object.keys(value).some((key) => !allowed.includes(key)))
+    throw new Error("Unknown protocol field");
+}
+export function identity(value: unknown) {
+  validateValue(text(100), value, "identity");
+  if (!/^[a-zA-Z0-9][a-zA-Z0-9/_:.-]*$/.test(value as string))
+    throw new Error("Invalid identity");
+}
+export function revision(value: unknown) {
+  if (!Number.isSafeInteger(value) || Number(value) < 0)
+    throw new Error("Invalid revision");
+}
+export function boundedRuntimeContext(
+  value: unknown,
+): asserts value is Record<string, unknown> {
+  record(value);
+  let count = 0;
+  const visit = (v: unknown, depth = 0) => {
+    if (++count > 800 || depth > 6)
+      throw new Error("Runtime context exceeds bounds");
+    if (
+      v === null ||
+      typeof v === "boolean" ||
+      (typeof v === "number" && Number.isFinite(v))
+    )
+      return;
     if (typeof v === "string" && v.length <= 500) return;
-    if (Array.isArray(v) && v.length <= 30) {
-      v.forEach((c) => {
-        bounded(c, depth + 1);
+    if (Array.isArray(v) && v.length <= 12) {
+      v.forEach((item) => {
+        visit(item, depth + 1);
       });
       return;
     }
     if (
-      record(v) &&
+      v &&
+      typeof v === "object" &&
       Object.keys(v).length <= 30 &&
-      Object.keys(v).every((k) => k.length <= 100)
+      Object.keys(v).every((k) => k.length <= 160)
     ) {
-      Object.values(v).forEach((c) => {
-        bounded(c, depth + 1);
+      Object.values(v).forEach((item) => {
+        visit(item, depth + 1);
       });
       return;
     }
-    throw new Error("Invalid bounded context value");
+    throw new Error("Invalid runtime context value");
   };
-  bounded(value);
-  keys(value, [
-    "sessionId",
-    "revision",
-    "composition",
-    "instances",
-    "views",
-    "assumptions",
-    "recentChange",
-  ]);
-  if (
-    typeof value.sessionId !== "string" ||
-    !value.sessionId ||
-    !Number.isSafeInteger(value.revision) ||
-    Number(value.revision) < 0 ||
-    !record(value.composition) ||
-    value.composition.version !== 1 ||
-    typeof value.composition.ref !== "string"
-  )
-    throw new Error("Missing session identity or revision");
-  keys(value.composition, ["ref", "version"]);
-  templateDemo(value.composition.ref);
-  if (
-    !Array.isArray(value.instances) ||
-    value.instances.length < 1 ||
-    value.instances.length > 30 ||
-    !Array.isArray(value.views) ||
-    !value.views.every((v) => typeof v === "string") ||
-    !Array.isArray(value.assumptions) ||
-    !value.assumptions.every((v) => typeof v === "string")
-  )
-    throw new Error("Invalid context bindings");
-  const seen = new Set<string>();
-  for (const i of value.instances) {
-    if (
-      !record(i) ||
-      typeof i.id !== "string" ||
-      !i.id ||
-      seen.has(i.id) ||
-      typeof i.label !== "string" ||
-      !record(i.parameters) ||
-      !record(i.outputs) ||
-      !Array.isArray(i.actions) ||
-      !i.actions.every((a) => typeof a === "string")
-    )
-      throw new Error("Invalid exposed instance");
-    keys(i, ["id", "label", "parameters", "outputs", "actions"]);
-    seen.add(i.id);
-  }
-  if (value.recentChange !== undefined) {
-    if (
-      !record(value.recentChange) ||
-      !record(value.recentChange.before) ||
-      !record(value.recentChange.after)
-    )
-      throw new Error("Invalid recent change");
-    keys(value.recentChange, ["before", "after"]);
-  }
-  return value as unknown as ExperimentContext;
+  assertData(value);
+  visit(value);
 }
-export function parsePlan(
-  input: unknown,
-  currentDemo?: DemoType | null,
-  context?: ExperimentContext | null,
-): Plan {
-  if (!record(input)) throw new Error("Plan must be a JSON object");
-  if (input.schemaVersion !== 1)
-    throw new Error(
-      "Required schemaVersion must equal 1 on ALL outcomes, including clarify and unsupported",
-    );
-  if (
-    typeof input.message !== "string" ||
-    !input.message.trim() ||
-    input.message.length > 500
-  )
-    throw new Error(
-      "message must be a nonempty display string of at most 500 characters",
-    );
-  if (input.operation === "create") {
-    keys(input, [
-      "schemaVersion",
-      "operation",
-      "composition",
-      "parameters",
-      "instances",
-      "views",
-      "assembly",
-      "message",
-    ]);
-    const { operation: _operation, message: _message, ...recipe } = input;
-    const parsed = parseRecipe(JSON.stringify(recipe));
-    if (currentDemo && templateDemo(parsed.composition.ref) !== currentDemo)
-      throw new Error(
-        "Creation would replace the active model; begin a new experiment first",
-      );
-    return input as unknown as Plan;
-  }
-  if (input.operation === "edit") {
-    keys(input, [
-      "schemaVersion",
-      "operation",
+export function parseGenerationRequest(value: unknown): GenerationRequest {
+  record(value);
+  exactKeys(value, [
+    "protocolVersion",
+    "requestId",
+    "prompt",
+    "viewport",
+    "active",
+  ]);
+  if (value.protocolVersion !== 1)
+    throw new Error("Unsupported generation protocol");
+  identity(value.requestId);
+  validateValue(text(4000), value.prompt, "prompt");
+  if (!(value.prompt as string).trim())
+    throw new Error("Prompt must not be blank");
+  validateValue(
+    object({
+      width: num(240, 10000, "px", true),
+      height: num(240, 10000, "px", true),
+    }),
+    value.viewport,
+    "viewport",
+  );
+  if (value.active !== null) {
+    record(value.active);
+    exactKeys(value.active, [
       "sessionId",
-      "expectedRevision",
+      "authoredRevision",
+      "interactionRevision",
+      "recipe",
+      "runtimeContext",
+    ]);
+    identity(value.active.sessionId);
+    revision(value.active.authoredRevision);
+    revision(value.active.interactionRevision);
+    const recipe = parseRecipe(value.active.recipe);
+    if (recipe.recipeVersion !== 2)
+      throw new Error("Active recipe must be fully expanded");
+    validateAuthoredDocument(recipe.document, true);
+    boundedRuntimeContext(value.active.runtimeContext);
+    value = { ...value, active: { ...value.active, recipe } };
+  }
+  if (
+    new TextEncoder().encode(JSON.stringify(value)).byteLength >
+    REQUEST_BYTE_LIMIT
+  )
+    throw new Error("Request too large");
+  return structuredClone(value) as GenerationRequest;
+}
+export function parseIntentShape(value: unknown): TeachingIntent {
+  validateValue(intentSchema, value, "intent");
+  return structuredClone(value as TeachingIntent);
+}
+export function intentSources(prompt: string) {
+  const sources: { id: string; text: string }[] = [];
+  let start = 0;
+  while (start < prompt.length) {
+    let end = Math.min(start + 500, prompt.length);
+    if (end < prompt.length) {
+      const space = prompt.lastIndexOf(" ", end);
+      if (space > start) end = space;
+    }
+    sources.push({
+      id: `source-${sources.length + 1}`,
+      text: prompt.slice(start, end),
+    });
+    start = end;
+  }
+  return sources;
+}
+export function intentResponseSchema(prompt: string): ParameterSchema {
+  if (intentSchema.type !== "object")
+    throw new Error("Intent contract must be an object");
+  return object({
+    ...intentSchema.properties,
+    explicitConstraints: {
+      type: "array",
+      minItems: 0,
+      maxItems: 12,
+      items: object({
+        meaning: text(),
+        sourceId: {
+          type: "enum",
+          values: intentSources(prompt).map((s) => s.id),
+        },
+      }),
+    },
+  });
+}
+export function parseIntentResponse(
+  value: unknown,
+  prompt: string,
+): TeachingIntent {
+  validateValue(intentResponseSchema(prompt), value, "intent");
+  const response = value as Omit<TeachingIntent, "explicitConstraints"> & {
+    explicitConstraints: { meaning: string; sourceId: string }[];
+  };
+  const sources = new Map(intentSources(prompt).map((s) => [s.id, s.text]));
+  return parseIntent(
+    {
+      ...response,
+      explicitConstraints: response.explicitConstraints.map((c) => ({
+        meaning: c.meaning,
+        sourceText: sources.get(c.sourceId),
+      })),
+    },
+    prompt,
+  );
+}
+export function parseIntent(value: unknown, prompt: string): TeachingIntent {
+  const intent = parseIntentShape(value);
+  for (const constraint of intent.explicitConstraints)
+    if (!prompt.includes(constraint.sourceText))
+      throw new Error(
+        "Constraint source text must occur in the original request",
+      );
+  return structuredClone(intent);
+}
+export function parseCoverage(value: unknown): Coverage {
+  validateValue(coverageSchema, value, "coverage");
+  const coverage = value as Coverage;
+  if (
+    !coverage.covered.length ||
+    (coverage.level === "full" && coverage.omitted.length) ||
+    (coverage.level === "partial" &&
+      (!coverage.omitted.length || !coverage.explanation.trim()))
+  )
+    throw new Error("Inconsistent coverage");
+  return structuredClone(coverage);
+}
+export function parseGenerationResult(
+  value: unknown,
+  request?: GenerationRequest,
+): GenerationResult {
+  record(value);
+  if (value.protocolVersion !== 1)
+    throw new Error("Unsupported generation result");
+  identity(value.requestId);
+  if (request && value.requestId !== request.requestId)
+    throw new Error("Mismatched request identity");
+  const base = ["protocolVersion", "requestId", "status"];
+  if (value.status === "created" || value.status === "updated") {
+    exactKeys(value, [
+      ...base,
+      "expectedSessionId",
+      "expectedAuthoredRevision",
+      "expectedInteractionRevision",
+      "recipe",
+      "coverage",
+    ]);
+    if (value.expectedSessionId !== null) identity(value.expectedSessionId);
+    if (value.expectedAuthoredRevision !== null)
+      revision(value.expectedAuthoredRevision);
+    if (value.expectedInteractionRevision !== undefined)
+      revision(value.expectedInteractionRevision);
+    if (
+      (value.status === "created" &&
+        (value.expectedSessionId !== null ||
+          value.expectedAuthoredRevision !== null)) ||
+      (value.status === "updated" &&
+        (value.expectedSessionId === null ||
+          value.expectedAuthoredRevision === null))
+    )
+      throw new Error("Invalid authoring dependencies");
+    const recipe = parseRecipe(value.recipe);
+    if (recipe.recipeVersion !== 2 || recipe.nested.length)
+      throw new Error("Result must be a complete canonical recipe");
+    validateAuthoredDocument(recipe.document, true);
+    if (
+      !recipe.document.nodes.length ||
+      !recipe.document.lesson.title.trim() ||
+      !recipe.document.lesson.instruction.trim()
+    )
+      throw new Error("Result has no learner content");
+    const coverage = parseCoverage(value.coverage);
+    if (
+      coverage.level === "partial" &&
+      !recipe.document.lesson.explanation.includes(coverage.explanation)
+    )
+      throw new Error("Coverage limitations must persist in lesson content");
+    if (
+      request &&
+      value.status === "updated" &&
+      (value.expectedSessionId !== request.active?.sessionId ||
+        value.expectedAuthoredRevision !== request.active?.authoredRevision)
+    )
+      throw new Error("Result does not match authoring dependencies");
+    return { ...value, recipe, coverage } as GenerationResult;
+  }
+  if (value.status === "runtime_action") {
+    exactKeys(value, [
+      ...base,
+      "expectedSessionId",
+      "expectedInteractionRevision",
       "commands",
       "message",
     ]);
+    identity(value.expectedSessionId);
+    revision(value.expectedInteractionRevision);
     if (
-      typeof input.sessionId !== "string" ||
-      input.sessionId.length > 100 ||
-      !input.sessionId ||
-      !Number.isSafeInteger(input.expectedRevision) ||
-      Number(input.expectedRevision) < 0 ||
-      !Array.isArray(input.commands) ||
-      input.commands.length < 1 ||
-      input.commands.length > 8
+      !Array.isArray(value.commands) ||
+      !value.commands.length ||
+      value.commands.length > 8
     )
-      throw new Error("Invalid edit envelope");
-    const demo =
-      currentDemo ?? (context ? templateDemo(context.composition.ref) : null);
-    if (!demo) throw new Error("Edit requires an active experiment");
-    if (
-      context &&
-      (input.sessionId !== context.sessionId ||
-        input.expectedRevision !== context.revision)
-    )
-      throw new Error("Stale session or configuration revision");
-    for (const [index, c] of input.commands.entries()) {
-      if (
-        !record(c) ||
-        typeof c.action !== "string" ||
-        typeof c.target !== "string" ||
-        !c.target ||
-        c.target.length > 100
-      )
-        throw new Error(`commands[${index}]: invalid command`);
-      keys(c, ["action", "target", "arguments"]);
-      const op = operations[demo][c.action];
-      if (!op) throw new Error(`${c.action}: unsupported ${demo} operation`);
-      validateValue(op.arguments, c.arguments, `commands[${index}].arguments`);
-      if (
-        context &&
-        c.target !== "session" &&
-        !context.instances.some((i) => i.id === c.target)
-      )
-        throw new Error(`${c.target}: unknown target`);
+      throw new Error("Invalid runtime command batch");
+    for (const command of value.commands) {
+      record(command);
+      exactKeys(command, ["node", "command", "arguments"]);
+      identity(command.node);
+      validateValue(text(100), command.command);
+      record(command.arguments);
+      assertData(command.arguments);
+      if (request) {
+        const node = request.active?.recipe.document.nodes.find(
+          (n) => n.id === command.node,
+        );
+        const contract =
+          node &&
+          publicDefinition(node.definition).commands[String(command.command)];
+        if (!contract) throw new Error("Unknown runtime command target");
+        validateValue(contract.arguments, command.arguments);
+      }
     }
-    return input as unknown as Plan;
+    if (
+      request &&
+      (value.expectedSessionId !== request.active?.sessionId ||
+        value.expectedInteractionRevision !==
+          request.active?.interactionRevision)
+    )
+      throw new Error("Result does not match interaction dependencies");
+    validateValue(text(1500), value.message);
+    return structuredClone(value) as GenerationResult;
   }
-  if (
-    input.operation === "explain" ||
-    input.operation === "clarify" ||
-    input.operation === "unsupported"
-  ) {
-    keys(input, ["schemaVersion", "operation", "message"]);
-    return input as unknown as Plan;
+  if (value.status === "unsupported" || value.status === "failed") {
+    exactKeys(value, [
+      ...base,
+      "message",
+      ...(value.status === "failed" ? ["retryable"] : []),
+    ]);
+    validateValue(text(1500), value.message);
+    if (value.status === "failed" && typeof value.retryable !== "boolean")
+      throw new Error("Invalid retry policy");
+    return structuredClone(value) as GenerationResult;
   }
-  throw new Error("Unknown plan outcome");
-}
-export function parseModelContent(
-  content: string,
-  demo?: DemoType | null,
-  context?: ExperimentContext | null,
-) {
-  if (content.length > 16000)
-    throw new Error("Model output exceeds size limit");
-  const text = content
-    .trim()
-    .replace(/^```(?:json)?\s*\n?([\s\S]*?)\n?```$/, "$1");
-  return parsePlan(JSON.parse(text), demo, context);
+  throw new Error("Unknown generation outcome");
 }

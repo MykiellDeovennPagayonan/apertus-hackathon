@@ -1,0 +1,654 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/projectile-comparison",
+  "version": 1,
+  "title": "Projectile motion",
+  "description": "Compare two launch angles on the same flight diagram.",
+  "tags": ["physics", "projectile", "comparison"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "projectile/primary",
+        "definition": "models/Projectile",
+        "version": 1,
+        "label": "Projectile",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "angle": 30,
+          "velocity": 20,
+          "gravity": 1.62,
+          "playing": true,
+          "slowMo": false,
+          "trajectoryVisible": true,
+          "showVectors": false
+        }
+      },
+      {
+        "id": "projectile/primary/appearance",
+        "definition": "appearance/Projectile",
+        "version": 1,
+        "label": "Projectile scene",
+        "scope": "scope/projectile-comparison",
+        "configuration": {}
+      },
+      {
+        "id": "projectile/primary/appearance/Launcher",
+        "definition": "appearance/Launcher",
+        "version": 1,
+        "label": "Launcher",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "visible": true
+        }
+      },
+      {
+        "id": "projectile/primary/appearance/Trajectory",
+        "definition": "appearance/Trajectory",
+        "version": 1,
+        "label": "Trajectory",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "visible": true
+        }
+      },
+      {
+        "id": "projectile/primary/appearance/VelocityArrow",
+        "definition": "appearance/VelocityArrow",
+        "version": 1,
+        "label": "Velocity arrows",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "visible": true
+        }
+      },
+      {
+        "id": "projectile/primary/appearance/ProjectileBody",
+        "definition": "appearance/ProjectileBody",
+        "version": 1,
+        "label": "Projectile body",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "visible": true
+        }
+      },
+      {
+        "id": "projectile/primary/control/set:angle",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Ball 1 angle",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "label": "Ball 1 angle",
+          "mode": "immediate",
+          "initial": "{\"value\":30}"
+        }
+      },
+      {
+        "id": "projectile/primary/display/range",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Ball 1 distance",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "label": "Ball 1 distance",
+          "precision": 1
+        }
+      },
+      {
+        "id": "projectile/primary/display/maxHeight",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Ball 1 height",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "label": "Ball 1 height",
+          "precision": 1
+        }
+      },
+      {
+        "id": "projectile/secondary",
+        "definition": "models/Projectile",
+        "version": 1,
+        "label": "Projectile",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "angle": 60,
+          "velocity": 20,
+          "gravity": 1.62,
+          "playing": true,
+          "slowMo": false,
+          "trajectoryVisible": true,
+          "showVectors": false
+        }
+      },
+      {
+        "id": "projectile/secondary/control/set:angle",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Ball 2 angle",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "label": "Ball 2 angle",
+          "mode": "immediate",
+          "initial": "{\"value\":60}"
+        }
+      },
+      {
+        "id": "projectile/secondary/display/range",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Ball 2 distance",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "label": "Ball 2 distance",
+          "precision": 1
+        }
+      },
+      {
+        "id": "projectile/secondary/display/maxHeight",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Ball 2 height",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "label": "Ball 2 height",
+          "precision": 1
+        }
+      },
+      {
+        "id": "launch",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Launch both",
+        "scope": "scope/projectile-comparison",
+        "configuration": {
+          "label": "Launch both",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "projectile/primary/link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "projectile/primary",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "projectile/primary/appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "projectile/primary/link/appearance/Launcher",
+        "kind": "attachment",
+        "from": {
+          "node": "projectile/primary/appearance/Launcher",
+          "port": "scene"
+        },
+        "to": {
+          "node": "projectile/primary/appearance",
+          "port": "visuals"
+        }
+      },
+      {
+        "id": "projectile/primary/link/appearance/Trajectory",
+        "kind": "attachment",
+        "from": {
+          "node": "projectile/primary/appearance/Trajectory",
+          "port": "scene"
+        },
+        "to": {
+          "node": "projectile/primary/appearance",
+          "port": "visuals"
+        }
+      },
+      {
+        "id": "projectile/primary/link/appearance/VelocityArrow",
+        "kind": "attachment",
+        "from": {
+          "node": "projectile/primary/appearance/VelocityArrow",
+          "port": "scene"
+        },
+        "to": {
+          "node": "projectile/primary/appearance",
+          "port": "visuals"
+        }
+      },
+      {
+        "id": "projectile/primary/link/appearance/ProjectileBody",
+        "kind": "attachment",
+        "from": {
+          "node": "projectile/primary/appearance/ProjectileBody",
+          "port": "scene"
+        },
+        "to": {
+          "node": "projectile/primary/appearance",
+          "port": "visuals"
+        }
+      },
+      {
+        "id": "projectile/primary/link/control/set:angle",
+        "kind": "command",
+        "from": {
+          "node": "projectile/primary/control/set:angle",
+          "port": "submit"
+        },
+        "to": {
+          "node": "projectile/primary",
+          "port": "set:angle"
+        }
+      },
+      {
+        "id": "projectile/primary/link/output/range",
+        "kind": "value",
+        "from": {
+          "node": "projectile/primary",
+          "port": "range"
+        },
+        "to": {
+          "node": "projectile/primary/display/range",
+          "port": "value"
+        }
+      },
+      {
+        "id": "projectile/primary/link/output/maxHeight",
+        "kind": "value",
+        "from": {
+          "node": "projectile/primary",
+          "port": "maxHeight"
+        },
+        "to": {
+          "node": "projectile/primary/display/maxHeight",
+          "port": "value"
+        }
+      },
+      {
+        "id": "projectile/secondary/link/appearance/shared-scene",
+        "kind": "attachment",
+        "from": {
+          "node": "projectile/secondary",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "projectile/primary/appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "projectile/secondary/link/control/set:angle",
+        "kind": "command",
+        "from": {
+          "node": "projectile/secondary/control/set:angle",
+          "port": "submit"
+        },
+        "to": {
+          "node": "projectile/secondary",
+          "port": "set:angle"
+        }
+      },
+      {
+        "id": "projectile/secondary/link/output/range",
+        "kind": "value",
+        "from": {
+          "node": "projectile/secondary",
+          "port": "range"
+        },
+        "to": {
+          "node": "projectile/secondary/display/range",
+          "port": "value"
+        }
+      },
+      {
+        "id": "projectile/secondary/link/output/maxHeight",
+        "kind": "value",
+        "from": {
+          "node": "projectile/secondary",
+          "port": "maxHeight"
+        },
+        "to": {
+          "node": "projectile/secondary/display/maxHeight",
+          "port": "value"
+        }
+      },
+      {
+        "id": "projectile/primary/link/control/set:angle/restart/projectile/secondary",
+        "kind": "command",
+        "from": {
+          "node": "projectile/primary/control/set:angle",
+          "port": "submit"
+        },
+        "to": {
+          "node": "projectile/secondary",
+          "port": "RESTART"
+        },
+        "arguments": {}
+      },
+      {
+        "id": "projectile/secondary/link/control/set:angle/restart/projectile/primary",
+        "kind": "command",
+        "from": {
+          "node": "projectile/secondary/control/set:angle",
+          "port": "submit"
+        },
+        "to": {
+          "node": "projectile/primary",
+          "port": "RESTART"
+        },
+        "arguments": {}
+      },
+      {
+        "id": "launch/projectile/primary",
+        "kind": "command",
+        "from": {
+          "node": "launch",
+          "port": "submit"
+        },
+        "to": {
+          "node": "projectile/primary",
+          "port": "LAUNCH"
+        },
+        "arguments": {}
+      },
+      {
+        "id": "launch/projectile/secondary",
+        "kind": "command",
+        "from": {
+          "node": "launch",
+          "port": "submit"
+        },
+        "to": {
+          "node": "projectile/secondary",
+          "port": "LAUNCH"
+        },
+        "arguments": {}
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/projectile-comparison",
+        "label": "Projectile comparison"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/projectile/primary/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "projectile/primary/appearance"
+        },
+        {
+          "id": "layout/projectile/primary/display/range",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "projectile/primary/display/range"
+        },
+        {
+          "id": "layout/projectile/secondary/display/range",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "projectile/secondary/display/range"
+        },
+        {
+          "id": "layout/projectile/primary/display/maxHeight",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "projectile/primary/display/maxHeight"
+        },
+        {
+          "id": "layout/projectile/secondary/display/maxHeight",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "projectile/secondary/display/maxHeight"
+        },
+        {
+          "id": "layout/projectile/primary/control/set:angle",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "projectile/primary/control/set:angle"
+        },
+        {
+          "id": "layout/projectile/secondary/control/set:angle",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "projectile/secondary/control/set:angle"
+        },
+        {
+          "id": "layout/launch",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "launch"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Projectile motion",
+      "instruction": "Change either launch angle. Compare how far and how high the balls travel.",
+      "explanation": "Fixed launch speed of 20 m/s and lunar gravity of 1.62 m/s\u00b2. Air resistance is ignored."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/projectile/primary/appearance",
+          "layoutId": "layout/projectile/primary/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 460
+          },
+          "zIndex": 0,
+          "locked": false
+        },
+        {
+          "id": "board/layout/projectile/primary/display/range",
+          "layoutId": "layout/projectile/primary/display/range",
+          "rect": {
+            "x": 744,
+            "y": 0,
+            "width": 220,
+            "height": 96
+          },
+          "zIndex": 1,
+          "locked": false
+        },
+        {
+          "id": "board/layout/projectile/secondary/display/range",
+          "layoutId": "layout/projectile/secondary/display/range",
+          "rect": {
+            "x": 980,
+            "y": 0,
+            "width": 220,
+            "height": 96
+          },
+          "zIndex": 2,
+          "locked": false
+        },
+        {
+          "id": "board/layout/projectile/primary/display/maxHeight",
+          "layoutId": "layout/projectile/primary/display/maxHeight",
+          "rect": {
+            "x": 744,
+            "y": 112,
+            "width": 220,
+            "height": 96
+          },
+          "zIndex": 3,
+          "locked": false
+        },
+        {
+          "id": "board/layout/projectile/secondary/display/maxHeight",
+          "layoutId": "layout/projectile/secondary/display/maxHeight",
+          "rect": {
+            "x": 980,
+            "y": 112,
+            "width": 220,
+            "height": 96
+          },
+          "zIndex": 4,
+          "locked": false
+        },
+        {
+          "id": "board/layout/projectile/primary/control/set:angle",
+          "layoutId": "layout/projectile/primary/control/set:angle",
+          "rect": {
+            "x": 744,
+            "y": 224,
+            "width": 220,
+            "height": 156
+          },
+          "zIndex": 5,
+          "locked": false
+        },
+        {
+          "id": "board/layout/projectile/secondary/control/set:angle",
+          "layoutId": "layout/projectile/secondary/control/set:angle",
+          "rect": {
+            "x": 980,
+            "y": 224,
+            "width": 220,
+            "height": 156
+          },
+          "zIndex": 6,
+          "locked": false
+        },
+        {
+          "id": "board/layout/launch",
+          "layoutId": "layout/launch",
+          "rect": {
+            "x": 744,
+            "y": 396,
+            "width": 456,
+            "height": 64
+          },
+          "zIndex": 7,
+          "locked": false
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1248,
+        "height": 508
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/projectile/primary/appearance"],
+        [
+          "board/layout/projectile/primary/control/set:angle",
+          "board/layout/projectile/secondary/control/set:angle"
+        ],
+        ["board/layout/launch"],
+        [
+          "board/layout/projectile/primary/display/range",
+          "board/layout/projectile/secondary/display/range"
+        ],
+        [
+          "board/layout/projectile/primary/display/maxHeight",
+          "board/layout/projectile/secondary/display/maxHeight"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/Projectile",
+      "version": 1
+    },
+    {
+      "id": "appearance/Projectile",
+      "version": 1
+    },
+    {
+      "id": "appearance/Launcher",
+      "version": 1
+    },
+    {
+      "id": "appearance/Trajectory",
+      "version": 1
+    },
+    {
+      "id": "appearance/VelocityArrow",
+      "version": 1
+    },
+    {
+      "id": "appearance/ProjectileBody",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Fixed launch speed of 20 m/s and lunar gravity of 1.62 m/s\u00b2. Air resistance is ignored."
+  ],
+  "catalog": {
+    "icon": "\u2197",
+    "category": "physics",
+    "order": 1
+  }
+}

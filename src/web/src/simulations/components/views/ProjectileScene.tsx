@@ -1,6 +1,4 @@
 import { useId } from "react";
-import { useProjectileStore } from "../../runtime/projectileSession";
-import { ProjectileExperiment } from "../compositions/ProjectileExperiment";
 import { ProjectileStyles } from "../resources/ProjectileStyles";
 import { LauncherVisual } from "../visuals/LauncherVisual";
 import { ShapeVisual2D } from "../visuals/ShapeVisual2D";
@@ -8,24 +6,39 @@ import { TrajectoryVisual } from "../visuals/TrajectoryVisual";
 import { VelocityArrowVisual } from "../visuals/VelocityArrowVisual";
 import { SVGWorldView } from "./SVGWorldView";
 
-const {
-  width: W,
-  height: H,
-  groundY: GROUND_Y,
-  originX: ORIGIN_X,
-} = ProjectileExperiment.viewSettings;
+// Display coordinates belong to the reusable scene; physical distance uses the model scale.
+const W = 760,
+  H = 420,
+  GROUND_Y = 350,
+  ORIGIN_X = 55;
 
-export function ProjectileScene() {
-  const s = useProjectileStore();
+export function ProjectileScene({
+  state: s,
+  visualLayers = [
+    "appearance/Launcher",
+    "appearance/Trajectory",
+    "appearance/VelocityArrow",
+    "appearance/ProjectileBody",
+  ],
+}: {
+  visualLayers?: string[];
+  state: Pick<
+    import("../../runtime/projectileSession").ProjectileState,
+    "primary" | "instances" | "angle" | "velocity" | "gravity" | "showVectors"
+  >;
+}) {
   const markerId = useId();
 
-  const { duration: T, range: R, maxHeight: Hmax } = s.primary.metrics;
-  const compareR = Math.max(...s.instances.map((i) => i.metrics.range)),
-    compareH = Math.max(...s.instances.map((i) => i.metrics.maxHeight));
+  const { duration: T } = s.primary.metrics;
+  // Keep a stable world scale while changing angle.
+  const referenceRange = Math.max(
+    ...s.instances.map((i) => i.launch.velocity ** 2 / i.gravity),
+    1,
+  );
   const scale = Math.min(
     12,
-    (W - ORIGIN_X - 60) / Math.max(R, compareR, 1),
-    (GROUND_Y - 65) / Math.max(Hmax, compareH, 1),
+    (W - ORIGIN_X - 60) / referenceRange,
+    (GROUND_Y - 65) / (referenceRange / 2),
   );
 
   const ball = s.primary.transform.position;
@@ -36,20 +49,18 @@ export function ProjectileScene() {
 
   return (
     <>
-      <section className="projectile-legend" aria-label="Flight comparison">
-        {s.instances.map((instance, index) => (
-          <div key={instance.id} className={index ? "is-comparison" : ""}>
-            <strong>
-              Ball {index + 1} · {instance.launch.angle}° ·{" "}
-              {instance.launch.velocity} m/s
-            </strong>
-            <span>
-              Range {instance.metrics.range.toFixed(1)} m · Height{" "}
-              {instance.metrics.maxHeight.toFixed(1)} m
-            </span>
-          </div>
-        ))}
-      </section>
+      {s.instances.length > 1 && (
+        <section className="projectile-legend" aria-label="Flight comparison">
+          {s.instances.map((instance, index) => (
+            <div key={instance.id} className={index ? "is-comparison" : ""}>
+              <strong>
+                Ball {index + 1} · {instance.launch.angle}° ·{" "}
+                {instance.launch.velocity} m/s
+              </strong>
+            </div>
+          ))}
+        </section>
+      )}
       <SVGWorldView
         aria-label="Simulation diagram"
         role="img"
@@ -57,6 +68,18 @@ export function ProjectileScene() {
         className="projectile-scene"
         style={{ width: "100%", height: "100%" }}
       >
+        <text x={ORIGIN_X} y={GROUND_Y + 30} fill="var(--muted)" fontSize={14}>
+          0 m
+        </text>
+        <text
+          x={W - 35}
+          y={GROUND_Y + 30}
+          textAnchor="end"
+          fill="var(--muted)"
+          fontSize={14}
+        >
+          Distance →
+        </text>
         {/* ground */}
         <line
           x1={0}
@@ -67,12 +90,18 @@ export function ProjectileScene() {
           strokeWidth={2}
         />
 
-        <LauncherVisual angle={s.angle} originX={ORIGIN_X} groundY={GROUND_Y} />
+        {visualLayers.includes("appearance/Launcher") && (
+          <LauncherVisual
+            angle={s.angle}
+            originX={ORIGIN_X}
+            groundY={GROUND_Y}
+          />
+        )}
         {s.instances.map((instance, index) =>
-          instance.trajectoryVisible ? (
+          instance.trajectoryVisible &&
+          visualLayers.includes("appearance/Trajectory") ? (
             <TrajectoryVisual
               key={instance.id}
-              metrics={instance.metrics}
               velocity={instance.launch.velocity}
               angle={instance.launch.angle}
               gravity={instance.gravity}
@@ -84,6 +113,7 @@ export function ProjectileScene() {
           ) : null,
         )}
         {s.showVectors &&
+          visualLayers.includes("appearance/VelocityArrow") &&
           vecTimes.map((tv, i) => (
             <VelocityArrowVisual
               key={i === 0 ? "start" : i === 1 ? "middle" : "end"}
@@ -112,23 +142,28 @@ export function ProjectileScene() {
         </defs>
 
         {/* ball */}
-        <ShapeVisual2D
-          identity={s.primary.id}
-          cx={bx}
-          cy={by}
-          r={ProjectileStyles.radius}
-          fill="var(--accent)"
-        />
-        {s.instances.slice(1).map((instance) => (
+        {visualLayers.includes("appearance/ProjectileBody") && (
           <ShapeVisual2D
-            key={instance.id}
-            identity={instance.id}
-            cx={ORIGIN_X + instance.transform.position.x * scale}
-            cy={GROUND_Y - instance.transform.position.y * scale}
+            identity={s.primary.id}
+            cx={bx}
+            cy={by}
             r={ProjectileStyles.radius}
-            fill="var(--warn)"
+            fill="var(--accent)"
           />
-        ))}
+        )}
+        {s.instances
+          .slice(1)
+          .filter(() => visualLayers.includes("appearance/ProjectileBody"))
+          .map((instance) => (
+            <ShapeVisual2D
+              key={instance.id}
+              identity={instance.id}
+              cx={ORIGIN_X + instance.transform.position.x * scale}
+              cy={GROUND_Y - instance.transform.position.y * scale}
+              r={ProjectileStyles.radius}
+              fill="var(--warn)"
+            />
+          ))}
       </SVGWorldView>
     </>
   );

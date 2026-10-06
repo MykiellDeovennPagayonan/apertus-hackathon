@@ -1,6 +1,9 @@
 import type { UIAction } from "../../runtime/types";
 import { FractionBar } from "../prefabs/MathBoards";
-import type { FractionComparisonBoard } from "../traits/MathBoards";
+import type {
+  FractionBar as Bar,
+  FractionComparisonBoard,
+} from "../traits/MathBoards";
 import { compare, validFraction } from "./fractionMath";
 import { integer, payload } from "./mathSequence";
 export function FractionBuilderSystem(
@@ -22,14 +25,22 @@ export function FractionBuilderSystem(
     return;
   }
   if (!integer(p.bar, 0, 1)) throw new Error("Choose bar A or B.");
-  const bar = board.bars[p.bar];
+  board.bars[p.bar] = updateFractionBar(board.bars[p.bar], action);
+  board.relation = compare(board.bars[0].value, board.bars[1].value);
+  board.feedback = "";
+}
+
+/** One independently addressed bar operation, shared by board and composition runtimes. */
+export function updateFractionBar(source: Bar, action: UIAction): Bar {
+  const p = payload(action.value);
+  let bar = structuredClone(source);
   switch (action.type) {
     case "SET_BAR_FRACTION":
       if (!validFraction(p.fraction, true))
         throw new Error(
           "Use a numerator between zero and the denominator, and 1–12 parts.",
         );
-      board.bars[p.bar] = FractionBar(bar.id, p.fraction.n, p.fraction.d);
+      bar = FractionBar(bar.id, p.fraction.n, p.fraction.d);
       break;
     case "TOGGLE_FRACTION_PIECE":
       if (!integer(p.piece, 0, bar.value.d - 1))
@@ -48,6 +59,5 @@ export function FractionBuilderSystem(
     default:
       throw new Error("Unsupported fraction builder action.");
   }
-  board.relation = compare(board.bars[0].value, board.bars[1].value);
-  board.feedback = "";
+  return bar;
 }

@@ -1,17 +1,12 @@
 import { createStore, type StateCreator, type StoreApi } from "zustand/vanilla";
-import type {
-  ExperimentContext,
-  Plan,
-  TargetedCommand,
-} from "../../lib/planner/schema";
-import { parsePlan } from "../../lib/planner/schema";
+import { publicDefinition } from "../components/catalog";
 import { GRAVITIES } from "../components/resources/GravityPresets";
 import type { GasState } from "../components/traits/GasState";
 import type { MathBoard } from "../components/traits/MathBoards";
-import { modelProvider } from "./assembly";
+import { modelProvider, validateAssemblyInstances } from "./assembly";
 import { assemblyInitializer, useAssemblyStore } from "./assemblySession";
 import { bridgeInitializer, useBridgeStore } from "./bridgeSession";
-import { operations, validateCommand } from "./capabilities";
+import { operations, templateNames, validateCommand } from "./capabilities";
 import { type ActionResult, rejected } from "./commands";
 import type { CompositionDefinition } from "./definition";
 import {
@@ -20,6 +15,8 @@ import {
   useElementaryStore,
 } from "./elementarySession";
 import { gasInitializer, useGasStore } from "./gasSession";
+import type { ExperimentContext, Plan, TargetedCommand } from "./legacyPlan";
+import { parsePlan } from "./legacyPlan";
 import { isMathDemo } from "./mathModel";
 import { mathInitializer, useMathStore } from "./mathSession";
 import {
@@ -27,6 +24,16 @@ import {
   projectileInstance,
   useProjectileStore,
 } from "./projectileSession";
+import {
+  activateRecipeSession,
+  disposeRecipeSession,
+  getRecipeSession,
+  type RecipeSession,
+} from "./recipeSession";
+import { recipeCommands } from "./recipes/compatibility";
+import { loadRecipe as loadAuthoredRecipe } from "./recipes/loadRecipe";
+import { listPremadeRecipes, premadeRecipe } from "./recipes/registry";
+import { serializeRecipe as serializeAuthoredRecipe } from "./recipes/serializeRecipe";
 import {
   parseRecipe,
   type Recipe,
@@ -42,8 +49,27 @@ let active: DemoType | null = null,
   sequence = 0,
   revision = 0,
   sessionId = "";
+let automaticMotion = false;
+const motionListeners = new Set<() => void>();
 let definition: CompositionDefinition | null = null,
   acceptedRecipe: Recipe | null = null;
+let authoredSession: RecipeSession | null = null;
+export const getAuthoredSession = getRecipeSession;
+export function activatePremadeSession(slug: Exclude<DemoType, "assembly">) {
+  return activateAuthoredSession(loadAuthoredRecipe(premadeRecipe(slug)), slug);
+}
+function activateAuthoredSession(
+  candidate: ReturnType<typeof loadAuthoredRecipe>,
+  slug: DemoType,
+) {
+  disposeSession();
+  authoredSession = activateRecipeSession(candidate.recipe);
+  active = slug;
+  sessionId = authoredSession.sessionId;
+  revision = 0;
+  return authoredSession;
+}
+
 let recentChange: ExperimentContext["recentChange"];
 let correlationId: string | null = null;
 const planCorrelations = new WeakMap<object, string>();
@@ -51,15 +77,23 @@ export function correlatePlan(plan: Plan, id: string) {
   planCorrelations.set(plan, id);
 }
 export function getDiagnosticSnapshot() {
+  const canonical = getRecipeSession();
+  if (canonical) return canonical.snapshot();
   return structuredClone({
     correlationId,
     recipe: acceptedRecipe,
     context: getExperimentContext(),
-    state: active ? data(stores(active).live.getState()) : null,
+    state: authoredSession
+      ? authoredSession.runtime.getSnapshot()
+      : active
+        ? data(stores(active).live.getState())
+        : null,
   });
 }
 export function disposeSession() {
   if (typeof cancelAnimationFrame !== "undefined") cancelAnimationFrame(frame);
+  disposeRecipeSession();
+  authoredSession = null;
   active = null;
   definition = null;
   acceptedRecipe = null;
@@ -170,7 +204,48 @@ function commitCandidate(pair: ReturnType<typeof stores>) {
     data(pair.candidate.getState()),
   );
 }
+/** Presentation clock policy; domain playing state and calculations remain authoritative. */
+export function setSessionAnimation(enabled: boolean) {
+  getRecipeSession()?.setAnimation(enabled);
+  if (automaticMotion === enabled) return;
+  automaticMotion = enabled;
+  for (const listener of motionListeners) listener();
+}
+export const getSessionAnimation = () => automaticMotion;
+export function subscribeSessionAnimation(listener: () => void) {
+  motionListeners.add(listener);
+  return () => {
+    motionListeners.delete(listener);
+  };
+}
+export function advanceSessionTime(delta: number): ActionResult {
+  if (!active || !Number.isFinite(delta) || delta < 0 || delta > 60)
+    return rejected("Choose a finite timestep from zero to 60 seconds.");
+  try {
+    if (authoredSession) {
+      let remaining = delta;
+      while (remaining > 0) {
+        const step = Math.min(remaining, 1);
+        authoredSession.runtime.step(step);
+        remaining -= step;
+      }
+      return { accepted: true };
+    }
+    if (active === "assembly") useAssemblyStore.getState().step(delta);
+    if (active === "projectile") useProjectileStore.getState().step(delta);
+    if (active === "town") useTownStore.getState().step(delta);
+    if (active === "gas") useGasStore.getState().step(delta);
+    if (isMathDemo(active)) useMathStore.getState().step(delta);
+    return { accepted: true };
+  } catch (error) {
+    return rejected(
+      error instanceof Error ? error.message : "Unable to advance time.",
+    );
+  }
+}
 function runClock(demo: DemoType) {
+  if (getRecipeSession()) return;
+  setSessionAnimation(false);
   let previous: number | undefined;
   const identity = sessionId;
   const tick = (now: number) => {
@@ -180,12 +255,7 @@ function runClock(demo: DemoType) {
     const reduced =
       typeof matchMedia !== "undefined" &&
       matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (demo === "assembly") useAssemblyStore.getState().step(delta);
-    if (demo === "projectile")
-      useProjectileStore.getState().step(reduced ? 60 : delta);
-    if (demo === "town") useTownStore.getState().step(delta);
-    if (demo === "gas" && !reduced) useGasStore.getState().step(delta);
-    if (isMathDemo(demo)) useMathStore.getState().step(delta);
+    if (!reduced || automaticMotion) advanceSessionTime(delta);
     frame = requestAnimationFrame(tick);
   };
   if (
@@ -320,6 +390,20 @@ export function dispatchBatch(
   if (active !== demo) return rejected("This experiment is not active");
   if (commands.length < 1 || commands.length > 8)
     return rejected("A batch requires 1–8 commands");
+  if (authoredSession) {
+    try {
+      if (commands.length === 1 && commands[0].type === "RESET")
+        return authoredSession.runtime.reset();
+      const translated = recipeCommands(authoredSession.runtime, commands);
+      if (!translated.length)
+        return rejected("This action is unavailable for the current recipe.");
+      return authoredSession.runtime.dispatch(translated);
+    } catch (error) {
+      return rejected(
+        error instanceof Error ? error.message : "Invalid recipe command",
+      );
+    }
+  }
   const changeTarget = commands.find(
     (command) => command.target && command.target !== "session",
   )?.target;
@@ -334,6 +418,18 @@ export function dispatchBatch(
       return rejected(
         `commands[${index}] ${c.target ?? "session"}: ${result.error}`,
       );
+  }
+  if (demo === "assembly") {
+    try {
+      const staged = pair.candidate.getState() as ReturnType<
+        typeof useAssemblyStore.getState
+      >;
+      validateAssemblyInstances(staged.instances);
+    } catch (error) {
+      return rejected(
+        error instanceof Error ? error.message : "Invalid instance comparison",
+      );
+    }
   }
   commitCandidate(pair);
   revision++;
@@ -395,7 +491,71 @@ export function executePlan(input: Plan): ActionResult & { demo?: DemoType } {
     return rejected(error instanceof Error ? error.message : "Invalid plan");
   }
 }
+/** Expose edit-relevant summaries without sending nested visual geometry or large graph datasets. */
+function plannerOutputs(outputs: Record<string, unknown>) {
+  const shallow = (value: unknown, depth = 0): boolean => {
+    if (depth > 2) return false;
+    if (
+      value === null ||
+      ["number", "string", "boolean"].includes(typeof value)
+    )
+      return true;
+    if (Array.isArray(value))
+      return value.length <= 8 && value.every((v) => shallow(v, depth + 1));
+    if (value && typeof value === "object")
+      return Object.values(value).every((v) => shallow(v, depth + 1));
+    return false;
+  };
+  return structuredClone(
+    Object.fromEntries(
+      Object.entries(outputs).filter(([, value]) => shallow(value)),
+    ),
+  );
+}
 export function getExperimentContext(): ExperimentContext | null {
+  if (active && authoredSession) {
+    const demo = active;
+    const { runtime, recipe } = authoredSession;
+    const snapshot = runtime.getSnapshot();
+    const instances = runtime.document.nodes
+      .filter(
+        (node) =>
+          publicDefinition(node.definition).category === "models" &&
+          !["models/TrussJoint", "models/TrussMember"].includes(
+            node.definition,
+          ),
+      )
+      .map((node) => {
+        const state = snapshot.state[node.id] ?? {};
+        return {
+          id: node.id,
+          label: node.label,
+          parameters: plannerOutputs(state),
+          outputs: plannerOutputs(snapshot.outputs[node.id] ?? {}),
+          actions: Object.keys(operations[demo]).filter((action) => {
+            try {
+              return (
+                recipeCommands(runtime, [{ type: action, target: node.id }])
+                  .length > 0
+              );
+            } catch {
+              return false;
+            }
+          }),
+        };
+      });
+    return {
+      sessionId,
+      revision,
+      composition: {
+        ref: `compositions/${templateNames[active as Exclude<DemoType, "assembly">]}`,
+        version: 1,
+      },
+      instances,
+      views: ["RecipeLesson"],
+      assumptions: recipe.assumptions,
+    };
+  }
   if (!active || !definition) return null;
   const actions = Object.keys(operations[active]);
   let instances: ExperimentContext["instances"];
@@ -404,7 +564,7 @@ export function getExperimentContext(): ExperimentContext | null {
       id: i.id,
       label: i.label,
       parameters: structuredClone(i.parameters),
-      outputs: structuredClone(i.outputs),
+      outputs: plannerOutputs(i.outputs),
       actions: Object.keys(modelProvider(i.provider).actions),
     }));
   } else if (active === "gas") {
@@ -553,10 +713,33 @@ export function getActiveDefinition() {
 }
 /** Saves the accepted initial recipe, not a running checkpoint. */
 export function saveRecipe() {
+  const canonical = getRecipeSession();
+  if (canonical) return canonical.serialize();
+  if (authoredSession)
+    return serializeAuthoredRecipe(
+      authoredSession.recipe,
+      authoredSession.runtime.document,
+    );
   if (!acceptedRecipe) throw new Error("No active recipe");
   return serializeRecipe(acceptedRecipe);
 }
 export function loadRecipe(text: string) {
+  const input: unknown = JSON.parse(text);
+  if (
+    input &&
+    typeof input === "object" &&
+    "recipeVersion" in input &&
+    input.recipeVersion === 2
+  ) {
+    const candidate = loadAuthoredRecipe(input);
+    const entry = listPremadeRecipes().find(
+      ({ recipe }) => recipe.id === candidate.recipe.id,
+    );
+    return activateAuthoredSession(
+      candidate,
+      (entry?.slug ?? "assembly") as DemoType,
+    );
+  }
   const recipe = parseRecipe(text),
     resolved = resolveRecipe(recipe);
   return activateSession(resolved.demo, resolved, recipe);

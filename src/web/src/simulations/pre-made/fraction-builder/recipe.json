@@ -1,0 +1,260 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-fraction-builder",
+  "version": 1,
+  "title": "Fraction builder",
+  "description": "Which fraction shades more of an equal-sized whole?",
+  "tags": [
+    "mathematics",
+    "fraction-builder",
+    "lab"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "models/fraction-builder",
+        "version": 1,
+        "label": "Fraction builder",
+        "scope": "scope/lab",
+        "configuration": {
+          "bars": [
+            {
+              "n": 3,
+              "d": 4
+            },
+            {
+              "n": 1,
+              "d": 2
+            }
+          ]
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/fraction-builder",
+        "version": 1,
+        "label": "Fraction builder scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "task",
+        "definition": "controls/FractionComparisonActivity",
+        "version": 1,
+        "label": "Fraction comparison controls",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Fraction comparison controls"
+        }
+      },
+      {
+        "id": "result",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Compare the fractions",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Compare the fractions",
+          "precision": 2
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/task",
+        "kind": "command",
+        "from": {
+          "node": "task",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "SET_FRACTION_COMPARISON"
+        }
+      },
+      {
+        "id": "link/result",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "board"
+        },
+        "to": {
+          "node": "result",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Fraction builder"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "task"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Fraction builder",
+      "instruction": "Tap the bars to shade pieces. Compare the fractions.",
+      "explanation": "Bars represent equal-sized wholes. Each bar has 1\u201312 equal parts; shaded parts represent its numerator. Changing the denominator clears that bar. Comparing fractions uses exact integer cross multiplication."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 430
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 240
+        },
+        {
+          "id": "board/layout/result",
+          "layoutId": "layout/result",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 340,
+            "height": 164
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 180,
+            "width": 340,
+            "height": 250
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 498
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/task"
+        ],
+        [
+          "board/layout/result"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/fraction-builder",
+      "version": 1
+    },
+    {
+      "id": "appearance/fraction-builder",
+      "version": 1
+    },
+    {
+      "id": "controls/FractionComparisonActivity",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Bars represent equal-sized wholes. Each bar has 1\u201312 equal parts; shaded parts represent its numerator.",
+    "Changing the denominator clears that bar. Comparing fractions uses exact integer cross multiplication."
+  ],
+  "catalog": {
+    "icon": "\u00bd",
+    "category": "mathematics",
+    "order": 7
+  }
+}

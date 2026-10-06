@@ -1,4 +1,3 @@
-import { useTownStore } from "../../runtime/townSession";
 import { TownAppearance } from "../resources/TownAppearance";
 import type { Citizen } from "../traits/Resident";
 import { townSurfaceHeight } from "./townSurface";
@@ -16,14 +15,16 @@ export function CitizenVisual3D({
       position={[c.pos.x, townSurfaceHeight(c.pos, nearSchool) - 0.02, c.pos.z]}
       rotation={[0, c.heading, 0]}
     >
-      <mesh position={[0, 0.62, 0]} castShadow>
-        <capsuleGeometry args={[0.21, 0.38, 4, 8]} />
-        <meshStandardMaterial color={TownAppearance.citizenColors[i % 5]} />
-      </mesh>
-      <mesh position={[0, 1.13, 0]} castShadow>
-        <sphereGeometry args={[0.2, 10, 8]} />
-        <meshStandardMaterial color={i % 3 === 0 ? "#aa7956" : "#e0b68e"} />
-      </mesh>
+      <CitizenBodyVisual
+        color={TownAppearance.citizenColors[i % 5]}
+        bodyY={0.62}
+        bodyRadius={0.21}
+        bodyLength={0.38}
+        headY={1.13}
+        headRadius={0.2}
+        headSegments={[10, 8]}
+        skin={i % 3 === 0 ? "#aa7956" : "#e0b68e"}
+      />
       <mesh position={[0, 1.25, -0.015]} castShadow>
         <sphereGeometry args={[0.205, 8, 6, 0, Math.PI * 2, 0, Math.PI / 2]} />
         <meshStandardMaterial color="#635445" />
@@ -43,19 +44,47 @@ export function CitizenVisual3D({
     </group>
   );
 }
-export default function CitizensView() {
-  const citizens = useTownStore((s) => s.citizens),
-    nearSchool = useTownStore((s) => s.marketNearSchool);
+/** Body appearance consumes a profile; scene policies supply positions, headings and selection. */
+export function CitizenBodyVisual({
+  color,
+  bodyY,
+  bodyRadius,
+  bodyLength,
+  headY,
+  headRadius,
+  headSegments,
+  skin,
+  transparent = false,
+  opacity = 1,
+  emissive = "#000000",
+}: {
+  color: string;
+  bodyY: number;
+  bodyRadius: number;
+  bodyLength: number;
+  headY: number;
+  headRadius: number;
+  headSegments: [number, number];
+  skin: string;
+  transparent?: boolean;
+  opacity?: number;
+  emissive?: string;
+}) {
   return (
-    <group>
-      {citizens.map((c, i) => (
-        <CitizenVisual3D
-          key={c.id}
-          citizen={c}
-          index={i}
-          nearSchool={nearSchool}
+    <>
+      <mesh position={[0, bodyY, 0]} castShadow>
+        <capsuleGeometry args={[bodyRadius, bodyLength, 4, 8]} />
+        <meshStandardMaterial
+          color={color}
+          transparent={transparent}
+          opacity={opacity}
+          emissive={emissive}
         />
-      ))}
-    </group>
+      </mesh>
+      <mesh position={[0, headY, 0]} castShadow>
+        <sphereGeometry args={[headRadius, ...headSegments]} />
+        <meshStandardMaterial color={skin} />
+      </mesh>
+    </>
   );
 }

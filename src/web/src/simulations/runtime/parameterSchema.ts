@@ -7,7 +7,12 @@ export type ParameterSchema =
       unit?: string;
     }
   | { type: "boolean"; description?: string }
-  | { type: "string"; enum?: readonly string[]; maxLength?: number }
+  | {
+      type: "string";
+      enum?: readonly string[];
+      minLength?: number;
+      maxLength?: number;
+    }
   | { type: "enum"; values: readonly (number | string | null)[] }
   | {
       type: "object";
@@ -68,7 +73,7 @@ export function validateValue(
     case "string":
       if (
         typeof value !== "string" ||
-        !value.length ||
+        value.length < (schema.minLength ?? 1) ||
         value.length > (schema.maxLength ?? 100) ||
         (schema.enum && !schema.enum.includes(value))
       )

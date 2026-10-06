@@ -1,5 +1,4 @@
 import { readConfig } from "../apertus/config";
-import { readLayaConfig } from "../laya/config";
 export interface PlannerTrace {
   id: string;
   startedAt: string;
@@ -19,17 +18,23 @@ export function startTrace(id: string, prompt: string) {
   const started = Date.now();
   let configuration: unknown;
   try {
-    const a = readConfig(),
-      l = readLayaConfig();
+    const a = readConfig();
     configuration = {
       mode: process.env.PLANNER_MODE ?? "hybrid",
       apertus: {
         model: a.model,
+        provider: a.provider,
+        baseUrl: a.baseUrl,
+        structuredOutput: a.structuredOutput,
+        contextCapacity: a.contextTokens,
         maxTokens: a.maxTokens,
         temperature: 0,
         timeout: a.timeout,
       },
-      laya: { timeout: l.timeout, gate: l.gate, creationGate: l.creationGate },
+      laya: {
+        policy:
+          "Constructed only for ambiguous selection; see selection.laya events.",
+      },
       deadlineMs: Number(process.env.PLANNER_TIMEOUT_MS ?? 120000),
     };
   } catch {

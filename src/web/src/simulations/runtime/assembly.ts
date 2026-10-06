@@ -1,4 +1,8 @@
+import { chemistry } from "../domains/chemistry";
+import { dynamicSystems } from "../domains/dynamic-systems";
 import { mathFoundations } from "../domains/math-foundations";
+import { naturalSystems } from "../domains/natural-systems";
+import { physicalSystems } from "../domains/physical-systems";
 import type {
   Assembly,
   DomainContribution,
@@ -20,6 +24,10 @@ import {
 /** Explicit integration list. Contributions must never mutate this registry on import. */
 export const domainContributions: readonly DomainContribution[] = immutable([
   mathFoundations,
+  chemistry,
+  physicalSystems,
+  naturalSystems,
+  dynamicSystems,
 ]);
 export const assemblyModels: readonly DomainModel[] =
   domainContributions.flatMap((d) => d.models);
@@ -28,7 +36,23 @@ export const assemblyPresentationContracts = {
   balance: true,
   line: true,
   circle: true,
+  "chemistry-dilution": true,
+  "chemistry-conservation": true,
+  "chemistry-rate": true,
+  "physical-pendulum": true,
+  "physical-track": true,
+  "physical-circuit": true,
+  "natural-diffusion": true,
+  "natural-predator-prey": true,
+  "natural-plant-growth": true,
+  "dynamic-growth": true,
+  "dynamic-traffic": true,
+  "dynamic-queue": true,
 };
+export function validateAssemblyInstances(instances: readonly ModelInstance[]) {
+  for (const contribution of domainContributions)
+    contribution.validateInstances?.(instances);
+}
 export function registeredAssemblyActions() {
   const actions: Record<string, DomainModel["actions"][string]> = {};
   const refs = new Set<string>();
@@ -194,6 +218,7 @@ export function compileAssembly(input: Assembly): {
     if (i.prefab.version !== 1) throw new Error("Unsupported prefab version");
     return instantiateModel(i.id, i.label, i.prefab.ref, i.parameters);
   });
+  validateAssemblyInstances(instances);
   for (const model of assemblyModels)
     if (
       instances.filter((i) => i.provider === model.ref).length >

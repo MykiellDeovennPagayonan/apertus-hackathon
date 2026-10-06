@@ -403,3 +403,23 @@
   background: var(--accent);
   color: var(--panel);
 }
+
+.manual-create-entry {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 20px auto 0;
+}
+.manual-create-entry a {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-weight: 600;
+  min-height: 44px;
+}
+.manual-create-entry span {
+  font-size: 14px;
+}

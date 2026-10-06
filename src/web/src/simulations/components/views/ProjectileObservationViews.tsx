@@ -78,6 +78,7 @@ export function ProjectileObservationViews() {
               <EntityInspectorView
                 demo="projectile"
                 id={i.id}
+                label={`Ball ${index + 1}`}
                 parameters={{
                   angle: i.launch.angle,
                   speed: i.launch.velocity,

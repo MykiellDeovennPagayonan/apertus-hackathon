@@ -1,3 +1,4 @@
+import { lineParameterSchema } from "../../components/contracts/LineParameters";
 import {
   circleMeasure,
   type EquationState,
@@ -120,8 +121,8 @@ const line: DomainModel = {
   ],
   parameters: object(
     {
-      slope: num(-20, 20, "1"),
-      intercept: num(-100, 100, "math units"),
+      slope: lineParameterSchema("slope", "1"),
+      intercept: lineParameterSchema("intercept", "math units"),
       xMin: num(-100, 100, "math units"),
       xMax: num(-100, 100, "math units"),
     },
@@ -161,11 +162,11 @@ const line: DomainModel = {
   ),
   actions: {
     SET_SLOPE: action(
-      num(-20, 20, "1"),
+      lineParameterSchema("slope", "1"),
       "Set the slope of this line; zero and negative slopes are supported",
     ),
     SET_INTERCEPT: action(
-      num(-100, 100, "math units"),
+      lineParameterSchema("intercept", "math units"),
       "Set the y intercept of this line",
     ),
   },

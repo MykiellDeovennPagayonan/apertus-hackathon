@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { ShapeVisual2D } from "./ShapeVisual2D";
 export function CounterTokenVisual({
   id,
@@ -6,7 +7,9 @@ export function CounterTokenVisual({
   ordinal,
   active = false,
   color = "#245bcb",
+  inactiveColor = "#eef2fb",
   radius = 23,
+  animated = false,
 }: {
   id: string;
   x: number;
@@ -14,18 +17,17 @@ export function CounterTokenVisual({
   ordinal?: number | null;
   active?: boolean;
   color?: string;
+  inactiveColor?: string;
   radius?: number;
+  animated?: boolean;
 }) {
-  return (
-    <g
-      className="math-token"
-      style={{ transform: `translate(${x}px, ${y}px)` }}
-    >
+  const content = (
+    <>
       <circle r={Math.max(radius, 34)} fill="transparent" />
       <ShapeVisual2D
         identity={id}
         r={radius}
-        fill={active ? color : "#eef2fb"}
+        fill={active ? color : inactiveColor}
         stroke={color}
         strokeWidth={2}
       />
@@ -40,6 +42,23 @@ export function CounterTokenVisual({
           {ordinal}
         </text>
       )}
+    </>
+  );
+  return animated ? (
+    <motion.g
+      className="math-token"
+      initial={false}
+      animate={{ x, y }}
+      transition={{ duration: 0.48, ease: "easeInOut" }}
+    >
+      {content}
+    </motion.g>
+  ) : (
+    <g
+      className="math-token"
+      style={{ transform: `translate(${x}px, ${y}px)` }}
+    >
+      {content}
     </g>
   );
 }

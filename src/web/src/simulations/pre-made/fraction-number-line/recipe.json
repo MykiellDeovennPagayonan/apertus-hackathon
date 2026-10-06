@@ -1,0 +1,261 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-fraction-number-line",
+  "version": 1,
+  "title": "Fraction number line",
+  "description": "Where do fractions belong, and how do they add or subtract?",
+  "tags": [
+    "mathematics",
+    "fraction-number-line",
+    "lab"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "models/fraction-number-line",
+        "version": 1,
+        "label": "Fraction number line",
+        "scope": "scope/lab",
+        "configuration": {
+          "task": {
+            "mode": "place",
+            "a": {
+              "n": 3,
+              "d": 4
+            },
+            "b": {
+              "n": 1,
+              "d": 4
+            }
+          }
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/fraction-number-line",
+        "version": 1,
+        "label": "Fraction number line scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "task",
+        "definition": "controls/NumberLineActivity",
+        "version": 1,
+        "label": "Fraction number line controls",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Fraction number line controls"
+        }
+      },
+      {
+        "id": "result",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Your fraction",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Your fraction",
+          "precision": 2
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/task",
+        "kind": "command",
+        "from": {
+          "node": "task",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "SET_NUMBER_LINE_TASK"
+        }
+      },
+      {
+        "id": "link/result",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "board"
+        },
+        "to": {
+          "node": "result",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Fraction number line"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "task"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Fraction number line",
+      "instruction": "Tap the line to place the fraction. Check your answer.",
+      "explanation": "The line has a fixed scale from zero to three wholes. Supported denominators are 1, 2, 3, 4, 6 and 12. Addition moves right and subtraction moves left. Fractions and results must remain between zero and three; operations use exact rational arithmetic."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 330
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 250
+        },
+        {
+          "id": "board/layout/result",
+          "layoutId": "layout/result",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 340,
+            "height": 164
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 180,
+            "width": 340,
+            "height": 180
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 498
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/task"
+        ],
+        [
+          "board/layout/result"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/fraction-number-line",
+      "version": 1
+    },
+    {
+      "id": "appearance/fraction-number-line",
+      "version": 1
+    },
+    {
+      "id": "controls/NumberLineActivity",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "The line has a fixed scale from zero to three wholes. Supported denominators are 1, 2, 3, 4, 6 and 12.",
+    "Addition moves right and subtraction moves left. Fractions and results must remain between zero and three; operations use exact rational arithmetic."
+  ],
+  "catalog": {
+    "icon": "\u219d",
+    "category": "mathematics",
+    "order": 8
+  }
+}

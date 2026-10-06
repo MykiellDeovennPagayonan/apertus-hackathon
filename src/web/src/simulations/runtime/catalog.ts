@@ -1,3 +1,4 @@
+import { registerComponentDefinitions } from "../components/registry";
 import { measurementProbeSchema } from "../components/traits/MeasurementProbe";
 import type { OperationMetadata } from "./capabilities";
 import { operations, templateNames, templateParameters } from "./capabilities";
@@ -6,6 +7,7 @@ import { registerMathDefinitions } from "./mathCatalog";
 import type { ParameterSchema } from "./parameterSchema";
 import type { DemoType } from "./types";
 export interface Definition {
+  composition?: import("../components/contracts/ComponentDefinition").ComponentDefinition;
   id: string;
   kind: ComponentKind;
   version: number;
@@ -437,3 +439,5 @@ Object.assign(definitions.get("traits/MeasurementProbe") ?? {}, {
     "Pause adds no samples; relaunch/reset starts at time zero; keeps the first bounded samples",
   ],
 });
+
+registerComponentDefinitions(definitions);

@@ -12,6 +12,10 @@ export default function ExperimentCatalog({
       <span className="eyebrow">READY TO EXPLORE</span>
       <h1>Pick an experiment.</h1>
       <p>Premade worlds, ready to run. Choose one and start changing things.</p>
+      <div className="manual-create-entry">
+        <Link href="/experiments/builder">Create manually →</Link>
+        <span>Start with an empty canvas.</span>
+      </div>
       {error && <output>{error}</output>}
       <div className="experiment-catalog__grid">
         {Object.entries(premadeExperiments).map(([id, experiment]) => (

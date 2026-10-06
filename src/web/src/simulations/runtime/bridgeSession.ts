@@ -1,5 +1,4 @@
 import { create, type StateCreator } from "zustand";
-import { BridgeExperiment } from "../components/compositions/BridgeExperiment";
 import { buildTruss } from "../components/prefabs/TrussAssembly";
 import { HeuristicBridgeResponseSystem } from "../components/systems/HeuristicBridgeResponseSystem";
 import {
@@ -9,10 +8,11 @@ import {
   type SimulationCommand,
   validNumber,
 } from "./commands";
+import { BridgeExperiment } from "./recipes/compatibility/compositions/BridgeExperiment";
 
 const defaults = BridgeExperiment.defaults;
 const initialTruss = () => buildTruss(defaults.spanScale, defaults.dense);
-interface BridgeState {
+export interface BridgeState {
   initial: typeof defaults;
   activate: (
     parameters: typeof defaults,
