@@ -634,6 +634,7 @@ export function SpatialBoard({
   const finish = (event: PointerEvent) => {
     if (completeMarquee(event)) return;
     const g = gesture.current;
+    if (!g || g.pointer !== event.pointerId) return;
     if (
       authoring &&
       !pan &&
@@ -1697,6 +1698,8 @@ export function SpatialBoard({
           immersive={!!immersive}
           learnerArea={area}
           selection={selection}
+          preview={preview}
+          onPreviewChange={setPreview}
           onSelect={setSelection}
           onCommit={(next, group, action) => {
             if (conversion) setConversion(next);

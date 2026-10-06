@@ -114,6 +114,71 @@ const document = canonicalDocument(authored);
     await drag(await region([textElement]));
     await page.keyboard.up("Shift");
     assert.equal(await selection.textContent(), "3 selected");
+    const mixedItems = [component, boxElement, textElement];
+    const boxes = () => Promise.all(mixedItems.map((el) => el.boundingBox()));
+    const close = (actual, expected) =>
+      assert.ok(
+        Math.abs(actual - expected) < 1,
+        `${actual} should equal ${expected}`,
+      );
+    const heading = component.locator(".board-item-tools button").first();
+    for (const origin of [boxElement, textElement, heading]) {
+      const saved = (await draft()).items;
+      const before = await boxes();
+      const handle = await origin.boundingBox();
+      await page.mouse.move(
+        handle.x + handle.width / 2,
+        handle.y + handle.height / 2,
+      );
+      await page.mouse.down();
+      await page.mouse.move(
+        handle.x + handle.width / 2 + 48,
+        handle.y + handle.height / 2 + 24,
+        { steps: 6 },
+      );
+      const live = await boxes();
+      for (let i = 0; i < before.length; i++) {
+        close(live[i].x - before[i].x, 48);
+        close(live[i].y - before[i].y, 24);
+      }
+      assert.deepEqual(
+        (await draft()).items,
+        saved,
+        "Dragging previews every item without saving early",
+      );
+      await page.mouse.up();
+      const released = await boxes();
+      for (let i = 0; i < before.length; i++) {
+        close(released[i].x, live[i].x);
+        close(released[i].y, live[i].y);
+      }
+      await page.getByRole("button", { name: "Undo", exact: true }).click();
+      assert.deepEqual(
+        (await draft()).items,
+        saved,
+        "One undo restores the entire mixed drag",
+      );
+    }
+    // Cancelling a drawing-led mixed drag restores every preview together.
+    const beforeCancel = await boxes();
+    const drawingBounds = await boxElement.boundingBox();
+    await page.mouse.move(drawingBounds.x + 40, drawingBounds.y + 40);
+    await page.mouse.down();
+    await page.mouse.move(drawingBounds.x + 100, drawingBounds.y + 70, {
+      steps: 4,
+    });
+    await page.keyboard.press("Escape");
+    await page.mouse.up();
+    const cancelled = await boxes();
+    for (let i = 0; i < cancelled.length; i++) {
+      close(cancelled[i].x, beforeCancel[i].x);
+      close(cancelled[i].y, beforeCancel[i].y);
+    }
+    // Restore the selection after Escape for the existing rectangle checks.
+    await drag(await region(mixedItems));
+    console.log(
+      "Mixed selections preview and commit together from drawings and components; undo and cancellation passed",
+    );
     await page.mouse.click(blank.x, blank.y);
     assert.equal(await selection.count(), 0);
     await drag(await region([component, boxElement]), true);

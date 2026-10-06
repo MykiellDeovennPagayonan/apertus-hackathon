@@ -78,6 +78,8 @@ export function DrawingEditor({
   viewport,
   authoring,
   selection,
+  preview,
+  onPreviewChange: setPreview,
   onSelect,
   onCommit,
   onAction,
@@ -95,6 +97,8 @@ export function DrawingEditor({
   immersive?: boolean;
   learnerArea?: Rect;
   selection: string[];
+  preview: Record<string, Rect>;
+  onPreviewChange: (rects: Record<string, Rect>) => void;
   onSelect: (ids: string[]) => void;
   onCommit: DrawingCommit;
   onAction: (
@@ -105,7 +109,6 @@ export function DrawingEditor({
   tool: DrawingTool;
   onToolChange: (tool: DrawingTool) => void;
 }) {
-  const [preview, setPreview] = useState<Record<string, Rect>>({});
   const [ghost, setGhost] = useState<DrawingItem | null>(null);
   const [editing, setEditing] = useState<{
     id: string;
@@ -345,7 +348,7 @@ export function DrawingEditor({
       window.removeEventListener("keyup", keyup);
       window.removeEventListener("blur", blur);
     };
-  }, [authoring, immersive, onPanTool]);
+  }, [authoring, immersive, onPanTool, setPreview]);
   useEffect(() => {
     if (!authoring) {
       callbacks.current.finishText();
