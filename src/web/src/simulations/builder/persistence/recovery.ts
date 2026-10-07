@@ -13,6 +13,7 @@ export type DraftRecovery = {
   valid: ExperimentDocument;
   selected?: string;
   saveId?: string | null;
+  revision?: number;
   recovery?: string;
 };
 export function editableDocument(document: ExperimentDocument) {
@@ -37,7 +38,7 @@ export function usableEntries(entries: SavedExperiment[]) {
     }
   });
 }
-export function readBuilderRecovery(entries = readLibrary()) {
+export function readBuilderRecovery(entries = readLibrary(), ownerId?: string) {
   if (!Array.isArray(entries)) throw new Error("Saved library is unreadable");
   const usable = usableEntries(entries),
     params = new URLSearchParams(location.search),
@@ -45,7 +46,7 @@ export function readBuilderRecovery(entries = readLibrary()) {
     entry = usable.find((e) => e.id === lesson);
   if (lesson && !entry)
     throw new Error(
-      "This saved lesson is unavailable on this device. Import its experiment JSON to open it here.",
+      "This saved lesson is unavailable in this library. Import its experiment JSON to open it here.",
     );
   if (entry) {
     validateRunnableDocument(entry.document);
@@ -67,7 +68,9 @@ export function readBuilderRecovery(entries = readLibrary()) {
       remix: parseDocument(source),
     };
   }
-  const raw = localStorage.getItem(DRAFT_KEY);
+  const raw = localStorage.getItem(
+    ownerId ? `${DRAFT_KEY}:${ownerId}` : DRAFT_KEY,
+  );
   const draft: DraftRecovery | undefined = raw ? JSON.parse(raw) : undefined;
   if (draft) draft.valid = editableDocument(draft.valid);
   return {
@@ -76,6 +79,9 @@ export function readBuilderRecovery(entries = readLibrary()) {
     draft,
   };
 }
-export function persistDraft(draft: DraftRecovery) {
-  localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+export function persistDraft(draft: DraftRecovery, ownerId?: string) {
+  localStorage.setItem(
+    ownerId ? `${DRAFT_KEY}:${ownerId}` : DRAFT_KEY,
+    JSON.stringify(draft),
+  );
 }
