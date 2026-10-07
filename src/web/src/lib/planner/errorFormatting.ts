@@ -50,7 +50,7 @@ function formatSingleDetail(line: string): string {
     .replace(/^(?:Error|PlannerError):\s*/i, "")
     .trim();
 
-  // 2. Authoring / simulation binding errors translated to sensible layman language
+  // 2. Authoring / simulation binding errors translated to sensible user-facing language
   if (
     /^A numeric readout cannot display a structured or unavailable output$/i.test(
       cleaned,
@@ -278,7 +278,7 @@ function formatSingleDetail(line: string): string {
   return cleaned;
 }
 
-export function formatLaymanStatus(raw: string): string {
+export function formatUserFacingStatus(raw: string): string {
   if (!raw || typeof raw !== "string") return "";
   const trimmed = raw.trim();
 
@@ -348,7 +348,7 @@ export function formatLaymanStatus(raw: string): string {
   return trimmed;
 }
 
-export function formatLaymanDetails(raw: string): string {
+export function formatUserFacingDetails(raw: string): string {
   if (!raw || typeof raw !== "string") return "";
   const lines = raw
     .split(/\r?\n/)
@@ -357,3 +357,7 @@ export function formatLaymanDetails(raw: string): string {
   if (lines.length === 0) return "";
   return lines.map(formatSingleDetail).join("\n");
 }
+
+export const formatUserFacingError = formatUserFacingDetails;
+export const simplifyErrorMessage = formatUserFacingDetails;
+export const simplifyStatusMessage = formatUserFacingStatus;

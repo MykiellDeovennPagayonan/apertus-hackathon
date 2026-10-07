@@ -4,9 +4,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { requestGeneration } from "../../../lib/planner/browser";
 import {
-  formatLaymanDetails,
-  formatLaymanStatus,
-} from "../../../lib/planner/layman";
+  formatUserFacingDetails,
+  formatUserFacingStatus,
+} from "../../../lib/planner/errorFormatting";
 import type { GenerationRequest } from "../../../lib/planner/schema";
 import { ControlsTarget } from "../../../simulations/components/views/ControlsOverlay";
 import { ExperimentView } from "../../../simulations/components/views/ExperimentView";
@@ -172,7 +172,7 @@ export default function ExperimentsShell({
               text: "Your saved lesson could not be reopened.",
               details:
                 error instanceof Error
-                  ? formatLaymanDetails(error.message)
+                  ? formatUserFacingDetails(error.message)
                   : "Use a downloaded recipe to recover.",
             });
           }
@@ -209,7 +209,7 @@ export default function ExperimentsShell({
           text: "Couldn't open this lesson.",
           details:
             error instanceof Error
-              ? formatLaymanDetails(error.message)
+              ? formatUserFacingDetails(error.message)
               : "Invalid recipe",
         });
       }
@@ -237,7 +237,7 @@ export default function ExperimentsShell({
           text: "Your lesson is ready, but it couldn't be saved in this browser. Use Save recipe to download it.",
           details:
             error instanceof Error
-              ? formatLaymanDetails(error.message)
+              ? formatUserFacingDetails(error.message)
               : "Browser storage is unavailable.",
         });
       return false;
@@ -270,8 +270,8 @@ export default function ExperimentsShell({
       if (result.status === "failed") {
         setStatus({
           kind: "error",
-          text: formatLaymanStatus(result.message),
-          details: formatLaymanDetails(result.message),
+          text: formatUserFacingStatus(result.message),
+          details: formatUserFacingDetails(result.message),
           retry: result.retryable,
         });
         return;
@@ -280,7 +280,7 @@ export default function ExperimentsShell({
         setStatus({
           kind: "info",
           text: "That request isn't supported yet.",
-          details: formatLaymanDetails(result.message),
+          details: formatUserFacingDetails(result.message),
         });
         return;
       }
@@ -323,7 +323,7 @@ export default function ExperimentsShell({
           text: "Couldn't complete your request.",
           details:
             error instanceof Error
-              ? formatLaymanDetails(error.message)
+              ? formatUserFacingDetails(error.message)
               : "Please try again.",
           retry: true,
         });
@@ -368,7 +368,7 @@ export default function ExperimentsShell({
         text: "Couldn't export this recipe.",
         details:
           error instanceof Error
-            ? formatLaymanDetails(error.message)
+            ? formatUserFacingDetails(error.message)
             : "Please try again.",
       });
     } finally {
@@ -387,7 +387,7 @@ export default function ExperimentsShell({
         text: "Couldn't prepare Remix. Download the recipe and import it in the builder.",
         details:
           error instanceof Error
-            ? formatLaymanDetails(error.message)
+            ? formatUserFacingDetails(error.message)
             : "Browser storage is unavailable.",
       });
     }
@@ -419,7 +419,7 @@ export default function ExperimentsShell({
         text: "Couldn't open this recipe.",
         details:
           error instanceof Error
-            ? formatLaymanDetails(error.message)
+            ? formatUserFacingDetails(error.message)
             : "Invalid recipe",
       });
     }
@@ -511,7 +511,7 @@ export default function ExperimentsShell({
                           text: "Couldn't reset lesson.",
                           details:
                             error instanceof Error
-                              ? formatLaymanDetails(error.message)
+                              ? formatUserFacingDetails(error.message)
                               : "Reset failed",
                         });
                       }
@@ -551,7 +551,7 @@ export default function ExperimentsShell({
                           text: "Couldn't undo that change.",
                           details:
                             error instanceof Error
-                              ? formatLaymanDetails(error.message)
+                              ? formatUserFacingDetails(error.message)
                               : "Undo failed",
                         });
                       }
@@ -571,7 +571,7 @@ export default function ExperimentsShell({
                           text: "Couldn't redo that change.",
                           details:
                             error instanceof Error
-                              ? formatLaymanDetails(error.message)
+                              ? formatUserFacingDetails(error.message)
                               : "Redo failed",
                         });
                       }

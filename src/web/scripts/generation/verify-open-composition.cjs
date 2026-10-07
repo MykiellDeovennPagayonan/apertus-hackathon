@@ -26,7 +26,7 @@ const { finalizeRecipe } = load(
 const { emptyAuthoredDocument } = load("src/simulations/runtime/authoring/types.ts");
 const { loadRecipe } = load("src/simulations/runtime/recipes/loadRecipe.ts");
 const { RecipeLesson } = load("src/simulations/components/views/RecipeLesson.tsx");
-const { formatLaymanDetails, formatLaymanStatus } = load("src/lib/planner/layman.ts");
+const { formatUserFacingDetails, formatUserFacingStatus } = load("src/lib/planner/errorFormatting.ts");
 const { parseCoverage } = load("src/lib/planner/schema.ts");
 
 async function testBucket() {
@@ -420,48 +420,48 @@ async function testOpenCompositionGate() {
   console.log("Phase 2 gate passed: Hand-scripted open composition built, validated, runtime-tested (20m vs 5m), and rendered via RecipeLesson!");
 }
 
-function testLaymanDetailsAndCoverageCapping() {
-  // Test 1: Layman formatting for array range
-  const msg1 = formatLaymanDetails("coverage.covered: expected 0–12 items");
+function testErrorFormattingAndCoverageCapping() {
+  // Test 1: User-facing formatting for array range
+  const msg1 = formatUserFacingDetails("coverage.covered: expected 0–12 items");
   assert.equal(
     msg1,
     "Covered topics: can't be too high or can't be too low (can't have more than 12 items).",
   );
 
-  const msg1Hyphen = formatLaymanDetails("coverage.covered: expected 0-12 items");
+  const msg1Hyphen = formatUserFacingDetails("coverage.covered: expected 0-12 items");
   assert.equal(
     msg1Hyphen,
     "Covered topics: can't be too high or can't be too low (can't have more than 12 items).",
   );
 
-  // Test 2: Layman formatting for number range
-  const msg2 = formatLaymanDetails("parameters.mass: expected number 1–1000 kg");
+  // Test 2: User-facing formatting for number range
+  const msg2 = formatUserFacingDetails("parameters.mass: expected number 1–1000 kg");
   assert.equal(
     msg2,
     "Mass: can't be too high or can't be too low (must be between 1 and 1000 kg).",
   );
 
-  // Test 3: Layman formatting for integer range
-  const msg3 = formatLaymanDetails("parameters.count: expected integer 1–20");
+  // Test 3: User-facing formatting for integer range
+  const msg3 = formatUserFacingDetails("parameters.count: expected integer 1–20");
   assert.equal(
     msg3,
     "Count: can't be too high or can't be too low (must be a whole number between 1 and 20).",
   );
 
-  // Test 4: Layman formatting for boolean and enum
-  const msg4 = formatLaymanDetails("doc.presentation.particles: expected boolean");
+  // Test 4: User-facing formatting for boolean and enum
+  const msg4 = formatUserFacingDetails("doc.presentation.particles: expected boolean");
   assert.equal(msg4, "Particles: must be either on or off (yes or no).");
 
-  const msg5 = formatLaymanDetails("mode: expected one of single, comparison");
+  const msg5 = formatUserFacingDetails("mode: expected one of single, comparison");
   assert.equal(msg5, "Mode: must be one of: single, comparison.");
 
-  // Test 5: Layman formatting for unknown field
-  const msg6 = formatLaymanDetails("unknown field extraProp");
+  // Test 5: User-facing formatting for unknown field
+  const msg6 = formatUserFacingDetails("unknown field extraProp");
   assert.equal(msg6, "Unrecognized setting 'extraProp'.");
 
   // Test 6: Preserves natural multi-line text
   const multi = "Load deflection is simulated.\nFriction and momentum are not simulated.";
-  assert.equal(formatLaymanDetails(multi), multi);
+  assert.equal(formatUserFacingDetails(multi), multi);
 
   // Test 7: parseCoverage capping (no exception thrown for 20 items)
   const overflown = {
@@ -474,25 +474,25 @@ function testLaymanDetailsAndCoverageCapping() {
   assert.equal(parsed.covered.length, 12, "Covered capped to 12 items");
   assert.equal(parsed.omitted.length, 1, "Omitted retained");
 
-  // Test 8: Minimized layman status for non-technical user
-  const statusReadout = formatLaymanStatus(
+  // Test 8: Minimized user-facing status for non-technical users
+  const statusReadout = formatUserFacingStatus(
     "Apertus returned invalid stage arguments: A numeric readout cannot display a structured or unavailable output",
   );
   assert.equal(statusReadout, "Couldn't add that measurement display.");
 
-  const statusWidget = formatLaymanStatus(
+  const statusWidget = formatUserFacingStatus(
     "Apertus returned invalid stage arguments: Widget does not accept this command field",
   );
   assert.equal(statusWidget, "Couldn't add that simulation control.");
 
-  const statusTimeout = formatLaymanStatus("Apertus timed out. Please try again.");
+  const statusTimeout = formatUserFacingStatus("Apertus timed out. Please try again.");
   assert.equal(statusTimeout, "Request timed out. Please try again.");
 
-  const statusFixture = formatLaymanStatus("Fixture timeout");
+  const statusFixture = formatUserFacingStatus("Fixture timeout");
   assert.equal(statusFixture, "Fixture timeout");
 
-  // Test 9: Minimized layman details stripping technical debug wrappers
-  const detailReadout = formatLaymanDetails(
+  // Test 9: Minimized user-facing details stripping technical debug wrappers
+  const detailReadout = formatUserFacingDetails(
     "Apertus returned invalid stage arguments: A numeric readout cannot display a structured or unavailable output",
   );
   assert.equal(
@@ -500,7 +500,7 @@ function testLaymanDetailsAndCoverageCapping() {
     "This measurement contains multiple data points and cannot be shown on a single number readout.",
   );
 
-  const detailWidget = formatLaymanDetails(
+  const detailWidget = formatUserFacingDetails(
     "Apertus returned invalid stage arguments: Widget does not accept this command field",
   );
   assert.equal(
@@ -508,30 +508,30 @@ function testLaymanDetailsAndCoverageCapping() {
     "This control type cannot be used for that simulation setting.",
   );
 
-  // Test 10: Uncaught / unexpected runtime errors translated to layman details
+  // Test 10: Uncaught / unexpected runtime errors translated to user-facing details
   assert.equal(
-    formatLaymanDetails("Multiple JSON objects found in response; expected exactly one"),
+    formatUserFacingDetails("Multiple JSON objects found in response; expected exactly one"),
     "The AI generator produced multiple responses. Please try asking again.",
   );
   assert.equal(
-    formatLaymanDetails("Malformed JSON: Unexpected token < in JSON at position 0"),
+    formatUserFacingDetails("Malformed JSON: Unexpected token < in JSON at position 0"),
     "The response had a formatting issue. Please try again.",
   );
   assert.equal(
-    formatLaymanDetails("Failed to fetch"),
+    formatUserFacingDetails("Failed to fetch"),
     "Could not connect to the network. Please check your connection.",
   );
   assert.equal(
-    formatLaymanDetails("DOMException: Request cancelled"),
+    formatUserFacingDetails("DOMException: Request cancelled"),
     "The request was cancelled.",
   );
   assert.equal(
-    formatLaymanDetails("QuotaExceededError: storage full"),
+    formatUserFacingDetails("QuotaExceededError: storage full"),
     "Browser storage is full. Download your recipe to save your progress.",
   );
 
   // Test 11: Preserved long application status messages
-  const appStatus = formatLaymanStatus(
+  const appStatus = formatUserFacingStatus(
     "Your lesson is ready, but it couldn't be saved in this browser. Use Save recipe to download it.",
   );
   assert.equal(
@@ -539,14 +539,14 @@ function testLaymanDetailsAndCoverageCapping() {
     "Your lesson is ready, but it couldn't be saved in this browser. Use Save recipe to download it.",
   );
 
-  console.log("Layman details and coverage capping tests passed!");
+  console.log("Error formatting and coverage capping tests passed!");
 }
 
 (async () => {
   await testBucket();
   testFormatFixer();
   await testOpenCompositionGate();
-  testLaymanDetailsAndCoverageCapping();
+  testErrorFormattingAndCoverageCapping();
   console.log("All Phase 2 deterministic tests passed!");
 })().catch((err) => {
   console.error("Test failed:", err);
