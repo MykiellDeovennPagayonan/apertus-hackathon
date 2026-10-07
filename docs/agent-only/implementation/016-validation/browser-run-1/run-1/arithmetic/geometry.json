@@ -1,0 +1,106 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "pageOverflow": false,
+  "nativeNumbers": 0,
+  "cards": [
+    {
+      "id": "A/board/layout/appearance",
+      "rect": {
+        "x": 239,
+        "y": 274.6875,
+        "width": 618,
+        "height": 440,
+        "top": 274.6875,
+        "right": 857,
+        "bottom": 714.6875,
+        "left": 239
+      },
+      "width": 618,
+      "height": 440,
+      "scrollWidth": 618,
+      "scrollHeight": 440
+    },
+    {
+      "id": "A/board/layout/result",
+      "rect": {
+        "x": 883,
+        "y": 274.6875,
+        "width": 318,
+        "height": 162,
+        "top": 274.6875,
+        "right": 1201,
+        "bottom": 436.6875,
+        "left": 883
+      },
+      "width": 318,
+      "height": 162,
+      "scrollWidth": 318,
+      "scrollHeight": 162
+    },
+    {
+      "id": "A/board/layout/control/SET_ARITHMETIC_TASK",
+      "rect": {
+        "x": 883,
+        "y": 454.6875,
+        "width": 318,
+        "height": 260,
+        "top": 454.6875,
+        "right": 1201,
+        "bottom": 714.6875,
+        "left": 883
+      },
+      "width": 318,
+      "height": 260,
+      "scrollWidth": 318,
+      "scrollHeight": 260
+    }
+  ],
+  "inputs": [
+    {
+      "rect": {
+        "x": 891,
+        "y": 557.1875,
+        "width": 143,
+        "height": 53,
+        "top": 557.1875,
+        "right": 1034,
+        "bottom": 610.1875,
+        "left": 891
+      },
+      "fontSize": 22,
+      "minimumFontSize": 20,
+      "occluded": false
+    },
+    {
+      "rect": {
+        "x": 1050,
+        "y": 557.1875,
+        "width": 143,
+        "height": 53,
+        "top": 557.1875,
+        "right": 1193,
+        "bottom": 610.1875,
+        "left": 1050
+      },
+      "fontSize": 22,
+      "minimumFontSize": 20,
+      "occluded": false
+    }
+  ],
+  "scenes": [
+    {
+      "x": 259,
+      "y": 364.28125,
+      "width": 578,
+      "height": 270.40625,
+      "top": 364.28125,
+      "right": 837,
+      "bottom": 634.6875,
+      "left": 259,
+      "chromeOccluded": false
+    }
+  ]
+}

@@ -1,4 +1,8 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import {
+  formatLaymanDetails,
+  formatLaymanStatus,
+} from "../../lib/planner/layman";
 import "./CommandBar.css";
 export type ComposerStatus = {
   kind: "working" | "success" | "error" | "info";
@@ -109,7 +113,7 @@ export default function CommandBar({
           >
             <output>
               <span className="command-bar__activity" aria-hidden="true" />
-              {status.text}
+              {formatLaymanStatus(status.text)}
             </output>
             {status.retry && (
               <button
@@ -126,7 +130,7 @@ export default function CommandBar({
                 aria-expanded={popover === "details"}
                 aria-controls={panelId}
                 onClick={() => {
-                  setDetailText(status.details ?? "");
+                  setDetailText(formatLaymanDetails(status.details ?? ""));
                   setPopover(popover === "details" ? null : "details");
                 }}
               >
@@ -182,11 +186,17 @@ export default function CommandBar({
             ))
           ) : (
             <>
-              <p>{popover === "last" ? lastRequest?.prompt : detailText}</p>
+              <p>
+                {popover === "last"
+                  ? lastRequest?.prompt
+                  : formatLaymanDetails(detailText)}
+              </p>
               {popover === "last" && (
                 <>
                   <p className="command-bar__response">
-                    {lastRequest?.details}
+                    {lastRequest?.details
+                      ? formatLaymanDetails(lastRequest.details)
+                      : ""}
                   </p>
                   <button
                     type="button"

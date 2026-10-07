@@ -1,0 +1,10 @@
+{
+  "protocolVersion": 1,
+  "requestId": "3e147210-f4f4-4c4f-ae3e-a88ae3c77cb3",
+  "prompt": "Help me learn area and perimeter. Compare two rectangles: A is 6 metres wide and 4 metres high; B is 8 metres wide and 2 metres high. They should start with the same perimeter. Put them side by side, give each its own width and height controls, and show area and perimeter for each.",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "active": null
+}

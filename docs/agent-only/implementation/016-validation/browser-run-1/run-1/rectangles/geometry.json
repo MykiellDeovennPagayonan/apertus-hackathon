@@ -1,0 +1,266 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "pageOverflow": false,
+  "nativeNumbers": 0,
+  "cards": [
+    {
+      "id": "A/board/layout/appearance",
+      "rect": {
+        "x": 157,
+        "y": 277,
+        "width": 550,
+        "height": 158,
+        "top": 277,
+        "right": 707,
+        "bottom": 435,
+        "left": 157
+      },
+      "width": 550,
+      "height": 158,
+      "scrollWidth": 550,
+      "scrollHeight": 158
+    },
+    {
+      "id": "A/board/layout/result/area",
+      "rect": {
+        "x": 157,
+        "y": 617,
+        "width": 264,
+        "height": 94,
+        "top": 617,
+        "right": 421,
+        "bottom": 711,
+        "left": 157
+      },
+      "width": 264,
+      "height": 94,
+      "scrollWidth": 264,
+      "scrollHeight": 94
+    },
+    {
+      "id": "A/board/layout/result/perimeter",
+      "rect": {
+        "x": 443,
+        "y": 617,
+        "width": 264,
+        "height": 94,
+        "top": 617,
+        "right": 707,
+        "bottom": 711,
+        "left": 443
+      },
+      "width": 264,
+      "height": 94,
+      "scrollWidth": 264,
+      "scrollHeight": 94
+    },
+    {
+      "id": "B/board/layout/appearance",
+      "rect": {
+        "x": 733,
+        "y": 277,
+        "width": 550,
+        "height": 158,
+        "top": 277,
+        "right": 1283,
+        "bottom": 435,
+        "left": 733
+      },
+      "width": 550,
+      "height": 158,
+      "scrollWidth": 550,
+      "scrollHeight": 158
+    },
+    {
+      "id": "B/board/layout/result/area",
+      "rect": {
+        "x": 733,
+        "y": 617,
+        "width": 264,
+        "height": 94,
+        "top": 617,
+        "right": 997,
+        "bottom": 711,
+        "left": 733
+      },
+      "width": 264,
+      "height": 94,
+      "scrollWidth": 264,
+      "scrollHeight": 94
+    },
+    {
+      "id": "B/board/layout/result/perimeter",
+      "rect": {
+        "x": 1019,
+        "y": 617,
+        "width": 264,
+        "height": 94,
+        "top": 617,
+        "right": 1283,
+        "bottom": 711,
+        "left": 1019
+      },
+      "width": 264,
+      "height": 94,
+      "scrollWidth": 264,
+      "scrollHeight": 94
+    },
+    {
+      "id": "board/A/layout/input/width",
+      "rect": {
+        "x": 157,
+        "y": 457,
+        "width": 264,
+        "height": 162,
+        "top": 457,
+        "right": 421,
+        "bottom": 619,
+        "left": 157
+      },
+      "width": 264,
+      "height": 162,
+      "scrollWidth": 264,
+      "scrollHeight": 162
+    },
+    {
+      "id": "board/A/layout/input/height",
+      "rect": {
+        "x": 443,
+        "y": 457,
+        "width": 264,
+        "height": 162,
+        "top": 457,
+        "right": 707,
+        "bottom": 619,
+        "left": 443
+      },
+      "width": 264,
+      "height": 162,
+      "scrollWidth": 264,
+      "scrollHeight": 162
+    },
+    {
+      "id": "board/B/layout/input/width",
+      "rect": {
+        "x": 733,
+        "y": 457,
+        "width": 264,
+        "height": 162,
+        "top": 457,
+        "right": 997,
+        "bottom": 619,
+        "left": 733
+      },
+      "width": 264,
+      "height": 162,
+      "scrollWidth": 264,
+      "scrollHeight": 162
+    },
+    {
+      "id": "board/B/layout/input/height",
+      "rect": {
+        "x": 1019,
+        "y": 457,
+        "width": 264,
+        "height": 162,
+        "top": 457,
+        "right": 1283,
+        "bottom": 619,
+        "left": 1019
+      },
+      "width": 264,
+      "height": 162,
+      "scrollWidth": 264,
+      "scrollHeight": 162
+    }
+  ],
+  "inputs": [
+    {
+      "rect": {
+        "x": 309,
+        "y": 477,
+        "width": 88,
+        "height": 48,
+        "top": 477,
+        "right": 397,
+        "bottom": 525,
+        "left": 309
+      },
+      "fontSize": 26,
+      "minimumFontSize": 24,
+      "occluded": false
+    },
+    {
+      "rect": {
+        "x": 595,
+        "y": 477,
+        "width": 88,
+        "height": 48,
+        "top": 477,
+        "right": 683,
+        "bottom": 525,
+        "left": 595
+      },
+      "fontSize": 26,
+      "minimumFontSize": 24,
+      "occluded": false
+    },
+    {
+      "rect": {
+        "x": 885,
+        "y": 477,
+        "width": 88,
+        "height": 48,
+        "top": 477,
+        "right": 973,
+        "bottom": 525,
+        "left": 885
+      },
+      "fontSize": 26,
+      "minimumFontSize": 24,
+      "occluded": false
+    },
+    {
+      "rect": {
+        "x": 1171,
+        "y": 477,
+        "width": 88,
+        "height": 48,
+        "top": 477,
+        "right": 1259,
+        "bottom": 525,
+        "left": 1171
+      },
+      "fontSize": 26,
+      "minimumFontSize": 24,
+      "occluded": false
+    }
+  ],
+  "scenes": [
+    {
+      "x": 157,
+      "y": 277,
+      "width": 550,
+      "height": 158,
+      "top": 277,
+      "right": 707,
+      "bottom": 435,
+      "left": 157,
+      "chromeOccluded": false
+    },
+    {
+      "x": 733,
+      "y": 277,
+      "width": 550,
+      "height": 158,
+      "top": 277,
+      "right": 1283,
+      "bottom": 435,
+      "left": 733,
+      "chromeOccluded": false
+    }
+  ]
+}

@@ -1,0 +1,359 @@
+{
+  "status": 200,
+  "trace": {
+    "id": "3e147210-f4f4-4c4f-ae3e-a88ae3c77cb3",
+    "prompt": "Help me learn area and perimeter. Compare two rectangles: A is 6 metres wide and 4 metres high; B is 8 metres wide and 2 metres high. They should start with the same perimeter. Put them side by side, give each its own width and height controls, and show area and perimeter for each.",
+    "configuration": {
+      "mode": "apertus",
+      "apertus": {
+        "model": "apertus-16k",
+        "provider": "local",
+        "baseUrl": "http://127.0.0.1:11434/v1",
+        "structuredOutput": "auto",
+        "contextCapacity": 16384,
+        "maxTokens": 4096,
+        "temperature": 0,
+        "timeout": 120000
+      },
+      "laya": {
+        "policy": "Constructed only for ambiguous selection; see selection.laya events."
+      },
+      "deadlineMs": 120000
+    },
+    "startedAt": "2026-10-07T14:23:29.610Z",
+    "events": [
+      {
+        "event": "stage",
+        "elapsedMs": 0,
+        "data": {
+          "task": "teaching_intent",
+          "inputCharacters": 3789,
+          "promptTokens": null
+        }
+      },
+      {
+        "event": "budget",
+        "elapsedMs": 0,
+        "data": {
+          "calls": 1,
+          "repairs": 0,
+          "turns": 0,
+          "layaCalls": 0
+        }
+      },
+      {
+        "event": "teaching_intent.inference",
+        "elapsedMs": 1757,
+        "data": {
+          "stage": "teaching_intent",
+          "model": "apertus-16k",
+          "elapsedMs": 1757,
+          "finishReason": "stop",
+          "maxTokens": 768,
+          "contextCapacity": 16384,
+          "usage": {
+            "promptTokens": 830,
+            "outputTokens": 146,
+            "totalTokens": 976
+          },
+          "constrained": true
+        }
+      },
+      {
+        "event": "teaching_intent.schemaValidated",
+        "elapsedMs": 1757,
+        "data": {
+          "stage": "teaching_intent",
+          "attempt": 0
+        }
+      },
+      {
+        "event": "teaching_intent.response",
+        "elapsedMs": 1757,
+        "data": {
+          "stage": "teaching_intent",
+          "attempt": 0,
+          "result": {
+            "goal": "Teach the learner about area and perimeter of rectangles. Compare two rectangles, A and B, with given dimensions. Show area and perimeter for each and demonstrate how changing dimensions affects these values.",
+            "concepts": [
+              "area",
+              "perimeter",
+              "rectangle"
+            ],
+            "interactions": [
+              "compare",
+              "change dimensions"
+            ],
+            "observations": [
+              "area and perimeter values"
+            ],
+            "explicitConstraints": [
+              {
+                "meaning": "Initial dimensions of rectangle A",
+                "sourceText": "Help me learn area and perimeter. Compare two rectangles: A is 6 metres wide and 4 metres high; B is 8 metres wide and 2 metres high. They should start with the same perimeter. Put them side by side, give each its own width and height controls, and show area and perimeter for each."
+              },
+              {
+                "meaning": "Initial dimensions of rectangle B",
+                "sourceText": "Help me learn area and perimeter. Compare two rectangles: A is 6 metres wide and 4 metres high; B is 8 metres wide and 2 metres high. They should start with the same perimeter. Put them side by side, give each its own width and height controls, and show area and perimeter for each."
+              },
+              {
+                "meaning": "Perimeter of rectangle A should be equal to perimeter of rectangle B",
+                "sourceText": "Help me learn area and perimeter. Compare two rectangles: A is 6 metres wide and 4 metres high; B is 8 metres wide and 2 metres high. They should start with the same perimeter. Put them side by side, give each its own width and height controls, and show area and perimeter for each."
+              }
+            ],
+            "suggestedStructure": "comparison"
+          }
+        }
+      },
+      {
+        "event": "retrieval",
+        "elapsedMs": 1765,
+        "data": [
+          {
+            "card": {
+              "id": "prebuilt/models-area-perimeter",
+              "version": 1,
+              "recipeSlug": "area-perimeter",
+              "summary": "How do side lengths change the inside area and the outside perimeter?",
+              "supports": [
+                "area",
+                "perimeter",
+                "rectangle",
+                "dimensions"
+              ],
+              "limitations": [
+                "Rectangles only. Equal perimeter at the start does not lock later exploration.",
+                "Side lengths describe a rectangle in metres and range from 0.1 to 100. Area is width times height in square metres; perimeter is twice their sum in metres.",
+                "The drawing preserves the side-length proportion while adapting its scale to fit."
+              ],
+              "interactionNames": [
+                "change width",
+                "change height",
+                "compare independent rectangles",
+                "reset"
+              ],
+              "observationNames": [
+                "area in m²",
+                "perimeter in m",
+                "proportional rectangle scene"
+              ],
+              "names": [
+                "Area & perimeter",
+                "mathematics",
+                "area-perimeter",
+                "lab",
+                "area",
+                "perimeter",
+                "rectangle",
+                "dimensions",
+                "rectangles",
+                "width",
+                "height",
+                "side lengths",
+                "metres",
+                "square metres"
+              ]
+            },
+            "score": 18
+          }
+        ]
+      },
+      {
+        "event": "selection.laya",
+        "elapsedMs": 1765,
+        "data": {
+          "status": "skipped",
+          "reason": "Unambiguous grounded capability"
+        }
+      },
+      {
+        "event": "stage",
+        "elapsedMs": 1778,
+        "data": {
+          "task": "configure_selected_recipe",
+          "inputCharacters": 6889,
+          "promptTokens": null
+        }
+      },
+      {
+        "event": "budget",
+        "elapsedMs": 1778,
+        "data": {
+          "calls": 2,
+          "repairs": 0,
+          "turns": 0,
+          "layaCalls": 0
+        }
+      },
+      {
+        "event": "configure_selected_recipe.inference",
+        "elapsedMs": 3567,
+        "data": {
+          "stage": "configure_selected_recipe",
+          "model": "apertus-16k",
+          "elapsedMs": 1789,
+          "finishReason": "stop",
+          "maxTokens": 1024,
+          "contextCapacity": 16384,
+          "usage": {
+            "promptTokens": 1478,
+            "outputTokens": 133,
+            "totalTokens": 1611
+          },
+          "constrained": true
+        }
+      },
+      {
+        "event": "configure_selected_recipe.schemaValidated",
+        "elapsedMs": 3572,
+        "data": {
+          "stage": "configure_selected_recipe",
+          "attempt": 0
+        }
+      },
+      {
+        "event": "configure_selected_recipe.response",
+        "elapsedMs": 3583,
+        "data": {
+          "stage": "configure_selected_recipe",
+          "attempt": 0,
+          "result": {
+            "instances": [
+              {
+                "alias": "A",
+                "overrides": {
+                  "width": 6,
+                  "height": 4
+                }
+              },
+              {
+                "alias": "B",
+                "overrides": {
+                  "width": 8,
+                  "height": 2
+                }
+              }
+            ],
+            "coverage": {
+              "level": "full",
+              "covered": [
+                "area"
+              ],
+              "omitted": [],
+              "explanation": "Area of rectangle A is 6m * 4m = 24m². Area of rectangle B is 8m * 2m = 16m². Both rectangles start with the same perimeter, which is 2*(6m + 4m) = 20m. Changing dimensions affects area and perimeter proportionally."
+            }
+          }
+        }
+      },
+      {
+        "event": "operations",
+        "elapsedMs": 3590,
+        "data": {
+          "tools": [
+            "insert_recipe",
+            "insert_recipe",
+            "set_lesson",
+            "arrange"
+          ],
+          "receipt": {
+            "operationId": "creation",
+            "draftRevision": 1,
+            "status": "applied",
+            "handles": {
+              "A/model": "A/model",
+              "A/appearance": "A/appearance",
+              "A/input/width": "A/input/width",
+              "A/input/height": "A/input/height",
+              "A/result/area": "A/result/area",
+              "A/result/perimeter": "A/result/perimeter",
+              "A/scope/lab": "A/scope/lab",
+              "A/link/appearance": "A/link/appearance",
+              "A/link/result/area": "A/link/result/area",
+              "A/link/result/perimeter": "A/link/result/perimeter",
+              "A/link/input/width": "A/link/input/width",
+              "A/link/input/height": "A/link/input/height",
+              "A/group/prebuilt/models-area-perimeter": "A/group/prebuilt/models-area-perimeter",
+              "A/layout/root": "A/layout/root",
+              "A/layout/appearance": "A/layout/appearance",
+              "A/layout/result/area": "A/layout/result/area",
+              "A/layout/result/perimeter": "A/layout/result/perimeter",
+              "A/layout/task": "A/layout/task",
+              "A/layout/input/width": "A/layout/input/width",
+              "A/layout/input/height": "A/layout/input/height",
+              "A/board/layout/appearance": "A/board/layout/appearance",
+              "A/board/layout/result/area": "A/board/layout/result/area",
+              "A/board/layout/result/perimeter": "A/board/layout/result/perimeter",
+              "A/board/layout/task": "A/board/layout/task",
+              "A": "A/model",
+              "B/model": "B/model",
+              "B/appearance": "B/appearance",
+              "B/input/width": "B/input/width",
+              "B/input/height": "B/input/height",
+              "B/result/area": "B/result/area",
+              "B/result/perimeter": "B/result/perimeter",
+              "B/scope/lab": "B/scope/lab",
+              "B/link/appearance": "B/link/appearance",
+              "B/link/result/area": "B/link/result/area",
+              "B/link/result/perimeter": "B/link/result/perimeter",
+              "B/link/input/width": "B/link/input/width",
+              "B/link/input/height": "B/link/input/height",
+              "B/group/prebuilt/models-area-perimeter": "B/group/prebuilt/models-area-perimeter",
+              "B/layout/root": "B/layout/root",
+              "B/layout/appearance": "B/layout/appearance",
+              "B/layout/result/area": "B/layout/result/area",
+              "B/layout/result/perimeter": "B/layout/result/perimeter",
+              "B/layout/task": "B/layout/task",
+              "B/layout/input/width": "B/layout/input/width",
+              "B/layout/input/height": "B/layout/input/height",
+              "B/board/layout/appearance": "B/board/layout/appearance",
+              "B/board/layout/result/area": "B/board/layout/result/area",
+              "B/board/layout/result/perimeter": "B/board/layout/result/perimeter",
+              "B/board/layout/task": "B/board/layout/task",
+              "B": "B/model"
+            },
+            "summary": "Applied 4 authoring operation(s).",
+            "issues": []
+          }
+        }
+      },
+      {
+        "event": "finalization",
+        "elapsedMs": 3594,
+        "data": {
+          "status": "created",
+          "nodes": 12,
+          "connections": 10,
+          "coverage": {
+            "level": "full",
+            "covered": [
+              "area"
+            ],
+            "omitted": [],
+            "explanation": "Area of rectangle A is 6m * 4m = 24m². Area of rectangle B is 8m * 2m = 16m². Both rectangles start with the same perimeter, which is 2*(6m + 4m) = 20m. Changing dimensions affects area and perimeter proportionally."
+          },
+          "budget": {
+            "calls": 2,
+            "repairs": 0,
+            "layaCalls": 0
+          }
+        }
+      },
+      {
+        "event": "result",
+        "elapsedMs": 3594,
+        "data": {
+          "status": "created",
+          "nodes": 12,
+          "coverage": {
+            "level": "full",
+            "covered": [
+              "area"
+            ],
+            "omitted": [],
+            "explanation": "Area of rectangle A is 6m * 4m = 24m². Area of rectangle B is 8m * 2m = 16m². Both rectangles start with the same perimeter, which is 2*(6m + 4m) = 20m. Changing dimensions affects area and perimeter proportionally."
+          }
+        }
+      }
+    ]
+  }
+}

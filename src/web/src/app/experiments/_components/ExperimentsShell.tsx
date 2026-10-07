@@ -3,6 +3,10 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { requestGeneration } from "../../../lib/planner/browser";
+import {
+  formatLaymanDetails,
+  formatLaymanStatus,
+} from "../../../lib/planner/layman";
 import type { GenerationRequest } from "../../../lib/planner/schema";
 import { ControlsTarget } from "../../../simulations/components/views/ControlsOverlay";
 import { ExperimentView } from "../../../simulations/components/views/ExperimentView";
@@ -203,7 +207,10 @@ export default function ExperimentsShell({
         setStatus({
           kind: "error",
           text: "Couldn't open this lesson.",
-          details: error instanceof Error ? error.message : "Invalid recipe",
+          details:
+            error instanceof Error
+              ? formatLaymanDetails(error.message)
+              : "Invalid recipe",
         });
       }
     }, 0);
@@ -263,7 +270,8 @@ export default function ExperimentsShell({
       if (result.status === "failed") {
         setStatus({
           kind: "error",
-          text: result.message,
+          text: formatLaymanStatus(result.message),
+          details: formatLaymanDetails(result.message),
           retry: result.retryable,
         });
         return;
@@ -272,7 +280,7 @@ export default function ExperimentsShell({
         setStatus({
           kind: "info",
           text: "That request isn't supported yet.",
-          details: result.message,
+          details: formatLaymanDetails(result.message),
         });
         return;
       }
@@ -285,7 +293,13 @@ export default function ExperimentsShell({
       const details =
         result.status === "runtime_action"
           ? result.message
-          : result.coverage.explanation || session.document.lesson.instruction;
+          : [
+              result.learnerExplanation,
+              result.coverage.explanation ||
+                session.document.lesson.instruction,
+            ]
+              .filter(Boolean)
+              .join("\n\n");
       setLastRequest({ prompt: text, details });
       setStatus({
         kind:
@@ -307,7 +321,10 @@ export default function ExperimentsShell({
         setStatus({
           kind: "error",
           text: "Couldn't complete your request.",
-          details: error instanceof Error ? error.message : "Please try again.",
+          details:
+            error instanceof Error
+              ? formatLaymanDetails(error.message)
+              : "Please try again.",
           retry: true,
         });
     } finally {

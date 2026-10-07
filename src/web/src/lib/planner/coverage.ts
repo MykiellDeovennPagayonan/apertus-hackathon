@@ -1,5 +1,9 @@
 import { publicDefinition } from "../../simulations/components/catalog";
-import type { CompositeRecipe } from "../../simulations/runtime/authoring/types";
+import type {
+  AuthoredDocument,
+  CompositeRecipe,
+} from "../../simulations/runtime/authoring/types";
+import type { ComponentCard } from "./bucket";
 import type { CapabilityCard } from "./catalog";
 import { type Coverage, parseCoverage, type TeachingIntent } from "./schema";
 
@@ -78,6 +82,12 @@ export function coverageFor(
         );
       }
   }
+  if (coverage.covered.length > 12) {
+    coverage.covered = coverage.covered.slice(0, 12);
+  }
+  if (coverage.omitted.length > 12) {
+    coverage.omitted = coverage.omitted.slice(0, 12);
+  }
   return parseCoverage(coverage);
 }
 export function verifyCoverage(recipe: CompositeRecipe, card: CapabilityCard) {
@@ -109,4 +119,71 @@ export function verifyCoverage(recipe: CompositeRecipe, card: CapabilityCard) {
     )
   )
     throw new Error("Selected capability was not constructed");
+}
+
+export function computeOpenCompositionCoverage(
+  prompt: string,
+  intent: TeachingIntent,
+  document: AuthoredDocument,
+  bucketCards: ComponentCard[],
+): Coverage {
+  const covered: string[] = [];
+  const omitted: string[] = [];
+
+  const requested = (pattern: RegExp) =>
+    [...prompt.matchAll(new RegExp(pattern.source, "gi"))].some(
+      (match) =>
+        !/\b(?:without|no|not|don't|do not)\b[^.!?;]{0,35}$/i.test(
+          prompt.slice(0, match.index),
+        ),
+    );
+
+  const presentDefs = new Set(document.nodes.map((n) => n.definition));
+
+  for (const card of bucketCards) {
+    if (presentDefs.has(card.id)) {
+      for (const sup of card.supports) {
+        if (!covered.includes(sup)) covered.push(sup);
+      }
+    }
+  }
+
+  const hasRollingTrack = presentDefs.has(
+    "prefabs/physical-systems/RollingTrack",
+  );
+  if (hasRollingTrack) {
+    if (!covered.some((c) => /friction/i.test(c))) {
+      covered.push("Rolling friction and stopping distance");
+    }
+  }
+
+  if (requested(/weight|mass/i)) {
+    omitted.push("Weight / mass");
+  }
+  if (requested(/momentum/i)) {
+    omitted.push("Momentum");
+  }
+  if (requested(/friction/i) && !hasRollingTrack) {
+    omitted.push("Friction");
+  }
+
+  const finalCovered = covered.slice(0, 12);
+  const finalOmitted = omitted.slice(0, 12);
+
+  if (finalCovered.length === 0) {
+    finalCovered.push(intent.goal || "Interactive simulation");
+  }
+
+  const level = finalOmitted.length > 0 ? "partial" : "full";
+  const explanation =
+    level === "partial"
+      ? `${finalCovered.join(", ")} is simulated. ${finalOmitted.join(" and ")} are not modeled in this simulation.`
+      : "";
+
+  return {
+    level,
+    covered: finalCovered,
+    omitted: finalOmitted,
+    explanation,
+  };
 }

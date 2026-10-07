@@ -1,0 +1,328 @@
+{
+  "recipeVersion": 2,
+  "id": "generated/329dc399-7495-4d1c-b990-b06cb38c3211",
+  "version": 1,
+  "title": "Addition & subtraction",
+  "description": "Choose your numbers. Press Add circles or Take away circles to see what happens.",
+  "tags": [
+    "mathematics",
+    "arithmetic",
+    "lab"
+  ],
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/arithmetic",
+      "version": 1
+    },
+    {
+      "id": "appearance/arithmetic",
+      "version": 1
+    },
+    {
+      "id": "controls/ArithmeticActivity",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "The board owns tokens and exact fraction state. Token interactions invoke its declared commands."
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "A/model",
+        "definition": "models/arithmetic",
+        "version": 1,
+        "label": "A · Arithmetic",
+        "scope": "A/scope/lab",
+        "configuration": {
+          "task": {
+            "operation": "add",
+            "a": 7,
+            "b": 4
+          },
+          "looping": false
+        }
+      },
+      {
+        "id": "A/appearance",
+        "definition": "appearance/arithmetic",
+        "version": 1,
+        "label": "A · Arithmetic appearance",
+        "scope": "A/scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "A/control/SET_ARITHMETIC_TASK",
+        "definition": "controls/ArithmeticActivity",
+        "version": 1,
+        "label": "A · Arithmetic controls",
+        "scope": "A/scope/lab",
+        "configuration": {
+          "label": "A · Arithmetic controls"
+        }
+      },
+      {
+        "id": "A/result",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "A · Your calculation",
+        "scope": "A/scope/lab",
+        "configuration": {
+          "label": "A · Your calculation",
+          "precision": 0
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "A/link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "A/model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "A/appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "A/link/control/SET_ARITHMETIC_TASK",
+        "kind": "command",
+        "from": {
+          "node": "A/control/SET_ARITHMETIC_TASK",
+          "port": "submit"
+        },
+        "to": {
+          "node": "A/model",
+          "port": "SET_ARITHMETIC_TASK"
+        }
+      },
+      {
+        "id": "A/link/result",
+        "kind": "value",
+        "from": {
+          "node": "A/model",
+          "port": "board"
+        },
+        "to": {
+          "node": "A/result",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "A/scope/lab",
+        "label": "A · Arithmetic"
+      }
+    ],
+    "groups": [
+      {
+        "id": "A/group/prebuilt/models-arithmetic",
+        "label": "Addition & subtraction",
+        "members": [
+          "A/model",
+          "A/appearance",
+          "A/control/SET_ARITHMETIC_TASK",
+          "A/result"
+        ],
+        "source": {
+          "id": "prebuilt/models-arithmetic",
+          "version": 1
+        },
+        "collapsed": false,
+        "parameters": [
+          {
+            "name": "task",
+            "node": "A/model",
+            "field": "task",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "operation": {
+                  "type": "enum",
+                  "values": [
+                    "add",
+                    "subtract"
+                  ]
+                },
+                "a": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 20,
+                  "unit": "circles"
+                },
+                "b": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 20,
+                  "unit": "circles"
+                }
+              },
+              "optional": []
+            },
+            "default": {
+              "operation": "add",
+              "a": 7,
+              "b": 4
+            }
+          },
+          {
+            "name": "looping",
+            "node": "A/model",
+            "field": "looping",
+            "schema": {
+              "type": "boolean"
+            },
+            "default": false
+          }
+        ],
+        "exposedPorts": []
+      }
+    ],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "A/layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "A/appearance"
+        },
+        {
+          "id": "A/layout/result",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "A/result"
+        },
+        {
+          "id": "A/layout/control/SET_ARITHMETIC_TASK",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "A/control/SET_ARITHMETIC_TASK"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Addition & subtraction",
+      "instruction": "Choose your numbers. Press Add circles or Take away circles to see what happens.",
+      "explanation": "Each circle stands for one. Addition brings circles together; subtraction takes circles away. Changing a number starts a fresh calculation. Results use whole numbers from 0 to 20."
+    },
+    "editor": {
+      "positions": {
+        "A/model": {
+          "x": 340,
+          "y": 0
+        },
+        "A/appearance": {
+          "x": 680,
+          "y": 0
+        },
+        "A/control/SET_ARITHMETIC_TASK": {
+          "x": 0,
+          "y": 0
+        },
+        "A/result": {
+          "x": 1020,
+          "y": 0
+        }
+      },
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "A/board/layout/appearance",
+          "layoutId": "A/layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 442
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 400
+        },
+        {
+          "id": "A/board/layout/result",
+          "layoutId": "A/layout/result",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 320,
+            "height": 164
+          },
+          "zIndex": 1,
+          "locked": false
+        },
+        {
+          "id": "A/board/layout/control/SET_ARITHMETIC_TASK",
+          "layoutId": "A/layout/control/SET_ARITHMETIC_TASK",
+          "rect": {
+            "x": 644,
+            "y": 180,
+            "width": 320,
+            "height": 262
+          },
+          "zIndex": 2,
+          "locked": false
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1012,
+        "height": 490
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "A/board/layout/appearance"
+        ],
+        [
+          "A/board/layout/control/SET_ARITHMETIC_TASK"
+        ],
+        [
+          "A/board/layout/result"
+        ]
+      ]
+    }
+  }
+}

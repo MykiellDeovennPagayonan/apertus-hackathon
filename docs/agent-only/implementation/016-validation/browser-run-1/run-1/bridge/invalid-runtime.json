@@ -1,0 +1,2760 @@
+{
+  "requestId": "f9153dab-8291-41a8-9d39-cd4a897bb849",
+  "sessionId": "recipe-780c6e6d-7ae7-4c21-b8fa-9f3a0af12cad",
+  "authoredRevision": 0,
+  "interactionRevision": 3,
+  "recipe": {
+    "recipeVersion": 2,
+    "id": "generated/f9153dab-8291-41a8-9d39-cd4a897bb849",
+    "version": 1,
+    "title": "Truss bridge",
+    "description": "Move the truck with the slider. Watch which beams carry more load, then tap a beam to inspect it. Exact engineering deflection in millimetres is unavailable. Response and illustrated sag are conceptual/heuristic, not engineering analysis.",
+    "tags": [
+      "spatial",
+      "mechanics"
+    ],
+    "document": {
+      "formatVersion": 3,
+      "nodes": [
+        {
+          "id": "A/model",
+          "definition": "models/BridgeResponse",
+          "version": 1,
+          "label": "A · Bridge response",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "spanScale": 1,
+            "dense": false
+          }
+        },
+        {
+          "id": "A/appearance",
+          "definition": "appearance/Bridge",
+          "version": 1,
+          "label": "A · Bridge scene",
+          "scope": "A/scope/lab",
+          "configuration": {}
+        },
+        {
+          "id": "A/appearance/Beam",
+          "definition": "appearance/Beam",
+          "version": 1,
+          "label": "A · Truss beams",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "visible": true
+          }
+        },
+        {
+          "id": "A/appearance/Joint",
+          "definition": "appearance/Joint",
+          "version": 1,
+          "label": "A · Truss joints",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "visible": true
+          }
+        },
+        {
+          "id": "A/appearance/BridgeSupport",
+          "definition": "appearance/BridgeSupport",
+          "version": 1,
+          "label": "A · Bridge supports",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "visible": true
+          }
+        },
+        {
+          "id": "A/appearance/LoadTruck",
+          "definition": "appearance/LoadTruck",
+          "version": 1,
+          "label": "A · Load truck",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "visible": true
+          }
+        },
+        {
+          "id": "A/display/selected",
+          "definition": "displays/Inspector",
+          "version": 1,
+          "label": "A · Readout",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "label": "A · Selected member",
+            "precision": 3
+          }
+        },
+        {
+          "id": "A/generated/b0",
+          "definition": "models/TrussJoint",
+          "version": 1,
+          "label": "A · Truss joint",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "A/generated/b1",
+          "definition": "models/TrussJoint",
+          "version": 1,
+          "label": "A · Truss joint",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "x": 0.2,
+            "y": 0
+          }
+        },
+        {
+          "id": "A/generated/t1",
+          "definition": "models/TrussJoint",
+          "version": 1,
+          "label": "A · Truss joint",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "x": 0.2,
+            "y": -1
+          }
+        },
+        {
+          "id": "A/generated/b2",
+          "definition": "models/TrussJoint",
+          "version": 1,
+          "label": "A · Truss joint",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "x": 0.4,
+            "y": 0
+          }
+        },
+        {
+          "id": "A/generated/t2",
+          "definition": "models/TrussJoint",
+          "version": 1,
+          "label": "A · Truss joint",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "x": 0.4,
+            "y": -1
+          }
+        },
+        {
+          "id": "A/generated/b3",
+          "definition": "models/TrussJoint",
+          "version": 1,
+          "label": "A · Truss joint",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "x": 0.6,
+            "y": 0
+          }
+        },
+        {
+          "id": "A/generated/t3",
+          "definition": "models/TrussJoint",
+          "version": 1,
+          "label": "A · Truss joint",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "x": 0.6,
+            "y": -1
+          }
+        },
+        {
+          "id": "A/generated/b4",
+          "definition": "models/TrussJoint",
+          "version": 1,
+          "label": "A · Truss joint",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "x": 0.8,
+            "y": 0
+          }
+        },
+        {
+          "id": "A/generated/t4",
+          "definition": "models/TrussJoint",
+          "version": 1,
+          "label": "A · Truss joint",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "x": 0.8,
+            "y": -1
+          }
+        },
+        {
+          "id": "A/generated/b5",
+          "definition": "models/TrussJoint",
+          "version": 1,
+          "label": "A · Truss joint",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "x": 1,
+            "y": 0
+          }
+        },
+        {
+          "id": "A/generated/deck0",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · deck0",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/b0",
+            "b": "A/generated/b1",
+            "kind": "deck",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/deck1",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · deck1",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/b1",
+            "b": "A/generated/b2",
+            "kind": "deck",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/deck2",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · deck2",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/b2",
+            "b": "A/generated/b3",
+            "kind": "deck",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/deck3",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · deck3",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/b3",
+            "b": "A/generated/b4",
+            "kind": "deck",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/deck4",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · deck4",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/b4",
+            "b": "A/generated/b5",
+            "kind": "deck",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/top1",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · top1",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/t1",
+            "b": "A/generated/t2",
+            "kind": "top",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/top2",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · top2",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/t2",
+            "b": "A/generated/t3",
+            "kind": "top",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/top3",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · top3",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/t3",
+            "b": "A/generated/t4",
+            "kind": "top",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/vert1",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · vert1",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/b1",
+            "b": "A/generated/t1",
+            "kind": "vertical",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/vert2",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · vert2",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/b2",
+            "b": "A/generated/t2",
+            "kind": "vertical",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/vert3",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · vert3",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/b3",
+            "b": "A/generated/t3",
+            "kind": "vertical",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/vert4",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · vert4",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/b4",
+            "b": "A/generated/t4",
+            "kind": "vertical",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/endL",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · endL",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/b0",
+            "b": "A/generated/t1",
+            "kind": "diagonal",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/endR",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · endR",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/b5",
+            "b": "A/generated/t4",
+            "kind": "diagonal",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/diag1",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · diag1",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/t1",
+            "b": "A/generated/b2",
+            "kind": "diagonal",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/diag2",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · diag2",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/b2",
+            "b": "A/generated/t3",
+            "kind": "diagonal",
+            "present": true
+          }
+        },
+        {
+          "id": "A/generated/diag3",
+          "definition": "models/TrussMember",
+          "version": 1,
+          "label": "A · diag3",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "a": "A/generated/t3",
+            "b": "A/generated/b4",
+            "kind": "diagonal",
+            "present": true
+          }
+        },
+        {
+          "id": "A/load",
+          "definition": "models/BridgeLoad",
+          "version": 1,
+          "label": "A · Bridge load",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "position": 0.5,
+            "magnitude": 10
+          }
+        },
+        {
+          "id": "A/control/MOVE_LOAD",
+          "definition": "controls/Slider",
+          "version": 1,
+          "label": "A · Slider",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "label": "A · Move load",
+            "initial": "{\"value\":0.5}",
+            "mode": "immediate"
+          }
+        },
+        {
+          "id": "A/control/SET_LOAD",
+          "definition": "controls/Slider",
+          "version": 1,
+          "label": "A · Slider",
+          "scope": "A/scope/lab",
+          "configuration": {
+            "label": "A · Load (t)",
+            "initial": "{\"value\":10}",
+            "mode": "immediate"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "id": "A/link/appearance",
+          "kind": "attachment",
+          "from": {
+            "node": "A/model",
+            "port": "appearance"
+          },
+          "to": {
+            "node": "A/appearance",
+            "port": "model"
+          }
+        },
+        {
+          "id": "A/link/appearance/Beam",
+          "kind": "attachment",
+          "from": {
+            "node": "A/appearance/Beam",
+            "port": "scene"
+          },
+          "to": {
+            "node": "A/appearance",
+            "port": "visuals"
+          }
+        },
+        {
+          "id": "A/link/appearance/Joint",
+          "kind": "attachment",
+          "from": {
+            "node": "A/appearance/Joint",
+            "port": "scene"
+          },
+          "to": {
+            "node": "A/appearance",
+            "port": "visuals"
+          }
+        },
+        {
+          "id": "A/link/appearance/BridgeSupport",
+          "kind": "attachment",
+          "from": {
+            "node": "A/appearance/BridgeSupport",
+            "port": "scene"
+          },
+          "to": {
+            "node": "A/appearance",
+            "port": "visuals"
+          }
+        },
+        {
+          "id": "A/link/appearance/LoadTruck",
+          "kind": "attachment",
+          "from": {
+            "node": "A/appearance/LoadTruck",
+            "port": "scene"
+          },
+          "to": {
+            "node": "A/appearance",
+            "port": "visuals"
+          }
+        },
+        {
+          "id": "A/link/output/selected",
+          "kind": "value",
+          "from": {
+            "node": "A/model",
+            "port": "selected"
+          },
+          "to": {
+            "node": "A/display/selected",
+            "port": "value"
+          }
+        },
+        {
+          "id": "A/link/generated/b0/model/joints",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/b0",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "joints"
+          }
+        },
+        {
+          "id": "A/link/generated/b1/model/joints",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/b1",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "joints"
+          }
+        },
+        {
+          "id": "A/link/generated/t1/model/joints",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/t1",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "joints"
+          }
+        },
+        {
+          "id": "A/link/generated/b2/model/joints",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/b2",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "joints"
+          }
+        },
+        {
+          "id": "A/link/generated/t2/model/joints",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/t2",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "joints"
+          }
+        },
+        {
+          "id": "A/link/generated/b3/model/joints",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/b3",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "joints"
+          }
+        },
+        {
+          "id": "A/link/generated/t3/model/joints",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/t3",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "joints"
+          }
+        },
+        {
+          "id": "A/link/generated/b4/model/joints",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/b4",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "joints"
+          }
+        },
+        {
+          "id": "A/link/generated/t4/model/joints",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/t4",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "joints"
+          }
+        },
+        {
+          "id": "A/link/generated/b5/model/joints",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/b5",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "joints"
+          }
+        },
+        {
+          "id": "A/link/generated/deck0/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/deck0",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/deck1/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/deck1",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/deck2/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/deck2",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/deck3/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/deck3",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/deck4/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/deck4",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/top1/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/top1",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/top2/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/top2",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/top3/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/top3",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/vert1/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/vert1",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/vert2/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/vert2",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/vert3/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/vert3",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/vert4/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/vert4",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/endL/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/endL",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/endR/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/endR",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/diag1/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/diag1",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/diag2/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/diag2",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/generated/diag3/model/members",
+          "kind": "value",
+          "from": {
+            "node": "A/generated/diag3",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "members"
+          }
+        },
+        {
+          "id": "A/link/load/model/load",
+          "kind": "value",
+          "from": {
+            "node": "A/load",
+            "port": "data"
+          },
+          "to": {
+            "node": "A/model",
+            "port": "load"
+          }
+        },
+        {
+          "id": "A/link/control/MOVE_LOAD",
+          "kind": "command",
+          "from": {
+            "node": "A/control/MOVE_LOAD",
+            "port": "submit"
+          },
+          "to": {
+            "node": "A/load",
+            "port": "MOVE_LOAD"
+          }
+        },
+        {
+          "id": "A/link/control/SET_LOAD",
+          "kind": "command",
+          "from": {
+            "node": "A/control/SET_LOAD",
+            "port": "submit"
+          },
+          "to": {
+            "node": "A/load",
+            "port": "SET_LOAD"
+          }
+        }
+      ],
+      "resources": [],
+      "scopes": [
+        {
+          "id": "A/scope/lab",
+          "label": "A · Bridge response"
+        }
+      ],
+      "groups": [
+        {
+          "id": "A/group/recipes/BridgeLab",
+          "label": "Truss bridge",
+          "members": [
+            "A/model",
+            "A/appearance",
+            "A/appearance/Beam",
+            "A/appearance/Joint",
+            "A/appearance/BridgeSupport",
+            "A/appearance/LoadTruck",
+            "A/display/selected",
+            "A/generated/b0",
+            "A/generated/b1",
+            "A/generated/t1",
+            "A/generated/b2",
+            "A/generated/t2",
+            "A/generated/b3",
+            "A/generated/t3",
+            "A/generated/b4",
+            "A/generated/t4",
+            "A/generated/b5",
+            "A/generated/deck0",
+            "A/generated/deck1",
+            "A/generated/deck2",
+            "A/generated/deck3",
+            "A/generated/deck4",
+            "A/generated/top1",
+            "A/generated/top2",
+            "A/generated/top3",
+            "A/generated/vert1",
+            "A/generated/vert2",
+            "A/generated/vert3",
+            "A/generated/vert4",
+            "A/generated/endL",
+            "A/generated/endR",
+            "A/generated/diag1",
+            "A/generated/diag2",
+            "A/generated/diag3",
+            "A/load",
+            "A/control/MOVE_LOAD",
+            "A/control/SET_LOAD"
+          ],
+          "source": {
+            "id": "recipes/BridgeLab",
+            "version": 1
+          },
+          "collapsed": false,
+          "parameters": [
+            {
+              "name": "position",
+              "node": "A/load",
+              "field": "position",
+              "schema": {
+                "type": "number",
+                "minimum": 0.05,
+                "maximum": 0.95,
+                "unit": ""
+              },
+              "default": 0.5
+            },
+            {
+              "name": "magnitude",
+              "node": "A/load",
+              "field": "magnitude",
+              "schema": {
+                "type": "number",
+                "minimum": 2,
+                "maximum": 30,
+                "unit": "t"
+              },
+              "default": 10
+            }
+          ],
+          "exposedPorts": []
+        }
+      ],
+      "layout": {
+        "id": "layout/root",
+        "kind": "stack",
+        "label": "",
+        "gap": 16,
+        "columns": 2,
+        "children": [
+          {
+            "id": "A/layout/appearance",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "A/appearance"
+          },
+          {
+            "id": "A/layout/control/MOVE_LOAD",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "A/control/MOVE_LOAD"
+          },
+          {
+            "id": "A/layout/control/SET_LOAD",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "A/control/SET_LOAD"
+          },
+          {
+            "id": "A/layout/display/selected",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "A/display/selected"
+          }
+        ]
+      },
+      "lesson": {
+        "title": "Truss bridge",
+        "instruction": "Move the truck with the slider. Watch which beams carry more load, then tap a beam to inspect it. Exact engineering deflection in millimetres is unavailable. Response and illustrated sag are conceptual/heuristic, not engineering analysis.",
+        "explanation": "Conceptual heuristic scores, not structural deflection or a general structural solver.\nOnly generated five/eight panel topology, span scales 1 or 2, and one absent middle diagonal are supported.\nExact engineering deflection in millimetres is unavailable. Response and illustrated sag are conceptual/heuristic, not engineering analysis."
+      },
+      "editor": {
+        "positions": {
+          "A/model": {
+            "x": 340,
+            "y": 0
+          },
+          "A/appearance": {
+            "x": 680,
+            "y": 0
+          },
+          "A/appearance/Beam": {
+            "x": 680,
+            "y": 220
+          },
+          "A/appearance/Joint": {
+            "x": 680,
+            "y": 440
+          },
+          "A/appearance/BridgeSupport": {
+            "x": 680,
+            "y": 660
+          },
+          "A/appearance/LoadTruck": {
+            "x": 680,
+            "y": 880
+          },
+          "A/display/selected": {
+            "x": 1020,
+            "y": 0
+          },
+          "A/generated/b0": {
+            "x": 340,
+            "y": 220
+          },
+          "A/generated/b1": {
+            "x": 340,
+            "y": 440
+          },
+          "A/generated/t1": {
+            "x": 340,
+            "y": 660
+          },
+          "A/generated/b2": {
+            "x": 340,
+            "y": 880
+          },
+          "A/generated/t2": {
+            "x": 340,
+            "y": 1100
+          },
+          "A/generated/b3": {
+            "x": 340,
+            "y": 1320
+          },
+          "A/generated/t3": {
+            "x": 340,
+            "y": 1540
+          },
+          "A/generated/b4": {
+            "x": 340,
+            "y": 1760
+          },
+          "A/generated/t4": {
+            "x": 340,
+            "y": 1980
+          },
+          "A/generated/b5": {
+            "x": 340,
+            "y": 2200
+          },
+          "A/generated/deck0": {
+            "x": 340,
+            "y": 2420
+          },
+          "A/generated/deck1": {
+            "x": 340,
+            "y": 2640
+          },
+          "A/generated/deck2": {
+            "x": 340,
+            "y": 2860
+          },
+          "A/generated/deck3": {
+            "x": 340,
+            "y": 3080
+          },
+          "A/generated/deck4": {
+            "x": 340,
+            "y": 3300
+          },
+          "A/generated/top1": {
+            "x": 340,
+            "y": 3520
+          },
+          "A/generated/top2": {
+            "x": 340,
+            "y": 3740
+          },
+          "A/generated/top3": {
+            "x": 340,
+            "y": 3960
+          },
+          "A/generated/vert1": {
+            "x": 340,
+            "y": 4180
+          },
+          "A/generated/vert2": {
+            "x": 340,
+            "y": 4400
+          },
+          "A/generated/vert3": {
+            "x": 340,
+            "y": 4620
+          },
+          "A/generated/vert4": {
+            "x": 340,
+            "y": 4840
+          },
+          "A/generated/endL": {
+            "x": 340,
+            "y": 5060
+          },
+          "A/generated/endR": {
+            "x": 340,
+            "y": 5280
+          },
+          "A/generated/diag1": {
+            "x": 340,
+            "y": 5500
+          },
+          "A/generated/diag2": {
+            "x": 340,
+            "y": 5720
+          },
+          "A/generated/diag3": {
+            "x": 340,
+            "y": 5940
+          },
+          "A/load": {
+            "x": 340,
+            "y": 6160
+          },
+          "A/control/MOVE_LOAD": {
+            "x": 0,
+            "y": 0
+          },
+          "A/control/SET_LOAD": {
+            "x": 0,
+            "y": 220
+          }
+        },
+        "zoom": 1
+      },
+      "presentation": {
+        "version": 1,
+        "mode": "board",
+        "items": [
+          {
+            "id": "A/board/layout/appearance",
+            "layoutId": "A/layout/appearance",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 620,
+              "height": 360
+            },
+            "zIndex": 0,
+            "locked": false,
+            "responsiveMinHeight": 280
+          },
+          {
+            "id": "A/board/layout/control/MOVE_LOAD",
+            "layoutId": "A/layout/control/MOVE_LOAD",
+            "rect": {
+              "x": 644,
+              "y": 256,
+              "width": 320,
+              "height": 160
+            },
+            "zIndex": 1,
+            "locked": false
+          },
+          {
+            "id": "A/board/layout/control/SET_LOAD",
+            "layoutId": "A/layout/control/SET_LOAD",
+            "rect": {
+              "x": 644,
+              "y": 432,
+              "width": 320,
+              "height": 160
+            },
+            "zIndex": 2,
+            "locked": false
+          },
+          {
+            "id": "A/board/layout/display/selected",
+            "layoutId": "A/layout/display/selected",
+            "rect": {
+              "x": 644,
+              "y": 0,
+              "width": 320,
+              "height": 240
+            },
+            "zIndex": 3,
+            "locked": false
+          }
+        ],
+        "groups": [],
+        "startView": {
+          "x": -24,
+          "y": -24,
+          "width": 1012,
+          "height": 640
+        },
+        "navigation": {
+          "mode": "bounded",
+          "minZoom": 0.25,
+          "maxZoom": 2
+        },
+        "immersive": {
+          "startup": "board",
+          "allowReturnToBoard": true,
+          "overlays": []
+        },
+        "responsive": true,
+        "responsiveRows": [
+          [
+            "A/board/layout/appearance"
+          ],
+          [
+            "A/board/layout/control/MOVE_LOAD"
+          ],
+          [
+            "A/board/layout/control/SET_LOAD"
+          ],
+          [
+            "A/board/layout/display/selected"
+          ]
+        ]
+      }
+    },
+    "nested": [],
+    "parameters": [],
+    "externalPorts": [],
+    "dependencies": [
+      {
+        "id": "models/BridgeResponse",
+        "version": 1
+      },
+      {
+        "id": "appearance/Bridge",
+        "version": 1
+      },
+      {
+        "id": "appearance/Beam",
+        "version": 1
+      },
+      {
+        "id": "appearance/Joint",
+        "version": 1
+      },
+      {
+        "id": "appearance/BridgeSupport",
+        "version": 1
+      },
+      {
+        "id": "appearance/LoadTruck",
+        "version": 1
+      },
+      {
+        "id": "displays/Inspector",
+        "version": 1
+      },
+      {
+        "id": "models/TrussJoint",
+        "version": 1
+      },
+      {
+        "id": "models/TrussMember",
+        "version": 1
+      },
+      {
+        "id": "models/BridgeLoad",
+        "version": 1
+      },
+      {
+        "id": "controls/Slider",
+        "version": 1
+      }
+    ],
+    "assumptions": [
+      "Conceptual heuristic scores, not structural deflection or a general structural solver.",
+      "Only generated five/eight panel topology, span scales 1 or 2, and one absent middle diagonal are supported."
+    ]
+  },
+  "coverage": {
+    "level": "partial",
+    "covered": [
+      "truss bridge"
+    ],
+    "omitted": [
+      "exact deflection in millimetres"
+    ],
+    "explanation": "Exact engineering deflection in millimetres is unavailable. Response and illustrated sag are conceptual/heuristic, not engineering analysis."
+  },
+  "state": {
+    "state": {
+      "A/model": {
+        "spanScale": 1,
+        "dense": false,
+        "selectedMember": "A/generated/deck1",
+        "ready": true,
+        "truss": {
+          "joints": [
+            {
+              "x": 0,
+              "y": 0,
+              "id": "A/generated/b0"
+            },
+            {
+              "x": 0.2,
+              "y": 0,
+              "id": "A/generated/b1"
+            },
+            {
+              "x": 0.2,
+              "y": -1,
+              "id": "A/generated/t1"
+            },
+            {
+              "x": 0.4,
+              "y": 0,
+              "id": "A/generated/b2"
+            },
+            {
+              "x": 0.4,
+              "y": -1,
+              "id": "A/generated/t2"
+            },
+            {
+              "x": 0.6,
+              "y": 0,
+              "id": "A/generated/b3"
+            },
+            {
+              "x": 0.6,
+              "y": -1,
+              "id": "A/generated/t3"
+            },
+            {
+              "x": 0.8,
+              "y": 0,
+              "id": "A/generated/b4"
+            },
+            {
+              "x": 0.8,
+              "y": -1,
+              "id": "A/generated/t4"
+            },
+            {
+              "x": 1,
+              "y": 0,
+              "id": "A/generated/b5"
+            }
+          ],
+          "members": [
+            {
+              "a": "A/generated/b0",
+              "b": "A/generated/b1",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck0"
+            },
+            {
+              "a": "A/generated/b1",
+              "b": "A/generated/b2",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck1"
+            },
+            {
+              "a": "A/generated/b2",
+              "b": "A/generated/b3",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck2"
+            },
+            {
+              "a": "A/generated/b3",
+              "b": "A/generated/b4",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck3"
+            },
+            {
+              "a": "A/generated/b4",
+              "b": "A/generated/b5",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck4"
+            },
+            {
+              "a": "A/generated/t1",
+              "b": "A/generated/t2",
+              "kind": "top",
+              "present": true,
+              "id": "A/generated/top1"
+            },
+            {
+              "a": "A/generated/t2",
+              "b": "A/generated/t3",
+              "kind": "top",
+              "present": true,
+              "id": "A/generated/top2"
+            },
+            {
+              "a": "A/generated/t3",
+              "b": "A/generated/t4",
+              "kind": "top",
+              "present": true,
+              "id": "A/generated/top3"
+            },
+            {
+              "a": "A/generated/b1",
+              "b": "A/generated/t1",
+              "kind": "vertical",
+              "present": true,
+              "id": "A/generated/vert1"
+            },
+            {
+              "a": "A/generated/b2",
+              "b": "A/generated/t2",
+              "kind": "vertical",
+              "present": true,
+              "id": "A/generated/vert2"
+            },
+            {
+              "a": "A/generated/b3",
+              "b": "A/generated/t3",
+              "kind": "vertical",
+              "present": true,
+              "id": "A/generated/vert3"
+            },
+            {
+              "a": "A/generated/b4",
+              "b": "A/generated/t4",
+              "kind": "vertical",
+              "present": true,
+              "id": "A/generated/vert4"
+            },
+            {
+              "a": "A/generated/b0",
+              "b": "A/generated/t1",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/endL"
+            },
+            {
+              "a": "A/generated/b5",
+              "b": "A/generated/t4",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/endR"
+            },
+            {
+              "a": "A/generated/t1",
+              "b": "A/generated/b2",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/diag1"
+            },
+            {
+              "a": "A/generated/b2",
+              "b": "A/generated/t3",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/diag2"
+            },
+            {
+              "a": "A/generated/t3",
+              "b": "A/generated/b4",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/diag3"
+            }
+          ],
+          "panels": 5,
+          "span": 1.6,
+          "height": 0.28,
+          "id": "A/model",
+          "load": {
+            "id": "A/load",
+            "assembly": "A/model",
+            "position": 0.25,
+            "magnitude": 10
+          }
+        },
+        "response": {
+          "members": [
+            {
+              "a": "A/generated/b0",
+              "b": "A/generated/b1",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck0"
+            },
+            {
+              "a": "A/generated/b1",
+              "b": "A/generated/b2",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck1"
+            },
+            {
+              "a": "A/generated/b2",
+              "b": "A/generated/b3",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck2"
+            },
+            {
+              "a": "A/generated/b3",
+              "b": "A/generated/b4",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck3"
+            },
+            {
+              "a": "A/generated/b4",
+              "b": "A/generated/b5",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck4"
+            },
+            {
+              "a": "A/generated/t1",
+              "b": "A/generated/t2",
+              "kind": "top",
+              "present": true,
+              "id": "A/generated/top1"
+            },
+            {
+              "a": "A/generated/t2",
+              "b": "A/generated/t3",
+              "kind": "top",
+              "present": true,
+              "id": "A/generated/top2"
+            },
+            {
+              "a": "A/generated/t3",
+              "b": "A/generated/t4",
+              "kind": "top",
+              "present": true,
+              "id": "A/generated/top3"
+            },
+            {
+              "a": "A/generated/b1",
+              "b": "A/generated/t1",
+              "kind": "vertical",
+              "present": true,
+              "id": "A/generated/vert1"
+            },
+            {
+              "a": "A/generated/b2",
+              "b": "A/generated/t2",
+              "kind": "vertical",
+              "present": true,
+              "id": "A/generated/vert2"
+            },
+            {
+              "a": "A/generated/b3",
+              "b": "A/generated/t3",
+              "kind": "vertical",
+              "present": true,
+              "id": "A/generated/vert3"
+            },
+            {
+              "a": "A/generated/b4",
+              "b": "A/generated/t4",
+              "kind": "vertical",
+              "present": true,
+              "id": "A/generated/vert4"
+            },
+            {
+              "a": "A/generated/b0",
+              "b": "A/generated/t1",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/endL"
+            },
+            {
+              "a": "A/generated/b5",
+              "b": "A/generated/t4",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/endR"
+            },
+            {
+              "a": "A/generated/t1",
+              "b": "A/generated/b2",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/diag1"
+            },
+            {
+              "a": "A/generated/b2",
+              "b": "A/generated/t3",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/diag2"
+            },
+            {
+              "a": "A/generated/t3",
+              "b": "A/generated/b4",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/diag3"
+            }
+          ],
+          "responses": {
+            "A/generated/deck0": {
+              "score": 0.773510815003846,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/deck1": {
+              "score": 1,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/deck2": {
+              "score": 0.47908919101438535,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/deck3": {
+              "score": 0.2626993323938256,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/deck4": {
+              "score": 0.25013480781319625,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/top1": {
+              "score": 1,
+              "classification": "compression",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/top2": {
+              "score": 0.47908919101438535,
+              "classification": "compression",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/top3": {
+              "score": 0.2626993323938256,
+              "classification": "compression",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/vert1": {
+              "score": 0.9113820359579827,
+              "classification": "compression",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/vert2": {
+              "score": 0.6435108150038459,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/vert3": {
+              "score": 0.1863167156379729,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/vert4": {
+              "score": 0.12160871178018975,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/endL": {
+              "score": 0.643510815003846,
+              "classification": "compression",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/endR": {
+              "score": 0.12013480781319626,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/diag1": {
+              "score": 0.9113820359579826,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/diag2": {
+              "score": 0.34908919101438535,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/diag3": {
+              "score": 0.13269933239382556,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            }
+          },
+          "supportShares": [
+            7.5,
+            2.5
+          ]
+        },
+        "loadPos": 0.25,
+        "loadTons": 10,
+        "removedMember": null,
+        "buildNonce": 0
+      },
+      "A/generated/b0": {
+        "x": 0,
+        "y": 0
+      },
+      "A/generated/b1": {
+        "x": 0.2,
+        "y": 0
+      },
+      "A/generated/t1": {
+        "x": 0.2,
+        "y": -1
+      },
+      "A/generated/b2": {
+        "x": 0.4,
+        "y": 0
+      },
+      "A/generated/t2": {
+        "x": 0.4,
+        "y": -1
+      },
+      "A/generated/b3": {
+        "x": 0.6,
+        "y": 0
+      },
+      "A/generated/t3": {
+        "x": 0.6,
+        "y": -1
+      },
+      "A/generated/b4": {
+        "x": 0.8,
+        "y": 0
+      },
+      "A/generated/t4": {
+        "x": 0.8,
+        "y": -1
+      },
+      "A/generated/b5": {
+        "x": 1,
+        "y": 0
+      },
+      "A/generated/deck0": {
+        "a": "A/generated/b0",
+        "b": "A/generated/b1",
+        "kind": "deck",
+        "present": true
+      },
+      "A/generated/deck1": {
+        "a": "A/generated/b1",
+        "b": "A/generated/b2",
+        "kind": "deck",
+        "present": true
+      },
+      "A/generated/deck2": {
+        "a": "A/generated/b2",
+        "b": "A/generated/b3",
+        "kind": "deck",
+        "present": true
+      },
+      "A/generated/deck3": {
+        "a": "A/generated/b3",
+        "b": "A/generated/b4",
+        "kind": "deck",
+        "present": true
+      },
+      "A/generated/deck4": {
+        "a": "A/generated/b4",
+        "b": "A/generated/b5",
+        "kind": "deck",
+        "present": true
+      },
+      "A/generated/top1": {
+        "a": "A/generated/t1",
+        "b": "A/generated/t2",
+        "kind": "top",
+        "present": true
+      },
+      "A/generated/top2": {
+        "a": "A/generated/t2",
+        "b": "A/generated/t3",
+        "kind": "top",
+        "present": true
+      },
+      "A/generated/top3": {
+        "a": "A/generated/t3",
+        "b": "A/generated/t4",
+        "kind": "top",
+        "present": true
+      },
+      "A/generated/vert1": {
+        "a": "A/generated/b1",
+        "b": "A/generated/t1",
+        "kind": "vertical",
+        "present": true
+      },
+      "A/generated/vert2": {
+        "a": "A/generated/b2",
+        "b": "A/generated/t2",
+        "kind": "vertical",
+        "present": true
+      },
+      "A/generated/vert3": {
+        "a": "A/generated/b3",
+        "b": "A/generated/t3",
+        "kind": "vertical",
+        "present": true
+      },
+      "A/generated/vert4": {
+        "a": "A/generated/b4",
+        "b": "A/generated/t4",
+        "kind": "vertical",
+        "present": true
+      },
+      "A/generated/endL": {
+        "a": "A/generated/b0",
+        "b": "A/generated/t1",
+        "kind": "diagonal",
+        "present": true
+      },
+      "A/generated/endR": {
+        "a": "A/generated/b5",
+        "b": "A/generated/t4",
+        "kind": "diagonal",
+        "present": true
+      },
+      "A/generated/diag1": {
+        "a": "A/generated/t1",
+        "b": "A/generated/b2",
+        "kind": "diagonal",
+        "present": true
+      },
+      "A/generated/diag2": {
+        "a": "A/generated/b2",
+        "b": "A/generated/t3",
+        "kind": "diagonal",
+        "present": true
+      },
+      "A/generated/diag3": {
+        "a": "A/generated/t3",
+        "b": "A/generated/b4",
+        "kind": "diagonal",
+        "present": true
+      },
+      "A/load": {
+        "position": 0.25,
+        "magnitude": 10
+      }
+    },
+    "outputs": {
+      "A/generated/b0": {
+        "data": {
+          "x": 0,
+          "y": 0,
+          "id": "A/generated/b0"
+        }
+      },
+      "A/generated/b1": {
+        "data": {
+          "x": 0.2,
+          "y": 0,
+          "id": "A/generated/b1"
+        }
+      },
+      "A/generated/t1": {
+        "data": {
+          "x": 0.2,
+          "y": -1,
+          "id": "A/generated/t1"
+        }
+      },
+      "A/generated/b2": {
+        "data": {
+          "x": 0.4,
+          "y": 0,
+          "id": "A/generated/b2"
+        }
+      },
+      "A/generated/t2": {
+        "data": {
+          "x": 0.4,
+          "y": -1,
+          "id": "A/generated/t2"
+        }
+      },
+      "A/generated/b3": {
+        "data": {
+          "x": 0.6,
+          "y": 0,
+          "id": "A/generated/b3"
+        }
+      },
+      "A/generated/t3": {
+        "data": {
+          "x": 0.6,
+          "y": -1,
+          "id": "A/generated/t3"
+        }
+      },
+      "A/generated/b4": {
+        "data": {
+          "x": 0.8,
+          "y": 0,
+          "id": "A/generated/b4"
+        }
+      },
+      "A/generated/t4": {
+        "data": {
+          "x": 0.8,
+          "y": -1,
+          "id": "A/generated/t4"
+        }
+      },
+      "A/generated/b5": {
+        "data": {
+          "x": 1,
+          "y": 0,
+          "id": "A/generated/b5"
+        }
+      },
+      "A/generated/deck0": {
+        "data": {
+          "a": "A/generated/b0",
+          "b": "A/generated/b1",
+          "kind": "deck",
+          "present": true,
+          "id": "A/generated/deck0"
+        }
+      },
+      "A/generated/deck1": {
+        "data": {
+          "a": "A/generated/b1",
+          "b": "A/generated/b2",
+          "kind": "deck",
+          "present": true,
+          "id": "A/generated/deck1"
+        }
+      },
+      "A/generated/deck2": {
+        "data": {
+          "a": "A/generated/b2",
+          "b": "A/generated/b3",
+          "kind": "deck",
+          "present": true,
+          "id": "A/generated/deck2"
+        }
+      },
+      "A/generated/deck3": {
+        "data": {
+          "a": "A/generated/b3",
+          "b": "A/generated/b4",
+          "kind": "deck",
+          "present": true,
+          "id": "A/generated/deck3"
+        }
+      },
+      "A/generated/deck4": {
+        "data": {
+          "a": "A/generated/b4",
+          "b": "A/generated/b5",
+          "kind": "deck",
+          "present": true,
+          "id": "A/generated/deck4"
+        }
+      },
+      "A/generated/top1": {
+        "data": {
+          "a": "A/generated/t1",
+          "b": "A/generated/t2",
+          "kind": "top",
+          "present": true,
+          "id": "A/generated/top1"
+        }
+      },
+      "A/generated/top2": {
+        "data": {
+          "a": "A/generated/t2",
+          "b": "A/generated/t3",
+          "kind": "top",
+          "present": true,
+          "id": "A/generated/top2"
+        }
+      },
+      "A/generated/top3": {
+        "data": {
+          "a": "A/generated/t3",
+          "b": "A/generated/t4",
+          "kind": "top",
+          "present": true,
+          "id": "A/generated/top3"
+        }
+      },
+      "A/generated/vert1": {
+        "data": {
+          "a": "A/generated/b1",
+          "b": "A/generated/t1",
+          "kind": "vertical",
+          "present": true,
+          "id": "A/generated/vert1"
+        }
+      },
+      "A/generated/vert2": {
+        "data": {
+          "a": "A/generated/b2",
+          "b": "A/generated/t2",
+          "kind": "vertical",
+          "present": true,
+          "id": "A/generated/vert2"
+        }
+      },
+      "A/generated/vert3": {
+        "data": {
+          "a": "A/generated/b3",
+          "b": "A/generated/t3",
+          "kind": "vertical",
+          "present": true,
+          "id": "A/generated/vert3"
+        }
+      },
+      "A/generated/vert4": {
+        "data": {
+          "a": "A/generated/b4",
+          "b": "A/generated/t4",
+          "kind": "vertical",
+          "present": true,
+          "id": "A/generated/vert4"
+        }
+      },
+      "A/generated/endL": {
+        "data": {
+          "a": "A/generated/b0",
+          "b": "A/generated/t1",
+          "kind": "diagonal",
+          "present": true,
+          "id": "A/generated/endL"
+        }
+      },
+      "A/generated/endR": {
+        "data": {
+          "a": "A/generated/b5",
+          "b": "A/generated/t4",
+          "kind": "diagonal",
+          "present": true,
+          "id": "A/generated/endR"
+        }
+      },
+      "A/generated/diag1": {
+        "data": {
+          "a": "A/generated/t1",
+          "b": "A/generated/b2",
+          "kind": "diagonal",
+          "present": true,
+          "id": "A/generated/diag1"
+        }
+      },
+      "A/generated/diag2": {
+        "data": {
+          "a": "A/generated/b2",
+          "b": "A/generated/t3",
+          "kind": "diagonal",
+          "present": true,
+          "id": "A/generated/diag2"
+        }
+      },
+      "A/generated/diag3": {
+        "data": {
+          "a": "A/generated/t3",
+          "b": "A/generated/b4",
+          "kind": "diagonal",
+          "present": true,
+          "id": "A/generated/diag3"
+        }
+      },
+      "A/load": {
+        "data": {
+          "position": 0.25,
+          "magnitude": 10,
+          "id": "A/load"
+        }
+      },
+      "A/model": {
+        "data": {
+          "spanScale": 1,
+          "dense": false,
+          "selectedMember": "A/generated/deck1",
+          "ready": true,
+          "truss": {
+            "joints": [
+              {
+                "x": 0,
+                "y": 0,
+                "id": "A/generated/b0"
+              },
+              {
+                "x": 0.2,
+                "y": 0,
+                "id": "A/generated/b1"
+              },
+              {
+                "x": 0.2,
+                "y": -1,
+                "id": "A/generated/t1"
+              },
+              {
+                "x": 0.4,
+                "y": 0,
+                "id": "A/generated/b2"
+              },
+              {
+                "x": 0.4,
+                "y": -1,
+                "id": "A/generated/t2"
+              },
+              {
+                "x": 0.6,
+                "y": 0,
+                "id": "A/generated/b3"
+              },
+              {
+                "x": 0.6,
+                "y": -1,
+                "id": "A/generated/t3"
+              },
+              {
+                "x": 0.8,
+                "y": 0,
+                "id": "A/generated/b4"
+              },
+              {
+                "x": 0.8,
+                "y": -1,
+                "id": "A/generated/t4"
+              },
+              {
+                "x": 1,
+                "y": 0,
+                "id": "A/generated/b5"
+              }
+            ],
+            "members": [
+              {
+                "a": "A/generated/b0",
+                "b": "A/generated/b1",
+                "kind": "deck",
+                "present": true,
+                "id": "A/generated/deck0"
+              },
+              {
+                "a": "A/generated/b1",
+                "b": "A/generated/b2",
+                "kind": "deck",
+                "present": true,
+                "id": "A/generated/deck1"
+              },
+              {
+                "a": "A/generated/b2",
+                "b": "A/generated/b3",
+                "kind": "deck",
+                "present": true,
+                "id": "A/generated/deck2"
+              },
+              {
+                "a": "A/generated/b3",
+                "b": "A/generated/b4",
+                "kind": "deck",
+                "present": true,
+                "id": "A/generated/deck3"
+              },
+              {
+                "a": "A/generated/b4",
+                "b": "A/generated/b5",
+                "kind": "deck",
+                "present": true,
+                "id": "A/generated/deck4"
+              },
+              {
+                "a": "A/generated/t1",
+                "b": "A/generated/t2",
+                "kind": "top",
+                "present": true,
+                "id": "A/generated/top1"
+              },
+              {
+                "a": "A/generated/t2",
+                "b": "A/generated/t3",
+                "kind": "top",
+                "present": true,
+                "id": "A/generated/top2"
+              },
+              {
+                "a": "A/generated/t3",
+                "b": "A/generated/t4",
+                "kind": "top",
+                "present": true,
+                "id": "A/generated/top3"
+              },
+              {
+                "a": "A/generated/b1",
+                "b": "A/generated/t1",
+                "kind": "vertical",
+                "present": true,
+                "id": "A/generated/vert1"
+              },
+              {
+                "a": "A/generated/b2",
+                "b": "A/generated/t2",
+                "kind": "vertical",
+                "present": true,
+                "id": "A/generated/vert2"
+              },
+              {
+                "a": "A/generated/b3",
+                "b": "A/generated/t3",
+                "kind": "vertical",
+                "present": true,
+                "id": "A/generated/vert3"
+              },
+              {
+                "a": "A/generated/b4",
+                "b": "A/generated/t4",
+                "kind": "vertical",
+                "present": true,
+                "id": "A/generated/vert4"
+              },
+              {
+                "a": "A/generated/b0",
+                "b": "A/generated/t1",
+                "kind": "diagonal",
+                "present": true,
+                "id": "A/generated/endL"
+              },
+              {
+                "a": "A/generated/b5",
+                "b": "A/generated/t4",
+                "kind": "diagonal",
+                "present": true,
+                "id": "A/generated/endR"
+              },
+              {
+                "a": "A/generated/t1",
+                "b": "A/generated/b2",
+                "kind": "diagonal",
+                "present": true,
+                "id": "A/generated/diag1"
+              },
+              {
+                "a": "A/generated/b2",
+                "b": "A/generated/t3",
+                "kind": "diagonal",
+                "present": true,
+                "id": "A/generated/diag2"
+              },
+              {
+                "a": "A/generated/t3",
+                "b": "A/generated/b4",
+                "kind": "diagonal",
+                "present": true,
+                "id": "A/generated/diag3"
+              }
+            ],
+            "panels": 5,
+            "span": 1.6,
+            "height": 0.28,
+            "id": "A/model",
+            "load": {
+              "id": "A/load",
+              "assembly": "A/model",
+              "position": 0.25,
+              "magnitude": 10
+            }
+          },
+          "response": {
+            "members": [
+              {
+                "a": "A/generated/b0",
+                "b": "A/generated/b1",
+                "kind": "deck",
+                "present": true,
+                "id": "A/generated/deck0"
+              },
+              {
+                "a": "A/generated/b1",
+                "b": "A/generated/b2",
+                "kind": "deck",
+                "present": true,
+                "id": "A/generated/deck1"
+              },
+              {
+                "a": "A/generated/b2",
+                "b": "A/generated/b3",
+                "kind": "deck",
+                "present": true,
+                "id": "A/generated/deck2"
+              },
+              {
+                "a": "A/generated/b3",
+                "b": "A/generated/b4",
+                "kind": "deck",
+                "present": true,
+                "id": "A/generated/deck3"
+              },
+              {
+                "a": "A/generated/b4",
+                "b": "A/generated/b5",
+                "kind": "deck",
+                "present": true,
+                "id": "A/generated/deck4"
+              },
+              {
+                "a": "A/generated/t1",
+                "b": "A/generated/t2",
+                "kind": "top",
+                "present": true,
+                "id": "A/generated/top1"
+              },
+              {
+                "a": "A/generated/t2",
+                "b": "A/generated/t3",
+                "kind": "top",
+                "present": true,
+                "id": "A/generated/top2"
+              },
+              {
+                "a": "A/generated/t3",
+                "b": "A/generated/t4",
+                "kind": "top",
+                "present": true,
+                "id": "A/generated/top3"
+              },
+              {
+                "a": "A/generated/b1",
+                "b": "A/generated/t1",
+                "kind": "vertical",
+                "present": true,
+                "id": "A/generated/vert1"
+              },
+              {
+                "a": "A/generated/b2",
+                "b": "A/generated/t2",
+                "kind": "vertical",
+                "present": true,
+                "id": "A/generated/vert2"
+              },
+              {
+                "a": "A/generated/b3",
+                "b": "A/generated/t3",
+                "kind": "vertical",
+                "present": true,
+                "id": "A/generated/vert3"
+              },
+              {
+                "a": "A/generated/b4",
+                "b": "A/generated/t4",
+                "kind": "vertical",
+                "present": true,
+                "id": "A/generated/vert4"
+              },
+              {
+                "a": "A/generated/b0",
+                "b": "A/generated/t1",
+                "kind": "diagonal",
+                "present": true,
+                "id": "A/generated/endL"
+              },
+              {
+                "a": "A/generated/b5",
+                "b": "A/generated/t4",
+                "kind": "diagonal",
+                "present": true,
+                "id": "A/generated/endR"
+              },
+              {
+                "a": "A/generated/t1",
+                "b": "A/generated/b2",
+                "kind": "diagonal",
+                "present": true,
+                "id": "A/generated/diag1"
+              },
+              {
+                "a": "A/generated/b2",
+                "b": "A/generated/t3",
+                "kind": "diagonal",
+                "present": true,
+                "id": "A/generated/diag2"
+              },
+              {
+                "a": "A/generated/t3",
+                "b": "A/generated/b4",
+                "kind": "diagonal",
+                "present": true,
+                "id": "A/generated/diag3"
+              }
+            ],
+            "responses": {
+              "A/generated/deck0": {
+                "score": 0.773510815003846,
+                "classification": "tension",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/deck1": {
+                "score": 1,
+                "classification": "tension",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/deck2": {
+                "score": 0.47908919101438535,
+                "classification": "tension",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/deck3": {
+                "score": 0.2626993323938256,
+                "classification": "tension",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/deck4": {
+                "score": 0.25013480781319625,
+                "classification": "tension",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/top1": {
+                "score": 1,
+                "classification": "compression",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/top2": {
+                "score": 0.47908919101438535,
+                "classification": "compression",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/top3": {
+                "score": 0.2626993323938256,
+                "classification": "compression",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/vert1": {
+                "score": 0.9113820359579827,
+                "classification": "compression",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/vert2": {
+                "score": 0.6435108150038459,
+                "classification": "tension",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/vert3": {
+                "score": 0.1863167156379729,
+                "classification": "tension",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/vert4": {
+                "score": 0.12160871178018975,
+                "classification": "tension",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/endL": {
+                "score": 0.643510815003846,
+                "classification": "compression",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/endR": {
+                "score": 0.12013480781319626,
+                "classification": "tension",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/diag1": {
+                "score": 0.9113820359579826,
+                "classification": "tension",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/diag2": {
+                "score": 0.34908919101438535,
+                "classification": "tension",
+                "model": "heuristic-bridge-v1"
+              },
+              "A/generated/diag3": {
+                "score": 0.13269933239382556,
+                "classification": "tension",
+                "model": "heuristic-bridge-v1"
+              }
+            },
+            "supportShares": [
+              7.5,
+              2.5
+            ]
+          },
+          "loadPos": 0.25,
+          "loadTons": 10,
+          "removedMember": null,
+          "buildNonce": 0,
+          "id": "A/model"
+        },
+        "response": {
+          "members": [
+            {
+              "a": "A/generated/b0",
+              "b": "A/generated/b1",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck0"
+            },
+            {
+              "a": "A/generated/b1",
+              "b": "A/generated/b2",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck1"
+            },
+            {
+              "a": "A/generated/b2",
+              "b": "A/generated/b3",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck2"
+            },
+            {
+              "a": "A/generated/b3",
+              "b": "A/generated/b4",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck3"
+            },
+            {
+              "a": "A/generated/b4",
+              "b": "A/generated/b5",
+              "kind": "deck",
+              "present": true,
+              "id": "A/generated/deck4"
+            },
+            {
+              "a": "A/generated/t1",
+              "b": "A/generated/t2",
+              "kind": "top",
+              "present": true,
+              "id": "A/generated/top1"
+            },
+            {
+              "a": "A/generated/t2",
+              "b": "A/generated/t3",
+              "kind": "top",
+              "present": true,
+              "id": "A/generated/top2"
+            },
+            {
+              "a": "A/generated/t3",
+              "b": "A/generated/t4",
+              "kind": "top",
+              "present": true,
+              "id": "A/generated/top3"
+            },
+            {
+              "a": "A/generated/b1",
+              "b": "A/generated/t1",
+              "kind": "vertical",
+              "present": true,
+              "id": "A/generated/vert1"
+            },
+            {
+              "a": "A/generated/b2",
+              "b": "A/generated/t2",
+              "kind": "vertical",
+              "present": true,
+              "id": "A/generated/vert2"
+            },
+            {
+              "a": "A/generated/b3",
+              "b": "A/generated/t3",
+              "kind": "vertical",
+              "present": true,
+              "id": "A/generated/vert3"
+            },
+            {
+              "a": "A/generated/b4",
+              "b": "A/generated/t4",
+              "kind": "vertical",
+              "present": true,
+              "id": "A/generated/vert4"
+            },
+            {
+              "a": "A/generated/b0",
+              "b": "A/generated/t1",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/endL"
+            },
+            {
+              "a": "A/generated/b5",
+              "b": "A/generated/t4",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/endR"
+            },
+            {
+              "a": "A/generated/t1",
+              "b": "A/generated/b2",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/diag1"
+            },
+            {
+              "a": "A/generated/b2",
+              "b": "A/generated/t3",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/diag2"
+            },
+            {
+              "a": "A/generated/t3",
+              "b": "A/generated/b4",
+              "kind": "diagonal",
+              "present": true,
+              "id": "A/generated/diag3"
+            }
+          ],
+          "responses": {
+            "A/generated/deck0": {
+              "score": 0.773510815003846,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/deck1": {
+              "score": 1,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/deck2": {
+              "score": 0.47908919101438535,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/deck3": {
+              "score": 0.2626993323938256,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/deck4": {
+              "score": 0.25013480781319625,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/top1": {
+              "score": 1,
+              "classification": "compression",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/top2": {
+              "score": 0.47908919101438535,
+              "classification": "compression",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/top3": {
+              "score": 0.2626993323938256,
+              "classification": "compression",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/vert1": {
+              "score": 0.9113820359579827,
+              "classification": "compression",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/vert2": {
+              "score": 0.6435108150038459,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/vert3": {
+              "score": 0.1863167156379729,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/vert4": {
+              "score": 0.12160871178018975,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/endL": {
+              "score": 0.643510815003846,
+              "classification": "compression",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/endR": {
+              "score": 0.12013480781319626,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/diag1": {
+              "score": 0.9113820359579826,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/diag2": {
+              "score": 0.34908919101438535,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            },
+            "A/generated/diag3": {
+              "score": 0.13269933239382556,
+              "classification": "tension",
+              "model": "heuristic-bridge-v1"
+            }
+          },
+          "supportShares": [
+            7.5,
+            2.5
+          ]
+        },
+        "selected": {
+          "member": {
+            "a": "A/generated/b1",
+            "b": "A/generated/b2",
+            "kind": "deck",
+            "present": true,
+            "id": "A/generated/deck1"
+          },
+          "response": {
+            "score": 1,
+            "classification": "tension",
+            "model": "heuristic-bridge-v1"
+          }
+        }
+      }
+    }
+  }
+}

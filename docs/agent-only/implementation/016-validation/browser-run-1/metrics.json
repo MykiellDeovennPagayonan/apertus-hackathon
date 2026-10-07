@@ -1,0 +1,53 @@
+{
+  "evidence": "live-model",
+  "attempts": 3,
+  "passed": 3,
+  "failed": 0,
+  "firstAttemptSchemaValid": 3,
+  "firstAttemptCorrect": 3,
+  "acceptedAfterRepair": 0,
+  "stages": [
+    {
+      "task": "teaching_intent",
+      "firstAttemptSchemaValid": true,
+      "firstAttemptCorrect": true,
+      "acceptedAfterRepair": false,
+      "failures": []
+    },
+    {
+      "task": "configure_selected_recipe",
+      "firstAttemptSchemaValid": true,
+      "firstAttemptCorrect": true,
+      "acceptedAfterRepair": false,
+      "failures": []
+    },
+    {
+      "task": "teaching_intent",
+      "firstAttemptSchemaValid": true,
+      "firstAttemptCorrect": true,
+      "acceptedAfterRepair": false,
+      "failures": []
+    },
+    {
+      "task": "configure_selected_recipe",
+      "firstAttemptSchemaValid": true,
+      "firstAttemptCorrect": true,
+      "acceptedAfterRepair": false,
+      "failures": []
+    },
+    {
+      "task": "teaching_intent",
+      "firstAttemptSchemaValid": true,
+      "firstAttemptCorrect": true,
+      "acceptedAfterRepair": false,
+      "failures": []
+    },
+    {
+      "task": "configure_selected_recipe",
+      "firstAttemptSchemaValid": true,
+      "firstAttemptCorrect": true,
+      "acceptedAfterRepair": false,
+      "failures": []
+    }
+  ]
+}

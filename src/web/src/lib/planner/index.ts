@@ -26,10 +26,12 @@ import {
   retrieveCapabilities,
   selectedContract,
 } from "./catalog";
+import { compose } from "./compose";
 import { verifyExplicitQuantities } from "./constraints";
 import { parseStageJson, stageMessages } from "./context";
 import { coverageFor, verifyCoverage } from "./coverage";
 import { PlannerError } from "./errors";
+import { fixConfiguration } from "./formatFixer";
 import {
   type Coverage,
   type GenerationRequest,
@@ -214,14 +216,14 @@ async function followup(
       message:
         "Prompt changes currently support addition/subtraction, rectangle area/perimeter, and truss bridge lessons. You can continue exploring this lesson or Remix it.",
     };
-  const mode = await stage(
+  let mode = await stage(
     "followup_mode",
     request,
     budget,
     toJsonSchema(followupModeSchema),
     {
       policy:
-        "Explicit start/initial/default, adding components/observations, layout, or wording means authored. Perform/play/reset/move now means runtime. An ordinary value change without starting/default wording is a learner runtime action. Creating a different lesson means new. Never capture a running checkpoint.",
+        "Explicit start/initial/default, adding components/observations, layout, or wording means authored. Perform/play/reset/move now means runtime. An ordinary value change without starting/default wording is a learner runtime action. Creating a different lesson means new. Questions, explanations, or queries that do not operate or reconfigure the simulation are unsupported. Never capture a running checkpoint.",
       targets: handles.map(({ target, label, definition }) => ({
         target,
         label,
@@ -236,6 +238,12 @@ async function followup(
     undefined,
     96,
   );
+  if (
+    mode === "runtime" &&
+    /\b(?:start|starting|initial|initially|default)\b/i.test(request.prompt)
+  ) {
+    mode = "authored";
+  }
   if (mode === "new") return null;
   if (mode === "unsupported")
     return {
@@ -272,14 +280,49 @@ async function followup(
       toJsonSchema(selectionShape),
       {
         policy:
-          "Select only the declared runtime commands needed to perform the request now. Value changes are runtime actions unless the request says start, initial, or default. Preserve the current operation when only arithmetic numbers change. Do not select RESET unless explicitly requested.",
+          "Select only the declared runtime commands needed to perform the request now. Value changes are runtime actions unless the request says start, initial, or default. Preserve the current operation when only arithmetic numbers change. Do not select RESET unless explicitly requested. For bridge loads, SET_LOAD changes weight/mass/magnitude (tonnes), while MOVE_LOAD changes position (left/right/across).",
         options,
       },
       (value) => {
         validateValue(selectionShape, value);
-        const selections = (value as { selections: string[] }).selections;
+        let selections = (value as { selections: string[] }).selections;
         if (new Set(selections).size !== selections.length)
           throw new Error("Runtime command selections must be unique");
+
+        // Disambiguate bridge MOVE_LOAD vs SET_LOAD based on user intent keywords
+        const isWeightQuery =
+          /\b(?:kg|ton|tonne|tons|tonnes|weight|mass|heavy|load)\b/i.test(
+            request.prompt,
+          ) &&
+          !/\b(?:move|position|slide|location|left|right)\b/i.test(
+            request.prompt,
+          );
+        const isPositionQuery =
+          /\b(?:move|position|slide|location|left|right)\b/i.test(
+            request.prompt,
+          ) &&
+          !/\b(?:kg|ton|tonne|tons|tonnes|weight|mass|heavy)\b/i.test(
+            request.prompt,
+          );
+
+        selections = selections.map((selId) => {
+          const opt = options.find((o) => o.id === selId);
+          if (!opt) return selId;
+          if (isWeightQuery && opt.command === "MOVE_LOAD") {
+            const setLoadOpt = options.find(
+              (o) => o.node === opt.node && o.command === "SET_LOAD",
+            );
+            if (setLoadOpt) return setLoadOpt.id;
+          }
+          if (isPositionQuery && opt.command === "SET_LOAD") {
+            const moveLoadOpt = options.find(
+              (o) => o.node === opt.node && o.command === "MOVE_LOAD",
+            );
+            if (moveLoadOpt) return moveLoadOpt.id;
+          }
+          return selId;
+        });
+
         return selections;
       },
       undefined,
@@ -316,8 +359,93 @@ async function followup(
           currentState: current.runtimeContext[selected.node],
         },
         (value) => {
-          validateValue(responseSchema, value);
-          const arguments_ = unwrapped ? { value } : value;
+          let v = value;
+          if (
+            responseSchema.type === "object" &&
+            responseSchema.properties &&
+            Object.keys(responseSchema.properties).length === 1 &&
+            "value" in responseSchema.properties &&
+            (typeof v === "number" || typeof v === "string")
+          ) {
+            v = { value: v };
+          }
+          if (
+            (responseSchema.type === "number" ||
+              responseSchema.type === "integer") &&
+            v &&
+            typeof v === "object" &&
+            "value" in (v as Record<string, unknown>)
+          ) {
+            v = (v as Record<string, unknown>).value;
+          }
+          if (typeof v === "string") {
+            const m = v
+              .trim()
+              .match(/^(-?[0-9]+(?:\.[0-9]+)?)\s*[a-zA-Z%°/]*$/);
+            if (m) {
+              v = Number(m[1]);
+            }
+          }
+          if (
+            (responseSchema.type === "number" ||
+              responseSchema.type === "integer") &&
+            typeof v === "number"
+          ) {
+            if (
+              typeof responseSchema.minimum === "number" &&
+              v < responseSchema.minimum
+            ) {
+              v = responseSchema.minimum;
+            } else if (
+              typeof responseSchema.maximum === "number" &&
+              v > responseSchema.maximum
+            ) {
+              v = responseSchema.maximum;
+            }
+          }
+          if (
+            v &&
+            typeof v === "object" &&
+            responseSchema.type === "object" &&
+            responseSchema.properties
+          ) {
+            const rec = v as Record<string, unknown>;
+            for (const [propName, propSchema] of Object.entries(
+              responseSchema.properties,
+            )) {
+              if (propName in rec) {
+                let iv = rec[propName];
+                if (typeof iv === "string") {
+                  const m = iv
+                    .trim()
+                    .match(/^(-?[0-9]+(?:\.[0-9]+)?)\s*[a-zA-Z%°/]*$/);
+                  if (m) {
+                    iv = Number(m[1]);
+                  }
+                }
+                if (
+                  (propSchema.type === "number" ||
+                    propSchema.type === "integer") &&
+                  typeof iv === "number"
+                ) {
+                  if (
+                    typeof propSchema.minimum === "number" &&
+                    iv < propSchema.minimum
+                  ) {
+                    iv = propSchema.minimum;
+                  } else if (
+                    typeof propSchema.maximum === "number" &&
+                    iv > propSchema.maximum
+                  ) {
+                    iv = propSchema.maximum;
+                  }
+                }
+                rec[propName] = iv;
+              }
+            }
+          }
+          validateValue(responseSchema, v);
+          const arguments_ = unwrapped ? { value: v } : v;
           validateValue(fullSchema, arguments_);
           return arguments_ as Record<string, unknown>;
         },
@@ -343,7 +471,18 @@ async function followup(
     }
     candidate.adoptSnapshot(snapshot);
     const accepted = candidate.dispatch(commands);
-    if (!accepted.accepted) throw new Error(accepted.error);
+    if (!accepted.accepted) {
+      return {
+        protocolVersion: 1,
+        status: "unsupported",
+        requestId: request.requestId,
+        message:
+          accepted.error === "Unknown or absent member"
+            ? "Please click directly on a bridge beam to select and inspect it."
+            : accepted.error ||
+              "That action cannot be performed on the current simulation.",
+      };
+    }
     return {
       protocolVersion: 1,
       status: "runtime_action",
@@ -425,7 +564,7 @@ async function followup(
     followupContract(current.recipe.document, true),
     {
       policy:
-        "Only change authored fields explicitly requested. Nested task objects must be complete. Keep unrelated authored values. Add an observation through add_observation; do not configure a disconnected display.",
+        "Only change authored fields explicitly requested. Nested task objects must be complete. Keep unrelated authored values. Add an observation through add_observation; do not configure a disconnected display. When status is 'authored', operations must contain 1-8 operations configuring or modifying the simulation. For bridge starting values, configure the load target.",
       targets: handles,
     },
     (value) => {
@@ -451,6 +590,7 @@ async function followup(
     expectedAuthoredRevision: current.authoredRevision,
     recipe,
     coverage,
+    learnerExplanation: response.message,
   };
 }
 export async function planPrompt(
@@ -482,7 +622,7 @@ export async function planPrompt(
       toJsonSchema(intentResponseSchema(request.prompt)),
       {
         policy:
-          "Describe the goal, concepts, actions and observations concisely. Use 1–3 short entries per concepts/interactions/observations list; do not invent extra interactions or feedback. explicitConstraints is ALWAYS an array of {meaning, sourceId} objects. Select sourceId from constraintSources for each explicit quantity, unit, negation or starting constraint. The application attaches the exact original text; do not return sourceText. Multiple constraints may refer to the same source. Do not claim supported capabilities.",
+          "Describe the goal, concepts, actions and observations concisely. Use 1–3 short entries per concepts/interactions/observations list; do not invent extra interactions or feedback. explicitConstraints is ALWAYS an array of {meaning, sourceId} objects. Select sourceId from constraintSources for each explicit quantity, unit, negation or starting constraint. The application attaches the exact original text; do not return sourceText. Multiple constraints may refer to the same source. Do not claim supported capabilities. suggestedStructure is 'comparison' ONLY when the learner explicitly requests comparing two models or differences (e.g. compare, versus, difference, two). Otherwise default to 'single'.",
         constraintSources: intentSources(request.prompt),
       },
       (value) => parseIntentResponse(value, request.prompt),
@@ -504,19 +644,28 @@ export async function planPrompt(
       768,
     );
     const selected = await select(request, intent, budget);
-    if (!selected)
-      return {
-        protocolVersion: 1,
-        status: "unsupported",
-        requestId: request.requestId,
-        message:
-          "I can currently build addition/subtraction, rectangle area/perimeter, and truss bridge lessons. This request has no useful supported teaching overlap.",
-      };
+    if (!selected) {
+      budget.trace?.("selection.fallback_to_composition", {
+        reason: "No single recipe fits request",
+      });
+      return await compose(request, intent, budget);
+    }
     const source = premadeRecipe(selected.recipeSlug);
     const construct = (
       configuration: ReturnType<typeof parseCreation>,
       report: boolean,
     ) => {
+      const fixResult = fixConfiguration(
+        request.prompt,
+        selected.recipeSlug,
+        configuration,
+      );
+      if (fixResult.fixes.length > 0) {
+        budget.trace?.("fixer.applied", {
+          stage: "configure_selected_recipe",
+          fixes: fixResult.fixes,
+        });
+      }
       const defaults = Object.fromEntries(
         source.parameters.map((parameter) => [
           parameter.name,
@@ -736,6 +885,7 @@ export async function planPrompt(
         expectedAuthoredRevision: null,
         recipe,
         coverage,
+        learnerExplanation: intent.goal,
       },
       request,
     );

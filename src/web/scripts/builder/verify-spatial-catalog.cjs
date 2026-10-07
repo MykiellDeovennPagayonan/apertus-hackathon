@@ -325,7 +325,7 @@ function inventory(dir) {
     .flatMap((e) =>
       e.isDirectory()
         ? inventory(path.join(dir, e.name))
-        : [path.relative(repo, path.join(dir, e.name))],
+        : [path.relative(repo, path.join(dir, e.name)).replace(/\\/g, "/")],
     );
 }
 assert.deepEqual(
