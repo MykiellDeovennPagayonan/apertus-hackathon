@@ -28,41 +28,55 @@ async function main() {
   const dbName = `apertus_test_${randomUUID().replaceAll("-", "")}`;
   const port = await freePort();
   const base = `http://127.0.0.1:${port}`;
-  const server = spawn(
-    process.execPath,
-    [
-      require.resolve("next/dist/bin/next"),
-      "dev",
-      "--hostname",
-      "127.0.0.1",
-      "--port",
-      String(port),
-    ],
-    {
-      cwd: path.resolve(__dirname, "../.."),
-      windowsHide: true,
-      env: {
-        ...process.env,
-        MONGODB_URI: process.env.MONGODB_TEST_URI,
-        MONGODB_DB_NAME: dbName,
-        NEXTAUTH_SECRET: randomUUID() + randomUUID(),
-        NEXTAUTH_URL: base,
-        GOOGLE_CLIENT_ID: "integration-test",
-        GOOGLE_CLIENT_SECRET: "integration-test",
-        APERTUS_BROWSER_TEST_DIR: ".next/database-tests",
-      },
-      stdio: ["ignore", "pipe", "pipe"],
-    },
-  );
   let output = "";
-  server.stdout.on("data", (chunk) => {
-    output = (output + chunk).slice(-5000);
-  });
-  server.stderr.on("data", (chunk) => {
-    output = (output + chunk).slice(-5000);
-  });
-  try {
-    await client.connect();
+  const startServer = (configured) => {
+    const child = spawn(
+      process.execPath,
+      [
+        require.resolve("next/dist/bin/next"),
+        "dev",
+        "--hostname",
+        "127.0.0.1",
+        "--port",
+        String(port),
+      ],
+      {
+        cwd: path.resolve(__dirname, "../.."),
+        windowsHide: true,
+        env: {
+          ...process.env,
+          MONGODB_URI: process.env.MONGODB_TEST_URI,
+          MONGODB_DB_NAME: dbName,
+          NEXTAUTH_SECRET: randomUUID() + randomUUID(),
+          NEXTAUTH_URL: base,
+          GOOGLE_CLIENT_ID: configured ? "integration-test" : "",
+          GOOGLE_CLIENT_SECRET: configured ? "integration-test" : "",
+          APERTUS_BROWSER_TEST_DIR: ".next/database-tests",
+        },
+        stdio: ["ignore", "pipe", "pipe"],
+      },
+    );
+    child.stdout.on("data", (chunk) => {
+      output = (output + chunk).slice(-5000);
+    });
+    child.stderr.on("data", (chunk) => {
+      output = (output + chunk).slice(-5000);
+    });
+    return child;
+  };
+  let server = startServer(false);
+  const stopServer = async () => {
+    if (server.exitCode !== null) return;
+    const exited = new Promise((resolve) => server.once("exit", resolve));
+    if (process.platform === "win32")
+      execFileSync("taskkill", ["/PID", String(server.pid), "/T", "/F"], {
+        windowsHide: true,
+        stdio: "ignore",
+      });
+    else server.kill("SIGTERM");
+    await exited;
+  };
+  const waitUntilReady = async () => {
     let ready = false;
     for (let attempt = 0; attempt < 120; attempt++) {
       try {
@@ -78,6 +92,22 @@ async function main() {
       await new Promise((resolve) => setTimeout(resolve, 500));
     }
     assert.ok(ready, `Test server did not start. ${output}`);
+  };
+  try {
+    await client.connect();
+    await waitUntilReady();
+    assert.equal(
+      (await fetch(`${base}/api/auth/signin`)).status,
+      503,
+      "Missing Google credentials must disable sign-in.",
+    );
+    assert.equal(await (await fetch(`${base}/api/auth/session`)).json(), null);
+    console.log(
+      "Incomplete Google configuration disables sign-in and retains guest sessions.",
+    );
+    await stopServer();
+    server = startServer(true);
+    await waitUntilReady();
     const response = await fetch(`${base}/api/library/simulations`);
     assert.equal(
       response.status,
@@ -478,14 +508,7 @@ async function main() {
       "Component persistence, expired sessions, and revoked sessions passed.",
     );
   } finally {
-    if (server.exitCode === null) {
-      if (process.platform === "win32")
-        execFileSync("taskkill", ["/PID", String(server.pid), "/T", "/F"], {
-          windowsHide: true,
-          stdio: "ignore",
-        });
-      else server.kill("SIGTERM");
-    }
+    await stopServer();
     await client.db(dbName).dropDatabase();
     await client.close();
   }

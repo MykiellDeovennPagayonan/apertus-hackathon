@@ -9,6 +9,8 @@ export function authConfigured() {
     env.MONGODB_URI?.trim() &&
       env.MONGODB_DB_NAME?.trim() &&
       env.NEXTAUTH_URL?.trim() &&
+      env.GOOGLE_CLIENT_ID?.trim() &&
+      env.GOOGLE_CLIENT_SECRET?.trim() &&
       env.NEXTAUTH_SECRET &&
       env.NEXTAUTH_SECRET.length >= 32,
   );
