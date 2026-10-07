@@ -172,7 +172,7 @@ export default function ExperimentsShell({
               text: "Your saved lesson could not be reopened.",
               details:
                 error instanceof Error
-                  ? error.message
+                  ? formatLaymanDetails(error.message)
                   : "Use a downloaded recipe to recover.",
             });
           }
@@ -237,7 +237,7 @@ export default function ExperimentsShell({
           text: "Your lesson is ready, but it couldn't be saved in this browser. Use Save recipe to download it.",
           details:
             error instanceof Error
-              ? error.message
+              ? formatLaymanDetails(error.message)
               : "Browser storage is unavailable.",
         });
       return false;
@@ -352,22 +352,29 @@ export default function ExperimentsShell({
     if (selectedExperiment) router.replace("/experiments");
   };
   const downloadRecipe = () => {
+    let url: string | null = null;
     try {
-      const url = URL.createObjectURL(
+      url = URL.createObjectURL(
         new Blob([saveRecipe()], { type: "application/json" }),
       );
       const anchor = document.createElement("a");
       anchor.href = url;
       anchor.download = "apertus-experiment.json";
       anchor.click();
-      URL.revokeObjectURL(url);
       setStatus({ kind: "success", text: "Recipe download started." });
     } catch (error) {
       setStatus({
         kind: "error",
         text: "Couldn't export this recipe.",
-        details: error instanceof Error ? error.message : "Please try again.",
+        details:
+          error instanceof Error
+            ? formatLaymanDetails(error.message)
+            : "Please try again.",
       });
+    } finally {
+      if (url) {
+        setTimeout(() => URL.revokeObjectURL(url!), 1000);
+      }
     }
   };
   const remix = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -380,7 +387,7 @@ export default function ExperimentsShell({
         text: "Couldn't prepare Remix. Download the recipe and import it in the builder.",
         details:
           error instanceof Error
-            ? error.message
+            ? formatLaymanDetails(error.message)
             : "Browser storage is unavailable.",
       });
     }
@@ -388,7 +395,13 @@ export default function ExperimentsShell({
   const importRecipe = async (file: File) => {
     try {
       if (file.size > 1_100_000) throw new Error("Recipe file is too large.");
-      const source: unknown = JSON.parse(await file.text());
+      const text = await file.text();
+      let source: unknown;
+      try {
+        source = JSON.parse(text);
+      } catch {
+        throw new Error("Recipe file is not valid JSON.");
+      }
       const session = activateRecipeSession(source, undefined, disposeSession);
       pending.current?.controller.abort();
       pending.current = null;
@@ -404,7 +417,10 @@ export default function ExperimentsShell({
       setStatus({
         kind: "error",
         text: "Couldn't open this recipe.",
-        details: error instanceof Error ? error.message : "Invalid recipe",
+        details:
+          error instanceof Error
+            ? formatLaymanDetails(error.message)
+            : "Invalid recipe",
       });
     }
   };
@@ -484,10 +500,37 @@ export default function ExperimentsShell({
               </button>
               {lesson && (
                 <>
-                  <button type="button" onClick={() => lesson.runtime.reset()}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      try {
+                        lesson.runtime.reset();
+                      } catch (error) {
+                        setStatus({
+                          kind: "error",
+                          text: "Couldn't reset lesson.",
+                          details:
+                            error instanceof Error
+                              ? formatLaymanDetails(error.message)
+                              : "Reset failed",
+                        });
+                      }
+                    }}
+                  >
                     Reset lesson
                   </button>
-                  <button type="button" onClick={() => void persist(lesson)}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      void persist(lesson).then((saved) => {
+                        if (saved)
+                          setStatus({
+                            kind: "success",
+                            text: "Lesson saved to library.",
+                          });
+                      });
+                    }}
+                  >
                     Save to library
                   </button>
                   <button
@@ -500,8 +543,18 @@ export default function ExperimentsShell({
                     type="button"
                     disabled={!lesson.canUndo}
                     onClick={() => {
-                      lesson.undo();
-                      void persist(lesson);
+                      try {
+                        if (lesson.undo()) void persist(lesson);
+                      } catch (error) {
+                        setStatus({
+                          kind: "error",
+                          text: "Couldn't undo that change.",
+                          details:
+                            error instanceof Error
+                              ? formatLaymanDetails(error.message)
+                              : "Undo failed",
+                        });
+                      }
                     }}
                   >
                     Undo lesson change
@@ -510,8 +563,18 @@ export default function ExperimentsShell({
                     type="button"
                     disabled={!lesson.canRedo}
                     onClick={() => {
-                      lesson.redo();
-                      void persist(lesson);
+                      try {
+                        if (lesson.redo()) void persist(lesson);
+                      } catch (error) {
+                        setStatus({
+                          kind: "error",
+                          text: "Couldn't redo that change.",
+                          details:
+                            error instanceof Error
+                              ? formatLaymanDetails(error.message)
+                              : "Redo failed",
+                        });
+                      }
                     }}
                   >
                     Redo lesson change

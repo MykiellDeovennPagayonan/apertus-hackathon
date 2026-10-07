@@ -24,8 +24,12 @@ export function ActionButton({
         aria-label={label}
         className={`recipe-action recipe-action--${intent} ${className ?? ""}`}
         onClick={() => {
-          const result = onCommand();
-          setError(result.accepted ? undefined : result.error);
+          try {
+            const result = onCommand();
+            setError(result.accepted ? undefined : (result.error ?? "Action failed"));
+          } catch (e) {
+            setError(e instanceof Error ? e.message : "Action failed");
+          }
         }}
       >
         {children}

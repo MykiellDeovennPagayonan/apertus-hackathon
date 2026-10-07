@@ -208,7 +208,57 @@ function testFormatFixer() {
     verifyExplicitQuantities(arithPrompt, "arithmetic", arithConfigModelOutput);
   });
 
-  console.log("Format fixer test passed: all 13 syntax, configuration, connection, and deletion checks verified.");
+  // 14. Stripped think tags from reasoning models
+  const thinkOutput = "<think>I need to configure track_1 height</think>\n```json\n{\"action\":\"tool\",\"tool\":{\"tool\":\"configure\",\"arguments\":{\"target\":\"track_1\",\"changes\":{\"height\":2}}}}\n```";
+  const thinkCleaned = cleanJsonText(thinkOutput);
+  assert.ok(thinkCleaned.fixes.includes("stripped_think_tags"));
+  assert.equal(thinkCleaned.error, undefined);
+
+  // 15. Unwrapped array of tool calls
+  const arrayEnvelope = [{ action: "tool", tool: { tool: "arrange", arguments: { template: "vertical" } } }];
+  const arrayNorm = normalizeEnvelope(arrayEnvelope);
+  assert.equal(arrayNorm.action, "tool");
+  assert.ok(arrayNorm.fixes.includes("unwrapped_array_envelope"));
+
+  // 16. OpenAI function envelope with camelCase tool name and stringified JSON
+  const fnEnvelope = {
+    function: {
+      name: "insertComponent",
+      arguments: JSON.stringify({ definition: "BridgeLoad" }),
+    },
+  };
+  const fnNorm = normalizeEnvelope(fnEnvelope);
+  assert.equal(fnNorm.normalized.tool, "insert_component");
+  assert.ok(fnNorm.fixes.includes("unwrapped_function_envelope"));
+  assert.ok(fnNorm.fixes.includes("normalized_tool_insertComponent_to_insert_component"));
+  assert.ok(fnNorm.fixes.includes("parsed_stringified_arguments"));
+
+  // 17. Broad full pipeline: short definition, missing version/alias/config
+  const broadRaw = "```json\n{\"tool\":\"add_component\",\"parameters\":{\"definition\":\"BridgeLoad\"}}\n```";
+  const broadResult = fixAndValidateToolResponse(broadRaw, []);
+  assert.equal(broadResult.issues.length, 0);
+  assert.equal(broadResult.request.tool, "insert_component");
+  assert.equal(broadResult.request.arguments.definition, "models/BridgeLoad");
+  assert.equal(broadResult.request.arguments.version, 1);
+  assert.deepEqual(broadResult.request.arguments.configuration, {});
+
+  // 18. Shorthand connection strings
+  const connString = { tool: "connect", arguments: { from: "track_1:distance", to: "display_1:value" } };
+  const connNorm = normalizeReferences(connString, ["track_1", "display_1"]);
+  assert.deepEqual(connNorm.request.arguments.from, { node: "track_1", port: "distance" });
+  assert.deepEqual(connNorm.request.arguments.to, { node: "display_1", port: "value" });
+
+  // 19. Flattened configure root arguments into changes
+  const flatConfig = { tool: "configure", arguments: { target: "track_1", resistance: 0.15 } };
+  const flatNorm = normalizeReferences(flatConfig, ["track_1"]);
+  assert.equal(flatNorm.request.arguments.changes.resistance, 0.15);
+  assert.ok(flatNorm.fixes.includes("collected_root_arguments_into_changes"));
+
+  // 20. Done synonym normalization
+  const finishEnv = normalizeEnvelope({ action: "finish", note: "All done" });
+  assert.equal(finishEnv.action, "done");
+
+  console.log("Format fixer test passed: all 20 syntax, envelope, configuration, connection, and deletion checks verified.");
 }
 
 async function testOpenCompositionGate() {
@@ -456,6 +506,37 @@ function testLaymanDetailsAndCoverageCapping() {
   assert.equal(
     detailWidget,
     "This control type cannot be used for that simulation setting.",
+  );
+
+  // Test 10: Uncaught / unexpected runtime errors translated to layman details
+  assert.equal(
+    formatLaymanDetails("Multiple JSON objects found in response; expected exactly one"),
+    "The AI generator produced multiple responses. Please try asking again.",
+  );
+  assert.equal(
+    formatLaymanDetails("Malformed JSON: Unexpected token < in JSON at position 0"),
+    "The response had a formatting issue. Please try again.",
+  );
+  assert.equal(
+    formatLaymanDetails("Failed to fetch"),
+    "Could not connect to the network. Please check your connection.",
+  );
+  assert.equal(
+    formatLaymanDetails("DOMException: Request cancelled"),
+    "The request was cancelled.",
+  );
+  assert.equal(
+    formatLaymanDetails("QuotaExceededError: storage full"),
+    "Browser storage is full. Download your recipe to save your progress.",
+  );
+
+  // Test 11: Preserved long application status messages
+  const appStatus = formatLaymanStatus(
+    "Your lesson is ready, but it couldn't be saved in this browser. Use Save recipe to download it.",
+  );
+  assert.equal(
+    appStatus,
+    "Your lesson is ready, but it couldn't be saved in this browser. Use Save recipe to download it.",
   );
 
   console.log("Layman details and coverage capping tests passed!");

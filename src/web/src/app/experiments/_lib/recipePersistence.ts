@@ -29,10 +29,14 @@ export function persistRecipe(session: RecipeSession) {
   return promise;
 }
 export function reopenAcceptedRecipe() {
-  const id = sessionStorage.getItem(LAST_RECIPE);
-  if (!id) return null;
-  const entry = readLibrary().find((entry) => entry?.id === id);
-  if (!entry) return null;
-  expected.set(id, structuredClone(entry));
-  return serializeDocument(entry.document);
+  try {
+    const id = sessionStorage.getItem(LAST_RECIPE);
+    if (!id) return null;
+    const entry = readLibrary().find((entry) => entry?.id === id);
+    if (!entry) return null;
+    expected.set(id, structuredClone(entry));
+    return serializeDocument(entry.document);
+  } catch {
+    return null;
+  }
 }

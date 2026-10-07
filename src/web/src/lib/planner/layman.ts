@@ -132,6 +132,64 @@ function formatSingleDetail(line: string): string {
   if (/^Selected capability was not constructed$/i.test(cleaned)) {
     return "The requested experiment could not be built with available components.";
   }
+  if (/^Multiple JSON objects found in response/i.test(cleaned)) {
+    return "The AI generator produced multiple responses. Please try asking again.";
+  }
+  if (/^Unbalanced brackets; possible truncated output/i.test(cleaned)) {
+    return "The response was cut short before finishing. Please try again.";
+  }
+  if (/^No JSON object found/i.test(cleaned)) {
+    return "The AI generator did not produce a valid response format. Please try again.";
+  }
+  if (
+    /^(?:Malformed JSON|JSON (?:syntax )?error|Unexpected token|.*is not valid JSON)/i.test(
+      cleaned,
+    )
+  ) {
+    return "The response had a formatting issue. Please try again.";
+  }
+  if (
+    /^(?:Failed to fetch|fetch failed|NetworkError|Load failed)/i.test(
+      cleaned,
+    )
+  ) {
+    return "Could not connect to the network. Please check your connection.";
+  }
+  if (
+    /^(?:The operation was aborted|DOMException: Request cancelled|Request cancelled)/i.test(
+      cleaned,
+    )
+  ) {
+    return "The request was cancelled.";
+  }
+  if (
+    /^Response correlation does not match the current request/i.test(
+      cleaned,
+    )
+  ) {
+    return "The server response was out of sync. Please try again.";
+  }
+  if (/QuotaExceededError|quota has been exceeded/i.test(cleaned)) {
+    return "Browser storage is full. Download your recipe to save your progress.";
+  }
+  if (/^Browser storage is unavailable/i.test(cleaned)) {
+    return "Browser storage is unavailable in this environment.";
+  }
+  if (/^Failed to initialize simulation runtime/i.test(cleaned)) {
+    return "Couldn't start the simulation runtime for this experiment.";
+  }
+  if (/^Unable to construct a runnable simulation/i.test(cleaned)) {
+    return "Couldn't build a working simulation from this description. Try asking with more details.";
+  }
+  if (/^Recipe file is too large/i.test(cleaned)) {
+    return "The recipe file is too large to open.";
+  }
+  if (/^Recipe file is not valid JSON/i.test(cleaned)) {
+    return "The recipe file contains invalid data.";
+  }
+  if (/^Your saved lesson could not be reopened/i.test(cleaned)) {
+    return "Your saved lesson could not be reopened. Use a downloaded recipe to recover.";
+  }
 
   // 3. Schema validation path-based errors
   let path = "";
@@ -236,6 +294,17 @@ export function formatLaymanStatus(raw: string): string {
     trimmed.startsWith("Building your") ||
     trimmed.startsWith("Checking your") ||
     trimmed.startsWith("That change is outside") ||
+    trimmed.startsWith("Your lesson is ready") ||
+    trimmed.startsWith("Your saved lesson") ||
+    trimmed.startsWith("Couldn't open this lesson") ||
+    trimmed.startsWith("Couldn't open this recipe") ||
+    trimmed.startsWith("Couldn't export this recipe") ||
+    trimmed.startsWith("Couldn't complete your request") ||
+    trimmed.startsWith("Couldn't prepare Remix") ||
+    trimmed.startsWith("Choose a premade experiment") ||
+    trimmed.startsWith("Recipe opened") ||
+    trimmed.startsWith("Recipe download") ||
+    trimmed.startsWith("Lesson saved") ||
     trimmed === "Please try again."
   ) {
     return trimmed;

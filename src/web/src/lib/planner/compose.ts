@@ -228,13 +228,16 @@ export async function compose(
         const validLayoutTargets = new Set(
           draft.document.layout.children.map((l) => l.node ?? l.id),
         );
-        const filterTargets = (list: string[]) =>
-          list.filter((id) => {
-            const resolved = draft.handles[id] ?? id;
-            return (
-              validLayoutTargets.has(resolved) || validLayoutTargets.has(id)
-            );
-          });
+        const filterTargets = (list: unknown) =>
+          Array.isArray(list)
+            ? list.filter((id) => {
+                if (typeof id !== "string") return false;
+                const resolved = draft.handles[id] ?? id;
+                return (
+                  validLayoutTargets.has(resolved) || validLayoutTargets.has(id)
+                );
+              })
+            : [];
         turnResult.request.arguments.main = filterTargets(
           turnResult.request.arguments.main,
         );

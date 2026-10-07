@@ -31,8 +31,18 @@ export function cleanJsonText(raw: string): {
   const fixes: string[] = [];
   let text = raw.trim();
 
-  // 1. Strip markdown fences
-  if (text.startsWith("```")) {
+  // 0. Strip <think>...</think> reasoning blocks
+  if (/<think>[\s\S]*?<\/think>/i.test(text)) {
+    text = text.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+    fixes.push("stripped_think_tags");
+  }
+
+  // 1. Strip markdown fences or extract fenced code block
+  const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+  if (fenceMatch) {
+    text = fenceMatch[1].trim();
+    fixes.push("stripped_markdown_fence");
+  } else if (text.startsWith("```")) {
     text = text
       .replace(/^```(?:json)?\s*/i, "")
       .replace(/\s*```$/i, "")
@@ -106,8 +116,97 @@ export function cleanJsonText(raw: string): {
   return { cleaned: text, fixes };
 }
 
+const CANONICAL_TOOL_MAP: Record<string, ToolRequest["tool"]> = {
+  insert_component: "insert_component",
+  insertcomponent: "insert_component",
+  "insert-component": "insert_component",
+  add_component: "insert_component",
+  addcomponent: "insert_component",
+  "add-component": "insert_component",
+  create_component: "insert_component",
+  createcomponent: "insert_component",
+  put_component: "insert_component",
+
+  insert_recipe: "insert_recipe",
+  insertrecipe: "insert_recipe",
+  "insert-recipe": "insert_recipe",
+  add_recipe: "insert_recipe",
+  addrecipe: "insert_recipe",
+  load_recipe: "insert_recipe",
+  loadrecipe: "insert_recipe",
+
+  configure: "configure",
+  config: "configure",
+  set_configuration: "configure",
+  setconfiguration: "configure",
+  set_config: "configure",
+  update_configuration: "configure",
+  update_config: "configure",
+  patch_configuration: "configure",
+  patch_config: "configure",
+
+  add_control: "add_control",
+  addcontrol: "add_control",
+  "add-control": "add_control",
+  create_control: "add_control",
+  createcontrol: "add_control",
+  insert_control: "add_control",
+  insertcontrol: "add_control",
+  bind_control: "add_control",
+
+  add_observation: "add_observation",
+  addobservation: "add_observation",
+  "add-observation": "add_observation",
+  create_observation: "add_observation",
+  createobservation: "add_observation",
+  insert_observation: "add_observation",
+  add_readout: "add_observation",
+  addreadout: "add_observation",
+  add_inspector: "add_observation",
+  addinspector: "add_observation",
+
+  connect: "connect",
+  connect_ports: "connect",
+  connectports: "connect",
+  "connect-ports": "connect",
+  wire: "connect",
+  link: "connect",
+  create_connection: "connect",
+
+  regenerate_truss: "regenerate_truss",
+  regeneratetruss: "regenerate_truss",
+  "regenerate-truss": "regenerate_truss",
+  update_truss: "regenerate_truss",
+  updatetruss: "regenerate_truss",
+  rebuild_truss: "regenerate_truss",
+
+  remove: "remove",
+  delete: "remove",
+  delete_component: "remove",
+  deletecomponent: "remove",
+  remove_component: "remove",
+  removecomponent: "remove",
+  destroy: "remove",
+
+  arrange: "arrange",
+  layout: "arrange",
+  set_layout: "arrange",
+  setlayout: "arrange",
+  arrange_layout: "arrange",
+  arrangelayout: "arrange",
+  "arrange-layout": "arrange",
+
+  set_lesson: "set_lesson",
+  setlesson: "set_lesson",
+  "set-lesson": "set_lesson",
+  update_lesson: "set_lesson",
+  updatelesson: "set_lesson",
+  lesson: "set_lesson",
+};
+
 /**
- * Normalizes common envelope misspellings safely (e.g. args -> arguments, unwrapping {action, tool}).
+ * Normalizes common envelope misspellings safely (e.g. args -> arguments, unwrapping {action, tool},
+ * OpenAI function call schemas, arrays, tool name canonicalization).
  */
 export function normalizeEnvelope(obj: unknown): {
   normalized: unknown;
@@ -115,19 +214,54 @@ export function normalizeEnvelope(obj: unknown): {
   fixes: string[];
 } {
   const fixes: string[] = [];
-  if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
+
+  // 1. Unwrap arrays e.g. [ { action: "tool", ... } ]
+  if (Array.isArray(obj)) {
+    if (obj.length > 0) {
+      const inner = normalizeEnvelope(obj[0]);
+      return {
+        normalized: inner.normalized,
+        action: inner.action,
+        fixes: ["unwrapped_array_envelope", ...inner.fixes],
+      };
+    }
+    return { normalized: obj, action: "tool", fixes };
+  }
+
+  if (!obj || typeof obj !== "object") {
     return { normalized: obj, action: "tool", fixes };
   }
 
   const record = { ...(obj as Record<string, unknown>) };
 
-  // Turn envelope: { action: "done" } or { action: "tool", tool: { ... } }
-  if (record.action === "done") {
+  // 2. Done action recognition
+  const doneKeywords = new Set([
+    "done",
+    "finish",
+    "finished",
+    "complete",
+    "completed",
+    "stop",
+    "end",
+  ]);
+  if (
+    (typeof record.action === "string" &&
+      doneKeywords.has(record.action.toLowerCase().trim())) ||
+    (typeof record.status === "string" &&
+      doneKeywords.has(record.status.toLowerCase().trim())) ||
+    (typeof record.tool === "string" &&
+      doneKeywords.has(record.tool.toLowerCase().trim())) ||
+    record.done === true
+  ) {
     return { normalized: null, action: "done", fixes: ["action_done"] };
   }
-  const action: "tool" | "done" = "tool";
+
+  // 3. Unwrap nested envelopes
+  // - Turn envelope: { action: "tool", tool: { ... } } or { action: "call", ... }
   if (
-    record.action === "tool" &&
+    (record.action === "tool" ||
+      record.action === "call" ||
+      record.action === "use_tool") &&
     record.tool &&
     typeof record.tool === "object"
   ) {
@@ -139,18 +273,109 @@ export function normalizeEnvelope(obj: unknown): {
     };
   }
 
-  // Alias normalization: "args" -> "arguments"
+  // - OpenAI function format: { function: { name, arguments } } or { type: "function", function: ... }
+  if (record.function && typeof record.function === "object") {
+    const inner = normalizeEnvelope(record.function);
+    return {
+      normalized: inner.normalized,
+      action: inner.action,
+      fixes: ["unwrapped_function_envelope", ...inner.fixes],
+    };
+  }
+
+  // - OpenAI tool_call format: { tool_call: { ... } } or { tool_calls: [ ... ] }
+  if (record.tool_call && typeof record.tool_call === "object") {
+    const inner = normalizeEnvelope(record.tool_call);
+    return {
+      normalized: inner.normalized,
+      action: inner.action,
+      fixes: ["unwrapped_tool_call_envelope", ...inner.fixes],
+    };
+  }
+  if (Array.isArray(record.tool_calls) && record.tool_calls.length > 0) {
+    const inner = normalizeEnvelope(record.tool_calls[0]);
+    return {
+      normalized: inner.normalized,
+      action: inner.action,
+      fixes: ["unwrapped_tool_calls_envelope", ...inner.fixes],
+    };
+  }
+
+  // 4. Tool name key normalization
+  if (typeof record.name === "string" && !record.tool) {
+    record.tool = record.name;
+    delete record.name;
+    fixes.push("normalized_name_to_tool");
+  } else if (typeof record.tool_name === "string" && !record.tool) {
+    record.tool = record.tool_name;
+    delete record.tool_name;
+    fixes.push("normalized_tool_name_to_tool");
+  } else if (typeof record.call === "string" && !record.tool) {
+    record.tool = record.call;
+    delete record.call;
+    fixes.push("normalized_call_to_tool");
+  }
+
+  // 5. Arguments key normalization
   if ("args" in record && !("arguments" in record)) {
     record.arguments = record.args;
     delete record.args;
     fixes.push("normalized_args_to_arguments");
+  } else if ("parameters" in record && !("arguments" in record)) {
+    record.arguments = record.parameters;
+    delete record.parameters;
+    fixes.push("normalized_parameters_to_arguments");
+  } else if ("params" in record && !("arguments" in record)) {
+    record.arguments = record.params;
+    delete record.params;
+    fixes.push("normalized_params_to_arguments");
+  } else if (
+    "input" in record &&
+    !("arguments" in record) &&
+    typeof record.input === "object"
+  ) {
+    record.arguments = record.input;
+    delete record.input;
+    fixes.push("normalized_input_to_arguments");
   }
 
-  return { normalized: record, action, fixes };
+  // 6. Stringified JSON arguments (common in OpenAI tool responses)
+  if (typeof record.arguments === "string") {
+    try {
+      record.arguments = JSON.parse(record.arguments as string);
+      fixes.push("parsed_stringified_arguments");
+    } catch {
+      // Retain raw string if parse fails
+    }
+  }
+
+  // 7. Canonical tool name mapping
+  if (typeof record.tool === "string") {
+    const rawTool = (record.tool as string).toLowerCase().trim();
+    const canonical = CANONICAL_TOOL_MAP[rawTool];
+    if (canonical) {
+      if (canonical !== record.tool) {
+        fixes.push(`normalized_tool_${record.tool}_to_${canonical}`);
+        record.tool = canonical;
+      }
+    }
+  }
+
+  return { normalized: record, action: "tool", fixes };
+}
+
+function humanize(str: string): string {
+  const spaced = str
+    .replace(/[-_]+/g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .trim();
+  if (!spaced) return str;
+  return spaced.charAt(0).toUpperCase() + spaced.slice(1);
 }
 
 /**
- * Normalizes case and whitespace of target/source/node references against known live targets.
+ * Normalizes case, whitespace, definitions, argument aliases, and missing defaults
+ * across all authoring tools against known live targets and document schema.
  */
 export function normalizeReferences(
   request: ToolRequest,
@@ -194,135 +419,531 @@ export function normalizeReferences(
     return current;
   }
 
-  if (req.tool === "regenerate_truss") {
-    req.arguments.target = resolveRef(req.arguments.target);
-  } else if (req.tool === "configure") {
-    req.arguments.target = resolveRef(req.arguments.target);
-    if (req.arguments.changes && typeof req.arguments.changes === "object") {
-      const changes = req.arguments.changes as Record<string, unknown>;
-      for (const [k, v] of Object.entries(changes)) {
-        if (typeof v === "string") {
-          const m = v.trim().match(/^(-?[0-9]+(?:\.[0-9]+)?)\s*[a-zA-Z%°/]*$/);
-          if (m) {
-            changes[k] = Number(m[1]);
-            fixes.push(`coerced_config_${k}_string_to_number`);
+  if (req.tool === "insert_component") {
+    if (!req.arguments || typeof req.arguments !== "object") {
+      req.arguments = {} as never;
+    }
+    const rawArgs = req.arguments as Record<string, unknown>;
+
+    // 1. Definition normalization
+    if (typeof rawArgs.definition === "string") {
+      const defStr = rawArgs.definition.trim();
+      if (!publicDefinitions.has(defStr)) {
+        for (const [id] of publicDefinitions) {
+          if (
+            id.toLowerCase() === defStr.toLowerCase() ||
+            id.toLowerCase().endsWith(`/${defStr.toLowerCase()}`) ||
+            id.toLowerCase().replace(/[-_]/g, "").endsWith(defStr.toLowerCase().replace(/[-_]/g, ""))
+          ) {
+            fixes.push(`resolved_definition_${defStr}_to_${id}`);
+            rawArgs.definition = id;
+            break;
           }
         }
       }
-      if (document) {
-        const targetNode =
-          document.nodes.find((n) => n.id === req.arguments.target) ||
-          document.nodes.find(
-            (n) =>
-              n.id
-                .toLowerCase()
-                .endsWith(`/${req.arguments.target.toLowerCase().trim()}`) ||
-              req.arguments.target
-                .toLowerCase()
-                .trim()
-                .endsWith(`/${n.id.toLowerCase()}`),
-          );
-        if (targetNode) {
-          req.arguments.target = targetNode.id;
-          const def = publicDefinitions.get(targetNode.definition);
-          if (targetNode.definition.includes("RollingTrack")) {
-            if ("friction" in changes && !("resistance" in changes)) {
-              changes.resistance = changes.friction;
-              delete changes.friction;
-              fixes.push("normalized_config_friction_to_resistance");
-            }
-            if ("roughness" in changes && !("resistance" in changes)) {
-              changes.resistance = changes.roughness;
-              delete changes.roughness;
-              fixes.push("normalized_config_roughness_to_resistance");
-            }
+    }
+
+    // 2. Version default
+    if (typeof rawArgs.version !== "number") {
+      rawArgs.version = 1;
+      fixes.push("defaulted_insert_version_1");
+    }
+
+    // 3. Alias default & sanitization
+    if (typeof rawArgs.alias !== "string" || !rawArgs.alias.trim()) {
+      const defPart =
+        (typeof rawArgs.definition === "string"
+          ? rawArgs.definition.split("/").pop()
+          : "comp") || "comp";
+      rawArgs.alias = `${defPart.toLowerCase()}_1`;
+      fixes.push("defaulted_insert_alias");
+    } else {
+      let sanitized = rawArgs.alias.trim().replace(/[^a-zA-Z0-9_-]/g, "_");
+      if (!/^[a-zA-Z]/.test(sanitized)) {
+        sanitized = `c_${sanitized}`;
+      }
+      if (sanitized !== rawArgs.alias) {
+        fixes.push(`sanitized_alias_${rawArgs.alias}_to_${sanitized}`);
+        rawArgs.alias = sanitized;
+      }
+    }
+
+    // 4. Configuration normalization
+    if (
+      !rawArgs.configuration ||
+      typeof rawArgs.configuration !== "object" ||
+      Array.isArray(rawArgs.configuration)
+    ) {
+      const altCfg = rawArgs.config || rawArgs.parameters || rawArgs.props;
+      if (altCfg && typeof altCfg === "object" && !Array.isArray(altCfg)) {
+        rawArgs.configuration = altCfg;
+        fixes.push("normalized_config_to_configuration");
+      } else {
+        rawArgs.configuration = {};
+        fixes.push("defaulted_insert_configuration");
+      }
+    }
+
+    const cfg = rawArgs.configuration as Record<string, unknown>;
+    for (const [k, v] of Object.entries(cfg)) {
+      if (typeof v === "string" && /^-?[0-9]+(?:\.[0-9]+)?$/.test(v.trim())) {
+        cfg[k] = Number(v.trim());
+        fixes.push(`coerced_insert_config_${k}_string_to_number`);
+      }
+    }
+    if (
+      typeof rawArgs.definition === "string" &&
+      rawArgs.definition.includes("RollingTrack")
+    ) {
+      if ("friction" in cfg && !("resistance" in cfg)) {
+        cfg.resistance = cfg.friction;
+        delete cfg.friction;
+        fixes.push("normalized_insert_config_friction_to_resistance");
+      }
+      if ("roughness" in cfg && !("resistance" in cfg)) {
+        cfg.resistance = cfg.roughness;
+        delete cfg.roughness;
+        fixes.push("normalized_insert_config_roughness_to_resistance");
+      }
+    }
+
+    // 5. Clean extra keys outside ["definition", "version", "alias", "configuration"]
+    for (const key of Object.keys(rawArgs)) {
+      if (!["definition", "version", "alias", "configuration"].includes(key)) {
+        delete rawArgs[key];
+        fixes.push(`stripped_extra_insert_arg_${key}`);
+      }
+    }
+  } else if (req.tool === "configure") {
+    if (!req.arguments || typeof req.arguments !== "object") {
+      req.arguments = {} as never;
+    }
+    const rawArgs = req.arguments as Record<string, unknown>;
+    if (typeof rawArgs.target === "string") {
+      rawArgs.target = resolveRef(rawArgs.target);
+    } else if (document && document.nodes.length > 0) {
+      rawArgs.target = document.nodes[0].id;
+      fixes.push("defaulted_configure_target");
+    }
+
+    if (
+      !rawArgs.changes ||
+      typeof rawArgs.changes !== "object" ||
+      Array.isArray(rawArgs.changes)
+    ) {
+      const altChanges =
+        rawArgs.parameters || rawArgs.config || rawArgs.settings || rawArgs.patch;
+      if (altChanges && typeof altChanges === "object" && !Array.isArray(altChanges)) {
+        rawArgs.changes = altChanges;
+        fixes.push("normalized_parameters_to_changes");
+      } else {
+        const rootChanges: Record<string, unknown> = {};
+        for (const [k, v] of Object.entries(rawArgs)) {
+          if (k !== "target" && k !== "changes") {
+            rootChanges[k] = v;
+            delete rawArgs[k];
           }
-          if (targetNode.definition.includes("BridgeLoad")) {
-            if (
-              changes.position !== undefined &&
-              typeof changes.position === "number" &&
-              changes.position > 0.95
-            ) {
-              if (changes.magnitude === undefined) {
-                fixes.push("redirected_bridge_load_position_to_magnitude");
-                changes.magnitude = Math.min(30, Math.max(2, changes.position));
-                delete changes.position;
-              } else {
-                changes.position = 0.95;
-              }
-            } else if (
-              changes.position !== undefined &&
-              typeof changes.position === "number" &&
-              changes.position < 0.05
-            ) {
-              changes.position = 0.05;
+        }
+        if (Object.keys(rootChanges).length > 0) {
+          rawArgs.changes = rootChanges;
+          fixes.push("collected_root_arguments_into_changes");
+        } else {
+          rawArgs.changes = {};
+        }
+      }
+    }
+
+    const changes = rawArgs.changes as Record<string, unknown>;
+    for (const [k, v] of Object.entries(changes)) {
+      if (typeof v === "string") {
+        const m = v.trim().match(/^(-?[0-9]+(?:\.[0-9]+)?)\s*[a-zA-Z%°/]*$/);
+        if (m) {
+          changes[k] = Number(m[1]);
+          fixes.push(`coerced_config_${k}_string_to_number`);
+        }
+      }
+    }
+    if (document) {
+      const targetNode =
+        document.nodes.find((n) => n.id === rawArgs.target) ||
+        document.nodes.find(
+          (n) =>
+            n.id.toLowerCase().endsWith(`/${String(rawArgs.target).toLowerCase().trim()}`) ||
+            String(rawArgs.target).toLowerCase().trim().endsWith(`/${n.id.toLowerCase()}`),
+        );
+      if (targetNode) {
+        rawArgs.target = targetNode.id;
+        const def = publicDefinitions.get(targetNode.definition);
+        if (targetNode.definition.includes("RollingTrack")) {
+          if ("friction" in changes && !("resistance" in changes)) {
+            changes.resistance = changes.friction;
+            delete changes.friction;
+            fixes.push("normalized_config_friction_to_resistance");
+          }
+          if ("roughness" in changes && !("resistance" in changes)) {
+            changes.resistance = changes.roughness;
+            delete changes.roughness;
+            fixes.push("normalized_config_roughness_to_resistance");
+          }
+        }
+        if (targetNode.definition.includes("BridgeLoad")) {
+          if (
+            changes.position !== undefined &&
+            typeof changes.position === "number" &&
+            changes.position > 0.95
+          ) {
+            if (changes.magnitude === undefined) {
+              fixes.push("redirected_bridge_load_position_to_magnitude");
+              changes.magnitude = Math.min(30, Math.max(2, changes.position));
+              delete changes.position;
+            } else {
+              changes.position = 0.95;
             }
-            if (
-              changes.magnitude !== undefined &&
-              typeof changes.magnitude === "number"
-            ) {
-              changes.magnitude = Math.min(30, Math.max(2, changes.magnitude));
-            }
+          } else if (
+            changes.position !== undefined &&
+            typeof changes.position === "number" &&
+            changes.position < 0.05
+          ) {
+            changes.position = 0.05;
           }
           if (
-            def?.configuration &&
-            typeof def.configuration === "object" &&
-            "properties" in def.configuration
+            changes.magnitude !== undefined &&
+            typeof changes.magnitude === "number"
           ) {
-            const props = (def.configuration as Record<string, unknown>)
-              .properties as Record<string, Record<string, unknown>>;
-            for (const [propName, propSchema] of Object.entries(props || {})) {
+            changes.magnitude = Math.min(30, Math.max(2, changes.magnitude));
+          }
+        }
+        if (
+          def?.configuration &&
+          typeof def.configuration === "object" &&
+          "properties" in def.configuration
+        ) {
+          const props = (def.configuration as Record<string, unknown>)
+            .properties as Record<string, Record<string, unknown>>;
+          for (const [propName, propSchema] of Object.entries(props || {})) {
+            if (
+              (propSchema.type === "number" || propSchema.type === "integer") &&
+              typeof changes[propName] === "number"
+            ) {
+              const val = changes[propName] as number;
               if (
-                (propSchema.type === "number" ||
-                  propSchema.type === "integer") &&
-                typeof changes[propName] === "number"
+                typeof propSchema.minimum === "number" &&
+                val < propSchema.minimum
               ) {
-                const val = changes[propName] as number;
-                if (
-                  typeof propSchema.minimum === "number" &&
-                  val < propSchema.minimum
-                ) {
-                  fixes.push(`clamped_config_${propName}_min`);
-                  changes[propName] = propSchema.minimum;
-                } else if (
-                  typeof propSchema.maximum === "number" &&
-                  val > propSchema.maximum
-                ) {
-                  fixes.push(`clamped_config_${propName}_max`);
-                  changes[propName] = propSchema.maximum;
-                }
+                fixes.push(`clamped_config_${propName}_min`);
+                changes[propName] = propSchema.minimum;
+              } else if (
+                typeof propSchema.maximum === "number" &&
+                val > propSchema.maximum
+              ) {
+                fixes.push(`clamped_config_${propName}_max`);
+                changes[propName] = propSchema.maximum;
               }
             }
           }
         }
       }
     }
-  } else if (req.tool === "insert_component") {
-    if (
-      req.arguments.configuration &&
-      typeof req.arguments.configuration === "object"
-    ) {
-      const cfg = req.arguments.configuration as Record<string, unknown>;
-      for (const [k, v] of Object.entries(cfg)) {
-        if (typeof v === "string" && /^-?[0-9]+(?:\.[0-9]+)?$/.test(v.trim())) {
-          cfg[k] = Number(v.trim());
-          fixes.push(`coerced_insert_config_${k}_string_to_number`);
+
+    // Clean extra keys outside ["target", "changes"]
+    for (const key of Object.keys(rawArgs)) {
+      if (!["target", "changes"].includes(key)) {
+        delete rawArgs[key];
+        fixes.push(`stripped_extra_config_arg_${key}`);
+      }
+    }
+  } else if (req.tool === "add_control") {
+    if (!req.arguments || typeof req.arguments !== "object") {
+      req.arguments = {} as never;
+    }
+    const rawArgs = req.arguments as Record<string, unknown>;
+    if (typeof rawArgs.target === "string") {
+      rawArgs.target = resolveRef(rawArgs.target);
+    } else if (document && document.nodes.length > 0) {
+      rawArgs.target = document.nodes[0].id;
+      fixes.push("defaulted_control_target");
+    }
+
+    const validWidgets = ["slider", "toggle", "button", "stepper", "schema"];
+    const widgetCandidate = (rawArgs.widget || rawArgs.type || rawArgs.control_type) as string;
+    if (typeof widgetCandidate === "string" && validWidgets.includes(widgetCandidate.toLowerCase())) {
+      rawArgs.widget = widgetCandidate.toLowerCase();
+    } else if (!rawArgs.widget || !validWidgets.includes(rawArgs.widget as string)) {
+      rawArgs.widget = "slider";
+      fixes.push("defaulted_control_widget_slider");
+    }
+
+    if (document) {
+      const targetNode = document.nodes.find((n) => n.id === rawArgs.target);
+      if (targetNode) {
+        const def = publicDefinitions.get(targetNode.definition);
+        if (def) {
+          if (!rawArgs.command && def.commands) {
+            const firstCmd = Object.keys(def.commands)[0];
+            if (firstCmd) {
+              rawArgs.command = firstCmd;
+              fixes.push(`defaulted_control_command_${firstCmd}`);
+            }
+          }
+          const cmd = def.commands[rawArgs.command as string];
+          if (cmd) {
+            const leaves = parameterLeaves(cmd.arguments);
+            if (leaves.length === 1 && rawArgs.field !== leaves[0].path) {
+              fixes.push(
+                `normalized_control_field_${rawArgs.field}_to_${leaves[0].path}`,
+              );
+              rawArgs.field = leaves[0].path;
+            } else if (
+              leaves.length > 1 &&
+              (!rawArgs.field || !leaves.some((l) => l.path === rawArgs.field))
+            ) {
+              const match = leaves.find(
+                (l) =>
+                  rawArgs.field &&
+                  l.path.toLowerCase().includes(String(rawArgs.field).toLowerCase()),
+              );
+              if (match) {
+                fixes.push(
+                  `normalized_control_field_${rawArgs.field}_to_${match.path}`,
+                );
+                rawArgs.field = match.path;
+              } else {
+                rawArgs.field = leaves[0].path;
+                fixes.push(`defaulted_control_field_${leaves[0].path}`);
+              }
+            }
+          }
         }
       }
-      if (req.arguments.definition?.includes("RollingTrack")) {
-        if ("friction" in cfg && !("resistance" in cfg)) {
-          cfg.resistance = cfg.friction;
-          delete cfg.friction;
-          fixes.push("normalized_insert_config_friction_to_resistance");
+    }
+
+    if (typeof rawArgs.label !== "string" || !rawArgs.label.trim()) {
+      rawArgs.label = humanize(String(rawArgs.field || rawArgs.command || "Control"));
+      fixes.push("defaulted_control_label");
+    }
+
+    for (const key of Object.keys(rawArgs)) {
+      if (!["target", "command", "field", "widget", "label"].includes(key)) {
+        delete rawArgs[key];
+        fixes.push(`stripped_extra_control_arg_${key}`);
+      }
+    }
+  } else if (req.tool === "add_observation") {
+    if (!req.arguments || typeof req.arguments !== "object") {
+      req.arguments = {} as never;
+    }
+    const rawArgs = req.arguments as Record<string, unknown>;
+    if (!rawArgs.source && rawArgs.target) {
+      rawArgs.source = rawArgs.target;
+      delete rawArgs.target;
+      fixes.push("normalized_observation_target_to_source");
+    }
+    if (typeof rawArgs.source === "string") {
+      rawArgs.source = resolveRef(rawArgs.source);
+    } else if (document && document.nodes.length > 0) {
+      rawArgs.source = document.nodes[0].id;
+      fixes.push("defaulted_observation_source");
+    }
+
+    if (document) {
+      const sourceNode = document.nodes.find((n) => n.id === rawArgs.source);
+      if (sourceNode) {
+        const def = publicDefinitions.get(sourceNode.definition);
+        if (def) {
+          const validOutputs = Object.entries(def.outputs)
+            .filter(([_, port]) => port.kind === "value")
+            .map(([k]) => k);
+          if (rawArgs.output && !validOutputs.includes(rawArgs.output as string)) {
+            const match = validOutputs.find(
+              (o) => o.toLowerCase() === String(rawArgs.output).toLowerCase(),
+            );
+            if (match) {
+              fixes.push(
+                `normalized_observation_output_${rawArgs.output}_to_${match}`,
+              );
+              rawArgs.output = match;
+            } else if (validOutputs.length > 0) {
+              rawArgs.output = validOutputs[0];
+              fixes.push(`defaulted_observation_output_${validOutputs[0]}`);
+            }
+          } else if (!rawArgs.output && validOutputs.length > 0) {
+            rawArgs.output = validOutputs[0];
+            fixes.push(`defaulted_observation_output_${validOutputs[0]}`);
+          }
+          if (rawArgs.widget === "readout") {
+            try {
+              const runtime = new DocumentRuntime(document);
+              const outputVal =
+                runtime.getSnapshot().outputs[sourceNode.id]?.[
+                  rawArgs.output as string
+                ];
+              if (
+                typeof outputVal !== "number" &&
+                rawArgs.output !== "board"
+              ) {
+                fixes.push(
+                  "normalized_observation_widget_readout_to_inspector",
+                );
+                rawArgs.widget = "inspector";
+              }
+            } catch {
+              if (sourceNode.definition === "models/BridgeResponse") {
+                fixes.push(
+                  "normalized_observation_widget_readout_to_inspector",
+                );
+                rawArgs.widget = "inspector";
+              }
+            }
+          }
         }
-        if ("roughness" in cfg && !("resistance" in cfg)) {
-          cfg.resistance = cfg.roughness;
-          delete cfg.roughness;
-          fixes.push("normalized_insert_config_roughness_to_resistance");
+      }
+    }
+
+    const validObsWidgets = [
+      "readout",
+      "inspector",
+      "table",
+      "graph",
+      "histogram",
+      "heatmap",
+    ];
+    const obsCandidate = (rawArgs.widget || rawArgs.type || rawArgs.observation_type) as string;
+    if (
+      typeof obsCandidate === "string" &&
+      validObsWidgets.includes(obsCandidate.toLowerCase())
+    ) {
+      rawArgs.widget = obsCandidate.toLowerCase();
+    } else if (
+      !rawArgs.widget ||
+      !validObsWidgets.includes(rawArgs.widget as string)
+    ) {
+      rawArgs.widget = "inspector";
+      fixes.push("defaulted_observation_widget_inspector");
+    }
+
+    if (typeof rawArgs.label !== "string" || !rawArgs.label.trim()) {
+      rawArgs.label = humanize(String(rawArgs.output || "Observation"));
+      fixes.push("defaulted_observation_label");
+    }
+
+    for (const key of Object.keys(rawArgs)) {
+      if (!["source", "output", "widget", "label"].includes(key)) {
+        delete rawArgs[key];
+        fixes.push(`stripped_extra_obs_arg_${key}`);
+      }
+    }
+  } else if (req.tool === "connect") {
+    if (!req.arguments || typeof req.arguments !== "object") {
+      req.arguments = {} as never;
+    }
+    const rawArgs = req.arguments as Record<string, unknown>;
+    if (!rawArgs.from && rawArgs.source) {
+      rawArgs.from = rawArgs.source;
+      delete rawArgs.source;
+      fixes.push("normalized_connect_source_to_from");
+    }
+    if (!rawArgs.to && rawArgs.target) {
+      rawArgs.to = rawArgs.target;
+      delete rawArgs.target;
+      fixes.push("normalized_connect_target_to_to");
+    }
+
+    if (typeof rawArgs.from === "string") {
+      const parts = (rawArgs.from as string).split(/[:.]/);
+      rawArgs.from = { node: parts[0], port: parts[1] || "" };
+      fixes.push("parsed_connect_from_string");
+    }
+    if (typeof rawArgs.to === "string") {
+      const parts = (rawArgs.to as string).split(/[:.]/);
+      rawArgs.to = { node: parts[0], port: parts[1] || "" };
+      fixes.push("parsed_connect_to_string");
+    }
+
+    if (rawArgs.from && typeof rawArgs.from === "object") {
+      const fromObj = rawArgs.from as Record<string, unknown>;
+      if (typeof fromObj.node === "string")
+        fromObj.node = resolveRef(fromObj.node);
+    }
+    if (rawArgs.to && typeof rawArgs.to === "object") {
+      const toObj = rawArgs.to as Record<string, unknown>;
+      if (typeof toObj.node === "string") toObj.node = resolveRef(toObj.node);
+    }
+
+    if (document) {
+      const fromObj = rawArgs.from as Record<string, string> | undefined;
+      const toObj = rawArgs.to as Record<string, string> | undefined;
+      const fromNode = fromObj?.node
+        ? document.nodes.find((n) => n.id === fromObj.node)
+        : undefined;
+      const toNode = toObj?.node
+        ? document.nodes.find((n) => n.id === toObj.node)
+        : undefined;
+      const fromDef = fromNode
+        ? publicDefinitions.get(fromNode.definition)
+        : undefined;
+      const toDef = toNode
+        ? publicDefinitions.get(toNode.definition)
+        : undefined;
+
+      if (fromDef && toDef && fromObj && toObj) {
+        const fromHasOutput =
+          fromDef.outputs && fromObj.port in fromDef.outputs;
+        const toHasOutput = toDef.outputs && toObj.port in toDef.outputs;
+        const fromHasInput = fromDef.inputs && fromObj.port in fromDef.inputs;
+        const toHasInput = toDef.inputs && toObj.port in toDef.inputs;
+
+        if (!fromHasOutput && toHasOutput && fromHasInput && !toHasInput) {
+          fixes.push("normalized_connect_swapped_from_and_to");
+          const temp = rawArgs.from;
+          rawArgs.from = rawArgs.to;
+          rawArgs.to = temp;
         }
+      }
+
+      if (fromDef?.outputs && fromObj?.port) {
+        const validOutputs = Object.keys(fromDef.outputs);
+        if (!validOutputs.includes(fromObj.port)) {
+          const match = validOutputs.find(
+            (o) =>
+              o.toLowerCase() ===
+              fromObj.port.toLowerCase().replace(/_/g, ""),
+          );
+          if (match) {
+            fixes.push(
+              `normalized_connect_from_port_${fromObj.port}_to_${match}`,
+            );
+            fromObj.port = match;
+          }
+        }
+      }
+      if (toDef?.inputs && toObj?.port) {
+        const validInputs = Object.keys(toDef.inputs);
+        if (!validInputs.includes(toObj.port)) {
+          const match = validInputs.find(
+            (i) =>
+              i.toLowerCase() ===
+              toObj.port.toLowerCase().replace(/_/g, ""),
+          );
+          if (match) {
+            fixes.push(
+              `normalized_connect_to_port_${toObj.port}_to_${match}`,
+            );
+            toObj.port = match;
+          }
+        }
+      }
+    }
+
+    for (const key of Object.keys(rawArgs)) {
+      if (!["from", "to"].includes(key)) {
+        delete rawArgs[key];
+        fixes.push(`stripped_extra_connect_arg_${key}`);
       }
     }
   } else if (req.tool === "remove") {
+    if (!req.arguments || typeof req.arguments !== "object") {
+      req.arguments = {} as never;
+    }
     const rawArgs = req.arguments as Record<string, unknown>;
     if ("target" in rawArgs && !("targets" in rawArgs)) {
       rawArgs.targets = [rawArgs.target];
@@ -331,6 +952,9 @@ export function normalizeReferences(
     } else if (typeof rawArgs.targets === "string") {
       rawArgs.targets = [rawArgs.targets];
       fixes.push("normalized_remove_targets_string_to_array");
+    } else if (!Array.isArray(rawArgs.targets)) {
+      rawArgs.targets = [];
+      fixes.push("defaulted_remove_targets_array");
     }
     if (Array.isArray(rawArgs.targets)) {
       rawArgs.targets = (rawArgs.targets as string[]).map(resolveRef);
@@ -349,185 +973,126 @@ export function normalizeReferences(
       }
       req.arguments.targets = rawArgs.targets as string[];
     }
-  } else if (req.tool === "add_control") {
-    req.arguments.target = resolveRef(req.arguments.target);
-    if (document) {
-      const targetNode = document.nodes.find(
-        (n) => n.id === req.arguments.target,
-      );
-      if (targetNode) {
-        const def = publicDefinitions.get(targetNode.definition);
-        const cmd = def?.commands[req.arguments.command];
-        if (cmd) {
-          const leaves = parameterLeaves(cmd.arguments);
-          if (leaves.length === 1 && req.arguments.field !== leaves[0].path) {
-            fixes.push(
-              `normalized_control_field_${req.arguments.field}_to_${leaves[0].path}`,
-            );
-            req.arguments.field = leaves[0].path;
-          } else if (
-            leaves.length > 1 &&
-            (!req.arguments.field ||
-              !leaves.some((l) => l.path === req.arguments.field))
-          ) {
-            const match = leaves.find(
-              (l) =>
-                req.arguments.field &&
-                l.path
-                  .toLowerCase()
-                  .includes(req.arguments.field.toLowerCase()),
-            );
-            if (match) {
-              fixes.push(
-                `normalized_control_field_${req.arguments.field}_to_${match.path}`,
-              );
-              req.arguments.field = match.path;
-            }
-          }
-        }
-      }
-    }
-  } else if (req.tool === "add_observation") {
-    req.arguments.source = resolveRef(req.arguments.source);
-    if (document) {
-      const sourceNode = document.nodes.find(
-        (n) => n.id === req.arguments.source,
-      );
-      if (sourceNode) {
-        const def = publicDefinitions.get(sourceNode.definition);
-        if (def) {
-          const validOutputs = Object.entries(def.outputs)
-            .filter(([_, port]) => port.kind === "value")
-            .map(([k]) => k);
-          if (
-            req.arguments.output &&
-            !validOutputs.includes(req.arguments.output)
-          ) {
-            const match = validOutputs.find(
-              (o) => o.toLowerCase() === req.arguments.output.toLowerCase(),
-            );
-            if (match) {
-              fixes.push(
-                `normalized_observation_output_${req.arguments.output}_to_${match}`,
-              );
-              req.arguments.output = match;
-            }
-          }
-          if (req.arguments.widget === "readout") {
-            try {
-              const runtime = new DocumentRuntime(document);
-              const outputVal =
-                runtime.getSnapshot().outputs[sourceNode.id]?.[
-                  req.arguments.output
-                ];
-              if (
-                typeof outputVal !== "number" &&
-                req.arguments.output !== "board"
-              ) {
-                fixes.push(
-                  "normalized_observation_widget_readout_to_inspector",
-                );
-                req.arguments.widget = "inspector";
-              }
-            } catch {
-              if (sourceNode.definition === "models/BridgeResponse") {
-                fixes.push(
-                  "normalized_observation_widget_readout_to_inspector",
-                );
-                req.arguments.widget = "inspector";
-              }
-            }
-          }
-        }
-      }
-    }
-  } else if (req.tool === "connect") {
-    if (req.arguments.from?.node) {
-      req.arguments.from.node = resolveRef(req.arguments.from.node);
-    }
-    if (req.arguments.to?.node) {
-      req.arguments.to.node = resolveRef(req.arguments.to.node);
-    }
-    if (document) {
-      const fromNode = req.arguments.from?.node
-        ? document.nodes.find((n) => n.id === req.arguments.from.node)
-        : undefined;
-      const toNode = req.arguments.to?.node
-        ? document.nodes.find((n) => n.id === req.arguments.to.node)
-        : undefined;
-      const fromDef = fromNode
-        ? publicDefinitions.get(fromNode.definition)
-        : undefined;
-      const toDef = toNode
-        ? publicDefinitions.get(toNode.definition)
-        : undefined;
-
-      // Detect swapped from and to
-      if (fromDef && toDef) {
-        const fromHasOutput =
-          fromDef.outputs && req.arguments.from.port in fromDef.outputs;
-        const toHasOutput =
-          toDef.outputs && req.arguments.to.port in toDef.outputs;
-        const fromHasInput =
-          fromDef.inputs && req.arguments.from.port in fromDef.inputs;
-        const toHasInput =
-          toDef.inputs && req.arguments.to.port in toDef.inputs;
-
-        if (!fromHasOutput && toHasOutput && fromHasInput && !toHasInput) {
-          fixes.push("normalized_connect_swapped_from_and_to");
-          const temp = req.arguments.from;
-          req.arguments.from = req.arguments.to;
-          req.arguments.to = temp;
-        }
-      }
-
-      // Normalize port casing / snake_case
-      if (fromDef?.outputs) {
-        const validOutputs = Object.keys(fromDef.outputs);
-        if (!validOutputs.includes(req.arguments.from.port)) {
-          const match = validOutputs.find(
-            (o) =>
-              o.toLowerCase() ===
-              req.arguments.from.port.toLowerCase().replace(/_/g, ""),
-          );
-          if (match) {
-            fixes.push(
-              `normalized_connect_from_port_${req.arguments.from.port}_to_${match}`,
-            );
-            req.arguments.from.port = match;
-          }
-        }
-      }
-      if (toDef?.inputs) {
-        const validInputs = Object.keys(toDef.inputs);
-        if (!validInputs.includes(req.arguments.to.port)) {
-          const match = validInputs.find(
-            (i) =>
-              i.toLowerCase() ===
-              req.arguments.to.port.toLowerCase().replace(/_/g, ""),
-          );
-          if (match) {
-            fixes.push(
-              `normalized_connect_to_port_${req.arguments.to.port}_to_${match}`,
-            );
-            req.arguments.to.port = match;
-          }
-        }
+    for (const key of Object.keys(rawArgs)) {
+      if (!["targets"].includes(key)) {
+        delete rawArgs[key];
+        fixes.push(`stripped_extra_remove_arg_${key}`);
       }
     }
   } else if (req.tool === "arrange") {
-    if (req.arguments.preserveLocked !== true) {
-      req.arguments.preserveLocked = true;
+    if (!req.arguments || typeof req.arguments !== "object") {
+      req.arguments = {} as never;
+    }
+    const rawArgs = req.arguments as Record<string, unknown>;
+    if (rawArgs.preserveLocked !== true) {
+      rawArgs.preserveLocked = true;
       fixes.push("normalized_preserve_locked_true");
     }
     const validTemplates = ["scene-with-sidebar", "comparison", "vertical"];
-    if (!validTemplates.includes(req.arguments.template)) {
-      req.arguments.template = "scene-with-sidebar";
+    if (
+      typeof rawArgs.template !== "string" ||
+      !validTemplates.includes(rawArgs.template as string)
+    ) {
+      rawArgs.template = "scene-with-sidebar";
       fixes.push("normalized_arrange_template");
     }
     for (const key of ["main", "controls", "results", "narrowOrder"] as const) {
-      if (Array.isArray(req.arguments[key])) {
-        req.arguments[key] = (req.arguments[key] as string[]).map(resolveRef);
+      if (!Array.isArray(rawArgs[key])) {
+        rawArgs[key] = [];
+        fixes.push(`defaulted_arrange_${key}_array`);
+      } else {
+        rawArgs[key] = (rawArgs[key] as string[]).map(resolveRef);
+      }
+    }
+    for (const key of Object.keys(rawArgs)) {
+      if (
+        ![
+          "template",
+          "main",
+          "controls",
+          "results",
+          "narrowOrder",
+          "preserveLocked",
+        ].includes(key)
+      ) {
+        delete rawArgs[key];
+        fixes.push(`stripped_extra_arrange_arg_${key}`);
+      }
+    }
+  } else if (req.tool === "set_lesson") {
+    if (!req.arguments || typeof req.arguments !== "object") {
+      req.arguments = {} as never;
+    }
+    const rawArgs = req.arguments as Record<string, unknown>;
+    if (!rawArgs.instruction && rawArgs.description) {
+      rawArgs.instruction = rawArgs.description;
+      delete rawArgs.description;
+      fixes.push("normalized_description_to_instruction");
+    }
+    if (typeof rawArgs.title !== "string" || !rawArgs.title.trim()) {
+      rawArgs.title = "Simulation Experiment";
+      fixes.push("defaulted_lesson_title");
+    }
+    if (typeof rawArgs.instruction !== "string" || !rawArgs.instruction.trim()) {
+      rawArgs.instruction = "Explore the experiment.";
+      fixes.push("defaulted_lesson_instruction");
+    }
+    if (
+      typeof rawArgs.explanation !== "string" ||
+      !rawArgs.explanation.trim()
+    ) {
+      rawArgs.explanation = String(rawArgs.instruction || rawArgs.title);
+      fixes.push("defaulted_lesson_explanation");
+    }
+    for (const key of Object.keys(rawArgs)) {
+      if (!["title", "instruction", "explanation"].includes(key)) {
+        delete rawArgs[key];
+        fixes.push(`stripped_extra_lesson_arg_${key}`);
+      }
+    }
+  } else if (req.tool === "regenerate_truss") {
+    if (!req.arguments || typeof req.arguments !== "object") {
+      req.arguments = {} as never;
+    }
+    const rawArgs = req.arguments as Record<string, unknown>;
+    if (typeof rawArgs.target === "string") {
+      rawArgs.target = resolveRef(rawArgs.target);
+    }
+    if (rawArgs.spanScale !== 1 && rawArgs.spanScale !== 2) {
+      rawArgs.spanScale = 1;
+      fixes.push("defaulted_truss_spanScale_1");
+    }
+    if (typeof rawArgs.dense !== "boolean") {
+      rawArgs.dense = false;
+      fixes.push("defaulted_truss_dense_false");
+    }
+    for (const key of Object.keys(rawArgs)) {
+      if (!["target", "spanScale", "dense"].includes(key)) {
+        delete rawArgs[key];
+        fixes.push(`stripped_extra_truss_arg_${key}`);
+      }
+    }
+  } else if (req.tool === "insert_recipe") {
+    if (!req.arguments || typeof req.arguments !== "object") {
+      req.arguments = {} as never;
+    }
+    const rawArgs = req.arguments as Record<string, unknown>;
+    if (typeof rawArgs.version !== "number") {
+      rawArgs.version = 1;
+      fixes.push("defaulted_recipe_version_1");
+    }
+    if (
+      !rawArgs.overrides ||
+      typeof rawArgs.overrides !== "object" ||
+      Array.isArray(rawArgs.overrides)
+    ) {
+      rawArgs.overrides = {};
+      fixes.push("defaulted_recipe_overrides");
+    }
+    for (const key of Object.keys(rawArgs)) {
+      if (!["recipe", "version", "alias", "overrides"].includes(key)) {
+        delete rawArgs[key];
+        fixes.push(`stripped_extra_recipe_arg_${key}`);
       }
     }
   }
@@ -823,21 +1388,21 @@ export function fixAndValidateToolResponse(
     return { request: null, action: "done", fixes: allFixes, issues: [] };
   }
 
-  try {
-    validateToolRequest(normalized as ToolRequest);
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : "Tool validation failed";
-    issues.push(msg);
-    onEvent?.("fixer.rejected", { error: msg, parsed: normalized });
-    return { request: null, action: "tool", fixes: allFixes, issues };
-  }
-
   const { request: refRequest, fixes: refFixes } = normalizeReferences(
     normalized as ToolRequest,
     liveTargets,
     document,
   );
   allFixes.push(...refFixes);
+
+  try {
+    validateToolRequest(refRequest);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Tool validation failed";
+    issues.push(msg);
+    onEvent?.("fixer.rejected", { error: msg, parsed: refRequest });
+    return { request: null, action: "tool", fixes: allFixes, issues };
+  }
 
   if (turnSchema) {
     try {
