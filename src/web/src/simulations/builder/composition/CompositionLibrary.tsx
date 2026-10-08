@@ -47,11 +47,16 @@ export function CompositionLibrary({
   catalog,
   open,
   onClose,
+  onAiBuild,
+  aiBusy = false,
 }: {
   catalog: ComponentCatalog;
   open: boolean;
   onClose: () => void;
+  onAiBuild?: (prompt: string) => void;
+  aiBusy?: boolean;
 }) {
+  const [aiPrompt, setAiPrompt] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeSection, setSection] = useState("all");
   const [importing, setImporting] = useState(false);
@@ -74,6 +79,7 @@ export function CompositionLibrary({
       setDetail(null);
       setImporting(false);
       setSection("all");
+      setAiPrompt("");
     }
   }, [open]);
   const entries: Entry[] = open
@@ -143,6 +149,34 @@ export function CompositionLibrary({
     >
       <div className="composition-catalog">
         <div className="catalog-controls" hidden={importing || !!detail}>
+          {onAiBuild && (
+            <form
+              className="catalog-ai-builder"
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (aiPrompt.trim()) {
+                  onAiBuild(aiPrompt.trim());
+                  setAiPrompt("");
+                }
+              }}
+            >
+              <label className="catalog-ai-label">
+                <span>✨ Build with AI</span>
+                <div className="catalog-ai-input-row">
+                  <input
+                    type="text"
+                    placeholder="Describe a component or behavior to generate…"
+                    value={aiPrompt}
+                    onChange={(e) => setAiPrompt(e.target.value)}
+                    disabled={aiBusy}
+                  />
+                  <button type="submit" disabled={!aiPrompt.trim() || aiBusy}>
+                    {aiBusy ? "Building…" : "Build with AI"}
+                  </button>
+                </div>
+              </label>
+            </form>
+          )}
           <label className="catalog-search">
             <span className="builder-sr-only">Search components</span>
             <input

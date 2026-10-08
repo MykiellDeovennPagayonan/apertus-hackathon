@@ -71,16 +71,25 @@ export async function compose(
   }
 
   // 2. Initialize authoring transaction
-  const initialDoc = emptyAuthoredDocument();
-  initialDoc.presentation = {
-    version: 1,
-    mode: "board",
-    items: [],
-    groups: [],
-    startView: { x: 0, y: 0, width: 800, height: 600 },
-    navigation: { mode: "bounded", minZoom: 0.25, maxZoom: 2 },
-    immersive: { startup: "board", allowReturnToBoard: true, overlays: [] },
-  };
+  const shouldStartFresh =
+    /\b(?:start over|from scratch|new experiment|clear all|reset all|replace everything)\b/i.test(
+      request.prompt,
+    );
+  const initialDoc = structuredClone(
+    (!shouldStartFresh && request.active?.recipe.document) ||
+      emptyAuthoredDocument(),
+  );
+  if (!initialDoc.presentation) {
+    initialDoc.presentation = {
+      version: 1,
+      mode: "board",
+      items: [],
+      groups: [],
+      startView: { x: 0, y: 0, width: 800, height: 600 },
+      navigation: { mode: "bounded", minZoom: 0.25, maxZoom: 2 },
+      immersive: { startup: "board", allowReturnToBoard: true, overlays: [] },
+    };
+  }
   const draft = new AuthoringTransaction(request.requestId, initialDoc);
 
   const maxTurns = budget.maxTurns;
@@ -403,12 +412,15 @@ export async function compose(
     throw new PlannerError("Failed to initialize simulation runtime", 502);
   }
 
+  const isUpdated = Boolean(request.active && !shouldStartFresh);
   return {
     protocolVersion: 1,
-    status: "created",
+    status: isUpdated ? "updated" : "created",
     requestId: request.requestId,
-    expectedSessionId: null,
-    expectedAuthoredRevision: null,
+    expectedSessionId: isUpdated ? (request.active?.sessionId ?? null) : null,
+    expectedAuthoredRevision: isUpdated
+      ? (request.active?.authoredRevision ?? null)
+      : null,
     recipe,
     coverage,
     learnerExplanation: intent.goal,

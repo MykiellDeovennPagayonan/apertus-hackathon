@@ -29,11 +29,26 @@ export class AuthoringTransaction {
   >();
   revision = 0;
   private operationCount = 0;
+  readonly draftId: string;
   constructor(
-    readonly draftId: string,
-    document: AuthoredDocument = emptyAuthoredDocument(),
+    draftIdOrDoc: string | AuthoredDocument = "draft",
+    document?: AuthoredDocument,
   ) {
-    this.state = { document: structuredClone(document), handles: {} };
+    let doc: AuthoredDocument;
+    if (typeof draftIdOrDoc === "string") {
+      this.draftId = draftIdOrDoc;
+      doc = document ?? emptyAuthoredDocument();
+    } else {
+      this.draftId = "draft";
+      doc = draftIdOrDoc ?? emptyAuthoredDocument();
+    }
+    const handles: Record<string, string> = {};
+    if (doc.nodes) {
+      for (const node of doc.nodes) {
+        handles[node.id] = node.id;
+      }
+    }
+    this.state = { document: structuredClone(doc), handles };
   }
   fork() {
     const copy = new AuthoringTransaction(this.draftId);

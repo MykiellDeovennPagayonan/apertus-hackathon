@@ -208,14 +208,11 @@ async function followup(
   const current = request.active;
   if (!current) throw new Error("A follow-up requires an active recipe");
   const handles = activeHandles(current.recipe.document);
-  if (!handles.length)
-    return {
-      protocolVersion: 1,
-      status: "unsupported",
-      requestId: request.requestId,
-      message:
-        "Prompt changes currently support addition/subtraction, rectangle area/perimeter, and truss bridge lessons. You can continue exploring this lesson or Remix it.",
-    };
+  if (!handles.length) {
+    // Active recipe has no legacy handles (open composition or builder document);
+    // fall back to open composition planning.
+    return null;
+  }
   let mode = await stage(
     "followup_mode",
     request,

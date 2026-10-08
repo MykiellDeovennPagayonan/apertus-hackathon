@@ -35,7 +35,9 @@ import {
   ManualComponentSettings,
   manualDefinition,
 } from "./ManualComponentSettings";
+import CommandBar from "../../../app/_components/CommandBar";
 import { download, useComponentCatalog } from "./useComponentCatalog";
+import { useBuilderAi } from "./useBuilderAi";
 import "./composition.css";
 type Edit = (
   change: (d: ExperimentDocument) => void,
@@ -99,6 +101,7 @@ export default function CompositionBuilder({
     };
   }, []);
   const catalog = useComponentCatalog(doc, edit);
+  const ai = useBuilderAi({ doc, edit });
   const {
     document,
     components,
@@ -702,6 +705,11 @@ export default function CompositionBuilder({
         catalog={catalog}
         open={libraryOpen}
         onClose={() => setLibraryOpen(false)}
+        onAiBuild={(prompt) => {
+          ai.onPrompt(prompt);
+          setLibraryOpen(false);
+        }}
+        aiBusy={ai.busy}
       />
       <SaveCompositeDialog
         catalog={catalog}
@@ -727,6 +735,39 @@ export default function CompositionBuilder({
           </button>
         </details>
       )}
+      <div className="builder-composer">
+        <CommandBar
+          placeholder={
+            doc.authored?.nodes?.length
+              ? "Ask AI to add components, connect, or change the experiment…"
+              : "Describe an experiment to build with AI…"
+          }
+          chips={
+            doc.authored?.nodes?.length
+              ? [
+                  "Add a slider to control parameters",
+                  "Add an observation readout",
+                  "Connect available outputs to inputs",
+                  "Change starting values",
+                ]
+              : [
+                  "Create an addition experiment with circles",
+                  "Compare two rectangles and their areas",
+                  "Build a harmonic oscillator with a spring and mass",
+                  "Help me learn how a truss bridge carries a load",
+                ]
+          }
+          disabled={ai.busy}
+          status={ai.status}
+          value={ai.draft}
+          onChange={ai.setDraft}
+          landing={!doc.authored?.nodes?.length}
+          lastRequest={ai.lastRequest}
+          onSubmit={ai.onPrompt}
+          onStop={ai.cancel}
+          submitLabel={doc.authored?.nodes?.length ? "Apply" : "Build"}
+        />
+      </div>
     </main>
   );
 }

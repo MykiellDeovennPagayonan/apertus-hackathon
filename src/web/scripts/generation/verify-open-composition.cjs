@@ -27,7 +27,9 @@ const { emptyAuthoredDocument } = load("src/simulations/runtime/authoring/types.
 const { loadRecipe } = load("src/simulations/runtime/recipes/loadRecipe.ts");
 const { RecipeLesson } = load("src/simulations/components/views/RecipeLesson.tsx");
 const { formatUserFacingDetails, formatUserFacingStatus } = load("src/lib/planner/errorFormatting.ts");
-const { parseCoverage } = load("src/lib/planner/schema.ts");
+const { parseCoverage, parseGenerationRequest, parseGenerationResult } = load("src/lib/planner/schema.ts");
+const { activeFromBuilderDocument } = load("src/simulations/builder/composition/useBuilderAi.ts");
+const { createFreshDocument } = load("src/simulations/builder/document/canonical.ts");
 
 async function testBucket() {
   const bucket = retrieveComponentBucket(
@@ -542,11 +544,136 @@ function testErrorFormattingAndCoverageCapping() {
   console.log("Error formatting and coverage capping tests passed!");
 }
 
+async function testBuilderAiIntegration() {
+  // 1. Fresh document produces null active context
+  const fresh = createFreshDocument();
+  assert.equal(activeFromBuilderDocument(fresh), null, "Fresh empty document has no active context");
+
+  // 2. Build a populated document using RollingTrack
+  const transaction = new AuthoringTransaction(emptyAuthoredDocument());
+  transaction.execute({
+    draftId: transaction.draftId,
+    expectedRevision: transaction.revision,
+    operationId: "insert_track",
+    request: [
+      {
+        tool: "insert_component",
+        arguments: {
+          definition: "prefabs/physical-systems/RollingTrack",
+          version: 1,
+          alias: "main_track",
+          configuration: { height: 1.5, resistance: 0.1, gravity: 9.81 },
+        },
+      },
+      {
+        tool: "set_lesson",
+        arguments: {
+          title: "Rolling Dynamics",
+          instruction: "Explore motion along an inclined track",
+          explanation: "Conservation of energy and friction effects",
+        },
+      },
+    ],
+  });
+
+  const authored = transaction.document;
+  const builderDoc = {
+    documentVersion: 3,
+    template: "line",
+    recipe: null,
+    lesson: structuredClone(authored.lesson),
+    authored,
+    presentation: {
+      layout: "right",
+      view: "line",
+      particles: true,
+      directShading: true,
+      camera: "overview",
+      controls: [],
+      results: [],
+    },
+    editor: structuredClone(authored.editor),
+  };
+
+  // 3. activeFromBuilderDocument creates a valid GenerationRequest active object
+  const active = activeFromBuilderDocument(builderDoc);
+  assert.ok(active, "Active context created from populated builder document");
+  assert.equal(active.recipe.title, "Rolling Dynamics");
+  assert.equal(active.recipe.document.nodes.length, 1);
+
+  // 4. Validate that this active context passes parseGenerationRequest
+  const request = parseGenerationRequest({
+    protocolVersion: 1,
+    requestId: "req-builder-1",
+    prompt: "Add a slider to control the track friction",
+    viewport: { width: 1024, height: 768 },
+    active,
+  });
+  assert.equal(request.active.sessionId, active.sessionId);
+
+  // 5. Test that AuthoringTransaction initialized with builder document populates handles
+  const followUpTx = new AuthoringTransaction("draft-followup", builderDoc.authored);
+  const existingNodeId = builderDoc.authored.nodes[0].id;
+  assert.equal(followUpTx.handles[existingNodeId], existingNodeId, "Existing node ID present in handles");
+
+  // Execute add_control on the existing node using its ID
+  const controlReceipt = followUpTx.execute({
+    draftId: followUpTx.draftId,
+    expectedRevision: followUpTx.revision,
+    operationId: "add_friction_control",
+    request: [
+      {
+        tool: "add_control",
+        arguments: {
+          target: existingNodeId,
+          command: "ROLL_SET_RESISTANCE",
+          field: "value",
+          widget: "slider",
+          label: "Track Friction (μ)",
+        },
+      },
+    ],
+  });
+  assert.equal(controlReceipt.status, "applied", "add_control successfully applied to existing node");
+  assert.equal(followUpTx.document.nodes.length, 2, "Slider node added to document");
+
+  // 6. Test updated status envelope conforms to schema
+  const updatedDoc = followUpTx.document;
+  const updatedRecipe = finalizeRecipe(updatedDoc, {
+    id: "generated/lesson",
+    title: updatedDoc.lesson.title,
+    description: updatedDoc.lesson.instruction,
+  });
+
+  const resultPayload = {
+    protocolVersion: 1,
+    status: "updated",
+    requestId: request.requestId,
+    expectedSessionId: request.active.sessionId,
+    expectedAuthoredRevision: request.active.authoredRevision,
+    recipe: updatedRecipe,
+    coverage: {
+      level: "full",
+      covered: ["track friction"],
+      omitted: [],
+      explanation: "",
+    },
+    learnerExplanation: "Added a slider to control friction on the rolling track.",
+  };
+
+  const parsedResult = parseGenerationResult(resultPayload, request);
+  assert.equal(parsedResult.status, "updated");
+  assert.equal(parsedResult.recipe.document.nodes.length, 2);
+
+  console.log("Builder AI integration tests passed: activeFromBuilderDocument, handle reuse, and incremental updates verified!");
+}
+
 (async () => {
   await testBucket();
   testFormatFixer();
   await testOpenCompositionGate();
   testErrorFormattingAndCoverageCapping();
+  await testBuilderAiIntegration();
   console.log("All Phase 2 deterministic tests passed!");
 })().catch((err) => {
   console.error("Test failed:", err);
