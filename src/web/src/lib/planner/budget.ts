@@ -1,6 +1,13 @@
+import { type LlmConfig, readLlmConfig } from "../llm/config";
 import { PlannerError } from "./errors";
 export type TraceSink = (event: string, data: unknown) => void;
 export class GenerationBudget {
+  private configuration?: LlmConfig;
+  /** A generation keeps one provider/model even if process configuration changes. */
+  get llmConfig(): LlmConfig {
+    this.configuration ??= readLlmConfig();
+    return this.configuration;
+  }
   calls = 0;
   repairs = 0;
   turns = 0;

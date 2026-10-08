@@ -1,6 +1,11 @@
+import {
+  connectionError,
+  createProviderRequest,
+  readProviderResponse,
+} from "../llm/adapters";
+import { readLlmConfig } from "../llm/config";
 import type { GenerationBudget } from "../planner/budget";
 import { PlannerError } from "../planner/errors";
-import { readConfig } from "./config";
 import type { JsonSchema } from "./structuredSchema";
 export interface Message {
   role: string;
@@ -27,17 +32,20 @@ export async function requestStructured<T>(
   signal?: AbortSignal,
   options: StructuredOptions & { verify?: (result: T) => void } = {},
 ): Promise<T> {
-  let config: ReturnType<typeof readConfig>;
+  let config: ReturnType<typeof readLlmConfig>;
   try {
-    config = readConfig();
+    config = options.budget?.llmConfig ?? readLlmConfig();
   } catch (error) {
     throw new PlannerError(
-      error instanceof Error ? error.message : "Invalid Apertus configuration",
+      error instanceof Error ? error.message : "Invalid LLM configuration",
       503,
     );
   }
   if (active >= config.concurrency)
-    throw new PlannerError("Apertus is busy. Please try again shortly.", 429);
+    throw new PlannerError(
+      `${config.label} is busy. Please try again shortly.`,
+      429,
+    );
   active++;
   const timeout = AbortSignal.timeout(config.timeout);
   const combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
@@ -50,74 +58,52 @@ export async function requestStructured<T>(
     repair = false,
   ) => {
     if (combined.aborted)
-      throw new PlannerError("Apertus request cancelled.", 499);
+      throw new PlannerError(`${config.label} request cancelled.`, 499);
     options.budget?.consumeCall(repair);
     if (JSON.stringify(current).length > 28000)
       throw new PlannerError("Inference context exceeds stage bounds.", 502);
     const started = Date.now();
+    const providerRequest = createProviderRequest(
+      config,
+      current,
+      tokens,
+      schema,
+    );
     let response: Response;
     try {
-      response = await fetch(`${config.baseUrl}/chat/completions`, {
+      response = await fetch(providerRequest.url, {
         method: "POST",
         cache: "no-store",
+        redirect: "error",
         signal: combined,
-        headers: {
-          "Content-Type": "application/json",
-          ...(config.token ? { Authorization: `Bearer ${config.token}` } : {}),
-        },
-        body: JSON.stringify({
-          model: config.model,
-          temperature: 0,
-          max_tokens: tokens,
-          stream: false,
-          messages: current,
-          // MLX accepts tokenizer arguments separately from the OpenAI schema.
-          // Small authoring stages reserve their output for arguments, not deliberation.
-          ...(config.provider === "local" && config.localRuntime === "mlx"
-            ? { chat_template_kwargs: { enable_thinking: false } }
-            : {}),
-          ...(schema
-            ? {
-                response_format: {
-                  type: "json_schema",
-                  json_schema: {
-                    name: "authoring_stage",
-                    strict: true,
-                    schema,
-                  },
-                },
-              }
-            : {}),
-        }),
+        headers: providerRequest.headers,
+        body: JSON.stringify(providerRequest.body),
       });
     } catch (err) {
       if (combined.aborted) throw err;
-      throw new PlannerError(
-        config.provider === "local"
-          ? config.localRuntime === "ollama"
-            ? "Cannot reach local Ollama. Start it with ollama serve."
-            : "Cannot reach local Apertus. Start it with make -C src/inference run."
-          : "Cannot reach hosted Apertus. Check its endpoint and credentials.",
-        502,
-      );
+      throw new PlannerError(connectionError(config), 502);
     }
     if (!response.ok) {
       await response.body?.cancel();
-      if (response.status === 404 && config.localRuntime === "ollama") {
+      if (
+        response.status === 404 &&
+        config.connection === "local" &&
+        config.localRuntime === "ollama"
+      ) {
         throw new PlannerError(
           `Ollama model '${config.model}' not found. Run 'ollama pull ${config.model}' or check available models with 'ollama list'.`,
           503,
         );
       }
       throw new PlannerError(
-        `Apertus inference returned HTTP ${response.status}.`,
-        502,
+        `${config.label} inference returned HTTP ${response.status}.${response.status === 401 || response.status === 403 ? " Check credentials and model access." : response.status === 404 ? " Check LLM_MODEL and model access." : ""}`,
+        response.status === 429 ? 429 : 502,
       );
     }
     // Provider output is bounded independently of its declared token limit.
     const body = response.body?.getReader();
     if (!body)
-      throw new PlannerError("Apertus returned no response body.", 502);
+      throw new PlannerError(`${config.label} returned no response body.`, 502);
     let size = 0;
     const chunks: Uint8Array[] = [];
     try {
@@ -141,20 +127,17 @@ export async function requestStructured<T>(
       offset += chunk.length;
     }
     const data = JSON.parse(new TextDecoder().decode(bytes));
-    const choice = data?.choices?.[0];
-    const content = choice?.message?.content;
-    const tokenCount = (value: unknown) =>
-      Number.isSafeInteger(value) && Number(value) >= 0 ? Number(value) : null;
-    const usage = {
-      promptTokens: tokenCount(data.usage?.prompt_tokens),
-      outputTokens: tokenCount(data.usage?.completion_tokens),
-      totalTokens: tokenCount(data.usage?.total_tokens),
-    };
+    const { content, finishReason, usage, model } = readProviderResponse(
+      config,
+      data,
+    );
     options.onEvent?.("inference", {
       stage: options.stage,
-      model: data.model ?? config.model,
+      provider: config.provider,
+      connection: config.connection,
+      model,
       elapsedMs: Date.now() - started,
-      finishReason: choice?.finish_reason ?? null,
+      finishReason,
       maxTokens: tokens,
       contextCapacity: config.contextTokens,
       usage,
@@ -169,7 +152,7 @@ export async function requestStructured<T>(
         "Inference input plus output reserve exceeds the configured context capacity.",
         502,
       );
-    if (choice?.finish_reason === "length")
+    if (finishReason === "length")
       throw new Error(
         "Output was truncated; return only the requested small arguments",
       );
@@ -179,11 +162,15 @@ export async function requestStructured<T>(
       content.length > 16000
     )
       throw new Error("Expected one bounded JSON response");
-    return content;
+    return providerRequest.restore(content);
   };
   try {
-    const key = `${config.baseUrl}/${config.model}`;
-    if (config.structuredOutput === "auto" && !capabilities.has(key)) {
+    const key = `${config.provider}/${config.baseUrl}/${config.model}`;
+    if (
+      config.provider === "apertus" &&
+      config.structuredOutput === "auto" &&
+      !capabilities.has(key)
+    ) {
       const probeSchema = {
         type: "object",
         additionalProperties: false,
@@ -233,7 +220,10 @@ export async function requestStructured<T>(
       });
     }
     const schema =
-      capabilities.get(key) && options.schema ? options.schema : undefined;
+      config.structuredOutput === "auto" &&
+      (config.provider !== "apertus" || capabilities.get(key))
+        ? options.schema
+        : undefined;
     let issue: string | undefined;
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
@@ -270,7 +260,7 @@ export async function requestStructured<T>(
               (options.budget && options.budget.repairs >= 2)
             )
               throw new PlannerError(
-                `Apertus returned invalid stage arguments: ${issue}`,
+                `${config.label} returned invalid stage arguments: ${issue}`,
                 502,
               );
             continue;
@@ -303,27 +293,23 @@ export async function requestStructured<T>(
       }
       if (attempt === 1 || (options.budget && options.budget.repairs >= 2))
         throw new PlannerError(
-          `Apertus returned invalid stage arguments: ${issue}`,
+          `${config.label} returned invalid stage arguments: ${issue}`,
           502,
         );
     }
-    throw new PlannerError("No valid Apertus result.", 502);
+    throw new PlannerError(`No valid ${config.label} result.`, 502);
   } catch (error) {
     if (signal?.aborted) {
       options.budget?.check();
-      throw new PlannerError("Apertus request cancelled.", 499);
+      throw new PlannerError(`${config.label} request cancelled.`, 499);
     }
     if (timeout.aborted)
-      throw new PlannerError("Apertus timed out. Please try again.", 504);
+      throw new PlannerError(
+        `${config.label} timed out. Please try again.`,
+        504,
+      );
     if (error instanceof PlannerError) throw error;
-    throw new PlannerError(
-      config.provider === "local"
-        ? config.localRuntime === "ollama"
-          ? "Cannot reach local Ollama. Start it with ollama serve."
-          : "Cannot reach local Apertus. Start it with make -C src/inference run."
-        : "Cannot reach hosted Apertus. Check its endpoint and credentials.",
-      502,
-    );
+    throw new PlannerError(connectionError(config), 502);
   } finally {
     active--;
   }

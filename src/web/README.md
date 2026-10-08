@@ -24,7 +24,7 @@ Laya is optional for ambiguous selection. To enable it, run `make -C src/inferen
 
 `POST /api/apertus` uses a versioned GenerationRequest/GenerationResult protocol. Apertus interprets teaching intent and returns small arguments for the exact selected recipe or typed authoring tools. Application code owns identifiers, bindings, layout, topology, validation, and the complete expanded recipe. The new path does not use the historical planner.
 
-The request has one deadline (at most 120 seconds), six Apertus calls, one repair per stage and two repairs total, one optional Laya selection, one broader retrieval, and twelve successful authoring operations. Each repair uses a fresh focused prompt. Structured-output support is probed by behavior in `auto` mode; `strict-json` uses the same schema and semantic validation without requesting provider grammar support. Provider token usage is recorded when supplied; absent usage is recorded as unknown. Set `APERTUS_CONTEXT_TOKENS` only to a verified provider context capacity.
+The request has one deadline (at most 120 seconds), six LLM calls, one repair per stage and two repairs total, one optional Laya selection, one broader retrieval, and twelve successful authoring operations. Each repair uses a fresh focused prompt. Apertus structured-output support is probed by behavior in `auto` mode; cloud providers use native schema formats; `strict-json` uses the same schema and semantic validation without requesting provider grammar support. Provider token usage is recorded when supplied; absent usage is recorded as unknown. Set `LLM_CONTEXT_TOKENS` (or the legacy `APERTUS_CONTEXT_TOKENS` for Apertus) only to a verified provider context capacity.
 
 Generation supports arithmetic addition/subtraction, independent rectangle comparisons, and the existing truss mechanism. Bridge responses remain heuristic: requests for engineering deflection retain a useful bridge lesson with visible limitations. Friction, momentum, weight alone, and unrelated concepts have no supported teaching overlap. A partial result explicitly identifies covered and omitted concepts.
 
@@ -56,11 +56,59 @@ For integration verification, point `MONGODB_TEST_URI` at a disposable local Mon
 
 ## Provider configuration
 
-`APERTUS_PROVIDER=local` uses `APERTUS_LOCAL_BASE_URL` (including `/v1`) and `APERTUS_LOCAL_MODEL`. Run inference separately from Next.js. A deployed server's loopback address refers to that server.
+Set server-only variables in `src/web/.env.local`, then restart Next.js. Both Experiments and Builder use the selected provider through the existing `/api/apertus` endpoint. Provider selection is deployment-wide; the browser does not send credentials or choose a provider. Each generation keeps the same resolved settings across its stages and repairs. An unavailable provider fails explicitly; there is no automatic switch to another provider.
 
-Hosted mode uses `APERTUS_PROVIDER=huggingface`, `HF_TOKEN`, and a served `APERTUS_HF_MODEL`; `APERTUS_HF_BASE_URL` defaults to `https://router.huggingface.co/v1`. Downloadable MLX weights need not be available through hosted inference. Hosted deployment remains unverified. Configuration and credentials are server-only. Restart Next.js after changing `.env.local`. There is no automatic provider switch.
+For OpenAI GPT-5.6 Luna:
 
-`PLANNER_MAX_CONCURRENT_REQUESTS` and `APERTUS_MAX_CONCURRENT_REQUESTS` bound per-process concurrency. Cancellation aborts downstream HTTP work; it cannot interrupt an already running MLX computation. Other platforms can supply a compatible inference server.
+```dotenv
+LLM_PROVIDER=openai
+LLM_MODEL=gpt-5.6-luna
+OPENAI_API_KEY=your-api-key
+```
+
+The OpenAI adapter uses the Responses API with `store=false`. If `LLM_MODEL` is omitted, OpenAI defaults to `gpt-5.6-luna`. Luna defaults to reasoning effort `none` so bounded authoring stages reserve their output for arguments. `OPENAI_REASONING_EFFORT` can override it; other models use their provider default unless this variable is set. Supported efforts and output formats differ by model. Selecting a model does not grant your API account access to it. Use an API key with model access and billing enabled.
+
+For Anthropic, supply the exact Claude model ID available to your account:
+
+```dotenv
+LLM_PROVIDER=anthropic
+LLM_MODEL=your-claude-model-id
+ANTHROPIC_API_KEY=your-api-key
+```
+
+The Anthropic adapter uses the Messages API, separating the system prompt from user/assistant messages. `LLM_MODEL` is required for Anthropic. Neither cloud provider requires a local inference service. Laya remains a separate optional local selection service: use `PLANNER_MODE=apertus` to skip it entirely even when OpenAI or Anthropic is selected. The legacy mode name controls Laya usage, not the LLM provider.
+
+To switch back to local Apertus:
+
+```dotenv
+LLM_PROVIDER=apertus
+APERTUS_PROVIDER=local
+APERTUS_LOCAL_RUNTIME=mlx
+APERTUS_LOCAL_BASE_URL=http://127.0.0.1:43101/v1
+APERTUS_LOCAL_MODEL=m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4
+```
+
+Remove or comment out `LLM_MODEL` when switching back so the existing `APERTUS_LOCAL_MODEL` or `APERTUS_HF_MODEL` takes effect. An explicitly set `LLM_MODEL` overrides either Apertus model variable. Leaving `LLM_PROVIDER` unset preserves the existing Apertus configuration. MLX and Ollama continue using their existing OpenAI-compatible Chat Completions transport; Ollama requires its own configured base URL/model. Run local inference separately from Next.js. A deployed server's loopback address refers to that server.
+
+Hosted Apertus uses `APERTUS_PROVIDER=huggingface`, `HF_TOKEN`, and a served `APERTUS_HF_MODEL`; `APERTUS_HF_BASE_URL` defaults to `https://router.huggingface.co/v1`. Downloadable MLX weights need not be available through hosted inference.
+
+Optional common settings take precedence over corresponding Apertus settings:
+
+| Variable | Behavior |
+| --- | --- |
+| `LLM_TIMEOUT_MS` | Per-call deadline, 1–600000 ms; defaults to 120000 for cloud providers. The planner's total deadline still applies. |
+| `LLM_MAX_TOKENS` | Output-token ceiling, 1–128000; defaults to 4096 for cloud providers. Individual stages may request fewer tokens; reasoning tokens share the provider's output budget. |
+| `LLM_MAX_CONCURRENT_REQUESTS` | Per-process concurrent LLM calls, 1–16; defaults to 1 for cloud providers. |
+| `LLM_STRUCTURED_OUTPUT` | `auto` (default): native cloud schemas, behavior probe for Apertus. `strict-json`: skip provider grammar, retain application validation and repairs. Use this for models without native schema support. |
+| `LLM_CONTEXT_TOKENS` | Optional verified input-plus-output capacity, 1–2000000. Provider-reported usage is checked against this capacity; this is not a tokenizer-based preflight. |
+
+Without these overrides, Apertus keeps its existing `APERTUS_*` settings. Cloud providers ignore unused Apertus configuration. `PLANNER_MAX_CONCURRENT_REQUESTS` still independently limits complete generations. Cancellation aborts downstream HTTP work; it cannot interrupt an already running MLX computation.
+
+Native schema adapters wrap root arrays, translate OpenAI optional properties to nullable required fields and restore omitted fields before validation, and remove unsupported Anthropic grammar constraints while retaining them in field descriptions. The original application validators still enforce all bounds and semantic rules. HTTP failures and refusals do not consume JSON repair attempts. Local diagnostics identify provider, connection, model, duration and normalized token usage without credentials; Anthropic input usage includes cached input tokens. Enable `PLANNER_DIAGNOSTICS=true` only locally; traces contain prompts and are disabled in production.
+
+Run `pnpm test:generation:providers` for deterministic adapter/configuration fault coverage. These mocked tests do not establish live OpenAI, Anthropic or hosted Apertus quality or account access. For a live smoke test, configure the provider, restart the app, generate the same prompt in Builder or Experiments, and inspect the diagnostic trace. Switch providers and restart between comparison runs, using the same starting experiment state.
+
+API references: [OpenAI GPT-5.6 Luna](https://developers.openai.com/api/docs/models/gpt-5.6-luna), [OpenAI structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs), [Anthropic Messages](https://platform.claude.com/docs/en/api/messages/create), and [Anthropic structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs).
 
 ## Verification
 
@@ -99,7 +147,7 @@ Implementation, cleanup, and verification evidence for phases 1–3 live in `../
 ## Ownership
 
 - `src/lib/planner`: protocol, teaching stages, retrieval, budgets, coverage, and diagnostics.
-- `src/lib/apertus`, `src/lib/laya`: bounded provider transports and optional shortlist selection.
+- `src/lib/llm`, `src/lib/apertus`, `src/lib/laya`: provider configuration/adapters, shared bounded transport, and optional shortlist selection.
 - `src/simulations/components/catalog`: authoritative schemas and teaching metadata.
 - `src/simulations/runtime/authoring`: pure shared insertion, bindings, arrangement, transactions, and finalization.
 - `src/simulations/runtime/recipeSession.ts`: canonical authored/runtime revisions, clock, history, and snapshots.

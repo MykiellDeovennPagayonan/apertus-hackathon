@@ -1,4 +1,4 @@
-import { readConfig } from "../apertus/config";
+import { readLlmConfig } from "../llm/config";
 export interface PlannerTrace {
   id: string;
   startedAt: string;
@@ -18,17 +18,19 @@ export function startTrace(id: string, prompt: string) {
   const started = Date.now();
   let configuration: unknown;
   try {
-    const a = readConfig();
+    const a = readLlmConfig();
     configuration = {
       mode: process.env.PLANNER_MODE ?? "hybrid",
-      apertus: {
+      llm: {
         model: a.model,
         provider: a.provider,
+        connection: a.connection,
         baseUrl: a.baseUrl,
         structuredOutput: a.structuredOutput,
         contextCapacity: a.contextTokens,
         maxTokens: a.maxTokens,
-        temperature: 0,
+        ...(a.provider === "apertus" ? { temperature: 0 } : {}),
+        reasoningEffort: a.reasoningEffort ?? null,
         timeout: a.timeout,
       },
       laya: {
