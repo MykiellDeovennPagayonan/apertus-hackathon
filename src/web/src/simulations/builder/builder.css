@@ -13,11 +13,11 @@
 .builder-start * {
   box-sizing: border-box;
 }
-.manual-builder button:not(.builder-composer *),
+.manual-builder button,
 .builder-start button,
-.manual-builder select:not(.builder-composer *),
-.manual-builder input:not([type="range"]):not([type="checkbox"]):not(.builder-composer *),
-.manual-builder textarea:not(.builder-composer *) {
+.manual-builder select,
+.manual-builder input:not([type="range"]):not([type="checkbox"]),
+.manual-builder textarea {
   font: inherit;
   color: inherit;
   border: 1px solid var(--builder-border);
@@ -50,12 +50,12 @@
   align-items: center;
   gap: 10px;
 }
-.manual-builder input:not(.builder-composer *),
-.manual-builder select:not(.builder-composer *),
-.manual-builder textarea:not(.builder-composer *) {
+.manual-builder input,
+.manual-builder select,
+.manual-builder textarea {
   min-width: 0;
 }
-.manual-builder textarea:not(.builder-composer *) {
+.manual-builder textarea {
   min-height: 100px;
   resize: vertical;
   width: 100%;
