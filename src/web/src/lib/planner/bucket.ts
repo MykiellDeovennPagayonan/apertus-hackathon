@@ -37,6 +37,18 @@ const words = (text: string) =>
 const contains = (text: string, phrase: string) =>
   ` ${words(text)} `.includes(` ${words(phrase)} `);
 
+const splitCamelCase = (text: string) =>
+  text.replace(/([a-z0-9])([A-Z])/g, "$1 $2").toLowerCase();
+
+const normalizeWord = (w: string) => {
+  const s = w.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (s.endsWith("ies") && s.length > 4) return s.slice(0, -3) + "y";
+  if (s.endsWith("es") && s.length > 4) return s.slice(0, -2);
+  if (s.endsWith("s") && s.length > 3) return s.slice(0, -1);
+  if (s.endsWith("ing") && s.length > 5) return s.slice(0, -3);
+  return s;
+};
+
 export function buildInitialCard(id: string): ComponentBucketCard | null {
   const def = publicDefinitions.get(id);
   if (!def) return null;
@@ -57,31 +69,73 @@ export function buildInitialCard(id: string): ComponentBucketCard | null {
   const supports = [...def.tags];
   if (def.configuration.type === "object" && def.configuration.properties) {
     for (const p of Object.keys(def.configuration.properties)) {
-      if (!supports.includes(p)) supports.push(p);
+      if (p.length > 2 && !supports.includes(p)) supports.push(p);
     }
   }
   for (const o of Object.keys(def.outputs)) {
-    if (!supports.includes(o)) supports.push(o);
+    if (o.length > 2 && !supports.includes(o)) supports.push(o);
   }
+
   const descLower = (def.description || "").toLowerCase();
+  const idLower = def.id.toLowerCase();
+
+  // Domain-specific keyword associations
   if (descLower.includes("friction") || descLower.includes("resistance")) {
-    if (!supports.includes("friction")) supports.push("friction");
-    if (!supports.includes("rolling resistance"))
-      supports.push("rolling resistance");
+    supports.push("friction", "rolling resistance", "stopping distance");
   }
   if (descLower.includes("pendulum")) {
-    if (!supports.includes("pendulum")) supports.push("pendulum");
-    if (!supports.includes("harmonic oscillator"))
-      supports.push("harmonic oscillator");
-    if (!supports.includes("oscillator")) supports.push("oscillator");
-    if (!supports.includes("oscillation")) supports.push("oscillation");
+    supports.push("pendulum", "harmonic oscillator", "oscillator", "oscillation", "period");
   }
   if (
     descLower.includes("circuit") ||
     descLower.includes("voltage") ||
     descLower.includes("current")
   ) {
-    if (!supports.includes("circuit")) supports.push("circuit");
+    supports.push("circuit", "voltage", "current", "resistance", "bulbs");
+  }
+  if (idLower.includes("dilution") || descLower.includes("diluting")) {
+    supports.push("dilution", "saline", "salt", "concentration", "salt water");
+  }
+  if (idLower.includes("reactionrate") || descLower.includes("reaction rate")) {
+    supports.push("reaction rate", "half life", "half-life", "temperature", "chemical kinetics");
+  }
+  if (idLower.includes("conservation") || descLower.includes("balancing chemical")) {
+    supports.push("chemical equation", "balancing", "conservation", "molecules");
+  }
+  if (idLower.includes("predatorprey") || descLower.includes("lotka")) {
+    supports.push("predator prey", "lotka volterra", "rabbits", "foxes", "population");
+  }
+  if (idLower.includes("plantgrowth") || descLower.includes("plant limiting")) {
+    supports.push("plant growth", "biomass", "limiting resource", "nutrients");
+  }
+  if (idLower.includes("diffusion") || descLower.includes("diffusion in water")) {
+    supports.push("diffusion", "dye", "concentration");
+  }
+  if (idLower.includes("compoundgrowth") || descLower.includes("compound and simple")) {
+    supports.push("compound interest", "simple interest", "interest rate", "principal", "annual rate");
+  }
+  if (idLower.includes("ringtraffic") || descLower.includes("traffic")) {
+    supports.push("traffic jam", "congestion", "headway", "vehicles");
+  }
+  if (idLower.includes("checkoutqueue") || descLower.includes("checkout cashiers")) {
+    supports.push(
+      "queue",
+      "checkout queue",
+      "cashiers",
+      "cashier",
+      "waiting time",
+      "arrival rate",
+      "service rate",
+    );
+  }
+  if (idLower.includes("equation") || descLower.includes("linear equation")) {
+    supports.push("solve equation", "balance scale", "linear equation");
+  }
+  if (idLower.includes("circle") || descLower.includes("radius")) {
+    supports.push("circle", "circumference", "diameter", "pi");
+  }
+  if (idLower.includes("line") || descLower.includes("slope")) {
+    supports.push("line slope", "linear function", "slope", "intercept");
   }
 
   return {
@@ -90,7 +144,7 @@ export function buildInitialCard(id: string): ComponentBucketCard | null {
     kind: "initial",
     title: def.title,
     summary: def.description || discovery?.summary || def.title,
-    supports,
+    supports: [...new Set(supports)],
     limitations: [...(def.assumptions || [])],
     inputs,
     outputs,
@@ -186,10 +240,13 @@ export function retrieveComponentBucket(
     const rank = searchRank(card.title, query);
     let score = rank === 0 ? 12 : rank === 1 ? 8 : rank === 2 ? 4 : 0;
     for (const s of card.supports) {
-      if (contains(query, s)) score += 3;
+      if (s.length > 1 && contains(query, s)) score += 3;
     }
     if (contains(query, card.title)) score += 5;
     if (contains(query, id)) score += 6;
+    for (const word of words(card.title).split(" ")) {
+      if (word.length > 3 && contains(query, word)) score += 2;
+    }
     // Baseline scores for essential UI scaffolding
     if (id === "displays/Readout") score += 2;
     if (id === "controls/Slider") score += 2;
@@ -208,7 +265,11 @@ export function retrieveComponentBucket(
       if (contains(intentTerms, card.title)) return true;
       if (contains(intentTerms, card.id)) return true;
       for (const s of card.supports) {
-        if (contains(intentTerms, s) || contains(s, intentTerms)) return true;
+        if (
+          s.length > 2 &&
+          (contains(intentTerms, s) || contains(s, intentTerms))
+        )
+          return true;
       }
       return false;
     };

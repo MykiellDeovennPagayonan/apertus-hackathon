@@ -157,7 +157,12 @@ export function computeOpenCompositionCoverage(
     }
   }
 
-  if (requested(/weight|mass/i)) {
+  const simulatesMass =
+    presentDefs.has("prefabs/chemistry/Dilution") ||
+    presentDefs.has("prefabs/natural-systems/DiffusionField") ||
+    presentDefs.has("models/BridgeLoad");
+
+  if (requested(/weight|mass/i) && !simulatesMass) {
     omitted.push("Weight / mass");
   }
   if (requested(/momentum/i)) {

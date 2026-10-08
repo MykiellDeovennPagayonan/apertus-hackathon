@@ -71,6 +71,46 @@ const TEST_CASES = [
     buildPrompt: "Build a projectile launcher composite with launch angle slider and distance readout",
     refinePrompt: "Add a launch speed slider control and an observation readout",
   },
+  {
+    id: "case-6-predator-prey",
+    name: "Predator-Prey Population Ecology",
+    description: "Lotka-Volterra ecosystem composite exploring rabbit growth, fox population, and cycle dynamics",
+    expectedModel: "prefabs/natural-systems/PredatorPrey",
+    buildPrompt: "Build a predator prey composite with rabbit growth control and fox count readout",
+    refinePrompt: "Add an initial rabbit population slider and an observation readout",
+  },
+  {
+    id: "case-7-reaction-rate",
+    name: "Chemical Reaction Kinetics",
+    description: "First-order reaction rate composite exploring Arrhenius temperature, reaction rate, and half-life",
+    expectedModel: "prefabs/chemistry/ReactionRate",
+    buildPrompt: "Build a chemical reaction rate composite with temperature slider and half-life readout",
+    refinePrompt: "Add an elapsed time observation readout",
+  },
+  {
+    id: "case-8-compound-growth",
+    name: "Compound and Simple Interest Growth",
+    description: "Financial growth composite comparing annual interest rate and total accumulated balance",
+    expectedModel: "prefabs/dynamic-systems/CompoundGrowth",
+    buildPrompt: "Build a compound interest composite with annual rate slider and balance readout",
+    refinePrompt: "Add a principal slider control and an observation readout",
+  },
+  {
+    id: "case-9-checkout-queue",
+    name: "Checkout Queue Operations",
+    description: "Queueing system composite exploring cashier count, customer arrival rate, and waiting times",
+    expectedModel: "prefabs/dynamic-systems/CheckoutQueue",
+    buildPrompt: "Build a checkout queue composite with cashier slider and waiting time readout",
+    refinePrompt: "Add an arrival rate slider control",
+  },
+  {
+    id: "case-10-circle-geometry",
+    name: "Circle Geometry & Pi Invariance",
+    description: "Circle geometry composite exploring radius, diameter, circumference, and constant pi ratio",
+    expectedModel: "prefabs/math-foundations/Circle",
+    buildPrompt: "Build a circle geometry composite with radius slider and circumference readout",
+    refinePrompt: "Add a diameter readout",
+  },
 ];
 
 async function executeStage(requestId, prompt, active) {

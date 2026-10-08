@@ -507,6 +507,50 @@ export function normalizeReferences(
       }
     }
 
+    const def =
+      typeof rawArgs.definition === "string"
+        ? publicDefinitions.get(rawArgs.definition)
+        : undefined;
+    if (
+      def?.configuration &&
+      typeof def.configuration === "object" &&
+      "properties" in def.configuration
+    ) {
+      const props = (def.configuration as Record<string, unknown>)
+        .properties as Record<string, Record<string, unknown>>;
+      for (const [propName, propSchema] of Object.entries(props || {})) {
+        if (
+          (propSchema.type === "number" || propSchema.type === "integer") &&
+          typeof cfg[propName] === "number"
+        ) {
+          let val = cfg[propName] as number;
+          if (
+            propName.toLowerCase().includes("rate") &&
+            typeof propSchema.maximum === "number" &&
+            propSchema.maximum <= 1 &&
+            val > 1
+          ) {
+            val = val / 100;
+            fixes.push(`normalized_insert_${propName}_percent_to_decimal`);
+          }
+          if (
+            typeof propSchema.minimum === "number" &&
+            val < propSchema.minimum
+          ) {
+            fixes.push(`clamped_insert_config_${propName}_min`);
+            val = propSchema.minimum;
+          } else if (
+            typeof propSchema.maximum === "number" &&
+            val > propSchema.maximum
+          ) {
+            fixes.push(`clamped_insert_config_${propName}_max`);
+            val = propSchema.maximum;
+          }
+          cfg[propName] = propSchema.type === "integer" ? Math.round(val) : val;
+        }
+      }
+    }
+
     // 5. Clean extra keys outside ["definition", "version", "alias", "configuration"]
     for (const key of Object.keys(rawArgs)) {
       if (!["definition", "version", "alias", "configuration"].includes(key)) {
@@ -625,7 +669,16 @@ export function normalizeReferences(
               (propSchema.type === "number" || propSchema.type === "integer") &&
               typeof changes[propName] === "number"
             ) {
-              const val = changes[propName] as number;
+              let val = changes[propName] as number;
+              if (
+                propName.toLowerCase().includes("rate") &&
+                typeof propSchema.maximum === "number" &&
+                propSchema.maximum <= 1 &&
+                val > 1
+              ) {
+                val = val / 100;
+                fixes.push(`normalized_config_${propName}_percent_to_decimal`);
+              }
               if (
                 typeof propSchema.minimum === "number" &&
                 val < propSchema.minimum
@@ -638,6 +691,8 @@ export function normalizeReferences(
               ) {
                 fixes.push(`clamped_config_${propName}_max`);
                 changes[propName] = propSchema.maximum;
+              } else {
+                changes[propName] = propSchema.type === "integer" ? Math.round(val) : val;
               }
             }
           }
@@ -664,7 +719,15 @@ export function normalizeReferences(
       fixes.push("defaulted_control_target");
     }
 
-    const validWidgets = ["slider", "toggle", "button", "stepper", "schema"];
+    const validWidgets = [
+      "slider",
+      "number",
+      "toggle",
+      "select",
+      "button",
+      "stepper",
+      "schema",
+    ];
     const widgetCandidate = (rawArgs.widget || rawArgs.type || rawArgs.control_type) as string;
     if (typeof widgetCandidate === "string" && validWidgets.includes(widgetCandidate.toLowerCase())) {
       rawArgs.widget = widgetCandidate.toLowerCase();
@@ -674,18 +737,53 @@ export function normalizeReferences(
     }
 
     if (document) {
-      const targetNode = document.nodes.find((n) => n.id === rawArgs.target);
+      const targetNode =
+        document.nodes.find(
+          (n) =>
+            n.id === rawArgs.target ||
+            n.id.endsWith(`/${rawArgs.target}`) ||
+            n.id.includes(String(rawArgs.target)),
+        ) || (document.nodes.length === 1 ? document.nodes[0] : undefined);
       if (targetNode) {
         const def = publicDefinitions.get(targetNode.definition);
-        if (def) {
-          if (!rawArgs.command && def.commands) {
-            const firstCmd = Object.keys(def.commands)[0];
-            if (firstCmd) {
-              rawArgs.command = firstCmd;
-              fixes.push(`defaulted_control_command_${firstCmd}`);
+        if (def && def.commands) {
+          const availableCommands = Object.keys(def.commands);
+          let cmd = def.commands[rawArgs.command as string];
+
+          if (!cmd && availableCommands.length > 0) {
+            const targetConcept = String(rawArgs.command || rawArgs.field || "")
+              .toLowerCase()
+              .replace(/^set:/, "")
+              .replace(/[^a-z0-9]/g, "");
+
+            // 1. Check if any command name contains targetConcept
+            const nameMatch = availableCommands.find((c) => {
+              const cClean = c.toLowerCase().replace(/[^a-z0-9]/g, "");
+              return (
+                cClean === targetConcept ||
+                cClean.includes(targetConcept) ||
+                (targetConcept.length > 3 && targetConcept.includes(cClean))
+              );
+            });
+
+            // 2. Check if any command takes an argument leaf containing targetConcept
+            const leafMatch = availableCommands.find((c) => {
+              const leaves = parameterLeaves(def.commands[c].arguments);
+              return leaves.some((l) =>
+                l.path.toLowerCase().replace(/[^a-z0-9]/g, "").includes(targetConcept),
+              );
+            });
+
+            const resolvedCmdName = nameMatch || leafMatch || availableCommands[0];
+            if (resolvedCmdName) {
+              fixes.push(
+                `normalized_control_command_${rawArgs.command}_to_${resolvedCmdName}`,
+              );
+              rawArgs.command = resolvedCmdName;
+              cmd = def.commands[resolvedCmdName];
             }
           }
-          const cmd = def.commands[rawArgs.command as string];
+
           if (cmd) {
             const leaves = parameterLeaves(cmd.arguments);
             if (leaves.length === 1 && rawArgs.field !== leaves[0].path) {
@@ -710,6 +808,30 @@ export function normalizeReferences(
               } else {
                 rawArgs.field = leaves[0].path;
                 fixes.push(`defaulted_control_field_${leaves[0].path}`);
+              }
+            }
+
+            // Normalize widget to match schema type
+            const targetLeaf =
+              leaves.find((l) => l.path === rawArgs.field) || leaves[0];
+            if (targetLeaf) {
+              if (
+                targetLeaf.schema.type === "enum" &&
+                rawArgs.widget !== "select"
+              ) {
+                fixes.push(
+                  `normalized_control_widget_${rawArgs.widget}_to_select_for_enum`,
+                );
+                rawArgs.widget = "select";
+              } else if (
+                targetLeaf.schema.type === "boolean" &&
+                rawArgs.widget !== "toggle" &&
+                rawArgs.widget !== "button"
+              ) {
+                fixes.push(
+                  `normalized_control_widget_${rawArgs.widget}_to_toggle_for_boolean`,
+                );
+                rawArgs.widget = "toggle";
               }
             }
           }
@@ -746,7 +868,13 @@ export function normalizeReferences(
     }
 
     if (document) {
-      const sourceNode = document.nodes.find((n) => n.id === rawArgs.source);
+      const sourceNode =
+        document.nodes.find(
+          (n) =>
+            n.id === rawArgs.source ||
+            n.id.endsWith(`/${rawArgs.source}`) ||
+            n.id.includes(String(rawArgs.source)),
+        ) || (document.nodes.length === 1 ? document.nodes[0] : undefined);
       if (sourceNode) {
         const def = publicDefinitions.get(sourceNode.definition);
         if (def) {
@@ -754,9 +882,17 @@ export function normalizeReferences(
             .filter(([_, port]) => port.kind === "value")
             .map(([k]) => k);
           if (rawArgs.output && !validOutputs.includes(rawArgs.output as string)) {
-            const match = validOutputs.find(
-              (o) => o.toLowerCase() === String(rawArgs.output).toLowerCase(),
-            );
+            const cleanOutput = String(rawArgs.output)
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, "");
+            const match = validOutputs.find((o) => {
+              const oClean = o.toLowerCase().replace(/[^a-z0-9]/g, "");
+              return (
+                oClean === cleanOutput ||
+                oClean.includes(cleanOutput) ||
+                cleanOutput.includes(oClean)
+              );
+            });
             if (match) {
               fixes.push(
                 `normalized_observation_output_${rawArgs.output}_to_${match}`,

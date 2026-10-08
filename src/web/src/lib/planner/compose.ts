@@ -1,4 +1,7 @@
-import { publicDefinition } from "../../simulations/components/catalog";
+import {
+  publicDefinition,
+  publicDefinitions,
+} from "../../simulations/components/catalog";
 import { finalizeRecipe } from "../../simulations/runtime/authoring/operations";
 import {
   autoConnectUnambiguous,
@@ -15,7 +18,7 @@ import {
 } from "../../simulations/runtime/authoring/types";
 import { loadRecipe } from "../../simulations/runtime/recipes/loadRecipe";
 import { type Message, requestStructured } from "../apertus/transport";
-import { retrieveComponentBucket } from "./bucket";
+import { buildInitialCard, retrieveComponentBucket } from "./bucket";
 import type { GenerationBudget } from "./budget";
 import { computeOpenCompositionCoverage } from "./coverage";
 import { PlannerError } from "./errors";
@@ -53,7 +56,27 @@ export async function compose(
   budget.check();
 
   // 1. Retrieve component bucket
-  const bucket = retrieveComponentBucket(request.prompt, intent);
+  const activeContextText = request.active
+    ? [
+        request.active.recipe.title,
+        request.active.recipe.description || "",
+        ...request.active.recipe.document.nodes.map((n) => n.definition),
+      ].join(" ")
+    : "";
+  const bucketPrompt = activeContextText
+    ? `${request.prompt} ${activeContextText}`
+    : request.prompt;
+  const bucket = retrieveComponentBucket(bucketPrompt, intent);
+
+  if (request.active?.recipe.document.nodes) {
+    for (const node of request.active.recipe.document.nodes) {
+      if (!bucket.some((c) => c.id === node.definition)) {
+        const card = buildInitialCard(node.definition);
+        if (card) bucket.unshift(card);
+      }
+    }
+  }
+
   const serializedChars = JSON.stringify(bucket).length;
   budget.trace?.("bucket", {
     count: bucket.length,
@@ -112,7 +135,18 @@ export async function compose(
       const handle =
         Object.entries(draft.handles).find(([, id]) => id === n.id)?.[0] ??
         n.id;
-      return { handle, definition: n.definition, config: n.configuration };
+      const def = publicDefinitions.get(n.definition);
+      return {
+        handle,
+        definition: n.definition,
+        commands: def ? Object.keys(def.commands) : [],
+        valueOutputs: def
+          ? Object.entries(def.outputs)
+              .filter(([, p]) => p.kind === "value")
+              .map(([k]) => k)
+          : [],
+        config: n.configuration,
+      };
     });
     const connectionsSummary = draft.document.connections.map(
       (c) => `${c.from.node}.${c.from.port} -> ${c.to.node}.${c.to.port}`,
