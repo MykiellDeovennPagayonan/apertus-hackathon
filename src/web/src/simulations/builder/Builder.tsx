@@ -1,4 +1,5 @@
 "use client";
+import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import CompositionBuilder from "./composition/CompositionBuilder";
 import {
@@ -17,7 +18,7 @@ import {
 } from "./persistence/recovery";
 import "./builder.css";
 import {
-  readLibrary,
+  loadLibrary,
   type SavedExperiment as Saved,
   saveEntry,
 } from "./persistence/storage";
@@ -25,6 +26,8 @@ import {
 const message = (e: unknown) =>
   e instanceof Error ? e.message : "Something went wrong";
 export default function Builder() {
+  const { data: account } = useSession();
+  const ownerId = account?.user.id;
   const [sessionRevision, setSessionRevision] = useState(0);
   const [doc, setDoc] = useState<ExperimentDocument | null>(null);
   const [valid, setValid] = useState<ExperimentDocument | null>(null);
@@ -59,6 +62,7 @@ export default function Builder() {
   );
   const [saved, setSaved] = useState<Saved[]>([]);
   const [saveId, setSaveId] = useState<string | null>(null);
+  const [saveRevision, setSaveRevision] = useState<number | undefined>();
   const [saving, setSaving] = useState(false);
   const [draftState, setDraftState] = useState("Saved locally");
   const storageBusy = useRef(false);
@@ -74,7 +78,12 @@ export default function Builder() {
     playingSaved,
   );
   const open = useCallback(
-    (next: ExperimentDocument, id: string | null = null, recovered = "") => {
+    (
+      next: ExperimentDocument,
+      id: string | null = null,
+      recovered = "",
+      revision?: number,
+    ) => {
       fileMenu.current?.removeAttribute("open");
       const convertedTown =
         next.template === "town" && Boolean(next.recipe) && !next.scene;
@@ -89,6 +98,7 @@ export default function Builder() {
       setPlayingSaved(false);
       setError("");
       setSaveId(id);
+      setSaveRevision(revision);
       setNotice(
         convertedTown
           ? "Town example converted to editable pieces. Residents now use explicit departure schedules and navigation across authored ground; the original saved copy stays intact until you save."
@@ -98,59 +108,84 @@ export default function Builder() {
     [resetHistory],
   );
   useEffect(() => {
-    try {
-      const entries = readLibrary();
-      if (!Array.isArray(entries))
-        throw new Error("Saved library is unreadable");
-      const usable = usableEntries(entries);
-      setSaved(usable);
-      if (usable.length !== entries.length)
-        setNotice(
-          "Some saved experiments use unsupported or invalid documents. Their stored copies have been preserved.",
-        );
-      // Development effect replay must reopen the same recipe after its URL is cleaned.
-      const recovered = initialRecovery.current ?? readBuilderRecovery(entries);
-      initialRecovery.current = recovered;
-      if (recovered.lesson) {
-        open(recovered.lesson.document, recovered.lesson.id);
-        setPlayingSaved(true);
-        setExpanded(true);
-      } else if (recovered.remix) {
-        open(recovered.remix);
-        window.history.replaceState(null, "", location.pathname);
-      } else if (recovered.draft) {
-        try {
-          open(
-            recovered.draft.document,
-            recovered.draft.saveId ?? null,
-            recovered.draft.recovery ?? "",
-          );
-        } catch {
-          open(recovered.draft.valid, recovered.draft.saveId ?? null);
-          setRecovery(JSON.stringify(recovered.draft.document, null, 2));
+    let disposed = false;
+    const initialize = async () => {
+      try {
+        const entries = await loadLibrary(ownerId);
+        if (disposed) return;
+        if (!Array.isArray(entries))
+          throw new Error("Saved library is unreadable");
+        const usable = usableEntries(entries);
+        setSaved(usable);
+        if (usable.length !== entries.length)
           setNotice(
-            "Recovered your last valid draft. The incomplete copy is available for repair.",
+            "Some saved experiments use unsupported or invalid documents. Their stored copies have been preserved.",
           );
-        }
-        setSelected(recovered.draft.selected ?? "");
-      } else open(createFreshDocument());
-    } catch (e) {
-      open(createFreshDocument());
-      setError(message(e));
-    }
-    setReady(true);
-  }, [open]);
+        // Development effect replay must reopen the same recipe after its URL is cleaned.
+        const recovered =
+          initialRecovery.current ?? readBuilderRecovery(entries, ownerId);
+        initialRecovery.current = recovered;
+        if (recovered.lesson) {
+          open(
+            recovered.lesson.document,
+            recovered.lesson.id,
+            "",
+            recovered.lesson.revision,
+          );
+          setPlayingSaved(true);
+          setExpanded(true);
+        } else if (recovered.remix) {
+          open(recovered.remix);
+          window.history.replaceState(null, "", location.pathname);
+        } else if (recovered.draft) {
+          try {
+            open(
+              recovered.draft.document,
+              recovered.draft.saveId ?? null,
+              recovered.draft.recovery ?? "",
+              recovered.draft.revision,
+            );
+          } catch {
+            open(
+              recovered.draft.valid,
+              recovered.draft.saveId ?? null,
+              "",
+              recovered.draft.revision,
+            );
+            setRecovery(JSON.stringify(recovered.draft.document, null, 2));
+            setNotice(
+              "Recovered your last valid draft. The incomplete copy is available for repair.",
+            );
+          }
+          setSelected(recovered.draft.selected ?? "");
+        } else open(createFreshDocument());
+      } catch (e) {
+        if (disposed) return;
+        open(createFreshDocument());
+        setError(message(e));
+      }
+      setReady(true);
+    };
+    void initialize();
+    return () => {
+      disposed = true;
+    };
+  }, [open, ownerId]);
   useEffect(() => {
     if (!ready || !doc || !valid || playingSaved) return;
     try {
       setDraftState("Saving locally…");
-      persistDraft({
-        document: doc,
-        valid,
-        selected,
-        saveId,
-        recovery,
-      });
+      persistDraft(
+        {
+          document: doc,
+          valid,
+          selected,
+          saveId,
+          ...(ownerId ? { revision: saveRevision } : {}),
+          recovery,
+        },
+        ownerId,
+      );
       setDraftState("Saved locally");
     } catch {
       setDraftState("Local save failed");
@@ -158,7 +193,17 @@ export default function Builder() {
         "Draft could not be stored locally. Export your experiment to keep a copy.",
       );
     }
-  }, [doc, valid, ready, selected, saveId, playingSaved, recovery]);
+  }, [
+    doc,
+    valid,
+    ready,
+    selected,
+    saveId,
+    saveRevision,
+    playingSaved,
+    recovery,
+    ownerId,
+  ]);
   const history = (
     <details className="builder-action-history">
       <summary>Action history ({past.length})</summary>
@@ -189,11 +234,15 @@ export default function Builder() {
       const id = saveId ?? crypto.randomUUID();
       const entries = await saveEntry(
         { id, document: doc },
-        saved.find((entry) => entry.id === id),
+        ownerId && saveId
+          ? { id, document: doc, revision: saveRevision }
+          : saved.find((entry) => entry.id === id),
+        ownerId,
       );
       setSaved(usableEntries(entries));
       setSaveId(id);
-      setNotice("Saved on this device.");
+      setSaveRevision(entries.find((entry) => entry.id === id)?.revision);
+      setNotice(ownerId ? "Saved to your account." : "Saved on this device.");
     } catch (e) {
       setNotice(`Couldn't save the experiment. ${message(e)}`);
     } finally {
@@ -248,12 +297,14 @@ export default function Builder() {
   );
   const library = saved.length > 0 && (
     <section className="builder-library">
-      <h2>Saved on this device</h2>
+      <h2>{ownerId ? "Your saved experiments" : "Saved on this device"}</h2>
       {saved.map((entry) => (
         <div key={entry.id}>
           <button
             type="button"
-            onClick={() => open(entry.document, entry.id, entry.recovery)}
+            onClick={() =>
+              open(entry.document, entry.id, entry.recovery, entry.revision)
+            }
           >
             Open {entry.document.lesson.title || "Untitled experiment"}
           </button>{" "}
@@ -276,8 +327,8 @@ export default function Builder() {
         document: valid,
         recovery: error ? JSON.stringify(doc, null, 2) : recovery,
       };
-      await saveEntry(backup);
-      setSaved((previous) => [...previous, backup]);
+      const entries = await saveEntry(backup, undefined, ownerId);
+      setSaved(usableEntries(entries));
       return true;
     } catch (e) {
       setNotice(`Your draft could not be preserved. ${message(e)}`);

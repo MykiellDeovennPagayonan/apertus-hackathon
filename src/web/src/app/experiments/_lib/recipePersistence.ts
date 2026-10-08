@@ -3,7 +3,7 @@ import {
   serializeDocument,
 } from "../../../simulations/builder/document/serialization";
 import {
-  readLibrary,
+  loadLibrary,
   type SavedExperiment,
   saveEntry,
 } from "../../../simulations/builder/persistence/storage";
@@ -14,25 +14,33 @@ const expected = new Map<string, SavedExperiment>();
 const queues = new Map<string, Promise<unknown>>();
 
 /** Store one accepted authored snapshot through the normal library/conflict workflow. */
-export function persistRecipe(session: RecipeSession) {
+export function persistRecipe(session: RecipeSession, ownerId?: string) {
   const id = session.recipe.id;
+  const key = `${ownerId ?? "guest"}:${id}`;
   const entry = { id, document: parseDocument(session.serialize()) };
   const write = async () => {
-    await saveEntry(entry, expected.get(id));
-    expected.set(id, structuredClone(entry));
-    sessionStorage.setItem(LAST_RECIPE, id);
+    const entries = await saveEntry(entry, expected.get(key), ownerId);
+    const saved = entries.find((item) => item.id === id);
+    if (!saved) throw new Error("The saved lesson could not be located.");
+    expected.set(key, structuredClone(saved));
+    sessionStorage.setItem(
+      ownerId ? `${LAST_RECIPE}:${ownerId}` : LAST_RECIPE,
+      id,
+    );
   };
-  const promise = (queues.get(id) ?? Promise.resolve())
+  const promise = (queues.get(key) ?? Promise.resolve())
     .catch(() => {})
     .then(write);
-  queues.set(id, promise);
+  queues.set(key, promise);
   return promise;
 }
-export function reopenAcceptedRecipe() {
-  const id = sessionStorage.getItem(LAST_RECIPE);
+export async function reopenAcceptedRecipe(ownerId?: string) {
+  const id = sessionStorage.getItem(
+    ownerId ? `${LAST_RECIPE}:${ownerId}` : LAST_RECIPE,
+  );
   if (!id) return null;
-  const entry = readLibrary().find((entry) => entry?.id === id);
+  const entry = (await loadLibrary(ownerId)).find((entry) => entry?.id === id);
   if (!entry) return null;
-  expected.set(id, structuredClone(entry));
+  expected.set(`${ownerId ?? "guest"}:${id}`, structuredClone(entry));
   return serializeDocument(entry.document);
 }

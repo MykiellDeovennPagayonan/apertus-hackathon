@@ -1,3 +1,7 @@
+import {
+  loadRemoteSimulations,
+  saveRemoteSimulation,
+} from "../../../lib/library/client";
 import { type ExperimentDocument, validateDocument } from "../document";
 
 export const DRAFT_KEY = "apertus-builder-draft-v1";
@@ -6,6 +10,7 @@ export type SavedExperiment = {
   id: string;
   document: ExperimentDocument;
   recovery?: string;
+  revision?: number;
 };
 
 export function readLibrary(): SavedExperiment[] {
@@ -17,13 +22,33 @@ export function readLibrary(): SavedExperiment[] {
   return entries;
 }
 
+export async function loadLibrary(
+  ownerId?: string,
+): Promise<SavedExperiment[]> {
+  return ownerId ? loadRemoteSimulations(ownerId) : readLibrary();
+}
+
 /** One complete storage replacement, using a cross-tab lock when supported. Unknown legacy entries are retained. */
 export async function saveEntry(
   entry: SavedExperiment,
   expected?: SavedExperiment,
+  ownerId?: string,
 ): Promise<SavedExperiment[]> {
   validateDocument(entry.document);
   const snapshot = structuredClone(entry);
+  if (ownerId) {
+    if (expected && expected.revision === undefined)
+      throw new Error(
+        "Reopen this experiment before saving it to your account.",
+      );
+    const entries = await loadRemoteSimulations(ownerId);
+    const saved = await saveRemoteSimulation(
+      snapshot,
+      ownerId,
+      expected?.revision ?? null,
+    );
+    return [...entries.filter((item) => item.id !== saved.id), saved];
+  }
   const write = () => {
     const entries = readLibrary();
     const current = entries.find((item) => item?.id === snapshot.id);

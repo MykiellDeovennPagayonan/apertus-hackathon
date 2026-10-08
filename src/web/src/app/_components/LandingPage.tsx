@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import AccountControl from "./AccountControl";
 import ApertusBadge from "./ApertusBadge";
 import ExperimentArt from "./ExperimentArt";
 import "./LandingPage.css";
@@ -39,6 +40,7 @@ export default function LandingPage({ children }: { children?: ReactNode }) {
         </Link>
         <nav aria-label="Main navigation">
           <Link href="/experiments">Explore experiments ↗</Link>
+          <AccountControl />
         </nav>
         <span className="local-status">
           <i /> Interactive experiments

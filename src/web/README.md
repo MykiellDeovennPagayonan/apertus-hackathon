@@ -30,6 +30,30 @@ Generation supports arithmetic addition/subtraction, independent rectangle compa
 
 Created or updated authored lessons are saved through the normal recipe library. Reload restores the accepted initial recipe. Runtime exploration changes current state without changing the saved starting values. Authored undo/redo retains recipe and coverage metadata. Save recipe, Open recipe, and voluntary Remix use the normal import/export and builder paths. Invalid output, cancellation, stale revisions, unsupported requests, and storage failures preserve the current lesson; storage failures expose a downloadable recovery recipe.
 
+## Accounts and MongoDB persistence
+
+NextAuth uses encrypted JWT sessions and the official MongoDB adapter for user identities and Google account links. Library requests recheck the user and session version in MongoDB. Configure the server-only variables in `.env.local` from `.env.example`: `MONGODB_URI`, `MONGODB_DB_NAME`, `NEXTAUTH_SECRET`, and `NEXTAUTH_URL`. Google additionally requires `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`. Generate a secret with `node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"`. Never commit its output. Set `NEXTAUTH_URL` to the app's actual origin; for local port 43100, register `http://localhost:43100/api/auth/callback/google` as the authorized redirect URI in your Google OAuth web client. Restart Next.js after changing configuration. See the [NextAuth Google setup](https://next-auth.js.org/providers/google). Previously issued database sessions require signing in again after the JWT migration.
+
+The custom interface lives at `/auth/sign-in`, `/auth/sign-up`, `/auth/forgot-password`, `/auth/reset-password`, and `/auth/verify-email`. Auth pages share an animated physics background with pause/resume and reduced-motion support. Sign-in and sign-out controls are available on the landing page and experiment catalog. With authentication unconfigured, the existing guest workspace remains available.
+
+**Draft limitation:** email/password registration, verification, and recovery are not connected to HTTP routes or an email transport yet. The forms and account-service groundwork are present; they are not completed email flows. Choosing the delivery provider and approving tests for these new endpoints are still pending. Google OAuth also needs a manual check with real credentials. Do not treat this draft as ready to deploy.
+
+Signed-in experiment saves, generated lessons, and reusable component recipes use MongoDB. Guests keep the existing device-local libraries. Guest records are not automatically uploaded or merged into an account. Draft recovery remains local, with separate keys for each account. Switching accounts resets the active workspace.
+
+| Collection | Contents and identity |
+| --- | --- |
+| `users`, `accounts` | User identities, Google account links, optional password hashes and verification/reset metadata, and session versions. |
+| `authLimits` | Hashed rate-limit buckets with expiry indexes for password/account requests. |
+| `sessions` | Legacy database-session records; new JWT sessions do not use this collection. |
+| `simulations` | `ownerId`, `experimentId`, full existing experiment `document`, optional `recovery`, `revision`, `createdAt`, `updatedAt`. Unique `(ownerId, experimentId)`. |
+| `components` | `ownerId`, full existing component `recipe`, `revision`, `createdAt`, `updatedAt`. Unique `(ownerId, recipe.id)`. |
+
+Collections and indexes initialize on the first database connection. Library collection validators enforce the storage envelope; the existing application validators check the complete document/recipe before writes. Existing collection validators are not replaced automatically. Built-in recipes stay in code, and saved documents preserve their existing version formats. The persistence `revision` is separate from recipe/document versions. Updates require the previously read revision; concurrent or stale saves return a conflict rather than overwriting another save.
+
+`GET`/`PUT /api/library/simulations` and `/api/library/components` derive the owner from the verified server session. Clients cannot choose another owner. Requests carry the expected account to reject stale tabs after account switches; saves require the configured origin and JSON bodies of at most 2 MB. Database errors return a generic unavailable message.
+
+For integration verification, point `MONGODB_TEST_URI` at a disposable local MongoDB server and run `pnpm test:database` from `src/web`. It creates and drops uniquely named test databases, starts its own local Next.js server, and tests real sessions, ownership, validation, concurrent conflicts, and browser save/load. Install Chromium with `pnpm exec playwright install chromium` or set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to an installed browser. These tests seed test sessions; live Google OAuth still requires a configured OAuth client and a manual sign-in check.
+
 ## Provider configuration
 
 `APERTUS_PROVIDER=local` uses `APERTUS_LOCAL_BASE_URL` (including `/v1`) and `APERTUS_LOCAL_MODEL`. Run inference separately from Next.js. A deployed server's loopback address refers to that server.

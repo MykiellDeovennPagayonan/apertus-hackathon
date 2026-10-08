@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { requestGeneration } from "../../../lib/planner/browser";
 import type { GenerationRequest } from "../../../lib/planner/schema";
@@ -24,6 +25,7 @@ import {
   saveRecipe,
 } from "../../../simulations/runtime/session";
 import type { DemoType } from "../../../simulations/runtime/types";
+import AccountControl from "../../_components/AccountControl";
 import CommandBar, { type ComposerStatus } from "../../_components/CommandBar";
 import LandingPage from "../../_components/LandingPage";
 import { premadeExperiments } from "../_lib/premadeExperiments";
@@ -37,6 +39,8 @@ export default function ExperimentsShell({
 }: {
   landing?: boolean;
 }) {
+  const { data: account } = useSession();
+  const ownerId = account?.user.id;
   const [draft, setDraft] = useState("");
   const [lastRequest, setLastRequest] = useState<{
     prompt: string;
@@ -144,7 +148,7 @@ export default function ExperimentsShell({
   }, [status]);
   useEffect(() => {
     const revision = ++startupRevision.current;
-    const timer = window.setTimeout(() => {
+    const timer = window.setTimeout(async () => {
       pending.current?.controller.abort();
       pending.current = null;
       setBusy(false);
@@ -156,7 +160,8 @@ export default function ExperimentsShell({
       if (!selectedExperiment) {
         if (landing)
           try {
-            const saved = reopenAcceptedRecipe();
+            const saved = await reopenAcceptedRecipe(ownerId);
+            if (revision !== startupRevision.current) return;
             if (saved) {
               activateRecipeSession(JSON.parse(saved));
               syncSession();
@@ -208,17 +213,18 @@ export default function ExperimentsShell({
       }
     }, 0);
     return () => {
+      ++startupRevision.current;
       window.clearTimeout(timer);
       pending.current?.controller.abort();
       pending.current = null;
       disposeSession();
     };
-  }, [selectedExperiment, landing, syncSession]);
+  }, [selectedExperiment, landing, syncSession, ownerId]);
 
   const persist = async (session: RecipeSession) => {
     const revision = session.authoredRevision;
     try {
-      await persistRecipe(session);
+      await persistRecipe(session, ownerId);
       return true;
     } catch (error) {
       if (
@@ -227,7 +233,7 @@ export default function ExperimentsShell({
       )
         setStatus({
           kind: "error",
-          text: "Your lesson is ready, but it couldn't be saved in this browser. Use Save recipe to download it.",
+          text: "Your lesson is ready, but it couldn't be saved. Use Save recipe to download it.",
           details:
             error instanceof Error
               ? error.message
@@ -436,6 +442,7 @@ export default function ExperimentsShell({
             ✳ apertus<span className="brand__suffix">/ experiments</span>
           </Link>
           <Link href="/">← Back to the lab</Link>
+          <AccountControl />
         </header>
         <ExperimentCatalog error={status?.text} />
       </div>
