@@ -160,7 +160,9 @@ const baseline = JSON.parse(
   ),
 );
 for (const [file, hash] of Object.entries(baseline.hashes)) {
-  const current = fs.readFileSync(path.join(repo, file));
+  const current = fs
+    .readFileSync(path.join(repo, file), "utf8")
+    .replace(/\r\n/g, "\n");
   if (
     /gas/i.test(file) ||
     !["arithmetic", "area-perimeter", "bridge"].some((slug) =>

@@ -2,6 +2,9 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env) {
   const provider = env.APERTUS_PROVIDER ?? "local";
   if (provider !== "local" && provider !== "huggingface")
     throw new Error("APERTUS_PROVIDER must be local or huggingface.");
+  const localRuntime = env.APERTUS_LOCAL_RUNTIME ?? "mlx";
+  if (localRuntime !== "mlx" && localRuntime !== "ollama")
+    throw new Error("APERTUS_LOCAL_RUNTIME must be mlx or ollama.");
   const online = provider === "huggingface";
   const baseUrl = online
     ? env.APERTUS_HF_BASE_URL || "https://router.huggingface.co/v1"
@@ -45,6 +48,7 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env) {
       ? integer("APERTUS_CONTEXT_TOKENS", 8192, 1000000)
       : null,
     provider,
+    localRuntime,
     baseUrl: baseUrl.replace(/\/+$/, ""),
     model,
     token,

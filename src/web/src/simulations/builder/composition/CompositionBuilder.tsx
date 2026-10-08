@@ -35,7 +35,9 @@ import {
   ManualComponentSettings,
   manualDefinition,
 } from "./ManualComponentSettings";
+import CommandBar from "../../../app/_components/CommandBar";
 import { download, useComponentCatalog } from "./useComponentCatalog";
+import { useBuilderAi } from "./useBuilderAi";
 import "./composition.css";
 type Edit = (
   change: (d: ExperimentDocument) => void,
@@ -99,6 +101,7 @@ export default function CompositionBuilder({
     };
   }, []);
   const catalog = useComponentCatalog(doc, edit);
+  const ai = useBuilderAi({ doc, edit });
   const {
     document,
     components,
@@ -702,6 +705,11 @@ export default function CompositionBuilder({
         catalog={catalog}
         open={libraryOpen}
         onClose={() => setLibraryOpen(false)}
+        onAiBuild={(prompt) => {
+          ai.onPrompt(prompt);
+          setLibraryOpen(false);
+        }}
+        aiBusy={ai.busy}
       />
       <SaveCompositeDialog
         catalog={catalog}
@@ -727,6 +735,43 @@ export default function CompositionBuilder({
           </button>
         </details>
       )}
+      <div className="builder-composer">
+        <CommandBar
+          placeholder={
+            doc.authored?.nodes?.length
+              ? "Add components, wire connections, or configure this composite…"
+              : "Describe a composite to build (e.g. spring-mass oscillator with slider and readout)…"
+          }
+          chips={
+            doc.authored?.nodes?.length
+              ? [
+                  "Add slider control component wired to model input",
+                  "Add observation readout component wired to output",
+                  "Connect available component ports",
+                  "Adjust model configuration parameters",
+                  "Group components into a reusable composite with exposed parameters",
+                ]
+              : [
+                  "Assemble harmonic oscillator composite with mass slider and readout",
+                  "Build inclined track composite with friction control and speedometer",
+                  "Create balance scale composite with weights and angle readout",
+                  "Assemble projectile launcher composite with launch angle control",
+                ]
+          }
+          disabled={ai.busy}
+          status={ai.status}
+          value={ai.draft}
+          onChange={ai.setDraft}
+          landing={false}
+          compact={true}
+          lastRequest={ai.lastRequest}
+          onSubmit={ai.onPrompt}
+          onStop={ai.cancel}
+          submitLabel={
+            doc.authored?.nodes?.length ? "Update Composite" : "Build Composite"
+          }
+        />
+      </div>
     </main>
   );
 }

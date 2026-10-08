@@ -132,28 +132,36 @@ export class RecipeSession {
   undo() {
     const previous = this.history.at(-1);
     if (!previous) return false;
-    this.runtime.updateDocument(previous.recipe.document);
-    this.history.pop();
-    this.redoHistory.push(this.checkpoint());
-    this.recipe = previous.recipe;
-    this.coverage = previous.coverage;
-    this.requestId = previous.requestId;
-    this.authoredRevision++;
-    this.publish();
-    return true;
+    try {
+      this.runtime.updateDocument(previous.recipe.document);
+      this.history.pop();
+      this.redoHistory.push(this.checkpoint());
+      this.recipe = previous.recipe;
+      this.coverage = previous.coverage;
+      this.requestId = previous.requestId;
+      this.authoredRevision++;
+      this.publish();
+      return true;
+    } catch {
+      return false;
+    }
   }
   redo() {
     const next = this.redoHistory.at(-1);
     if (!next) return false;
-    this.runtime.updateDocument(next.recipe.document);
-    this.redoHistory.pop();
-    this.history.push(this.checkpoint());
-    this.recipe = next.recipe;
-    this.coverage = next.coverage;
-    this.requestId = next.requestId;
-    this.authoredRevision++;
-    this.publish();
-    return true;
+    try {
+      this.runtime.updateDocument(next.recipe.document);
+      this.redoHistory.pop();
+      this.history.push(this.checkpoint());
+      this.recipe = next.recipe;
+      this.coverage = next.coverage;
+      this.requestId = next.requestId;
+      this.authoredRevision++;
+      this.publish();
+      return true;
+    } catch {
+      return false;
+    }
   }
   get canUndo() {
     return this.history.length > 0;

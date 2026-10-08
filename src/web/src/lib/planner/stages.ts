@@ -7,6 +7,7 @@ import {
   recipeOverrideSchema,
   type ToolRequest,
 } from "../../simulations/runtime/authoring/operations";
+import { DocumentRuntime } from "../../simulations/runtime/authoring/runtime";
 import type { AuthoredDocument } from "../../simulations/runtime/authoring/types";
 import { assertData } from "../../simulations/runtime/authoring/validate";
 import {
@@ -23,6 +24,7 @@ import {
   capabilityCards,
   compatibleComponents,
 } from "./catalog";
+import { normalizeReferences } from "./formatFixer";
 import { type Coverage, coverageSchema, exactKeys, record } from "./schema";
 
 const text: ParameterSchema = { type: "string", maxLength: 500 };
@@ -95,6 +97,50 @@ export function parseCreationResponse(
   value: unknown,
   slug: string,
 ): CreationArguments {
+  if (value && typeof value === "object" && "instances" in value) {
+    const rawInstances = (value as Record<string, unknown>).instances;
+    if (Array.isArray(rawInstances)) {
+      for (const inst of rawInstances) {
+        if (
+          inst &&
+          typeof inst === "object" &&
+          inst.overrides &&
+          typeof inst.overrides === "object"
+        ) {
+          const ov = inst.overrides as Record<string, unknown>;
+          if (slug === "bridge") {
+            if (
+              typeof ov.magnitude === "string" &&
+              /^-?[0-9]+(?:\.[0-9]+)?$/.test(ov.magnitude.trim())
+            ) {
+              ov.magnitude = Number(ov.magnitude.trim());
+            }
+            if (typeof ov.magnitude === "number") {
+              ov.magnitude = Math.min(30, Math.max(2, ov.magnitude));
+            }
+            if (
+              typeof ov.position === "string" &&
+              /^-?[0-9]+(?:\.[0-9]+)?$/.test(ov.position.trim())
+            ) {
+              ov.position = Number(ov.position.trim());
+            }
+            if (typeof ov.position === "number") {
+              if (ov.position > 0.95) {
+                if (ov.magnitude === undefined) {
+                  ov.magnitude = Math.min(30, Math.max(2, ov.position));
+                  delete ov.position;
+                } else {
+                  ov.position = 0.95;
+                }
+              } else if (ov.position < 0.05) {
+                ov.position = 0.05;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   validateValue(creationResponseSchema(slug), value, "creationArguments");
   const response = value as Record<string, unknown>;
   return parseCreation(
@@ -210,17 +256,33 @@ export function allowedOperations(
           }),
         });
     }
-    for (const [output, port] of Object.entries(handle.outputs))
-      if (port.kind === "value")
+    let snapshotOutputs: Record<string, unknown> = {};
+    try {
+      snapshotOutputs =
+        new DocumentRuntime(document).getSnapshot().outputs[handle.target] ??
+        {};
+    } catch {
+      // Document might not be runnable yet
+    }
+    for (const [output, port] of Object.entries(handle.outputs)) {
+      if (port.kind === "value") {
+        const val = snapshotOutputs[output];
+        const isNumeric =
+          (val !== undefined && typeof val === "number") || output === "board";
+        const allowedWidgets = isNumeric
+          ? (["readout", "inspector"] as const)
+          : (["inspector"] as const);
         list.push({
           tool: "add_observation",
           schema: object({
             source: target,
             output: choice(output),
-            widget: choice("readout", "inspector"),
+            widget: choice(...allowedWidgets),
             label: text,
           }),
         });
+      }
+    }
   }
   for (const def of compatibleComponents())
     list.push({
@@ -302,17 +364,29 @@ export function parseAuthoredFollowup(
     (value.status === "unsupported" && value.operations.length)
   )
     throw new Error("Invalid authoring outcome");
-  for (const operation of value.operations) {
+  for (let i = 0; i < value.operations.length; i++) {
+    const operation = value.operations[i];
     record(operation);
     exactKeys(operation, ["tool", "arguments"]);
     assertData(operation);
+    try {
+      const normalized = normalizeReferences(
+        operation as ToolRequest,
+        document.nodes.map((n) => n.id),
+        document,
+      );
+      value.operations[i] = normalized.request;
+    } catch {
+      // ignore
+    }
+    const currentOp = value.operations[i] as ToolRequest;
     const possibilities = allowedOperations(document).filter(
-      (entry) => entry.tool === operation.tool,
+      (entry) => entry.tool === currentOp.tool,
     );
     let last: unknown = new Error("Unavailable operation");
     const valid = possibilities.some((entry) => {
       try {
-        validateValue(entry.schema, operation.arguments);
+        validateValue(entry.schema, currentOp.arguments);
         return true;
       } catch (error) {
         last = error;
