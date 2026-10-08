@@ -19,6 +19,7 @@
     "test:builder:parity": "node scripts/builder/verify-builder-parity.cjs",
     "test:builder:parity:browser": "node scripts/verify-builder-parity-browser.cjs",
     "test:builder": "node scripts/builder/verify-builder.cjs",
+    "test:database": "node scripts/database/verify-library.cjs && node scripts/database/verify-api.cjs",
     "test:builder:browser": "node scripts/verify-unified-builder-browser.cjs && node scripts/verify-spatial-catalog-browser.cjs && node scripts/verify-builder-ux-reliability-browser.cjs",
     "test:composition": "node scripts/builder/verify-composition.cjs && node scripts/builder/verify-composition-graph.cjs && node scripts/builder/verify-architecture.cjs",
     "test:composition:browser": "node scripts/verify-composition-browser.cjs",
@@ -59,10 +60,13 @@
     "test:builder:live": "node scripts/generation/verify-builder-cases-live-ollama.cjs"
   },
   "dependencies": {
+    "@auth/mongodb-adapter": "3.11.3",
     "@react-three/drei": "10.7.9",
     "@react-three/fiber": "9.8.1",
     "framer-motion": "13.4.5",
+    "mongodb": "^6.21.0",
     "next": "16.3.8",
+    "next-auth": "4.24.15",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "three": "0.186.1",

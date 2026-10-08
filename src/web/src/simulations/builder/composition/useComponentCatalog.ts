@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { publicDefinition } from "../../components/catalog";
 import {
@@ -23,7 +24,10 @@ import type {
 import { validateAuthoredDocument } from "../../runtime/authoring/validate";
 import type { ExperimentDocument } from "../document";
 import { planInsertion } from "../editor/insertionPlan";
-import { RecipeRepository } from "../library/RecipeRepository";
+import {
+  loadComponentLibrary,
+  saveComponentRecipe,
+} from "../library/persistence";
 import { type Feedback, makeFeedback } from "./feedback";
 import { libraryChoices } from "./libraryChoices";
 
@@ -47,6 +51,8 @@ export function useComponentCatalog(
     action?: string,
   ) => boolean,
 ) {
+  const { data: account } = useSession();
+  const ownerId = account?.user.id;
   const document = requireValue(doc.authored);
   const [selection, select] = useState<string[]>([]),
     [query, search] = useState(""),
@@ -78,19 +84,26 @@ export function useComponentCatalog(
     report("");
   };
   useEffect(() => {
-    try {
-      setRecipes(new RecipeRepository(localStorage).read());
-    } catch (e) {
-      setMessage(
-        makeFeedback(
-          errorText(e),
-          "error",
-          "open the saved library",
-          "library.read",
-        ),
-      );
-    }
-  }, []);
+    let disposed = false;
+    loadComponentLibrary(ownerId)
+      .then((entries) => {
+        if (!disposed) setRecipes(entries);
+      })
+      .catch((e: unknown) => {
+        if (disposed) return;
+        setMessage(
+          makeFeedback(
+            errorText(e),
+            "error",
+            "open the saved library",
+            "library.read",
+          ),
+        );
+      });
+    return () => {
+      disposed = true;
+    };
+  }, [ownerId]);
   const [regeneration, setRegeneration] = useState<ReturnType<
     typeof regenerateTruss
   > | null>(null);
@@ -181,13 +194,7 @@ export function useComponentCatalog(
   const saveRecipe = async () => {
     try {
       const recipe = makeSelectionRecipe();
-      if (!navigator.locks)
-        throw new Error(
-          "This browser cannot coordinate local saves; export your recipe instead.",
-        );
-      await navigator.locks.request("apertus-composites-v1", () =>
-        setRecipes(new RecipeRepository(localStorage).save(recipe)),
-      );
+      setRecipes(await saveComponentRecipe(recipe, ownerId));
       report(
         `Saved ${recipe.title}${recipe.externalPorts.length ? ` with ${recipe.externalPorts.length} external ports` : ""}.`,
         "success",
@@ -319,13 +326,7 @@ export function useComponentCatalog(
         throw new Error(
           "This identity already exists. Save a separate copy to keep both assemblies.",
         );
-      if (!navigator.locks)
-        throw new Error(
-          "Local saving needs browser locks. Keep your file and try a supported browser.",
-        );
-      await navigator.locks.request("apertus-composites-v1", () =>
-        setRecipes(new RecipeRepository(localStorage).save(recipe)),
-      );
+      setRecipes(await saveComponentRecipe(recipe, ownerId));
       retain("");
       report(
         `Saved ${recipe.title} to your library.`,
