@@ -748,16 +748,35 @@ export function normalizeReferences(
         const def = publicDefinitions.get(targetNode.definition);
         if (def && def.commands) {
           const availableCommands = Object.keys(def.commands);
-          let cmd = def.commands[rawArgs.command as string];
+          let cmd: (typeof def.commands)[string] | undefined =
+            def.commands[rawArgs.command as string];
+
+          const isCommandBindable = (cName: string) => {
+            const cCmd = def.commands[cName];
+            if (!cCmd) return false;
+            const l = parameterLeaves(cCmd.arguments);
+            if (l.length === 0) return true;
+            return l.some((leaf) =>
+              ["number", "integer", "boolean", "enum", "string"].includes(
+                leaf.schema.type,
+              ),
+            );
+          };
+
+          if (cmd && !isCommandBindable(rawArgs.command as string)) {
+            cmd = undefined;
+          }
 
           if (!cmd && availableCommands.length > 0) {
+            const bindableCommands = availableCommands.filter(isCommandBindable);
+            const candidates = bindableCommands.length > 0 ? bindableCommands : availableCommands;
             const targetConcept = String(rawArgs.command || rawArgs.field || "")
               .toLowerCase()
               .replace(/^set:/, "")
               .replace(/[^a-z0-9]/g, "");
 
             // 1. Check if any command name contains targetConcept
-            const nameMatch = availableCommands.find((c) => {
+            const nameMatch = candidates.find((c) => {
               const cClean = c.toLowerCase().replace(/[^a-z0-9]/g, "");
               return (
                 cClean === targetConcept ||
@@ -767,14 +786,14 @@ export function normalizeReferences(
             });
 
             // 2. Check if any command takes an argument leaf containing targetConcept
-            const leafMatch = availableCommands.find((c) => {
+            const leafMatch = candidates.find((c) => {
               const leaves = parameterLeaves(def.commands[c].arguments);
               return leaves.some((l) =>
                 l.path.toLowerCase().replace(/[^a-z0-9]/g, "").includes(targetConcept),
               );
             });
 
-            const resolvedCmdName = nameMatch || leafMatch || availableCommands[0];
+            const resolvedCmdName = nameMatch || leafMatch || candidates[0];
             if (resolvedCmdName) {
               fixes.push(
                 `normalized_control_command_${rawArgs.command}_to_${resolvedCmdName}`,
@@ -812,31 +831,59 @@ export function normalizeReferences(
             }
 
             // Normalize widget to match schema type
-            const targetLeaf =
-              leaves.find((l) => l.path === rawArgs.field) || leaves[0];
-            if (targetLeaf) {
-              if (
-                targetLeaf.schema.type === "enum" &&
-                rawArgs.widget !== "select"
-              ) {
+            if (leaves.length === 0) {
+              if (rawArgs.widget !== "button") {
                 fixes.push(
-                  `normalized_control_widget_${rawArgs.widget}_to_select_for_enum`,
+                  `normalized_control_widget_${rawArgs.widget}_to_button_for_no_arg_command`,
                 );
-                rawArgs.widget = "select";
-              } else if (
-                targetLeaf.schema.type === "boolean" &&
-                rawArgs.widget !== "toggle" &&
-                rawArgs.widget !== "button"
-              ) {
+                rawArgs.widget = "button";
+              }
+              rawArgs.field = "";
+            } else {
+              if (rawArgs.widget === "button") {
+                const targetLeaf =
+                  leaves.find((l) => l.path === rawArgs.field) || leaves[0];
+                if (targetLeaf.schema.type === "boolean") {
+                  rawArgs.widget = "toggle";
+                } else if (targetLeaf.schema.type === "enum") {
+                  rawArgs.widget = "select";
+                } else {
+                  rawArgs.widget = "slider";
+                }
                 fixes.push(
-                  `normalized_control_widget_${rawArgs.widget}_to_toggle_for_boolean`,
+                  `normalized_control_widget_button_to_${rawArgs.widget}`,
                 );
-                rawArgs.widget = "toggle";
+              }
+              const targetLeaf =
+                leaves.find((l) => l.path === rawArgs.field) || leaves[0];
+              if (targetLeaf) {
+                if (
+                  targetLeaf.schema.type === "enum" &&
+                  rawArgs.widget !== "select"
+                ) {
+                  fixes.push(
+                    `normalized_control_widget_${rawArgs.widget}_to_select_for_enum`,
+                  );
+                  rawArgs.widget = "select";
+                } else if (
+                  targetLeaf.schema.type === "boolean" &&
+                  rawArgs.widget !== "toggle" &&
+                  rawArgs.widget !== "button"
+                ) {
+                  fixes.push(
+                    `normalized_control_widget_${rawArgs.widget}_to_toggle_for_boolean`,
+                  );
+                  rawArgs.widget = "toggle";
+                }
               }
             }
           }
         }
       }
+    }
+
+    if (typeof rawArgs.field !== "string") {
+      rawArgs.field = "";
     }
 
     if (typeof rawArgs.label !== "string" || !rawArgs.label.trim()) {

@@ -396,6 +396,7 @@ export async function compose(
       budget.trace?.("turn.executed", {
         turn: turn + 1,
         tool: turnResult.request.tool,
+        request: turnResult.request,
         status: lastReceipt.status,
         issues: lastReceipt.issues,
         revision: draft.revision,

@@ -94,28 +94,95 @@ export function buildInitialCard(id: string): ComponentBucketCard | null {
     supports.push("circuit", "voltage", "current", "resistance", "bulbs");
   }
   if (idLower.includes("dilution") || descLower.includes("diluting")) {
-    supports.push("dilution", "saline", "salt", "concentration", "salt water");
+    supports.push(
+      "dilution",
+      "saline",
+      "salt",
+      "concentration",
+      "salt water",
+      "dilute",
+      "beaker",
+      "solution",
+    );
   }
   if (idLower.includes("reactionrate") || descLower.includes("reaction rate")) {
-    supports.push("reaction rate", "half life", "half-life", "temperature", "chemical kinetics");
+    supports.push(
+      "reaction rate",
+      "half life",
+      "half-life",
+      "temperature",
+      "chemical kinetics",
+      "arrhenius",
+    );
   }
   if (idLower.includes("conservation") || descLower.includes("balancing chemical")) {
-    supports.push("chemical equation", "balancing", "conservation", "molecules");
+    supports.push(
+      "chemical equation",
+      "balancing",
+      "conservation",
+      "molecules",
+      "atoms",
+      "reactants",
+      "products",
+      "balancing equations",
+    );
   }
   if (idLower.includes("predatorprey") || descLower.includes("lotka")) {
-    supports.push("predator prey", "lotka volterra", "rabbits", "foxes", "population");
+    supports.push(
+      "predator prey",
+      "lotka volterra",
+      "rabbits",
+      "foxes",
+      "population",
+      "ecosystem",
+    );
   }
   if (idLower.includes("plantgrowth") || descLower.includes("plant limiting")) {
-    supports.push("plant growth", "biomass", "limiting resource", "nutrients");
+    supports.push(
+      "plant growth",
+      "biomass",
+      "limiting resource",
+      "nutrients",
+      "plant",
+      "plants",
+      "light",
+      "water",
+      "photosynthesis",
+    );
   }
   if (idLower.includes("diffusion") || descLower.includes("diffusion in water")) {
-    supports.push("diffusion", "dye", "concentration");
+    supports.push(
+      "diffusion",
+      "dye",
+      "concentration",
+      "dye diffusion",
+      "spread",
+      "dispersion",
+    );
   }
   if (idLower.includes("compoundgrowth") || descLower.includes("compound and simple")) {
-    supports.push("compound interest", "simple interest", "interest rate", "principal", "annual rate");
+    supports.push(
+      "compound interest",
+      "simple interest",
+      "interest rate",
+      "principal",
+      "annual rate",
+      "savings",
+      "investment",
+    );
   }
   if (idLower.includes("ringtraffic") || descLower.includes("traffic")) {
-    supports.push("traffic jam", "congestion", "headway", "vehicles");
+    supports.push(
+      "traffic jam",
+      "congestion",
+      "headway",
+      "vehicles",
+      "traffic",
+      "traffic flow",
+      "ring traffic",
+      "cars",
+      "brake",
+    );
   }
   if (idLower.includes("checkoutqueue") || descLower.includes("checkout cashiers")) {
     supports.push(
@@ -126,16 +193,39 @@ export function buildInitialCard(id: string): ComponentBucketCard | null {
       "waiting time",
       "arrival rate",
       "service rate",
+      "customers",
     );
   }
   if (idLower.includes("equation") || descLower.includes("linear equation")) {
-    supports.push("solve equation", "balance scale", "linear equation");
+    supports.push(
+      "solve equation",
+      "balance scale",
+      "linear equation",
+      "algebra",
+      "algebraic",
+      "solve for x",
+      "equation balance",
+    );
   }
   if (idLower.includes("circle") || descLower.includes("radius")) {
-    supports.push("circle", "circumference", "diameter", "pi");
+    supports.push(
+      "circle",
+      "circumference",
+      "diameter",
+      "pi",
+      "radius",
+    );
   }
   if (idLower.includes("line") || descLower.includes("slope")) {
-    supports.push("line slope", "linear function", "slope", "intercept");
+    supports.push(
+      "line slope",
+      "linear function",
+      "slope",
+      "intercept",
+      "rise and run",
+      "straight line",
+      "y=mx+b",
+    );
   }
 
   return {
