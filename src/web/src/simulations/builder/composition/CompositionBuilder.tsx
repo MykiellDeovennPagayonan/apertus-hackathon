@@ -739,33 +739,36 @@ export default function CompositionBuilder({
         <CommandBar
           placeholder={
             doc.authored?.nodes?.length
-              ? "Ask AI to add components, connect, or change the experiment…"
-              : "Describe an experiment to build with AI…"
+              ? "Add components, wire connections, or configure this composite…"
+              : "Describe a composite to build (e.g. spring-mass oscillator with slider and readout)…"
           }
           chips={
             doc.authored?.nodes?.length
               ? [
-                  "Add a slider to control parameters",
-                  "Add an observation readout",
-                  "Connect available outputs to inputs",
-                  "Change starting values",
+                  "Add slider control component wired to model input",
+                  "Add observation readout component wired to output",
+                  "Connect available component ports",
+                  "Adjust model configuration parameters",
+                  "Group components into a reusable composite with exposed parameters",
                 ]
               : [
-                  "Create an addition experiment with circles",
-                  "Compare two rectangles and their areas",
-                  "Build a harmonic oscillator with a spring and mass",
-                  "Help me learn how a truss bridge carries a load",
+                  "Assemble harmonic oscillator composite with mass slider and readout",
+                  "Build inclined track composite with friction control and speedometer",
+                  "Create balance scale composite with weights and angle readout",
+                  "Assemble projectile launcher composite with launch angle control",
                 ]
           }
           disabled={ai.busy}
           status={ai.status}
           value={ai.draft}
           onChange={ai.setDraft}
-          landing={!doc.authored?.nodes?.length}
+          landing={false}
           lastRequest={ai.lastRequest}
           onSubmit={ai.onPrompt}
           onStop={ai.cancel}
-          submitLabel={doc.authored?.nodes?.length ? "Apply" : "Build"}
+          submitLabel={
+            doc.authored?.nodes?.length ? "Update Composite" : "Build Composite"
+          }
         />
       </div>
     </main>

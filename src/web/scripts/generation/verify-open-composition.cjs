@@ -593,13 +593,67 @@ async function testBuilderAiIntegration() {
       results: [],
     },
     editor: structuredClone(authored.editor),
+    recipeMetadata: {
+      id: "composite/rolling-dynamics",
+      version: 2,
+      title: "Rolling Dynamics Composite",
+      description: "Composite with inclined track and velocity output",
+      parameters: [
+        {
+          name: "track_resistance",
+          node: authored.nodes[0].id,
+          field: "resistance",
+          schema: { type: "number", minimum: 0, maximum: 1 },
+          default: 0.1,
+        },
+      ],
+      externalPorts: [
+        {
+          name: "velocity_out",
+          endpoint: { node: authored.nodes[0].id, port: "speed" },
+          direction: "output",
+          port: { kind: "value", unit: "m/s", crossScope: true },
+        },
+      ],
+      tags: ["physics", "dynamics"],
+      assumptions: ["Ideal rigid ball rolling on track"],
+      dependencies: [],
+      nested: [],
+    },
   };
 
-  // 3. activeFromBuilderDocument creates a valid GenerationRequest active object
+  builderDoc.authored.groups = [
+    {
+      id: "group-1",
+      label: "Track Assembly",
+      members: [authored.nodes[0].id],
+      parameters: [
+        {
+          name: "track_height",
+          node: authored.nodes[0].id,
+          field: "height",
+          schema: { type: "number", minimum: 0.5, maximum: 5 },
+          default: 1.5,
+        },
+      ],
+      exposedPorts: [],
+      collapsed: false,
+    },
+  ];
+
+  // 3. activeFromBuilderDocument creates a valid GenerationRequest active object with complete composite details
   const active = activeFromBuilderDocument(builderDoc);
   assert.ok(active, "Active context created from populated builder document");
   assert.equal(active.recipe.title, "Rolling Dynamics");
   assert.equal(active.recipe.document.nodes.length, 1);
+  assert.equal(active.recipe.parameters.length, 2, "Both metadata and group parameters extracted");
+  assert.equal(active.recipe.parameters[0].name, "track_resistance");
+  assert.equal(active.recipe.parameters[1].name, "track_height");
+  assert.equal(active.recipe.externalPorts.length, 1, "External port extracted");
+  assert.equal(active.recipe.externalPorts[0].name, "velocity_out");
+  assert.ok(active.recipe.tags.includes("composite") && active.recipe.tags.includes("builder"), "Composite tags attached");
+  assert.deepEqual(active.recipe.assumptions, ["Ideal rigid ball rolling on track"], "Assumptions preserved");
+  assert.equal(active.recipe.document.groups.length, 1, "Authored groups preserved");
 
   // 4. Validate that this active context passes parseGenerationRequest
   const request = parseGenerationRequest({
@@ -610,6 +664,7 @@ async function testBuilderAiIntegration() {
     active,
   });
   assert.equal(request.active.sessionId, active.sessionId);
+  assert.ok(request.active.sessionId.startsWith("builder-"), "Builder session ID identified for composite builder");
 
   // 5. Test that AuthoringTransaction initialized with builder document populates handles
   const followUpTx = new AuthoringTransaction("draft-followup", builderDoc.authored);

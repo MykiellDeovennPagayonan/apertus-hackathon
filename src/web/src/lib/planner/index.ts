@@ -207,6 +207,10 @@ async function followup(
 ): Promise<GenerationResult | null> {
   const current = request.active;
   if (!current) throw new Error("A follow-up requires an active recipe");
+  if (current.sessionId.startsWith("builder-")) {
+    // Builder sessions are authoring workflows that compose or modify components and composites.
+    return null;
+  }
   const handles = activeHandles(current.recipe.document);
   if (!handles.length) {
     // Active recipe has no legacy handles (open composition or builder document);
@@ -640,7 +644,13 @@ export async function planPrompt(
       },
       768,
     );
-    const selected = await select(request, intent, budget);
+    const isBuilderModifyingComposite =
+      Boolean(request.active?.sessionId?.startsWith("builder-")) &&
+      (request.active?.recipe.document.nodes.length ?? 0) > 0;
+
+    const selected = isBuilderModifyingComposite
+      ? null
+      : await select(request, intent, budget);
     if (!selected) {
       budget.trace?.("selection.fallback_to_composition", {
         reason: "No single recipe fits request",

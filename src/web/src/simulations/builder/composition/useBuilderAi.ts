@@ -10,6 +10,7 @@ import {
 import type { GenerationRequest } from "../../../lib/planner/schema";
 import { reconcileBoard } from "../../runtime/authoring/board";
 import { finalizeRecipe } from "../../runtime/authoring/operations";
+import { publicDefinition } from "../../components/catalog";
 import type { ExperimentDocument } from "../document/types";
 
 export function activeFromBuilderDocument(
@@ -18,6 +19,18 @@ export function activeFromBuilderDocument(
   if (!doc.authored || !doc.authored.nodes?.length) return null;
   try {
     const authored = structuredClone(doc.authored);
+    if (!authored.formatVersion) {
+      authored.formatVersion = 3;
+    }
+    if (!authored.groups) {
+      authored.groups = [];
+    }
+    if (!authored.resources) {
+      authored.resources = [];
+    }
+    if (!authored.scopes) {
+      authored.scopes = [{ id: "main", label: "Main" }];
+    }
     if (!authored.lesson.title?.trim()) {
       authored.lesson.title = doc.lesson?.title?.trim() || "Working experiment";
     }
@@ -26,7 +39,112 @@ export function activeFromBuilderDocument(
         doc.lesson?.instruction?.trim() || "Explore the simulation";
     }
     reconcileBoard(authored);
-    const recipe = finalizeRecipe(authored);
+
+    const normalizeParam = (p: import("../../runtime/authoring/types").ExposedParameter) => {
+      const targetNode = authored.nodes.find((n) => n.id === p.node);
+      if (targetNode) {
+        try {
+          const def = publicDefinition(targetNode.definition);
+          const config = def.configuration;
+          const propSchema =
+            config.type === "object" && config.properties
+              ? config.properties[p.field]
+              : undefined;
+          if (propSchema) {
+            return {
+              ...p,
+              schema: structuredClone(propSchema),
+              default:
+                p.default !== undefined
+                  ? p.default
+                  : (targetNode.configuration[p.field] ?? def.defaults[p.field]),
+            };
+          }
+        } catch {}
+      }
+      return p;
+    };
+
+    const normalizePort = (ep: import("../../runtime/authoring/types").ExposedPort) => {
+      const targetNode = authored.nodes.find((n) => n.id === ep.endpoint.node);
+      if (targetNode) {
+        try {
+          const def = publicDefinition(targetNode.definition);
+          const portDef =
+            ep.direction === "input"
+              ? def.inputs[ep.endpoint.port]
+              : def.outputs[ep.endpoint.port];
+          if (portDef) {
+            return {
+              ...ep,
+              port: structuredClone(portDef),
+            };
+          }
+        } catch {}
+      }
+      return ep;
+    };
+
+    if (authored.groups) {
+      authored.groups = authored.groups.map((g) => ({
+        ...g,
+        parameters: (g.parameters || []).map(normalizeParam),
+        exposedPorts: (g.exposedPorts || []).map(normalizePort),
+      }));
+    }
+
+    // Extract all composite parameters from groups and metadata
+    const rawParams = [
+      ...(doc.recipeMetadata?.parameters ?? []),
+      ...(authored.groups || []).flatMap((g) => g.parameters || []),
+    ];
+    const exposedParams = rawParams.map(normalizeParam);
+
+    // Extract all external ports exposed at the composite boundary
+    const rawPorts = [
+      ...(doc.recipeMetadata?.externalPorts ?? []),
+      ...(authored.groups || []).flatMap((g) => g.exposedPorts || []),
+    ];
+    const externalPorts = rawPorts.map(normalizePort);
+
+    const tags = [
+      ...new Set([
+        ...(doc.recipeMetadata?.tags ?? []),
+        "composite",
+        "builder",
+        doc.template || "custom",
+      ]),
+    ];
+
+    const discovery = doc.recipeMetadata?.discovery ?? {
+      kind: "composite" as const,
+      group: "composites" as const,
+      summary:
+        doc.lesson?.instruction?.trim() ||
+        authored.lesson.instruction ||
+        "An assembly of connected components.",
+      placement: "Adds an assembly of connected components",
+    };
+
+    const recipe = finalizeRecipe(authored, {
+      id: doc.recipeMetadata?.id ?? `composite/${doc.template || "custom"}`,
+      version: doc.recipeMetadata?.version ?? 1,
+      title:
+        doc.lesson?.title?.trim() || authored.lesson.title || "Custom Composite",
+      description:
+        doc.lesson?.instruction?.trim() ||
+        authored.lesson.instruction ||
+        "Assembled composite component",
+      parameters: exposedParams,
+      externalPorts,
+      tags,
+      discovery,
+      assumptions: doc.recipeMetadata?.assumptions ?? [],
+      nested: doc.recipeMetadata?.nested ?? [],
+      dependencies: doc.recipeMetadata?.dependencies ?? [],
+      catalog: doc.recipeMetadata?.catalog,
+    });
+
     return {
       sessionId: `builder-${doc.template || "custom"}`,
       authoredRevision: 1,
@@ -97,8 +215,8 @@ export function useBuilderAi({
       setStatus({
         kind: "working",
         text: doc.authored?.nodes?.length
-          ? "Working out the changes…"
-          : "Building your experiment…",
+          ? "Assembling composite changes…"
+          : "Building composite components…",
       });
 
       try {
@@ -107,7 +225,10 @@ export function useBuilderAi({
           controller.signal,
           () => {
             if (pending.current === owner && !controller.signal.aborted) {
-              setStatus({ kind: "working", text: "Checking your experiment…" });
+              setStatus({
+                kind: "working",
+                text: "Validating composite connections and layout…",
+              });
             }
           },
         );
@@ -156,7 +277,7 @@ export function useBuilderAi({
               reconcileBoard(d.authored);
             },
             null,
-            `AI Build: ${promptLabel}`,
+            `AI Composite: ${promptLabel}`,
           );
 
           setDraft("");
@@ -173,8 +294,8 @@ export function useBuilderAi({
             kind: result.coverage.level === "partial" ? "info" : "success",
             text:
               result.status === "created"
-                ? "Ready — experiment built."
-                : "Experiment updated.",
+                ? "Composite built — components connected and arranged on canvas."
+                : "Composite updated — components and connections integrated.",
             details,
           });
           return;

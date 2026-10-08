@@ -27,20 +27,21 @@ import type {
 } from "./schema";
 import { buildTurnEnvelopeSchema, buildTurnTools } from "./turnSchema";
 
-const TURN_SYSTEM_PROMPT = `You are the simulation composition agent for Apertus.
-Your task is to build an interactive educational simulation experiment matching the user's intent.
+const TURN_SYSTEM_PROMPT = `You are the component and composite builder agent for Apertus.
+Your task is to build or modify an interactive simulation composite matching the user's intent.
+A composite is a reusable assembly of connected components (models, controls, observations, canvases) with typed ports and layout.
 Each turn, you must return a single JSON turn envelope containing either:
 1. {"action": "tool", "tool": {"tool": "<tool_name>", "arguments": { ... }}, "note": "<brief rationale>"}
 2. {"action": "done", "note": "<brief summary>"}
 
 Recommended sequence of operations:
 1. Insert required model/prefab components (insert_component with definition and alias).
-2. Connect required ports between components if needed.
-3. Configure model parameters to reflect constraints.
-4. Add interactive controls (add_control) for independent exploration.
+2. Connect required ports between components if needed (connect).
+3. Configure model parameters to reflect constraints (configure).
+4. Add interactive controls (add_control) for independent parameter exploration.
 5. Add observation readouts or graphs (add_observation) to show key outputs.
-6. Set lesson info (set_lesson) and layout arrangement (arrange).
-7. Return action "done" when the lesson is fully assembled.
+6. Set composite metadata and lesson info (set_lesson) and layout arrangement (arrange).
+7. Return action "done" when the composite is fully assembled and configured.
 Only use valid tool names and arguments from the provided schema. Do not output markdown fences or explanatory text outside the JSON envelope.`;
 
 export async function compose(
@@ -118,16 +119,40 @@ export async function compose(
     );
     const suggestions = suggestConnections(draft.document);
 
+    const isCompositeBuilder =
+      request.active?.sessionId?.startsWith("builder-") ?? false;
+
     const contextData = {
+      mode: isCompositeBuilder ? "composite_builder" : "experiment_planner",
       draftSummary: {
         nodes: nodesSummary,
         connections: connectionsSummary,
+        groups:
+          draft.document.groups?.map((g) => ({
+            id: g.id,
+            label: g.label,
+            members: g.members,
+            parameters: g.parameters,
+            exposedPorts: g.exposedPorts,
+          })) ?? [],
         unconnectedRequiredPorts: suggestions.map(
           (s) =>
             `${s.to.node}.${s.to.port} (compatible candidate: ${s.from.node}.${s.from.port})`,
         ),
         revision: draft.revision,
       },
+      compositeDetails: request.active?.recipe
+        ? {
+            id: request.active.recipe.id,
+            title: request.active.recipe.title,
+            description: request.active.recipe.description,
+            parameters: request.active.recipe.parameters,
+            externalPorts: request.active.recipe.externalPorts,
+            tags: request.active.recipe.tags,
+            assumptions: request.active.recipe.assumptions,
+            discovery: request.active.recipe.discovery,
+          }
+        : undefined,
       bucketComponents: bucket.map((c) => ({
         id: c.id,
         kind: c.kind,
@@ -155,35 +180,63 @@ export async function compose(
       (n) => publicDefinition(n.definition).category === "displays",
     ).length;
 
-    const wantedModels = intent.suggestedStructure === "comparison" ? 2 : 1;
-    const wantedControls = wantedModels;
-    const wantedObservations = wantedModels;
     let stepHint = "";
-    if (modelNodes.length < wantedModels) {
-      stepHint =
-        wantedModels > 1
-          ? "Step: insert the models to compare (insert_component or insert_recipe)."
-          : "Step: insert the single model needed (insert_component or insert_recipe).";
-    } else if (controlCount < wantedControls) {
-      stepHint =
-        "Step: add an interactive control (add_control) using a command and field that exist on the target model.";
-    } else if (observationCount < wantedObservations) {
-      stepHint =
-        "Step: add an observation readout (add_observation) using an output that exists on the source model.";
+    if (isCompositeBuilder) {
+      if (modelNodes.length === 0) {
+        stepHint =
+          "Step: insert the core physical or mathematical model component (insert_component or insert_recipe).";
+      } else if (
+        draft.document.connections.length === 0 &&
+        (controlCount > 0 || observationCount > 0)
+      ) {
+        stepHint =
+          "Step: connect controls or observation readouts to model ports (connect).";
+      } else if (controlCount === 0) {
+        stepHint =
+          "Step: add interactive control components (add_control) to manipulate composite model parameters.";
+      } else if (observationCount === 0) {
+        stepHint =
+          "Step: add observation or display components (add_observation) to visualize composite outputs.";
+      } else {
+        stepHint =
+          "Step: configure parameters (configure), set composite title/description (set_lesson), arrange layout (arrange), or return action 'done'.";
+      }
     } else {
-      stepHint =
-        "Step: configure parameters (configure), set lesson info (set_lesson), arrange layout (arrange), or return action 'done'.";
+      const wantedModels = intent.suggestedStructure === "comparison" ? 2 : 1;
+      const wantedControls = wantedModels;
+      const wantedObservations = wantedModels;
+      if (modelNodes.length < wantedModels) {
+        stepHint =
+          wantedModels > 1
+            ? "Step: insert the models to compare (insert_component or insert_recipe)."
+            : "Step: insert the single model needed (insert_component or insert_recipe).";
+      } else if (controlCount < wantedControls) {
+        stepHint =
+          "Step: add an interactive control (add_control) using a command and field that exist on the target model.";
+      } else if (observationCount < wantedObservations) {
+        stepHint =
+          "Step: add an observation readout (add_observation) using an output that exists on the source model.";
+      } else {
+        stepHint =
+          "Step: configure parameters (configure), set lesson info (set_lesson), arrange layout (arrange), or return action 'done'.";
+      }
     }
 
     const messages: Message[] = [
       { role: "system", content: TURN_SYSTEM_PROMPT },
       {
         role: "user",
-        content: `Original request: "${request.prompt}"\nLearning goal: "${intent.goal}"\nGuidance: ${stepHint}\nContext:\n${JSON.stringify(
-          contextData,
-          null,
-          2,
-        )}\n\nChoose the next single tool operation to perform, or choose done if complete.`,
+        content: isCompositeBuilder
+          ? `Original composite request: "${request.prompt}"\nGoal: "${intent.goal}"\nComposite Assembly Guidance: ${stepHint}\nContext:\n${JSON.stringify(
+              contextData,
+              null,
+              2,
+            )}\n\nChoose the next single tool operation to build or modify this composite, or choose done if complete.`
+          : `Original request: "${request.prompt}"\nLearning goal: "${intent.goal}"\nGuidance: ${stepHint}\nContext:\n${JSON.stringify(
+              contextData,
+              null,
+              2,
+            )}\n\nChoose the next single tool operation to perform, or choose done if complete.`,
       },
     ];
 
