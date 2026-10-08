@@ -763,6 +763,7 @@ export default function CompositionBuilder({
           value={ai.draft}
           onChange={ai.setDraft}
           landing={false}
+          compact={true}
           lastRequest={ai.lastRequest}
           onSubmit={ai.onPrompt}
           onStop={ai.cancel}

@@ -21,6 +21,7 @@ interface Props {
   onStop: () => void;
   submitLabel?: string;
   landing?: boolean;
+  compact?: boolean;
   lastRequest?: { prompt: string; details: string } | null;
 }
 export default function CommandBar({
@@ -34,6 +35,7 @@ export default function CommandBar({
   onStop,
   submitLabel = "Apply",
   landing = false,
+  compact = false,
   lastRequest,
 }: Props) {
   const input = useRef<HTMLTextAreaElement>(null);
@@ -104,7 +106,7 @@ export default function CommandBar({
   return (
     <div
       ref={root}
-      className={`command-bar${landing ? " command-bar--landing" : ""}`}
+      className={`command-bar${landing ? " command-bar--landing" : ""}${compact ? " command-bar--compact" : ""}`}
     >
       <div className="command-bar__meta">
         {status && (
@@ -211,6 +213,25 @@ export default function CommandBar({
           )}
         </div>
       )}
+      {compact && !disabled && !value.trim() && chips.length > 0 && !popover && (
+        <div
+          className="command-bar__quick-chips"
+          role="region"
+          aria-label="Quick suggestions"
+        >
+          {chips.slice(0, 3).map((c) => (
+            <button
+              key={c}
+              className="command-bar__quick-chip"
+              type="button"
+              onClick={() => choose(c)}
+            >
+              <span aria-hidden="true">✨</span>{" "}
+              {c.length > 34 ? `${c.slice(0, 31)}…` : c}
+            </button>
+          ))}
+        </div>
+      )}
       <form
         className="command-bar__form"
         onSubmit={(e) => {
@@ -248,6 +269,9 @@ export default function CommandBar({
               aria-controls={panelId}
               onClick={() => setPopover(popover === "ideas" ? null : "ideas")}
             >
+              <span aria-hidden="true" className="command-bar__ideas-icon">
+                💡
+              </span>{" "}
               Ideas
             </button>
           )}

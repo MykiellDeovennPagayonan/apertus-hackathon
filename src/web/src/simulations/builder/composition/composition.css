@@ -1998,19 +1998,33 @@ never beside the workspace. */
 .builder-composer {
   position: fixed;
   z-index: 40;
-  bottom: 24px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: min(760px, calc(100% - 32px));
+  width: min(640px, calc(100% - 32px));
   pointer-events: auto;
+  transition: width 0.2s ease, transform 0.2s ease;
 }
 .builder-composer .command-bar {
   width: 100%;
 }
+.builder-composer textarea {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  resize: none !important;
+  min-height: 24px !important;
+  padding: 2px 0 !important;
+}
+.builder-composer .command-bar__ideas,
+.builder-composer .command-bar__send {
+  box-sizing: border-box;
+}
 @media (max-width: 768px) {
   .builder-composer {
     width: calc(100% - 24px);
-    bottom: 16px;
+    bottom: 14px;
   }
 }
 
