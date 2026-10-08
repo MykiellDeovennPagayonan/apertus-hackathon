@@ -123,6 +123,7 @@ export default function AuthScreen({
   email: initialEmail,
   providerError,
   configured,
+  emailFlowsReady,
   google,
   initialExpired,
   unavailable,
@@ -132,6 +133,7 @@ export default function AuthScreen({
   email: string;
   providerError: boolean;
   configured: boolean;
+  emailFlowsReady: boolean;
   google: boolean;
   initialExpired: boolean;
   unavailable: boolean;
@@ -296,6 +298,12 @@ export default function AuthScreen({
             continue as a guest.
           </p>
         )}
+        {configured && !emailFlowsReady && (
+          <p className="auth-error" role="alert">
+            Email sign-in, registration, and password recovery are not available
+            yet. Use Google sign-in or continue as a guest.
+          </p>
+        )}
         {unavailable && (
           <p className="auth-error" role="alert">
             We couldn’t check this link. Please try again later.
@@ -326,7 +334,9 @@ export default function AuthScreen({
           </Link>
         ) : (done && reset) || (done && verify && token) ? null : (
           <form onSubmit={submit} noValidate>
-            <fieldset disabled={busy || !configured || unavailable}>
+            <fieldset
+              disabled={busy || !configured || !emailFlowsReady || unavailable}
+            >
               {verify && email && !expired && !token ? (
                 <p className="auth-email">{email}</p>
               ) : (

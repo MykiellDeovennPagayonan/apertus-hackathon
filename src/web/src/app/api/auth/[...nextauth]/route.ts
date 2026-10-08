@@ -9,7 +9,8 @@ async function handle(request: NextRequest, context: Context) {
   if (!authConfigured()) {
     const { nextauth } = await context.params;
     if (request.method === "GET" && nextauth[0] === "session")
-      return Response.json(null, { headers: { "Cache-Control": "no-store" } });
+      // NextAuth's client maps an empty object to a guest session.
+      return Response.json({}, { headers: { "Cache-Control": "no-store" } });
     return Response.json(
       { message: "Sign-in is unavailable." },
       { status: 503 },

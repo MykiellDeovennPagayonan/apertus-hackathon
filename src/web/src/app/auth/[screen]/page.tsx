@@ -47,6 +47,8 @@ export default async function Page({
       email={value("email")}
       providerError={Boolean(value("error"))}
       configured={authConfigured()}
+      // Keep incomplete password/email flows disabled until routes and delivery are connected.
+      emailFlowsReady={false}
       google={googleConfigured()}
       initialExpired={expired}
       unavailable={unavailable}

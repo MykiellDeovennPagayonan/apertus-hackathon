@@ -32,15 +32,19 @@ Created or updated authored lessons are saved through the normal recipe library.
 
 ## Accounts and MongoDB persistence
 
-Google sign-in uses NextAuth with database sessions and the official MongoDB adapter. Configure the server-only variables in `.env.local` from `.env.example`: `MONGODB_URI`, `MONGODB_DB_NAME`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `GOOGLE_CLIENT_ID`, and `GOOGLE_CLIENT_SECRET`. Generate a secret with `node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"`. Never commit its output. Set `NEXTAUTH_URL` to the app's actual origin; for local port 43100, register `http://localhost:43100/api/auth/callback/google` as the authorized redirect URI in your Google OAuth web client. Restart Next.js after changing configuration. See the [NextAuth Google setup](https://next-auth.js.org/providers/google).
+NextAuth uses encrypted JWT sessions and the official MongoDB adapter for user identities and Google account links. Library requests recheck the user and session version in MongoDB. Configure the server-only variables in `.env.local` from `.env.example`: `MONGODB_URI`, `MONGODB_DB_NAME`, `NEXTAUTH_SECRET`, and `NEXTAUTH_URL`. Google additionally requires `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`. Generate a secret with `node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"`. Never commit its output. Set `NEXTAUTH_URL` to the app's actual origin; for local port 43100, register `http://localhost:43100/api/auth/callback/google` as the authorized redirect URI in your Google OAuth web client. Restart Next.js after changing configuration. See the [NextAuth Google setup](https://next-auth.js.org/providers/google). Previously issued database sessions require signing in again after the JWT migration.
 
-The custom login interface is deferred until its design is provided. The root session provider is ready; client controls can use `signIn("google")`, `signOut()`, and `useSession()` from `next-auth/react`. NextAuth's default sign-in page is available at `/api/auth/signin` once configured. With authentication unconfigured, the existing guest workspace remains available.
+The custom interface lives at `/auth/sign-in`, `/auth/sign-up`, `/auth/forgot-password`, `/auth/reset-password`, and `/auth/verify-email`. Auth pages share an animated physics background with pause/resume and reduced-motion support. Sign-in and sign-out controls are available on the landing page and experiment catalog. With authentication unconfigured, the existing guest workspace remains available.
+
+**Draft limitation:** email/password registration, verification, and recovery are not connected to HTTP routes or an email transport yet. The forms and account-service groundwork are present; they are not completed email flows. Choosing the delivery provider and approving tests for these new endpoints are still pending. Google OAuth also needs a manual check with real credentials. Do not treat this draft as ready to deploy.
 
 Signed-in experiment saves, generated lessons, and reusable component recipes use MongoDB. Guests keep the existing device-local libraries. Guest records are not automatically uploaded or merged into an account. Draft recovery remains local, with separate keys for each account. Switching accounts resets the active workspace.
 
 | Collection | Contents and identity |
 | --- | --- |
-| `users`, `accounts`, `sessions` | NextAuth-owned identity, Google account links, and revocable sessions. |
+| `users`, `accounts` | User identities, Google account links, optional password hashes and verification/reset metadata, and session versions. |
+| `authLimits` | Hashed rate-limit buckets with expiry indexes for password/account requests. |
+| `sessions` | Legacy database-session records; new JWT sessions do not use this collection. |
 | `simulations` | `ownerId`, `experimentId`, full existing experiment `document`, optional `recovery`, `revision`, `createdAt`, `updatedAt`. Unique `(ownerId, experimentId)`. |
 | `components` | `ownerId`, full existing component `recipe`, `revision`, `createdAt`, `updatedAt`. Unique `(ownerId, recipe.id)`. |
 

@@ -102,7 +102,10 @@ async function main() {
       503,
       "Missing server credentials must disable sign-in.",
     );
-    assert.equal(await (await fetch(`${base}/api/auth/session`)).json(), null);
+    assert.deepEqual(
+      await (await fetch(`${base}/api/auth/session`)).json(),
+      {},
+    );
     console.log(
       "Incomplete server configuration disables sign-in and retains guest sessions.",
     );
