@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import CommandBar from "../../../app/_components/CommandBar";
 import { publicDefinition } from "../../components/catalog";
 import { SchemaForm } from "../../components/controls/SchemaForm";
 import { RecipeLesson } from "../../components/views/RecipeLesson";
@@ -35,9 +36,8 @@ import {
   ManualComponentSettings,
   manualDefinition,
 } from "./ManualComponentSettings";
-import CommandBar from "../../../app/_components/CommandBar";
-import { download, useComponentCatalog } from "./useComponentCatalog";
 import { useBuilderAi } from "./useBuilderAi";
+import { download, useComponentCatalog } from "./useComponentCatalog";
 import "./composition.css";
 type Edit = (
   change: (d: ExperimentDocument) => void,
@@ -62,7 +62,11 @@ export default function CompositionBuilder({
   expanded,
   onExpanded,
   onZoom,
+  lifecycle,
+  storageNotice,
 }: {
+  lifecycle?: ReactNode;
+  storageNotice?: ReactNode;
   doc: ExperimentDocument;
   valid: ExperimentDocument;
   edit: Edit;
@@ -244,6 +248,8 @@ export default function CompositionBuilder({
           </span>
         </button>
       </header>
+      {!expanded && <div className="builder-project-toolbar">{lifecycle}</div>}
+      {!expanded && storageNotice}
       {error && (
         <section className="builder-feedback is-error" role="alert">
           <strong>Preview is using the last valid draft</strong>

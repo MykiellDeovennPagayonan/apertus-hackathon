@@ -447,7 +447,15 @@ assert.throws(
       setItem: () => {
         throw new Error("quota");
       },
-    }).save({ ...recipe, id: "another" }),
+    }).save({
+      ...recipe,
+      id: "another",
+      title: "Quota test copy",
+      document: {
+        ...recipe.document,
+        lesson: { ...recipe.document.lesson, title: "Quota test copy" },
+      },
+    }),
   /quota/,
 );
 assert.equal(stored, unchanged);

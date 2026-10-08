@@ -1,3 +1,4 @@
+import { nameFields } from "../../../lib/projects/validation";
 import { validateRecipe } from "../../runtime/authoring/recipes";
 import type { CompositeRecipe } from "../../runtime/authoring/types";
 import { parseRecipe } from "../../runtime/recipes/schema";
@@ -19,6 +20,17 @@ export class RecipeRepository {
     validateRecipe(recipe);
     const recipes = this.read(),
       index = recipes.findIndex((r) => r.id === recipe.id);
+    const normalizedName = nameFields(recipe.title).normalizedName;
+    if (
+      recipes.some(
+        (item) =>
+          item.id !== recipe.id &&
+          nameFields(item.title).normalizedName === normalizedName,
+      )
+    )
+      throw new Error(
+        "That name already exists on this device. Choose a different name.",
+      );
     if (
       (index >= 0 && !expected) ||
       (expected &&

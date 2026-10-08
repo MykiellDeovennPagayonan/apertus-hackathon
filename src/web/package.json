@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "test": "node scripts/recipes/verify-structure.cjs && node scripts/recipes/verify-contract.cjs && node scripts/verify-control-contracts.cjs && node scripts/verify-gas-recipe.cjs && node scripts/verify-component-completion.cjs && node scripts/verify-inspector-presentation.cjs && node scripts/verify-data-presentation.cjs && node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs && node scripts/builder/verify-builder.cjs && node scripts/builder/verify-composition.cjs && node scripts/builder/verify-composition-graph.cjs && node scripts/builder/verify-canvas-editor.cjs && node scripts/builder/verify-builder-parity.cjs && node scripts/builder/verify-architecture.cjs && node scripts/builder/verify-public-catalog.cjs && node scripts/builder/verify-spatial-catalog.cjs && node scripts/builder/verify-unified-builder.cjs && node scripts/builder/verify-builder-ux-reliability.cjs && node scripts/builder/verify-spatial-board.cjs && node scripts/builder/verify-decorations.cjs && node scripts/generation/verify-contract.cjs && node scripts/generation/verify-architecture.cjs && node scripts/generation/verify-faults.cjs && node scripts/generation/verify-open-composition.cjs",
+    "test": "node scripts/recipes/verify-structure.cjs && node scripts/recipes/verify-contract.cjs && node scripts/verify-control-contracts.cjs && node scripts/verify-gas-recipe.cjs && node scripts/verify-component-completion.cjs && node scripts/verify-inspector-presentation.cjs && node scripts/verify-data-presentation.cjs && node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs && node scripts/builder/verify-builder.cjs && node scripts/builder/verify-composition.cjs && node scripts/builder/verify-composition-graph.cjs && node scripts/builder/verify-canvas-editor.cjs && node scripts/builder/verify-builder-parity.cjs && node scripts/builder/verify-architecture.cjs && node scripts/builder/verify-public-catalog.cjs && node scripts/builder/verify-spatial-catalog.cjs && node scripts/builder/verify-unified-builder.cjs && node scripts/builder/verify-builder-ux-reliability.cjs && node scripts/builder/verify-spatial-board.cjs && node scripts/builder/verify-decorations.cjs && node scripts/generation/verify-contract.cjs && node scripts/generation/verify-architecture.cjs && node scripts/generation/verify-faults.cjs && node scripts/generation/verify-open-composition.cjs && node scripts/projects/verify-contract.cjs",
     "test:gas-recipe": "node scripts/verify-gas-recipe.cjs",
     "test:browser": "node scripts/generation/verify-fixture-browser.cjs",
     "test:components:browser": "node scripts/verify-component-presentation-browser.cjs && node scripts/verify-data-presentation-browser.cjs && node scripts/verify-component-completion-browser.cjs",
@@ -57,7 +57,12 @@
     "test:generation:browser": "node scripts/generation/verify-fixture-browser.cjs",
     "test:generation:faults": "node scripts/generation/verify-faults.cjs",
     "test:generation:open": "node scripts/generation/verify-open-composition.cjs",
-    "test:builder:live": "node scripts/generation/verify-builder-cases-live-ollama.cjs"
+    "test:builder:live": "node scripts/generation/verify-builder-cases-live-ollama.cjs",
+    "test:projects:database": "node scripts/database/verify-projects.cjs",
+    "test:projects:browser": "node scripts/database/verify-community-browser.cjs",
+    "test:projects": "node scripts/projects/verify-contract.cjs",
+    "db:migrate-projects": "node scripts/database/migrate-projects.cjs",
+    "db:moderate-community": "node scripts/database/moderate-community.cjs"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "3.11.3",

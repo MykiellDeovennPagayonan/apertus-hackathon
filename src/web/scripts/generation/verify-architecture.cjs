@@ -154,8 +154,8 @@ for (const match of inferenceMakefile.matchAll(/\bpnpm\s+(test[\w:-]*)/g))
 const baseline = JSON.parse(
   fs.readFileSync(
     path.join(
-      repo,
-      "docs/agent-only/implementation/015-validation/baseline.json",
+      root,
+      "scripts/generation/fixtures/protected-baseline.json",
     ),
   ),
 );

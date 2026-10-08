@@ -1,4 +1,5 @@
 import { type Db, MongoServerError } from "mongodb";
+import { initializeProjects } from "../projects/schema";
 
 const metadata = {
   _id: { bsonType: "objectId" },
@@ -61,6 +62,7 @@ export async function initializeLibraryCollections(db: Db) {
       { key: { ownerId: 1, updatedAt: -1 }, name: "owner_recent" },
     ]);
   }
+  await initializeProjects(db);
 }
 
 /** NextAuth owns these records; only its lookup and uniqueness indexes live here. */

@@ -14,6 +14,11 @@ export type DraftRecovery = {
   selected?: string;
   saveId?: string | null;
   revision?: number;
+  projectType?: "experiment" | "composition";
+  sharingAllowed?: boolean;
+  basedOnPublicationId?: string;
+  expectedLocal?: SavedExperiment;
+  expectedComposition?: import("../../runtime/authoring/types").CompositeRecipe;
   recovery?: string;
 };
 export function editableDocument(document: ExperimentDocument) {

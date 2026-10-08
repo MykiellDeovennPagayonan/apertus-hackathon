@@ -108,3 +108,46 @@ Implementation, cleanup, and verification evidence for phases 1–3 live in `../
 - `src/simulations/builder`: optional authoring UI using the same runtime tools.
 
 The protected gas recipe, physics, and authored layout remain unchanged. Historical saved-format readers and legacy adapters are retained only for their identified compatibility consumers; the cleanup report records those boundaries.
+
+### Private projects and community publishing
+
+The builder has visible **New experiment**, **Clear canvas**, **Download recipe**, and **Publish** controls. Guests can create projects, keep local saves, and download recipes. Guest project content is never written to MongoDB. Account drafts also have device-local recovery; **Save** explicitly updates the private cloud copy. Unsaved replacement/navigation actions offer save, discard, and cancel.
+
+`/projects` manages private experiments and reusable compositions, including names, descriptions, tags, opt-in sharing, downloads, deletion, and explicit imports of local work. Names are unique per account and project type after Unicode normalization, whitespace normalization, and case-insensitive comparison. Database indexes enforce the final check. Private project IDs remain stable when renamed.
+
+Enable **Allow this project to be published to the community**, save, then review the publication. Publishing requires an account and an acknowledgement that all included content may be shared under CC BY 4.0. Each publication stores a validated, self-contained snapshot. Editing or deleting the private source never changes that snapshot. Publish later edits as a new version with a different public name. Authors can withdraw publications from browsing without rewriting snapshot content.
+
+`/community` provides searchable experiment/composition discovery. Detail pages can run experiments, preview compositions, show version history, download attributed exports, remix projects, and insert compositions into the builder. Current compositions must be fully expanded and reference registered component versions; unsupported legacy nested recipes must be expanded before publication. Recovery/legacy compatibility copies are excluded from public snapshots. Community exports retain the publication's identity, author, license, and attribution alongside the native payload, and the builder accepts these exports.
+
+#### MongoDB setup
+
+Use the server-only settings in `.env.example`: `MONGODB_URI`, `MONGODB_DB_NAME`, `NEXTAUTH_URL`, and a unique `NEXTAUTH_SECRET` of at least 32 characters. Configure Google OAuth for account sign-in; incomplete email registration/reset flows remain disabled. Never expose database or authentication credentials through `NEXT_PUBLIC_*`.
+
+**Publishing requires a replica set or MongoDB Atlas**, because version allocation, snapshot insertion, and source-revision checks run in one transaction. Private saves can use standalone MongoDB. An unavailable transaction configuration produces an explicit error rather than a partial publication.
+
+Canonical data lives in `projects`, `communityPublications`, and `publicationSeries`. The previous `simulations` and `components` APIs are compatibility adapters; new writes target `projects`. Public API DTOs exclude private source IDs/revisions, recovery copies, and account email.
+
+#### Migration and rollback
+
+Back up the database before enabling this release (for example, use your deployment's snapshot facility or `mongodump` with securely supplied credentials). Inventory legacy records with `pnpm db:migrate-projects`; use `pnpm db:migrate-projects -- --apply` to migrate all owners. Owner migration also happens lazily on first library access.
+
+Migration copies rather than deletes source records, preserves revisions/timestamps, and defaults sharing to false. Per-owner leases serialize concurrent migrations; receipts retain source identities and hashes. Legacy duplicate titles get deterministic `(imported N)` suffixes; original titles stay in receipts. Unsupported records are quarantined, retained, and offered for export on My projects. Local originals also remain after explicit account import.
+
+Verify counts, quarantined receipts, and representative round trips before rollout. Retain legacy collections and a full backup until the retention window ends. Rolling back to older code restores its legacy reads; it does **not** include writes made to the new canonical store, so export/reconcile those writes before rollback. Do not blindly copy legacy records over newer projects or remove migration receipts: doing so can resurrect deleted projects. To retry repaired quarantined records, use a controlled maintenance window and backup, repair the retained source, and remove only the affected source receipt and its owner's completion marker before rerunning migration.
+
+#### Moderation and operations
+
+Signed-in users can report public projects. `pnpm db:moderate-community` lists the most recent 50 open reports for maintainers with server-only database access. `pnpm db:moderate-community -- --withdraw <publicationId>` withdraws the exact publication and resolves its reports; the snapshot stays preserved. Establish an actual review rotation before opening publishing to a broad audience. There is no public administrative endpoint.
+
+Schedule backups of the canonical collections and test restore procedures. Save revisions prevent accidental overwrite; they are not historical backups. The initial release intentionally has no automatic cloud autosave, offline retry queue, collaborative editing, likes, or comments. List APIs use bounded cursor pagination; compatibility library APIs remain temporarily available for older callers.
+
+#### Verification
+
+- `pnpm test`: existing deterministic suite plus project/AI/storage regression contracts.
+- `pnpm exec tsc --noEmit`: source and generated-route type checks.
+- `MONGODB_TEST_URI=<disposable-replica-set-uri> pnpm test:projects:database`: real names, migration, conflict, immutable version, retry, and composition tests.
+- `MONGODB_TEST_URI=<disposable-replica-set-uri> pnpm test:database`: existing MongoDB and authenticated browser/API checks.
+- `MONGODB_TEST_URI=<disposable-replica-set-uri> pnpm test:projects:browser`: community and builder end-to-end acceptance checks.
+- `pnpm exec next build --webpack`: production build verification.
+
+Browser checks require Chromium installed for the locked Playwright version, or `PLAYWRIGHT_CHROMIUM_EXECUTABLE` pointing to an installed compatible executable. Database tests create uniquely named temporary databases and drop only those databases during cleanup. Never point `MONGODB_TEST_URI` at production credentials.
