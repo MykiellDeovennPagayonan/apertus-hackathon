@@ -1,4 +1,8 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import {
+  formatUserFacingDetails,
+  formatUserFacingStatus,
+} from "../../lib/planner/errorFormatting";
 import "./CommandBar.css";
 export type ComposerStatus = {
   kind: "working" | "success" | "error" | "info";
@@ -17,6 +21,7 @@ interface Props {
   onStop: () => void;
   submitLabel?: string;
   landing?: boolean;
+  compact?: boolean;
   lastRequest?: { prompt: string; details: string } | null;
 }
 export default function CommandBar({
@@ -30,6 +35,7 @@ export default function CommandBar({
   onStop,
   submitLabel = "Apply",
   landing = false,
+  compact = false,
   lastRequest,
 }: Props) {
   const input = useRef<HTMLTextAreaElement>(null);
@@ -100,7 +106,7 @@ export default function CommandBar({
   return (
     <div
       ref={root}
-      className={`command-bar${landing ? " command-bar--landing" : ""}`}
+      className={`command-bar${landing ? " command-bar--landing" : ""}${compact ? " command-bar--compact" : ""}`}
     >
       <div className="command-bar__meta">
         {status && (
@@ -109,7 +115,7 @@ export default function CommandBar({
           >
             <output>
               <span className="command-bar__activity" aria-hidden="true" />
-              {status.text}
+              {formatUserFacingStatus(status.text)}
             </output>
             {status.retry && (
               <button
@@ -126,7 +132,7 @@ export default function CommandBar({
                 aria-expanded={popover === "details"}
                 aria-controls={panelId}
                 onClick={() => {
-                  setDetailText(status.details ?? "");
+                  setDetailText(formatUserFacingDetails(status.details ?? ""));
                   setPopover(popover === "details" ? null : "details");
                 }}
               >
@@ -182,11 +188,17 @@ export default function CommandBar({
             ))
           ) : (
             <>
-              <p>{popover === "last" ? lastRequest?.prompt : detailText}</p>
+              <p>
+                {popover === "last"
+                  ? lastRequest?.prompt
+                  : formatUserFacingDetails(detailText)}
+              </p>
               {popover === "last" && (
                 <>
                   <p className="command-bar__response">
-                    {lastRequest?.details}
+                    {lastRequest?.details
+                      ? formatUserFacingDetails(lastRequest.details)
+                      : ""}
                   </p>
                   <button
                     type="button"
@@ -199,6 +211,25 @@ export default function CommandBar({
               )}
             </>
           )}
+        </div>
+      )}
+      {compact && !disabled && !value.trim() && chips.length > 0 && !popover && (
+        <div
+          className="command-bar__quick-chips"
+          role="region"
+          aria-label="Quick suggestions"
+        >
+          {chips.slice(0, 3).map((c) => (
+            <button
+              key={c}
+              className="command-bar__quick-chip"
+              type="button"
+              onClick={() => choose(c)}
+            >
+              <span aria-hidden="true">✨</span>{" "}
+              {c.length > 34 ? `${c.slice(0, 31)}…` : c}
+            </button>
+          ))}
         </div>
       )}
       <form
@@ -238,6 +269,9 @@ export default function CommandBar({
               aria-controls={panelId}
               onClick={() => setPopover(popover === "ideas" ? null : "ideas")}
             >
+              <span aria-hidden="true" className="command-bar__ideas-icon">
+                💡
+              </span>{" "}
               Ideas
             </button>
           )}

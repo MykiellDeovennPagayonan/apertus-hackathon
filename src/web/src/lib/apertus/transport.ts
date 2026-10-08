@@ -55,37 +55,60 @@ export async function requestStructured<T>(
     if (JSON.stringify(current).length > 28000)
       throw new PlannerError("Inference context exceeds stage bounds.", 502);
     const started = Date.now();
-    const response = await fetch(`${config.baseUrl}/chat/completions`, {
-      method: "POST",
-      cache: "no-store",
-      signal: combined,
-      headers: {
-        "Content-Type": "application/json",
-        ...(config.token ? { Authorization: `Bearer ${config.token}` } : {}),
-      },
-      body: JSON.stringify({
-        model: config.model,
-        temperature: 0,
-        max_tokens: tokens,
-        stream: false,
-        messages: current,
-        // MLX accepts tokenizer arguments separately from the OpenAI schema.
-        // Small authoring stages reserve their output for arguments, not deliberation.
-        ...(config.provider === "local"
-          ? { chat_template_kwargs: { enable_thinking: false } }
-          : {}),
-        ...(schema
-          ? {
-              response_format: {
-                type: "json_schema",
-                json_schema: { name: "authoring_stage", strict: true, schema },
-              },
-            }
-          : {}),
-      }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${config.baseUrl}/chat/completions`, {
+        method: "POST",
+        cache: "no-store",
+        signal: combined,
+        headers: {
+          "Content-Type": "application/json",
+          ...(config.token ? { Authorization: `Bearer ${config.token}` } : {}),
+        },
+        body: JSON.stringify({
+          model: config.model,
+          temperature: 0,
+          max_tokens: tokens,
+          stream: false,
+          messages: current,
+          // MLX accepts tokenizer arguments separately from the OpenAI schema.
+          // Small authoring stages reserve their output for arguments, not deliberation.
+          ...(config.provider === "local" && config.localRuntime === "mlx"
+            ? { chat_template_kwargs: { enable_thinking: false } }
+            : {}),
+          ...(schema
+            ? {
+                response_format: {
+                  type: "json_schema",
+                  json_schema: {
+                    name: "authoring_stage",
+                    strict: true,
+                    schema,
+                  },
+                },
+              }
+            : {}),
+        }),
+      });
+    } catch (err) {
+      if (combined.aborted) throw err;
+      throw new PlannerError(
+        config.provider === "local"
+          ? config.localRuntime === "ollama"
+            ? "Cannot reach local Ollama. Start it with ollama serve."
+            : "Cannot reach local Apertus. Start it with make -C src/inference run."
+          : "Cannot reach hosted Apertus. Check its endpoint and credentials.",
+        502,
+      );
+    }
     if (!response.ok) {
       await response.body?.cancel();
+      if (response.status === 404 && config.localRuntime === "ollama") {
+        throw new PlannerError(
+          `Ollama model '${config.model}' not found. Run 'ollama pull ${config.model}' or check available models with 'ollama list'.`,
+          503,
+        );
+      }
       throw new PlannerError(
         `Apertus inference returned HTTP ${response.status}.`,
         502,
@@ -295,7 +318,9 @@ export async function requestStructured<T>(
     if (error instanceof PlannerError) throw error;
     throw new PlannerError(
       config.provider === "local"
-        ? "Cannot reach local Apertus. Start it with make -C src/inference run."
+        ? config.localRuntime === "ollama"
+          ? "Cannot reach local Ollama. Start it with ollama serve."
+          : "Cannot reach local Apertus. Start it with make -C src/inference run."
         : "Cannot reach hosted Apertus. Check its endpoint and credentials.",
       502,
     );

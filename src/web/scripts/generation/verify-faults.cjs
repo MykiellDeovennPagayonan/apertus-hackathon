@@ -268,8 +268,46 @@ async function repairFault(name, bad) {
   } finally {
     clearTimeout(keepAlive);
   }
+
+  // Ollama runtime transport assertions
+  process.env.APERTUS_TIMEOUT_MS = "1000";
+  process.env.APERTUS_LOCAL_RUNTIME = "ollama";
+  const ollamaCalls = [];
+  provider([{ content: '{"width":5}' }], ollamaCalls);
+  const ollamaRes = await requestStructured(messages, parse, "Repair");
+  assert.deepEqual(ollamaRes, { width: 5 });
+  assert.equal(ollamaCalls[0].chat_template_kwargs, undefined, "Ollama omits MLX chat_template_kwargs");
+
+  // Ollama 404 model not found mapping
+  global.fetch = async () =>
+    new Response(JSON.stringify({ error: "model not found" }), {
+      status: 404,
+      statusText: "Not Found",
+      headers: { "Content-Type": "application/json" },
+    });
+  await assert.rejects(
+    () => requestStructured(messages, parse, "Repair"),
+    (e) => e.status === 503 && /Ollama model.*not found/.test(e.message),
+  );
+
+  // Ollama network failure error message
+  global.fetch = async () => {
+    throw new TypeError("fetch failed");
+  };
+  await assert.rejects(
+    () => requestStructured(messages, parse, "Repair"),
+    (e) => e.status === 502 && /Cannot reach local Ollama/.test(e.message),
+  );
+
+  // MLX network failure error message
+  process.env.APERTUS_LOCAL_RUNTIME = "mlx";
+  await assert.rejects(
+    () => requestStructured(messages, parse, "Repair"),
+    (e) => e.status === 502 && /make -C src\/inference run/.test(e.message),
+  );
+
   console.log(
-    "Fault injection passed: malformed JSON, wrong fields, truncation, bounded repair, HTTP failure, semantic/schema accounting, local deliberation disabled, cancellation and timeout. These are deterministic fixtures, not live model evidence. Binding, operation retry and stale revisions are covered by verify-contract.cjs; browser Stop/supersession by lifecycle-browser.cjs.",
+    "Fault injection passed: malformed JSON, wrong fields, truncation, bounded repair, HTTP failure, semantic/schema accounting, local deliberation disabled, Ollama/MLX transport parity, cancellation and timeout. These are deterministic fixtures, not live model evidence. Binding, operation retry and stale revisions are covered by verify-contract.cjs; browser Stop/supersession by lifecycle-browser.cjs.",
   );
 })()
   .catch((e) => {

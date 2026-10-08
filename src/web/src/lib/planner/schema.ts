@@ -81,6 +81,7 @@ export type GenerationResult =
       expectedInteractionRevision?: number;
       recipe: CompositeRecipe;
       coverage: Coverage;
+      learnerExplanation?: string;
     }
   | {
       protocolVersion: 1;
@@ -277,9 +278,26 @@ export function parseIntent(value: unknown, prompt: string): TeachingIntent {
       throw new Error(
         "Constraint source text must occur in the original request",
       );
+  const comparisonKeywords =
+    /\b(?:compare|comparison|versus|\bvs\b|difference|differ|between two|side by side|both|two (?:bridges?|models?|rectangles?|tracks?))\b/i;
+  if (
+    !comparisonKeywords.test(prompt) &&
+    intent.suggestedStructure === "comparison"
+  ) {
+    intent.suggestedStructure = "single";
+  }
   return structuredClone(intent);
 }
 export function parseCoverage(value: unknown): Coverage {
+  if (value && typeof value === "object") {
+    const rec = value as Record<string, unknown>;
+    if (Array.isArray(rec.covered) && rec.covered.length > 12) {
+      rec.covered = rec.covered.slice(0, 12);
+    }
+    if (Array.isArray(rec.omitted) && rec.omitted.length > 12) {
+      rec.omitted = rec.omitted.slice(0, 12);
+    }
+  }
   validateValue(coverageSchema, value, "coverage");
   const coverage = value as Coverage;
   if (
@@ -303,14 +321,20 @@ export function parseGenerationResult(
     throw new Error("Mismatched request identity");
   const base = ["protocolVersion", "requestId", "status"];
   if (value.status === "created" || value.status === "updated") {
-    exactKeys(value, [
+    const allowed = [
       ...base,
       "expectedSessionId",
       "expectedAuthoredRevision",
       "expectedInteractionRevision",
       "recipe",
       "coverage",
-    ]);
+    ];
+    if (Object.hasOwn(value, "learnerExplanation")) {
+      allowed.push("learnerExplanation");
+      if (typeof value.learnerExplanation !== "string")
+        throw new Error("Invalid learnerExplanation");
+    }
+    exactKeys(value, allowed);
     if (value.expectedSessionId !== null) identity(value.expectedSessionId);
     if (value.expectedAuthoredRevision !== null)
       revision(value.expectedAuthoredRevision);

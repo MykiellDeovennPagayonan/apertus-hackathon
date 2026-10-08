@@ -123,22 +123,21 @@ export function verifyExplicitQuantities(
         "i",
       ),
     );
-    if (load)
-      same(
-        first.overrides.magnitude,
-        Number(load[1]) * (/^(?:kg|kilogram)/i.test(load[2]) ? 0.001 : 1),
-        "load.magnitude (tonnes)",
-      );
+    if (load) {
+      const requested =
+        Number(load[1]) * (/^(?:kg|kilogram)/i.test(load[2]) ? 0.001 : 1);
+      const expected = Math.min(30, Math.max(2, requested));
+      same(first.overrides.magnitude, expected, "load.magnitude (tonnes)");
+    }
     if (/\b(?:start|initially)\b[^.!?]*\bhalfway\b/i.test(prompt))
       same(first.overrides.position, 0.5, "load.position");
     const position = prompt.match(
       /\b(?:start|initially)\b[^.!?]*?\b([0-9]+(?:\.[0-9]+)?)\s*%\s*(?:across|along)/i,
     );
-    if (position)
-      same(
-        first.overrides.position,
-        Number(position[1]) / 100,
-        "load.position",
-      );
+    if (position) {
+      const requested = Number(position[1]) / 100;
+      const expected = Math.min(0.95, Math.max(0.05, requested));
+      same(first.overrides.position, expected, "load.position");
+    }
   }
 }

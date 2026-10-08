@@ -24,11 +24,14 @@ async function launch() {
   const override = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE;
   const installed = fs.existsSync(chromium.executablePath());
   const mac = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+  const winEdge = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
   const executablePath =
     override ||
     (!installed && process.platform === "darwin" && fs.existsSync(mac)
       ? mac
-      : undefined);
+      : !installed && process.platform === "win32" && fs.existsSync(winEdge)
+        ? winEdge
+        : undefined);
   return chromium.launch({
     headless: true,
     ...(executablePath ? { executablePath } : {}),
