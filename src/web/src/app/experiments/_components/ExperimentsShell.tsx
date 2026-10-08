@@ -25,6 +25,7 @@ import {
   saveRecipe,
 } from "../../../simulations/runtime/session";
 import type { DemoType } from "../../../simulations/runtime/types";
+import AccountControl from "../../_components/AccountControl";
 import CommandBar, { type ComposerStatus } from "../../_components/CommandBar";
 import LandingPage from "../../_components/LandingPage";
 import { premadeExperiments } from "../_lib/premadeExperiments";
@@ -441,6 +442,7 @@ export default function ExperimentsShell({
             ✳ apertus<span className="brand__suffix">/ experiments</span>
           </Link>
           <Link href="/">← Back to the lab</Link>
+          <AccountControl />
         </header>
         <ExperimentCatalog error={status?.text} />
       </div>

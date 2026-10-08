@@ -66,6 +66,9 @@ export async function initializeLibraryCollections(db: Db) {
 /** NextAuth owns these records; only its lookup and uniqueness indexes live here. */
 export async function initializeAuthIndexes(db: Db) {
   await db
+    .collection("authLimits")
+    .createIndex({ expires: 1 }, { expireAfterSeconds: 0 });
+  await db
     .collection("users")
     .createIndex({ email: 1 }, { unique: true, sparse: true });
   await db

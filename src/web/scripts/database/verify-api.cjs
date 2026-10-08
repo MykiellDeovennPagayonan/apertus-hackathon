@@ -28,6 +28,7 @@ async function main() {
   const dbName = `apertus_test_${randomUUID().replaceAll("-", "")}`;
   const port = await freePort();
   const base = `http://127.0.0.1:${port}`;
+  const secret = randomUUID() + randomUUID();
   let output = "";
   const startServer = (configured) => {
     const child = spawn(
@@ -47,7 +48,7 @@ async function main() {
           ...process.env,
           MONGODB_URI: process.env.MONGODB_TEST_URI,
           MONGODB_DB_NAME: dbName,
-          NEXTAUTH_SECRET: randomUUID() + randomUUID(),
+          NEXTAUTH_SECRET: configured ? secret : "",
           NEXTAUTH_URL: base,
           GOOGLE_CLIENT_ID: configured ? "integration-test" : "",
           GOOGLE_CLIENT_SECRET: configured ? "integration-test" : "",
@@ -99,11 +100,11 @@ async function main() {
     assert.equal(
       (await fetch(`${base}/api/auth/signin`)).status,
       503,
-      "Missing Google credentials must disable sign-in.",
+      "Missing server credentials must disable sign-in.",
     );
     assert.equal(await (await fetch(`${base}/api/auth/session`)).json(), null);
     console.log(
-      "Incomplete Google configuration disables sign-in and retains guest sessions.",
+      "Incomplete server configuration disables sign-in and retains guest sessions.",
     );
     await stopServer();
     server = startServer(true);
@@ -128,17 +129,16 @@ async function main() {
       email: "bob@example.test",
       emailVerified: null,
     });
-    const token = randomUUID();
-    const bobToken = randomUUID();
-    await adapter.createSession({
-      sessionToken: token,
-      userId: alice.id,
-      expires: new Date(Date.now() + 600_000),
+    const { encode } = require("next-auth/jwt");
+    const token = await encode({
+      secret,
+      token: { sub: alice.id, sessionVersion: 0 },
+      maxAge: 600,
     });
-    await adapter.createSession({
-      sessionToken: bobToken,
-      userId: bob.id,
-      expires: new Date(Date.now() + 600_000),
+    const bobToken = await encode({
+      secret,
+      token: { sub: bob.id, sessionVersion: 0 },
+      maxAge: 600,
     });
     const request = (url, cookie = token, body, origin = base) =>
       fetch(`${base}${url}`, {
@@ -279,11 +279,10 @@ async function main() {
       ).status,
       409,
     );
-    const expiredToken = randomUUID();
-    await adapter.createSession({
-      sessionToken: expiredToken,
-      userId: alice.id,
-      expires: new Date(Date.now() - 1000),
+    const expiredToken = await encode({
+      secret,
+      token: { sub: alice.id, sessionVersion: 0 },
+      maxAge: -1000,
     });
     assert.equal(
       (await request("/api/library/simulations", expiredToken)).status,
@@ -502,7 +501,10 @@ async function main() {
     } finally {
       await browser.close();
     }
-    await adapter.deleteSession(token);
+    await client
+      .db(dbName)
+      .collection("users")
+      .updateOne({ email: alice.email }, { $inc: { sessionVersion: 1 } });
     assert.equal((await request("/api/library/simulations")).status, 401);
     console.log(
       "Component persistence, expired sessions, and revoked sessions passed.",
