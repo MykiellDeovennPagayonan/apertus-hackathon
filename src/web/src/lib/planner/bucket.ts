@@ -71,6 +71,10 @@ export function buildInitialCard(id: string): ComponentBucketCard | null {
   }
   if (descLower.includes("pendulum")) {
     if (!supports.includes("pendulum")) supports.push("pendulum");
+    if (!supports.includes("harmonic oscillator"))
+      supports.push("harmonic oscillator");
+    if (!supports.includes("oscillator")) supports.push("oscillator");
+    if (!supports.includes("oscillation")) supports.push("oscillation");
   }
   if (
     descLower.includes("circuit") ||

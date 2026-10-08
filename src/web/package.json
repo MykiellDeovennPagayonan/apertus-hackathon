@@ -55,7 +55,8 @@
     "test:generation:ux": "node scripts/generation/verify-ux-browser.cjs",
     "test:generation:browser": "node scripts/generation/verify-fixture-browser.cjs",
     "test:generation:faults": "node scripts/generation/verify-faults.cjs",
-    "test:generation:open": "node scripts/generation/verify-open-composition.cjs"
+    "test:generation:open": "node scripts/generation/verify-open-composition.cjs",
+    "test:builder:live": "node scripts/generation/verify-builder-cases-live-ollama.cjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",

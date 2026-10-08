@@ -180,6 +180,13 @@ export async function compose(
       (n) => publicDefinition(n.definition).category === "displays",
     ).length;
 
+    const wantsMoreControls =
+      /\b(?:add|insert|include|create|provide|give)\b/i.test(request.prompt) &&
+      /\b(?:slider|control|input|dial|button)\b/i.test(request.prompt);
+    const wantsMoreObservations =
+      /\b(?:add|insert|include|create|provide|give)\b/i.test(request.prompt) &&
+      /\b(?:readout|observation|display|meter|graph|monitor)\b/i.test(request.prompt);
+
     let stepHint = "";
     if (isCompositeBuilder) {
       if (modelNodes.length === 0) {
@@ -191,6 +198,12 @@ export async function compose(
       ) {
         stepHint =
           "Step: connect controls or observation readouts to model ports (connect).";
+      } else if (wantsMoreControls && executedPayloads.size === 0) {
+        stepHint =
+          "Step: add interactive control components (add_control) to satisfy user addition request.";
+      } else if (wantsMoreObservations && executedPayloads.size === 0) {
+        stepHint =
+          "Step: add observation or display components (add_observation) to satisfy user addition request.";
       } else if (controlCount === 0) {
         stepHint =
           "Step: add interactive control components (add_control) to manipulate composite model parameters.";
@@ -274,6 +287,30 @@ export async function compose(
     );
 
     if (turnResult.action === "done") {
+      if (
+        isCompositeBuilder &&
+        executedPayloads.size === 0 &&
+        (wantsMoreControls || wantsMoreObservations) &&
+        turn === 0
+      ) {
+        lastReceipt = {
+          operationId: "op_premature_done",
+          draftRevision: draft.revision,
+          handles: draft.handles,
+          status: "rejected",
+          summary:
+            "User requested adding components; please perform add_control or add_observation before finishing.",
+          issues: [
+            {
+              code: "premature_done",
+              message:
+                "User requested adding components; please perform add_control or add_observation before finishing.",
+            },
+          ],
+        };
+        turn++;
+        continue;
+      }
       budget.trace?.("turn.done", { turn: turn + 1, fixes: turnResult.fixes });
       break;
     }
