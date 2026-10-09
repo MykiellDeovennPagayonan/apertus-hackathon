@@ -17,6 +17,7 @@ import type {
 } from "../../components/traits/ElementaryBoards";
 import type { MathBoard } from "../../components/traits/MathBoards";
 import type { SceneObject } from "../../components/traits/SceneObjects";
+import { agentProviders } from "../agents/providers";
 import { assemblyModels, measureModel } from "../assembly";
 import {
   mathDemos,
@@ -50,6 +51,7 @@ export type RuntimeProvider = {
   capture?(state: Record<string, unknown>): Record<string, unknown>;
 };
 export const runtimeProviders = new Map<string, RuntimeProvider>([
+  ...agentProviders,
   ...spatialProviders,
   ...dataProviders,
   ...explorationProviders,

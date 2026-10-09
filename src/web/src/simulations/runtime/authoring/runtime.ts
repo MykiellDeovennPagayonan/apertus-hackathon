@@ -13,6 +13,7 @@ import type {
   FractionObject,
   LineObject,
 } from "../../components/traits/SceneObjects";
+import { AgentEffects } from "../agents/client";
 import type { ActionResult } from "../commands";
 import { validateValue } from "../parameterSchema";
 import { runtimeProvider } from "./providers";
@@ -33,6 +34,25 @@ export class DocumentRuntime {
   private snapshot: Snapshot;
   private listeners = new Set<() => void>();
   private interactionListeners = new Set<() => void>();
+  private effects = new AgentEffects(
+    () => this.snapshot,
+    () => this.document,
+    (node, generation, patch) => {
+      if (this.snapshot.state[node]?.generation !== generation) return;
+      const staged = structuredClone(this.snapshot);
+      Object.assign(staged.state[node], patch);
+      this.commit(staged);
+      for (const listener of this.interactionListeners) listener();
+    },
+  );
+  dispose() {
+    this.effects.dispose();
+    this.listeners.clear();
+    this.interactionListeners.clear();
+  }
+  activateEffects() {
+    this.effects.activate();
+  }
   subscribeInteractions = (listener: () => void) => {
     this.interactionListeners.add(listener);
     return () => {
@@ -90,6 +110,7 @@ export class DocumentRuntime {
     this.document = structuredClone(document);
     try {
       this.commit(staged);
+      this.effects.reconcile();
     } catch (error) {
       this.document = previousDocument;
       throw error;
@@ -243,6 +264,7 @@ export class DocumentRuntime {
       }
       this.commit(staged);
       for (const listener of this.interactionListeners) listener();
+      this.effects.reconcile();
       return { accepted: true };
     } catch (e) {
       return {

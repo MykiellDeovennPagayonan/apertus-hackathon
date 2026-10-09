@@ -1,8 +1,8 @@
 {
   "generatedBy": "src/web/scripts/builder/audit-public-catalog.cjs",
-  "originalSourceFiles": 285,
-  "sourceFiles": 290,
-  "exportRecords": 668,
+  "originalSourceFiles": 290,
+  "sourceFiles": 298,
+  "exportRecords": 691,
   "records": [
     {
       "source": "src/web/src/simulations/components/README.md",
@@ -32,6 +32,104 @@
       "destination": "public infrastructure owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "No active static consumer; retained data/type/export has no independent public registration"
+    },
+    {
+      "source": "src/web/src/simulations/components/behaviors/AgentActivation.ts",
+      "export": "AgentActivation",
+      "activeConsumers": [
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "behavior",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/scripts/agents/verify-core.cjs"
+        ],
+        "destination": "src/web/scripts/agents/verify-core.cjs"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public behavior owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/behaviors/AgentActivation.ts",
+      "export": "activationEligible",
+      "activeConsumers": [
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "behavior",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/scripts/agents/verify-core.cjs"
+        ],
+        "destination": "src/web/scripts/agents/verify-core.cjs"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public behavior owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
       "source": "src/web/src/simulations/components/behaviors/DailyRoutine.ts",
@@ -278,6 +376,53 @@
       "identity": [],
       "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
       "destination": "public behavior owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/catalog/agents.ts",
+      "export": "agentDefinitions",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefinitions"
+          ]
+        }
+      ],
+      "responsibility": "infrastructure",
+      "finalOwner": {
+        "kind": "catalog/recipe infrastructure",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/index.ts"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefinitions"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public infrastructure owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
@@ -1402,6 +1547,13 @@
       "export": "base",
       "activeConsumers": [
         {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/catalog/authoring.ts",
           "typeOnly": false,
           "symbols": [
@@ -1435,12 +1587,13 @@
         "kind": "catalog/recipe infrastructure",
         "packages": [],
         "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/catalog/authoring.ts",
           "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "src/web/src/simulations/components/catalog/exploration.ts",
           "src/web/src/simulations/components/catalog/index.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -1454,6 +1607,13 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
+        },
         {
           "source": "src/web/src/simulations/components/catalog/authoring.ts",
           "typeOnly": false,
@@ -1494,6 +1654,13 @@
       "export": "genericDefinitions",
       "activeConsumers": [
         {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/catalog/authoring.ts",
           "typeOnly": false,
           "symbols": [
@@ -1527,12 +1694,13 @@
         "kind": "catalog/recipe infrastructure",
         "packages": [],
         "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/catalog/authoring.ts",
           "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "src/web/src/simulations/components/catalog/exploration.ts",
           "src/web/src/simulations/components/catalog/index.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -1546,6 +1714,13 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
+        },
         {
           "source": "src/web/src/simulations/components/catalog/authoring.ts",
           "typeOnly": false,
@@ -14381,6 +14556,53 @@
       "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
+      "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+      "export": "AgentActions",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentActions"
+          ]
+        }
+      ],
+      "responsibility": "control",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentActions"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public control owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
       "source": "src/web/src/simulations/components/controls/ArithmeticControls.tsx",
       "export": "ArithmeticControls",
       "activeConsumers": [
@@ -23633,6 +23855,53 @@
       "destination": "public model metadata owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
+    },
+    {
+      "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+      "export": "AIAgent",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AIAgent"
+          ]
+        }
+      ],
+      "responsibility": "initialization",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/runtime/agents/providers.ts"
+        ],
+        "destination": "src/web/src/simulations/runtime/agents/providers.ts"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AIAgent"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public initialization owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
       "source": "src/web/src/simulations/components/prefabs/BridgeLoad.ts",
@@ -33855,6 +34124,506 @@
       "identity": [],
       "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
       "destination": "public resource/defaults owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+      "export": "validateRunConfiguration",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/lib/agents/http.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/agents/model.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentContext",
+            "parseAgentProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/runner.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/lib/agents/http.ts",
+          "src/web/src/lib/agents/model.ts",
+          "src/web/src/simulations/runtime/agents/runner.ts",
+          "src/web/scripts/agents/verify-core.cjs"
+        ],
+        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/lib/agents/http.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/agents/model.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentContext",
+            "parseAgentProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/runner.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+      "export": "observeAgent",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/lib/agents/http.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/agents/model.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentContext",
+            "parseAgentProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/runner.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/lib/agents/http.ts",
+          "src/web/src/lib/agents/model.ts",
+          "src/web/src/simulations/runtime/agents/runner.ts",
+          "src/web/scripts/agents/verify-core.cjs"
+        ],
+        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/lib/agents/http.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/agents/model.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentContext",
+            "parseAgentProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/runner.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+      "export": "agentContext",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/lib/agents/http.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/agents/model.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentContext",
+            "parseAgentProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/runner.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/lib/agents/http.ts",
+          "src/web/src/lib/agents/model.ts",
+          "src/web/src/simulations/runtime/agents/runner.ts",
+          "src/web/scripts/agents/verify-core.cjs"
+        ],
+        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/lib/agents/http.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/agents/model.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentContext",
+            "parseAgentProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/runner.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+      "export": "parseAgentProposal",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/lib/agents/http.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/agents/model.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentContext",
+            "parseAgentProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/runner.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/lib/agents/http.ts",
+          "src/web/src/lib/agents/model.ts",
+          "src/web/src/simulations/runtime/agents/runner.ts",
+          "src/web/scripts/agents/verify-core.cjs"
+        ],
+        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/lib/agents/http.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/agents/model.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentContext",
+            "parseAgentProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/runner.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+      "export": "applyAgentProposal",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/lib/agents/http.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/agents/model.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentContext",
+            "parseAgentProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/runner.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/lib/agents/http.ts",
+          "src/web/src/lib/agents/model.ts",
+          "src/web/src/simulations/runtime/agents/runner.ts",
+          "src/web/scripts/agents/verify-core.cjs"
+        ],
+        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/lib/agents/http.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/agents/model.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentContext",
+            "parseAgentProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/runner.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
@@ -66768,6 +67537,1230 @@
       "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
+      "source": "src/web/src/simulations/components/traits/AIAgent.ts",
+      "export": "agentProfileSchema",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "responsibility": "private state/schema",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/contracts.ts",
+          "src/web/src/simulations/runtime/agents/providers.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+      },
+      "classification": "private/infrastructure",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "shared schema/runtime infrastructure",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/traits/AIAgent.ts",
+      "export": "AgentProfile",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "responsibility": "private state/schema",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/contracts.ts",
+          "src/web/src/simulations/runtime/agents/providers.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+      },
+      "classification": "private/infrastructure",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "shared schema/runtime infrastructure",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/traits/AIAgent.ts",
+      "export": "AgentConfiguration",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "responsibility": "private state/schema",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/contracts.ts",
+          "src/web/src/simulations/runtime/agents/providers.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+      },
+      "classification": "private/infrastructure",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "shared schema/runtime infrastructure",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/traits/AIAgent.ts",
+      "export": "agentEnvironmentSchema",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "responsibility": "private state/schema",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/contracts.ts",
+          "src/web/src/simulations/runtime/agents/providers.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+      },
+      "classification": "private/infrastructure",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "shared schema/runtime infrastructure",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/traits/AIAgent.ts",
+      "export": "AgentEnvironmentConfiguration",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "responsibility": "private state/schema",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/contracts.ts",
+          "src/web/src/simulations/runtime/agents/providers.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+      },
+      "classification": "private/infrastructure",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "shared schema/runtime infrastructure",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/traits/AIAgent.ts",
+      "export": "AgentMemory",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "responsibility": "private state/schema",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/contracts.ts",
+          "src/web/src/simulations/runtime/agents/providers.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+      },
+      "classification": "private/infrastructure",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "shared schema/runtime infrastructure",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/traits/AIAgent.ts",
+      "export": "AgentPlan",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "responsibility": "private state/schema",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/contracts.ts",
+          "src/web/src/simulations/runtime/agents/providers.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+      },
+      "classification": "private/infrastructure",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "shared schema/runtime infrastructure",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/traits/AIAgent.ts",
+      "export": "AgentActivity",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "responsibility": "private state/schema",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/contracts.ts",
+          "src/web/src/simulations/runtime/agents/providers.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+      },
+      "classification": "private/infrastructure",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "shared schema/runtime infrastructure",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/traits/AIAgent.ts",
+      "export": "agentDefaults",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "responsibility": "private state/schema",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/contracts.ts",
+          "src/web/src/simulations/runtime/agents/providers.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+      },
+      "classification": "private/infrastructure",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentDefaults",
+            "agentEnvironmentSchema",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/prefabs/AIAgent.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentDefaults",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "typeOnly": false,
+          "symbols": [
+            "AgentConfiguration",
+            "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration",
+            "AgentMemory",
+            "AgentPlan"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "shared schema/runtime infrastructure",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
       "source": "src/web/src/simulations/components/traits/BallisticMotion.ts",
       "export": "BallisticMotion",
       "activeConsumers": [],
@@ -94288,6 +96281,245 @@
       "completion": "No active static consumer; retained data/type/export has no independent public registration"
     },
     {
+      "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+      "export": "useAgentValue",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "useAgentValue"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentProfileView",
+            "AgentTranscriptView"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/controls/AgentActions.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "useAgentValue"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentProfileView",
+            "AgentTranscriptView"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+      "export": "AgentProfileView",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "useAgentValue"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentProfileView",
+            "AgentTranscriptView"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/controls/AgentActions.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "useAgentValue"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentProfileView",
+            "AgentTranscriptView"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+      "export": "AgentTranscriptView",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "useAgentValue"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentProfileView",
+            "AgentTranscriptView"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/controls/AgentActions.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "useAgentValue"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentProfileView",
+            "AgentTranscriptView"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/agents/agents.css",
+      "export": "(file)",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/agents/AgentViews.tsx"
+      },
+      "classification": "private presentation stylesheet",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
       "source": "src/web/src/simulations/components/views/board/DrawingEditor.tsx",
       "export": "DrawingTool",
       "activeConsumers": [
@@ -97815,6 +100047,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "typeOnly": false,
           "symbols": [
@@ -97869,6 +100108,7 @@
         "packages": [],
         "consumers": [
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx",
@@ -97876,7 +100116,7 @@
           "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
           "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
         ],
-        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -97897,6 +100137,13 @@
             "AuthorContext",
             "AuthorControls",
             "MotionContext",
+            "SnapshotContext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
             "SnapshotContext"
           ]
         },
@@ -97970,6 +100217,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "typeOnly": false,
           "symbols": [
@@ -98024,6 +100278,7 @@
         "packages": [],
         "consumers": [
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx",
@@ -98031,7 +100286,7 @@
           "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
           "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
         ],
-        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -98052,6 +100307,13 @@
             "AuthorContext",
             "AuthorControls",
             "MotionContext",
+            "SnapshotContext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
             "SnapshotContext"
           ]
         },
@@ -98125,6 +100387,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "typeOnly": false,
           "symbols": [
@@ -98179,6 +100448,7 @@
         "packages": [],
         "consumers": [
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx",
@@ -98186,7 +100456,7 @@
           "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
           "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
         ],
-        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -98207,6 +100477,13 @@
             "AuthorContext",
             "AuthorControls",
             "MotionContext",
+            "SnapshotContext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
             "SnapshotContext"
           ]
         },
@@ -98280,6 +100557,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "typeOnly": false,
           "symbols": [
@@ -98334,6 +100618,7 @@
         "packages": [],
         "consumers": [
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx",
@@ -98341,7 +100626,7 @@
           "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
           "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
         ],
-        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -98362,6 +100647,13 @@
             "AuthorContext",
             "AuthorControls",
             "MotionContext",
+            "SnapshotContext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
             "SnapshotContext"
           ]
         },

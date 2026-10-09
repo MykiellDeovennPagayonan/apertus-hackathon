@@ -72,6 +72,11 @@ export function RecipeLesson({
   const ref = useRef<DocumentRuntime | null>(null);
   if (!ref.current) ref.current = supplied ?? new DocumentRuntime(document);
   const runtime = supplied ?? ref.current;
+  useEffect(() => {
+    if (supplied) return;
+    runtime.activateEffects();
+    return () => runtime.dispose();
+  }, [runtime, supplied]);
   const lastRuntimeSource = useRef<string | null>(null);
   const runtimeSource = JSON.stringify({
     ...document,

@@ -571,6 +571,14 @@ export function SpatialBoard({
     initial.centerY = startingTop + size.height / (2 * initial.zoom);
   }
   if (authoring) initial.zoom = Math.min(1, initial.zoom);
+  // Reflowed learner content stays at readable scale even in the full workspace.
+  // Frame its opening row below floating headings without shrinking the canvas.
+  if (freeCanvas && autoLayout && !authoring) {
+    initial.zoom = 1;
+    initial.centerX = p.startView.x + size.width / 2;
+    initial.centerY =
+      Math.min(...p.items.map((item) => item.rect.y)) - 96 + size.height / 2;
+  }
   const base = camera ?? initial;
   const fixed = !authoring && p.navigation.mode === "fixed";
   const navigable = fixed

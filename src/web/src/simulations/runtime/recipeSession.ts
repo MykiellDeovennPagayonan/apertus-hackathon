@@ -240,6 +240,7 @@ export class RecipeSession {
     });
   }
   dispose() {
+    this.runtime.dispose();
     if (typeof cancelAnimationFrame !== "undefined")
       cancelAnimationFrame(this.frame);
     this.frame = 0;

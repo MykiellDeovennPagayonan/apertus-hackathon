@@ -3,6 +3,7 @@ import {
   createProviderRequest,
   readProviderResponse,
 } from "../llm/adapters";
+import type { LlmConfig } from "../llm/config";
 import { readLlmConfig } from "../llm/config";
 import type { GenerationBudget } from "../planner/budget";
 import { PlannerError } from "../planner/errors";
@@ -12,8 +13,12 @@ export interface Message {
   content: string;
 }
 export interface StructuredOptions {
+  /** A caller freezes resolved settings for its own execution lifecycle. */
+  config?: LlmConfig;
   budget?: GenerationBudget;
   onEvent?: (event: string, data: unknown) => void;
+  /** Tracks calls whose usage may be unavailable if transport fails. */
+  onInferenceStarted?: () => void;
   schema?: JsonSchema;
   maxTokens?: number;
   stage?: string;
@@ -34,7 +39,7 @@ export async function requestStructured<T>(
 ): Promise<T> {
   let config: ReturnType<typeof readLlmConfig>;
   try {
-    config = options.budget?.llmConfig ?? readLlmConfig();
+    config = options.config ?? options.budget?.llmConfig ?? readLlmConfig();
   } catch (error) {
     throw new PlannerError(
       error instanceof Error ? error.message : "Invalid LLM configuration",
@@ -71,6 +76,7 @@ export async function requestStructured<T>(
     );
     let response: Response;
     try {
+      options.onInferenceStarted?.();
       response = await fetch(providerRequest.url, {
         method: "POST",
         cache: "no-store",

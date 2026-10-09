@@ -179,14 +179,17 @@ export default function ExperimentsShell({
           }
         return;
       }
-      if (!isDemo(selectedExperiment) || selectedExperiment === "assembly") {
+      if (
+        !hasPremadeRecipe(selectedExperiment) &&
+        (!isDemo(selectedExperiment) || selectedExperiment === "assembly")
+      ) {
         setStatus({ kind: "info", text: "Choose a premade experiment below." });
         return;
       }
       try {
         if (hasPremadeRecipe(selectedExperiment))
           activatePremadeSession(selectedExperiment);
-        else {
+        else if (isDemo(selectedExperiment)) {
           const result = executePlan({
             schemaVersion: 1,
             operation: "create",
@@ -200,7 +203,7 @@ export default function ExperimentsShell({
           if (!result.accepted) throw new Error(result.error);
         }
         if (revision === startupRevision.current) {
-          setDemo(selectedExperiment);
+          setDemo(isDemo(selectedExperiment) ? selectedExperiment : "assembly");
           syncSession();
           setReady(true);
         }

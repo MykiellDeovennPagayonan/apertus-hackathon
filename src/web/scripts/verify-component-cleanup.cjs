@@ -93,8 +93,25 @@ if (process.argv.includes("--capture")) {
   );
   console.log("Captured public contracts and AI projections before cleanup.");
 } else {
+  // Implementation 021 adds agent capabilities. Protect every historical contract
+  // while admitting only these explicit additions; never recapture the baseline.
+  const current = canonical(contracts());
+  const added = [
+    "models/AIAgent",
+    "models/AgentSession",
+    "controls/AgentActions",
+    "displays/AgentProfile",
+    "displays/AgentTranscript",
+  ];
+  for (const id of added) {
+    assert.ok(current.definitions[id] && current.initialCards[id], id);
+    delete current.definitions[id];
+    delete current.initialCards[id];
+  }
+  assert.ok(current.compositeCards["agent-conversation"]);
+  delete current.compositeCards["agent-conversation"];
   assert.deepEqual(
-    canonical(contracts()),
+    current,
     JSON.parse(fs.readFileSync(fixture, "utf8")),
     "Public contracts or AI projections changed beyond the allowed appearance lifecycle correction",
   );

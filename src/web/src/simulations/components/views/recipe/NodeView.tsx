@@ -4,6 +4,8 @@ import { useContext } from "react";
 import type { DocumentRuntime } from "../../../runtime/authoring/runtime";
 import type { ComponentInstance } from "../../../runtime/authoring/types";
 import { publicDefinition } from "../../catalog";
+import { AgentActions } from "../../controls/AgentActions";
+import { AgentProfileView, AgentTranscriptView } from "../agents/AgentViews";
 import { MathReadoutView } from "../MathReadoutView";
 import { CanvasPresentation } from "./CanvasPresentation";
 import { ControlPresentation } from "./ControlPresentation";
@@ -21,6 +23,12 @@ export function NodeView({
 }) {
   const snapshot = useContext(SnapshotContext);
   const def = publicDefinition(node.definition);
+  if (node.definition === "displays/AgentProfile")
+    return <AgentProfileView node={node} runtime={runtime} />;
+  if (node.definition === "displays/AgentTranscript")
+    return <AgentTranscriptView node={node} runtime={runtime} />;
+  if (node.definition === "controls/AgentActions")
+    return <AgentActions node={node} runtime={runtime} />;
   if (def.category === "models") return null;
   if (def.category === "controls")
     return <ControlPresentation node={node} runtime={runtime} />;

@@ -1,0 +1,457 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/agent-conversation",
+  "version": 1,
+  "title": "Two perspectives, one city",
+  "description": "Let two AI agents explore how to improve daily travel. Change their personalities and compare the conversation.",
+  "tags": [
+    "social-systems",
+    "ai",
+    "agents",
+    "conversation"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "agent/planner",
+        "definition": "models/AIAgent",
+        "version": 1,
+        "label": "Mira \u00b7 city planner",
+        "scope": "scope/conversation",
+        "configuration": {
+          "name": "Mira",
+          "persona": "Practical and optimistic. Offer concrete suggestions, acknowledge costs, and invite questions.",
+          "objective": "Explore affordable ways to make daily travel easier without assuming everyone drives.",
+          "expertise": "City planning and public transport"
+        }
+      },
+      {
+        "id": "agent/resident",
+        "definition": "models/AIAgent",
+        "version": 1,
+        "label": "Leo \u00b7 curious resident",
+        "scope": "scope/conversation",
+        "configuration": {
+          "name": "Leo",
+          "persona": "Curious and thoughtful. Ask specific questions and bring up everyday experiences respectfully.",
+          "objective": "Consider how transport ideas work for commuters, families, and people with limited mobility.",
+          "expertise": "Everyday commuting and community needs"
+        }
+      },
+      {
+        "id": "environment",
+        "definition": "models/AgentSession",
+        "version": 1,
+        "label": "Shared topic",
+        "scope": "scope/conversation",
+        "configuration": {
+          "topic": "How can a city make daily travel easier?",
+          "maxSteps": 8,
+          "maxWords": 100
+        }
+      },
+      {
+        "id": "profile/planner",
+        "definition": "displays/AgentProfile",
+        "version": 1,
+        "label": "Mira",
+        "scope": "scope/conversation",
+        "configuration": {
+          "label": "Mira"
+        }
+      },
+      {
+        "id": "profile/resident",
+        "definition": "displays/AgentProfile",
+        "version": 1,
+        "label": "Leo",
+        "scope": "scope/conversation",
+        "configuration": {
+          "label": "Leo"
+        }
+      },
+      {
+        "id": "conversation",
+        "definition": "displays/AgentTranscript",
+        "version": 1,
+        "label": "Conversation",
+        "scope": "scope/conversation",
+        "configuration": {
+          "label": "Conversation"
+        }
+      },
+      {
+        "id": "actions",
+        "definition": "controls/AgentActions",
+        "version": 1,
+        "label": "Conversation controls",
+        "scope": "scope/conversation",
+        "configuration": {
+          "label": "Conversation controls"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/agent/planner",
+        "kind": "value",
+        "from": {
+          "node": "agent/planner",
+          "port": "profile"
+        },
+        "to": {
+          "node": "environment",
+          "port": "agents"
+        }
+      },
+      {
+        "id": "link/profile/planner",
+        "kind": "value",
+        "from": {
+          "node": "agent/planner",
+          "port": "profile"
+        },
+        "to": {
+          "node": "profile/planner",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/agent/resident",
+        "kind": "value",
+        "from": {
+          "node": "agent/resident",
+          "port": "profile"
+        },
+        "to": {
+          "node": "environment",
+          "port": "agents"
+        }
+      },
+      {
+        "id": "link/profile/resident",
+        "kind": "value",
+        "from": {
+          "node": "agent/resident",
+          "port": "profile"
+        },
+        "to": {
+          "node": "profile/resident",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/transcript",
+        "kind": "value",
+        "from": {
+          "node": "environment",
+          "port": "session"
+        },
+        "to": {
+          "node": "conversation",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/control-state",
+        "kind": "value",
+        "from": {
+          "node": "environment",
+          "port": "session"
+        },
+        "to": {
+          "node": "actions",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/action/NEXT",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "NEXT"
+        },
+        "to": {
+          "node": "environment",
+          "port": "NEXT"
+        }
+      },
+      {
+        "id": "link/action/PLAY",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "PLAY"
+        },
+        "to": {
+          "node": "environment",
+          "port": "PLAY"
+        }
+      },
+      {
+        "id": "link/action/PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "PAUSE"
+        },
+        "to": {
+          "node": "environment",
+          "port": "PAUSE"
+        }
+      },
+      {
+        "id": "link/action/CANCEL",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "CANCEL"
+        },
+        "to": {
+          "node": "environment",
+          "port": "CANCEL"
+        }
+      },
+      {
+        "id": "link/action/RESET",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "RESET"
+        },
+        "to": {
+          "node": "environment",
+          "port": "RESET"
+        }
+      },
+      {
+        "id": "link/action/REPLAY",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "REPLAY"
+        },
+        "to": {
+          "node": "environment",
+          "port": "REPLAY"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/conversation",
+        "label": "Conversation"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/profile/planner",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "profile/planner"
+        },
+        {
+          "id": "layout/profile/resident",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "profile/resident"
+        },
+        {
+          "id": "layout/conversation",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "conversation"
+        },
+        {
+          "id": "layout/actions",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "actions"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Two perspectives, one city",
+      "instruction": "Hear two agents explore a shared topic. Change their personalities in the builder and compare a new conversation.",
+      "explanation": "Each response comes from the configured AI model. The participants keep their own context and take turns responding to the shared conversation."
+    },
+    "editor": {
+      "positions": {
+        "agent/planner": {
+          "x": 0,
+          "y": 0
+        },
+        "agent/resident": {
+          "x": 340,
+          "y": 0
+        },
+        "environment": {
+          "x": 680,
+          "y": 0
+        },
+        "profile/planner": {
+          "x": 0,
+          "y": 220
+        },
+        "profile/resident": {
+          "x": 340,
+          "y": 220
+        },
+        "conversation": {
+          "x": 680,
+          "y": 220
+        },
+        "actions": {
+          "x": 0,
+          "y": 440
+        }
+      },
+      "zoom": 1
+    },
+    "presentation": {
+      "mode": "board",
+      "version": 2,
+      "responsive": true,
+      "items": [
+        {
+          "id": "board/conversation",
+          "layoutId": "layout/conversation",
+          "rect": {
+            "x": 0,
+            "y": 148,
+            "width": 710,
+            "height": 480
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/actions",
+          "layoutId": "layout/actions",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 710,
+            "height": 124
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/profile/planner",
+          "layoutId": "layout/profile/planner",
+          "rect": {
+            "x": 734,
+            "y": 0,
+            "width": 300,
+            "height": 240
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/profile/resident",
+          "layoutId": "layout/profile/resident",
+          "rect": {
+            "x": 734,
+            "y": 265,
+            "width": 300,
+            "height": 240
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1082,
+        "height": 680
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsiveRows": [
+        [
+          "board/actions"
+        ],
+        [
+          "board/conversation"
+        ],
+        [
+          "board/profile/planner"
+        ],
+        [
+          "board/profile/resident"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/AIAgent",
+      "version": 1
+    },
+    {
+      "id": "models/AgentSession",
+      "version": 1
+    },
+    {
+      "id": "displays/AgentProfile",
+      "version": 1
+    },
+    {
+      "id": "displays/AgentTranscript",
+      "version": 1
+    },
+    {
+      "id": "controls/AgentActions",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Fictional participants; generated claims are not verified facts.",
+    "Replay is the recorded conversation; rerunning may produce different responses."
+  ],
+  "catalog": {
+    "icon": "\u2667",
+    "category": "social-systems",
+    "order": 42
+  }
+}

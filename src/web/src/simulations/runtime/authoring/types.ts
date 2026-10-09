@@ -177,7 +177,7 @@ export type CompositeRecipe = {
   recipeVersion: 1 | 2;
   catalog?: {
     icon: string;
-    category: "physics" | "mathematics";
+    category: "physics" | "mathematics" | "social-systems";
     order: number;
   };
   id: string;

@@ -5,6 +5,7 @@ import { boolean, num, object } from "../../runtime/parameterSchema";
 import { liveExplorationCommands } from "../controls/interactionPolicy";
 import { componentDefinitions } from "../registry";
 import { authoringDefinitions } from "./authoring";
+import { agentDefinitions } from "./agents";
 import { definitionDiscovery } from "./discovery";
 import { explorationDefinitions } from "./exploration";
 import { applyExplorationTeaching } from "./explorationTeaching";
@@ -26,6 +27,7 @@ function register(definition: PublicDefinition) {
 }
 for (const d of [
   ...genericDefinitions,
+  ...agentDefinitions,
   ...explorationDefinitions,
   ...authoringDefinitions,
   ...spatialDefinitions,

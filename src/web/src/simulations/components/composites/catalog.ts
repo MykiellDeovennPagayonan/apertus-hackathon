@@ -643,6 +643,8 @@ const legacyBuiltInRecipes = [...publicDefinitions.values()]
           "models/Market",
           "models/DailyRoutine",
           "models/TownNavigation",
+          "models/AIAgent",
+          "models/AgentSession",
         ].includes(d.id)) ||
         /Authored(Line|Square|GasContainer|FractionBar)$/.test(d.id) ||
         /prefabs\/(chemistry|math-foundations|physical-systems|natural-systems|dynamic-systems)\//.test(

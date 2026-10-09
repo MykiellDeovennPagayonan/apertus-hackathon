@@ -1368,6 +1368,16 @@
   .board-workspace-tools {
   visibility: hidden;
 }
+@media (max-width: 700px) {
+  .experiment-workspace
+    .recipe-lesson:has(.agent-actions)
+    .spatial-board.is-compact.is-workspace
+    .is-floating
+    .board-workspace-tools {
+    top: auto;
+    bottom: calc(var(--composer-height, 64px) + var(--composer-bottom) + 12px);
+  }
+}
 /* Preserve actual-scale controls and scenes when vertical space is scarce.
    The authored activity repeats the actionable prompt in its first card. */
 @media (max-height: 650px) {
