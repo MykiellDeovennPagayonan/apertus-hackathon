@@ -140,11 +140,17 @@ if (process.argv.includes("--capture")) {
       ];
     }),
   );
-  assert.deepEqual(
-    rendered,
-    markupBaseline,
-    "Built-in recipe markup changed beyond React IDs/dynamic stack traces",
-  );
+  if (process.argv.includes("--capture-markup")) {
+    fs.writeFileSync(
+      path.join(__dirname, "fixtures/component-cleanup-markup.json"),
+      `${JSON.stringify(rendered, null, 2)}\n`,
+    );
+  } else
+    assert.deepEqual(
+      rendered,
+      markupBaseline,
+      "Built-in recipe markup changed beyond React IDs/dynamic stack traces",
+    );
   console.log(
     `${builtInRecipes.length} built-in recipes preserve their pre-refactor initial markup.`,
   );

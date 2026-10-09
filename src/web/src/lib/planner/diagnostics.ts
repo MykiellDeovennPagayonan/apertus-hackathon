@@ -1,4 +1,5 @@
 import { readLlmConfig } from "../llm/config";
+import { compositionDeadlineMs } from "./compositionPolicy";
 export interface PlannerTrace {
   id: string;
   startedAt: string;
@@ -36,9 +37,9 @@ export function startTrace(id: string, prompt: string) {
       decision: {
         provider: process.env.DECISION_PROVIDER?.trim() || "laya",
         policy:
-          "Constructed only for ambiguous selection; see selection.decision events.",
+          "See selection.decision or composition.decision for actual acceptance.",
       },
-      deadlineMs: Number(process.env.PLANNER_TIMEOUT_MS ?? 120000),
+      deadlineMs: compositionDeadlineMs(),
     };
   } catch {
     configuration = { invalid: true };
@@ -58,7 +59,7 @@ export function startTrace(id: string, prompt: string) {
     }
   }
   return (event: string, data: unknown) => {
-    if (enabled && trace.events.length < 50)
+    if (enabled && trace.events.length < 240)
       trace.events.push({ event, elapsedMs: Date.now() - started, data });
   };
 }

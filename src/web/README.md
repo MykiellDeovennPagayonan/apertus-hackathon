@@ -247,3 +247,30 @@ Schedule backups of the canonical collections and test restore procedures. Save 
 - `pnpm exec next build --webpack`: production build verification.
 
 Browser checks require Chromium installed for the locked Playwright version, or `PLAYWRIGHT_CHROMIUM_EXECUTABLE` pointing to an installed compatible executable. Database tests create uniquely named temporary databases and drop only those databases during cleanup. Never point `MONGODB_TEST_URI` at production credentials.
+
+## Realistic prompt composition with Laya and Apertus
+
+The composable catalog now includes scaled solar/lunar eclipse geometry and independent sinusoidal pressure sources with two-input superposition. Pendulum, ring-traffic and circuit requests reuse the existing physical models. All lessons use typed authoring operations, shared controls/displays, the same runtime and ordinary recipe persistence.
+
+Set these server-only variables to require real local Laya selection and Apertus authoring on the composition path:
+
+```dotenv
+LLM_PROVIDER=apertus
+APERTUS_PROVIDER=local
+APERTUS_LOCAL_RUNTIME=mlx
+APERTUS_LOCAL_BASE_URL=http://127.0.0.1:43101/v1
+APERTUS_LOCAL_MODEL=m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4
+PLANNER_MODE=hybrid
+DECISION_PROVIDER=laya
+COMPOSITION_DECISION_POLICY=required-laya
+DECISION_TIMEOUT_MS=20000
+LAYA_BASE_URL=http://127.0.0.1:43102
+```
+
+Start both inference services with the existing setup/run targets, check `smoke` and `smoke-laya`, then run `make run-realistic` from the repository root (or set the variables above and restart the web app). The local MLX launcher applies the tokenizer regex compatibility fix without modifying downloaded model files. Required composition allows up to 24 turns, 28 Apertus calls, three repairs, and one Laya decision; the default total deadline is 240 seconds (120 seconds in optional mode). `PLANNER_TIMEOUT_MS` explicitly overrides it. Required mode preserves the current lesson and reports a failure when Laya is unavailable or does not meet the confidence gate; it cannot silently claim both-provider success via an Apertus-only fallback. `COMPOSITION_DECISION_POLICY=optional` retains the previous selection policy.
+
+Use `pnpm test:generation:realistic` for deterministic component/physics/transaction checks. With local diagnostics enabled, run `pnpm test:generation:realistic:live` for five independent attempts per exact prompt and desktop interaction/screenshots at 1440×900, 1920×1080 and 1280×720. `GENERATION_RUNS=1` is a smoke run; `GENERATION_CASE=pendulum|traffic|circuit|eclipse|sound` narrows debugging. Use `UX_TEST_URL=http://localhost:<port>` for an isolated dev server. Raw evidence is restricted to the git-ignored `docs/agent-only/implementation/019-validation/` tree with a fresh run directory. Actual provider/model traces and numerical interaction assertions are required; mocked fixtures do not establish live acceptance. Review screenshots before accepting the report.
+
+Eclipse geometry is a scaled planar teaching model. Sound cancellation is ideal pressure superposition at one point with no audio output or real headphone controller. Existing pendulum/circuit/traffic fidelity assumptions remain visible in generated lessons.
+
+Replay a retained run with `REALISTIC_REPLAY_DIR=<absolute ignored live-run directory> pnpm test:generation:realistic:replay`. This imports the run's accepted recipes through the ordinary UI and checks both desktop motion preferences; it is UX replay, not new inference. `REALISTIC_REPLAY_REARRANGE=1` additionally reapplies only shared presentation arrangement for debugging; reports distinguish this from an unchanged accepted export. Failed attempts remain retained. The required local setup uses a bounded 20-second decision timeout to accommodate cold MLX inference; the optional decision default remains 3 seconds.

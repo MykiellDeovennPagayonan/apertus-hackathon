@@ -124,7 +124,7 @@ export function buildTurnTools(
       if (!def) continue;
       for (const [command, contract] of Object.entries(def.commands)) {
         const fields = parameterLeaves(contract.arguments).map((l) => l.path);
-        if (!fields.length) continue;
+        if (!fields.length) fields.push("");
         tools.push({
           tool: "add_control",
           schema: object({
@@ -176,7 +176,7 @@ export function buildTurnTools(
     tool: "set_lesson",
     schema: object({
       title: { type: "string", maxLength: 120 },
-      instruction: text,
+      instruction: { type: "string", maxLength: 500 },
       explanation: { type: "string", minLength: 0, maxLength: 1500 },
     }),
   });

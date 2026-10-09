@@ -22,10 +22,25 @@ export function createLayaProvider(
       (timing[key] as number) >= 0
         ? (timing[key] as number)
         : undefined;
+    const result = record(data.result);
+    const usage =
+      result.usage && typeof result.usage === "object"
+        ? record(result.usage)
+        : {};
+    const validCount = (value: unknown): value is number =>
+      typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
     return {
+      ...(validCount(usage.input_tokens) && validCount(usage.output_tokens)
+        ? {
+            usage: {
+              input_tokens: usage.input_tokens,
+              output_tokens: usage.output_tokens,
+            },
+          }
+        : {}),
       provider: "laya",
       model: readModel(data.model),
-      answers: readAnswers(record(data.result).answers, request, false),
+      answers: readAnswers(result.answers, request, false),
       durationMs: Date.now() - started,
       timing: {
         inference_ms: duration("inference_ms"),

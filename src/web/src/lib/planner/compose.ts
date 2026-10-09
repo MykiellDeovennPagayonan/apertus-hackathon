@@ -2,6 +2,7 @@ import {
   publicDefinition,
   publicDefinitions,
 } from "../../simulations/components/catalog";
+import { compositionRequirements } from "../../simulations/components/catalog/explorationTeaching";
 import { finalizeRecipe } from "../../simulations/runtime/authoring/operations";
 import {
   autoConnectUnambiguous,
@@ -20,14 +21,19 @@ import { loadRecipe } from "../../simulations/runtime/recipes/loadRecipe";
 import { type Message, requestStructured } from "../apertus/transport";
 import { buildInitialCard, retrieveComponentBucket } from "./bucket";
 import type { GenerationBudget } from "./budget";
+import { requiresLayaComposition } from "./compositionPolicy";
+import { compositionIssues } from "./compositionQuality";
+import { focusCompositionTools } from "./compositionTools";
 import { computeOpenCompositionCoverage } from "./coverage";
 import { PlannerError } from "./errors";
+import { focusedTurn } from "./focusedTurn";
 import { type FixerResult, fixAndValidateToolResponse } from "./formatFixer";
 import type {
   GenerationRequest,
   GenerationResult,
   TeachingIntent,
 } from "./schema";
+import { selectCompositionStrategy } from "./selection/compositionStrategy";
 import { buildTurnEnvelopeSchema, buildTurnTools } from "./turnSchema";
 
 const TURN_SYSTEM_PROMPT = `You are the component and composite builder agent for Apertus.
@@ -94,6 +100,12 @@ export async function compose(
     };
   }
 
+  const requiredLaya = requiresLayaComposition();
+  const strategy = requiredLaya
+    ? await selectCompositionStrategy(request.prompt, intent, bucket, budget)
+    : null;
+  if (strategy) intent = { ...intent, suggestedStructure: strategy.structure };
+
   // 2. Initialize authoring transaction
   const shouldStartFresh =
     /\b(?:start over|from scratch|new experiment|clear all|reset all|replace everything)\b/i.test(
@@ -114,7 +126,11 @@ export async function compose(
       immersive: { startup: "board", allowReturnToBoard: true, overlays: [] },
     };
   }
-  const draft = new AuthoringTransaction(request.requestId, initialDoc);
+  const draft = new AuthoringTransaction(
+    request.requestId,
+    initialDoc,
+    requiredLaya ? { operations: 32, receipts: 48 } : undefined,
+  );
 
   const maxTurns = budget.maxTurns;
   let turn = 0;
@@ -127,10 +143,66 @@ export async function compose(
   while (turn < maxTurns) {
     budget.check();
 
-    const turnTools = buildTurnTools(draft.document, bucket);
+    const allTools = buildTurnTools(draft.document, bucket);
+    let turnTools = strategy
+      ? focusCompositionTools(
+          draft.document,
+          bucket,
+          allTools,
+          strategy.definition,
+        )
+      : allTools;
+    if (
+      requiredLaya &&
+      compositionIssues(draft.document).length === 0 &&
+      draft.document.nodes.some(
+        (node) => node.definition === strategy?.definition,
+      )
+    ) {
+      const hasLesson = [...executedPayloads].some(
+        (p) => JSON.parse(p).tool === "set_lesson",
+      );
+      const hasArrangement = [...executedPayloads].some(
+        (p) => JSON.parse(p).tool === "arrange",
+      );
+      turnTools = allTools.filter((t) =>
+        !hasLesson
+          ? t.tool === "set_lesson"
+          : !hasArrangement
+            ? t.tool === "arrange"
+            : false,
+      );
+    }
+    if (requiredLaya) {
+      turnTools = turnTools.map((tool) => {
+        if (tool.tool !== "arrange" || tool.schema.type !== "object")
+          return tool;
+        const properties = { ...tool.schema.properties };
+        for (const [role, categories] of Object.entries({
+          main: ["appearance", "canvases"],
+          controls: ["controls"],
+          results: ["displays"],
+        })) {
+          const ids = draft.document.nodes
+            .filter((n) =>
+              categories.includes(publicDefinition(n.definition).category),
+            )
+            .map((n) => n.id);
+          const field = properties[role];
+          if (field.type === "array" && ids.length)
+            properties[role] = {
+              ...field,
+              items: { type: "enum", values: ids },
+            };
+        }
+        return { ...tool, schema: { ...tool.schema, properties } };
+      });
+    }
     const turnJsonSchema = buildTurnEnvelopeSchema(turnTools);
 
-    const liveHandles = Object.keys(draft.handles);
+    const liveHandles = requiredLaya
+      ? draft.document.nodes.map((n) => n.id)
+      : Object.keys(draft.handles);
     const nodesSummary = draft.document.nodes.map((n) => {
       const handle =
         Object.entries(draft.handles).find(([, id]) => id === n.id)?.[0] ??
@@ -139,6 +211,8 @@ export async function compose(
       return {
         handle,
         definition: n.definition,
+        label: n.label,
+        instanceLabel: `${compositionRequirements[n.definition]?.instanceNoun ?? def?.title ?? n.definition} ${draft.document.nodes.filter((peer) => peer.definition === n.definition).findIndex((peer) => peer.id === n.id) + 1}`,
         commands: def ? Object.keys(def.commands) : [],
         valueOutputs: def
           ? Object.entries(def.outputs)
@@ -157,6 +231,14 @@ export async function compose(
       request.active?.sessionId?.startsWith("builder-") ?? false;
 
     const contextData = {
+      strategy,
+      allowedTools: turnTools,
+      requirements: Object.fromEntries(
+        bucket
+          .filter((c) => compositionRequirements[c.id])
+          .map((c) => [c.id, compositionRequirements[c.id]]),
+      ),
+      incomplete: requiredLaya ? compositionIssues(draft.document) : [],
       mode: isCompositeBuilder ? "composite_builder" : "experiment_planner",
       draftSummary: {
         nodes: nodesSummary,
@@ -219,7 +301,9 @@ export async function compose(
       /\b(?:slider|control|input|dial|button)\b/i.test(request.prompt);
     const wantsMoreObservations =
       /\b(?:add|insert|include|create|provide|give)\b/i.test(request.prompt) &&
-      /\b(?:readout|observation|display|meter|graph|monitor)\b/i.test(request.prompt);
+      /\b(?:readout|observation|display|meter|graph|monitor)\b/i.test(
+        request.prompt,
+      );
 
     let stepHint = "";
     if (isCompositeBuilder) {
@@ -287,40 +371,108 @@ export async function compose(
       },
     ];
 
+    if (requiredLaya) budget.beginTurn();
     budget.trace?.("turn.start", {
       turn: turn + 1,
       revision: draft.revision,
       availableTools: turnTools.map((t) => t.tool),
     });
 
-    const turnResult = await requestStructured<FixerResult>(
-      messages,
-      (content: string) => {
-        const fixed = fixAndValidateToolResponse(
-          content,
-          liveHandles,
-          undefined,
-          (event, data) => {
-            budget.trace?.(event, data);
+    const turnResult = requiredLaya
+      ? await focusedTurn(
+          request.prompt,
+          turnTools,
+          {
+            aliases: Object.keys(draft.handles),
+            fidelity: [
+              ...new Set(
+                draft.document.nodes
+                  .flatMap((n) => [
+                    ...publicDefinition(n.definition).assumptions,
+                    compositionRequirements[n.definition]?.guidance ?? "",
+                  ])
+                  .filter(Boolean),
+              ),
+            ],
+            nodes: nodesSummary.map((n) => ({
+              ...n,
+              id: draft.handles[n.handle] ?? n.handle,
+            })),
+            connections: connectionsSummary,
+            selectedCapability: strategy?.definition,
+            priorOperation: lastReceipt
+              ? { summary: lastReceipt.summary, issues: lastReceipt.issues }
+              : null,
           },
-          draft.document,
+          budget,
+          turn,
+          (operation) => {
+            const candidate = draft.fork();
+            const receipt = candidate.execute({
+              draftId: candidate.draftId,
+              expectedRevision: candidate.revision,
+              operationId: `op_turn_${turn + 1}`,
+              request: operation,
+            });
+            if (receipt.status !== "applied")
+              throw new Error(
+                receipt.issues.map((issue) => issue.message).join("; ") ||
+                  receipt.summary,
+              );
+          },
+        )
+      : await requestStructured<FixerResult>(
+          messages,
+          (content: string) => {
+            const fixed = fixAndValidateToolResponse(
+              content,
+              liveHandles,
+              undefined,
+              (event, data) => {
+                budget.trace?.(event, data);
+              },
+              draft.document,
+            );
+            if (fixed.issues.length > 0) {
+              throw new Error(fixed.issues.join("; "));
+            }
+            return fixed;
+          },
+          'Return a single valid JSON turn envelope matching schema: {"action": "tool"|"done", "tool": {...}, "note": "..."}.',
+          budget.signal,
+          {
+            budget,
+            schema: turnJsonSchema,
+            maxTokens: 768,
+            onEvent: (event, data) =>
+              budget.trace?.(`turn_${turn + 1}.${event}`, data),
+            stage: `turn_${turn + 1}`,
+          },
         );
-        if (fixed.issues.length > 0) {
-          throw new Error(fixed.issues.join("; "));
-        }
-        return fixed;
-      },
-      'Return a single valid JSON turn envelope matching schema: {"action": "tool"|"done", "tool": {...}, "note": "..."}.',
-      budget.signal,
-      {
-        budget,
-        schema: turnJsonSchema,
-        maxTokens: 512,
-        stage: `turn_${turn + 1}`,
-      },
-    );
 
     if (turnResult.action === "done") {
+      const incomplete = requiredLaya ? compositionIssues(draft.document) : [];
+      if (
+        requiredLaya &&
+        (!draft.document.nodes.some(
+          (n) => publicDefinition(n.definition).category === "models",
+        ) ||
+          incomplete.length)
+      ) {
+        lastReceipt = {
+          operationId: "premature_done",
+          draftRevision: draft.revision,
+          handles: draft.handles,
+          status: "rejected",
+          summary: "Finish the required interactive graph before done.",
+          issues: incomplete.map((message) => ({
+            code: "incomplete_composition",
+            message,
+          })),
+        };
+        turn++;
+        continue;
+      }
       if (
         isCompositeBuilder &&
         executedPayloads.size === 0 &&
@@ -401,6 +553,11 @@ export async function compose(
         revision: draft.revision,
       });
 
+      if (requiredLaya && lastReceipt.status !== "applied")
+        throw new PlannerError(
+          `Composition operation rejected: ${lastReceipt.summary}`,
+          422,
+        );
       if (draft.revision === lastRevision) {
         unchangedRevisionsCount++;
         if (unchangedRevisionsCount >= 2) {
@@ -417,7 +574,9 @@ export async function compose(
   }
 
   // 4. Auto-connect any remaining unambiguous ports
-  const auto = autoConnectUnambiguous(draft.document);
+  const auto = requiredLaya
+    ? { connected: [] }
+    : autoConnectUnambiguous(draft.document);
   if (auto.connected.length > 0) {
     for (const conn of auto.connected) {
       draft.execute({
@@ -523,9 +682,27 @@ export async function compose(
     }
   }
 
+  if (requiredLaya) {
+    const issues = compositionIssues(finalDoc);
+    if (issues.length)
+      throw new PlannerError(
+        `Incomplete interactive composition: ${issues.join("; ")}`,
+        422,
+      );
+  }
+  const assumptions = [
+    ...new Set(
+      finalDoc.nodes.flatMap((n) => publicDefinition(n.definition).assumptions),
+    ),
+  ];
+  finalDoc.lesson.explanation = [finalDoc.lesson.explanation, ...assumptions]
+    .filter(Boolean)
+    .join("\n");
+
   // 9. Finalize recipe
   const recipe = finalizeRecipe(finalDoc, {
-    id: "generated/lesson",
+    id: `generated/${request.requestId}`,
+    assumptions,
     title: finalDoc.lesson.title,
     description: finalDoc.lesson.instruction,
   });

@@ -28,6 +28,7 @@ import {
   zoomAt,
 } from "../../../runtime/authoring/board";
 import { isDrawingItem } from "../../../runtime/authoring/drawings";
+import { expandResponsiveContent } from "../../../runtime/authoring/responsiveLayout";
 import type {
   AuthoredDocument,
   Layout,
@@ -230,19 +231,7 @@ export function SpatialBoard({
           return next;
         })()
       : !authoring && sourcePresentation?.responsive
-        ? {
-            ...sourcePresentation,
-            items: sourcePresentation.items.map((item) => ({
-              ...item,
-              rect: {
-                ...item.rect,
-                height: Math.max(
-                  item.rect.height,
-                  naturalHeights[item.id] ?? 0,
-                ),
-              },
-            })),
-          }
+        ? expandResponsiveContent(sourcePresentation, naturalHeights)
         : sourcePresentation;
   const [camera, setCamera] = useState<Camera | null>(null);
   useEffect(() => {
@@ -1743,17 +1732,30 @@ export function SpatialBoard({
                   const navigation = host
                     ?.querySelector(".board-camera-tools")
                     ?.getBoundingClientRect();
+                  const overlapsTarget = (rect: DOMRect | undefined) =>
+                    rect &&
+                    rect.left < bounds.right &&
+                    rect.right > bounds.left;
+                  const workspaceTools = host
+                    ?.querySelector(".board-workspace-tools")
+                    ?.getBoundingClientRect();
                   const usableTop = Math.max(
                     viewportBounds.top,
-                    header?.bottom ?? viewportBounds.top,
-                    host
-                      ?.querySelector(".board-workspace-tools")
-                      ?.getBoundingClientRect().bottom ?? viewportBounds.top,
+                    header && overlapsTarget(header)
+                      ? header.bottom
+                      : viewportBounds.top,
+                    workspaceTools && overlapsTarget(workspaceTools)
+                      ? workspaceTools.bottom
+                      : viewportBounds.top,
                   );
                   const usableBottom = Math.min(
                     viewportBounds.bottom,
-                    composer?.top ?? viewportBounds.bottom,
-                    navigation && navigation.height > 0
+                    composer && overlapsTarget(composer)
+                      ? composer.top
+                      : viewportBounds.bottom,
+                    navigation &&
+                      overlapsTarget(navigation) &&
+                      navigation.height > 0
                       ? navigation.top
                       : viewportBounds.bottom,
                   );

@@ -1,5 +1,7 @@
 {
-  "prebuilt/models-Projectile": "2a6511c6e77867f23fa8c4a48851b5b77ca40ad43a3bdf206928a85ade8cd6e2",
+  "prebuilt/models-SinusoidalSignal": "e1f52ef09e24f5962a4c3371595395ac7d47c7183f34f1e9fc9b45d8e036ba1d",
+  "prebuilt/models-EclipseGeometry": "4ec666fb5b121246c0ed5f3554b60fb7bfe4c083111c6bea7d8c6df2993c365e",
+  "prebuilt/models-Projectile": "6d1208fd214774662ce18c400a5c99c8a2dcbb812b995ebb55811260ddbfe03e",
   "prebuilt/models-ScheduledTrip": "0e0e638c097f93179c9f9d6cb3174d3b204467a119ee4793a48cd9e47417e9fc",
   "prebuilt/models-counting": "05542ca477fd36728205046aff1302fd1479190fd970843bf95063cd40d9c3b5",
   "prebuilt/models-arithmetic": "60a0adc24f76d68f8561e7cf87f7acde11cdc998f2311857b5027a91d081ebdf",
@@ -20,7 +22,7 @@
   "prebuilt/prefabs-chemistry-Dilution": "b572be6902223584ef24b862ecb9d8eb85cb9e8346ce12a1b4635da6f2c30ccd",
   "prebuilt/prefabs-chemistry-Conservation": "8b252e86720f0a072d73d2d4be85cc46a1126266f47bf40f564c9b9e4a6b9b97",
   "prebuilt/prefabs-chemistry-ReactionRate": "f57864430680421bf8b2d8b5ec830f0a0040648893ea2f950010236d91c2ad8c",
-  "prebuilt/prefabs-physical-systems-Pendulum": "8a8972974629c395593e25b4bc056a12d1695e6f820ac27253425aa5df5bbc51",
+  "prebuilt/prefabs-physical-systems-Pendulum": "cc8220ec6530ec73829af6dab2b29730ae186d0cdc1ae1f7a7f70163d07536f0",
   "prebuilt/prefabs-physical-systems-RollingTrack": "5e321b8b4a4b4bf57c7aa8b9c7320d5c48a16a69581e42fa4468f9e5d562ae76",
   "prebuilt/prefabs-physical-systems-ResistiveCircuit": "5c76e24ab6b2d92a659b4f2b1d2396f32253b5c3df9792480678938ea2d90db0",
   "prebuilt/prefabs-natural-systems-DiffusionField": "7ef98cae37b5f726331d5e7e8af55c325a79266ba06bf5c0b2d4b98a4dba27d4",
@@ -37,7 +39,7 @@
   "recipes/BridgeLabDense": "b3d33694c81bdba98385a3f951744115e9f13ad2a889a330736fcdeb5af309b3",
   "recipes/BridgeLabLong": "670b4f8e2d70e3754516fdf0e1c7542b76b2557a91c8f60820a285ccdf0cb7c8",
   "recipes/TownLab": "9c38091751acda889205d84fc9bcf0908db85c62e20cc490ae8c25a3af953de7",
-  "recipes/ProjectileComparison": "fef43a96a7e7cb1dd0db0a6c0b9fe0f4ab65abdb32ca49bf692b3e5e8146e017",
-  "recipes/PendulumComparison": "2978e62b749de9c930b32933321955055054e58db9217efc8dc218eef6d6e6fa",
+  "recipes/ProjectileComparison": "ac0e0cf0406fc03694638773a1577d2695f4523bc744ccadc903af38ca13b2e1",
+  "recipes/PendulumComparison": "9670910588387bec3f5e8ec2518608bc4f6583fd986c644fa64ca2994fc1087a",
   "recipes/RollingComparison": "3241dcaae60b82cbf33daa938712676f599bd05ab74616f6af84098b26fe01b5"
 }

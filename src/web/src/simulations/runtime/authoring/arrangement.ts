@@ -92,12 +92,33 @@ export function arrangeDocument(
             ? publicDefinition(node.definition).category
             : "layout";
   };
+  // Data-connected models share presentation space while runtime scopes stay
+  // isolated. Independent comparison models remain separate columns/sections.
+  const clusters = new Map(next.scopes.map((scope) => [scope.id, scope.id]));
+  const cluster = (scope: string): string => {
+    const parent = clusters.get(scope) ?? scope;
+    return parent === scope ? scope : cluster(parent);
+  };
+  for (const connection of next.connections) {
+    if (connection.kind !== "value") continue;
+    const source = next.nodes.find((node) => node.id === connection.from.node);
+    const target = next.nodes.find((node) => node.id === connection.to.node);
+    if (
+      source &&
+      target &&
+      publicDefinition(source.definition).category === "models" &&
+      publicDefinition(target.definition).category === "models"
+    )
+      clusters.set(cluster(source.scope), cluster(target.scope));
+  }
   const scopes = [
     ...new Set(
       board.items
         .filter((i): i is ComponentBoardItem => !!i.layoutId)
-        .map((i) => nodeFor(i)?.scope)
-        .filter(Boolean),
+        .flatMap((i) => {
+          const scope = nodeFor(i)?.scope;
+          return scope ? [cluster(scope)] : [];
+        }),
     ),
   ];
   const rows: string[][] = [];
@@ -109,7 +130,7 @@ export function arrangeDocument(
   for (const [index, scope] of scopes.entries()) {
     const items = board.items.filter(
       (i): i is ComponentBoardItem =>
-        !!i.layoutId && nodeFor(i)?.scope === scope,
+        !!i.layoutId && cluster(nodeFor(i)?.scope ?? "") === scope,
     );
     const scenes = items.filter((i) =>
       ["appearance", "canvases"].includes(category(i)),
@@ -144,7 +165,7 @@ export function arrangeDocument(
           : comparison &&
               nodeFor(item)?.definition === "appearance/area-perimeter"
             ? 160
-            : 360,
+            : 480,
       };
       item.responsiveMinHeight = nodeFor(item)?.definition.includes(
         "arithmetic",
@@ -153,7 +174,8 @@ export function arrangeDocument(
         : 280;
       sceneY += item.rect.height + 20;
     }
-    let y = request.template === "vertical" || comparison ? sceneY : scopeY;
+    const wideSidebar =
+      request.template === "scene-with-sidebar" && controls.length >= 3;
     const sidebarX =
       request.template === "vertical" || comparison ? x : x + 644;
     const width = comparison
@@ -161,39 +183,82 @@ export function arrangeDocument(
       : request.template === "vertical"
         ? 620
         : 320;
-    for (const [itemIndex, item] of (comparison
-      ? [...controls, ...results]
-      : [...results, ...controls]
-    ).entries()) {
-      if (item.locked) continue;
+    const heightFor = (item: ComponentBoardItem) => {
       const node = nodeFor(item);
-      const height =
-        node?.definition === "controls/ArithmeticActivity"
-          ? 262
-          : node?.definition === "displays/Inspector"
-            ? 240
-            : category(item) === "controls"
-              ? comparison
-                ? 144
-                : 160
-              : comparison
-                ? 96
+      return node?.definition === "controls/ArithmeticActivity"
+        ? 262
+        : node?.definition === "displays/Inspector"
+          ? 240
+          : node?.definition === "controls/Slider"
+            ? 264
+            : node?.definition === "controls/NumberInput"
+              ? 224
+              : category(item) === "controls"
+                ? 180
                 : 164;
-      item.rect = {
-        x: sidebarX + (comparison ? (itemIndex % 2) * 286 : 0),
-        y,
-        width,
-        height,
-      };
-      if (!comparison || itemIndex % 2 === 1) y += height + 16;
+    };
+    let y = request.template === "vertical" || comparison ? sceneY : scopeY;
+    let resultsBottom = sceneY;
+    if (wideSidebar) {
+      for (const item of results) {
+        if (item.locked) continue;
+        const height = heightFor(item);
+        item.rect = { x, y: resultsBottom, width: 620, height };
+        resultsBottom += height + 20;
+      }
     }
-    nextScopeY = Math.max(sceneY, y) + 24;
+    const controlTarget = (item: ComponentBoardItem) =>
+      next.connections.find(
+        (connection) =>
+          connection.kind === "command" &&
+          connection.from.node === nodeFor(item)?.id,
+      )?.to.node;
+    const controlTargets = [...new Set(controls.map(controlTarget))];
+    const controlColumns = controlTargets.map((target) =>
+      controls.filter((item) => controlTarget(item) === target),
+    );
+    const columnControls =
+      wideSidebar &&
+      controlColumns.length === 2 &&
+      controlColumns[0].length === controlColumns[1].length
+        ? controlColumns[0].flatMap((item, index) => [
+            item,
+            controlColumns[1][index],
+          ])
+        : controls;
+    const sidebarItems = wideSidebar
+      ? columnControls
+      : comparison
+        ? [...controls, ...results]
+        : [...results, ...controls];
+    const columns = comparison || wideSidebar ? 2 : 1;
+    for (let row = 0; row < sidebarItems.length; row += columns) {
+      const items = sidebarItems.slice(row, row + columns);
+      const rowHeight = Math.max(...items.map(heightFor));
+      for (const [column, item] of items.entries()) {
+        if (item.locked) continue;
+        item.rect = {
+          x: sidebarX + column * (width + 20),
+          y,
+          width,
+          height: rowHeight,
+        };
+      }
+      y += rowHeight + 20;
+    }
+    nextScopeY = Math.max(resultsBottom, y) + 24;
   }
   board.responsive = true;
   board.responsiveRows = rows;
   for (const item of board.items)
     if (!rows.flat().includes(item.id)) rows.push([item.id]);
   board.startView = extent(board.items.map((i) => i.rect));
+  // Include breathing room in a new composition's opening extent. The canvas
+  // remains full size and freely navigable; authored learner areas are preserved.
+  board.learnerArea ??= {
+    ...board.startView,
+    height: board.startView.height + 160,
+  };
   arrangeGraph(next);
   validateAuthoredDocument(next);
   return next;

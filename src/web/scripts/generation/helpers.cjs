@@ -24,7 +24,8 @@ async function launch() {
   const override = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE;
   const installed = fs.existsSync(chromium.executablePath());
   const mac = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-  const winEdge = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
+  const winEdge =
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
   const executablePath =
     override ||
     (!installed && process.platform === "darwin" && fs.existsSync(mac)
@@ -235,10 +236,15 @@ async function assertOpeningState(page, result, c, correlate = true) {
     assert.equal(s.state.state[loadNode.id].magnitude, 10);
     assert.equal(s.state.state[loadNode.id].position, 0.5);
     assert.match(await page.locator(".bridge-demo").innerText(), /10\s*t/);
+    await page.getByLabel("Board navigation help", { exact: true }).click();
+    await page
+      .getByText("About this lesson and its limits", { exact: true })
+      .click();
     assert.match(
-      await page.locator(".recipe-lesson > header").innerText(),
+      await page.locator(".recipe-lesson-info").innerText(),
       /deflection|millimet|unavailable/i,
     );
+    await page.getByLabel("Board navigation help", { exact: true }).click();
     assert.match(
       await page.locator(".bridge-member-hint").innerText(),
       /select|choose|click|tap|beam/i,

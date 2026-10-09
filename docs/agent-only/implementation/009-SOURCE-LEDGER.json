@@ -1,8 +1,8 @@
 {
   "generatedBy": "src/web/scripts/builder/audit-public-catalog.cjs",
-  "originalSourceFiles": 269,
-  "sourceFiles": 280,
-  "exportRecords": 649,
+  "originalSourceFiles": 280,
+  "sourceFiles": 285,
+  "exportRecords": 661,
   "records": [
     {
       "source": "src/web/src/simulations/components/README.md",
@@ -934,6 +934,470 @@
       "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
+      "source": "src/web/src/simulations/components/catalog/exploration.ts",
+      "export": "explorationDefinitions",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "explorationDefinitions"
+          ]
+        }
+      ],
+      "responsibility": "infrastructure",
+      "finalOwner": {
+        "kind": "catalog/recipe infrastructure",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/index.ts"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "explorationDefinitions"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public infrastructure owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+      "export": "CompositionRequirements",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/lib/planner/bucket.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compose.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionQuality.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyExplorationTeaching"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "infrastructure",
+      "finalOwner": {
+        "kind": "catalog/recipe infrastructure",
+        "packages": [],
+        "consumers": [
+          "src/web/src/lib/planner/bucket.ts",
+          "src/web/src/lib/planner/compose.ts",
+          "src/web/src/lib/planner/compositionQuality.ts",
+          "src/web/src/lib/planner/compositionTools.ts",
+          "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "src/web/src/simulations/components/catalog/index.ts",
+          "src/web/scripts/generation/verify-realistic-contracts.cjs"
+        ],
+        "destination": "src/web/src/lib/planner/bucket.ts, src/web/src/lib/planner/compose.ts, src/web/src/lib/planner/compositionQuality.ts, src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/selection/compositionStrategy.ts, src/web/src/simulations/components/catalog/index.ts, src/web/scripts/generation/verify-realistic-contracts.cjs"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/bucket.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compose.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionQuality.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyExplorationTeaching"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public infrastructure owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+      "export": "compositionRequirements",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/lib/planner/bucket.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compose.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionQuality.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyExplorationTeaching"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "infrastructure",
+      "finalOwner": {
+        "kind": "catalog/recipe infrastructure",
+        "packages": [],
+        "consumers": [
+          "src/web/src/lib/planner/bucket.ts",
+          "src/web/src/lib/planner/compose.ts",
+          "src/web/src/lib/planner/compositionQuality.ts",
+          "src/web/src/lib/planner/compositionTools.ts",
+          "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "src/web/src/simulations/components/catalog/index.ts",
+          "src/web/scripts/generation/verify-realistic-contracts.cjs"
+        ],
+        "destination": "src/web/src/lib/planner/bucket.ts, src/web/src/lib/planner/compose.ts, src/web/src/lib/planner/compositionQuality.ts, src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/selection/compositionStrategy.ts, src/web/src/simulations/components/catalog/index.ts, src/web/scripts/generation/verify-realistic-contracts.cjs"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/bucket.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compose.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionQuality.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyExplorationTeaching"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public infrastructure owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+      "export": "applyExplorationTeaching",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/lib/planner/bucket.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compose.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionQuality.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyExplorationTeaching"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "infrastructure",
+      "finalOwner": {
+        "kind": "catalog/recipe infrastructure",
+        "packages": [],
+        "consumers": [
+          "src/web/src/lib/planner/bucket.ts",
+          "src/web/src/lib/planner/compose.ts",
+          "src/web/src/lib/planner/compositionQuality.ts",
+          "src/web/src/lib/planner/compositionTools.ts",
+          "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "src/web/src/simulations/components/catalog/index.ts",
+          "src/web/scripts/generation/verify-realistic-contracts.cjs"
+        ],
+        "destination": "src/web/src/lib/planner/bucket.ts, src/web/src/lib/planner/compose.ts, src/web/src/lib/planner/compositionQuality.ts, src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/selection/compositionStrategy.ts, src/web/src/simulations/components/catalog/index.ts, src/web/scripts/generation/verify-realistic-contracts.cjs"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/bucket.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compose.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionQuality.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "typeOnly": false,
+          "symbols": [
+            "compositionRequirements"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyExplorationTeaching"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public infrastructure owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
       "source": "src/web/src/simulations/components/catalog/generic.ts",
       "export": "base",
       "activeConsumers": [
@@ -947,6 +1411,13 @@
         {
           "source": "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "typeOnly": true,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/exploration.ts",
+          "typeOnly": false,
           "symbols": [
             "base"
           ]
@@ -966,9 +1437,10 @@
         "consumers": [
           "src/web/src/simulations/components/catalog/authoring.ts",
           "src/web/src/simulations/components/catalog/controlDefinitions.ts",
+          "src/web/src/simulations/components/catalog/exploration.ts",
           "src/web/src/simulations/components/catalog/index.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/index.ts"
+        "destination": "src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -992,6 +1464,13 @@
         {
           "source": "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "typeOnly": true,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/exploration.ts",
+          "typeOnly": false,
           "symbols": [
             "base"
           ]
@@ -1029,6 +1508,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/catalog/exploration.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/catalog/index.ts",
           "typeOnly": false,
           "symbols": [
@@ -1043,9 +1529,10 @@
         "consumers": [
           "src/web/src/simulations/components/catalog/authoring.ts",
           "src/web/src/simulations/components/catalog/controlDefinitions.ts",
+          "src/web/src/simulations/components/catalog/exploration.ts",
           "src/web/src/simulations/components/catalog/index.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/index.ts"
+        "destination": "src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -1069,6 +1556,13 @@
         {
           "source": "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "typeOnly": true,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/exploration.ts",
+          "typeOnly": false,
           "symbols": [
             "base"
           ]
@@ -1115,10 +1609,31 @@
           ]
         },
         {
+          "source": "src/web/src/lib/planner/compositionQuality.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/coverage.ts",
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinitions"
           ]
         },
         {
@@ -1133,6 +1648,13 @@
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinitions"
           ]
         },
         {
@@ -1376,6 +1898,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/runtime/authoring/insertion.ts",
           "typeOnly": false,
           "symbols": [
@@ -1486,6 +2015,22 @@
         },
         {
           "source": "src/web/scripts/builder/verify-spatial-catalog.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-replay.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -1557,9 +2102,13 @@
           "src/web/src/lib/planner/bucket.ts",
           "src/web/src/lib/planner/catalog.ts",
           "src/web/src/lib/planner/compose.ts",
+          "src/web/src/lib/planner/compositionQuality.ts",
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/coverage.ts",
+          "src/web/src/lib/planner/focusedTurn.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/schema.ts",
+          "src/web/src/lib/planner/selection/compositionStrategy.ts",
           "src/web/src/lib/planner/turnSchema.ts",
           "src/web/src/simulations/builder/composition/ComponentSettings.tsx",
           "src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx",
@@ -1594,6 +2143,7 @@
           "src/web/src/simulations/runtime/authoring/bindings.ts",
           "src/web/src/simulations/runtime/authoring/composites.ts",
           "src/web/src/simulations/runtime/authoring/connections.ts",
+          "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
           "src/web/src/simulations/runtime/authoring/insertion.ts",
           "src/web/src/simulations/runtime/authoring/migrateControls.ts",
           "src/web/src/simulations/runtime/authoring/operations.ts",
@@ -1610,6 +2160,8 @@
           "src/web/scripts/builder/verify-public-catalog.cjs",
           "src/web/scripts/builder/verify-spatial-board.cjs",
           "src/web/scripts/builder/verify-spatial-catalog.cjs",
+          "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "src/web/scripts/generation/verify-realistic-replay.cjs",
           "src/web/scripts/verify-board-selection-browser.cjs",
           "src/web/scripts/verify-board-workspace-browser.cjs",
           "src/web/scripts/verify-component-cleanup.cjs",
@@ -1618,7 +2170,7 @@
           "src/web/scripts/verify-spatial-board-performance.cjs",
           "src/web/scripts/verify-spatial-immersive-browser.cjs"
         ],
-        "destination": "src/web/src/lib/planner/bucket.ts, src/web/src/lib/planner/catalog.ts, src/web/src/lib/planner/compose.ts, src/web/src/lib/planner/coverage.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/schema.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx, src/web/src/simulations/builder/composition/CompositionBuilder.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ControlTypeSettings.tsx, src/web/src/simulations/builder/composition/DataDisplaySettings.tsx, src/web/src/simulations/builder/composition/DecorationSettings.tsx, src/web/src/simulations/builder/composition/InputEditor.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/composition/useBuilderAi.ts, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/builder/graph/authoredGraph.ts, src/web/src/simulations/builder/library/SaveCompositeDialog.tsx, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/components/views/recipe/observations.ts, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/arrangement.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/insertion.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/providers.ts, src/web/src/simulations/runtime/authoring/recipes.ts, src/web/src/simulations/runtime/authoring/references.ts, src/web/src/simulations/runtime/authoring/runnable.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts, src/web/src/simulations/runtime/recipeSession.ts, src/web/src/simulations/runtime/recipes/compatibility/index.ts, src/web/src/simulations/runtime/session.ts, src/web/scripts/builder/audit-public-catalog.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-board.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/verify-board-selection-browser.cjs, src/web/scripts/verify-board-workspace-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-spatial-board-performance.cjs, src/web/scripts/verify-spatial-immersive-browser.cjs"
+        "destination": "src/web/src/lib/planner/bucket.ts, src/web/src/lib/planner/catalog.ts, src/web/src/lib/planner/compose.ts, src/web/src/lib/planner/compositionQuality.ts, src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/coverage.ts, src/web/src/lib/planner/focusedTurn.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/schema.ts, src/web/src/lib/planner/selection/compositionStrategy.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx, src/web/src/simulations/builder/composition/CompositionBuilder.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ControlTypeSettings.tsx, src/web/src/simulations/builder/composition/DataDisplaySettings.tsx, src/web/src/simulations/builder/composition/DecorationSettings.tsx, src/web/src/simulations/builder/composition/InputEditor.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/composition/useBuilderAi.ts, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/builder/graph/authoredGraph.ts, src/web/src/simulations/builder/library/SaveCompositeDialog.tsx, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/components/views/recipe/observations.ts, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/arrangement.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/src/simulations/runtime/authoring/insertion.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/providers.ts, src/web/src/simulations/runtime/authoring/recipes.ts, src/web/src/simulations/runtime/authoring/references.ts, src/web/src/simulations/runtime/authoring/runnable.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts, src/web/src/simulations/runtime/recipeSession.ts, src/web/src/simulations/runtime/recipes/compatibility/index.ts, src/web/src/simulations/runtime/session.ts, src/web/scripts/builder/audit-public-catalog.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-board.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/generation/verify-realistic-contracts.cjs, src/web/scripts/generation/verify-realistic-replay.cjs, src/web/scripts/verify-board-selection-browser.cjs, src/web/scripts/verify-board-workspace-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-spatial-board-performance.cjs, src/web/scripts/verify-spatial-immersive-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -1671,10 +2223,31 @@
           ]
         },
         {
+          "source": "src/web/src/lib/planner/compositionQuality.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/coverage.ts",
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinitions"
           ]
         },
         {
@@ -1689,6 +2262,13 @@
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinitions"
           ]
         },
         {
@@ -1932,6 +2512,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/runtime/authoring/insertion.ts",
           "typeOnly": false,
           "symbols": [
@@ -2042,6 +2629,22 @@
         },
         {
           "source": "src/web/scripts/builder/verify-spatial-catalog.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-replay.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -2139,10 +2742,31 @@
           ]
         },
         {
+          "source": "src/web/src/lib/planner/compositionQuality.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/coverage.ts",
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinitions"
           ]
         },
         {
@@ -2157,6 +2781,13 @@
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinitions"
           ]
         },
         {
@@ -2400,6 +3031,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/runtime/authoring/insertion.ts",
           "typeOnly": false,
           "symbols": [
@@ -2510,6 +3148,22 @@
         },
         {
           "source": "src/web/scripts/builder/verify-spatial-catalog.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-replay.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -2581,9 +3235,13 @@
           "src/web/src/lib/planner/bucket.ts",
           "src/web/src/lib/planner/catalog.ts",
           "src/web/src/lib/planner/compose.ts",
+          "src/web/src/lib/planner/compositionQuality.ts",
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/coverage.ts",
+          "src/web/src/lib/planner/focusedTurn.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/schema.ts",
+          "src/web/src/lib/planner/selection/compositionStrategy.ts",
           "src/web/src/lib/planner/turnSchema.ts",
           "src/web/src/simulations/builder/composition/ComponentSettings.tsx",
           "src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx",
@@ -2618,6 +3276,7 @@
           "src/web/src/simulations/runtime/authoring/bindings.ts",
           "src/web/src/simulations/runtime/authoring/composites.ts",
           "src/web/src/simulations/runtime/authoring/connections.ts",
+          "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
           "src/web/src/simulations/runtime/authoring/insertion.ts",
           "src/web/src/simulations/runtime/authoring/migrateControls.ts",
           "src/web/src/simulations/runtime/authoring/operations.ts",
@@ -2634,6 +3293,8 @@
           "src/web/scripts/builder/verify-public-catalog.cjs",
           "src/web/scripts/builder/verify-spatial-board.cjs",
           "src/web/scripts/builder/verify-spatial-catalog.cjs",
+          "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "src/web/scripts/generation/verify-realistic-replay.cjs",
           "src/web/scripts/verify-board-selection-browser.cjs",
           "src/web/scripts/verify-board-workspace-browser.cjs",
           "src/web/scripts/verify-component-cleanup.cjs",
@@ -2642,7 +3303,7 @@
           "src/web/scripts/verify-spatial-board-performance.cjs",
           "src/web/scripts/verify-spatial-immersive-browser.cjs"
         ],
-        "destination": "src/web/src/lib/planner/bucket.ts, src/web/src/lib/planner/catalog.ts, src/web/src/lib/planner/compose.ts, src/web/src/lib/planner/coverage.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/schema.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx, src/web/src/simulations/builder/composition/CompositionBuilder.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ControlTypeSettings.tsx, src/web/src/simulations/builder/composition/DataDisplaySettings.tsx, src/web/src/simulations/builder/composition/DecorationSettings.tsx, src/web/src/simulations/builder/composition/InputEditor.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/composition/useBuilderAi.ts, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/builder/graph/authoredGraph.ts, src/web/src/simulations/builder/library/SaveCompositeDialog.tsx, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/components/views/recipe/observations.ts, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/arrangement.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/insertion.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/providers.ts, src/web/src/simulations/runtime/authoring/recipes.ts, src/web/src/simulations/runtime/authoring/references.ts, src/web/src/simulations/runtime/authoring/runnable.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts, src/web/src/simulations/runtime/recipeSession.ts, src/web/src/simulations/runtime/recipes/compatibility/index.ts, src/web/src/simulations/runtime/session.ts, src/web/scripts/builder/audit-public-catalog.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-board.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/verify-board-selection-browser.cjs, src/web/scripts/verify-board-workspace-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-spatial-board-performance.cjs, src/web/scripts/verify-spatial-immersive-browser.cjs"
+        "destination": "src/web/src/lib/planner/bucket.ts, src/web/src/lib/planner/catalog.ts, src/web/src/lib/planner/compose.ts, src/web/src/lib/planner/compositionQuality.ts, src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/coverage.ts, src/web/src/lib/planner/focusedTurn.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/schema.ts, src/web/src/lib/planner/selection/compositionStrategy.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx, src/web/src/simulations/builder/composition/CompositionBuilder.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ControlTypeSettings.tsx, src/web/src/simulations/builder/composition/DataDisplaySettings.tsx, src/web/src/simulations/builder/composition/DecorationSettings.tsx, src/web/src/simulations/builder/composition/InputEditor.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/composition/useBuilderAi.ts, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/builder/graph/authoredGraph.ts, src/web/src/simulations/builder/library/SaveCompositeDialog.tsx, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/components/views/recipe/observations.ts, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/arrangement.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/src/simulations/runtime/authoring/insertion.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/providers.ts, src/web/src/simulations/runtime/authoring/recipes.ts, src/web/src/simulations/runtime/authoring/references.ts, src/web/src/simulations/runtime/authoring/runnable.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts, src/web/src/simulations/runtime/recipeSession.ts, src/web/src/simulations/runtime/recipes/compatibility/index.ts, src/web/src/simulations/runtime/session.ts, src/web/scripts/builder/audit-public-catalog.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-board.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/generation/verify-realistic-contracts.cjs, src/web/scripts/generation/verify-realistic-replay.cjs, src/web/scripts/verify-board-selection-browser.cjs, src/web/scripts/verify-board-workspace-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-spatial-board-performance.cjs, src/web/scripts/verify-spatial-immersive-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -2695,10 +3356,31 @@
           ]
         },
         {
+          "source": "src/web/src/lib/planner/compositionQuality.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/coverage.ts",
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinitions"
           ]
         },
         {
@@ -2713,6 +3395,13 @@
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/planner/selection/compositionStrategy.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinitions"
           ]
         },
         {
@@ -2956,6 +3645,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/runtime/authoring/insertion.ts",
           "typeOnly": false,
           "symbols": [
@@ -3066,6 +3762,22 @@
         },
         {
           "source": "src/web/scripts/builder/verify-spatial-catalog.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-replay.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -3828,6 +4540,13 @@
       "export": "schemaDefault",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "schemaDefault"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/builder/Builder.tsx",
           "typeOnly": false,
           "symbols": [
@@ -4111,6 +4830,7 @@
         "kind": "catalog/recipe infrastructure",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/focusedTurn.ts",
           "src/web/src/simulations/builder/Builder.tsx",
           "src/web/src/simulations/builder/composition/ControlSettings.tsx",
           "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx",
@@ -4148,7 +4868,7 @@
           "src/web/scripts/verify-spatial-workspace-ux-browser.cjs",
           "src/web/scripts/verify-unified-builder-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/Builder.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-cartesian-preview-browser.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion-browser.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-component-presentation-browser.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-data-presentation-browser.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-gas-recipe.cjs, src/web/scripts/verify-spatial-workspace-ux-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
+        "destination": "src/web/src/lib/planner/focusedTurn.ts, src/web/src/simulations/builder/Builder.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-cartesian-preview-browser.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion-browser.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-component-presentation-browser.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-data-presentation-browser.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-gas-recipe.cjs, src/web/scripts/verify-spatial-workspace-ux-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -4162,6 +4882,13 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "schemaDefault"
+          ]
+        },
         {
           "source": "src/web/src/simulations/builder/Builder.tsx",
           "typeOnly": false,
@@ -4452,6 +5179,13 @@
       "export": "createPublicNode",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "schemaDefault"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/builder/Builder.tsx",
           "typeOnly": false,
           "symbols": [
@@ -4735,6 +5469,7 @@
         "kind": "catalog/recipe infrastructure",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/focusedTurn.ts",
           "src/web/src/simulations/builder/Builder.tsx",
           "src/web/src/simulations/builder/composition/ControlSettings.tsx",
           "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx",
@@ -4772,7 +5507,7 @@
           "src/web/scripts/verify-spatial-workspace-ux-browser.cjs",
           "src/web/scripts/verify-unified-builder-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/Builder.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-cartesian-preview-browser.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion-browser.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-component-presentation-browser.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-data-presentation-browser.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-gas-recipe.cjs, src/web/scripts/verify-spatial-workspace-ux-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
+        "destination": "src/web/src/lib/planner/focusedTurn.ts, src/web/src/simulations/builder/Builder.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-cartesian-preview-browser.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion-browser.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-component-presentation-browser.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-data-presentation-browser.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-gas-recipe.cjs, src/web/scripts/verify-spatial-workspace-ux-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -4786,6 +5521,13 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "schemaDefault"
+          ]
+        },
         {
           "source": "src/web/src/simulations/builder/Builder.tsx",
           "typeOnly": false,
@@ -5076,6 +5818,13 @@
       "export": "modelRecipe",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "schemaDefault"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/builder/Builder.tsx",
           "typeOnly": false,
           "symbols": [
@@ -5359,6 +6108,7 @@
         "kind": "catalog/recipe infrastructure",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/focusedTurn.ts",
           "src/web/src/simulations/builder/Builder.tsx",
           "src/web/src/simulations/builder/composition/ControlSettings.tsx",
           "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx",
@@ -5396,7 +6146,7 @@
           "src/web/scripts/verify-spatial-workspace-ux-browser.cjs",
           "src/web/scripts/verify-unified-builder-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/Builder.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-cartesian-preview-browser.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion-browser.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-component-presentation-browser.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-data-presentation-browser.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-gas-recipe.cjs, src/web/scripts/verify-spatial-workspace-ux-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
+        "destination": "src/web/src/lib/planner/focusedTurn.ts, src/web/src/simulations/builder/Builder.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-cartesian-preview-browser.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion-browser.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-component-presentation-browser.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-data-presentation-browser.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-gas-recipe.cjs, src/web/scripts/verify-spatial-workspace-ux-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -5410,6 +6160,13 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "schemaDefault"
+          ]
+        },
         {
           "source": "src/web/src/simulations/builder/Builder.tsx",
           "typeOnly": false,
@@ -5700,6 +6457,13 @@
       "export": "builtInRecipes",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "schemaDefault"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/builder/Builder.tsx",
           "typeOnly": false,
           "symbols": [
@@ -5983,6 +6747,7 @@
         "kind": "catalog/recipe infrastructure",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/focusedTurn.ts",
           "src/web/src/simulations/builder/Builder.tsx",
           "src/web/src/simulations/builder/composition/ControlSettings.tsx",
           "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx",
@@ -6020,7 +6785,7 @@
           "src/web/scripts/verify-spatial-workspace-ux-browser.cjs",
           "src/web/scripts/verify-unified-builder-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/Builder.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-cartesian-preview-browser.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion-browser.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-component-presentation-browser.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-data-presentation-browser.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-gas-recipe.cjs, src/web/scripts/verify-spatial-workspace-ux-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
+        "destination": "src/web/src/lib/planner/focusedTurn.ts, src/web/src/simulations/builder/Builder.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-cartesian-preview-browser.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion-browser.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-component-presentation-browser.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-data-presentation-browser.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-gas-recipe.cjs, src/web/scripts/verify-spatial-workspace-ux-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -6034,6 +6799,13 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "schemaDefault"
+          ]
+        },
         {
           "source": "src/web/src/simulations/builder/Builder.tsx",
           "typeOnly": false,
@@ -6324,6 +7096,13 @@
       "export": "builtInRecipe",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "schemaDefault"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/builder/Builder.tsx",
           "typeOnly": false,
           "symbols": [
@@ -6607,6 +7386,7 @@
         "kind": "catalog/recipe infrastructure",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/focusedTurn.ts",
           "src/web/src/simulations/builder/Builder.tsx",
           "src/web/src/simulations/builder/composition/ControlSettings.tsx",
           "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx",
@@ -6644,7 +7424,7 @@
           "src/web/scripts/verify-spatial-workspace-ux-browser.cjs",
           "src/web/scripts/verify-unified-builder-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/Builder.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-cartesian-preview-browser.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion-browser.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-component-presentation-browser.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-data-presentation-browser.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-gas-recipe.cjs, src/web/scripts/verify-spatial-workspace-ux-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
+        "destination": "src/web/src/lib/planner/focusedTurn.ts, src/web/src/simulations/builder/Builder.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-cartesian-preview-browser.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion-browser.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-component-presentation-browser.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-data-presentation-browser.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-gas-recipe.cjs, src/web/scripts/verify-spatial-workspace-ux-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -6658,6 +7438,13 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "schemaDefault"
+          ]
+        },
         {
           "source": "src/web/src/simulations/builder/Builder.tsx",
           "typeOnly": false,
@@ -6948,6 +7735,13 @@
       "export": "learningConfiguration",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "schemaDefault"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/builder/Builder.tsx",
           "typeOnly": false,
           "symbols": [
@@ -7231,6 +8025,7 @@
         "kind": "catalog/recipe infrastructure",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/focusedTurn.ts",
           "src/web/src/simulations/builder/Builder.tsx",
           "src/web/src/simulations/builder/composition/ControlSettings.tsx",
           "src/web/src/simulations/builder/composition/ManualComponentSettings.tsx",
@@ -7268,7 +8063,7 @@
           "src/web/scripts/verify-spatial-workspace-ux-browser.cjs",
           "src/web/scripts/verify-unified-builder-browser.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/Builder.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-cartesian-preview-browser.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion-browser.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-component-presentation-browser.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-data-presentation-browser.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-gas-recipe.cjs, src/web/scripts/verify-spatial-workspace-ux-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
+        "destination": "src/web/src/lib/planner/focusedTurn.ts, src/web/src/simulations/builder/Builder.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/document/serialization.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/InstanceRecipeLesson.tsx, src/web/src/simulations/components/views/LegacyRecipeView.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/spatialMigration.ts, src/web/scripts/builder/verify-builder-ux-reliability.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/builder/verify-unified-builder.cjs, src/web/scripts/verify-builder-cartesian-preview-browser.cjs, src/web/scripts/verify-builder-ux-reliability-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion-browser.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-component-presentation-browser.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-data-presentation-browser.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-data-presentation.cjs, src/web/scripts/verify-gas-recipe.cjs, src/web/scripts/verify-spatial-workspace-ux-browser.cjs, src/web/scripts/verify-unified-builder-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -7282,6 +8077,13 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/focusedTurn.ts",
+          "typeOnly": false,
+          "symbols": [
+            "schemaDefault"
+          ]
+        },
         {
           "source": "src/web/src/simulations/builder/Builder.tsx",
           "typeOnly": false,
@@ -17014,6 +17816,14 @@
       "export": "scalarControls",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -17143,6 +17953,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -17159,7 +17970,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -17173,6 +17984,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -17309,6 +18128,14 @@
       "export": "activityContracts",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -17438,6 +18265,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -17454,7 +18282,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -17468,6 +18296,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -17604,6 +18440,14 @@
       "export": "legacyActivities",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -17733,6 +18577,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -17749,7 +18594,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -17763,6 +18608,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -17899,6 +18752,14 @@
       "export": "retiredControls",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -18028,6 +18889,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -18044,7 +18906,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -18058,6 +18920,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -18194,6 +19064,14 @@
       "export": "activityContract",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -18323,6 +19201,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -18339,7 +19218,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -18353,6 +19232,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -18489,6 +19376,14 @@
       "export": "hasControlSettings",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -18618,6 +19513,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -18634,7 +19530,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -18648,6 +19544,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -18784,6 +19688,14 @@
       "export": "acceptsScalar",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -18913,6 +19825,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -18929,7 +19842,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -18943,6 +19856,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -19079,6 +20000,14 @@
       "export": "parameterLeaves",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -19208,6 +20137,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -19224,7 +20154,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -19238,6 +20168,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -19374,6 +20312,14 @@
       "export": "scalarBinding",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -19503,6 +20449,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -19519,7 +20466,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -19533,6 +20480,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -19669,6 +20624,14 @@
       "export": "readParameter",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -19798,6 +20761,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -19814,7 +20778,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -19828,6 +20792,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -19964,6 +20936,14 @@
       "export": "writeParameter",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -20093,6 +21073,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -20109,7 +21090,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -20123,6 +21104,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -20259,6 +21248,14 @@
       "export": "validateControlConnection",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -20388,6 +21385,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -20404,7 +21402,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -20418,6 +21416,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -20554,6 +21560,14 @@
       "export": "validateScalarValue",
       "activeConsumers": [
         {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
+        {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
           "symbols": [
@@ -20683,6 +21697,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/lib/planner/compositionTools.ts",
           "src/web/src/lib/planner/formatFixer.ts",
           "src/web/src/lib/planner/stages.ts",
           "src/web/src/lib/planner/turnSchema.ts",
@@ -20699,7 +21714,7 @@
           "src/web/src/simulations/runtime/authoring/runtime.ts",
           "src/web/src/simulations/runtime/authoring/validate.ts"
         ],
-        "destination": "src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
+        "destination": "src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/stages.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -20713,6 +21728,14 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/lib/planner/compositionTools.ts",
+          "typeOnly": false,
+          "symbols": [
+            "acceptsScalar",
+            "parameterLeaves"
+          ]
+        },
         {
           "source": "src/web/src/lib/planner/formatFixer.ts",
           "typeOnly": false,
@@ -49850,6 +50873,560 @@
       "destination": "public model operation owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/exploration/eclipse.ts",
+      "export": "EclipseParameters",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx",
+          "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "src/web/scripts/generation/verify-realistic-contracts.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx, src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/scripts/generation/verify-realistic-contracts.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/exploration/eclipse.ts",
+      "export": "celestialRadii",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx",
+          "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "src/web/scripts/generation/verify-realistic-contracts.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx, src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/scripts/generation/verify-realistic-contracts.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/exploration/eclipse.ts",
+      "export": "eclipseGeometry",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx",
+          "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "src/web/scripts/generation/verify-realistic-contracts.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx, src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/scripts/generation/verify-realistic-contracts.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "eclipseGeometry"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/exploration/signals.ts",
+      "export": "SignalParameters",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "SignalSample",
+            "sampleSignal",
+            "sumSignals"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "src/web/scripts/generation/verify-realistic-contracts.cjs"
+        ],
+        "destination": "src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/scripts/generation/verify-realistic-contracts.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "SignalSample",
+            "sampleSignal",
+            "sumSignals"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/exploration/signals.ts",
+      "export": "SignalSample",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "SignalSample",
+            "sampleSignal",
+            "sumSignals"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "src/web/scripts/generation/verify-realistic-contracts.cjs"
+        ],
+        "destination": "src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/scripts/generation/verify-realistic-contracts.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "SignalSample",
+            "sampleSignal",
+            "sumSignals"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/exploration/signals.ts",
+      "export": "sampleSignal",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "SignalSample",
+            "sampleSignal",
+            "sumSignals"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "src/web/scripts/generation/verify-realistic-contracts.cjs"
+        ],
+        "destination": "src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/scripts/generation/verify-realistic-contracts.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "SignalSample",
+            "sampleSignal",
+            "sumSignals"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/exploration/signals.ts",
+      "export": "sumSignals",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "SignalSample",
+            "sampleSignal",
+            "sumSignals"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "src/web/scripts/generation/verify-realistic-contracts.cjs"
+        ],
+        "destination": "src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/scripts/generation/verify-realistic-contracts.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
+          "typeOnly": false,
+          "symbols": [
+            "SignalSample",
+            "sampleSignal",
+            "sumSignals"
+          ]
+        },
+        {
+          "source": "src/web/scripts/generation/verify-realistic-contracts.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
       "source": "src/web/src/simulations/components/systems/fractionMath.ts",
@@ -100670,6 +102247,53 @@
       "destination": "public appearance owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx",
+      "export": "EclipseVisual",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "EclipseVisual"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "EclipseVisual"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
       "source": "src/web/src/simulations/components/visuals/natural-systems/NaturalVisuals.tsx",

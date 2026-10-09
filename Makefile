@@ -6,7 +6,7 @@ WEB_PORT ?= 43100
 APERTUS_PORT ?= 43101
 LAYA_PORT ?= 43102
 
-.PHONY: install dev run run-web run-apertus run-laya stop stop-web stop-apertus stop-laya build start
+.PHONY: install dev run run-web run-realistic run-apertus run-laya stop stop-web stop-apertus stop-laya build start
 
 install:
 	$(PNPM) --dir $(WEB_DIR) install --frozen-lockfile
@@ -46,3 +46,7 @@ build: install
 # Build the production app with `make build` before running `make start`.
 start:
 	$(PNPM) --dir $(WEB_DIR) start --port $(WEB_PORT)
+
+# Requires separately running local Apertus and Laya services.
+run-realistic: install
+	PLANNER_MODE=hybrid DECISION_PROVIDER=laya LLM_PROVIDER=apertus COMPOSITION_DECISION_POLICY=required-laya DECISION_TIMEOUT_MS=20000 $(PNPM) --dir $(WEB_DIR) dev --port $(WEB_PORT)

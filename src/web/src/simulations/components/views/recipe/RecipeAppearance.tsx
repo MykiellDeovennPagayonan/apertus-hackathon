@@ -7,6 +7,7 @@ import type { DocumentRuntime } from "../../../runtime/authoring/runtime";
 import type { ComponentInstance } from "../../../runtime/authoring/types";
 import type { ModelInstance } from "../../../runtime/contribution";
 import { DragHandleControl } from "../../controls/DragHandleControl";
+import type { eclipseGeometry } from "../../systems/exploration/eclipse";
 import {
   BeakerVisual,
   MoleculeVisual,
@@ -22,6 +23,7 @@ import {
   DimensionLabelVisual,
   RatioBarVisual,
 } from "../../visuals/ElementaryVisuals";
+import { EclipseVisual } from "../../visuals/exploration/EclipseVisual";
 import {
   DiffusionHeatmap,
   PlantGrowthGraph,
@@ -79,6 +81,7 @@ function PhysicalAppearance({ instance }: { instance: ModelInstance }) {
         <PendulumVisual
           instance={instance}
           index={0}
+          showIndex={false}
           scale={220 / Math.max(1, Number(instance.parameters.length))}
         />
       </svg>
@@ -206,10 +209,50 @@ export function Appearance({
     id: model.id,
     label: model.label,
     provider: model.definition,
-    parameters: model.configuration,
+    parameters: Object.fromEntries(
+      Object.keys(model.configuration).map((key) => [
+        key,
+        snapshot.state[model.id]?.[key] ?? model.configuration[key],
+      ]),
+    ),
     state: snapshot.state[model.id],
     outputs: snapshot.outputs[model.id],
   };
+  if (node.definition === "appearance/EclipseGeometry")
+    return (
+      <EclipseVisual
+        geometry={
+          instance.outputs.geometry as ReturnType<typeof eclipseGeometry>
+        }
+      />
+    );
+  if (node.definition === "appearance/SignalSuperposition")
+    return (
+      <DatasetDisplay
+        value={instance.outputs.points}
+        kind="Chart"
+        label="Sound signals and their sum"
+        presentation={{
+          xKey: "x",
+          xLabel: "Time",
+          xUnit: "s",
+          yLabel: "Pressure",
+          yUnit: "Pa",
+          series: ["first", "second", "y"],
+          columns: [
+            { key: "x", label: "Time", unit: "s", type: "number" },
+            { key: "first", label: "Noise", unit: "Pa", type: "number" },
+            {
+              key: "second",
+              label: "Counter signal",
+              unit: "Pa",
+              type: "number",
+            },
+            { key: "y", label: "Sum", unit: "Pa", type: "number" },
+          ],
+        }}
+      />
+    );
   const name = node.definition.slice("appearance/".length),
     View = appearances[name];
   if (View) return <View instance={instance} />;

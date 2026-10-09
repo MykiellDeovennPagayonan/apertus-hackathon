@@ -5,6 +5,8 @@ import { boolean, num, object } from "../../runtime/parameterSchema";
 import { componentDefinitions } from "../registry";
 import { authoringDefinitions } from "./authoring";
 import { definitionDiscovery } from "./discovery";
+import { explorationDefinitions } from "./exploration";
+import { applyExplorationTeaching } from "./explorationTeaching";
 import { genericDefinitions } from "./generic";
 import {
   learningAppearances,
@@ -23,6 +25,7 @@ function register(definition: PublicDefinition) {
 }
 for (const d of [
   ...genericDefinitions,
+  ...explorationDefinitions,
   ...authoringDefinitions,
   ...spatialDefinitions,
   ...operationDefinitions,
@@ -264,6 +267,8 @@ publicDefinition("canvases/town").inputs.timeline = {
   unit: "town/timeline",
   optional: true,
 };
+
+applyExplorationTeaching(publicDefinitions);
 
 // Author-facing metadata is separate from runtime identity and execution contracts.
 for (const definition of publicDefinitions.values()) {

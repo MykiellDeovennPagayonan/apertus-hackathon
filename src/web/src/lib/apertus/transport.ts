@@ -257,7 +257,8 @@ export async function requestStructured<T>(
             });
             if (
               attempt === 1 ||
-              (options.budget && options.budget.repairs >= 2)
+              (options.budget &&
+                options.budget.repairs >= options.budget.maxRepairs)
             )
               throw new PlannerError(
                 `${config.label} returned invalid stage arguments: ${issue}`,
@@ -291,7 +292,10 @@ export async function requestStructured<T>(
           reason: issue,
         });
       }
-      if (attempt === 1 || (options.budget && options.budget.repairs >= 2))
+      if (
+        attempt === 1 ||
+        (options.budget && options.budget.repairs >= options.budget.maxRepairs)
+      )
         throw new PlannerError(
           `${config.label} returned invalid stage arguments: ${issue}`,
           502,

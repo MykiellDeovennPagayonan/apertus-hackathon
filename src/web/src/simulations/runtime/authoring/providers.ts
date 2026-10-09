@@ -25,6 +25,7 @@ import {
   updateMathBoard,
 } from "../mathModel";
 import { dataProviders } from "./dataProviders";
+import { explorationProviders } from "./explorationProviders";
 import { type RuntimeInputs, spatialProviders } from "./spatialProviders";
 import type { ComponentInstance } from "./types";
 import { assertData } from "./validate";
@@ -51,6 +52,7 @@ export type RuntimeProvider = {
 export const runtimeProviders = new Map<string, RuntimeProvider>([
   ...spatialProviders,
   ...dataProviders,
+  ...explorationProviders,
 ]);
 for (const m of assemblyModels)
   runtimeProviders.set(m.ref, {

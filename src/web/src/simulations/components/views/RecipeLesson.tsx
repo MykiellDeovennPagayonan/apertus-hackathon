@@ -120,6 +120,13 @@ export function RecipeLesson({
     workspace && presentationDocument.presentation?.mode === "board";
   const runtimeActions = (
     <>
+      {boardWorkspace && (
+        <details className="recipe-lesson-info">
+          <summary>About this lesson and its limits</summary>
+          <p>{document.lesson.instruction}</p>
+          <p>{document.lesson.explanation}</p>
+        </details>
+      )}
       {reducedMotion &&
         (!supplied || onAdvanceTime) &&
         document.nodes.some(

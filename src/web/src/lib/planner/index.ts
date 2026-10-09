@@ -17,7 +17,6 @@ import {
 import { premadeRecipe } from "../../simulations/runtime/recipes/registry";
 import { toJsonSchema } from "../apertus/structuredSchema";
 import { requestStructured } from "../apertus/transport";
-import { selectCapability } from "./selection/selectCapability";
 import { GenerationBudget, type TraceSink } from "./budget";
 import {
   activeHandles,
@@ -27,6 +26,7 @@ import {
   selectedContract,
 } from "./catalog";
 import { compose } from "./compose";
+import { requiresLayaComposition } from "./compositionPolicy";
 import { verifyExplicitQuantities } from "./constraints";
 import { parseStageJson, stageMessages } from "./context";
 import { coverageFor, verifyCoverage } from "./coverage";
@@ -43,6 +43,7 @@ import {
   parseIntentResponse,
   type TeachingIntent,
 } from "./schema";
+import { selectCapability } from "./selection/selectCapability";
 import {
   creationResponseSchema,
   followupContract,
@@ -607,13 +608,14 @@ export async function planPrompt(
   const limit = Number(process.env.PLANNER_MAX_CONCURRENT_REQUESTS ?? 1);
   if (!Number.isInteger(limit) || limit < 1 || limit > 16)
     throw new PlannerError("Invalid planner concurrency.", 503);
+  const requiredComposition = requiresLayaComposition();
   const budget = new GenerationBudget(signal, trace);
   budget.check();
   if (activeRequests >= limit)
     throw new PlannerError("Planner is busy. Please try again shortly.", 429);
   activeRequests++;
   try {
-    if (request.active) {
+    if (request.active && !requiredComposition) {
       const result = await followup(request, budget);
       if (result) return parseGenerationResult(result, request);
     }
@@ -649,9 +651,10 @@ export async function planPrompt(
       Boolean(request.active?.sessionId?.startsWith("builder-")) &&
       (request.active?.recipe.document.nodes.length ?? 0) > 0;
 
-    const selected = isBuilderModifyingComposite
-      ? null
-      : await select(request, intent, budget);
+    const selected =
+      isBuilderModifyingComposite || requiredComposition
+        ? null
+        : await select(request, intent, budget);
     if (!selected) {
       budget.trace?.("selection.fallback_to_composition", {
         reason: "No single recipe fits request",
