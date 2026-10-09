@@ -3,12 +3,21 @@ import {
   formatUserFacingDetails,
   formatUserFacingStatus,
 } from "../../lib/planner/errorFormatting";
+import {
+  type GenerationStage,
+  generationStages,
+} from "../../lib/planner/progress";
 import "./CommandBar.css";
 export type ComposerStatus = {
   kind: "working" | "success" | "error" | "info";
   text: string;
   details?: string;
   retry?: boolean;
+  progress?: {
+    startedAt: number;
+    stage: GenerationStage;
+    completed: GenerationStage[];
+  };
 };
 interface Props {
   placeholder?: string;
@@ -45,6 +54,17 @@ export default function CommandBar({
   );
   const [detailText, setDetailText] = useState("");
   const panelId = useId();
+  const [elapsed, setElapsed] = useState(0);
+  const startedAt =
+    status?.kind === "working" ? status.progress?.startedAt : undefined;
+  useEffect(() => {
+    if (startedAt === undefined) return;
+    const update = () =>
+      setElapsed(Math.floor((Date.now() - startedAt) / 1000));
+    update();
+    const timer = window.setInterval(update, 1000);
+    return () => window.clearInterval(timer);
+  }, [startedAt]);
   // biome-ignore lint/correctness/useExhaustiveDependencies: Remeasure the DOM after each controlled text change.
   useLayoutEffect(() => {
     const field = input.current;
@@ -108,6 +128,19 @@ export default function CommandBar({
       ref={root}
       className={`command-bar${landing ? " command-bar--landing" : ""}${compact ? " command-bar--compact" : ""}`}
     >
+      {status?.kind === "working" &&
+        status.progress &&
+        status.progress.completed.length > 0 && (
+          <ol className="command-bar__progress" aria-label="Completed steps">
+            {status.progress.completed.map((stage) => (
+              <li key={stage}>
+                <span aria-hidden="true">✓</span>
+                {generationStages[stage].replace(/…$/, "")}
+                <span className="command-bar__sr-only"> completed</span>
+              </li>
+            ))}
+          </ol>
+        )}
       <div className="command-bar__meta">
         {status && (
           <div
@@ -117,6 +150,9 @@ export default function CommandBar({
               <span className="command-bar__activity" aria-hidden="true" />
               {formatUserFacingStatus(status.text)}
             </output>
+            {status.kind === "working" && status.progress && (
+              <span className="command-bar__elapsed">{elapsed}s elapsed</span>
+            )}
             {status.retry && (
               <button
                 type="button"
@@ -213,25 +249,28 @@ export default function CommandBar({
           )}
         </div>
       )}
-      {compact && !disabled && !value.trim() && chips.length > 0 && !popover && (
-        <div
-          className="command-bar__quick-chips"
-          role="region"
-          aria-label="Quick suggestions"
-        >
-          {chips.slice(0, 3).map((c) => (
-            <button
-              key={c}
-              className="command-bar__quick-chip"
-              type="button"
-              onClick={() => choose(c)}
-            >
-              <span aria-hidden="true">✨</span>{" "}
-              {c.length > 34 ? `${c.slice(0, 31)}…` : c}
-            </button>
-          ))}
-        </div>
-      )}
+      {compact &&
+        !disabled &&
+        !value.trim() &&
+        chips.length > 0 &&
+        !popover && (
+          <section
+            className="command-bar__quick-chips"
+            aria-label="Quick suggestions"
+          >
+            {chips.slice(0, 3).map((c) => (
+              <button
+                key={c}
+                className="command-bar__quick-chip"
+                type="button"
+                onClick={() => choose(c)}
+              >
+                <span aria-hidden="true">✨</span>{" "}
+                {c.length > 34 ? `${c.slice(0, 31)}…` : c}
+              </button>
+            ))}
+          </section>
+        )}
       <form
         className="command-bar__form"
         onSubmit={(e) => {

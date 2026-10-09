@@ -28,6 +28,7 @@ import {
   zoomAt,
 } from "../../../runtime/authoring/board";
 import { isDrawingItem } from "../../../runtime/authoring/drawings";
+import { expandResponsiveContent } from "../../../runtime/authoring/responsiveLayout";
 import type {
   AuthoredDocument,
   Layout,
@@ -73,10 +74,6 @@ export function SpatialBoard({
   const sourcePresentation = persisted ?? conversion;
   const viewport = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 900, height: 600 });
-  const [chromeClearance, setChromeClearance] = useState({
-    top: 24,
-    bottom: 24,
-  });
   const autoLayout =
     requestedAutoLayout ||
     (!authoring &&
@@ -234,19 +231,7 @@ export function SpatialBoard({
           return next;
         })()
       : !authoring && sourcePresentation?.responsive
-        ? {
-            ...sourcePresentation,
-            items: sourcePresentation.items.map((item) => ({
-              ...item,
-              rect: {
-                ...item.rect,
-                height: Math.max(
-                  item.rect.height,
-                  naturalHeights[item.id] ?? 0,
-                ),
-              },
-            })),
-          }
+        ? expandResponsiveContent(sourcePresentation, naturalHeights)
         : sourcePresentation;
   const [camera, setCamera] = useState<Camera | null>(null);
   useEffect(() => {
@@ -385,6 +370,7 @@ export function SpatialBoard({
     window.addEventListener("keydown", cancelDrag, true);
     return () => window.removeEventListener("keydown", cancelDrag, true);
   }, []);
+  const hasBoard = !!p;
   const lastItems = useRef(p?.items.map((i) => i.id) ?? []);
   useEffect(() => {
     if (!p || !authoring) return;
@@ -397,57 +383,6 @@ export function SpatialBoard({
         zoom: 1,
       });
   }, [p, authoring]);
-  const hasBoard = !!p;
-  useEffect(() => {
-    if (!workspace || !hasBoard || !viewport.current) return;
-    const board = viewport.current;
-    const host = board.closest(".experiment-workspace");
-    if (!host) return;
-    const header = host.querySelector(".recipe-lesson > header");
-    const navigation = host.querySelector(".workspace-header");
-    const composer = host.querySelector(".workspace-composer");
-    const tools = host.querySelector(".board-workspace-tools");
-    const measure = () => {
-      const bounds = board.getBoundingClientRect();
-      const heading = header?.getBoundingClientRect();
-      const navigationBounds = navigation?.getBoundingClientRect();
-      const focused = host.classList.contains("experiment-workspace--focused");
-      const prompt = composer?.getBoundingClientRect();
-      const compact = bounds.width < 700 || bounds.height < 700;
-      const cameraMargin = compact ? 4 : 80;
-      const chromeBottom = Math.max(
-        heading?.height ? heading.bottom : bounds.top,
-        navigationBounds?.bottom ?? bounds.top,
-      );
-      const top = Math.max(
-        0,
-        chromeBottom -
-          bounds.top +
-          (focused ? cameraMargin : Math.min(20, cameraMargin)),
-      );
-      const bottom = prompt
-        ? Math.max(0, bounds.bottom - prompt.top + cameraMargin)
-        : 24;
-      setChromeClearance((current) =>
-        current.top === top && current.bottom === bottom
-          ? current
-          : { top, bottom },
-      );
-    };
-    const resize = new ResizeObserver(measure);
-    for (const element of [board, header, navigation, composer, tools])
-      if (element) resize.observe(element);
-    const mutation = new MutationObserver(measure);
-    mutation.observe(host, {
-      attributes: true,
-      attributeFilter: ["style", "class"],
-    });
-    measure();
-    return () => {
-      resize.disconnect();
-      mutation.disconnect();
-    };
-  }, [workspace, hasBoard]);
   useEffect(() => {
     if (
       (!autoLayout && (authoring || !sourcePresentation?.responsive)) ||
@@ -590,7 +525,11 @@ export function SpatialBoard({
   const area = autoLayout
     ? { ...contentArea, height: contentArea.height + 96 }
     : contentArea;
-  const { top: topClearance, bottom: bottomClearance } = chromeClearance;
+  // NEVER reserve or clip canvas space for UI. Workspace navigation, tools, and
+  // the composer must float above the full canvas. Do not override this rule by
+  // subtracting their sizes from the viewport or applying chrome-based clipping.
+  const topClearance = workspace ? 0 : 24;
+  const bottomClearance = workspace ? 0 : 24;
   const navigationArea =
     workspace && p.navigation.mode !== "fixed"
       ? {
@@ -599,10 +538,9 @@ export function SpatialBoard({
           height: area.height + topClearance + bottomClearance,
         }
       : area;
-  const freeCanvas =
-    workspace && chromeClearance.top === 0 && chromeClearance.bottom === 0;
+  const freeCanvas = !!workspace;
   const initial = freeCanvas
-    ? fit(autoLayout ? p.startView : area, size.width, size.height)
+    ? fit(area, size.width, size.height)
     : fit(
         p.startView,
         Math.max(1, size.width - 48),
@@ -1499,9 +1437,6 @@ export function SpatialBoard({
         tabIndex={0}
         className={`board-viewport ${pan || rightPanning ? "is-panning" : ""} ${rightPanning ? "is-right-panning" : ""} ${immersive && overlays.some((o) => !(collapsed[o.id] ?? o.collapsedByDefault)) ? "has-overlays" : ""}`}
         style={{
-          clipPath: workspace
-            ? `inset(${topClearance}px 0px ${bottomClearance}px 0px)`
-            : undefined,
           backgroundSize: `${24 * c.zoom}px ${24 * c.zoom}px`,
           backgroundPosition: `${size.width / 2 - c.centerX * c.zoom}px ${size.height / 2 - c.centerY * c.zoom}px`,
         }}
@@ -1797,17 +1732,30 @@ export function SpatialBoard({
                   const navigation = host
                     ?.querySelector(".board-camera-tools")
                     ?.getBoundingClientRect();
+                  const overlapsTarget = (rect: DOMRect | undefined) =>
+                    rect &&
+                    rect.left < bounds.right &&
+                    rect.right > bounds.left;
+                  const workspaceTools = host
+                    ?.querySelector(".board-workspace-tools")
+                    ?.getBoundingClientRect();
                   const usableTop = Math.max(
                     viewportBounds.top,
-                    header?.bottom ?? viewportBounds.top,
-                    host
-                      ?.querySelector(".board-workspace-tools")
-                      ?.getBoundingClientRect().bottom ?? viewportBounds.top,
+                    header && overlapsTarget(header)
+                      ? header.bottom
+                      : viewportBounds.top,
+                    workspaceTools && overlapsTarget(workspaceTools)
+                      ? workspaceTools.bottom
+                      : viewportBounds.top,
                   );
                   const usableBottom = Math.min(
                     viewportBounds.bottom,
-                    composer?.top ?? viewportBounds.bottom,
-                    navigation && navigation.height > 0
+                    composer && overlapsTarget(composer)
+                      ? composer.top
+                      : viewportBounds.bottom,
+                    navigation &&
+                      overlapsTarget(navigation) &&
+                      navigation.height > 0
                       ? navigation.top
                       : viewportBounds.bottom,
                   );

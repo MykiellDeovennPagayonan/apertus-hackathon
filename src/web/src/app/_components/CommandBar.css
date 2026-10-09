@@ -272,13 +272,18 @@
   background: rgba(255, 252, 245, 0.94);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid color-mix(in srgb, var(--accent, #1d4d43) 22%, var(--border, #ccc));
-  box-shadow: 0 4px 18px rgba(28, 43, 37, 0.08), 0 1px 3px rgba(28, 43, 37, 0.04);
+  border: 1px solid
+    color-mix(in srgb, var(--accent, #1d4d43) 22%, var(--border, #ccc));
+  box-shadow:
+    0 4px 18px rgba(28, 43, 37, 0.08),
+    0 1px 3px rgba(28, 43, 37, 0.04);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .command-bar--compact .command-bar__form:focus-within {
   border-color: var(--accent, #1d4d43);
-  box-shadow: 0 4px 22px color-mix(in srgb, var(--accent, #1d4d43) 20%, transparent), 0 0 0 1px var(--accent, #1d4d43);
+  box-shadow:
+    0 4px 22px color-mix(in srgb, var(--accent, #1d4d43) 20%, transparent),
+    0 0 0 1px var(--accent, #1d4d43);
   background: #ffffff;
 }
 .command-bar--compact .command-bar__input {
@@ -326,14 +331,16 @@
   font-size: 12.5px;
   font-weight: 600;
   gap: 6px;
-  box-shadow: 0 1px 4px color-mix(in srgb, var(--accent, #1d4d43) 25%, transparent);
+  box-shadow: 0 1px 4px
+    color-mix(in srgb, var(--accent, #1d4d43) 25%, transparent);
   transition: all 0.15s ease;
   white-space: nowrap;
 }
 .command-bar--compact .command-bar__send:not(:disabled):hover {
   background: color-mix(in srgb, var(--accent, #1d4d43) 85%, #000);
   transform: translateY(-0.5px);
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent, #1d4d43) 30%, transparent);
+  box-shadow: 0 2px 8px
+    color-mix(in srgb, var(--accent, #1d4d43) 30%, transparent);
 }
 .command-bar--compact .command-bar__send:disabled {
   background: color-mix(in srgb, var(--border, #ccc) 45%, transparent);
@@ -361,7 +368,8 @@
   padding: 3px 10px;
   border-radius: 12px;
   background: rgba(255, 252, 245, 0.92);
-  border: 1px solid color-mix(in srgb, var(--accent, #1d4d43) 18%, var(--border, #ccc));
+  border: 1px solid
+    color-mix(in srgb, var(--accent, #1d4d43) 18%, var(--border, #ccc));
   color: var(--accent, #1d4d43);
   cursor: pointer;
   white-space: nowrap;
@@ -379,4 +387,44 @@
 .command-bar__ideas-icon {
   font-size: 12px;
   line-height: 1;
+}
+
+.command-bar__progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0 12px 6px;
+  color: var(--text-dim);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.command-bar__progress li {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.command-bar__progress li > span:first-child {
+  color: var(--accent);
+}
+.command-bar__elapsed {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--text-dim);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.command-bar__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .command-bar__status--working .command-bar__activity {
+    animation: none;
+  }
 }

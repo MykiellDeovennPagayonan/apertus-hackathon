@@ -104,12 +104,7 @@ export function ScalarControl({
         current={{ value }}
         label={label ?? String(node.configuration.label || node.label)}
         submitLabel={submitLabel}
-        mode={
-          node.configuration.mode === "immediate" &&
-          command.submission === "continuous"
-            ? "immediate"
-            : "submit"
-        }
+        mode={command.submission === "continuous" ? "immediate" : "submit"}
         presentation={{
           value: {
             ...fieldPresentation,

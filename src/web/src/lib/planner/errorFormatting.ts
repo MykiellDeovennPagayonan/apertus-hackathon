@@ -92,18 +92,20 @@ function formatSingleDetail(line: string): string {
   if (/^Cannot reach local Ollama/i.test(cleaned)) {
     return "Cannot connect to Ollama. Make sure the local Ollama service is running.";
   }
-  if (/^Cannot reach (?:local|hosted) Apertus/i.test(cleaned)) {
+  if (
+    /^Cannot reach (?:(?:local|hosted) Apertus|OpenAI|Anthropic)/i.test(cleaned)
+  ) {
     return "Cannot connect to the AI service. Please verify the inference endpoint.";
   }
   if (
-    /^(?:Apertus|Planner) timed out\.?\s*(?:Please try again\.?)?$/i.test(
+    /^(?:Apertus|OpenAI|Anthropic|Planner) timed out\.?\s*(?:Please try again\.?)?$/i.test(
       cleaned,
     )
   ) {
     return "The request timed out. Please try again.";
   }
   if (
-    /^(?:Apertus|Planner) is busy\.?\s*(?:Please try again shortly\.?)?$/i.test(
+    /^(?:Apertus|OpenAI|Anthropic|Planner) is busy\.?\s*(?:Please try again shortly\.?)?$/i.test(
       cleaned,
     )
   ) {
@@ -149,9 +151,7 @@ function formatSingleDetail(line: string): string {
     return "The response had a formatting issue. Please try again.";
   }
   if (
-    /^(?:Failed to fetch|fetch failed|NetworkError|Load failed)/i.test(
-      cleaned,
-    )
+    /^(?:Failed to fetch|fetch failed|NetworkError|Load failed)/i.test(cleaned)
   ) {
     return "Could not connect to the network. Please check your connection.";
   }
@@ -163,9 +163,7 @@ function formatSingleDetail(line: string): string {
     return "The request was cancelled.";
   }
   if (
-    /^Response correlation does not match the current request/i.test(
-      cleaned,
-    )
+    /^Response correlation does not match the current request/i.test(cleaned)
   ) {
     return "The server response was out of sync. Please try again.";
   }

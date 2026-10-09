@@ -10,10 +10,12 @@ export function PendulumVisual({
   instance,
   index,
   scale,
+  showIndex = true,
 }: {
   instance: ModelInstance;
   index: number;
   scale: number;
+  showIndex?: boolean;
 }) {
   const pivotX = 80 + index * 130;
   const bobX = pivotX + Number(instance.outputs.x) * scale;
@@ -38,7 +40,8 @@ export function PendulumVisual({
       />
       <circle cx={bobX} cy={bobY} r={13} fill={physicalPalette[index % 4]} />
       <text x={pivotX} y={310} textAnchor="middle">
-        {index + 1}. {String(instance.parameters.length)} m
+        {showIndex ? `${index + 1}. ` : ""}
+        {String(instance.parameters.length)} m
       </text>
     </g>
   );

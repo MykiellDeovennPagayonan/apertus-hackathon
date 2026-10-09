@@ -5,7 +5,7 @@ import { LibraryError, LibraryRepository } from "../database/LibraryRepository";
 
 const BYTE_LIMIT = 2_000_000;
 
-async function readJson(request: Request): Promise<unknown> {
+export async function readJson(request: Request): Promise<unknown> {
   if (
     request.headers.get("content-type")?.split(";")[0].trim() !==
     "application/json"

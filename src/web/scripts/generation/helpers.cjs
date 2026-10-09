@@ -24,7 +24,8 @@ async function launch() {
   const override = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE;
   const installed = fs.existsSync(chromium.executablePath());
   const mac = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-  const winEdge = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
+  const winEdge =
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
   const executablePath =
     override ||
     (!installed && process.platform === "darwin" && fs.existsSync(mac)
@@ -235,10 +236,15 @@ async function assertOpeningState(page, result, c, correlate = true) {
     assert.equal(s.state.state[loadNode.id].magnitude, 10);
     assert.equal(s.state.state[loadNode.id].position, 0.5);
     assert.match(await page.locator(".bridge-demo").innerText(), /10\s*t/);
+    await page.getByLabel("Board navigation help", { exact: true }).click();
+    await page
+      .getByText("About this lesson and its limits", { exact: true })
+      .click();
     assert.match(
-      await page.locator(".recipe-lesson > header").innerText(),
+      await page.locator(".recipe-lesson-info").innerText(),
       /deflection|millimet|unavailable/i,
     );
+    await page.getByLabel("Board navigation help", { exact: true }).click();
     assert.match(
       await page.locator(".bridge-member-hint").innerText(),
       /select|choose|click|tap|beam/i,
@@ -701,6 +707,7 @@ function recordPage(page, record) {
   record.browserErrors = [];
   record.consoleErrors = [];
   record.networkFailures = [];
+  record.navigationCancellations = [];
   page.on("framenavigated", (f) => {
     if (f === page.mainFrame()) record.navigation.push(f.url());
   });
@@ -708,12 +715,23 @@ function recordPage(page, record) {
   page.on("console", (m) => {
     if (m.type() === "error") record.consoleErrors.push(m.text());
   });
-  page.on("requestfailed", (r) =>
-    record.networkFailures.push({
+  page.on("requestfailed", (r) => {
+    const failure = {
       url: r.url(),
       reason: r.failure()?.errorText,
-    }),
-  );
+    };
+    // Next cancels speculative route requests when native import navigates.
+    // Retain them separately; aborted API/document/asset requests still fail.
+    const url = new URL(r.url());
+    if (
+      r.method() === "GET" &&
+      url.searchParams.has("_rsc") &&
+      r.headers().rsc === "1" &&
+      failure.reason === "net::ERR_ABORTED"
+    )
+      record.navigationCancellations.push(failure);
+    else record.networkFailures.push(failure);
+  });
 }
 async function saveEvidence(page, record, dir) {
   fs.mkdirSync(dir, { recursive: true });

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./community/community.css";
 import AuthProvider from "./_components/AuthProvider";
 export const metadata: Metadata = {
   title: "Apertus Local Lab",

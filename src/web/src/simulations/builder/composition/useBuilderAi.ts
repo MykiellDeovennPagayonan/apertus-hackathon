@@ -8,9 +8,9 @@ import {
   formatUserFacingStatus,
 } from "../../../lib/planner/errorFormatting";
 import type { GenerationRequest } from "../../../lib/planner/schema";
+import { publicDefinition } from "../../components/catalog";
 import { reconcileBoard } from "../../runtime/authoring/board";
 import { finalizeRecipe } from "../../runtime/authoring/operations";
-import { publicDefinition } from "../../components/catalog";
 import type { ExperimentDocument } from "../document/types";
 
 export function activeFromBuilderDocument(
@@ -40,7 +40,9 @@ export function activeFromBuilderDocument(
     }
     reconcileBoard(authored);
 
-    const normalizeParam = (p: import("../../runtime/authoring/types").ExposedParameter) => {
+    const normalizeParam = (
+      p: import("../../runtime/authoring/types").ExposedParameter,
+    ) => {
       const targetNode = authored.nodes.find((n) => n.id === p.node);
       if (targetNode) {
         try {
@@ -57,7 +59,8 @@ export function activeFromBuilderDocument(
               default:
                 p.default !== undefined
                   ? p.default
-                  : (targetNode.configuration[p.field] ?? def.defaults[p.field]),
+                  : (targetNode.configuration[p.field] ??
+                    def.defaults[p.field]),
             };
           }
         } catch {}
@@ -65,7 +68,9 @@ export function activeFromBuilderDocument(
       return p;
     };
 
-    const normalizePort = (ep: import("../../runtime/authoring/types").ExposedPort) => {
+    const normalizePort = (
+      ep: import("../../runtime/authoring/types").ExposedPort,
+    ) => {
       const targetNode = authored.nodes.find((n) => n.id === ep.endpoint.node);
       if (targetNode) {
         try {
@@ -130,7 +135,9 @@ export function activeFromBuilderDocument(
       id: doc.recipeMetadata?.id ?? `composite/${doc.template || "custom"}`,
       version: doc.recipeMetadata?.version ?? 1,
       title:
-        doc.lesson?.title?.trim() || authored.lesson.title || "Custom Composite",
+        doc.lesson?.title?.trim() ||
+        authored.lesson.title ||
+        "Custom Composite",
       description:
         doc.lesson?.instruction?.trim() ||
         authored.lesson.instruction ||
@@ -168,6 +175,13 @@ export function useBuilderAi({
     action?: string,
   ) => boolean;
 }) {
+  const latest = useRef({ doc, edit });
+  latest.current = { doc, edit };
+  const workspace = useRef<{
+    sessionId: string | null;
+    revision: number;
+    fingerprint: string;
+  }>({ sessionId: null, revision: 0, fingerprint: "" });
   const [draft, setDraft] = useState("");
   const [lastRequest, setLastRequest] = useState<{
     prompt: string;
@@ -198,6 +212,18 @@ export function useBuilderAi({
       if (!text.trim()) return;
       pending.current?.controller.abort();
       const controller = new AbortController();
+      const active = activeFromBuilderDocument(doc);
+      if (!workspace.current.sessionId)
+        workspace.current.sessionId = `builder-${crypto.randomUUID()}`;
+      if (active) {
+        const fingerprint = JSON.stringify(doc.authored);
+        if (workspace.current.fingerprint !== fingerprint) {
+          workspace.current.revision++;
+          workspace.current.fingerprint = fingerprint;
+        }
+        active.sessionId = workspace.current.sessionId;
+        active.authoredRevision = workspace.current.revision;
+      }
       const request: GenerationRequest = {
         protocolVersion: 1,
         requestId: crypto.randomUUID(),
@@ -206,7 +232,7 @@ export function useBuilderAi({
           width: typeof window !== "undefined" ? window.innerWidth : 1280,
           height: typeof window !== "undefined" ? window.innerHeight : 800,
         },
-        active: activeFromBuilderDocument(doc),
+        active,
       };
       const owner = { controller, request };
       pending.current = owner;
@@ -234,6 +260,10 @@ export function useBuilderAi({
         );
 
         if (pending.current !== owner || controller.signal.aborted) return;
+        if (JSON.stringify(latest.current.doc) !== JSON.stringify(doc))
+          throw new Error(
+            "Your experiment changed during generation. Submit the request again to preserve your edits.",
+          );
 
         if (result.status === "failed") {
           setStatus({
@@ -255,9 +285,8 @@ export function useBuilderAi({
         }
 
         if (result.status === "created" || result.status === "updated") {
-          const promptLabel =
-            text.length > 36 ? `${text.slice(0, 33)}…` : text;
-          edit(
+          const promptLabel = text.length > 36 ? `${text.slice(0, 33)}…` : text;
+          const applied = latest.current.edit(
             (d) => {
               d.authored = structuredClone(result.recipe.document);
               d.lesson = {
@@ -274,12 +303,19 @@ export function useBuilderAi({
                   d.lesson.explanation ||
                   "",
               };
+              const { document: _document, ...metadata } = result.recipe;
+              d.recipeMetadata = structuredClone(metadata);
+              d.editor = structuredClone(d.authored.editor);
               reconcileBoard(d.authored);
             },
             null,
             `AI Composite: ${promptLabel}`,
           );
 
+          if (!applied)
+            throw new Error(
+              "The generated change was rejected. Your experiment is unchanged.",
+            );
           setDraft("");
           const details = [
             result.learnerExplanation,
@@ -304,8 +340,9 @@ export function useBuilderAi({
         if (result.status === "runtime_action") {
           setStatus({
             kind: "info",
-            text: "Action applied.",
-            details: result.message,
+            text: "Open Try lesson to apply runtime actions.",
+            details:
+              "The builder edits authored content. No runtime action was applied.",
           });
         }
       } catch (error) {
@@ -327,7 +364,7 @@ export function useBuilderAi({
         }
       }
     },
-    [doc, edit],
+    [doc],
   );
 
   const cancel = useCallback(() => {

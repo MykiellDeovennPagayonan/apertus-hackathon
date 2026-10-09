@@ -1,3 +1,4 @@
+import { getProject } from "../../../lib/projects/client";
 import {
   parseDocument,
   serializeDocument,
@@ -34,15 +35,20 @@ export function persistRecipe(session: RecipeSession, ownerId?: string) {
   queues.set(key, promise);
   return promise;
 }
-export function reopenAcceptedRecipe() {
-  try {
-    const id = sessionStorage.getItem(LAST_RECIPE);
-    if (!id) return null;
-    const entry = readLibrary().find((entry) => entry?.id === id);
-    if (!entry) return null;
-    expected.set(id, structuredClone(entry));
-    return serializeDocument(entry.document);
-  } catch {
-    return null;
-  }
+export async function reopenAcceptedRecipe(ownerId?: string) {
+  const id = sessionStorage.getItem(
+    ownerId ? `${LAST_RECIPE}:${ownerId}` : LAST_RECIPE,
+  );
+  if (!id) return null;
+  const project = ownerId ? await getProject(id, ownerId) : null;
+  const entry = project
+    ? {
+        id: project.projectId,
+        document: project.payload as SavedExperiment["document"],
+        revision: project.saveRevision,
+      }
+    : (await loadLibrary()).find((entry) => entry.id === id);
+  if (!entry) return null;
+  expected.set(`${ownerId ?? "guest"}:${id}`, structuredClone(entry));
+  return serializeDocument(entry.document);
 }

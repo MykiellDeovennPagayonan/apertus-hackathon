@@ -17,7 +17,6 @@ import {
 import { premadeRecipe } from "../../simulations/runtime/recipes/registry";
 import { toJsonSchema } from "../apertus/structuredSchema";
 import { requestStructured } from "../apertus/transport";
-import { selectCapability } from "../laya/selection";
 import { GenerationBudget, type TraceSink } from "./budget";
 import {
   activeHandles,
@@ -27,6 +26,7 @@ import {
   selectedContract,
 } from "./catalog";
 import { compose } from "./compose";
+import { requiresLayaComposition } from "./compositionPolicy";
 import { verifyExplicitQuantities } from "./constraints";
 import { parseStageJson, stageMessages } from "./context";
 import { coverageFor, verifyCoverage } from "./coverage";
@@ -43,6 +43,7 @@ import {
   parseIntentResponse,
   type TeachingIntent,
 } from "./schema";
+import { selectCapability } from "./selection/selectCapability";
 import {
   creationResponseSchema,
   followupContract,
@@ -131,6 +132,7 @@ async function select(
   intent: TeachingIntent,
   budget: GenerationBudget,
 ) {
+  budget.trace?.("selection.start", {});
   let ranked = retrieveCapabilities(request.prompt, intent);
   if (!ranked.length) {
     budget.broaderSearches++;
@@ -146,7 +148,7 @@ async function select(
   );
   if (!ranked.length) return null;
   if (ranked.length === 1 || ranked[0].score >= ranked[1].score + 8) {
-    budget.trace?.("selection.laya", {
+    budget.trace?.("selection.decision", {
       status: "skipped",
       reason: "Unambiguous grounded capability",
     });
@@ -159,12 +161,13 @@ async function select(
       intent,
       cards,
       budget,
+      () => budget.decision,
     );
-    if (selected) return selected;
+    if (selected.status === "selected") return selected.capability;
   } else
-    budget.trace?.("selection.laya", {
+    budget.trace?.("selection.decision", {
       status: "skipped",
-      reason: "Apertus-only mode",
+      reason: "Decision selection disabled",
     });
   const schema = selectionSchema(cards.map((c) => c.recipeSlug));
   const selected = await stage(
@@ -606,15 +609,19 @@ export async function planPrompt(
   const limit = Number(process.env.PLANNER_MAX_CONCURRENT_REQUESTS ?? 1);
   if (!Number.isInteger(limit) || limit < 1 || limit > 16)
     throw new PlannerError("Invalid planner concurrency.", 503);
+  const requiredComposition = requiresLayaComposition();
   const budget = new GenerationBudget(signal, trace);
   budget.check();
   if (activeRequests >= limit)
     throw new PlannerError("Planner is busy. Please try again shortly.", 429);
   activeRequests++;
   try {
-    if (request.active) {
+    if (request.active && !requiredComposition) {
       const result = await followup(request, budget);
-      if (result) return parseGenerationResult(result, request);
+      if (result) {
+        budget.trace?.("validation.start", {});
+        return parseGenerationResult(result, request);
+      }
     }
     const intent = await stage(
       "teaching_intent",
@@ -648,9 +655,10 @@ export async function planPrompt(
       Boolean(request.active?.sessionId?.startsWith("builder-")) &&
       (request.active?.recipe.document.nodes.length ?? 0) > 0;
 
-    const selected = isBuilderModifyingComposite
-      ? null
-      : await select(request, intent, budget);
+    const selected =
+      isBuilderModifyingComposite || requiredComposition
+        ? null
+        : await select(request, intent, budget);
     if (!selected) {
       budget.trace?.("selection.fallback_to_composition", {
         reason: "No single recipe fits request",
@@ -804,6 +812,7 @@ export async function planPrompt(
         construct(parsed, false);
       },
     );
+    budget.trace?.("validation.start", {});
     let { draft, recipe, coverage } = construct(configuration, true);
     if (configuration.extend) {
       const applyExtensions = (
@@ -904,7 +913,7 @@ export async function planPrompt(
       budget: {
         calls: budget.calls,
         repairs: budget.repairs,
-        layaCalls: budget.layaCalls,
+        decisionCalls: budget.decisionCalls,
       },
     });
     return result;

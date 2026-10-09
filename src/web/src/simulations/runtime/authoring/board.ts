@@ -1,3 +1,4 @@
+import { publicDefinition } from "../../components/catalog";
 import { isDrawingItem, validateDrawing } from "./drawings";
 import type { AuthoredDocument, Layout } from "./types";
 export type Rect = { x: number; y: number; width: number; height: number };
@@ -90,7 +91,21 @@ export function boardItemMinimum(
     (node) => node.id === layout?.node,
   )?.definition;
   if (definition === "controls/Button") return { width: 160, height: 48 };
+  if (definition === "controls/Toggle") return { width: 160, height: 80 };
   if (definition === "displays/Readout") return { width: 128, height: 96 };
+  if (definition === "displays/Inspector") {
+    const node = d.nodes.find((node) => node.id === layout?.node);
+    const binding = d.connections.find(
+      (connection) =>
+        connection.kind === "value" && connection.to.node === node?.id,
+    );
+    const source = d.nodes.find((node) => node.id === binding?.from.node);
+    const schema =
+      source && binding
+        ? publicDefinition(source.definition).outputs[binding.from.port]?.schema
+        : undefined;
+    if (schema?.type === "string") return { width: 128, height: 96 };
+  }
   if (definition === "controls/Slider") return { width: 160, height: 128 };
   return definition === "displays/Text" || definition === "displays/Box"
     ? { width: 72, height: 48 }

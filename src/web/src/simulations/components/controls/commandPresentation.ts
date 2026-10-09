@@ -49,7 +49,7 @@ export function commandPresentation(command: string, definition: string) {
     GROW_SET_RATE: "Annual interest rate",
     GROW_SET_YEARS: "Years of growth",
     GROW_SET_SCENARIO: "Choose a growth scenario",
-    TRAFFIC_BRAKE: "Brake the leading car",
+    TRAFFIC_BRAKE: "Brake car 1",
     TRAFFIC_SET_HEADWAY: "Following time gap",
     TRAFFIC_STEP: "Advance traffic by 0.25 seconds",
     TRAFFIC_RESTART: "Restart traffic",
@@ -159,7 +159,28 @@ export function commandPresentation(command: string, definition: string) {
           subtract: "Subtract fractions",
         };
   presentation["value.mode"] = { label: "Activity", choices: modes };
+  if (command === "CIRC_SET_TOPOLOGY")
+    presentation.value = {
+      widget: "segmented",
+      choices: { series: "Series", parallel: "Parallel" },
+      help: "Series: bulbs share one path. Parallel: each bulb has its own path.",
+    };
+  if (definition === "models/EclipseGeometry") {
+    const help: Record<string, string> = {
+      "set:moonAngle":
+        "Move the Moon around Earth. 180° gives solar alignment; 0° gives lunar alignment.",
+      "set:moonOffset":
+        "Move the Moon above or below the alignment. Zero keeps it in the same plane.",
+      "set:moonDistance":
+        "Move the Moon nearer to or farther from Earth. Distances are scaled for the diagram.",
+    };
+    presentation.value = { help: help[command] };
+  }
   const consequences: Record<string, string> = {
+    PEND_SET_LENGTH: "Longer rods swing more slowly.",
+    PEND_SET_AMPLITUDE: "Release angle (0–90°). Larger swings take longer.",
+    TRAFFIC_SET_HEADWAY:
+      "Time each driver leaves to the car ahead. A smaller gap means closer following.",
     CHEM_ADD_WATER:
       "Adds this volume to the current solution. The salt mass stays unchanged.",
     CHEM_SET_COEFFICIENTS:
@@ -185,6 +206,9 @@ export function commandPresentation(command: string, definition: string) {
   if (consequences[command])
     presentation.value = { ...presentation.value, help: consequences[command] };
   const propertyLabels: Record<string, string> = {
+    moonAngle: "Moon position",
+    moonOffset: "Alignment offset",
+    moonDistance: "Distance from Earth",
     angle: "Launch angle",
     velocity: "Launch speed",
     gravity: "Gravity",
@@ -208,6 +232,23 @@ export function commandPresentation(command: string, definition: string) {
     closed: "Close the road",
   };
   return {
+    legacyLabels:
+      (
+        {
+          "set:moonAngle": [
+            "Moon Angle (degrees)",
+            "Moon Angle",
+            "Set moonAngle",
+          ],
+          "set:moonOffset": ["Moon Offset", "Set moonOffset"],
+          "set:moonDistance": ["Moon Distance", "Set moonDistance"],
+          CIRC_SET_TOPOLOGY: ["Topology: Series or Parallel"],
+          PEND_SET_LENGTH: ["Length (m)", "Length"],
+          PEND_SET_AMPLITUDE: ["Amplitude (deg)", "Amplitude"],
+          TRAFFIC_SET_HEADWAY: ["Desired Headway (s)", "Desired Headway"],
+          TRAFFIC_BRAKE: ["Brake Lead Vehicle", "Brake lead vehicle"],
+        } as Record<string, string[]>
+      )[command] ?? [],
     label:
       labels[command] ||
       (command.startsWith("set:")

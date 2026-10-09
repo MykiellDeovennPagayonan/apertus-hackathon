@@ -2,6 +2,7 @@ import {
   loadRemoteSimulations,
   saveRemoteSimulation,
 } from "../../../lib/library/client";
+import { nameFields } from "../../../lib/projects/validation";
 import { type ExperimentDocument, validateDocument } from "../document";
 
 export const DRAFT_KEY = "apertus-builder-draft-v1";
@@ -11,6 +12,7 @@ export type SavedExperiment = {
   document: ExperimentDocument;
   recovery?: string;
   revision?: number;
+  basedOnPublicationId?: string;
 };
 
 export function readLibrary(): SavedExperiment[] {
@@ -41,16 +43,34 @@ export async function saveEntry(
       throw new Error(
         "Reopen this experiment before saving it to your account.",
       );
-    const entries = await loadRemoteSimulations(ownerId);
     const saved = await saveRemoteSimulation(
       snapshot,
       ownerId,
       expected?.revision ?? null,
     );
-    return [...entries.filter((item) => item.id !== saved.id), saved];
+    return [saved];
   }
   const write = () => {
     const entries = readLibrary();
+    const normalizedName = nameFields(
+      snapshot.document.lesson.title,
+    ).normalizedName;
+    if (
+      entries.some((item) => {
+        if (!item || item.id === snapshot.id) return false;
+        try {
+          return (
+            nameFields(item.document.lesson.title).normalizedName ===
+            normalizedName
+          );
+        } catch {
+          return false;
+        }
+      })
+    )
+      throw new Error(
+        "That name already exists on this device. Choose a different name.",
+      );
     const current = entries.find((item) => item?.id === snapshot.id);
     if (current && JSON.stringify(current) !== JSON.stringify(expected)) {
       throw new Error(

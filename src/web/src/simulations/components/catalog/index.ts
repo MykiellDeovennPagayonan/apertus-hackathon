@@ -2,9 +2,12 @@ import { assemblyModels } from "../../runtime/assembly";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import type { Port, PublicDefinition } from "../../runtime/authoring/types";
 import { boolean, num, object } from "../../runtime/parameterSchema";
+import { liveExplorationCommands } from "../controls/interactionPolicy";
 import { componentDefinitions } from "../registry";
 import { authoringDefinitions } from "./authoring";
 import { definitionDiscovery } from "./discovery";
+import { explorationDefinitions } from "./exploration";
+import { applyExplorationTeaching } from "./explorationTeaching";
 import { genericDefinitions } from "./generic";
 import {
   learningAppearances,
@@ -23,6 +26,7 @@ function register(definition: PublicDefinition) {
 }
 for (const d of [
   ...genericDefinitions,
+  ...explorationDefinitions,
   ...authoringDefinitions,
   ...spatialDefinitions,
   ...operationDefinitions,
@@ -162,7 +166,14 @@ for (const m of assemblyModels) {
       ]),
     ),
     commands: {
-      ...m.actions,
+      ...Object.fromEntries(
+        Object.entries(m.actions).map(([key, command]) => [
+          key,
+          liveExplorationCommands.has(key)
+            ? { ...command, submission: "continuous" as const }
+            : command,
+        ]),
+      ),
       RESET: {
         arguments: object({}),
         timing: "rebuild",
@@ -195,8 +206,8 @@ for (const m of assemblyModels) {
   });
   const id = `appearance/${m.presentation}`;
   register({
-    ...genericDefinitions[0],
     id,
+    version: 1,
     title: `${m.name} appearance`,
     description: `Display an attached ${m.name} model snapshot`,
     category: "appearance",
@@ -205,7 +216,15 @@ for (const m of assemblyModels) {
     defaults: {},
     inputs: { model: { kind: "attachment", unit: m.ref } },
     outputs: {},
+    commands: {},
     placement: ["lesson"],
+    lifecycle: {
+      authored: [],
+      presentation: [],
+      clock: false,
+      reset: "authored",
+      capture: false,
+    },
     assumptions: m.assumptions,
     presentationProvider: id,
   });
@@ -256,6 +275,8 @@ publicDefinition("canvases/town").inputs.timeline = {
   unit: "town/timeline",
   optional: true,
 };
+
+applyExplorationTeaching(publicDefinitions);
 
 // Author-facing metadata is separate from runtime identity and execution contracts.
 for (const definition of publicDefinitions.values()) {

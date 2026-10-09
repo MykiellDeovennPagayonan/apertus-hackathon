@@ -5,6 +5,7 @@ import type {
   TimedState,
   TrackState,
 } from "../../traits/physical-systems/state";
+import { pendulumAngle, pendulumPeriod } from "./pendulumMotion";
 
 function bounded(value: number, min: number, max: number, name: string) {
   if (!Number.isFinite(value) || value < min || value > max)
@@ -13,7 +14,7 @@ function bounded(value: number, min: number, max: number, name: string) {
 export function validatePendulum(s: PendulumState) {
   bounded(s.length, 0.1, 20, "Length (m)");
   bounded(s.gravity, 0.1, 30, "Gravity (m/s²)");
-  bounded(s.amplitude, 0, 10, "Small-angle amplitude (degrees)");
+  bounded(s.amplitude, 0, 90, "Starting angle (degrees)");
   bounded(s.elapsed, 0, 86400, "Simulation time (s)");
   if (typeof s.playing !== "boolean") throw new Error("Invalid playback state");
 }
@@ -50,9 +51,8 @@ export function playback<T extends TimedState>(
 }
 export function pendulumMeasure(s: PendulumState) {
   validatePendulum(s);
-  const omega = Math.sqrt(s.gravity / s.length);
-  const period = (2 * Math.PI) / omega;
-  const angle = s.amplitude * Math.cos(omega * s.elapsed);
+  const period = pendulumPeriod(s.length, s.gravity, s.amplitude);
+  const angle = pendulumAngle(s.amplitude, s.elapsed, period);
   const radians = (angle * Math.PI) / 180;
   return {
     period,
@@ -64,7 +64,7 @@ export function pendulumMeasure(s: PendulumState) {
     y: -s.length * Math.cos(radians),
     points: Array.from({ length: 25 }, (_, index) => {
       const x = (index * Math.min(12, 2 * period)) / 24;
-      return { x, y: s.amplitude * Math.cos(omega * x) };
+      return { x, y: pendulumAngle(s.amplitude, x, period) };
     }),
   };
 }
@@ -114,7 +114,8 @@ export function trackApply(
   value?: unknown,
 ): TrackState {
   if (action === "ROLL_SCALE_RESISTANCE") {
-    if (typeof value !== "number") throw new Error("Resistance factor must be numeric");
+    if (typeof value !== "number")
+      throw new Error("Resistance factor must be numeric");
     bounded(value, 0, 10, "Resistance factor");
     const next = { ...s, resistance: s.resistance * value, elapsed: 0 };
     validateTrack(next);

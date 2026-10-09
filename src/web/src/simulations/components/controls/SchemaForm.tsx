@@ -56,7 +56,9 @@ function Field({
   presentation = {},
   errorId,
   onValidityChange,
+  commitOnBlur = false,
 }: {
+  commitOnBlur?: boolean;
   widget?: string;
   schema: ParameterSchema;
   value: unknown;
@@ -85,6 +87,7 @@ function Field({
               presentation={presentation}
               errorId={errorId}
               onValidityChange={onValidityChange}
+              commitOnBlur={commitOnBlur}
               widget={widget}
               schema={child}
               value={(value as Record<string, unknown>)?.[key]}
@@ -120,6 +123,7 @@ function Field({
               presentation={presentation}
               errorId={errorId}
               onValidityChange={onValidityChange}
+              commitOnBlur={commitOnBlur}
               value={item}
               onChange={(next) =>
                 onChange(
@@ -153,6 +157,31 @@ function Field({
   if (schema.type === "enum" || (schema.type === "string" && schema.enum)) {
     const choices =
       schema.type === "enum" ? schema.values : requireValue(schema.enum);
+    if (widget === "segmented")
+      return (
+        <fieldset className="catalog-choice">
+          <legend>{label}</legend>
+          <div className="catalog-choice-options">
+            {choices.map((choice) => (
+              <label key={JSON.stringify(choice)}>
+                <input
+                  type="radio"
+                  name={id}
+                  value={JSON.stringify(choice)}
+                  checked={value === choice}
+                  aria-describedby={errorId}
+                  aria-invalid={!!errorId || undefined}
+                  onChange={() => onChange(choice)}
+                />
+                <span>
+                  {presentation[path]?.choices?.[String(choice)] ??
+                    String(choice)}
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      );
     return (
       <label className="catalog-field" htmlFor={id}>
         <span>{label}</span>
@@ -174,6 +203,8 @@ function Field({
   }
   const numeric = schema.type === "number" || schema.type === "integer";
   const candidateUnit = usefulUnit(schema);
+  if (candidateUnit && label.endsWith(` (${candidateUnit})`))
+    label = label.slice(0, -candidateUnit.length - 3);
   const unit =
     candidateUnit &&
     !label.toLowerCase().split(/\s+/).includes(candidateUnit.toLowerCase())
@@ -183,6 +214,7 @@ function Field({
     return (
       <NumberField
         label={label}
+        commitOnBlur={commitOnBlur}
         inputLabel={
           widget === "Slider" && presentation[path]?.exactLabel !== false
             ? `Exact ${label.toLowerCase()}`
@@ -370,6 +402,7 @@ export function SchemaForm({
               widget={widget}
               onChange={update}
               onValidityChange={fieldValidity}
+              commitOnBlur={mode === "immediate"}
               errorId={
                 feedbackTone === "error" && feedback
                   ? `${id}-feedback`
@@ -384,6 +417,7 @@ export function SchemaForm({
               path="value"
               presentation={presentation}
               onValidityChange={fieldValidity}
+              commitOnBlur={mode === "immediate"}
               errorId={
                 feedbackTone === "error" && feedback
                   ? `${id}-feedback`
@@ -414,6 +448,7 @@ export function SchemaForm({
                   path={key}
                   presentation={presentation}
                   onValidityChange={fieldValidity}
+                  commitOnBlur={mode === "immediate"}
                   errorId={
                     feedbackTone === "error" && feedback
                       ? `${id}-feedback`

@@ -1,14 +1,15 @@
 "use client";
-import { SchemaForm } from "../SchemaForm";
 import { naturalSystems } from "../../../domains/natural-systems";
+import type { ActionResult } from "../../../runtime/commands";
 import type { ModelInstance } from "../../../runtime/contribution";
 import { dispatchBatch, dispatchCommand } from "../../../runtime/session";
+import { SchemaForm } from "../SchemaForm";
 
 export type NaturalCommand = (
   instance: ModelInstance,
   action: string,
   value?: unknown,
-) => void;
+) => ActionResult;
 export function naturalCommand(
   report: (message: string) => void,
 ): NaturalCommand {
@@ -19,6 +20,7 @@ export function naturalCommand(
       ...(value === undefined ? {} : { value }),
     });
     report(result.accepted ? "" : result.error);
+    return result;
   };
 }
 const parameterByAction: Record<string, string> = {
@@ -39,10 +41,19 @@ function NumberControl({
   label: string;
   command: NaturalCommand;
 }) {
-  const model = naturalSystems.models.find(candidate => candidate.ref === instance.provider);
+  const model = naturalSystems.models.find(
+    (candidate) => candidate.ref === instance.provider,
+  );
   const schema = model?.actions[action]?.arguments;
   if (!schema) return null;
-  return <SchemaForm schema={schema} initial={{ value: instance.parameters[parameterByAction[action]] }} label={label} onSubmit={args => { command(instance, action, args.value); return { accepted: true }; }} />;
+  return (
+    <SchemaForm
+      schema={schema}
+      initial={{ value: instance.parameters[parameterByAction[action]] }}
+      label={label}
+      onSubmit={(args) => command(instance, action, args.value)}
+    />
+  );
 }
 export function NaturalControls({
   instance,

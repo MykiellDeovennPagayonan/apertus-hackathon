@@ -7,6 +7,7 @@ export function ActionButton({
   disabled = false,
   label,
   intent = "secondary",
+  pressed,
 }: {
   children: ReactNode;
   onCommand: () => ActionResult;
@@ -14,6 +15,7 @@ export function ActionButton({
   disabled?: boolean;
   label?: string;
   intent?: "primary" | "secondary" | "quiet";
+  pressed?: boolean;
 }) {
   const [error, setError] = useState<string>();
   return (
@@ -22,11 +24,14 @@ export function ActionButton({
         type="button"
         disabled={disabled}
         aria-label={label}
+        aria-pressed={pressed}
         className={`recipe-action recipe-action--${intent} ${className ?? ""}`}
         onClick={() => {
           try {
             const result = onCommand();
-            setError(result.accepted ? undefined : (result.error ?? "Action failed"));
+            setError(
+              result.accepted ? undefined : (result.error ?? "Action failed"),
+            );
           } catch (e) {
             setError(e instanceof Error ? e.message : "Action failed");
           }

@@ -52,7 +52,11 @@
     ".next-parity-build/types/**/*.ts",
     ".next-parity-build/dev/types/**/*.ts",
     ".next-drawing-tools/types/**/*.ts",
-    ".next-drawing-tools/dev/types/**/*.ts"
+    ".next-drawing-tools/dev/types/**/*.ts",
+    ".next-realistic-validation/types/**/*.ts",
+    ".next-realistic-validation/dev/types/**/*.ts",
+    ".next-realistic-build/types/**/*.ts",
+    ".next-realistic-build/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
