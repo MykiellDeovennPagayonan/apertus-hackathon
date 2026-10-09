@@ -185,16 +185,19 @@ export function RecipeLesson({
           className={`recipe-lesson ${boardWorkspace ? "is-board-workspace" : ""}`}
           aria-label={document.lesson.title}
         >
-          <header>
-            <h1>{document.lesson.title}</h1>
-            <p>{document.lesson.instruction}</p>
-            {document.lesson.explanation && (
-              <details className="recipe-explanation">
-                <summary>About this lesson and its limits</summary>
-                <p>{document.lesson.explanation}</p>
-              </details>
-            )}
-          </header>
+          {/* Workspace metadata belongs outside the canvas, never in a reserved top section. */}
+          {!boardWorkspace && (
+            <header>
+              <h1>{document.lesson.title}</h1>
+              <p>{document.lesson.instruction}</p>
+              {document.lesson.explanation && (
+                <details className="recipe-explanation">
+                  <summary>About this lesson and its limits</summary>
+                  <p>{document.lesson.explanation}</p>
+                </details>
+              )}
+            </header>
+          )}
           <AuthorContext.Provider
             value={{
               authoring,

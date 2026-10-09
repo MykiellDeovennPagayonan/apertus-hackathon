@@ -114,14 +114,10 @@ export default function ExperimentsShell({
     document.addEventListener("keydown", onEscape);
     return () => document.removeEventListener("keydown", onEscape);
   }, [controlsOpen]);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: A replacement session replaces the measured lesson header even while ready stays true.
   useEffect(() => {
     if (!ready) return;
     const composer = composerElement.current;
     const header = workspace.current?.querySelector(".workspace-header");
-    const lessonHeader = workspace.current?.querySelector(
-      ".recipe-lesson > header",
-    );
     const measure = () => {
       if (composer)
         workspace.current?.style.setProperty(
@@ -133,18 +129,14 @@ export default function ExperimentsShell({
         "--workspace-top",
         `${bottom + 16}px`,
       );
-      workspace.current?.style.setProperty(
-        "--lesson-heading-height",
-        `${lessonHeader?.getBoundingClientRect().height ?? 60}px`,
-      );
       refresh((value) => value + 1);
     };
     measure();
     const observer = new ResizeObserver(measure);
-    for (const element of [composer, header, lessonHeader])
+    for (const element of [composer, header])
       if (element) observer.observe(element);
     return () => observer.disconnect();
-  }, [ready, lesson, focused]);
+  }, [ready]);
   useEffect(() => {
     if (status?.kind !== "success") return;
     const timer = window.setTimeout(() => setStatus(null), 5000);
