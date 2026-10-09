@@ -1,8 +1,9 @@
-import type { ChoiceQuestion } from "./types";
+import type { ChoiceQuestion } from "../../decisions/contracts";
 export function acceptChoice(
   answer: unknown,
   question: ChoiceQuestion,
   gate: number,
+  confidenceGate = 0,
 ) {
   if (
     !Number.isFinite(gate) ||
@@ -12,7 +13,22 @@ export function acceptChoice(
     typeof answer !== "object"
   )
     return null;
-  const a = answer as { choice?: unknown; probabilities?: unknown };
+  const a = answer as {
+    choice?: unknown;
+    probabilities?: unknown;
+    confidence?: unknown;
+  };
+  if (
+    !Number.isFinite(confidenceGate) ||
+    confidenceGate < 0 ||
+    confidenceGate > 1 ||
+    (confidenceGate > 0 &&
+      (typeof a.confidence !== "number" ||
+        !Number.isFinite(a.confidence) ||
+        a.confidence < confidenceGate ||
+        a.confidence > 1))
+  )
+    return null;
   if (
     typeof a.choice !== "string" ||
     !Object.hasOwn(question.criteria, a.choice) ||
@@ -35,6 +51,7 @@ export function acceptChoice(
   if (
     Math.abs(total - 1) > 0.025 ||
     probability < gate ||
+    keys.some((key) => (probabilities[key] as number) > probability) ||
     a.choice === "unclear"
   )
     return null;

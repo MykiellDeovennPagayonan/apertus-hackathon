@@ -38,7 +38,7 @@ const { coverageFor } = load("src/lib/planner/coverage.ts");
 const { capabilityCards, retrieveCapabilities } = load(
   "src/lib/planner/catalog.ts",
 );
-const { acceptChoice } = load("src/lib/laya/decisions.ts");
+const { acceptChoice } = load("src/lib/planner/selection/acceptance.ts");
 const { arrangeDocument } = load(
   "src/simulations/runtime/authoring/arrangement.ts",
 );
@@ -520,28 +520,37 @@ console.log(
 
 const originalFetch = global.fetch;
 const originalEnv = { ...process.env };
-function mockInference(queue, calls, layaChoice = null) {
+function mockInference(queue, calls, decisionChoice = null) {
   global.fetch = async (url, options) => {
     const body = JSON.parse(options.body);
-    if (String(url).includes("/api/decide")) {
-      calls.push({ laya: true, body });
+    if (
+      String(url).includes("/api/decide") ||
+      String(url).endsWith("/systemone")
+    ) {
+      calls.push({ decision: true, body });
       const criteria = Object.keys(body.questions.capability.criteria);
-      return Response.json({
-        model: "fixture-laya",
-        result: {
-          answers: {
-            capability: {
-              choice: layaChoice ?? "unclear",
-              probabilities: Object.fromEntries(
-                criteria.map((k) => [
-                  k,
-                  k === (layaChoice ?? "unclear") ? 1 : 0,
-                ]),
-              ),
-            },
-          },
+      const answers = {
+        capability: {
+          type: "choice",
+          confidence: 1,
+          choice: decisionChoice ?? "unclear",
+          probabilities: Object.fromEntries(
+            criteria.map((k) => [
+              k,
+              k === (decisionChoice ?? "unclear") ? 1 : 0,
+            ]),
+          ),
         },
-      });
+      };
+      return Response.json(
+        String(url).endsWith("/systemone")
+          ? {
+              model: "fixture-jev",
+              answers,
+              usage: { input_tokens: 42, output_tokens: 8 },
+            }
+          : { model: "fixture-laya", result: { answers } },
+      );
     }
     calls.push(body);
     const queued = queue.shift();
@@ -669,14 +678,14 @@ function mockInference(queue, calls, layaChoice = null) {
       2,
       "Clear creation uses two focused calls and skips invalid Laya configuration",
     );
-    assert.ok(calls.every((c) => !c.laya));
+    assert.ok(calls.every((c) => !c.decision));
     assert.ok(
       calls.every((c) => !JSON.stringify(c.messages).includes("generated/b0")),
       "Topology stays out of model context",
     );
     assert.ok(
       traces.some(
-        (t) => t.event === "selection.laya" && t.data.status === "skipped",
+        (t) => t.event === "selection.decision" && t.data.status === "skipped",
       ),
     );
     if (c.id === "bridge") {
@@ -756,7 +765,7 @@ function mockInference(queue, calls, layaChoice = null) {
     active: null,
   });
   assert.equal(selected.status, "created");
-  assert.equal(ambiguous.filter((c) => c.laya).length, 1);
+  assert.equal(ambiguous.filter((c) => c.decision).length, 1);
   const fallback = [];
   mockInference(
     [
@@ -776,7 +785,44 @@ function mockInference(queue, calls, layaChoice = null) {
     ).status,
     "created",
   );
-  assert.equal(fallback.filter((c) => c.laya).length, 1);
+  assert.equal(fallback.filter((c) => c.decision).length, 1);
+  // Exercise both adapters through the real planner orchestration with fixture HTTP.
+  process.env.DECISION_PROVIDER = "jev";
+  process.env.TYPESAFE_API_KEY = "fixture-key";
+  const jevCalls = [];
+  mockInference(
+    [sampleIntent, { instances: cases[1].overrides, coverage }],
+    jevCalls,
+    "area-perimeter",
+  );
+  const jevSelected = await planPrompt({
+    ...request,
+    prompt: "Compare arithmetic and rectangle area",
+    active: null,
+  });
+  assert.equal(jevSelected.status, "created");
+  assert.equal(jevCalls.filter((call) => call.decision).length, 1);
+  const jevFallback = [];
+  mockInference(
+    [
+      sampleIntent,
+      { selected: "area-perimeter" },
+      { instances: cases[1].overrides, coverage },
+    ],
+    jevFallback,
+  );
+  assert.equal(
+    (
+      await planPrompt({
+        ...request,
+        prompt: "Compare arithmetic and rectangle area",
+        active: null,
+      })
+    ).status,
+    "created",
+  );
+  assert.equal(jevFallback.filter((call) => call.decision).length, 1);
+  process.env.DECISION_PROVIDER = "laya";
   const aborted = new AbortController();
   aborted.abort();
   await assert.rejects(

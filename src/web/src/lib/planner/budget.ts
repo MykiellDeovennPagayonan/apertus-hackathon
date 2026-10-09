@@ -1,5 +1,9 @@
+import { readDecisionConfig } from "../decisions/config";
+import { createDecisionProvider } from "../decisions/factory";
 import { type LlmConfig, readLlmConfig } from "../llm/config";
 import { PlannerError } from "./errors";
+import { readSelectionPolicy } from "./selection/policy";
+import type { DecisionSelectionDependencies } from "./selection/selectCapability";
 export type TraceSink = (event: string, data: unknown) => void;
 export class GenerationBudget {
   private configuration?: LlmConfig;
@@ -11,7 +15,24 @@ export class GenerationBudget {
   calls = 0;
   repairs = 0;
   turns = 0;
-  layaCalls = 0;
+  decisionCalls = 0;
+  private decisionDependencies?: DecisionSelectionDependencies;
+  get decision(): DecisionSelectionDependencies {
+    if (!this.decisionDependencies) {
+      const config = readDecisionConfig();
+      this.decisionDependencies = {
+        provider: createDecisionProvider(config),
+        policy: readSelectionPolicy(config.provider),
+      };
+    }
+    return this.decisionDependencies;
+  }
+  consumeDecisionCall() {
+    this.check();
+    if (this.decisionCalls >= 1)
+      throw new PlannerError("Decision selection budget exhausted", 502);
+    this.decisionCalls++;
+  }
   broaderSearches = 0;
   maxCalls = 6;
   maxRepairs = 2;
@@ -56,7 +77,7 @@ export class GenerationBudget {
       calls: this.calls,
       repairs: this.repairs,
       turns: this.turns,
-      layaCalls: this.layaCalls,
+      decisionCalls: this.decisionCalls,
     });
   }
 }

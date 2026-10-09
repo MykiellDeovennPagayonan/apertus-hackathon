@@ -209,7 +209,7 @@ async function repairFault(name, bad) {
       ...semantic,
       {
         event: "finalization",
-        data: { budget: { calls: 2, repairs: 1, layaCalls: 0 } },
+        data: { budget: { calls: 2, repairs: 1, decisionCalls: 0 } },
       },
     ],
   };

@@ -76,7 +76,7 @@ LLM_MODEL=your-claude-model-id
 ANTHROPIC_API_KEY=your-api-key
 ```
 
-The Anthropic adapter uses the Messages API, separating the system prompt from user/assistant messages. `LLM_MODEL` is required for Anthropic. Neither cloud provider requires a local inference service. Laya remains a separate optional local selection service: use `PLANNER_MODE=apertus` to skip it entirely even when OpenAI or Anthropic is selected. The legacy mode name controls Laya usage, not the LLM provider.
+The Anthropic adapter uses the Messages API, separating the system prompt from user/assistant messages. `LLM_MODEL` is required for Anthropic. Neither cloud provider requires a local inference service. The decision provider is independent: use `PLANNER_MODE=apertus` to skip decision selection entirely even when OpenAI or Anthropic is selected. The legacy mode name controls decision usage, not the LLM provider.
 
 To switch back to local Apertus:
 
@@ -109,6 +109,52 @@ Native schema adapters wrap root arrays, translate OpenAI optional properties to
 Run `pnpm test:generation:providers` for deterministic adapter/configuration fault coverage. These mocked tests do not establish live OpenAI, Anthropic or hosted Apertus quality or account access. For a live smoke test, configure the provider, restart the app, generate the same prompt in Builder or Experiments, and inspect the diagnostic trace. Switch providers and restart between comparison runs, using the same starting experiment state.
 
 API references: [OpenAI GPT-5.6 Luna](https://developers.openai.com/api/docs/models/gpt-5.6-luna), [OpenAI structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs), [Anthropic Messages](https://platform.claude.com/docs/en/api/messages/create), and [Anthropic structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs).
+
+## Laya or Jev decision selection
+
+Set `DECISION_PROVIDER=laya|jev` independently of `LLM_PROVIDER`. Leaving it unset preserves local Laya and existing `LAYA_*` settings. `PLANNER_MODE=hybrid` invokes the decision model only for an ambiguous capability shortlist; unambiguous requests skip it. Switching the decision provider does not change the text generation provider.
+
+For TypeSafe's hosted Jev:
+
+```dotenv
+PLANNER_MODE=hybrid
+DECISION_PROVIDER=jev
+TYPESAFE_API_KEY=your-typesafe-key
+JEV_BASE_URL=https://api.typesafe.ai/v1
+JEV_MODEL=jev-1.13.0
+```
+
+Create the key in the [TypeSafe console](https://console.typesafe.ai/keys), configure the backend environment, and restart Next.js. No local Laya process is needed for Jev. For local Laya, set `DECISION_PROVIDER=laya`, keep `LAYA_BASE_URL=http://127.0.0.1:43102`, and start `make run-laya`. With a hosted LLM and Jev, Next.js needs no local model services.
+
+The backend adapter sends Jev `{model, state, questions}` to `POST /v1/systemone` with Bearer authentication and normalizes `{model, answers, usage}` into the existing decision interface. Local Laya retains `/api/decide` and its nested `result.answers` envelope. The integration currently uses Choice questions; Jev also supports Score and Noul. [Official API reference](https://docs.typesafe.ai/api).
+
+Common `DECISION_TIMEOUT_MS`, `DECISION_ACCEPTANCE_GATE`, and `DECISION_CREATION_ACCEPTANCE_GATE` settings override the legacy Laya settings. Jev ignores `LAYA_*` values and defaults to a 3000 ms timeout and a 0.75 creation probability gate. `DECISION_CONFIDENCE_GATE` adds a separate check on the answer's confidence: defaults are 0.75 for Jev and 0 (disabled) for Laya. Selected-option probability and confidence are different quantities; neither threshold is a measured accuracy guarantee. Tune them with representative lesson requests and keep the `unclear` option. [TypeSafe confidence guide](https://docs.typesafe.ai/confidence).
+
+The existing planner budget permits at most one decision request per generation. Failed calls, invalid responses, low probability/confidence, or `unclear` return control to the configured LLM planning path. There is no automatic Jev-to-Laya failover. Cancellation stops work. Requests and responses are bounded to 64 KB, redirects are rejected, credentials stay server-side, and Jev requires HTTPS. The planner still validates configured recipes before applying them. Diagnostics use the provider-neutral `selection.decision` event name and include the actual provider, resolved model, token usage, and duration; production prompt traces remain disabled.
+
+Decision adapters return validated Choice answers through a shared contract. Capability selection receives its provider and policy as dependencies; it returns explicit selected, rejected, or unavailable outcomes. Connection settings and acceptance policy are resolved lazily and retained within each generation, so clear requests still skip decision configuration. Errors distinguish invalid configuration, HTTP failures, malformed responses, timeouts, and network failures. Cancellation propagates instead of becoming fallback.
+
+Internal diagnostics now use `decisionCalls` and `selection.decision`; update any external trace consumers that previously used `layaCalls` or `selection.laya`. Existing `LAYA_*`, `JEV_*`, and `DECISION_*` environment settings remain supported. The general `*_ACCEPTANCE_GATE` is retained for legacy validation; capability selection uses `*_CREATION_ACCEPTANCE_GATE`. The local Python `src/inference/laya` service remains provider-specific.
+
+### Infrastructure and rollout
+
+The initial deployment uses this path:
+
+```text
+Browser → Next.js planner → deterministic capability shortlist
+                           → decision adapter → local Laya OR hosted Jev
+                           → selected LLM → recipe validation → runtime
+```
+
+Jev needs an outbound HTTPS connection from the Next.js backend to `api.typesafe.ai:443`, a backend secret, and an account with API access. Put `TYPESAFE_API_KEY` in your deployment secret store. Keep the local Laya service reachable only from the backend if you choose Laya; a remote Next.js server cannot reach the laptop's loopback address. The existing planner concurrency limit bounds decision traffic within each process. No new database, GPU, public inference route, or job queue is required for the synchronous integration.
+
+Pin the model for threshold evaluations and release it alongside the question wording and gates. The official model page currently lists `jev-1.13.0`, $0.042 per million input tokens with free output, a 64k total request context and a 32k state-plus-longest-question limit. Pricing and dynamically adjusted rate limits should be rechecked before rollout. [Official models](https://docs.typesafe.ai/models).
+
+For multiple backend replicas, add a shared account rate limiter and a short circuit breaker for repeated overloads. The interactive adapter deliberately makes one attempt so retry backoff cannot consume the selection budget; it falls back to LLM planning on HTTP errors. If background workloads are added, use bounded retries for 429/529, honoring retry headers and the job deadline. Keep authentication/validation errors out of retry loops.
+
+Before relying on Jev selection quality, run paired live evaluations on identical prompts and starting state with each provider. Measure selection correctness, fallback frequency, end-to-end latency, and input-token cost. Include ambiguous, unsupported, multilingual, and adversarial requests. Jev documents weaknesses around arithmetic, counting, temporal comparisons, and instruction-like text in state; keep calculations and execution in deterministic code. [Official model limitations](https://docs.typesafe.ai/model-jaggedness/jev-1.13).
+
+Run `pnpm test:generation:decisions` for deterministic transport/configuration/fallback coverage. These tests use mocked responses and do not establish live model access or accuracy. A live generation only verifies Jev if its trace shows an actual Jev call; an unambiguous request or a successful LLM fallback does not verify the integration's decision quality.
 
 ## Verification
 
@@ -147,7 +193,9 @@ Implementation, cleanup, and verification evidence for phases 1–3 live in `../
 ## Ownership
 
 - `src/lib/planner`: protocol, teaching stages, retrieval, budgets, coverage, and diagnostics.
-- `src/lib/llm`, `src/lib/apertus`, `src/lib/laya`: provider configuration/adapters, shared bounded transport, and optional shortlist selection.
+- `src/lib/llm`, `src/lib/apertus`: LLM configuration/adapters and bounded text-generation transport.
+- `src/lib/decisions`: typed decision contracts, connection configuration, provider factory, Laya/Jev adapters, response validation, and bounded HTTP transport.
+- `src/lib/planner/selection`: capability questions, acceptance policy, and provider-independent selection orchestration.
 - `src/simulations/components/catalog`: authoritative schemas and teaching metadata.
 - `src/simulations/runtime/authoring`: pure shared insertion, bindings, arrangement, transactions, and finalization.
 - `src/simulations/runtime/recipeSession.ts`: canonical authored/runtime revisions, clock, history, and snapshots.

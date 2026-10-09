@@ -7,6 +7,7 @@ const { execFileSync } = require("node:child_process");
 const root = path.resolve(__dirname, "../..");
 const repo = path.resolve(root, "../..");
 const retired = [
+  "src/lib/laya",
   "src/lib/planner/creation.ts",
   "src/lib/apertus/client.ts",
   "src/lib/apertus/catalogSelection.ts",
@@ -104,6 +105,33 @@ for (const file of [
     target: resolve(file, entry),
   }));
   graph.set(file, edges);
+  if (file.includes("/lib/decisions/")) {
+    for (const edge of edges) {
+      assert.ok(
+        !edge.target?.includes("/lib/planner/"),
+        `Decision infrastructure imports planner policy: ${file}`,
+      );
+      assert.ok(
+        !edge.target?.includes("/simulations/"),
+        `Decision infrastructure imports simulation domain: ${file}`,
+      );
+    }
+  }
+  if (
+    file.includes("/lib/planner/selection/") &&
+    !file.endsWith("/policy.ts")
+  ) {
+    for (const edge of edges)
+      assert.ok(
+        !/\/decisions\/(?:providers|transport)\//.test(edge.target ?? ""),
+        `Selection bypasses provider contract: ${file}`,
+      );
+    assert.ok(
+      !/process\.env|\bfetch\(/.test(fs.readFileSync(file, "utf8")),
+      `Selection reads deployment state or calls HTTP: ${file}`,
+    );
+  }
+
   if (
     file.includes("/simulations/runtime/") ||
     file.includes("/simulations/components/")
@@ -153,10 +181,7 @@ for (const match of inferenceMakefile.matchAll(/\bpnpm\s+(test[\w:-]*)/g))
   );
 const baseline = JSON.parse(
   fs.readFileSync(
-    path.join(
-      root,
-      "scripts/generation/fixtures/protected-baseline.json",
-    ),
+    path.join(root, "scripts/generation/fixtures/protected-baseline.json"),
   ),
 );
 for (const [file, hash] of Object.entries(baseline.hashes)) {

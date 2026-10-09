@@ -33,9 +33,10 @@ export function startTrace(id: string, prompt: string) {
         reasoningEffort: a.reasoningEffort ?? null,
         timeout: a.timeout,
       },
-      laya: {
+      decision: {
+        provider: process.env.DECISION_PROVIDER?.trim() || "laya",
         policy:
-          "Constructed only for ambiguous selection; see selection.laya events.",
+          "Constructed only for ambiguous selection; see selection.decision events.",
       },
       deadlineMs: Number(process.env.PLANNER_TIMEOUT_MS ?? 120000),
     };
