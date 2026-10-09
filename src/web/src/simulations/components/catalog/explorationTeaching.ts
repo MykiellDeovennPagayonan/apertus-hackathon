@@ -15,7 +15,7 @@ export const compositionRequirements: Record<string, CompositionRequirements> =
     "prefabs/physical-systems/Pendulum": {
       topic: "Pendulum simulation",
       guidance:
-        "Small-angle period T = 2π√(L/g) depends on length and gravity, not amplitude. Amplitude changes the swing extent. Compare successive settings on the same pendulum.",
+        "Explore how length changes swing time at a fixed starting angle, then try larger starting angles up to 90°. Nonlinear period increases with amplitude; T≈2π√(L/g) is only the small-angle limit. Compare successive settings on the same pendulum. The drawing uses a fixed metre scale; changing length must visibly change the rod length.",
       selectionKey: "pendulum",
       commands: ["PEND_SET_LENGTH", "PEND_SET_AMPLITUDE", "PHYS_PLAY"],
       observations: ["period"],

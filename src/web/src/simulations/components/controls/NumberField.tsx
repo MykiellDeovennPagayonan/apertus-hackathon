@@ -20,6 +20,7 @@ export function NumberField({
   limits = false,
   inputLabel = label,
   rangeLabel = `Adjust ${label.toLowerCase()}`,
+  commitOnBlur = false,
 }: {
   label: string;
   value: number;
@@ -36,6 +37,7 @@ export function NumberField({
   limits?: boolean;
   inputLabel?: string;
   rangeLabel?: string;
+  commitOnBlur?: boolean;
   onChange: (value: number) => ActionResult;
 }) {
   const [draft, setDraft] = useState<{
@@ -101,6 +103,7 @@ export function NumberField({
               onValidityChange?.(false);
               const n = Number(text);
               if (
+                !commitOnBlur &&
                 text !== "" &&
                 n >= min &&
                 n <= max &&
@@ -113,7 +116,10 @@ export function NumberField({
               if (commit(e.target.value).accepted) setDraft(null);
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter") e.currentTarget.blur();
+              if (e.key === "Enter") {
+                if (commitOnBlur) e.preventDefault();
+                e.currentTarget.blur();
+              }
               if (e.key === "Escape") {
                 setDraft(null);
                 setError("");

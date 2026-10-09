@@ -29,9 +29,9 @@ import {
   PlantGrowthGraph,
   PopulationGraph,
 } from "../../visuals/natural-systems/NaturalVisuals";
+import { PendulumScene } from "../../visuals/physical-systems/PendulumScene";
 import {
   CircuitVisual,
-  PendulumVisual,
   TrackVisual,
 } from "../../visuals/physical-systems/PhysicalVisuals";
 import { ArithmeticScene } from "../ArithmeticScene";
@@ -76,16 +76,7 @@ const appearances: Record<
 };
 function PhysicalAppearance({ instance }: { instance: ModelInstance }) {
   if (instance.provider.endsWith("/Pendulum"))
-    return (
-      <svg viewBox="0 0 300 340" role="img" aria-label={instance.label}>
-        <PendulumVisual
-          instance={instance}
-          index={0}
-          showIndex={false}
-          scale={220 / Math.max(1, Number(instance.parameters.length))}
-        />
-      </svg>
-    );
+    return <PendulumScene instance={instance} />;
   if (instance.provider.endsWith("/RollingTrack")) {
     const extent = Math.max(
       1,

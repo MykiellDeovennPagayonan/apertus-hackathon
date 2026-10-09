@@ -135,7 +135,10 @@ fs.mkdirSync(captures, { recursive: true });
     await input.press("Escape");
     assert.equal(await input.inputValue(), "4");
     // Reopen settings from the board, remove exact entry, and retain a usable slider.
-    await page.locator('[data-board-component="controls/Slider"]').last().focus();
+    await page
+      .locator('[data-board-component="controls/Slider"]')
+      .last()
+      .focus();
     await page
       .locator('[data-board-component="controls/Slider"]')
       .last()
@@ -178,7 +181,10 @@ fs.mkdirSync(captures, { recursive: true });
     assert.equal(slider.configuration.parameter, "value.x");
     assert.equal(slider.configuration.showNumber, false);
     // Replace the widget in place and verify its identity in both builder views.
-    await page.locator('[data-board-component="controls/Slider"]').last().focus();
+    await page
+      .locator('[data-board-component="controls/Slider"]')
+      .last()
+      .focus();
     await page
       .locator('[data-board-component="controls/Slider"]')
       .last()
@@ -197,7 +203,7 @@ fs.mkdirSync(captures, { recursive: true });
     assert.equal(
       await typeSelector
         .locator('option[value="controls/Toggle"]')
-        .evaluate(option => option.disabled),
+        .evaluate((option) => option.disabled),
       true,
     );
     await typeSelector.selectOption("controls/NumberInput");
@@ -224,6 +230,15 @@ fs.mkdirSync(captures, { recursive: true });
     await page
       .getByRole("textbox", { name: "Horizontal input", exact: true })
       .fill("4");
+    assert.equal(
+      await page
+        .getByRole("textbox", { name: "X coordinate", exact: true })
+        .inputValue(),
+      "3.5",
+    );
+    await page
+      .getByRole("textbox", { name: "Horizontal input", exact: true })
+      .press("Enter");
     assert.equal(
       await page
         .getByRole("textbox", { name: "X coordinate", exact: true })
@@ -257,6 +272,9 @@ fs.mkdirSync(captures, { recursive: true });
     await page
       .getByRole("textbox", { name: "Selected amount", exact: true })
       .fill("5");
+    await page
+      .getByRole("textbox", { name: "Selected amount", exact: true })
+      .press("Enter");
     await page
       .locator(".recipe-measurement-value")
       .filter({ hasText: /125/ })

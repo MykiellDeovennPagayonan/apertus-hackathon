@@ -2,6 +2,7 @@ import { assemblyModels } from "../../runtime/assembly";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import type { Port, PublicDefinition } from "../../runtime/authoring/types";
 import { boolean, num, object } from "../../runtime/parameterSchema";
+import { liveExplorationCommands } from "../controls/interactionPolicy";
 import { componentDefinitions } from "../registry";
 import { authoringDefinitions } from "./authoring";
 import { definitionDiscovery } from "./discovery";
@@ -165,7 +166,14 @@ for (const m of assemblyModels) {
       ]),
     ),
     commands: {
-      ...m.actions,
+      ...Object.fromEntries(
+        Object.entries(m.actions).map(([key, command]) => [
+          key,
+          liveExplorationCommands.has(key)
+            ? { ...command, submission: "continuous" as const }
+            : command,
+        ]),
+      ),
       RESET: {
         arguments: object({}),
         timing: "rebuild",

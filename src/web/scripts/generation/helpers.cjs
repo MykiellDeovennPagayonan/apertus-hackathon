@@ -707,6 +707,7 @@ function recordPage(page, record) {
   record.browserErrors = [];
   record.consoleErrors = [];
   record.networkFailures = [];
+  record.navigationCancellations = [];
   page.on("framenavigated", (f) => {
     if (f === page.mainFrame()) record.navigation.push(f.url());
   });
@@ -714,12 +715,23 @@ function recordPage(page, record) {
   page.on("console", (m) => {
     if (m.type() === "error") record.consoleErrors.push(m.text());
   });
-  page.on("requestfailed", (r) =>
-    record.networkFailures.push({
+  page.on("requestfailed", (r) => {
+    const failure = {
       url: r.url(),
       reason: r.failure()?.errorText,
-    }),
-  );
+    };
+    // Next cancels speculative route requests when native import navigates.
+    // Retain them separately; aborted API/document/asset requests still fail.
+    const url = new URL(r.url());
+    if (
+      r.method() === "GET" &&
+      url.searchParams.has("_rsc") &&
+      r.headers().rsc === "1" &&
+      failure.reason === "net::ERR_ABORTED"
+    )
+      record.navigationCancellations.push(failure);
+    else record.networkFailures.push(failure);
+  });
 }
 async function saveEvidence(page, record, dir) {
   fs.mkdirSync(dir, { recursive: true });

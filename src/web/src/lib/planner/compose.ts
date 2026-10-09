@@ -628,6 +628,7 @@ export async function compose(
   }
 
   // 7. Check runnable
+  budget.trace?.("validation.start", {});
   let runCheck = checkRunnable(currentDoc);
   budget.trace?.("runnable.check", runCheck);
   if (!runCheck.runnable) {

@@ -1,7 +1,7 @@
 # 019 — Realistic prompt composition with live Laya and Apertus
 
 Date: 2026-10-09
-Status: Implemented and validated on 2026-10-09. Full real-model acceptance: 25/25 passed; native export replay: 10/10 passed. See [implementation evidence](019-IMPLEMENTATION-EVIDENCE.md).
+Status: Implemented and validated on 2026-10-09. Original real-model acceptance: 25/25 passed; original native export replay: 10/10 passed. See [implementation evidence](019-IMPLEMENTATION-EVIDENCE.md). The subsequent control, layout and nonlinear pendulum revision is documented separately in [UX review](020-SIMULATION-UX-REVIEW.md).
 
 ## 1. Outcome and scope
 
@@ -84,7 +84,7 @@ Each row is a composition target, not a new all-in-one component. Resolve exact 
 
 | Case | Reuse and link | Add only if audit proves a gap | Behavioral oracle |
 | --- | --- | --- | --- |
-| P1 | Existing physical pendulum instance → existing appearance, length/amplitude controls, playback, period readout and graph; optional second independent instance for comparison. | Teaching/discovery metadata or missing adapter only. Existing model already calculates small-angle motion and period. | `T = 2π√(L/g)`; quadrupling length doubles period at fixed gravity. Current amplitude limit is 0–10 degrees; preserve and explain small-angle assumptions. |
+| P1 | Existing physical pendulum instance → existing appearance, length/amplitude controls, playback, period readout and graph; optional second independent instance for comparison. | Teaching/discovery metadata or missing adapter only. The original model used small-angle motion. The UX revision extends the existing provider to nonlinear ideal motion, with unchanged public identifiers. | `T = 4√(L/g)K(sin(A/2))`; quadrupling length doubles period at fixed amplitude and gravity. Release angles span 0–90 degrees. Verify period by independent quadrature and motion by an independent ODE solver; keep a fixed visual metre scale when changing length. |
 | P2 | Existing ring-traffic model → traffic appearance, vehicle/density controls, playback, speed/headway observations; paired independent baseline/disturbance instances if supported. | A bounded disturbance command and needed observable dataset if the current model cannot represent or display propagation. Extend the existing traffic system rather than replacing it. | Deterministic seed/state; vehicle ordering and nonnegative safe gaps; disturbance affects following vehicles over time. Choose a validated congestion regime; do not claim every parameter setting jams. |
 | P3 | Existing physical circuit model → topology/bulb-count/voltage/resistance controls, circuit appearance and per-bulb observations. | Per-bulb power output or a reusable appearance brightness adapter if missing. | For identical resistance `R`, ideal source `V`, and `n` bulbs: series per-bulb power `V²/(n²R)`, parallel `V²/R`; respect supported bounds. Brightness is an educational power proxy, not photometric accuracy. |
 | P4 | Shared canvas, spatial controls, appearance attachments, observations, and existing transform/geometry helpers where applicable. | Small reusable celestial position/geometry and eclipse alignment/shadow calculation units plus focused appearance adapters. Separate state/configuration, pure geometry, commands, and rendering. | Aligned Sun–Moon–Earth gives solar alignment; Sun–Earth–Moon gives lunar alignment; off-axis cases do not. Check finite radii/occlusion and degenerate inputs. State whether geometry is planar/scaled; alignment alone must not be mislabeled total eclipse. |

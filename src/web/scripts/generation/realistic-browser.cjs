@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const h = require("./helpers.cjs");
+const { auditControls } = require("./realistic-control-ux.cjs");
 const { exercise } = require("./realistic-interactions.cjs");
 const write = (dir, name, value) =>
   fs.writeFileSync(path.join(dir, name), JSON.stringify(value, null, 2));
@@ -59,6 +60,7 @@ module.exports.verifyPage = async (page, recipe, c, dir) => {
     (s) => s.recipe?.id === recipe.id,
     "Generated lesson did not activate",
   );
+  await auditControls(page, dir, h);
   await inspectLayout(page, dir, "opening");
   const initialRuntimeState = (await h.snapshot(page)).state.state;
   write(dir, "initial-runtime-state.json", initialRuntimeState);

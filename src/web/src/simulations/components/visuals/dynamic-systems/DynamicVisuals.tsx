@@ -75,34 +75,99 @@ export function TrafficVisual({ instance }: { instance: ModelInstance }) {
           rx="190"
           ry="70"
         />
+        <ellipse className="traffic-lane" cx="310" cy="165" rx="217" ry="93" />
         {vehicles.map((vehicle) => {
           const angle =
             (vehicle.position / roadLength) * Math.PI * 2 - Math.PI / 2;
           const x = 310 + 217 * Math.cos(angle);
           const y = 165 + 93 * Math.sin(angle);
           const slow = vehicle.speed < desiredSpeed * 0.5;
+          const heading =
+            (Math.atan2(93 * Math.cos(angle), -217 * Math.sin(angle)) * 180) /
+            Math.PI;
           return (
-            <circle
+            <g
               key={vehicle.id}
-              className={slow ? "traffic-car is-slow" : "traffic-car"}
-              cx={x}
-              cy={y}
-              r={vehicle.id === 0 ? 7 : 5}
+              className={`traffic-vehicle${slow ? " is-slow" : ""}${vehicle.id === 0 ? " is-lead" : ""}`}
+              transform={`translate(${x} ${y}) rotate(${heading})`}
             >
-              <title>{`Vehicle ${vehicle.id + 1}: ${dynamicNumber(vehicle.speed)} m/s`}</title>
-            </circle>
+              <title>{`Car ${vehicle.id + 1}: ${dynamicNumber(vehicle.speed)} m/s${slow ? ", slowing" : ""}${vehicle.id === 0 ? "; brake target" : ""}`}</title>
+              {vehicle.id === 0 && (
+                <rect
+                  className="traffic-lead-ring"
+                  x="-17"
+                  y="-12"
+                  width="34"
+                  height="24"
+                  rx="9"
+                />
+              )}
+              <rect
+                className="traffic-tire"
+                x="-7"
+                y="-9"
+                width="6"
+                height="18"
+                rx="2"
+              />
+              <rect
+                className="traffic-tire"
+                x="5"
+                y="-9"
+                width="6"
+                height="18"
+                rx="2"
+              />
+              <rect
+                className="traffic-car"
+                x="-14"
+                y="-7"
+                width="28"
+                height="14"
+                rx="5"
+              />
+              <path
+                className="traffic-window"
+                d="M2-5h5l2 10H2zM-8-5h3V5h-3z"
+              />
+              <path className="traffic-headlights" d="M12-5v3M12 2v3" />
+              <path className="traffic-taillights" d="M-12-5v3M-12 2v3" />
+              {vehicle.id === 0 && (
+                <text
+                  className="traffic-car-number"
+                  transform={`rotate(${-heading})`}
+                  textAnchor="middle"
+                  y="4"
+                >
+                  1
+                </text>
+              )}
+            </g>
           );
         })}
         <text x="310" y="156" textAnchor="middle">
-          Closed road
+          {
+            vehicles.filter((vehicle) => vehicle.speed < desiredSpeed * 0.5)
+              .length
+          }{" "}
+          of {vehicles.length} cars slowing
         </text>
         <text x="310" y="180" textAnchor="middle">
-          slow cars turn amber
+          Traffic moves clockwise →
         </text>
       </svg>
       <figcaption>
-        Every dot is computed from the car-following model. Vehicle 1 is the
-        brief brake target.
+        <span className="traffic-key">
+          <i aria-hidden="true" />
+          Moving
+        </span>
+        <span className="traffic-key is-slow">
+          <i aria-hidden="true" />
+          Slowing · brake lights on
+        </span>
+        <span className="traffic-key is-lead">
+          <i aria-hidden="true">1</i>Brake target
+        </span>
       </figcaption>
     </figure>
   );

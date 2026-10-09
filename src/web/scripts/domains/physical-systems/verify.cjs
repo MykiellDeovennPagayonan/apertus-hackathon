@@ -1,4 +1,5 @@
 const assert = require("node:assert/strict");
+const { idealPendulumPeriod } = require("../../generation/pendulum-oracle.cjs");
 const { load } = require("../../test-loader.cjs");
 const {
   physicalSystems,
@@ -14,7 +15,11 @@ const near = (a, b) =>
   assert.ok(Math.abs(a - b) < 1e-10 * Math.max(1, Math.abs(b)), `${a} != ${b}`);
 const create = (m, p = {}) => {
   validateValue(m.parameters, p);
-  return m.initialize({ ...m.defaults, ...p });
+  return m.initialize({
+    ...m.defaults,
+    ...(m === pendulum ? { length: 1, amplitude: 5 } : {}),
+    ...p,
+  });
 };
 const apply = (m, s, a, v) => {
   validateValue(m.actions[a].arguments, v === undefined ? {} : { value: v });
@@ -33,13 +38,13 @@ for (const m of physicalSystems.models) {
 // Independent numeric oracles from the contract; these are development tests only.
 let p = create(pendulum),
   second = create(pendulum, { length: 2 });
-near(pendulum.measure(p).period, 2.0060666807106475);
-near(pendulum.measure(second).period, 2.837006706885775);
+near(pendulum.measure(p).period, idealPendulumPeriod(1, 9.81, 5));
+near(pendulum.measure(second).period, idealPendulumPeriod(2, 9.81, 5));
 second = apply(pendulum, second, "PEND_SET_LENGTH", 4);
 near(pendulum.measure(second).period / pendulum.measure(p).period, 2);
 near(pendulum.measure(p).x, 0.08715574274765817);
 p = pendulum.step(p, 2.1);
-near(pendulum.measure(p).lastPeriod, 2.0060666807106475);
+near(pendulum.measure(p).lastPeriod, idealPendulumPeriod(1, 9.81, 5));
 assert.equal(pendulum.measure(p).cycles, 1);
 let chunked = create(pendulum);
 for (let i = 0; i < 300; i++) chunked = pendulum.step(chunked, 0.01);
@@ -54,10 +59,41 @@ near(restarted.elapsed, 0);
 near(pendulum.measure(restarted).angle, 5);
 assert.equal(restarted.playing, false);
 assert.throws(() => apply(pendulum, create(pendulum), "PHYS_STEP"));
-for (const params of [{ amplitude: 11 }, { length: 0 }, { gravity: 0 }])
+for (const params of [{ amplitude: 91 }, { length: 0 }, { gravity: 0 }])
   assert.throws(() => create(pendulum, params));
 for (const dt of [NaN, -1])
   assert.throws(() => pendulum.step(create(pendulum), dt));
+// Nonlinear amplitude, trajectory, periodicity and independent RK4 equation oracle.
+for (const amplitude of [0, 5, 30, 60, 90]) {
+  const initial = create(pendulum, { amplitude });
+  const period = pendulum.measure(initial).period;
+  near(period, idealPendulumPeriod(1, 9.81, amplitude));
+  near(pendulum.measure({ ...initial, elapsed: period / 4 }).angle, 0);
+  near(pendulum.measure({ ...initial, elapsed: period / 2 }).angle, -amplitude);
+  let angle = (amplitude * Math.PI) / 180,
+    velocity = 0;
+  const duration = period * 0.37,
+    dt = duration / 10000;
+  for (let i = 0; i < 10000; i++) {
+    const a1 = velocity,
+      v1 = -9.81 * Math.sin(angle);
+    const a2 = velocity + (dt * v1) / 2,
+      v2 = -9.81 * Math.sin(angle + (dt * a1) / 2);
+    const a3 = velocity + (dt * v2) / 2,
+      v3 = -9.81 * Math.sin(angle + (dt * a2) / 2);
+    const a4 = velocity + dt * v3,
+      v4 = -9.81 * Math.sin(angle + dt * a3);
+    angle += (dt * (a1 + 2 * a2 + 2 * a3 + a4)) / 6;
+    velocity += (dt * (v1 + 2 * v2 + 2 * v3 + v4)) / 6;
+  }
+  const measured = pendulum.measure({ ...initial, elapsed: duration }).angle;
+  assert.ok(Math.abs(measured - (angle * 180) / Math.PI) < 0.00001);
+  assert.ok(Math.abs(measured) <= amplitude);
+}
+assert.ok(
+  pendulum.measure(create(pendulum, { amplitude: 90 })).period >
+    pendulum.measure(create(pendulum, { amplitude: 5 })).period * 1.17,
+);
 // Structural variant: three independently editable pendulums, no snapshot duplication.
 const trio = [1, 2, 4].map((length) => create(pendulum, { length }));
 const first = structuredClone(trio[0]);

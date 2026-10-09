@@ -1,5 +1,7 @@
 import { publicDefinition } from "../../components/catalog";
+import { isPlaybackCommand } from "../../components/controls/interactionPolicy";
 import {
+  boardItemMinimum,
   boardLayouts,
   type ComponentBoardItem,
   convertToBoard,
@@ -165,7 +167,15 @@ export function arrangeDocument(
           : comparison &&
               nodeFor(item)?.definition === "appearance/area-perimeter"
             ? 160
-            : 480,
+            : ((
+                {
+                  "appearance/physical-pendulum": 450,
+                  "appearance/dynamic-traffic": 360,
+                  "appearance/physical-circuit": 400,
+                  "appearance/EclipseGeometry": 420,
+                  "appearance/SignalSuperposition": 480,
+                } as Record<string, number>
+              )[nodeFor(item)?.definition ?? ""] ?? 480),
       };
       item.responsiveMinHeight = nodeFor(item)?.definition.includes(
         "arithmetic",
@@ -174,39 +184,7 @@ export function arrangeDocument(
         : 280;
       sceneY += item.rect.height + 20;
     }
-    const wideSidebar =
-      request.template === "scene-with-sidebar" && controls.length >= 3;
-    const sidebarX =
-      request.template === "vertical" || comparison ? x : x + 644;
-    const width = comparison
-      ? 266
-      : request.template === "vertical"
-        ? 620
-        : 320;
-    const heightFor = (item: ComponentBoardItem) => {
-      const node = nodeFor(item);
-      return node?.definition === "controls/ArithmeticActivity"
-        ? 262
-        : node?.definition === "displays/Inspector"
-          ? 240
-          : node?.definition === "controls/Slider"
-            ? 264
-            : node?.definition === "controls/NumberInput"
-              ? 224
-              : category(item) === "controls"
-                ? 180
-                : 164;
-    };
-    let y = request.template === "vertical" || comparison ? sceneY : scopeY;
-    let resultsBottom = sceneY;
-    if (wideSidebar) {
-      for (const item of results) {
-        if (item.locked) continue;
-        const height = heightFor(item);
-        item.rect = { x, y: resultsBottom, width: 620, height };
-        resultsBottom += height + 20;
-      }
-    }
+    const sidebarLayout = request.template === "scene-with-sidebar";
     const controlTarget = (item: ComponentBoardItem) =>
       next.connections.find(
         (connection) =>
@@ -217,6 +195,68 @@ export function arrangeDocument(
     const controlColumns = controlTargets.map((target) =>
       controls.filter((item) => controlTarget(item) === target),
     );
+    const wideSidebar =
+      sidebarLayout &&
+      controlColumns.length === 2 &&
+      controlColumns[0].length === controlColumns[1].length;
+    const playbackFirst = (items: ComponentBoardItem[]) =>
+      [...items].sort((a, b) => {
+        const rank = (item: ComponentBoardItem) => {
+          const command = next.connections.find(
+            (connection) =>
+              connection.kind === "command" &&
+              connection.from.node === nodeFor(item)?.id,
+          )?.to.port;
+          return command && isPlaybackCommand(command) ? 0 : 1;
+        };
+        return rank(a) - rank(b);
+      });
+    const sidebarX =
+      request.template === "vertical" || comparison ? x : x + 644;
+    const width = wideSidebar
+      ? 280
+      : comparison
+        ? 266
+        : request.template === "vertical"
+          ? 620
+          : 360;
+    const heightFor = (item: ComponentBoardItem) => {
+      const node = nodeFor(item);
+      const minimum = boardItemMinimum(next, item.layoutId);
+      const command = next.connections.find(
+        (connection) =>
+          connection.kind === "command" && connection.from.node === node?.id,
+      )?.to.port;
+      const preferred =
+        command && isPlaybackCommand(command)
+          ? 96
+          : node?.definition === "controls/ArithmeticActivity"
+            ? 262
+            : node?.definition === "displays/Inspector"
+              ? minimum.height === 96
+                ? 112
+                : 240
+              : node?.definition === "controls/Slider"
+                ? 176
+                : node?.definition === "controls/NumberInput"
+                  ? 160
+                  : category(item) === "controls"
+                    ? node?.definition === "controls/Button"
+                      ? 80
+                      : 136
+                    : 112;
+      return Math.max(preferred, minimum.height);
+    };
+    let y = request.template === "vertical" || comparison ? sceneY : scopeY;
+    let resultsBottom = sceneY;
+    if (sidebarLayout) {
+      for (const item of results) {
+        if (item.locked) continue;
+        const height = heightFor(item);
+        item.rect = { x, y: resultsBottom, width: 620, height };
+        resultsBottom += height + 20;
+      }
+    }
     const columnControls =
       wideSidebar &&
       controlColumns.length === 2 &&
@@ -225,8 +265,8 @@ export function arrangeDocument(
             item,
             controlColumns[1][index],
           ])
-        : controls;
-    const sidebarItems = wideSidebar
+        : playbackFirst(controls);
+    const sidebarItems = sidebarLayout
       ? columnControls
       : comparison
         ? [...controls, ...results]
@@ -254,10 +294,10 @@ export function arrangeDocument(
     if (!rows.flat().includes(item.id)) rows.push([item.id]);
   board.startView = extent(board.items.map((i) => i.rect));
   // Include breathing room in a new composition's opening extent. The canvas
-  // remains full size and freely navigable; authored learner areas are preserved.
-  board.learnerArea ??= {
+  // remains full size and freely navigable; locked component bounds are preserved.
+  board.learnerArea = {
     ...board.startView,
-    height: board.startView.height + 160,
+    height: board.startView.height + 48,
   };
   arrangeGraph(next);
   validateAuthoredDocument(next);

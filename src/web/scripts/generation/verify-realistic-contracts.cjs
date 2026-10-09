@@ -1,4 +1,5 @@
 const assert = require("node:assert/strict");
+const { idealPendulumPeriod } = require("./pendulum-oracle.cjs");
 const { load } = require("../test-loader.cjs");
 const { cases } = require("./realistic-cases.cjs");
 const { sampleSignal, sumSignals } = load(
@@ -364,7 +365,11 @@ for (const c of cases) {
     );
     near(
       runtime.getSnapshot().outputs[first].period,
-      2 * Math.PI * Math.sqrt(4 / 9.81),
+      idealPendulumPeriod(
+        4,
+        9.81,
+        runtime.getSnapshot().state[first].amplitude,
+      ),
     );
   }
   // A rejected batch leaves draft graph and revision intact.

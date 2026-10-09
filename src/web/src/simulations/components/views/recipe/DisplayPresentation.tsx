@@ -232,11 +232,24 @@ export function DisplayPresentation({
       return <MathReadoutView board={board} label={String(config.label)} />;
     if (kind === "Readout") {
       if (needsBridgeSelection) return <BridgeSelectionHint />;
+      const nearCancellation =
+        source?.definition === "data/SignalSuperposition" &&
+        ["residualPeak", "residualRms"].includes(binding?.from.port ?? "") &&
+        typeof value === "number" &&
+        value !== 0 &&
+        Math.abs(value) < 1e-12;
       const configuredLabel = String(config.label);
       const label =
-        unit && configuredLabel.endsWith(` ${unit}`)
-          ? configuredLabel.slice(0, -unit.length - 1)
-          : configuredLabel;
+        source?.definition === "prefabs/physical-systems/Pendulum" &&
+        binding?.from.port === "period"
+          ? "Time for one full swing"
+          : source?.definition ===
+                "prefabs/physical-systems/ResistiveCircuit" &&
+              binding?.from.port === "bulbPower"
+            ? "Power per bulb · brightness proxy"
+            : unit && configuredLabel.endsWith(` ${unit}`)
+              ? configuredLabel.slice(0, -unit.length - 1)
+              : configuredLabel;
       if (value && typeof value === "object")
         return (
           <PropertyInspector
@@ -249,10 +262,19 @@ export function DisplayPresentation({
       return (
         <section className="recipe-measurement" aria-label={label}>
           <span className="recipe-measurement-label">{label}</span>
-          <output className="recipe-measurement-value">
+          <output
+            className="recipe-measurement-value"
+            title={
+              nearCancellation
+                ? `Calculated value: ${value} ${unit}`
+                : undefined
+            }
+          >
             {value === ""
               ? "Unavailable"
-              : display(value, Number(config.precision))}
+              : nearCancellation
+                ? "≈ 0"
+                : display(value, Number(config.precision))}
             <small>{unit}</small>
           </output>
         </section>
@@ -279,6 +301,12 @@ export function DisplayPresentation({
             ).response
           }
         />
+      );
+    if (kind === "Inspector" && typeof value === "string")
+      return (
+        <output className="recipe-event" aria-live="polite">
+          {value || "Waiting for an observation"}
+        </output>
       );
     if (kind === "Inspector") {
       if (needsBridgeSelection) return <BridgeSelectionHint />;

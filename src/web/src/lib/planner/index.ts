@@ -132,6 +132,7 @@ async function select(
   intent: TeachingIntent,
   budget: GenerationBudget,
 ) {
+  budget.trace?.("selection.start", {});
   let ranked = retrieveCapabilities(request.prompt, intent);
   if (!ranked.length) {
     budget.broaderSearches++;
@@ -617,7 +618,10 @@ export async function planPrompt(
   try {
     if (request.active && !requiredComposition) {
       const result = await followup(request, budget);
-      if (result) return parseGenerationResult(result, request);
+      if (result) {
+        budget.trace?.("validation.start", {});
+        return parseGenerationResult(result, request);
+      }
     }
     const intent = await stage(
       "teaching_intent",
@@ -808,6 +812,7 @@ export async function planPrompt(
         construct(parsed, false);
       },
     );
+    budget.trace?.("validation.start", {});
     let { draft, recipe, coverage } = construct(configuration, true);
     if (configuration.extend) {
       const applyExtensions = (

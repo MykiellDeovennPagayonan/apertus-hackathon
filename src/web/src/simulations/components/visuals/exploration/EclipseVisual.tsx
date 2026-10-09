@@ -10,14 +10,20 @@ export function EclipseVisual({ geometry }: { geometry: Geometry }) {
     { body: geometry.earth, shadow: geometry.lunar },
   ];
   return (
-    <figure style={{ margin: 0 }}>
+    <figure className="eclipse-scene">
       <svg
         viewBox={`0 ${minY} 640 ${maxY - minY}`}
-        style={{ width: "100%", height: 260 }}
         role="img"
         aria-label={`Sun Earth Moon: ${geometry.event}`}
       >
-        <rect y="-110" width="640" height="620" fill="#f5f7fb" />
+        <circle
+          cx={geometry.earth.x}
+          cy={geometry.earth.y}
+          r="100"
+          fill="none"
+          stroke="#a6b2a3"
+          strokeDasharray="5 6"
+        />
         {shadows.map(({ body, shadow }, index) => {
           const length = 280,
             { ux, uy } = shadow.axis;
@@ -87,7 +93,8 @@ export function EclipseVisual({ geometry }: { geometry: Geometry }) {
               x={body.x}
               y={body.y + body.radius + 22}
               textAnchor="middle"
-              fill="#25344a"
+              fill="#30362e"
+              fontSize="18"
             >
               {body.name}
             </text>

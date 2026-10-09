@@ -34,6 +34,7 @@ function model(
             arguments: object({ value: schema }),
             description: `Set ${key}`,
             timing: "live" as const,
+            submission: "continuous" as const,
           },
         ]),
       ),

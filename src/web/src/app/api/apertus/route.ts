@@ -3,6 +3,10 @@ import { planPrompt } from "../../../lib/planner";
 import { startTrace } from "../../../lib/planner/diagnostics";
 import { PlannerError } from "../../../lib/planner/errors";
 import {
+  type GenerationStage,
+  progressFromTrace,
+} from "../../../lib/planner/progress";
+import {
   type GenerationResult,
   parseGenerationRequest,
   REQUEST_BYTE_LIMIT,
@@ -83,6 +87,78 @@ export async function POST(request: Request) {
       );
     }
     trace = startTrace(correlationId, input.prompt);
+    if (request.headers.get("Accept")?.includes("application/x-ndjson")) {
+      const cancellation = new AbortController();
+      const signal = AbortSignal.any([request.signal, cancellation.signal]);
+      const diagnostic = trace;
+      const encoder = new TextEncoder();
+      let closed = false;
+      const body = new ReadableStream<Uint8Array>({
+        async start(controller) {
+          const send = (event: unknown) => {
+            if (!closed && !signal.aborted)
+              controller.enqueue(encoder.encode(`${JSON.stringify(event)}\n`));
+          };
+          let previous: GenerationStage | null = null;
+          const report = (event: string, data: unknown) => {
+            diagnostic(event, data);
+            const stage = progressFromTrace(event, data);
+            if (stage && stage !== previous) {
+              previous = stage;
+              send({ type: "progress", requestId: correlationId, stage });
+            }
+          };
+          try {
+            const result = await planPrompt(input, signal, report);
+            report("result", {
+              status: result.status,
+              ...("recipe" in result
+                ? {
+                    nodes: result.recipe.document.nodes.length,
+                    coverage: result.coverage,
+                  }
+                : {}),
+            });
+            send({ type: "result", requestId: correlationId, result });
+          } catch (error) {
+            const status = error instanceof PlannerError ? error.status : 500;
+            const message =
+              error instanceof PlannerError
+                ? error.message
+                : "Unable to process the prompt.";
+            diagnostic("failure", { status, message });
+            send({
+              type: "result",
+              requestId: correlationId,
+              result: {
+                protocolVersion: 1,
+                status: "failed",
+                requestId: correlationId,
+                message,
+                retryable: [429, 502, 503, 504, 500].includes(status),
+              },
+            });
+          } finally {
+            if (!closed) {
+              closed = true;
+              controller.close();
+            }
+          }
+        },
+        cancel() {
+          closed = true;
+          cancellation.abort();
+        },
+      });
+      return new Response(body, {
+        headers: {
+          "Content-Type": "application/x-ndjson",
+          "Cache-Control": "no-store, no-transform",
+          "X-Request-ID": correlationId,
+          "X-Accel-Buffering": "no",
+        },
+      });
+    }
     const result = await planPrompt(input, request.signal, trace);
     trace("result", {
       status: result.status,

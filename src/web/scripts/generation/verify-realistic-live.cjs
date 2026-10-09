@@ -51,6 +51,29 @@ const write = (dir, name, value) =>
           deviceScaleFactor: 1,
         });
         const page = await context.newPage();
+        // Observe the actual fetch body without replacing requests or responses.
+        // Keeping a clone avoids losing streamed bodies after SPA navigation.
+        await page.addInitScript(() => {
+          const original = window.fetch;
+          window.fetch = async (...args) => {
+            const response = await original(...args);
+            if (new URL(response.url).pathname === "/api/apertus") {
+              const id = response.headers.get("X-Request-ID");
+              response
+                .clone()
+                .text()
+                .then((body) => {
+                  window.__realisticWire = {
+                    id,
+                    body,
+                    contentType: response.headers.get("Content-Type"),
+                  };
+                })
+                .catch(() => {});
+            }
+            return response;
+          };
+        });
         const record = {
           case: c.id,
           run,
@@ -69,6 +92,11 @@ const write = (dir, name, value) =>
         console.log(`Live ${run}/${runs}: ${c.id}`);
         try {
           await page.goto(new URL("/", h.base).href);
+          // Wait for the shell's effect: SSR fields can accept typing before
+          // React hydrates, then lose that text without sending a request.
+          await page.waitForFunction(
+            () => typeof window.__experimentSnapshot === "function",
+          );
           await page
             .getByRole("textbox", {
               name: "Describe an experiment…",
@@ -88,7 +116,24 @@ const write = (dir, name, value) =>
             .click();
           const response = await pending;
           const request = response.request().postDataJSON();
-          const result = await response.json();
+          await page.waitForFunction(
+            (id) => window.__realisticWire?.id === id,
+            request.requestId,
+            { timeout: 300000 },
+          );
+          const wire = await page.evaluate(() => window.__realisticWire);
+          write(dir, "wire-response.json", wire);
+          const result = wire.contentType?.includes("application/x-ndjson")
+            ? wire.body
+                .trim()
+                .split("\n")
+                .map(JSON.parse)
+                .find(
+                  (event) =>
+                    event.type === "result" &&
+                    event.requestId === request.requestId,
+                )?.result
+            : JSON.parse(wire.body);
           record.httpStatus = response.status();
           write(dir, "request.json", request);
           write(dir, "response.json", result);

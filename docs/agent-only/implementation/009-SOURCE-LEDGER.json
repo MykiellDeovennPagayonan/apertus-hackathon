@@ -1,8 +1,8 @@
 {
   "generatedBy": "src/web/scripts/builder/audit-public-catalog.cjs",
-  "originalSourceFiles": 280,
-  "sourceFiles": 285,
-  "exportRecords": 661,
+  "originalSourceFiles": 285,
+  "sourceFiles": 290,
+  "exportRecords": 668,
   "records": [
     {
       "source": "src/web/src/simulations/components/README.md",
@@ -1884,6 +1884,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/runtime/authoring/board.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/runtime/authoring/composites.ts",
           "typeOnly": false,
           "symbols": [
@@ -2141,6 +2148,7 @@
           "src/web/src/simulations/runtime/authoring/adapters.ts",
           "src/web/src/simulations/runtime/authoring/arrangement.ts",
           "src/web/src/simulations/runtime/authoring/bindings.ts",
+          "src/web/src/simulations/runtime/authoring/board.ts",
           "src/web/src/simulations/runtime/authoring/composites.ts",
           "src/web/src/simulations/runtime/authoring/connections.ts",
           "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
@@ -2170,7 +2178,7 @@
           "src/web/scripts/verify-spatial-board-performance.cjs",
           "src/web/scripts/verify-spatial-immersive-browser.cjs"
         ],
-        "destination": "src/web/src/lib/planner/bucket.ts, src/web/src/lib/planner/catalog.ts, src/web/src/lib/planner/compose.ts, src/web/src/lib/planner/compositionQuality.ts, src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/coverage.ts, src/web/src/lib/planner/focusedTurn.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/schema.ts, src/web/src/lib/planner/selection/compositionStrategy.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx, src/web/src/simulations/builder/composition/CompositionBuilder.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ControlTypeSettings.tsx, src/web/src/simulations/builder/composition/DataDisplaySettings.tsx, src/web/src/simulations/builder/composition/DecorationSettings.tsx, src/web/src/simulations/builder/composition/InputEditor.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/composition/useBuilderAi.ts, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/builder/graph/authoredGraph.ts, src/web/src/simulations/builder/library/SaveCompositeDialog.tsx, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/components/views/recipe/observations.ts, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/arrangement.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/src/simulations/runtime/authoring/insertion.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/providers.ts, src/web/src/simulations/runtime/authoring/recipes.ts, src/web/src/simulations/runtime/authoring/references.ts, src/web/src/simulations/runtime/authoring/runnable.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts, src/web/src/simulations/runtime/recipeSession.ts, src/web/src/simulations/runtime/recipes/compatibility/index.ts, src/web/src/simulations/runtime/session.ts, src/web/scripts/builder/audit-public-catalog.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-board.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/generation/verify-realistic-contracts.cjs, src/web/scripts/generation/verify-realistic-replay.cjs, src/web/scripts/verify-board-selection-browser.cjs, src/web/scripts/verify-board-workspace-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-spatial-board-performance.cjs, src/web/scripts/verify-spatial-immersive-browser.cjs"
+        "destination": "src/web/src/lib/planner/bucket.ts, src/web/src/lib/planner/catalog.ts, src/web/src/lib/planner/compose.ts, src/web/src/lib/planner/compositionQuality.ts, src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/coverage.ts, src/web/src/lib/planner/focusedTurn.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/schema.ts, src/web/src/lib/planner/selection/compositionStrategy.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx, src/web/src/simulations/builder/composition/CompositionBuilder.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ControlTypeSettings.tsx, src/web/src/simulations/builder/composition/DataDisplaySettings.tsx, src/web/src/simulations/builder/composition/DecorationSettings.tsx, src/web/src/simulations/builder/composition/InputEditor.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/composition/useBuilderAi.ts, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/builder/graph/authoredGraph.ts, src/web/src/simulations/builder/library/SaveCompositeDialog.tsx, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/components/views/recipe/observations.ts, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/arrangement.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/board.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/src/simulations/runtime/authoring/insertion.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/providers.ts, src/web/src/simulations/runtime/authoring/recipes.ts, src/web/src/simulations/runtime/authoring/references.ts, src/web/src/simulations/runtime/authoring/runnable.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts, src/web/src/simulations/runtime/recipeSession.ts, src/web/src/simulations/runtime/recipes/compatibility/index.ts, src/web/src/simulations/runtime/session.ts, src/web/scripts/builder/audit-public-catalog.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-board.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/generation/verify-realistic-contracts.cjs, src/web/scripts/generation/verify-realistic-replay.cjs, src/web/scripts/verify-board-selection-browser.cjs, src/web/scripts/verify-board-workspace-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-spatial-board-performance.cjs, src/web/scripts/verify-spatial-immersive-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -2492,6 +2500,13 @@
         },
         {
           "source": "src/web/src/simulations/runtime/authoring/bindings.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/authoring/board.ts",
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
@@ -3017,6 +3032,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/runtime/authoring/board.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/runtime/authoring/composites.ts",
           "typeOnly": false,
           "symbols": [
@@ -3274,6 +3296,7 @@
           "src/web/src/simulations/runtime/authoring/adapters.ts",
           "src/web/src/simulations/runtime/authoring/arrangement.ts",
           "src/web/src/simulations/runtime/authoring/bindings.ts",
+          "src/web/src/simulations/runtime/authoring/board.ts",
           "src/web/src/simulations/runtime/authoring/composites.ts",
           "src/web/src/simulations/runtime/authoring/connections.ts",
           "src/web/src/simulations/runtime/authoring/explorationProviders.ts",
@@ -3303,7 +3326,7 @@
           "src/web/scripts/verify-spatial-board-performance.cjs",
           "src/web/scripts/verify-spatial-immersive-browser.cjs"
         ],
-        "destination": "src/web/src/lib/planner/bucket.ts, src/web/src/lib/planner/catalog.ts, src/web/src/lib/planner/compose.ts, src/web/src/lib/planner/compositionQuality.ts, src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/coverage.ts, src/web/src/lib/planner/focusedTurn.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/schema.ts, src/web/src/lib/planner/selection/compositionStrategy.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx, src/web/src/simulations/builder/composition/CompositionBuilder.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ControlTypeSettings.tsx, src/web/src/simulations/builder/composition/DataDisplaySettings.tsx, src/web/src/simulations/builder/composition/DecorationSettings.tsx, src/web/src/simulations/builder/composition/InputEditor.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/composition/useBuilderAi.ts, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/builder/graph/authoredGraph.ts, src/web/src/simulations/builder/library/SaveCompositeDialog.tsx, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/components/views/recipe/observations.ts, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/arrangement.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/src/simulations/runtime/authoring/insertion.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/providers.ts, src/web/src/simulations/runtime/authoring/recipes.ts, src/web/src/simulations/runtime/authoring/references.ts, src/web/src/simulations/runtime/authoring/runnable.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts, src/web/src/simulations/runtime/recipeSession.ts, src/web/src/simulations/runtime/recipes/compatibility/index.ts, src/web/src/simulations/runtime/session.ts, src/web/scripts/builder/audit-public-catalog.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-board.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/generation/verify-realistic-contracts.cjs, src/web/scripts/generation/verify-realistic-replay.cjs, src/web/scripts/verify-board-selection-browser.cjs, src/web/scripts/verify-board-workspace-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-spatial-board-performance.cjs, src/web/scripts/verify-spatial-immersive-browser.cjs"
+        "destination": "src/web/src/lib/planner/bucket.ts, src/web/src/lib/planner/catalog.ts, src/web/src/lib/planner/compose.ts, src/web/src/lib/planner/compositionQuality.ts, src/web/src/lib/planner/compositionTools.ts, src/web/src/lib/planner/coverage.ts, src/web/src/lib/planner/focusedTurn.ts, src/web/src/lib/planner/formatFixer.ts, src/web/src/lib/planner/schema.ts, src/web/src/lib/planner/selection/compositionStrategy.ts, src/web/src/lib/planner/turnSchema.ts, src/web/src/simulations/builder/composition/ComponentSettings.tsx, src/web/src/simulations/builder/composition/CompositeInterfaceEditor.tsx, src/web/src/simulations/builder/composition/CompositionBuilder.tsx, src/web/src/simulations/builder/composition/CompositionLibrary.tsx, src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/composition/ControlTypeSettings.tsx, src/web/src/simulations/builder/composition/DataDisplaySettings.tsx, src/web/src/simulations/builder/composition/DecorationSettings.tsx, src/web/src/simulations/builder/composition/InputEditor.tsx, src/web/src/simulations/builder/composition/ManualComponentSettings.tsx, src/web/src/simulations/builder/composition/libraryChoices.ts, src/web/src/simulations/builder/composition/useBuilderAi.ts, src/web/src/simulations/builder/composition/useComponentCatalog.ts, src/web/src/simulations/builder/document/canonical.ts, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/builder/editor/selection.ts, src/web/src/simulations/builder/graph/authoredGraph.ts, src/web/src/simulations/builder/library/SaveCompositeDialog.tsx, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/composites/spatial.ts, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/controls/dynamic-systems/DynamicControls.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/src/simulations/components/views/recipe/observations.ts, src/web/src/simulations/runtime/authoring/adapters.ts, src/web/src/simulations/runtime/authoring/arrangement.ts, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/board.ts, src/web/src/simulations/runtime/authoring/composites.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/explorationProviders.ts, src/web/src/simulations/runtime/authoring/insertion.ts, src/web/src/simulations/runtime/authoring/migrateControls.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/providers.ts, src/web/src/simulations/runtime/authoring/recipes.ts, src/web/src/simulations/runtime/authoring/references.ts, src/web/src/simulations/runtime/authoring/runnable.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/src/simulations/runtime/authoring/validate.ts, src/web/src/simulations/runtime/recipeSession.ts, src/web/src/simulations/runtime/recipes/compatibility/index.ts, src/web/src/simulations/runtime/session.ts, src/web/scripts/builder/audit-public-catalog.cjs, src/web/scripts/builder/verify-public-catalog.cjs, src/web/scripts/builder/verify-spatial-board.cjs, src/web/scripts/builder/verify-spatial-catalog.cjs, src/web/scripts/generation/verify-realistic-contracts.cjs, src/web/scripts/generation/verify-realistic-replay.cjs, src/web/scripts/verify-board-selection-browser.cjs, src/web/scripts/verify-board-workspace-browser.cjs, src/web/scripts/verify-component-cleanup.cjs, src/web/scripts/verify-component-completion.cjs, src/web/scripts/verify-control-contracts.cjs, src/web/scripts/verify-spatial-board-performance.cjs, src/web/scripts/verify-spatial-immersive-browser.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -3625,6 +3648,13 @@
         },
         {
           "source": "src/web/src/simulations/runtime/authoring/bindings.ts",
+          "typeOnly": false,
+          "symbols": [
+            "publicDefinition"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/authoring/board.ts",
           "typeOnly": false,
           "symbols": [
             "publicDefinition"
@@ -14047,6 +14077,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/controls/PlaybackControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ActionButton"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/controls/PlaybackControls.tsx",
           "typeOnly": false,
           "symbols": [
@@ -14069,13 +14106,6 @@
         },
         {
           "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
-          "typeOnly": false,
-          "symbols": [
-            "ActionButton"
-          ]
-        },
-        {
-          "source": "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "typeOnly": false,
           "symbols": [
             "ActionButton"
@@ -14110,11 +14140,11 @@
           "src/web/src/simulations/components/controls/IntegerStepper.tsx",
           "src/web/src/simulations/components/controls/MathPlayback.tsx",
           "src/web/src/simulations/components/controls/MathPrimaryControls.tsx",
+          "src/web/src/simulations/components/controls/PlaybackControl.tsx",
           "src/web/src/simulations/components/controls/PlaybackControls.tsx",
           "src/web/src/simulations/components/controls/ToggleControl.tsx",
           "src/web/src/simulations/components/views/ElementaryExperimentView.tsx",
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
-          "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/lessons/CompositionLesson.tsx",
           "src/web/src/simulations/pre-made/town/controls/index.ts"
         ],
@@ -14192,6 +14222,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/controls/PlaybackControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ActionButton"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/controls/PlaybackControls.tsx",
           "typeOnly": false,
           "symbols": [
@@ -14214,13 +14251,6 @@
         },
         {
           "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
-          "typeOnly": false,
-          "symbols": [
-            "ActionButton"
-          ]
-        },
-        {
-          "source": "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "typeOnly": false,
           "symbols": [
             "ActionButton"
@@ -16006,6 +16036,53 @@
       "destination": "public control owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
+    },
+    {
+      "source": "src/web/src/simulations/components/controls/PlaybackControl.tsx",
+      "export": "PlaybackControl",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "PlaybackControl"
+          ]
+        }
+      ],
+      "responsibility": "control",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "PlaybackControl"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public control owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
       "source": "src/web/src/simulations/components/controls/PlaybackControls.tsx",
@@ -21924,6 +22001,160 @@
       "destination": "public control owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "No active static consumer; retained data/type/export has no independent public registration"
+    },
+    {
+      "source": "src/web/src/simulations/components/controls/interactionPolicy.ts",
+      "export": "liveExplorationCommands",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "liveExplorationCommands"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "isPlaybackCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/authoring/arrangement.ts",
+          "typeOnly": false,
+          "symbols": [
+            "isPlaybackCommand"
+          ]
+        }
+      ],
+      "responsibility": "control",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/index.ts",
+          "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
+          "src/web/src/simulations/runtime/authoring/arrangement.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/index.ts, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/arrangement.ts"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "liveExplorationCommands"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "isPlaybackCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/authoring/arrangement.ts",
+          "typeOnly": false,
+          "symbols": [
+            "isPlaybackCommand"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public control owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/controls/interactionPolicy.ts",
+      "export": "isPlaybackCommand",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "liveExplorationCommands"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "isPlaybackCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/authoring/arrangement.ts",
+          "typeOnly": false,
+          "symbols": [
+            "isPlaybackCommand"
+          ]
+        }
+      ],
+      "responsibility": "control",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/index.ts",
+          "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
+          "src/web/src/simulations/runtime/authoring/arrangement.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/index.ts, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/arrangement.ts"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "liveExplorationCommands"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "isPlaybackCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/authoring/arrangement.ts",
+          "typeOnly": false,
+          "symbols": [
+            "isPlaybackCommand"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public control owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
       "source": "src/web/src/simulations/components/controls/natural-systems/NaturalControls.tsx",
@@ -47586,7 +47817,8 @@
           },
           "description": "Set desired time headway at fixed vehicle count; preserve road, seed and model settings",
           "timing": "live",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/dynamic-systems/RingTraffic",
@@ -47941,7 +48173,8 @@
           },
           "description": "Set desired time headway at fixed vehicle count; preserve road, seed and model settings",
           "timing": "live",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/dynamic-systems/RingTraffic",
@@ -48296,7 +48529,8 @@
           },
           "description": "Set desired time headway at fixed vehicle count; preserve road, seed and model settings",
           "timing": "live",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/dynamic-systems/RingTraffic",
@@ -48651,7 +48885,8 @@
           },
           "description": "Set desired time headway at fixed vehicle count; preserve road, seed and model settings",
           "timing": "live",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/dynamic-systems/RingTraffic",
@@ -62250,7 +62485,8 @@
           },
           "description": "Set the swing's absolute string or rod length in metres, from 0.1 to 20 inclusive. For a multiple of another swing, calculate the new length from that other swing. Zero or negative length is unsupported: return unsupported, never an edit with value 0. Preserve gravity and amplitude; restart from maximum angle.",
           "timing": "relaunch",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/Pendulum",
@@ -62269,7 +62505,8 @@
           },
           "description": "Set gravity; comparison commands must apply the same value to all pendulums",
           "timing": "relaunch",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/Pendulum",
@@ -62280,15 +62517,16 @@
               "value": {
                 "type": "number",
                 "minimum": 0,
-                "maximum": 10,
+                "maximum": 90,
                 "unit": "deg"
               }
             },
             "optional": []
           },
-          "description": "Set small-angle amplitude and restart",
+          "description": "Set starting angle from 0 to 90 degrees and release from rest",
           "timing": "relaunch",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/Pendulum",
@@ -62509,7 +62747,7 @@
               "amplitude": {
                 "type": "number",
                 "minimum": 0,
-                "maximum": 10,
+                "maximum": 90,
                 "unit": "deg"
               },
               "playing": {
@@ -62823,7 +63061,8 @@
           },
           "description": "Set the swing's absolute string or rod length in metres, from 0.1 to 20 inclusive. For a multiple of another swing, calculate the new length from that other swing. Zero or negative length is unsupported: return unsupported, never an edit with value 0. Preserve gravity and amplitude; restart from maximum angle.",
           "timing": "relaunch",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/Pendulum",
@@ -62842,7 +63081,8 @@
           },
           "description": "Set gravity; comparison commands must apply the same value to all pendulums",
           "timing": "relaunch",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/Pendulum",
@@ -62853,15 +63093,16 @@
               "value": {
                 "type": "number",
                 "minimum": 0,
-                "maximum": 10,
+                "maximum": 90,
                 "unit": "deg"
               }
             },
             "optional": []
           },
-          "description": "Set small-angle amplitude and restart",
+          "description": "Set starting angle from 0 to 90 degrees and release from rest",
           "timing": "relaunch",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/Pendulum",
@@ -63082,7 +63323,7 @@
               "amplitude": {
                 "type": "number",
                 "minimum": 0,
-                "maximum": 10,
+                "maximum": 90,
                 "unit": "deg"
               },
               "playing": {
@@ -63395,7 +63636,8 @@
           },
           "description": "Set the swing's absolute string or rod length in metres, from 0.1 to 20 inclusive. For a multiple of another swing, calculate the new length from that other swing. Zero or negative length is unsupported: return unsupported, never an edit with value 0. Preserve gravity and amplitude; restart from maximum angle.",
           "timing": "relaunch",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/Pendulum",
@@ -63414,7 +63656,8 @@
           },
           "description": "Set gravity; comparison commands must apply the same value to all pendulums",
           "timing": "relaunch",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/Pendulum",
@@ -63425,15 +63668,16 @@
               "value": {
                 "type": "number",
                 "minimum": 0,
-                "maximum": 10,
+                "maximum": 90,
                 "unit": "deg"
               }
             },
             "optional": []
           },
-          "description": "Set small-angle amplitude and restart",
+          "description": "Set starting angle from 0 to 90 degrees and release from rest",
           "timing": "relaunch",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/Pendulum",
@@ -63527,7 +63771,7 @@
               "amplitude": {
                 "type": "number",
                 "minimum": 0,
-                "maximum": 10,
+                "maximum": 90,
                 "unit": "deg"
               },
               "playing": {
@@ -63726,7 +63970,8 @@
           },
           "description": "Set the swing's absolute string or rod length in metres, from 0.1 to 20 inclusive. For a multiple of another swing, calculate the new length from that other swing. Zero or negative length is unsupported: return unsupported, never an edit with value 0. Preserve gravity and amplitude; restart from maximum angle.",
           "timing": "relaunch",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/Pendulum",
@@ -63745,7 +63990,8 @@
           },
           "description": "Set gravity; comparison commands must apply the same value to all pendulums",
           "timing": "relaunch",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/Pendulum",
@@ -63756,15 +64002,16 @@
               "value": {
                 "type": "number",
                 "minimum": 0,
-                "maximum": 10,
+                "maximum": 90,
                 "unit": "deg"
               }
             },
             "optional": []
           },
-          "description": "Set small-angle amplitude and restart",
+          "description": "Set starting angle from 0 to 90 degrees and release from rest",
           "timing": "relaunch",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/Pendulum",
@@ -63858,7 +64105,7 @@
               "amplitude": {
                 "type": "number",
                 "minimum": 0,
-                "maximum": 10,
+                "maximum": 90,
                 "unit": "deg"
               },
               "playing": {
@@ -64853,7 +65100,8 @@
           },
           "description": "Set the ABSOLUTE final number of identical bulbs, an integer from 1 to 8. Adding a second bulb means value 2; adding a third means value 3. Preserve battery voltage and per-bulb resistance. This action preserves existing topology; changing series/parallel requires CIRC_SET_TOPOLOGY too when different from current topology.",
           "timing": "rebuild",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/ResistiveCircuit",
@@ -64873,7 +65121,8 @@
           },
           "description": "Connect the existing bulbs in supported series or parallel topology",
           "timing": "rebuild",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/ResistiveCircuit",
@@ -64892,7 +65141,8 @@
           },
           "description": "Set ideal battery voltage",
           "timing": "live",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/ResistiveCircuit",
@@ -64911,7 +65161,8 @@
           },
           "description": "Set resistance of every identical bulb in ohms, from 0.1 to 1000 inclusive. Zero or negative resistance would short the source and is unsupported: return unsupported, never an edit with value 0. Preserve bulb count, topology and battery voltage.",
           "timing": "live",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/ResistiveCircuit",
@@ -65173,7 +65424,8 @@
           },
           "description": "Set the ABSOLUTE final number of identical bulbs, an integer from 1 to 8. Adding a second bulb means value 2; adding a third means value 3. Preserve battery voltage and per-bulb resistance. This action preserves existing topology; changing series/parallel requires CIRC_SET_TOPOLOGY too when different from current topology.",
           "timing": "rebuild",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/ResistiveCircuit",
@@ -65193,7 +65445,8 @@
           },
           "description": "Connect the existing bulbs in supported series or parallel topology",
           "timing": "rebuild",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/ResistiveCircuit",
@@ -65212,7 +65465,8 @@
           },
           "description": "Set ideal battery voltage",
           "timing": "live",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/ResistiveCircuit",
@@ -65231,7 +65485,8 @@
           },
           "description": "Set resistance of every identical bulb in ohms, from 0.1 to 1000 inclusive. Zero or negative resistance would short the source and is unsupported: return unsupported, never an edit with value 0. Preserve bulb count, topology and battery voltage.",
           "timing": "live",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/ResistiveCircuit",
@@ -65493,7 +65748,8 @@
           },
           "description": "Set the ABSOLUTE final number of identical bulbs, an integer from 1 to 8. Adding a second bulb means value 2; adding a third means value 3. Preserve battery voltage and per-bulb resistance. This action preserves existing topology; changing series/parallel requires CIRC_SET_TOPOLOGY too when different from current topology.",
           "timing": "rebuild",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/ResistiveCircuit",
@@ -65513,7 +65769,8 @@
           },
           "description": "Connect the existing bulbs in supported series or parallel topology",
           "timing": "rebuild",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/ResistiveCircuit",
@@ -65532,7 +65789,8 @@
           },
           "description": "Set ideal battery voltage",
           "timing": "live",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/ResistiveCircuit",
@@ -65551,7 +65809,8 @@
           },
           "description": "Set resistance of every identical bulb in ohms, from 0.1 to 1000 inclusive. Zero or negative resistance would short the source and is unsupported: return unsupported, never an edit with value 0. Preserve bulb count, topology and battery voltage.",
           "timing": "live",
-          "target": "instance"
+          "target": "instance",
+          "submission": "continuous"
         },
         {
           "definition": "prefabs/physical-systems/ResistiveCircuit",
@@ -65723,6 +65982,104 @@
       "destination": "public model operation owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/physical-systems/pendulumMotion.ts",
+      "export": "pendulumPeriod",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/physical-systems/models.ts",
+          "typeOnly": false,
+          "symbols": [
+            "pendulumAngle",
+            "pendulumPeriod"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/physical-systems/models.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/physical-systems/models.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/physical-systems/models.ts",
+          "typeOnly": false,
+          "symbols": [
+            "pendulumAngle",
+            "pendulumPeriod"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/physical-systems/pendulumMotion.ts",
+      "export": "pendulumAngle",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/physical-systems/models.ts",
+          "typeOnly": false,
+          "symbols": [
+            "pendulumAngle",
+            "pendulumPeriod"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/physical-systems/models.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/physical-systems/models.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/physical-systems/models.ts",
+          "typeOnly": false,
+          "symbols": [
+            "pendulumAngle",
+            "pendulumPeriod"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
       "source": "src/web/src/simulations/components/systems/townNavigation.ts",
@@ -102584,6 +102941,142 @@
       "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
     },
     {
+      "source": "src/web/src/simulations/components/visuals/physical-systems/PendulumScene.css",
+      "export": "(file)",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/physical-systems/PendulumScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "registered public package implementation",
+        "packages": [
+          "appearance/physical-pendulum",
+          "appearance/physical-track",
+          "appearance/physical-circuit"
+        ],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/physical-systems/PendulumScene.tsx"
+        ],
+        "destination": "appearance/physical-pendulum, appearance/physical-track, appearance/physical-circuit"
+      },
+      "classification": "private presentation stylesheet",
+      "readiness": "registered metadata; provider/recipe checks in verify-public-catalog.cjs",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [
+        "lesson",
+        "lesson",
+        "lesson"
+      ],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/physical-systems/PendulumScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "identity": [
+        {
+          "id": "appearance/physical-pendulum",
+          "version": 1
+        },
+        {
+          "id": "appearance/physical-track",
+          "version": 1
+        },
+        {
+          "id": "appearance/physical-circuit",
+          "version": 1
+        }
+      ],
+      "ownershipEvidence": "Explicit source-to-catalog owner mapping in the ledger generator",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/physical-systems/PendulumScene.tsx",
+      "export": "PendulumScene",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "PendulumScene"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "registered public package implementation",
+        "packages": [
+          "appearance/physical-pendulum",
+          "appearance/physical-track",
+          "appearance/physical-circuit"
+        ],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+        ],
+        "destination": "appearance/physical-pendulum, appearance/physical-track, appearance/physical-circuit"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "registered metadata; provider/recipe checks in verify-public-catalog.cjs",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [
+        "lesson",
+        "lesson",
+        "lesson"
+      ],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "PendulumScene"
+          ]
+        }
+      ],
+      "identity": [
+        {
+          "id": "appearance/physical-pendulum",
+          "version": 1
+        },
+        {
+          "id": "appearance/physical-track",
+          "version": 1
+        },
+        {
+          "id": "appearance/physical-circuit",
+          "version": 1
+        }
+      ],
+      "ownershipEvidence": "Explicit source-to-catalog owner mapping in the ledger generator",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
+    },
+    {
       "source": "src/web/src/simulations/components/visuals/physical-systems/PhysicalVisuals.tsx",
       "export": "physicalPalette",
       "activeConsumers": [
@@ -102592,7 +103085,6 @@
           "typeOnly": false,
           "symbols": [
             "CircuitVisual",
-            "PendulumVisual",
             "TrackVisual"
           ]
         }
@@ -102631,7 +103123,6 @@
           "typeOnly": false,
           "symbols": [
             "CircuitVisual",
-            "PendulumVisual",
             "TrackVisual"
           ]
         }
@@ -102664,7 +103155,6 @@
           "typeOnly": false,
           "symbols": [
             "CircuitVisual",
-            "PendulumVisual",
             "TrackVisual"
           ]
         }
@@ -102703,7 +103193,6 @@
           "typeOnly": false,
           "symbols": [
             "CircuitVisual",
-            "PendulumVisual",
             "TrackVisual"
           ]
         }
@@ -102736,7 +103225,6 @@
           "typeOnly": false,
           "symbols": [
             "CircuitVisual",
-            "PendulumVisual",
             "TrackVisual"
           ]
         }
@@ -102775,7 +103263,6 @@
           "typeOnly": false,
           "symbols": [
             "CircuitVisual",
-            "PendulumVisual",
             "TrackVisual"
           ]
         }
@@ -102808,7 +103295,6 @@
           "typeOnly": false,
           "symbols": [
             "CircuitVisual",
-            "PendulumVisual",
             "TrackVisual"
           ]
         }
@@ -102847,7 +103333,6 @@
           "typeOnly": false,
           "symbols": [
             "CircuitVisual",
-            "PendulumVisual",
             "TrackVisual"
           ]
         }

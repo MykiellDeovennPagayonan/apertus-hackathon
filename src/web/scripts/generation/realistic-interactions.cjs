@@ -1,6 +1,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
+const { idealPendulumPeriod } = require("./pendulum-oracle.cjs");
 const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-6, `${a} != ${b}`);
 module.exports.exercise = async (page, recipe, c, dir, h) => {
   const node = recipe.document.nodes.find((n) => n.definition === c.definition);
@@ -34,9 +35,14 @@ module.exports.exercise = async (page, recipe, c, dir, h) => {
         if ((await button.getAttribute("aria-pressed")) !== String(value))
           await button.click();
       }
-    } else if (n.definition === "controls/Select")
-      await host.locator("select").selectOption(String(value));
-    else {
+    } else if (n.definition === "controls/Select") {
+      if (await host.locator("select").count())
+        await host.locator("select").selectOption(String(value));
+      else
+        await host
+          .locator(`input[type="radio"][value='${JSON.stringify(value)}']`)
+          .check();
+    } else {
       const input = host
         .locator(
           'input[inputmode="decimal"],input[inputmode="numeric"],input[type="number"]',
@@ -62,9 +68,49 @@ module.exports.exercise = async (page, recipe, c, dir, h) => {
       (s) =>
         Math.abs(
           s.state.outputs[node.id].period -
-            2 * Math.PI * Math.sqrt(4 / s.state.state[node.id].gravity),
+            idealPendulumPeriod(
+              4,
+              s.state.state[node.id].gravity,
+              s.state.state[node.id].amplitude,
+            ),
         ) < 1e-6,
       "Period mismatch",
+    );
+    await control(node, "PEND_SET_AMPLITUDE", 30);
+    const rodLength = () =>
+      page.locator("[data-pendulum-rod]").evaluate((line) => {
+        const scale = line.getScreenCTM().a;
+        return (
+          Math.hypot(
+            line.x2.baseVal.value - line.x1.baseVal.value,
+            line.y2.baseVal.value - line.y1.baseVal.value,
+          ) * scale
+        );
+      });
+    await control(node, "PEND_SET_LENGTH", 5);
+    const short = await rodLength();
+    await h.capture(page, dir, "length-5-metres");
+    await control(node, "PEND_SET_LENGTH", 17.4);
+    const long = await rodLength();
+    near(long / short, 17.4 / 5);
+    await h.capture(page, dir, "length-17-4-metres");
+    for (const amplitude of [60, 90]) {
+      await control(node, "PEND_SET_AMPLITUDE", amplitude);
+      const snapshot = (await state()).state;
+      near(snapshot.outputs[node.id].angle, amplitude);
+      near(
+        snapshot.outputs[node.id].period,
+        idealPendulumPeriod(17.4, snapshot.state[node.id].gravity, amplitude),
+      );
+      await h.capture(page, dir, `starting-angle-${amplitude}`);
+    }
+    fs.writeFileSync(
+      path.join(dir, "pendulum-visual-oracle.json"),
+      JSON.stringify(
+        { short, long, ratio: long / short, expected: 17.4 / 5 },
+        null,
+        2,
+      ),
     );
   }
   if (c.id === "circuit") {

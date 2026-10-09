@@ -6,7 +6,6 @@ import type { ComponentInstance } from "../../../runtime/authoring/types";
 import { object } from "../../../runtime/parameterSchema";
 import { publicDefinition } from "../../catalog";
 import { schemaDefault } from "../../composites/catalog";
-import { ActionButton } from "../../controls/ActionButton";
 import { ActivityControl, TrialControl } from "../../controls/ActivityControl";
 import {
   acceptedCommandArguments,
@@ -17,6 +16,8 @@ import {
   legacyActivities,
   scalarControls,
 } from "../../controls/controlContract";
+import { isPlaybackCommand } from "../../controls/interactionPolicy";
+import { PlaybackControl } from "../../controls/PlaybackControl";
 import {
   ScalarControl,
   UnconfiguredControl,
@@ -150,19 +151,21 @@ export function ControlPresentation({
     );
   const commandKey = connection?.to.port ?? "";
   const metadata = commandPresentation(commandKey, target?.definition ?? "");
-  const defaultLabel = String(config.label);
+  const defaultLabel =
+    target?.definition === "models/SinusoidalSignal"
+      ? String(config.label).replace(
+          /\bSet (phase|amplitude|frequency)\b/gi,
+          (_, field: string) => field[0].toUpperCase() + field.slice(1),
+        )
+      : String(config.label);
   const label =
     metadata.label &&
-    (defaultLabel === command.description ||
+    (metadata.legacyLabels.includes(defaultLabel) ||
+      defaultLabel === command.description ||
       defaultLabel === commandKey.replaceAll("_", " "))
       ? metadata.label
       : defaultLabel;
-  if (
-    node.definition === "controls/Button" &&
-    (/SET_(RATE_)?PLAYING$/.test(commandKey) ||
-      commandKey === "set:playing" ||
-      commandKey === "PHYS_PLAY")
-  ) {
+  if (isPlaybackCommand(commandKey)) {
     const playing =
       (snapshot.outputs[target?.id ?? ""]?.playing ??
         snapshot.state[target?.id ?? ""]?.playing ??
@@ -172,21 +175,12 @@ export function ControlPresentation({
             | undefined
         )?.playing) === true;
     return (
-      <div className="recipe-playback">
-        <ActionButton
-          intent="primary"
-          onCommand={() => runtime.submit(node.id, { value: !playing })}
-        >
-          {playing ? "Pause" : "Play"}
-        </ActionButton>
-        <span className="recipe-playback-state">
-          {playing
-            ? animated
-              ? "Running"
-              : "Ready; automatic motion paused"
-            : "Paused"}
-        </span>
-      </div>
+      <PlaybackControl
+        label={metadata.label || "Playback"}
+        playing={playing}
+        animated={animated}
+        onChange={(value) => runtime.submit(node.id, { value })}
+      />
     );
   }
   if (node.definition === "controls/EntityPicker") {
@@ -333,11 +327,7 @@ export function ControlPresentation({
       }}
       submitLabel={metadata.submitLabel}
       actionIntent={metadata.actionIntent}
-      mode={
-        command.submission === "continuous" && config.mode === "immediate"
-          ? "immediate"
-          : "submit"
-      }
+      mode={command.submission === "continuous" ? "immediate" : "submit"}
       onSubmit={(args) => runtime.submit(node.id, args)}
     />
   );

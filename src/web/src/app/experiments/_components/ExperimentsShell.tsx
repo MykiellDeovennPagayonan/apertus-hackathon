@@ -8,6 +8,10 @@ import {
   formatUserFacingDetails,
   formatUserFacingStatus,
 } from "../../../lib/planner/errorFormatting";
+import {
+  type GenerationStage,
+  generationStages,
+} from "../../../lib/planner/progress";
 import type { GenerationRequest } from "../../../lib/planner/schema";
 import { ControlsTarget } from "../../../simulations/components/views/ControlsOverlay";
 import { ExperimentView } from "../../../simulations/components/views/ExperimentView";
@@ -255,15 +259,42 @@ export default function ExperimentsShell({
     pending.current = owner;
     setDraft(text);
     setBusy(true);
-    setStatus({
-      kind: "working",
-      text: ready ? "Working out the changes…" : "Building your lesson…",
-    });
-    try {
-      const result = await requestGeneration(request, controller.signal, () => {
-        if (pending.current === owner && !controller.signal.aborted)
-          setStatus({ kind: "working", text: "Checking your lesson…" });
+    const startedAt = Date.now();
+    const updateProgress = (stage: GenerationStage) => {
+      if (pending.current !== owner || controller.signal.aborted) return;
+      setStatus((previous) => {
+        const progress =
+          previous?.kind === "working" &&
+          previous.progress?.startedAt === startedAt
+            ? previous.progress
+            : undefined;
+        const completed = progress ? [...progress.completed] : [];
+        // Adjustments can revisit a stage; only show each completed step once.
+        if (
+          progress &&
+          progress.stage !== stage &&
+          !completed.includes(progress.stage)
+        )
+          completed.push(progress.stage);
+        return {
+          kind: "working",
+          text: generationStages[stage],
+          progress: {
+            startedAt,
+            stage,
+            completed: completed.filter((item) => item !== stage),
+          },
+        };
       });
+    };
+    updateProgress(ready ? "planning_changes" : "understanding");
+    try {
+      const result = await requestGeneration(
+        request,
+        controller.signal,
+        undefined,
+        updateProgress,
+      );
       if (pending.current !== owner || controller.signal.aborted) return;
       if (result.status === "failed") {
         setStatus({
@@ -282,6 +313,7 @@ export default function ExperimentsShell({
         });
         return;
       }
+      updateProgress("opening");
       const session = acceptGenerationResult(result, request, disposeSession);
       syncSession();
       setDemo(null);
