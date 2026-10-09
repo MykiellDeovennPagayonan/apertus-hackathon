@@ -114,7 +114,8 @@ export function trackApply(
   value?: unknown,
 ): TrackState {
   if (action === "ROLL_SCALE_RESISTANCE") {
-    if (typeof value !== "number") throw new Error("Resistance factor must be numeric");
+    if (typeof value !== "number")
+      throw new Error("Resistance factor must be numeric");
     bounded(value, 0, 10, "Resistance factor");
     const next = { ...s, resistance: s.resistance * value, elapsed: 0 };
     validateTrack(next);

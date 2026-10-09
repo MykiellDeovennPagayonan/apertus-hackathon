@@ -31,9 +31,7 @@ async function open(browser, document) {
   await page.goto(
     `${process.env.UX_TEST_URL || "http://127.0.0.1:43002"}/experiments/builder`,
   );
-  await page
-    .getByRole("button", { name: "Continue draft", exact: true })
-    .click();
+  // Canonical saved drafts now open directly in the unified builder.
   await page.getByRole("button", { name: "Build", exact: true }).click();
   await page.locator(".recipe-lesson").waitFor();
   return { page, errors };

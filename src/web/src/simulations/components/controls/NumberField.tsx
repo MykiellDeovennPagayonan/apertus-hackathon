@@ -1,5 +1,6 @@
-import { type CSSProperties, useId, useState } from "react";
+import { type CSSProperties, useEffect, useId, useState } from "react";
 import type { ActionResult } from "../../runtime/commands";
+import { RangeInput } from "./RangeInput";
 
 /** Keep incomplete typing local; only validated values reach the model. */
 export function NumberField({
@@ -37,10 +38,22 @@ export function NumberField({
   rangeLabel?: string;
   onChange: (value: number) => ActionResult;
 }) {
-  const [draft, setDraft] = useState<string | null>(null);
+  const [draft, setDraft] = useState<{
+    text: string;
+    accepted?: number;
+  } | null>(null);
   const [error, setError] = useState("");
   const id = useId();
-  const commit = (text: string) => {
+  useEffect(() => {
+    // Accepted text follows other controls and resets. Unfinished/rejected edits
+    // stay local; explicit-submit forms own their separate draft/reset policy.
+    setDraft((current) =>
+      current?.accepted !== undefined && current.accepted !== value
+        ? null
+        : current,
+    );
+  }, [value]);
+  const commit = (text: string): ActionResult => {
     const n = Number(text);
     if (
       !/^[-+]?(?:\d+\.?\d*|\.\d+)$/.test(text.trim()) ||
@@ -49,21 +62,20 @@ export function NumberField({
       n > max ||
       (integer && !Number.isInteger(n))
     ) {
-      setError(
-        `Choose ${integer ? "a whole number" : "a number"} from ${min} to ${max}.`,
-      );
+      const message = `Choose ${integer ? "a whole number" : "a number"} from ${min} to ${max}.`;
+      setError(message);
       onValidityChange?.(false);
-      return false;
+      return { accepted: false, error: message };
     }
     if (n === value) {
       setError("");
       onValidityChange?.(true);
-      return true;
+      return { accepted: true };
     }
     const result = onChange(n);
     setError(result.accepted ? "" : result.error);
     onValidityChange?.(result.accepted);
-    return result.accepted;
+    return result;
   };
   return (
     <div
@@ -80,12 +92,12 @@ export function NumberField({
             type="text"
             inputMode={integer ? "numeric" : "decimal"}
             disabled={disabled}
-            value={draft ?? value}
+            value={draft?.text ?? value}
             aria-invalid={!!error}
             aria-describedby={error ? id : undefined}
             onChange={(e) => {
               const text = e.target.value;
-              setDraft(text);
+              setDraft({ text });
               onValidityChange?.(false);
               const n = Number(text);
               if (
@@ -93,11 +105,12 @@ export function NumberField({
                 n >= min &&
                 n <= max &&
                 (!integer || Number.isInteger(n))
-              )
-                commit(text);
+              ) {
+                if (commit(text).accepted) setDraft({ text, accepted: n });
+              }
             }}
             onBlur={(e) => {
-              if (commit(e.target.value)) setDraft(null);
+              if (commit(e.target.value).accepted) setDraft(null);
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") e.currentTarget.blur();
@@ -113,11 +126,10 @@ export function NumberField({
       </div>
       {presentation === "slider" && (
         <div className="catalog-slider-inputs">
-          <input
+          <RangeInput
             className="number-field-range"
             id={`${id}-range`}
             disabled={disabled}
-            type="range"
             aria-label={rangeLabel}
             min={min}
             max={sliderMax}
@@ -128,8 +140,9 @@ export function NumberField({
               } as CSSProperties
             }
             value={value}
-            onChange={(event) => {
-              if (commit(event.target.value)) setDraft(null);
+            onChange={(next) => commit(String(next))}
+            onResult={(result) => {
+              if (result.accepted) setDraft(null);
             }}
           />
         </div>

@@ -26,7 +26,9 @@ export function ActionButton({
         onClick={() => {
           try {
             const result = onCommand();
-            setError(result.accepted ? undefined : (result.error ?? "Action failed"));
+            setError(
+              result.accepted ? undefined : (result.error ?? "Action failed"),
+            );
           } catch (e) {
             setError(e instanceof Error ? e.message : "Action failed");
           }

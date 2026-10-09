@@ -195,8 +195,8 @@ for (const m of assemblyModels) {
   });
   const id = `appearance/${m.presentation}`;
   register({
-    ...genericDefinitions[0],
     id,
+    version: 1,
     title: `${m.name} appearance`,
     description: `Display an attached ${m.name} model snapshot`,
     category: "appearance",
@@ -205,7 +205,15 @@ for (const m of assemblyModels) {
     defaults: {},
     inputs: { model: { kind: "attachment", unit: m.ref } },
     outputs: {},
+    commands: {},
     placement: ["lesson"],
+    lifecycle: {
+      authored: [],
+      presentation: [],
+      clock: false,
+      reset: "authored",
+      capture: false,
+    },
     assumptions: m.assumptions,
     presentationProvider: id,
   });
