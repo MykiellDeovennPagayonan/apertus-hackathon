@@ -173,6 +173,80 @@ export function buildInitialCard(id: string): ComponentBucketCard | null {
   if (idLower.includes("line") || descLower.includes("slope")) {
     supports.push("line slope", "linear function", "slope", "intercept");
   }
+  if (
+    idLower.includes("titration") ||
+    descLower.includes("titration") ||
+    descLower.includes("neutralization")
+  ) {
+    supports.push(
+      "titration",
+      "acid base",
+      "neutralization",
+      "ph",
+      "equivalence point",
+      "buret",
+      "phenolphthalein",
+    );
+  }
+  if (
+    idLower.includes("gasequilibrium") ||
+    descLower.includes("gas equilibrium") ||
+    descLower.includes("le chatelier")
+  ) {
+    supports.push(
+      "gas equilibrium",
+      "le chatelier",
+      "equilibrium constant",
+      "n2o4",
+      "no2",
+      "chemical equilibrium",
+    );
+  }
+  if (
+    idLower.includes("marketequilibrium") ||
+    descLower.includes("market equilibrium") ||
+    descLower.includes("supply and demand")
+  ) {
+    supports.push(
+      "market equilibrium",
+      "supply and demand",
+      "equilibrium price",
+      "consumer surplus",
+      "producer surplus",
+      "price control",
+      "price ceiling",
+      "deadweight loss",
+    );
+  }
+  if (
+    idLower.includes("priceelasticity") ||
+    descLower.includes("price elasticity") ||
+    descLower.includes("elasticity of demand")
+  ) {
+    supports.push(
+      "price elasticity",
+      "elasticity",
+      "total revenue",
+      "elastic",
+      "inelastic",
+      "choke price",
+    );
+  }
+  if (
+    idLower.includes("costandprofit") ||
+    descLower.includes("cost and profit") ||
+    descLower.includes("profit maximization")
+  ) {
+    supports.push(
+      "production costs",
+      "cost and profit",
+      "marginal cost",
+      "average total cost",
+      "profit maximization",
+      "fixed cost",
+      "break even",
+    );
+  }
 
   return {
     id: def.id,

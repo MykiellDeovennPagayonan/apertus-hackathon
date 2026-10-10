@@ -6,11 +6,17 @@ import {
   dilutionApply,
   dilutionInitial,
   dilutionMeasure,
+  gasEquilibriumApply,
+  gasEquilibriumInitial,
+  gasEquilibriumMeasure,
   rateApply,
   rateConfiguration,
   rateInitial,
   rateMeasure,
   rateStep,
+  titrationApply,
+  titrationInitial,
+  titrationMeasure,
 } from "../../components/systems/chemistry/models";
 import type {
   DomainContribution,
@@ -228,9 +234,156 @@ export const reactionRate: DomainModel = {
   step: rateStep,
 };
 
+export const acidBaseTitration: DomainModel = {
+  ref: "prefabs/chemistry/AcidBaseTitration",
+  version: 1,
+  name: "Acid-base titration and pH neutralization",
+  presentation: "chemistry-titration",
+  maximumInstances: 2,
+  description:
+    "Strong acid titration with strong base. Observe pH curve changes as titrant is added from a buret, phenolphthalein indicator color changes, hydronium and hydroxide concentrations, and the neutral equivalence point.",
+  assumptions: [
+    "Monoprotic strong acid (e.g. HCl) titrated with strong base (e.g. NaOH) at 25°C.",
+    "Autoionization of water Kw = 1.0e-14 is accounted for near the equivalence point (pH 7.0). Phenolphthalein transitions from colorless to pink between pH 8.2 and 10.0.",
+  ],
+  parameters: object(
+    {
+      analyteVolume: num(5, 100, "mL"),
+      acidConcentration: num(0.01, 2, "mol/L"),
+      baseConcentration: num(0.01, 2, "mol/L"),
+      titrantVolumeAdded: num(0, 100, "mL"),
+    },
+    [
+      "analyteVolume",
+      "acidConcentration",
+      "baseConcentration",
+      "titrantVolumeAdded",
+    ],
+  ),
+  defaults: { ...chemistryDefaults.titration },
+  outputs: {
+    analyteVolume: output("mL", "Flask acid volume"),
+    acidConcentration: output("mol/L", "Flask acid concentration"),
+    baseConcentration: output("mol/L", "Buret base concentration"),
+    titrantVolumeAdded: output("mL", "Volume of titrant added"),
+    equivalenceVolume: output("mL", "Equivalence point volume"),
+    currentPH: output("pH", "Solution pH"),
+    hConcentration: output("mol/L", "Hydronium concentration [H₃O⁺]"),
+    ohConcentration: output("mol/L", "Hydroxide concentration [OH⁻]"),
+    indicatorColor: output("color", "Phenolphthalein indicator color"),
+    neutralized: output("1", "Solution is at equivalence pH"),
+    points: output("pH", "Titration curve pH versus volume"),
+  },
+  requiredObservations: [
+    "titrantVolumeAdded",
+    "equivalenceVolume",
+    "currentPH",
+    "indicatorColor",
+    "points",
+  ],
+  graphOutput: "points",
+  actions: {
+    CHEM_ADD_TITRANT: action(
+      num(0.1, 50, "mL"),
+      "Dispense titrant increment from buret into analyte flask",
+    ),
+    CHEM_SET_TITRANT_VOLUME: action(
+      num(0, 100, "mL"),
+      "Set exact volume of titrant dispensed from buret",
+    ),
+    CHEM_RESET_TITRATION: action(
+      undefined,
+      "Refill buret and reset titration volume to zero",
+    ),
+    CHEM_SET_ACID_CONC: action(
+      num(0.01, 2, "mol/L"),
+      "Change initial analyte acid concentration in flask",
+    ),
+  },
+  dependencies: dependencies("AcidBaseTitration", "TitrationSystem"),
+  initialize: titrationInitial,
+  apply: titrationApply,
+  measure: titrationMeasure,
+  configuration: (s) => ({ ...s }),
+};
+
+export const gasEquilibrium: DomainModel = {
+  ref: "prefabs/chemistry/GasEquilibrium",
+  version: 1,
+  name: "Gas equilibrium and Le Chatelier's principle",
+  presentation: "chemistry-gas-equilibrium",
+  maximumInstances: 2,
+  description:
+    "Reversible gas-phase equilibrium N₂O₄ (colorless) ⇌ 2 NO₂ (brown). Explore Le Chatelier's principle: temperature shifts the endothermic equilibrium, and volume/pressure shifts favor the side with fewer gas moles.",
+  assumptions: [
+    "Reversible reaction N₂O₄ ⇌ 2 NO₂ with endothermic forward reaction (ΔH° = +57.2 kJ/mol).",
+    "Equilibrium constant Kc varies with temperature via van 't Hoff equation. Total pressure follows the ideal gas law.",
+  ],
+  parameters: object(
+    {
+      temperature: num(250, 450, "K"),
+      volume: num(1, 20, "L"),
+      initialN2O4: num(0.1, 10, "mol"),
+      initialNO2: num(0, 10, "mol"),
+    },
+    ["temperature", "volume", "initialN2O4", "initialNO2"],
+  ),
+  defaults: { ...chemistryDefaults.gasEquilibrium },
+  outputs: {
+    temperature: output("K", "Chamber temperature"),
+    volume: output("L", "Chamber gas volume"),
+    initialN2O4: output("mol", "Initial moles of N₂O₄"),
+    initialNO2: output("mol", "Initial moles of NO₂"),
+    equilibriumConstant: output("mol/L", "Equilibrium constant Kc"),
+    molesN2O4: output("mol", "Equilibrium moles of N₂O₄"),
+    molesNO2: output("mol", "Equilibrium moles of NO₂"),
+    concN2O4: output("mol/L", "Concentration of colorless N₂O₄"),
+    concNO2: output("mol/L", "Concentration of brown NO₂"),
+    totalPressure: output("atm", "Total chamber pressure"),
+    gasColorIntensity: output("1", "Brown color intensity fraction"),
+    shiftDirection: output("shift", "Le Chatelier response state"),
+    points: output("mol/L", "NO₂ concentration across container volumes"),
+  },
+  requiredObservations: [
+    "temperature",
+    "volume",
+    "equilibriumConstant",
+    "concNO2",
+    "totalPressure",
+    "gasColorIntensity",
+    "points",
+  ],
+  graphOutput: "points",
+  actions: {
+    CHEM_SET_EQ_TEMP: action(
+      num(250, 450, "K"),
+      "Change reaction temperature to shift equilibrium via van 't Hoff",
+    ),
+    CHEM_SET_EQ_VOLUME: action(
+      num(1, 20, "L"),
+      "Change gas chamber volume to induce Le Chatelier pressure shift",
+    ),
+    CHEM_ADD_GAS: action(
+      undefined,
+      "Inject additional NO₂ gas into the chamber",
+    ),
+  },
+  dependencies: dependencies("GasEquilibrium", "LeChatelierSystem"),
+  initialize: gasEquilibriumInitial,
+  apply: gasEquilibriumApply,
+  measure: gasEquilibriumMeasure,
+  configuration: (s) => ({ ...s }),
+};
+
 /** Explicit integration imports this value; importing chemistry has no registration side effects. */
 export const chemistry: DomainContribution = {
   namespace: "chemistry",
   version: 1,
-  models: [dilution, conservation, reactionRate],
+  models: [
+    dilution,
+    conservation,
+    reactionRate,
+    acidBaseTitration,
+    gasEquilibrium,
+  ],
 };

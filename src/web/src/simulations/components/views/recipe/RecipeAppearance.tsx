@@ -9,10 +9,17 @@ import type { ModelInstance } from "../../../runtime/contribution";
 import { DragHandleControl } from "../../controls/DragHandleControl";
 import type { eclipseGeometry } from "../../systems/exploration/eclipse";
 import {
+  AcidBaseTitrationVisual,
   BeakerVisual,
+  GasEquilibriumVisual,
   MoleculeVisual,
   ReactionCurveVisual,
 } from "../../visuals/chemistry/ChemistryVisuals";
+import {
+  CostAndProfitVisual,
+  MarketEquilibriumVisual,
+  PriceElasticityVisual,
+} from "../../visuals/economics/EconomicsVisuals";
 import {
   GrowthVisual,
   QueueVisual,
@@ -67,12 +74,17 @@ const appearances: Record<
   "chemistry-dilution": BeakerVisual,
   "chemistry-conservation": MoleculeVisual,
   "chemistry-rate": ReactionCurveVisual,
+  "chemistry-titration": AcidBaseTitrationVisual,
+  "chemistry-gas-equilibrium": GasEquilibriumVisual,
   "dynamic-growth": GrowthVisual,
   "dynamic-traffic": TrafficVisual,
   "dynamic-queue": QueueVisual,
   "natural-diffusion": DiffusionHeatmap,
   "natural-predator-prey": PopulationGraph,
   "natural-plant-growth": PlantGrowthGraph,
+  "economics-market-equilibrium": MarketEquilibriumVisual,
+  "economics-price-elasticity": PriceElasticityVisual,
+  "economics-cost-and-profit": CostAndProfitVisual,
 };
 function PhysicalAppearance({ instance }: { instance: ModelInstance }) {
   if (instance.provider.endsWith("/Pendulum"))

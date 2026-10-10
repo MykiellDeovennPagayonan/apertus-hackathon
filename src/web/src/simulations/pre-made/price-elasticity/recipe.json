@@ -1,0 +1,361 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-price-elasticity",
+  "version": 1,
+  "title": "Price elasticity of demand",
+  "description": "How does price responsiveness determine consumer demand and maximize total revenue?",
+  "tags": ["economics", "price-elasticity", "lab"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/economics/PriceElasticity",
+        "version": 1,
+        "label": "Price elasticity",
+        "scope": "scope/lab",
+        "configuration": {
+          "chokePrice": 100,
+          "maxQuantity": 100,
+          "currentPrice": 50
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/economics-price-elasticity",
+        "version": 1,
+        "label": "Price elasticity scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/price",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Price ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Current price ($)",
+          "mode": "immediate",
+          "initial": "{\"value\": 50}",
+          "parameter": "value",
+          "step": 2,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/elasticity",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Point elasticity |Ed|",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Point elasticity |Ed|",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/revenue",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Total revenue ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Total revenue ($)",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/quantity",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Quantity demanded",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Quantity demanded",
+          "precision": 1
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/elasticity",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "elasticity"
+        },
+        "to": {
+          "node": "result/elasticity",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/revenue",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "totalRevenue"
+        },
+        "to": {
+          "node": "result/revenue",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/quantity",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "currentQuantity"
+        },
+        "to": {
+          "node": "result/quantity",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/price",
+        "kind": "command",
+        "from": {
+          "node": "input/price",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "ECON_SET_PRICE"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Price elasticity"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/elasticity",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/elasticity"
+        },
+        {
+          "id": "layout/result/revenue",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/revenue"
+        },
+        {
+          "id": "layout/result/quantity",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/quantity"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Price setting",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/price",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/price"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Price elasticity of demand",
+      "instruction": "Adjust price along the demand curve. Observe how elasticity transitions from elastic to inelastic and peaks total revenue.",
+      "explanation": "Point price elasticity of demand measures percentage change in quantity over percentage change in price. Total revenue is maximized at unit elasticity."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 350
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 180
+        },
+        {
+          "id": "board/layout/result/elasticity",
+          "layoutId": "layout/result/elasticity",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/revenue",
+          "layoutId": "layout/result/revenue",
+          "rect": {
+            "x": 822,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/quantity",
+          "layoutId": "layout/result/quantity",
+          "rect": {
+            "x": 644,
+            "y": 126,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 252,
+            "width": 340,
+            "height": 180
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/appearance"],
+        ["board/layout/task"],
+        ["board/layout/result/elasticity", "board/layout/result/revenue"],
+        ["board/layout/result/quantity"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "currentPrice",
+      "node": "model",
+      "field": "currentPrice",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 500,
+        "unit": "$"
+      },
+      "default": 50
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/economics/PriceElasticity",
+      "version": 1
+    },
+    {
+      "id": "appearance/economics-price-elasticity",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Linear demand curve where elasticity continuously declines from infinity at choke price to zero at price zero.",
+    "Unit elasticity (|Ed|=1) achieves maximum revenue."
+  ],
+  "catalog": {
+    "icon": "📈",
+    "category": "economics",
+    "order": 12
+  }
+}

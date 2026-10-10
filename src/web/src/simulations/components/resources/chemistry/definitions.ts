@@ -55,4 +55,16 @@ export const chemistryDefaults = Object.freeze({
     activationEnergy: 40000,
     duration: 30,
   }),
+  titration: Object.freeze({
+    analyteVolume: 25,
+    acidConcentration: 0.1,
+    baseConcentration: 0.1,
+    titrantVolumeAdded: 0,
+  }),
+  gasEquilibrium: Object.freeze({
+    temperature: 298,
+    volume: 5,
+    initialN2O4: 1.0,
+    initialNO2: 0.0,
+  }),
 });

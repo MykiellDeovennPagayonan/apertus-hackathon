@@ -84,7 +84,9 @@ export function validateRecipe(r: CompositeRecipe) {
       r.catalog &&
       (typeof r.catalog.icon !== "string" ||
         !r.catalog.icon.trim() ||
-        !["physics", "mathematics"].includes(r.catalog.category) ||
+        !["physics", "mathematics", "chemistry", "economics"].includes(
+          r.catalog.category,
+        ) ||
         !Number.isInteger(r.catalog.order))
     )
       throw new Error("Invalid recipe catalog metadata");

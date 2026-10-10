@@ -94,7 +94,8 @@ const originalPaths = cp
     encoding: "utf8",
   })
   .trim()
-  .split("\n")
+  .split(/\r?\n/)
+  .map((p) => p.replace(/\\/g, "/"))
   .filter(Boolean);
 const componentRoot = path.join(web, "src/simulations/components");
 function inventory(dir) {
@@ -103,7 +104,7 @@ function inventory(dir) {
     .flatMap((e) =>
       e.isDirectory()
         ? inventory(path.join(dir, e.name))
-        : [path.relative(root, path.join(dir, e.name))],
+        : [path.relative(root, path.join(dir, e.name)).replace(/\\/g, "/")],
     );
 }
 const paths = [...new Set([...originalPaths, ...inventory(componentRoot)])]
@@ -174,6 +175,16 @@ const explicitOwners = new Map([
       "prefabs/chemistry/Dilution",
       "prefabs/chemistry/Conservation",
       "prefabs/chemistry/ReactionRate",
+      "prefabs/chemistry/AcidBaseTitration",
+      "prefabs/chemistry/GasEquilibrium",
+    ],
+  ],
+  [
+    "systems/economics/models.ts",
+    [
+      "prefabs/economics/MarketEquilibrium",
+      "prefabs/economics/PriceElasticity",
+      "prefabs/economics/CostAndProfit",
     ],
   ],
   [
@@ -224,6 +235,15 @@ function definitionOwners(source, text, symbol) {
       "appearance/chemistry-dilution",
       "appearance/chemistry-conservation",
       "appearance/chemistry-rate",
+      "appearance/chemistry-titration",
+      "appearance/chemistry-gas-equilibrium",
+    ])
+      ids.add(id);
+  if (relative.startsWith("visuals/economics/"))
+    for (const id of [
+      "appearance/economics-market-equilibrium",
+      "appearance/economics-price-elasticity",
+      "appearance/economics-cost-and-profit",
     ])
       ids.add(id);
   if (relative.startsWith("visuals/physical-systems/"))
@@ -255,6 +275,31 @@ function definitionOwners(source, text, symbol) {
       ["prefabs/chemistry/Conservation"],
     ],
     ["systems/chemistry/models.ts", "rate", ["prefabs/chemistry/ReactionRate"]],
+    [
+      "systems/chemistry/models.ts",
+      "titration",
+      ["prefabs/chemistry/AcidBaseTitration"],
+    ],
+    [
+      "systems/chemistry/models.ts",
+      "gasEquilibrium",
+      ["prefabs/chemistry/GasEquilibrium"],
+    ],
+    [
+      "systems/economics/models.ts",
+      "marketEquilibrium",
+      ["prefabs/economics/MarketEquilibrium"],
+    ],
+    [
+      "systems/economics/models.ts",
+      "priceElasticity",
+      ["prefabs/economics/PriceElasticity"],
+    ],
+    [
+      "systems/economics/models.ts",
+      "costAndProfit",
+      ["prefabs/economics/CostAndProfit"],
+    ],
     [
       "systems/physical-systems/models.ts",
       "pendulum",

@@ -1,3 +1,4 @@
+import { templateNames } from "../../../simulations/runtime/capabilities";
 import { listPremadeRecipes } from "../../../simulations/runtime/recipes/registry";
 import type { DemoType } from "../../../simulations/runtime/types";
 
@@ -11,15 +12,17 @@ const entries: Record<
   }
 > = {
   ...(Object.fromEntries(
-    listPremadeRecipes().map(({ slug, recipe }) => [
-      slug,
-      {
-        title: recipe.title,
-        description: recipe.description,
-        icon: recipe.catalog.icon,
-        parameters: {},
-      },
-    ]),
+    listPremadeRecipes()
+      .filter(({ slug }) => slug in templateNames)
+      .map(({ slug, recipe }) => [
+        slug,
+        {
+          title: recipe.title,
+          description: recipe.description,
+          icon: recipe.catalog.icon,
+          parameters: {},
+        },
+      ]),
   ) as Record<
     Exclude<DemoType, "assembly" | "gas" | "town">,
     {

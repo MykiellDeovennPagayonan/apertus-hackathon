@@ -198,7 +198,6 @@ export async function compose(
         return { ...tool, schema: { ...tool.schema, properties } };
       });
     }
-    const turnJsonSchema = buildTurnEnvelopeSchema(turnTools);
 
     const liveHandles = requiredLaya
       ? draft.document.nodes.map((n) => n.id)
@@ -228,11 +227,14 @@ export async function compose(
     const suggestions = suggestConnections(draft.document);
 
     const isCompositeBuilder =
-      request.active?.sessionId?.startsWith("builder-") ?? false;
+      (request.active?.sessionId?.startsWith("builder-") ?? false) ||
+      /\b(?:builder|composite|component)\b/i.test(request.prompt) ||
+      Boolean(request.requestId?.includes("builder")) ||
+      request.active == null;
 
     const contextData = {
       strategy,
-      allowedTools: turnTools,
+      allowedTools: [...new Set(turnTools.map((t) => t.tool))],
       requirements: Object.fromEntries(
         bucket
           .filter((c) => compositionRequirements[c.id])
@@ -297,10 +299,13 @@ export async function compose(
     ).length;
 
     const wantsMoreControls =
-      /\b(?:add|insert|include|create|provide|give)\b/i.test(request.prompt) &&
-      /\b(?:slider|control|input|dial|button)\b/i.test(request.prompt);
+      /\b(?:build|make|add|insert|include|create|provide|give|with)\b/i.test(
+        request.prompt,
+      ) && /\b(?:slider|control|input|dial|button)\b/i.test(request.prompt);
     const wantsMoreObservations =
-      /\b(?:add|insert|include|create|provide|give)\b/i.test(request.prompt) &&
+      /\b(?:build|make|add|insert|include|create|provide|give|with)\b/i.test(
+        request.prompt,
+      ) &&
       /\b(?:readout|observation|display|meter|graph|monitor)\b/i.test(
         request.prompt,
       );
@@ -370,6 +375,13 @@ export async function compose(
             )}\n\nChoose the next single tool operation to perform, or choose done if complete.`,
       },
     ];
+
+    const canFinish = !(
+      modelNodes.length === 0 ||
+      (wantsMoreControls && controlCount === 0) ||
+      (wantsMoreObservations && observationCount === 0)
+    );
+    const turnJsonSchema = buildTurnEnvelopeSchema(turnTools, canFinish);
 
     if (requiredLaya) budget.beginTurn();
     budget.trace?.("turn.start", {
@@ -473,24 +485,24 @@ export async function compose(
         turn++;
         continue;
       }
+      const missingRequestedControl =
+        wantsMoreControls && controlCount === 0;
+      const missingRequestedObservation =
+        wantsMoreObservations && observationCount === 0;
       if (
-        isCompositeBuilder &&
-        executedPayloads.size === 0 &&
-        (wantsMoreControls || wantsMoreObservations) &&
-        turn === 0
+        (missingRequestedControl || missingRequestedObservation) &&
+        turn < maxTurns - 1
       ) {
         lastReceipt = {
           operationId: "op_premature_done",
           draftRevision: draft.revision,
           handles: draft.handles,
           status: "rejected",
-          summary:
-            "User requested adding components; please perform add_control or add_observation before finishing.",
+          summary: `User requested ${missingRequestedControl ? "controls/sliders" : ""}${missingRequestedControl && missingRequestedObservation ? " and " : ""}${missingRequestedObservation ? "observations/readouts" : ""}; please add them before finishing.`,
           issues: [
             {
               code: "premature_done",
-              message:
-                "User requested adding components; please perform add_control or add_observation before finishing.",
+              message: `User requested ${missingRequestedControl ? "controls/sliders" : ""}${missingRequestedControl && missingRequestedObservation ? " and " : ""}${missingRequestedObservation ? "observations/readouts" : ""}; perform add_control or add_observation before finishing.`,
             },
           ],
         };
