@@ -56,7 +56,11 @@
     ".next-realistic-validation/types/**/*.ts",
     ".next-realistic-validation/dev/types/**/*.ts",
     ".next-realistic-build/types/**/*.ts",
-    ".next-realistic-build/dev/types/**/*.ts"
+    ".next-realistic-build/dev/types/**/*.ts",
+    ".next-science-validation/types/**/*.ts",
+    ".next-science-validation/dev/types/**/*.ts",
+    ".next-science-build/types/**/*.ts",
+    ".next-science-build/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

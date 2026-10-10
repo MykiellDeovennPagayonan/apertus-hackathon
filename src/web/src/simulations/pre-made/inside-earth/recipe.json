@@ -1,0 +1,419 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/inside-earth",
+  "version": 1,
+  "title": "Inside Earth",
+  "description": "Why does the lithosphere include more than the crust?",
+  "tags": [
+    "science",
+    "earth",
+    "exploration"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/science/InsideEarth",
+        "version": 1,
+        "label": "Inside Earth",
+        "scope": "scope/lab",
+        "configuration": {
+          "settings": {
+            "classification": 0,
+            "peel": 0
+          },
+          "seed": 17
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/science-earth",
+        "version": 1,
+        "label": "Explore the scene",
+        "scope": "scope/lab",
+        "configuration": {
+          "question": "Why does the lithosphere include more than the crust?"
+        }
+      },
+      {
+        "id": "conditions",
+        "definition": "controls/science-earth",
+        "version": 1,
+        "label": "Explore a view",
+        "scope": "scope/lab",
+        "configuration": {
+          "panel": "conditions"
+        }
+      },
+      {
+        "id": "observations",
+        "definition": "displays/ScienceObservations",
+        "version": 1,
+        "label": "What you can see",
+        "scope": "scope/lab",
+        "configuration": {
+          "panel": "observations"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/conditions/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "conditions",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/observations/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "observations",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_EARTH_STEP",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_EARTH_STEP"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_EARTH_STEP"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_EARTH_PLAY",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_EARTH_PLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_EARTH_PLAY"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_EARTH_PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_EARTH_PAUSE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_EARTH_PAUSE"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_EARTH_SET",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_EARTH_SET"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_EARTH_SET"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_EARTH_SELECT",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_EARTH_SELECT"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_EARTH_SELECT"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_EARTH_SPEED",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_EARTH_SPEED"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_EARTH_SPEED"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_EARTH_OVERLAY",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_EARTH_OVERLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_EARTH_OVERLAY"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_EARTH_BASELINE",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_EARTH_BASELINE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_EARTH_BASELINE"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_EARTH_SET_CLASSIFICATION",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_EARTH_SET_CLASSIFICATION"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_EARTH_SET_CLASSIFICATION"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_EARTH_SET_PEEL",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_EARTH_SET_PEEL"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_EARTH_SET_PEEL"
+        }
+      },
+      {
+        "id": "link/conditions/RESET",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "RESET"
+        },
+        "to": {
+          "node": "model",
+          "port": "RESET"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_EARTH_RESTART",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_EARTH_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_EARTH_RESTART"
+        }
+      },
+      {
+        "id": "link/observations/SELECT",
+        "kind": "command",
+        "from": {
+          "node": "observations",
+          "port": "SELECT"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_EARTH_SELECT"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Inside Earth"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/conditions",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "conditions"
+        },
+        {
+          "id": "layout/observations",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "observations"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Inside Earth",
+      "instruction": "Select a layer in the cutaway.",
+      "explanation": "Crust thickness is exaggerated for readability. Depth bands are approximate teaching references. Mantle is predominantly solid and deforms over geological time. Outer core is liquid; inner core is solid. Tracer follows a prescribed schematic circulation field, not a geodynamic solver. One circulation cell does not alone drive a plate."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 880,
+            "height": 580
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 340
+        },
+        {
+          "id": "board/conditions",
+          "layoutId": "layout/conditions",
+          "rect": {
+            "x": 916,
+            "y": 30,
+            "width": 300,
+            "height": 130
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 130
+        },
+        {
+          "id": "board/observations",
+          "layoutId": "layout/observations",
+          "rect": {
+            "x": 916,
+            "y": 188,
+            "width": 300,
+            "height": 380
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 380
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -32,
+        "y": -28,
+        "width": 1280,
+        "height": 664
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "learnerArea": {
+        "x": -32,
+        "y": -28,
+        "width": 1280,
+        "height": 664
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/appearance"
+        ],
+        [
+          "board/conditions"
+        ],
+        [
+          "board/observations"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/science/InsideEarth",
+      "version": 1
+    },
+    {
+      "id": "appearance/science-earth",
+      "version": 1
+    },
+    {
+      "id": "controls/science-earth",
+      "version": 1
+    },
+    {
+      "id": "displays/ScienceObservations",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Crust thickness is exaggerated for readability. Depth bands are approximate teaching references.",
+    "Mantle is predominantly solid and deforms over geological time. Outer core is liquid; inner core is solid.",
+    "Tracer follows a prescribed schematic circulation field, not a geodynamic solver. One circulation cell does not alone drive a plate."
+  ],
+  "catalog": {
+    "icon": "\u25ce",
+    "category": "science",
+    "order": 25
+  }
+}

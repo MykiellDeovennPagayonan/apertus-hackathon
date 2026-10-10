@@ -119,12 +119,27 @@ export async function focusedTurn(
       example.label = `${labelPrefix} ${description ?? "control"}`;
     }
   }
+  const fieldContract =
+    single &&
+    tools[0].tool === "add_control" &&
+    tools[0].schema.type === "object"
+      ? tools[0].schema.properties.field
+      : undefined;
+  const fieldInstruction =
+    fieldContract?.type === "enum"
+      ? ` For add_control, field MUST be one of ${JSON.stringify(fieldContract.values)}. Field is the command argument path, not the model setting name. Copy that literal exactly.`
+      : "";
+  const scienceInstruction = contextNodes.some((node) =>
+    node.definition.startsWith("prefabs/science/"),
+  )
+    ? " For a science lesson, write the lesson instruction as one concise learning question specific to the user's investigation. A science appearance may override it with its editable question field (maximum 180 characters). Choose only condition controls needed for that investigation; retain trusted scientific feedback from model outputs."
+    : "";
   const request = await requestStructured<ToolRequest>(
     [
       {
         role: "system",
         content: single
-          ? `You provide arguments for the ${tools[0].tool} authoring tool. Return ONLY the argument object matching the schema. The root keys are the parameter names, not argumentSchema or action. Return values, NEVER a schema. Preserve explicit user values; omitted configuration overrides may be {} to keep registered defaults. The application allocates insertion aliases. Copy target IDs and command names exactly. Use concise labels without repeating units that controls already display. When controlLabelPrefix is supplied, the label MUST start with that exact prefix so independent sources remain identifiable. For repeated model instances, include the supplied instance label in each control label. Labels must respect contract units. Keep lesson instruction under 500 characters and explanation under 1500 characters. Follow the supplied fidelity facts; do not invent outputs, effects or instructions. For arrange, use a scene-with-sidebar layout and put appearances in main, controls in controls, and observations in results; never assign the same node to several roles.`
+          ? `You provide arguments for the ${tools[0].tool} authoring tool. Return ONLY the argument object matching the schema. The root keys are the parameter names, not argumentSchema or action. Return values, NEVER a schema. Preserve explicit user values; omitted configuration overrides may be {} to keep registered defaults. The application allocates insertion aliases. Copy target IDs and command names exactly. Use concise labels without repeating units that controls already display. When controlLabelPrefix is supplied, the label MUST start with that exact prefix so independent sources remain identifiable. For repeated model instances, include the supplied instance label in each control label. Labels must respect contract units. Keep lesson title under 80 characters and use a concise topic name. Keep lesson instruction under 500 characters and explanation under 1500 characters. Follow the supplied fidelity facts; do not invent outputs, effects or instructions. For arrange, use a scene-with-sidebar layout and put appearances in main, controls in controls, and observations in results; never assign the same node to several roles.${fieldInstruction}${scienceInstruction}`
           : "Choose one listed legal authoring candidate. Return ONLY {candidate,arguments}; arguments must match that candidate's schema. Copy IDs and port names exactly. Connect distinct source instances when combining two signals.",
       },
       {
@@ -223,7 +238,7 @@ export async function focusedTurn(
         throw new Error(`Control label must begin with "${labelPrefix}"`);
       return { tool: tools[index].tool, arguments: args } as ToolRequest;
     },
-    "Return ONLY a values object using the root keys in exampleResponse. NEVER return a schema, argumentSchema, or tool wrapper. No changes have been executed.",
+    `Return ONLY a values object using the root keys in exampleResponse. NEVER return a schema, argumentSchema, or tool wrapper. No changes have been executed.${fieldInstruction}${scienceInstruction}`,
     budget.signal,
     {
       budget,

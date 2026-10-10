@@ -94,23 +94,44 @@ if (process.argv.includes("--capture")) {
   // while admitting only these explicit additions; never recapture the baseline.
   // Implementation 022 adds four authored systems. Verify the historical catalog
   // in isolation so approved additions cannot displace old top-12 retrieval cards.
+  // Implementation 023 explicitly admits nine science models, their views and controls.
+  // Historical hashes remain unchanged; the science suite checks new contracts.
   // Their own contracts and real round trips are covered by test:systems/test:recipes.
   const newSlugs = new Set([
     "nutrient-limitation",
     "craft-production",
     "wildfire",
     "food-web",
+    "cell-division",
+    "immune-defense",
+    "genome-to-organism",
+    "pollination-network",
+    "invasive-species",
+    "inside-earth",
+    "plate-boundaries",
+    "volcano-life-cycle",
+    "water-cycle",
   ]);
   const newModels = assemblyModels.filter((m) =>
-    ["ecology", "social-systems"].includes(m.ref.split("/")[1]),
+    ["ecology", "social-systems", "science"].includes(m.ref.split("/")[1]),
   );
-  assert.equal(newModels.length, 4);
+  assert.equal(
+    newModels.filter((m) => m.ref.startsWith("prefabs/science/")).length,
+    9,
+  );
+  assert.equal(newModels.length, 13);
   const newIds = newModels.flatMap((m) => [
     m.ref,
     `appearance/${m.presentation}`,
     `resources/${m.ref.replaceAll("/", "-")}`,
   ]);
-  newIds.push("controls/FoodWebPopulation");
+  newIds.push(
+    "controls/FoodWebPopulation",
+    "displays/ScienceObservations",
+    ...newModels
+      .filter((m) => m.ref.startsWith("prefabs/science/"))
+      .map((m) => `controls/${m.presentation}`),
+  );
   const restored = new Map(newIds.map((id) => [id, publicDefinitions.get(id)]));
   const allRecipes = registry.listPremadeRecipes;
   const historicalRecipes = allRecipes().filter(
@@ -153,9 +174,19 @@ if (process.argv.includes("--capture")) {
   );
   for (const id of appearances) {
     const definition = publicDefinitions.get(id);
-    assert.deepEqual(definition.lifecycle.authored, [], id);
+    if (id.startsWith("appearance/science-")) {
+      assert.deepEqual(definition.lifecycle.authored, ["question"], id);
+      assert.deepEqual(
+        Object.keys(definition.configuration.properties),
+        ["question"],
+        id,
+      );
+      assert.equal(definition.configuration.properties.question.maxLength, 180);
+    } else {
+      assert.deepEqual(definition.lifecycle.authored, [], id);
+      assert.deepEqual(definition.configuration.properties, {}, id);
+    }
     assert.deepEqual(definition.lifecycle.presentation, [], id);
-    assert.deepEqual(definition.configuration.properties, {}, id);
   }
   // Each appearance owns its lifecycle metadata, even when initialized from the same factory.
   const first = publicDefinitions.get(appearances[0]);

@@ -17,6 +17,7 @@ import {
   resourceDefinitions,
 } from "./learningModels";
 import { operationDefinitions } from "./operations";
+import { scienceDefinitions } from "./science";
 import { spatialDefinitions } from "./spatial";
 
 /** Data-only definitions; executable legacy implementations are adapted in runtime/authoring/providers. */
@@ -29,6 +30,7 @@ function register(definition: PublicDefinition) {
 for (const d of [
   ...genericDefinitions,
   ...ecologyControlDefinitions,
+  ...scienceDefinitions,
   ...agentDefinitions,
   ...explorationDefinitions,
   ...authoringDefinitions,
@@ -151,7 +153,7 @@ for (const m of assemblyModels) {
     title: m.name,
     description: m.description,
     category: "models",
-    tags: [m.ref.split("/")[1], m.presentation],
+    tags: [m.ref.split("/")[1], m.presentation, ...(m.tags ?? [])],
     configuration: m.parameters,
     defaults: m.defaults,
     inputs: {},
@@ -165,6 +167,7 @@ for (const m of assemblyModels) {
               ? "grid"
               : "value",
           unit: o.unit,
+          ...(o.schema ? { schema: o.schema } : {}),
           crossScope: true,
         } as Port,
       ]),
@@ -216,14 +219,18 @@ for (const m of assemblyModels) {
     description: `Display an attached ${m.name} model snapshot`,
     category: "appearance",
     tags: [m.ref.split("/")[1]],
-    configuration: object({}),
+    configuration: m.ref.startsWith("prefabs/science/")
+      ? object({ question: { type: "string", minLength: 0, maxLength: 180 } }, [
+          "question",
+        ])
+      : object({}),
     defaults: {},
     inputs: { model: { kind: "attachment", unit: m.ref } },
     outputs: {},
     commands: {},
     placement: ["lesson"],
     lifecycle: {
-      authored: [],
+      authored: m.ref.startsWith("prefabs/science/") ? ["question"] : [],
       presentation: [],
       clock: false,
       reset: "authored",

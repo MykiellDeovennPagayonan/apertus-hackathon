@@ -1,8 +1,17 @@
 # Nine science simulations: implementation plan and desktop UX acceptance loop
 
-Date: 2026-10-10  
-Status: **Plan only. The nine simulations, new verification commands, live runs, and screenshots described here are deliverables to implement and verify.**  
+Date: 2026-10-10
+Status: **Nine simulations implemented; deterministic and production desktop checks pass. Reliable real-model composition and user acceptance remain incomplete.** See [current implementation and evidence](#current-implementation-and-evidence). The requirements below remain the acceptance contract, not a claim that every gate has passed.
 Scope: SCI-01 through SCI-09; shared learner and builder experiences; actual Apertus/Laya composition; desktop-first visual and interaction review.
+
+This is the single record for 023. Requirements remain below; implementation notes and evidence follow them. Earlier reports have been merged into the history sections rather than kept as separate documents.
+
+- [Requirements and acceptance contract](#1-source-contracts-and-priority)
+- [Current implementation, checks, and remaining limits](#current-implementation-and-evidence)
+- [Current screenshots](#current-screenshot-review)
+- [Historical implementation evidence](#historical-implementation-evidence)
+- [Historical redesign round 1](#historical-redesign-round-1)
+- [Historical screenshot review](#historical-screenshot-review)
 
 ## 1. Source contracts and priority
 
@@ -376,16 +385,447 @@ Run existing browser regressions for affected shared controls/board/generation h
 
 ## 9. Definition of done and report
 
-- [ ] All nine populated, scientifically bounded lessons are ordinary editable JSON recipes.
-- [ ] Their trusted models pass core invariants, seeded replay where applicable, reset, invalid-action, and independent-instance checks.
+Checked items reflect verified implementation. Combined UX, zoom, real-provider, and MCP gates stay open where evidence is incomplete.
+
+- [x] All nine populated, scientifically bounded lessons are ordinary editable JSON recipes.
+- [x] Their trusted models pass core invariants, seeded replay where applicable, reset, invalid-action, and independent-instance checks.
 - [ ] Consistent controls, spacing, typography, values, labels, inspection, and states work in learner and builder hosts.
-- [ ] Every desktop outcome task is independently operable in agent review, with visible and explainable consequences.
+- [x] Every desktop outcome task is independently operable in agent review, with visible and explainable consequences.
 - [ ] Keyboard, reduced motion, short viewport, and zoom retain access to essential content.
-- [ ] Save/export/reopen/remix/Try lesson preserve authored composition and supported behavior.
+- [x] Save/export/reopen/remix/Try lesson preserve authored composition and supported behavior.
 - [ ] A final frozen 27-attempt batch records actual Apertus and Laya use, all failures/repairs, accepted exports, and per-lesson results.
 - [ ] Playwright MCP screenshots have been opened, analyzed, linked to findings, and recaptured after fixes.
 - [ ] All required criteria pass per lesson, with no unresolved blocking/major findings or missing mandatory evidence.
 - [ ] A cross-lesson consistency review and affected shared-component regressions pass.
-- [ ] Final checks, scientific assumptions, minor issues, and testing limits are recorded honestly in `023-IMPLEMENTATION-EVIDENCE.md`.
+- [x] Final checks, scientific assumptions, minor issues, and testing limits are recorded honestly in [the current evidence section](#current-implementation-and-evidence).
 
 The final report leads with what was delivered and the remaining limitations, links to the evidence manifest and screenshots, summarizes actual live-provider results and UX corrections, and gives rerun commands. Do not replace evidence with “looks good,” “intuitive,” or a promise of user satisfaction.
+
+
+<a id="current-implementation-and-evidence"></a>
+
+## 10. Current implementation and evidence
+
+This iteration addresses the code review of `learnerPresentation.ts` and the missing investigation controls. Implementation and deterministic checks pass. User acceptance and reliable real-model generation remain separate gates.
+
+### Changes
+
+- Removed the hardcoded `learnerQuestions` map. A science appearance has an editable `question` configuration field, limited to 180 characters. Without an override, it displays the recipe's lesson instruction. The planner is instructed to author a question specific to the requested investigation. Saving, reopening, Remix, and Try lesson preserve it.
+- Kept model-state captions in trusted code. These describe accepted scientific states; they do not match or interpret the learner's wording. Fixed educational narration and arbitrary prompt understanding serve different purposes.
+- Restored condition controls for all nine lessons. A task button opens a native dialog with one condition editor at a time, precise numeric entry where applicable, and explicit restart actions. Optional authored `fields` restrict the dialog to the conditions needed for a lesson. Every action follows declared command bindings.
+- Added restart-with-current-conditions as a model command. Authored reset still restores authored conditions and clears retained results. Baseline comparisons preserve their snapshots, show both accepted scenes, and flag unequal seeds/time, multiple changed conditions, and differing antigen-specific memory. Matching time/seed alone is not a claim that all histories are scientifically equivalent.
+- Implemented distinct observation, inspection, and comparison panel configurations. Interactive scene objects now inspect the trusted model in all nine scenes; baseline scenes remain read-only.
+- Broadened science discovery vocabulary and added 27 varied prompts plus unrelated negative cases. These are retrieval tests, not proof of successful AI composition. No full-prompt lookup, confidence bypass, or silent template substitution was introduced.
+- Corrected live browser checks to compare an inspector's output text rather than its entire card. An untouched accepted immune recipe was replayed successfully against the trusted runtime after this correction.
+- Replaced the live harness's source fingerprint. The old command resolved `src/web` relative to a caller already inside `src/web`, producing the SHA-256 of empty input. It did **not** prove a frozen batch. The replacement resolves the repository root explicitly and hashes tracked and untracked nonignored web file contents, including staged edits and deletions. It checks before and after every attempt and stops if sources change. Regression checks exercise each of those cases.
+
+### Verified
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| Full repository web test suite | Pass | `pnpm --dir src/web test`; includes protected historical markup, Gas, contracts, and science checks |
+| TypeScript | Pass | `pnpm --dir src/web exec tsc --noEmit` |
+| Production build | Pass | `.next-science-audit`; `next build --webpack` |
+| Authored questions, capture/reopen, fallback, configured panels, baseline isolation | Pass | `scripts/domains/science/verify-presentation.cjs` |
+| Varied vocabulary retrieval | 27/27 pass | With and without inferred intent; unrelated cases exclude science |
+| Production opening, keyboard/dialog focus, four desktop sizes, Remix and Try lesson | 9/9 pass | [Browser report](023-validation/improvements-production-browser-final/report.json) |
+| Production scientific outcomes through learner controls | 9/9 pass | [Outcome report](023-validation/improvements-production-outcomes/report.json) |
+| Real Apertus/Laya varied wording | 8/27 end-to-end pass; 9/27 API accepted; focused water follow-up 1/1 pass | [Report](023-validation/improvements-paraphrases-2/report.json), [frozen-source receipt](023-validation/improvements-paraphrases-2/completion.json) |
+
+The outcome tasks include chromosome separation errors, matched/unmatched immune memory, parental provenance and mutation/environment, shorter bloom overlap, removal/barriers/restoration, mechanical Earth layers and mantle tracer, all five plate boundaries, effusive/explosive deposits, and matched paving/rainfall comparisons. Numeric invalid drafts preserve the accepted state; multiple changed conditions produce a warning.
+
+Screenshots of all nine opening scenes were visually inspected in this iteration. The comparison dialog intentionally scrolls to show its full evidence; opening learner cards do not require internal scrolling. Automated geometry checks are not user acceptance.
+
+### Real-model wording results
+
+The `generated-*.png` screenshots show **separate AI-generated recipes imported for validation**, not replacements for the authored premades. For example, `improvements-water-inspection-replay/` uses the generated question “How does water move from clouds to soil and groundwater?” with two sliders and three output cards. The authored Water Cycle keeps its large scene, “Compare watersheds” dialog, and “Follow the water” action. Generated layouts can still be more cluttered; functional passes do not establish design acceptance.
+
+
+The complete varied-wording batch recorded **27 fresh attempts: 8 end-to-end passes and 19 failures**. Nine API requests produced accepted recipes. Sixteen failed the required-Laya selection gate; two failed Apertus argument validation (one control label and one oversized intent-concepts list). The ninth accepted recipe failed browser inspection because the water scene lacked selectable objects.
+
+That browser failure exposed a real UI defect, not a reason to relax the harness. Water now has keyboard/click targets for the cloud, surface water, soil moisture, groundwater, river, and tracer, bound to their actual model identities. A regression check requires an interactive object in every science scene and no interactive objects in read-only comparison scenes. The full batch report is retained unchanged; a later replay does not turn an earlier failure into a fresh successful inference.
+
+| Lesson | API accepted | Initial generation + browser pass |
+| --- | --- | --- |
+| cell-division | 0/3 | 0/3 |
+| immune-defense | 2/3 | 2/3 |
+| genome-to-organism | 1/3 | 1/3 |
+| pollination-network | 2/3 | 2/3 |
+| invasive-species | 1/3 | 1/3 |
+| inside-earth | 1/3 | 1/3 |
+| plate-boundaries | 0/3 | 0/3 |
+| volcano-life-cycle | 1/3 | 1/3 |
+| water-cycle | 1/3 | 0/3 |
+
+The batch started and ended with fingerprint `6cd9741d808645180ff834d7b8fcc733224117860d75188f151b8f13ba9550e5`. It predates the final water inspection correction. Provider selection and argument failures remain unresolved; this does not meet the original live acceptance requirement.
+
+After the water correction, [one fresh real-provider request](023-validation/improvements-water-followup/report.json) for `water-cycle-paraphrase-3` passed generation, stepping, trusted-output agreement, keyboard inspection, and the alternate viewport check. Its [completion receipt](023-validation/improvements-water-followup/completion.json) proves unchanged sources for that focused run. This is an additional 1/1 check, not a replacement 27-attempt batch or a repair of the unresolved selection/argument failures.
+
+The eight passing accepted exports were [replayed unchanged in both motion preferences](023-validation/replay-1791612668989/report.json): 16/16 checks passed. The original accepted water export that exposed the defect also [replayed successfully in both preferences](023-validation/improvements-water-inspection-replay/report.json) after the correction. These are browser replays, not additional inference attempts.
+
+### Remaining acceptance limits
+
+The real-model batch exercises the unchanged required-Laya gate and actual local Apertus composition. Accepted exports receive browser state/output/inspection smoke checks. Those smoke checks do not prove that generated controls fully support every requested learning goal. Earlier accepted generated lessons still used more generic controls and observation panels than the curated lessons.
+
+The wording failures in the complete batch include Laya rejection of supported topics and invalid Apertus labels or intent arguments. Retrieval success cannot fix those later stages by itself. They must remain visible in the report rather than being counted as successful generation.
+
+Historical batches remain available, but their empty fingerprints cannot establish source stability. `improvements-paraphrases-1` was stopped while incomplete and cannot be used as final acceptance evidence. Historical raw responses and model receipts still record actual attempts.
+
+Standalone Playwright is used. Playwright MCP, actual 200% browser zoom, dedicated mobile polish, and user UX acceptance remain unverified. The original requirement for three complete fresh rounds across all nine canonical prompts is not satisfied by one varied-wording batch.
+
+### Repeat
+
+From `src/web`, with the actual local services and required-Laya development server running:
+
+```sh
+pnpm test:science
+pnpm test
+pnpm exec tsc --noEmit
+UX_TEST_URL=http://127.0.0.1:43112 SCIENCE_EVIDENCE_DIR=../../docs/agent-only/implementation/023-validation/<new-browser-directory> node scripts/domains/science/redesign-browser.cjs
+UX_TEST_URL=http://127.0.0.1:43112 SCIENCE_TASK_EVIDENCE_DIR=../../docs/agent-only/implementation/023-validation/<new-outcome-directory> pnpm test:science:tasks
+UX_TEST_URL=http://127.0.0.1:43113 GENERATION_EVIDENCE_DIR=../../docs/agent-only/implementation/023-validation/<new-frozen-directory> pnpm test:science:paraphrases:live
+```
+
+Keep application and harness sources unchanged throughout a live batch. Evidence directories are ignored by Git; the scripts and this record are repeatable, but raw local receipts/screenshots must be retained separately for sharing.
+
+
+<a id="current-screenshot-review"></a>
+
+## 11. Current screenshot review
+
+User UX acceptance remains pending. Open [the current production review app](http://127.0.0.1:43112/experiments).
+
+
+| Lesson | Production opening | Scientific outcome |
+| --- | --- | --- |
+| Cell division | [Opening](023-validation/improvements-production-browser-final/cell-division-opening-1440x900.png) | [Separation error](023-validation/improvements-production-outcomes/cell-division-unequal-daughters.png) |
+| Immune defense | [Opening](023-validation/improvements-production-browser-final/immune-defense-opening-1440x900.png) | [Memory comparison](023-validation/improvements-production-outcomes/immune-defense-matched-memory.png) |
+| Genome to organism | [Opening](023-validation/improvements-production-browser-final/genome-to-organism-opening-1440x900.png) | [Inheritance](023-validation/improvements-production-outcomes/genome-to-organism-chromosome-provenance.png) |
+| Pollination network | [Opening](023-validation/improvements-production-browser-final/pollination-network-opening-1440x900.png) | [Bloom comparison](023-validation/improvements-production-outcomes/pollination-network-bloom-comparison.png) |
+| Invasive species | [Opening](023-validation/improvements-production-browser-final/invasive-species-opening-1440x900.png) | [Control and restoration](023-validation/improvements-production-outcomes/invasive-species-control-and-restoration.png) |
+| Inside Earth | [Opening](023-validation/improvements-production-browser-final/inside-earth-opening-1440x900.png) | [Layers and tracer](023-validation/improvements-production-outcomes/inside-earth-mechanical-layers-and-tracer.png) |
+| Plate boundaries | [Opening](023-validation/improvements-production-browser-final/plate-boundaries-opening-1440x900.png) | [Alternate boundary](023-validation/improvements-production-outcomes/plate-boundaries-boundary-4.png) |
+| Volcano life cycle | [Opening](023-validation/improvements-production-browser-final/volcano-life-cycle-opening-1440x900.png) | [Eruption comparison](023-validation/improvements-production-outcomes/volcano-life-cycle-eruption-comparison.png) |
+| Water cycle | [Opening](023-validation/improvements-production-browser-final/water-cycle-opening-1440x900.png) | [Matched paving comparison](023-validation/improvements-production-outcomes/water-cycle-matched-paving-comparison.png) |
+
+
+<a id="historical-implementation-evidence"></a>
+
+## 12. Historical implementation evidence
+
+This record describes an earlier iteration. Its status, ports, commands, and screenshots are historical; use the current implementation section for the latest results.
+
+<details>
+<summary>Earlier notes and evidence</summary>
+
+Implementation date: 2026-10-10. See [the implementation plan](023-NINE-SCIENCE-SIMULATIONS.md) and [screenshot review](#current-screenshot-review).
+
+### What is implemented
+
+Nine independent, editable, ordinary JSON recipes now use the shared catalog, runtime, spatial board, and builder. Scenes, conditions, playback, inspection, and observations are separate components with explicit bindings. The protected Gas implementation is unchanged.
+
+| Lesson | Route | Main scientific feedback |
+| --- | --- | --- |
+| Cell division | `/experiments?experiment=cell-division` | Stable chromosome identity, DNA versus chromosome counts, normal/error daughter allocation |
+| Immune defense | `/experiments?experiment=immune-defense` | Innate/adaptive timing, antigen identity, binding versus clearance, matching/unmatched memory |
+| Genome to organism | `/experiments?experiment=genome-to-organism` | Three diploid loci, parental homolog provenance, crossover, explicit germline mutation, environment-dependent expression |
+| Pollination network | `/experiments?experiment=pollination-network` | Flowering windows, finite donor pollen, compatible transfer, delayed fertilization/fruit |
+| Invasive species | `/experiments?experiment=invasive-species` | 24 inspectable patches, recorded propagule sources, barriers, removal policy, restoration, finite effort |
+| Inside Earth | `/experiments?experiment=inside-earth` | Compositional/mechanical layers, solid mantle, liquid outer core, prescribed mantle tracer |
+| Plate boundaries | `/experiments?experiment=plate-boundaries` | Five presets, coordinated surface/cross-section, appropriate slab/arc/ridge/mountain/offset features |
+| Volcano life cycle | `/experiments?experiment=volcano-life-cycle` | Effusive/explosive presets, finite magma reservoir and supply/outflow accounting |
+| Water cycle | `/experiments?experiment=water-cycle` | Surface/soil/groundwater/atmosphere/channel stores, active tracer paths, open watershed budget |
+
+### UX decisions and refinements
+
+- One visible learning question, a large scene, a small conditions panel, consistent playback, selected-object inspection, and causal observations.
+- Shared spacing and warm colors; explicit selection outlines, keyboard object selectors, visible focus, and generous control targets measured at desktop board scale.
+- Precise numeric entry and sliders share accepted values. Incomplete numeric drafts preserve the model and offer Escape recovery. No native number spinners.
+- Advanced conditions use a native modal instead of expanding a learner card into the floating workspace controls. Restart settings have an explicit Apply and restart action.
+- Retained baselines keep an isolated state, settings, seed, metrics, and horizon. The comparison dialog displays both scenes and marks unequal horizons and changed conditions.
+- Reduced motion preserves explicit stepping. Playback is unavailable under reduced motion; the shared host owns animation.
+- Inspections name objects and explain their state and cause. Genome parent edits preserve existing descendants; flower appearance reflects bloom availability.
+- Scene host sizing, desktop layout, action labels, output schemas, discovery vocabulary, and accepted generic-control values were corrected during review.
+
+### Verification status
+
+Final results are being consolidated here. Raw evidence is intentionally ignored by Git under `023-validation/`; it remains available locally for review. Test scripts are tracked and repeatable.
+
+**Playwright MCP: not tested.** This session exposes no Playwright MCP tools. Screenshots and browser checks use the installed standalone Playwright package. They do not satisfy or impersonate the explicitly requested MCP gate.
+
+### Repeatable commands
+
+From the repository root:
+
+```sh
+pnpm --dir src/web test:science
+pnpm --dir src/web test
+pnpm --dir src/web exec tsc --noEmit
+APERTUS_BROWSER_TEST_DIR=.next-science-build pnpm --dir src/web exec next build --webpack
+
+UX_TEST_URL=http://127.0.0.1:43111 \
+SCIENCE_EVIDENCE_DIR=docs/agent-only/implementation/023-validation/desktop-<new-iteration> \
+pnpm --dir src/web test:science:browser
+
+UX_TEST_URL=http://127.0.0.1:43111 \
+SCIENCE_TASK_EVIDENCE_DIR=docs/agent-only/implementation/023-validation/outcomes-<new-iteration> \
+pnpm --dir src/web test:science:tasks
+
+UX_TEST_URL=http://127.0.0.1:43110 GENERATION_RUNS=3 \
+GENERATION_EVIDENCE_DIR=docs/agent-only/implementation/023-validation/live-<new-frozen-batch> \
+pnpm --dir src/web test:science:live
+
+UX_TEST_URL=http://127.0.0.1:43111 \
+pnpm --dir src/web test:science:replay --batch \
+docs/agent-only/implementation/023-validation/live-<accepted-batch>
+```
+
+Use the actual local services and the server environment specified in plan section 6.1. The actual model IDs used here are `m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4` and `aac6fef/laya-multilingual-mlx`.
+
+Keep planner diagnostics on the local development server. Production intentionally returns 404 for `/api/planner-diagnostics`, even with the environment flag enabled. The production attempt in `live-final-1` was retained and stopped because its provider receipts could not be read; it cannot pass the proof-of-provider gate. The final live batch uses port 43110, while production screenshot review uses 43111.
+
+### Review loop
+
+1. Keep both actual model services running; freeze application and test sources for a complete live batch.
+2. Run model/recipe regression checks and a production build.
+3. Capture and inspect all nine opening/changed states at 1440×900, 1280×800, 1920×1080, and 1366×768. Check target sizes, overflow, scrolling, and floating-tool collisions.
+4. Exercise invalid drafts, selection, setup/Escape, baseline/reset, keyboard, reduced motion, export/reopen, Remix, and the actual Try lesson button.
+5. Run the scientific outcome tasks and inspect alternate-state screenshots.
+6. Run three complete rounds of fresh real-provider generation, preserving every attempt, response, diagnostic trace, accepted recipe, browser trace, and screenshot. Missing provider proof or unusable required controls fails an attempt.
+7. Replay untouched accepted exports at alternate viewports and motion preferences; replay is not fresh model inference.
+8. Fix blocking findings in the model, shared host, declared control metadata, or authored layout. Retain old evidence. Repeat affected checks and run a fresh complete live batch after any generation/layout change.
+9. Run Playwright MCP review when that capability is available. Keep that gate pending until real MCP captures exist.
+
+### Scientific limits
+
+These are bounded educational models, with visible assumptions rather than real-world predictions. The genome is fictional and partial; sequences are illustrative. Earth flow and plate motion are prescribed schematic kinematics. Immune timing and actor counts are compressed. Volcano behavior is not a hazard forecast. The tracer represents an illustrative path and does not replace the watershed volume budget. Model receipts and successful repeated prompts do not guarantee success on every future prompt.
+
+</details>
+
+
+<a id="historical-redesign-round-1"></a>
+
+## 13. Historical redesign round 1
+
+This record describes an earlier iteration. Its status, ports, commands, and screenshots are historical; use the current implementation section for the latest results.
+
+<details>
+<summary>Earlier notes and evidence</summary>
+
+Date: 2026-10-10
+Status: implemented first design round; awaiting the user’s opinion before a second round.
+Requirement: [IMPORTANT](IMPORTANT.md).
+
+Open the [local review app](http://127.0.0.1:43111/experiments). The screenshots below show the actual production app at 1440×900, with normal motion preferences. They are unmodified captures from standalone Playwright. **Playwright MCP was unavailable; no MCP verification is claimed.**
+
+### What changed
+
+The repeated conditions/playback/inspection/metrics dashboard has been removed from the nine premades. Each now has a subject-specific flow, a larger teaching visual, and one short contextual explanation. Opening views have one or two lesson form/action controls, with direct selection of meaningful scene objects where appropriate. Shared workspace navigation remains separate from those lesson controls.
+
+Advanced model capabilities and scientific calculations remain available internally and through authoring; they do not automatically become learner controls. The simulations remain ordinary editable recipes with independent scene, explanation, and action components.
+
+### Verification and limits
+
+- All nine opening views and meaningful changed states passed the new browser checks.
+- All nine passed desktop geometry checks at 1440×900, 1280×800, and 1366×768: readable scene size, controls at least 44px within measurement tolerance, no obstructed action centers, and no internally clipped board content.
+- All nine passed native Remix in builder → Try lesson → interaction checks.
+- Keyboard layer/object selection, preset restart, contextual removal, and the first/repeat immune challenge passed. Explicit plate playback paused correctly. Immune playback also paused correctly and cleared the first challenge in 10 steps and the matching repeat in 6.
+- The full regression suite passed. After final polish, science invariants, recipe/save/reopen checks, and the production build passed again.
+- These checks establish functioning interactions; they do not establish the user’s design approval. The next design round is deliberately waiting for feedback.
+- This round reviews the nine authored premades. It does not claim a fresh nine-prompt Apertus/Laya generation batch or that every generated recipe has passed the new simplicity review. The earlier live-generation evidence remains separate.
+
+[Browser report](023-validation/redesign-round-1/report.json) · [Immune playback evidence](023-validation/redesign-round-1/immune-playback.json)
+
+Repeat the review with:
+
+```sh
+UX_TEST_URL=http://127.0.0.1:43111 pnpm --dir src/web test:science:browser
+pnpm --dir src/web test:science
+pnpm --dir src/web test:recipes
+```
+
+### Screenshots of all nine
+
+#### Cell division
+
+One next-stage action, visible chromosome continuity, and a short stage caption.
+
+![Cell division: default opening](023-validation/redesign-round-1/cell-division-default.png)
+
+[Open experiment](http://127.0.0.1:43111/experiments?experiment=cell-division) · [Changed state](023-validation/redesign-round-1/cell-division-changed.png) · [1280×800](023-validation/redesign-round-1/cell-division-opening-1280x800.png) · [1366×768](023-validation/redesign-round-1/cell-division-opening-1366x768.png) · [Builder](023-validation/redesign-round-1/cell-division-builder.png) · [Try lesson](023-validation/redesign-round-1/cell-division-try-lesson.png)
+
+#### Immune defense
+
+Introduce an infection, watch or pause its response, then repeat it after clearance. Only the current action appears.
+
+![Immune defense: default opening](023-validation/redesign-round-1/immune-defense-default.png)
+
+[Open experiment](http://127.0.0.1:43111/experiments?experiment=immune-defense) · [Changed state](023-validation/redesign-round-1/immune-defense-changed.png) · [1280×800](023-validation/redesign-round-1/immune-defense-opening-1280x800.png) · [1366×768](023-validation/redesign-round-1/immune-defense-opening-1366x768.png) · [Builder](023-validation/redesign-round-1/immune-defense-builder.png) · [Try lesson](023-validation/redesign-round-1/immune-defense-try-lesson.png)
+
+[Alternate activity state](023-validation/redesign-round-1/immune-defense-alternate.png)
+
+#### Genome to organism
+
+A family diagram, one offspring action, and one choice for looking inside the selected organism. The authored seed demonstrates visible variation without changing the inheritance rules.
+
+![Genome to organism: default opening](023-validation/redesign-round-1/genome-to-organism-default.png)
+
+[Open experiment](http://127.0.0.1:43111/experiments?experiment=genome-to-organism) · [Changed state](023-validation/redesign-round-1/genome-to-organism-changed.png) · [1280×800](023-validation/redesign-round-1/genome-to-organism-opening-1280x800.png) · [1366×768](023-validation/redesign-round-1/genome-to-organism-opening-1366x768.png) · [Builder](023-validation/redesign-round-1/genome-to-organism-builder.png) · [Try lesson](023-validation/redesign-round-1/genome-to-organism-try-lesson.png)
+
+[Alternate activity state](023-validation/redesign-round-1/genome-to-organism-alternate.png)
+
+#### Pollination network
+
+One next-day action. Flower buds, blooms, pollen routes, and fruit show the process.
+
+![Pollination network: default opening](023-validation/redesign-round-1/pollination-network-default.png)
+
+[Open experiment](http://127.0.0.1:43111/experiments?experiment=pollination-network) · [Changed state](023-validation/redesign-round-1/pollination-network-changed.png) · [1280×800](023-validation/redesign-round-1/pollination-network-opening-1280x800.png) · [1366×768](023-validation/redesign-round-1/pollination-network-opening-1366x768.png) · [Builder](023-validation/redesign-round-1/pollination-network-builder.png) · [Try lesson](023-validation/redesign-round-1/pollination-network-try-lesson.png)
+
+#### Invasive species
+
+Select a habitat patch and introduce a plant. Removal appears when the selected patch contains plants or seeds.
+
+![Invasive species: default opening](023-validation/redesign-round-1/invasive-species-default.png)
+
+[Open experiment](http://127.0.0.1:43111/experiments?experiment=invasive-species) · [Changed state](023-validation/redesign-round-1/invasive-species-changed.png) · [1280×800](023-validation/redesign-round-1/invasive-species-opening-1280x800.png) · [1366×768](023-validation/redesign-round-1/invasive-species-opening-1366x768.png) · [Builder](023-validation/redesign-round-1/invasive-species-builder.png) · [Try lesson](023-validation/redesign-round-1/invasive-species-try-lesson.png)
+
+[Alternate activity state](023-validation/redesign-round-1/invasive-species-alternate.png)
+
+#### Inside Earth
+
+Select a layer directly. A short explanation follows the selection; one choice switches material and behavior views.
+
+![Inside Earth: default opening](023-validation/redesign-round-1/inside-earth-default.png)
+
+[Open experiment](http://127.0.0.1:43111/experiments?experiment=inside-earth) · [Changed state](023-validation/redesign-round-1/inside-earth-changed.png) · [1280×800](023-validation/redesign-round-1/inside-earth-opening-1280x800.png) · [1366×768](023-validation/redesign-round-1/inside-earth-opening-1366x768.png) · [Builder](023-validation/redesign-round-1/inside-earth-builder.png) · [Try lesson](023-validation/redesign-round-1/inside-earth-try-lesson.png)
+
+[Alternate activity state](023-validation/redesign-round-1/inside-earth-alternate.png)
+
+#### Plate boundaries
+
+Choose a plate interaction and move or pause the plates. Reduced motion offers a single advance action.
+
+![Plate boundaries: default opening](023-validation/redesign-round-1/plate-boundaries-default.png)
+
+[Open experiment](http://127.0.0.1:43111/experiments?experiment=plate-boundaries) · [Changed state](023-validation/redesign-round-1/plate-boundaries-changed.png) · [1280×800](023-validation/redesign-round-1/plate-boundaries-opening-1280x800.png) · [1366×768](023-validation/redesign-round-1/plate-boundaries-opening-1366x768.png) · [Builder](023-validation/redesign-round-1/plate-boundaries-builder.png) · [Try lesson](023-validation/redesign-round-1/plate-boundaries-try-lesson.png)
+
+[Alternate activity state](023-validation/redesign-round-1/plate-boundaries-alternate.png)
+
+#### Volcano life cycle
+
+Choose an eruption type and advance the visible activity. No reservoir, lava, or ash dashboard.
+
+![Volcano life cycle: default opening](023-validation/redesign-round-1/volcano-life-cycle-default.png)
+
+[Open experiment](http://127.0.0.1:43111/experiments?experiment=volcano-life-cycle) · [Changed state](023-validation/redesign-round-1/volcano-life-cycle-changed.png) · [1280×800](023-validation/redesign-round-1/volcano-life-cycle-opening-1280x800.png) · [1366×768](023-validation/redesign-round-1/volcano-life-cycle-opening-1366x768.png) · [Builder](023-validation/redesign-round-1/volcano-life-cycle-builder.png) · [Try lesson](023-validation/redesign-round-1/volcano-life-cycle-try-lesson.png)
+
+[Alternate activity state](023-validation/redesign-round-1/volcano-life-cycle-alternate.png)
+
+#### Water cycle
+
+Follow a drop through a landscape with one action and a short explanation. No Track/Compare panels or water-budget readouts.
+
+![Water cycle: default opening](023-validation/redesign-round-1/water-cycle-default.png)
+
+[Open experiment](http://127.0.0.1:43111/experiments?experiment=water-cycle) · [Changed state](023-validation/redesign-round-1/water-cycle-changed.png) · [1280×800](023-validation/redesign-round-1/water-cycle-opening-1280x800.png) · [1366×768](023-validation/redesign-round-1/water-cycle-opening-1366x768.png) · [Builder](023-validation/redesign-round-1/water-cycle-builder.png) · [Try lesson](023-validation/redesign-round-1/water-cycle-try-lesson.png)
+
+### Feedback requested
+
+Is this simpler, visual-led direction right? Which experiments still feel confusing, too similar, or visually weak? No second design round has been started.
+
+</details>
+
+
+<a id="historical-screenshot-review"></a>
+
+## 14. Historical screenshot review
+
+This record describes an earlier iteration. Its status, ports, commands, and screenshots are historical; use the current implementation section for the latest results.
+
+<details>
+<summary>Earlier notes and evidence</summary>
+
+**Historical UX status: rejected by the user.** The screenshots below record the overloaded presentation that prompted the correction. They are not UX acceptance evidence. Follow [IMPORTANT](IMPORTANT.md) before presenting a replacement for review.
+
+Open the [running review app](http://127.0.0.1:43111/experiments). These are unmodified screenshots of the actual app, captured with standalone Playwright. Playwright MCP was unavailable in this session; no MCP verification is claimed.
+
+Each lesson includes precise conditions, explicit stepping, object inspection, causal observations, and retained baseline comparison. Mobile polish and a real 200% browser-zoom audit are outside this completed desktop pass.
+
+### Review index
+
+| Lesson | Open lesson | Changed state | Alternate scenario | Builder |
+| --- | --- | --- | --- | --- |
+| Cell division | [Review](http://127.0.0.1:43111/experiments?experiment=cell-division) | [Screenshot](023-validation/desktop-final-3/cell-division-changed.png) | [Screenshot](023-validation/outcomes-final/cell-division-unequal-allocation.png) | [Screenshot](023-validation/desktop-final-3/cell-division-builder.png) |
+| Immune defense | [Review](http://127.0.0.1:43111/experiments?experiment=immune-defense) | [Screenshot](023-validation/desktop-final-3/immune-defense-changed.png) | [Screenshot](023-validation/outcomes-final/immune-defense-matched-memory.png) | [Screenshot](023-validation/desktop-final-3/immune-defense-builder.png) |
+| Genome to organism | [Review](http://127.0.0.1:43111/experiments?experiment=genome-to-organism) | [Screenshot](023-validation/desktop-final-3/genome-to-organism-changed.png) | [Screenshot](023-validation/outcomes-final/genome-to-organism-germline-provenance.png) | [Screenshot](023-validation/desktop-final-3/genome-to-organism-builder.png) |
+| Pollination network | [Review](http://127.0.0.1:43111/experiments?experiment=pollination-network) | [Screenshot](023-validation/desktop-final-3/pollination-network-changed.png) | [Screenshot](023-validation/outcomes-final/pollination-network-short-bloom-overlap.png) | [Screenshot](023-validation/desktop-final-3/pollination-network-builder.png) |
+| Invasive species | [Review](http://127.0.0.1:43111/experiments?experiment=invasive-species) | [Screenshot](023-validation/desktop-final-3/invasive-species-changed.png) | [Screenshot](023-validation/outcomes-final/invasive-species-late-removal-seeds.png) | [Screenshot](023-validation/desktop-final-3/invasive-species-builder.png) |
+| Inside Earth | [Review](http://127.0.0.1:43111/experiments?experiment=inside-earth) | [Screenshot](023-validation/desktop-final-3/inside-earth-changed.png) | [Screenshot](023-validation/outcomes-final/inside-earth-mechanical-asthenosphere.png) | [Screenshot](023-validation/desktop-final-3/inside-earth-builder.png) |
+| Plate boundaries | [Review](http://127.0.0.1:43111/experiments?experiment=plate-boundaries) | [Screenshot](023-validation/desktop-final-3/plate-boundaries-changed.png) | [Screenshot](023-validation/outcomes-final/plate-boundaries-boundary-4.png) | [Screenshot](023-validation/desktop-final-3/plate-boundaries-builder.png) |
+| Volcano life cycle | [Review](http://127.0.0.1:43111/experiments?experiment=volcano-life-cycle) | [Screenshot](023-validation/desktop-final-3/volcano-life-cycle-changed.png) | [Screenshot](023-validation/outcomes-final/volcano-life-cycle-explosive-comparison.png) | [Screenshot](023-validation/desktop-final-3/volcano-life-cycle-builder.png) |
+| Water cycle | [Review](http://127.0.0.1:43111/experiments?experiment=water-cycle) | [Screenshot](023-validation/desktop-final-3/water-cycle-changed.png) | [Screenshot](023-validation/outcomes-final/water-cycle-paving-comparison.png) | [Screenshot](023-validation/desktop-final-3/water-cycle-builder.png) |
+
+### Cell division
+
+![Cell division: actual desktop opening](023-validation/desktop-final-3/cell-division-opening.png)
+
+[1280×800](023-validation/desktop-final-3/cell-division-opening-1280x800.png) · [1920×1080](023-validation/desktop-final-3/cell-division-opening-1920x1080.png) · [1366×768](023-validation/desktop-final-3/cell-division-opening-1366x768.png) · [Selection](023-validation/desktop-final-3/cell-division-selected.png) · [Baseline comparison](023-validation/desktop-final-3/cell-division-comparison.png) · [Try lesson](023-validation/desktop-final-3/cell-division-try-lesson.png)
+
+### Immune defense
+
+![Immune defense: actual desktop opening](023-validation/desktop-final-3/immune-defense-opening.png)
+
+[1280×800](023-validation/desktop-final-3/immune-defense-opening-1280x800.png) · [1920×1080](023-validation/desktop-final-3/immune-defense-opening-1920x1080.png) · [1366×768](023-validation/desktop-final-3/immune-defense-opening-1366x768.png) · [Selection](023-validation/desktop-final-3/immune-defense-selected.png) · [Baseline comparison](023-validation/desktop-final-3/immune-defense-comparison.png) · [Try lesson](023-validation/desktop-final-3/immune-defense-try-lesson.png)
+
+### Genome to organism
+
+![Genome to organism: actual desktop opening](023-validation/desktop-final-3/genome-to-organism-opening.png)
+
+[1280×800](023-validation/desktop-final-3/genome-to-organism-opening-1280x800.png) · [1920×1080](023-validation/desktop-final-3/genome-to-organism-opening-1920x1080.png) · [1366×768](023-validation/desktop-final-3/genome-to-organism-opening-1366x768.png) · [Selection](023-validation/desktop-final-3/genome-to-organism-selected.png) · [Baseline comparison](023-validation/desktop-final-3/genome-to-organism-comparison.png) · [Try lesson](023-validation/desktop-final-3/genome-to-organism-try-lesson.png)
+
+### Pollination network
+
+![Pollination network: actual desktop opening](023-validation/desktop-final-3/pollination-network-opening.png)
+
+[1280×800](023-validation/desktop-final-3/pollination-network-opening-1280x800.png) · [1920×1080](023-validation/desktop-final-3/pollination-network-opening-1920x1080.png) · [1366×768](023-validation/desktop-final-3/pollination-network-opening-1366x768.png) · [Selection](023-validation/desktop-final-3/pollination-network-selected.png) · [Baseline comparison](023-validation/desktop-final-3/pollination-network-comparison.png) · [Try lesson](023-validation/desktop-final-3/pollination-network-try-lesson.png)
+
+### Invasive species
+
+![Invasive species: actual desktop opening](023-validation/desktop-final-3/invasive-species-opening.png)
+
+[1280×800](023-validation/desktop-final-3/invasive-species-opening-1280x800.png) · [1920×1080](023-validation/desktop-final-3/invasive-species-opening-1920x1080.png) · [1366×768](023-validation/desktop-final-3/invasive-species-opening-1366x768.png) · [Selection](023-validation/desktop-final-3/invasive-species-selected.png) · [Baseline comparison](023-validation/desktop-final-3/invasive-species-comparison.png) · [Try lesson](023-validation/desktop-final-3/invasive-species-try-lesson.png)
+
+### Inside Earth
+
+![Inside Earth: actual desktop opening](023-validation/desktop-final-3/inside-earth-opening.png)
+
+[1280×800](023-validation/desktop-final-3/inside-earth-opening-1280x800.png) · [1920×1080](023-validation/desktop-final-3/inside-earth-opening-1920x1080.png) · [1366×768](023-validation/desktop-final-3/inside-earth-opening-1366x768.png) · [Selection](023-validation/desktop-final-3/inside-earth-selected.png) · [Baseline comparison](023-validation/desktop-final-3/inside-earth-comparison.png) · [Try lesson](023-validation/desktop-final-3/inside-earth-try-lesson.png)
+
+### Plate boundaries
+
+![Plate boundaries: actual desktop opening](023-validation/desktop-final-3/plate-boundaries-opening.png)
+
+[1280×800](023-validation/desktop-final-3/plate-boundaries-opening-1280x800.png) · [1920×1080](023-validation/desktop-final-3/plate-boundaries-opening-1920x1080.png) · [1366×768](023-validation/desktop-final-3/plate-boundaries-opening-1366x768.png) · [Selection](023-validation/desktop-final-3/plate-boundaries-selected.png) · [Baseline comparison](023-validation/desktop-final-3/plate-boundaries-comparison.png) · [Try lesson](023-validation/desktop-final-3/plate-boundaries-try-lesson.png)
+
+### Volcano life cycle
+
+![Volcano life cycle: actual desktop opening](023-validation/desktop-final-3/volcano-life-cycle-opening.png)
+
+[1280×800](023-validation/desktop-final-3/volcano-life-cycle-opening-1280x800.png) · [1920×1080](023-validation/desktop-final-3/volcano-life-cycle-opening-1920x1080.png) · [1366×768](023-validation/desktop-final-3/volcano-life-cycle-opening-1366x768.png) · [Selection](023-validation/desktop-final-3/volcano-life-cycle-selected.png) · [Baseline comparison](023-validation/desktop-final-3/volcano-life-cycle-comparison.png) · [Try lesson](023-validation/desktop-final-3/volcano-life-cycle-try-lesson.png)
+
+### Water cycle
+
+![Water cycle: actual desktop opening](023-validation/desktop-final-3/water-cycle-opening.png)
+
+[1280×800](023-validation/desktop-final-3/water-cycle-opening-1280x800.png) · [1920×1080](023-validation/desktop-final-3/water-cycle-opening-1920x1080.png) · [1366×768](023-validation/desktop-final-3/water-cycle-opening-1366x768.png) · [Selection](023-validation/desktop-final-3/water-cycle-selected.png) · [Baseline comparison](023-validation/desktop-final-3/water-cycle-comparison.png) · [Try lesson](023-validation/desktop-final-3/water-cycle-try-lesson.png)
+
+### Additional scenario screenshots
+
+[Immune: first challenge](023-validation/outcomes-final/immune-defense-first-clearance.png) · [Immune: unmatched antigen](023-validation/outcomes-final/immune-defense-unmatched-antigen.png) · [Water: vegetated watershed](023-validation/outcomes-final/water-cycle-vegetated.png) · [Volcano: effusive](023-validation/outcomes-final/volcano-life-cycle-effusive.png)
+
+[Genome: cell](023-validation/outcomes-final/genome-to-organism-zoom-1.png) · [Chromosomes](023-validation/outcomes-final/genome-to-organism-zoom-2.png) · [Gene](023-validation/outcomes-final/genome-to-organism-zoom-3.png) · [DNA](023-validation/outcomes-final/genome-to-organism-zoom-4.png)
+
+See [implementation evidence and repeatable commands](#historical-implementation-evidence) for scientific checks, browser results, actual provider receipts, and remaining gates.
+
+</details>

@@ -88,11 +88,13 @@ async function stage<T>(
         parseStageJson(content, schema.type === "array" ? "array" : "object"),
       ),
     `Return only this stage's schema, preserving the original constraints. Do not repeat valid prior operations.${
-      task === "runtime_command_arguments"
-        ? " Return only the selected command's argument object. The application owns the command envelope. Close each nested argument object before the root object."
-        : task === "authoring_arguments"
-          ? " For operations, close the arguments object with }, then the operation object with }, then the operations array with ], and finally the root object with }."
-          : ""
+      task === "teaching_intent"
+        ? " Keep each of concepts, interactions, and observations to at most THREE concise entries. Combine related concepts into one entry. Do not list individual terms as separate concepts. This is a compact intent summary, not a glossary."
+        : task === "runtime_command_arguments"
+          ? " Return only the selected command's argument object. The application owns the command envelope. Close each nested argument object before the root object."
+          : task === "authoring_arguments"
+            ? " For operations, close the arguments object with }, then the operation object with }, then the operations array with ], and finally the root object with }."
+            : ""
     }`,
     budget.signal,
     {

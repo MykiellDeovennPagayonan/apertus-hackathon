@@ -175,7 +175,7 @@ export function buildTurnTools(
   tools.push({
     tool: "set_lesson",
     schema: object({
-      title: { type: "string", maxLength: 120 },
+      title: { type: "string", maxLength: 100 },
       instruction: { type: "string", maxLength: 500 },
       explanation: { type: "string", minLength: 0, maxLength: 1500 },
     }),

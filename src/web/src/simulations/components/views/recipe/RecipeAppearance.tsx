@@ -37,6 +37,7 @@ import {
   CircuitVisual,
   TrackVisual,
 } from "../../visuals/physical-systems/PhysicalVisuals";
+import { ScienceScene } from "../../visuals/science/ScienceScene";
 import { ProductionComparisonVisual } from "../../visuals/social-systems/ProductionComparisonVisual";
 import { ArithmeticScene } from "../ArithmeticScene";
 import { BridgeScene } from "../BridgeScene";
@@ -70,8 +71,18 @@ const appearances: Record<
     instance: ModelInstance;
     onSelect?: (selection: number) => void;
     onCommand?: (command: string, value?: unknown) => void;
+    question?: string;
   }) => React.ReactNode
 > = {
+  "science-cell": ScienceScene,
+  "science-immune": ScienceScene,
+  "science-genome": ScienceScene,
+  "science-pollination": ScienceScene,
+  "science-invasive": ScienceScene,
+  "science-earth": ScienceScene,
+  "science-plates": ScienceScene,
+  "science-volcano": ScienceScene,
+  "science-water": ScienceScene,
   "ecology-nutrients": NutrientLimitationVisual,
   "ecology-wildfire": WildfireComparisonVisual,
   "ecology-food-web": FoodWebVisual,
@@ -262,6 +273,14 @@ export function Appearance({
     return (
       <View
         instance={instance}
+        question={
+          name.startsWith("science-")
+            ? String(
+                node.configuration.question ||
+                  runtime.document.lesson.instruction,
+              )
+            : undefined
+        }
         onCommand={(command, value) =>
           runtime.dispatch([
             {

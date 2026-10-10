@@ -1,7 +1,53 @@
+import { scienceSpecs } from "../../domains/science/specs";
 import type { FieldPresentation } from "./SchemaForm";
 
 /** Presentation metadata never changes command names, arguments, or validation. */
 export function commandPresentation(command: string, definition: string) {
+  const science = scienceSpecs.find(
+    (s) => definition === `prefabs/science/${s.name}`,
+  );
+  if (science && command.startsWith(`SCI_${science.kind.toUpperCase()}_`)) {
+    const op = command.slice(`SCI_${science.kind.toUpperCase()}_`.length);
+    const setting = science.settings.find(
+      (f) => op === `SET_${f.key.toUpperCase()}`,
+    );
+    const labels: Record<string, string> = {
+      STEP: science.step,
+      EXPOSE: "Introduce / repeat pathogen",
+      INTRODUCE: "Introduce at selected patch",
+      REMOVE: "Remove selected patch",
+      RESTORE: "Restore native cover",
+      BASELINE: "Keep baseline and restart",
+      PLAY: "Play",
+      PAUSE: "Pause",
+      SELECT: "Inspect object",
+      SPEED: "Playback speed",
+      OVERLAY: "Labels and pathways",
+    };
+    const presentation: FieldPresentation = setting
+      ? {
+          value: {
+            label: setting.label,
+            help: setting.help,
+            choices: setting.options
+              ? Object.fromEntries(
+                  setting.options.map((label, i) => [String(i), label]),
+                )
+              : undefined,
+          },
+        }
+      : {};
+    return {
+      legacyLabels: [op.toLowerCase().replaceAll("_", " ")],
+      label: setting?.label ?? labels[op],
+      presentation,
+      actionIntent:
+        op === "STEP" || op === "EXPOSE" || op === "INTRODUCE"
+          ? ("primary" as const)
+          : ("secondary" as const),
+      submitLabel: setting?.restart ? "Apply and restart" : undefined,
+    };
+  }
   const labels: Record<string, string> = {
     MOVE_LOAD: "Load position",
     SET_LOAD: "Load mass",
@@ -294,6 +340,14 @@ export function acceptedCommandArguments(
   draft?: Record<string, unknown>,
 ): Record<string, unknown> | undefined {
   if (!state) return;
+  const science = /^SCI_[A-Z]+_SET_(.+)$/.exec(command);
+  if (science) {
+    const settings = state.settings as Record<string, unknown> | undefined;
+    const key = Object.keys(settings ?? {}).find(
+      (key) => key.toUpperCase() === science[1],
+    );
+    if (settings && key) return { value: settings[key] };
+  }
   if (command.startsWith("WEB_SET_")) {
     const key = command.slice("WEB_SET_".length).toLowerCase();
     if (Object.hasOwn(state, key)) return { value: state[key] };

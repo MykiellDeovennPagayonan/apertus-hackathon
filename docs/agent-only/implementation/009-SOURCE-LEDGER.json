@@ -1,8 +1,8 @@
 {
   "generatedBy": "src/web/scripts/builder/audit-public-catalog.cjs",
-  "originalSourceFiles": 301,
-  "sourceFiles": 313,
-  "exportRecords": 726,
+  "originalSourceFiles": 313,
+  "sourceFiles": 323,
+  "exportRecords": 761,
   "records": [
     {
       "source": "src/web/src/simulations/components/README.md",
@@ -1634,6 +1634,13 @@
           "symbols": [
             "genericDefinitions"
           ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/science.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
         }
       ],
       "responsibility": "infrastructure",
@@ -1646,9 +1653,10 @@
           "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "src/web/src/simulations/components/catalog/ecologyControls.ts",
           "src/web/src/simulations/components/catalog/exploration.ts",
-          "src/web/src/simulations/components/catalog/index.ts"
+          "src/web/src/simulations/components/catalog/index.ts",
+          "src/web/src/simulations/components/catalog/science.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts, src/web/src/simulations/components/catalog/science.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -1702,6 +1710,13 @@
           "typeOnly": false,
           "symbols": [
             "genericDefinitions"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/science.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
           ]
         }
       ],
@@ -1756,6 +1771,13 @@
           "symbols": [
             "genericDefinitions"
           ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/science.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
         }
       ],
       "responsibility": "infrastructure",
@@ -1768,9 +1790,10 @@
           "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "src/web/src/simulations/components/catalog/ecologyControls.ts",
           "src/web/src/simulations/components/catalog/exploration.ts",
-          "src/web/src/simulations/components/catalog/index.ts"
+          "src/web/src/simulations/components/catalog/index.ts",
+          "src/web/src/simulations/components/catalog/science.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts, src/web/src/simulations/components/catalog/science.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -1824,6 +1847,13 @@
           "typeOnly": false,
           "symbols": [
             "genericDefinitions"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/science.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
           ]
         }
       ],
@@ -4371,6 +4401,53 @@
           "typeOnly": false,
           "symbols": [
             "operationDefinitions"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public infrastructure owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/catalog/science.ts",
+      "export": "scienceDefinitions",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "scienceDefinitions"
+          ]
+        }
+      ],
+      "responsibility": "infrastructure",
+      "finalOwner": {
+        "kind": "catalog/recipe infrastructure",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/index.ts"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "scienceDefinitions"
           ]
         }
       ],
@@ -15926,6 +16003,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "NumberField"
+          ]
+        },
+        {
           "source": "src/web/scripts/fixtures/component-cleanup.tsx",
           "typeOnly": false,
           "symbols": [
@@ -15951,6 +16035,7 @@
           "src/web/src/simulations/components/controls/SchemaForm.tsx",
           "src/web/src/simulations/components/controls/TaskControl.tsx",
           "src/web/src/simulations/components/views/ElementaryExperimentView.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
           "src/web/scripts/fixtures/component-cleanup.tsx"
         ],
         "destination": "controls/NumberInput"
@@ -16049,6 +16134,13 @@
         },
         {
           "source": "src/web/src/simulations/components/views/ElementaryExperimentView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "NumberField"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
           "typeOnly": false,
           "symbols": [
             "NumberField"
@@ -17917,6 +18009,14 @@
           ]
         },
         {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
           "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
           "typeOnly": false,
           "symbols": [
@@ -17948,10 +18048,11 @@
           "src/web/src/simulations/runtime/authoring/connections.ts",
           "src/web/src/simulations/runtime/authoring/operations.ts",
           "src/web/src/simulations/runtime/authoring/runtime.ts",
+          "src/web/scripts/domains/science/verify.cjs",
           "src/web/scripts/domains/systems-comparisons/verify.cjs",
           "src/web/scripts/verify-component-completion.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/scripts/domains/systems-comparisons/verify.cjs, src/web/scripts/verify-component-completion.cjs"
+        "destination": "src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/scripts/domains/science/verify.cjs, src/web/scripts/domains/systems-comparisons/verify.cjs, src/web/scripts/verify-component-completion.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -18037,6 +18138,14 @@
           "symbols": [
             "acceptedCommandArguments"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         },
         {
           "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
@@ -18139,6 +18248,14 @@
           ]
         },
         {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
           "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
           "typeOnly": false,
           "symbols": [
@@ -18170,10 +18287,11 @@
           "src/web/src/simulations/runtime/authoring/connections.ts",
           "src/web/src/simulations/runtime/authoring/operations.ts",
           "src/web/src/simulations/runtime/authoring/runtime.ts",
+          "src/web/scripts/domains/science/verify.cjs",
           "src/web/scripts/domains/systems-comparisons/verify.cjs",
           "src/web/scripts/verify-component-completion.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/scripts/domains/systems-comparisons/verify.cjs, src/web/scripts/verify-component-completion.cjs"
+        "destination": "src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/scripts/domains/science/verify.cjs, src/web/scripts/domains/systems-comparisons/verify.cjs, src/web/scripts/verify-component-completion.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -18259,6 +18377,14 @@
           "symbols": [
             "acceptedCommandArguments"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         },
         {
           "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
@@ -69998,6 +70124,3922 @@
       "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "ScienceKind",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "Setting",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "ScienceSpec",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "Offspring",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "ImmuneData",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "PollenData",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "InvasiveData",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "VolcanoData",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "WaterData",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "Baseline",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "ScienceState",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "ScienceObject",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "ScienceObservation",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "clamp",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "randomAt",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/contracts.ts",
+      "export": "event",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/science/environment.ts",
+          "src/web/src/simulations/components/systems/science/life.ts",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/src/simulations/domains/science/specs.ts"
+        ],
+        "destination": "src/web/src/simulations/components/systems/science/environment.ts, src/web/src/simulations/components/systems/science/life.ts, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx, src/web/src/simulations/components/views/science/learnerPresentation.ts, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts, src/web/src/simulations/domains/science/specs.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/science/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/science/life.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "randomAt",
+            "ScienceObservation",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceKind",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "clamp",
+            "event",
+            "ScienceSpec",
+            "ScienceState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/specs.ts",
+          "typeOnly": true,
+          "symbols": [
+            "ScienceSpec",
+            "Setting"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/environment.ts",
+      "export": "habitatRows",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "environmentObservation",
+            "environmentStep"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/scripts/domains/science/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/domains/science/index.ts, src/web/scripts/domains/science/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "environmentObservation",
+            "environmentStep"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/environment.ts",
+      "export": "habitatColumns",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "environmentObservation",
+            "environmentStep"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/scripts/domains/science/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/domains/science/index.ts, src/web/scripts/domains/science/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "environmentObservation",
+            "environmentStep"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/environment.ts",
+      "export": "environmentStep",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "environmentObservation",
+            "environmentStep"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/scripts/domains/science/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/domains/science/index.ts, src/web/scripts/domains/science/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "environmentObservation",
+            "environmentStep"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/environment.ts",
+      "export": "waterTotal",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "environmentObservation",
+            "environmentStep"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/scripts/domains/science/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/domains/science/index.ts, src/web/scripts/domains/science/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "environmentObservation",
+            "environmentStep"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/environment.ts",
+      "export": "environmentObservation",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "environmentObservation",
+            "environmentStep"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/domains/science/index.ts",
+          "src/web/scripts/domains/science/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/domains/science/index.ts, src/web/scripts/domains/science/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "environmentObservation",
+            "environmentStep"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/life.ts",
+      "export": "cellStages",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "cellStages"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "flowerAvailable",
+            "genomeGlow",
+            "inspectedGenome"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "lifeObservation",
+            "lifeStep"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "cellStages"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "flowerAvailable",
+            "genomeGlow",
+            "inspectedGenome"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "lifeObservation",
+            "lifeStep"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/life.ts",
+      "export": "flowerAvailable",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "cellStages"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "flowerAvailable",
+            "genomeGlow",
+            "inspectedGenome"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "lifeObservation",
+            "lifeStep"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "cellStages"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "flowerAvailable",
+            "genomeGlow",
+            "inspectedGenome"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "lifeObservation",
+            "lifeStep"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/life.ts",
+      "export": "inspectedGenome",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "cellStages"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "flowerAvailable",
+            "genomeGlow",
+            "inspectedGenome"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "lifeObservation",
+            "lifeStep"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "cellStages"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "flowerAvailable",
+            "genomeGlow",
+            "inspectedGenome"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "lifeObservation",
+            "lifeStep"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/life.ts",
+      "export": "genomeGlow",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "cellStages"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "flowerAvailable",
+            "genomeGlow",
+            "inspectedGenome"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "lifeObservation",
+            "lifeStep"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "cellStages"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "flowerAvailable",
+            "genomeGlow",
+            "inspectedGenome"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "lifeObservation",
+            "lifeStep"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/life.ts",
+      "export": "lifeStep",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "cellStages"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "flowerAvailable",
+            "genomeGlow",
+            "inspectedGenome"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "lifeObservation",
+            "lifeStep"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "cellStages"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "flowerAvailable",
+            "genomeGlow",
+            "inspectedGenome"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "lifeObservation",
+            "lifeStep"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/science/life.ts",
+      "export": "lifeObservation",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "cellStages"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "flowerAvailable",
+            "genomeGlow",
+            "inspectedGenome"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "lifeObservation",
+            "lifeStep"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "src/web/src/simulations/domains/science/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/visuals/science/ScienceScene.tsx, src/web/src/simulations/domains/science/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "cellStages"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "flowerAvailable",
+            "genomeGlow",
+            "inspectedGenome"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/science/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "lifeObservation",
+            "lifeStep"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
       "source": "src/web/src/simulations/components/systems/social-systems/production.ts",
       "export": "ProductionState",
       "activeConsumers": [
@@ -99377,6 +103419,138 @@
       "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
+      "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+      "export": "ScienceControls",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceControls",
+            "ScienceObservations"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "src/web/scripts/domains/science/verify-presentation.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceControls",
+            "ScienceObservations"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+      "export": "ScienceObservations",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceControls",
+            "ScienceObservations"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "src/web/scripts/domains/science/verify-presentation.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceControls",
+            "ScienceObservations"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
       "source": "src/web/src/simulations/components/views/ScopedWorldView.tsx",
       "export": "ScopedWorldView",
       "activeConsumers": [
@@ -103528,6 +107702,14 @@
           "symbols": [
             "Appearance"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "responsibility": "display/layout/composite",
@@ -103535,9 +107717,10 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
-          "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "src/web/scripts/domains/science/verify-presentation.cjs"
         ],
-        "destination": "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+        "destination": "src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -103557,6 +107740,14 @@
           "symbols": [
             "Appearance"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "identity": [],
@@ -103634,6 +107825,14 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "MotionContext",
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": false,
           "symbols": [
@@ -103687,6 +107886,14 @@
             "AuthorContext",
             "SnapshotContext"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "responsibility": "display/layout/composite",
@@ -103696,15 +107903,17 @@
         "consumers": [
           "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/NodeView.tsx",
           "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
-          "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+          "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx",
+          "src/web/scripts/domains/science/verify-presentation.cjs"
         ],
-        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -103736,6 +107945,14 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "MotionContext",
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": false,
           "symbols": [
@@ -103789,6 +108006,14 @@
             "AuthorContext",
             "SnapshotContext"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "identity": [],
@@ -103819,6 +108044,14 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "MotionContext",
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": false,
           "symbols": [
@@ -103872,6 +108105,14 @@
             "AuthorContext",
             "SnapshotContext"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "responsibility": "display/layout/composite",
@@ -103881,15 +108122,17 @@
         "consumers": [
           "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/NodeView.tsx",
           "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
-          "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+          "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx",
+          "src/web/scripts/domains/science/verify-presentation.cjs"
         ],
-        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -103921,6 +108164,14 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "MotionContext",
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": false,
           "symbols": [
@@ -103974,6 +108225,14 @@
             "AuthorContext",
             "SnapshotContext"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "identity": [],
@@ -104004,6 +108263,14 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "MotionContext",
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": false,
           "symbols": [
@@ -104057,6 +108324,14 @@
             "AuthorContext",
             "SnapshotContext"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "responsibility": "display/layout/composite",
@@ -104066,15 +108341,17 @@
         "consumers": [
           "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/NodeView.tsx",
           "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
-          "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+          "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx",
+          "src/web/scripts/domains/science/verify-presentation.cjs"
         ],
-        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -104106,6 +108383,14 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "MotionContext",
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": false,
           "symbols": [
@@ -104159,6 +108444,14 @@
             "AuthorContext",
             "SnapshotContext"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "identity": [],
@@ -104189,6 +108482,14 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "MotionContext",
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": false,
           "symbols": [
@@ -104242,6 +108543,14 @@
             "AuthorContext",
             "SnapshotContext"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "responsibility": "display/layout/composite",
@@ -104251,15 +108560,17 @@
         "consumers": [
           "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/NodeView.tsx",
           "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
-          "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+          "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx",
+          "src/web/scripts/domains/science/verify-presentation.cjs"
         ],
-        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -104291,6 +108602,14 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "MotionContext",
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": false,
           "symbols": [
@@ -104344,6 +108663,14 @@
             "AuthorContext",
             "SnapshotContext"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "identity": [],
@@ -105089,6 +109416,209 @@
           "typeOnly": false,
           "symbols": [
             "*"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/science-lessons.css",
+      "export": "(file)",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/RecipeLesson.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx"
+      },
+      "classification": "private presentation stylesheet",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+      "export": "ScienceComparison",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceComparison"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceComparison"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/science/ScienceInvestigation.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceComparison"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceComparison"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/science/ScienceInvestigation.tsx",
+      "export": "ScienceInvestigation",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceInvestigation"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/SciencePanels.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/SciencePanels.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceInvestigation"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/science/learnerPresentation.ts",
+      "export": "learnerCaption",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "learnerCaption"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/SciencePanels.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/SciencePanels.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/SciencePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "learnerCaption"
           ]
         }
       ],
@@ -109475,6 +114005,85 @@
       "destination": "public appearance owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/science/ScienceScene.tsx",
+      "export": "ScienceScene",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceScene"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceScene"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "src/web/scripts/domains/science/verify-presentation.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/science/ScienceComparison.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceScene"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/science/ScienceComparison.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ScienceScene"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/science/verify-presentation.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
       "source": "src/web/src/simulations/components/visuals/social-systems/ProductionComparisonVisual.tsx",

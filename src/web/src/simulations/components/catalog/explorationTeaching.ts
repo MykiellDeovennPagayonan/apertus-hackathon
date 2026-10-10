@@ -1,3 +1,5 @@
+import { scienceCommand } from "../../domains/science";
+import { scienceSpecs } from "../../domains/science/specs";
 import type { PublicDefinition } from "../../runtime/authoring/types";
 export interface CompositionRequirements {
   topic: string;
@@ -10,8 +12,48 @@ export interface CompositionRequirements {
   dependencies?: string[];
   minimumInstances?: number;
 }
+const scienceTopics: Record<string, string> = {
+  cell: "Cell division and mitosis",
+  immune: "Immune defense and antigen-specific memory",
+  genome: "Genetics and inheritance",
+  pollination: "Pollination",
+  invasive: "Spread and removal of invasive species",
+  earth: "Earth layers and mantle convection",
+  plates: "Plate boundaries and tectonics",
+  volcano: "Volcano eruptions: effusive and explosive",
+  water: "Water cycle and watershed runoff",
+};
 export const compositionRequirements: Record<string, CompositionRequirements> =
   {
+    ...Object.fromEntries(
+      scienceSpecs.map((spec) => [
+        `prefabs/science/${spec.name}`,
+        {
+          topic: scienceTopics[spec.kind],
+          selectionKey: spec.slug,
+          guidance: `${spec.question} ${spec.invitation} ${spec.assumptions.join(" ")} Add a stage action, supported condition controls, attached scene, and separate observations.`,
+          commands: [
+            scienceCommand(spec.kind, "STEP"),
+            ...(spec.kind === "immune"
+              ? [scienceCommand(spec.kind, "EXPOSE")]
+              : spec.kind === "invasive"
+                ? [
+                    scienceCommand(spec.kind, "INTRODUCE"),
+                    scienceCommand(spec.kind, "REMOVE"),
+                  ]
+                : []),
+            ...spec.settings
+              .filter((f) => !f.advanced)
+              .slice(0, 2)
+              .map((f) =>
+                scienceCommand(spec.kind, `SET_${f.key.toUpperCase()}`),
+              ),
+          ],
+          observations: ["summary", "explanation", "inspection"],
+          appearance: `appearance/science-${spec.kind}`,
+        },
+      ]),
+    ),
     "prefabs/physical-systems/Pendulum": {
       topic: "Pendulum simulation",
       guidance:

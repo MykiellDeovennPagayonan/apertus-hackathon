@@ -92,6 +92,11 @@ export function boardItemMinimum(
   const definition = d.nodes.find(
     (node) => node.id === layout?.node,
   )?.definition;
+  if (definition?.startsWith("controls/science-")) {
+    const node = d.nodes.find((node) => node.id === layout?.node);
+    return { width: 200, height: node?.configuration.panel === "playback" ? 96 : 100 };
+  }
+  if (definition === "displays/ScienceObservations") return { width: 200, height: 96 };
   if (definition === "controls/Button") return { width: 160, height: 48 };
   if (definition === "controls/FoodWebPopulation")
     return { width: 280, height: 330 };

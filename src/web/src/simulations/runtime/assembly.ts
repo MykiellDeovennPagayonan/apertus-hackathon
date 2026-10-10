@@ -1,3 +1,4 @@
+import { science } from "../domains/science";
 import { chemistry } from "../domains/chemistry";
 import { dynamicSystems } from "../domains/dynamic-systems";
 import { ecology } from "../domains/ecology";
@@ -32,11 +33,13 @@ export const domainContributions: readonly DomainContribution[] = immutable([
   dynamicSystems,
   ecology,
   socialSystems,
+  science,
 ]);
 export const assemblyModels: readonly DomainModel[] =
   domainContributions.flatMap((d) => d.models);
 /** Matches concrete adapters in the assembly client view. Integration adds adapters serially. */
 export const assemblyPresentationContracts = {
+  "science-cell": true, "science-immune": true, "science-genome": true, "science-pollination": true, "science-invasive": true, "science-earth": true, "science-plates": true, "science-volcano": true, "science-water": true,
   "ecology-nutrients": true,
   "ecology-wildfire": true,
   "ecology-food-web": true,

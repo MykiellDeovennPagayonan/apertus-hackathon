@@ -8,9 +8,13 @@ export interface DomainModel {
   name: string;
   description: string;
   assumptions: readonly string[];
+  tags?: readonly string[];
   parameters: ParameterSchema;
   defaults: Record<string, unknown>;
-  outputs: Record<string, { unit: string; description: string }>;
+  outputs: Record<
+    string,
+    { unit: string; description: string; schema?: ParameterSchema }
+  >;
   actions: Record<
     string,
     {
