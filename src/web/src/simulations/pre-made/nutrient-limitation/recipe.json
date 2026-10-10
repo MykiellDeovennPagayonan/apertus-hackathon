@@ -1,0 +1,460 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/nutrient-limitation",
+  "version": 1,
+  "title": "Nutrients & plant growth",
+  "description": "Compare nutrient-limited growth with a balanced reference, holding light and water fixed.",
+  "tags": ["science", "systems", "comparison"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/ecology/Nutrients",
+        "version": 1,
+        "label": "Nutrients & plant growth",
+        "scope": "scope/lab",
+        "configuration": {
+          "nitrogen": 40,
+          "phosphorus": 100,
+          "potassium": 100
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/ecology-nutrients",
+        "version": 1,
+        "label": "Visual comparison",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/nitrogen",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Nitrogen availability",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Nitrogen availability",
+          "mode": "immediate",
+          "initial": "{\"value\":40}",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/phosphorus",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Phosphorus availability",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Phosphorus availability",
+          "mode": "immediate",
+          "initial": "{\"value\":100}",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/potassium",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Potassium availability",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Potassium availability",
+          "mode": "immediate",
+          "initial": "{\"value\":100}",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/biomass",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Biomass index",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Biomass index",
+          "precision": 0
+        }
+      },
+      {
+        "id": "result/height",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Plant height",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Plant height",
+          "precision": 0
+        }
+      },
+      {
+        "id": "result/health",
+        "definition": "displays/StatusMessage",
+        "version": 1,
+        "label": "Visible health",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Visible health",
+          "precision": 0
+        }
+      },
+      {
+        "id": "conclusion",
+        "definition": "displays/StatusMessage",
+        "version": 1,
+        "label": "What this shows",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "What this shows",
+          "precision": 0
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/input/nitrogen",
+        "kind": "command",
+        "from": {
+          "node": "input/nitrogen",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "NUTRIENT_SET_NITROGEN"
+        }
+      },
+      {
+        "id": "link/input/phosphorus",
+        "kind": "command",
+        "from": {
+          "node": "input/phosphorus",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "NUTRIENT_SET_PHOSPHORUS"
+        }
+      },
+      {
+        "id": "link/input/potassium",
+        "kind": "command",
+        "from": {
+          "node": "input/potassium",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "NUTRIENT_SET_POTASSIUM"
+        }
+      },
+      {
+        "id": "link/result/biomass",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "biomass"
+        },
+        "to": {
+          "node": "result/biomass",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/height",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "height"
+        },
+        "to": {
+          "node": "result/height",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/health",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "health"
+        },
+        "to": {
+          "node": "result/health",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/conclusion",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "conclusion"
+        },
+        "to": {
+          "node": "conclusion",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Nutrients & plant growth"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/controls",
+          "kind": "stack",
+          "label": "Change one condition",
+          "gap": 12,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/nitrogen",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "input/nitrogen"
+            },
+            {
+              "id": "layout/input/phosphorus",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "input/phosphorus"
+            },
+            {
+              "id": "layout/input/potassium",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "input/potassium"
+            }
+          ]
+        },
+        {
+          "id": "layout/results",
+          "kind": "stack",
+          "label": "What happened",
+          "gap": 12,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/measurements",
+              "kind": "grid",
+              "label": "",
+              "gap": 14,
+              "columns": 2,
+              "children": [
+                {
+                  "id": "layout/result/biomass",
+                  "kind": "stack",
+                  "label": "",
+                  "gap": 8,
+                  "columns": 1,
+                  "children": [],
+                  "node": "result/biomass"
+                },
+                {
+                  "id": "layout/result/height",
+                  "kind": "stack",
+                  "label": "",
+                  "gap": 8,
+                  "columns": 1,
+                  "children": [],
+                  "node": "result/height"
+                }
+              ]
+            },
+            {
+              "id": "layout/result/health",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "result/health"
+            }
+          ]
+        },
+        {
+          "id": "layout/conclusion",
+          "kind": "stack",
+          "label": "Why it happens",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "conclusion",
+          "fontSize": 16
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Nutrients & plant growth",
+      "instruction": "Compare nutrient-limited growth with a balanced reference, holding light and water fixed.",
+      "explanation": "Light and water are fixed and suitable. All supplies are relative levels; 100 is sufficient in this fictional plant. Biomass follows the lowest supply up to a ceiling of 100. Height is a separate nonlinear index. Equal shortages co-limit growth. Deficiency cues are illustrative. Excess, soil interactions, species differences and toxicity are outside this teaching model; it is not fertilizer advice."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 820,
+            "height": 530
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 180
+        },
+        {
+          "id": "board/layout/controls",
+          "layoutId": "layout/controls",
+          "rect": {
+            "x": 844,
+            "y": 0,
+            "width": 350,
+            "height": 444
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 200
+        },
+        {
+          "id": "board/layout/results",
+          "layoutId": "layout/results",
+          "rect": {
+            "x": 844,
+            "y": 464,
+            "width": 350,
+            "height": 175
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 115
+        },
+        {
+          "id": "board/layout/conclusion",
+          "layoutId": "layout/conclusion",
+          "rect": {
+            "x": 0,
+            "y": 536,
+            "width": 820,
+            "height": 96
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 115
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1242,
+        "height": 704
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/appearance"],
+        ["board/layout/controls"],
+        ["board/layout/results"],
+        ["board/layout/conclusion"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/ecology/Nutrients",
+      "version": 1
+    },
+    {
+      "id": "appearance/ecology-nutrients",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    },
+    {
+      "id": "displays/StatusMessage",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Light and water are fixed and suitable. All supplies are relative levels; 100 is sufficient in this fictional plant.",
+    "Biomass follows the lowest supply up to a ceiling of 100. Height is a separate nonlinear index. Equal shortages co-limit growth.",
+    "Deficiency cues are illustrative. Excess, soil interactions, species differences and toxicity are outside this teaching model; it is not fertilizer advice."
+  ],
+  "catalog": {
+    "icon": "\u2667",
+    "category": "science",
+    "order": 16
+  }
+}

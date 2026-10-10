@@ -4,9 +4,10 @@ import type { Port, PublicDefinition } from "../../runtime/authoring/types";
 import { boolean, num, object } from "../../runtime/parameterSchema";
 import { liveExplorationCommands } from "../controls/interactionPolicy";
 import { componentDefinitions } from "../registry";
-import { authoringDefinitions } from "./authoring";
 import { agentDefinitions } from "./agents";
+import { authoringDefinitions } from "./authoring";
 import { definitionDiscovery } from "./discovery";
+import { ecologyControlDefinitions } from "./ecologyControls";
 import { explorationDefinitions } from "./exploration";
 import { applyExplorationTeaching } from "./explorationTeaching";
 import { genericDefinitions } from "./generic";
@@ -27,6 +28,7 @@ function register(definition: PublicDefinition) {
 }
 for (const d of [
   ...genericDefinitions,
+  ...ecologyControlDefinitions,
   ...agentDefinitions,
   ...explorationDefinitions,
   ...authoringDefinitions,

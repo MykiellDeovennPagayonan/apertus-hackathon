@@ -93,9 +93,15 @@ export function boardItemMinimum(
     (node) => node.id === layout?.node,
   )?.definition;
   if (definition === "controls/Button") return { width: 160, height: 48 };
+  if (definition === "controls/FoodWebPopulation")
+    return { width: 280, height: 330 };
   if (definition === "controls/AgentActions") return { width: 280, height: 96 };
   if (definition === "controls/Toggle") return { width: 160, height: 80 };
-  if (definition === "displays/Readout") return { width: 128, height: 96 };
+  if (
+    definition === "displays/Readout" ||
+    definition === "displays/StatusMessage"
+  )
+    return { width: 128, height: 96 };
   if (definition === "displays/Inspector") {
     const node = d.nodes.find((node) => node.id === layout?.node);
     const binding = d.connections.find(

@@ -10,9 +10,7 @@ const { publicDefinitions } = load(
 const { assemblyModels } = load("src/simulations/runtime/assembly.ts");
 const catalog = load("src/lib/planner/catalog.ts");
 const bucket = load("src/lib/planner/bucket.ts");
-const { listPremadeRecipes } = load(
-  "src/simulations/runtime/recipes/registry.ts",
-);
+const registry = load("src/simulations/runtime/recipes/registry.ts");
 const fixture = path.join(
   __dirname,
   "fixtures/component-cleanup-contracts.json",
@@ -69,10 +67,9 @@ function contracts() {
       ]),
     ),
     compositeCards: Object.fromEntries(
-      listPremadeRecipes().map(({ slug }) => [
-        slug,
-        hash(bucket.buildCompositeCard(slug)),
-      ]),
+      registry
+        .listPremadeRecipes()
+        .map(({ slug }) => [slug, hash(bucket.buildCompositeCard(slug))]),
     ),
     buckets: Object.fromEntries(
       prompts.map((prompt) => [
@@ -95,7 +92,43 @@ if (process.argv.includes("--capture")) {
 } else {
   // Implementation 021 adds agent capabilities. Protect every historical contract
   // while admitting only these explicit additions; never recapture the baseline.
-  const current = canonical(contracts());
+  // Implementation 022 adds four authored systems. Verify the historical catalog
+  // in isolation so approved additions cannot displace old top-12 retrieval cards.
+  // Their own contracts and real round trips are covered by test:systems/test:recipes.
+  const newSlugs = new Set([
+    "nutrient-limitation",
+    "craft-production",
+    "wildfire",
+    "food-web",
+  ]);
+  const newModels = assemblyModels.filter((m) =>
+    ["ecology", "social-systems"].includes(m.ref.split("/")[1]),
+  );
+  assert.equal(newModels.length, 4);
+  const newIds = newModels.flatMap((m) => [
+    m.ref,
+    `appearance/${m.presentation}`,
+    `resources/${m.ref.replaceAll("/", "-")}`,
+  ]);
+  newIds.push("controls/FoodWebPopulation");
+  const restored = new Map(newIds.map((id) => [id, publicDefinitions.get(id)]));
+  const allRecipes = registry.listPremadeRecipes;
+  const historicalRecipes = allRecipes().filter(
+    (entry) => !newSlugs.has(entry.slug),
+  );
+  for (const [id, definition] of restored) {
+    assert.ok(definition, id);
+    publicDefinitions.delete(id);
+  }
+  registry.listPremadeRecipes = () => historicalRecipes;
+  let current;
+  try {
+    current = canonical(contracts());
+  } finally {
+    registry.listPremadeRecipes = allRecipes;
+    for (const [id, definition] of restored)
+      publicDefinitions.set(id, definition);
+  }
   const added = [
     "models/AIAgent",
     "models/AgentSession",

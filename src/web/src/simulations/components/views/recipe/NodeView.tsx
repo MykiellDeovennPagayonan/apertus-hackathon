@@ -5,6 +5,7 @@ import type { DocumentRuntime } from "../../../runtime/authoring/runtime";
 import type { ComponentInstance } from "../../../runtime/authoring/types";
 import { publicDefinition } from "../../catalog";
 import { AgentActions } from "../../controls/AgentActions";
+import { FoodWebPopulationControl } from "../../controls/FoodWebPopulationControl";
 import { AgentProfileView, AgentTranscriptView } from "../agents/AgentViews";
 import { MathReadoutView } from "../MathReadoutView";
 import { CanvasPresentation } from "./CanvasPresentation";
@@ -29,6 +30,8 @@ export function NodeView({
     return <AgentTranscriptView node={node} runtime={runtime} />;
   if (node.definition === "controls/AgentActions")
     return <AgentActions node={node} runtime={runtime} />;
+  if (node.definition === "controls/FoodWebPopulation")
+    return <FoodWebPopulationControl node={node} runtime={runtime} />;
   if (def.category === "models") return null;
   if (def.category === "controls")
     return <ControlPresentation node={node} runtime={runtime} />;

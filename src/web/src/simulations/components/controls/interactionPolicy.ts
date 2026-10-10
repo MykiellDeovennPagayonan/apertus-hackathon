@@ -1,5 +1,15 @@
 /** Safe, absolute exploration setters. Additive/rebuilding actions stay explicit. */
 export const liveExplorationCommands = new Set([
+  "NUTRIENT_SET_NITROGEN",
+  "NUTRIENT_SET_PHOSPHORUS",
+  "NUTRIENT_SET_POTASSIUM",
+  "FIRE_SET_COVERAGE",
+  "FIRE_SET_WIND",
+  "FIRE_SET_MOISTURE",
+  "WEB_SET_PRESSURE",
+  "PRODUCTION_SET_SPECIALIZATION",
+  "PRODUCTION_SET_DELAY",
+  "PRODUCTION_SET_DISRUPTION",
   "PEND_SET_LENGTH",
   "PEND_SET_GRAVITY",
   "PEND_SET_AMPLITUDE",

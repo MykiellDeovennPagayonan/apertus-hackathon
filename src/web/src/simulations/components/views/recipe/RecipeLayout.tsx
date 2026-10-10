@@ -311,6 +311,10 @@ function LayoutView({
         layout.fontSize || themeTokens?.fontSize
           ? `${layout.fontSize ?? Number(themeTokens?.fontSize)}px`
           : undefined,
+      "--recipe-font-size":
+        layout.fontSize || themeTokens?.fontSize
+          ? `${layout.fontSize ?? Number(themeTokens?.fontSize)}px`
+          : undefined,
       "--mobile-columns": layout.mobileColumns ?? 1,
       ...(themeTokens
         ? {

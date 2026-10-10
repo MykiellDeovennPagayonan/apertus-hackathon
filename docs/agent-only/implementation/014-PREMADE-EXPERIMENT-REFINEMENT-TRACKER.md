@@ -1,6 +1,7 @@
 # Premade experiment refinement tracker
 
-Date: 2026-10-06  
+Date: 2026-10-10
+
 Scope: every premade currently offered in the Experiments tab.  
 Priority: learner UX first, supported by clean code, shared components, and explicit recipes.
 
@@ -27,8 +28,14 @@ The inventory follows the current [Experiments catalog](../../../src/web/src/app
 | Area & perimeter | `area-perimeter` | **Refined** | [recipe.json](../../../src/web/src/simulations/pre-made/area-perimeter/recipe.json) | Width and height in metres alongside a proportional rectangle; shaded area and contrasting perimeter edge; independent area/perimeter readouts arranged side by side. |
 | Coordinate plotting | `coordinates` | **Refined** | [recipe.json](../../../src/web/src/simulations/pre-made/coordinates/recipe.json) | Exact decimal x/y entry, a touch-sized draggable point, one-unit arrow-key movement, projection guides, labeled coordinates, and independent horizontal/vertical readouts. |
 | Probability trials | `probability` | **Refined** | [recipe.json](../../../src/web/src/simulations/pre-made/probability/recipe.json) | Staged coin/die and trial-count choices; one Run trials action creates a fresh reproducible sample; a readable count/percentage chart and independent observed-versus-expected summary. |
+| Two perspectives, one city | `agent-conversation` | **Implemented — prior batch** | [recipe.json](../../../src/web/src/simulations/pre-made/agent-conversation/recipe.json) | Existing agent conversation; this batch preserves it and checks its HTML scene rather than its decorative SVG. |
+| Three-versus-three AI debate | `debate` | **Implemented — prior batch** | [recipe.json](../../../src/web/src/simulations/pre-made/debate/recipe.json) | Existing authored debate; no new learner refinement claimed in this batch. |
+| Nutrients & plant growth | `nutrient-limitation` | **Reviewed — desktop** | [recipe.json](../../../src/web/src/simulations/pre-made/nutrient-limitation/recipe.json) | Shared-scale plants, sufficient-resource bars, co-limitation, validated inputs, biomass/height and causal explanation. |
+| Craft or assembly line? | `craft-production` | **Reviewed — desktop** | [recipe.json](../../../src/web/src/simulations/pre-made/craft-production/recipe.json) | Equal workers/shift; follow an item through stages; queues, idle time, output, defects; bottleneck and interruption counterexamples. |
+| Wildfire & fuel treatment | `wildfire` | **Reviewed — desktop** | [recipe.json](../../../src/web/src/simulations/pre-made/wildfire/recipe.json) | Identical ignition/weather; paired patterned landscapes; treatment, intensity, burned area and community outcomes, including treatment crossing. |
+| Food-web connections | `food-web` | **Reviewed — desktop** | [recipe.json](../../../src/web/src/simulations/pre-made/food-web/recipe.json) | Readable three-organism feeding paths, searchable access to all 24 Yellowstone nodes, sourced species details and a guided wolf-removal scenario. |
 
-**Count: 13 premades; 12 refined, 1 not yet (Living town).** Counting is currently titled “Counting circles” in the catalog; this is the counting-numbers activity discussed during refinement.
+**Count: 19 premades; 12 previously refined, 4 desktop-reviewed, 2 prior agent implementations, 1 not yet (Living town).** Counting is currently titled “Counting circles” in the catalog; this is the counting-numbers activity discussed during refinement.
 
 Gas retains its existing filename and loading path as a deliberate protected exception. Do not rename or migrate it to satisfy a generic convention during this work. The earlier gas-migration plan in implementation 013 and the uniform-shell feature document does not override the user's later instruction to leave gas untouched.
 
@@ -149,3 +156,25 @@ The acceptance reference remains gas: a clear change, a visible effect, and a me
 Authored scene, task, and observation nodes remain separate. Compact opening card sizes replace the prior maximum-sized forms. Shared responsive cards expand for validation and additional operands; small-screen layouts place paired quantities side by side at their actual readable scale. Scene SVGs fit their authored bounds. Short instructions identify the next action instead of describing every supported feature at once.
 
 Stricter browser checks enforce the number of opening fields, exact-value target heights and font sizes, no internal card scrolling, invalid-state expansion, unfinished-fraction recovery, keyboard marker movement, and the existing saved JSON / remix / Try lesson flows. Evidence for this correction is recorded in [014-validation/seven-mathematics-ux-correction.md](014-validation/seven-mathematics-ux-correction.md), independently of the older `013-validation` captures.
+
+
+## 8. Four systems desktop review — 2026-10-10
+
+The four new systems use explicit JSON recipes, shared authored execution and independent scene/control/result components. They passed deterministic boundary/counterexample checks, the full non-browser suite, and a 34-state Playwright desktop review with catalog, invalid input, keyboard, reset, saved-file import and Save recipe → Remix → Try lesson coverage. Two written screenshot critique rounds corrected control-column overflow, explanation placement/typography, food-web arrowheads, plant-height scaling and visible factory handoffs/queues.
+
+Evidence, geometry, calibrated assumptions and reproducible commands are recorded in [022 — Four systems simulations, section 12](022-FOUR-SYSTEMS-SIMULATIONS.md#12-evidence-record). Phone acceptance is deferred. Broader browser acceptance remains explicitly blocked by baseline-identical mobile navigation overlap in Area & perimeter and compact Gas clipping; these failures were reproduced against an unchanged archived app. Gas implementation and experience have not been changed to clear the gate. The existing checks retain these assertions.
+
+
+### Four systems follow-up: spacing and actual food-web exploration
+
+The user-requested follow-up replaces the six-role food illustration with a 24-node Yellowstone explorer, including 18 actual named animals, 55 feeding links, species details and independent combined interventions. Shared systems spacing now uses consistent insets/gaps, resized cards, and validation feedback that replaces the range hint in place. All four opening screenshots and detailed exploration evidence are retained in [022-validation/refinement](022-validation/refinement/); [section 13 of the implementation record](022-FOUR-SYSTEMS-SIMULATIONS.md#13-user-requested-spacing-and-food-web-expansion--2026-10-10) records the critique and engineering decisions. The additional Playwright loop covers all 24 organism controls, focused layouts, species dialogs, bounds/rejection, navigation, combined interventions and reset. Protected Gas and the prior broader browser acceptance limits remain unchanged.
+
+
+### User-rejected presentation replaced with learning interactions
+
+Section 14 of [022](022-FOUR-SYSTEMS-SIMULATIONS.md) supersedes the prior food-web and production presentation. Food-web exploration uses explicit feeding paths and a searchable organism browser. Production now uses an illustrated chair factory with selectable stations and a watch/pause journey. Wildfire adds authoritative selectable treatment patches and a separate comparison step. Nutrients remain unchanged. Final visual evidence is retained in [022-validation/ux-redesign](022-validation/ux-redesign/). Geometry passing alone is not represented as proof of student comprehension.
+
+
+Latest user-directed comparison refinement: section 15 of [022](022-FOUR-SYSTEMS-SIMULATIONS.md) supersedes section 14's wildfire planner and factory illustration. Wildfire preserves the original compact paired grids and lets learners treat individual trees directly on the right-hand map. Production uses equal overhead factories with matching eight-station layouts, small workers, independent chair building on the left and directional handoffs on the right. [Screenshots and desktop QA](022-validation/compact-grids-topdown/) include custom firebreak/gap outcomes and slow-station queues. Food and nutrients retain their reviewed presentation.
+
+Factory spacing follow-up: section 16 of [022](022-FOUR-SYSTEMS-SIMULATIONS.md) records slightly taller matching rooms, smaller workers/workbenches and greater row separation, with preserved station targets. [Latest screenshots](022-validation/factory-spacing/) and the desktop Playwright state matrix pass.

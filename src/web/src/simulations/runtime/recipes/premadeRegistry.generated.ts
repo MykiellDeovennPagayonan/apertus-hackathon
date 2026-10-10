@@ -5,13 +5,17 @@ import recipe2 from "../../pre-made/arithmetic/recipe.json";
 import recipe3 from "../../pre-made/bridge/recipe.json";
 import recipe4 from "../../pre-made/coordinates/recipe.json";
 import recipe5 from "../../pre-made/counting/recipe.json";
-import recipe6 from "../../pre-made/debate/recipe.json";
-import recipe7 from "../../pre-made/equal-groups/recipe.json";
-import recipe8 from "../../pre-made/fraction-builder/recipe.json";
-import recipe9 from "../../pre-made/fraction-number-line/recipe.json";
-import recipe10 from "../../pre-made/probability/recipe.json";
-import recipe11 from "../../pre-made/projectile/recipe.json";
-import recipe12 from "../../pre-made/ratio/recipe.json";
+import recipe6 from "../../pre-made/craft-production/recipe.json";
+import recipe7 from "../../pre-made/debate/recipe.json";
+import recipe8 from "../../pre-made/equal-groups/recipe.json";
+import recipe9 from "../../pre-made/food-web/recipe.json";
+import recipe10 from "../../pre-made/fraction-builder/recipe.json";
+import recipe11 from "../../pre-made/fraction-number-line/recipe.json";
+import recipe12 from "../../pre-made/nutrient-limitation/recipe.json";
+import recipe13 from "../../pre-made/probability/recipe.json";
+import recipe14 from "../../pre-made/projectile/recipe.json";
+import recipe15 from "../../pre-made/ratio/recipe.json";
+import recipe16 from "../../pre-made/wildfire/recipe.json";
 export const premadeSources = {
   "agent-conversation": recipe0,
   "area-perimeter": recipe1,
@@ -19,11 +23,15 @@ export const premadeSources = {
   "bridge": recipe3,
   "coordinates": recipe4,
   "counting": recipe5,
-  "debate": recipe6,
-  "equal-groups": recipe7,
-  "fraction-builder": recipe8,
-  "fraction-number-line": recipe9,
-  "probability": recipe10,
-  "projectile": recipe11,
-  "ratio": recipe12,
+  "craft-production": recipe6,
+  "debate": recipe7,
+  "equal-groups": recipe8,
+  "food-web": recipe9,
+  "fraction-builder": recipe10,
+  "fraction-number-line": recipe11,
+  "nutrient-limitation": recipe12,
+  "probability": recipe13,
+  "projectile": recipe14,
+  "ratio": recipe15,
+  "wildfire": recipe16,
 } as const;

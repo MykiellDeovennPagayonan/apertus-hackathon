@@ -1,8 +1,8 @@
 {
   "generatedBy": "src/web/scripts/builder/audit-public-catalog.cjs",
-  "originalSourceFiles": 298,
-  "sourceFiles": 301,
-  "exportRecords": 703,
+  "originalSourceFiles": 301,
+  "sourceFiles": 313,
+  "exportRecords": 726,
   "records": [
     {
       "source": "src/web/src/simulations/components/README.md",
@@ -1079,6 +1079,53 @@
       "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
+      "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+      "export": "ecologyControlDefinitions",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "ecologyControlDefinitions"
+          ]
+        }
+      ],
+      "responsibility": "infrastructure",
+      "finalOwner": {
+        "kind": "catalog/recipe infrastructure",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/index.ts"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "ecologyControlDefinitions"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public infrastructure owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
       "source": "src/web/src/simulations/components/catalog/exploration.ts",
       "export": "explorationDefinitions",
       "activeConsumers": [
@@ -1568,6 +1615,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/catalog/exploration.ts",
           "typeOnly": false,
           "symbols": [
@@ -1590,10 +1644,11 @@
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/catalog/authoring.ts",
           "src/web/src/simulations/components/catalog/controlDefinitions.ts",
+          "src/web/src/simulations/components/catalog/ecologyControls.ts",
           "src/web/src/simulations/components/catalog/exploration.ts",
           "src/web/src/simulations/components/catalog/index.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -1624,6 +1679,13 @@
         {
           "source": "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "typeOnly": true,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
           "symbols": [
             "base"
           ]
@@ -1675,6 +1737,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/catalog/exploration.ts",
           "typeOnly": false,
           "symbols": [
@@ -1697,10 +1766,11 @@
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/catalog/authoring.ts",
           "src/web/src/simulations/components/catalog/controlDefinitions.ts",
+          "src/web/src/simulations/components/catalog/ecologyControls.ts",
           "src/web/src/simulations/components/catalog/exploration.ts",
           "src/web/src/simulations/components/catalog/index.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -1731,6 +1801,13 @@
         {
           "source": "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "typeOnly": true,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
           "symbols": [
             "base"
           ]
@@ -14959,6 +15036,53 @@
       "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
+      "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+      "export": "FoodWebPopulationControl",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodWebPopulationControl"
+          ]
+        }
+      ],
+      "responsibility": "control",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodWebPopulationControl"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public control owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
       "source": "src/web/src/simulations/components/controls/FractionBuilderControls.tsx",
       "export": "FractionBuilderControls",
       "activeConsumers": [
@@ -15746,6 +15870,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "NumberField"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/controls/IntegerStepper.tsx",
           "typeOnly": false,
           "symbols": [
@@ -15812,6 +15943,7 @@
           "src/web/src/simulations/components/controls/ActivityControl.tsx",
           "src/web/src/simulations/components/controls/BoundControl.tsx",
           "src/web/src/simulations/components/controls/EqualGroupsControls.tsx",
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
           "src/web/src/simulations/components/controls/IntegerStepper.tsx",
           "src/web/src/simulations/components/controls/MathPrimaryControls.tsx",
           "src/web/src/simulations/components/controls/ParameterSlider.tsx",
@@ -15861,6 +15993,13 @@
         },
         {
           "source": "src/web/src/simulations/components/controls/EqualGroupsControls.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "NumberField"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
           "typeOnly": false,
           "symbols": [
             "NumberField"
@@ -17778,6 +17917,14 @@
           ]
         },
         {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
           "source": "src/web/scripts/verify-component-completion.cjs",
           "typeOnly": false,
           "symbols": [
@@ -17801,9 +17948,10 @@
           "src/web/src/simulations/runtime/authoring/connections.ts",
           "src/web/src/simulations/runtime/authoring/operations.ts",
           "src/web/src/simulations/runtime/authoring/runtime.ts",
+          "src/web/scripts/domains/systems-comparisons/verify.cjs",
           "src/web/scripts/verify-component-completion.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/scripts/verify-component-completion.cjs"
+        "destination": "src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/scripts/domains/systems-comparisons/verify.cjs, src/web/scripts/verify-component-completion.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -17889,6 +18037,14 @@
           "symbols": [
             "acceptedCommandArguments"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         },
         {
           "source": "src/web/scripts/verify-component-completion.cjs",
@@ -17983,6 +18139,14 @@
           ]
         },
         {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
           "source": "src/web/scripts/verify-component-completion.cjs",
           "typeOnly": false,
           "symbols": [
@@ -18006,9 +18170,10 @@
           "src/web/src/simulations/runtime/authoring/connections.ts",
           "src/web/src/simulations/runtime/authoring/operations.ts",
           "src/web/src/simulations/runtime/authoring/runtime.ts",
+          "src/web/scripts/domains/systems-comparisons/verify.cjs",
           "src/web/scripts/verify-component-completion.cjs"
         ],
-        "destination": "src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/scripts/verify-component-completion.cjs"
+        "destination": "src/web/src/simulations/builder/composition/ControlSettings.tsx, src/web/src/simulations/builder/editor/controlTypeCommands.ts, src/web/src/simulations/components/composites/catalog.ts, src/web/src/simulations/components/controls/ScalarControl.tsx, src/web/src/simulations/components/controls/chemistry/ChemistryControls.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/runtime/authoring/bindings.ts, src/web/src/simulations/runtime/authoring/connections.ts, src/web/src/simulations/runtime/authoring/operations.ts, src/web/src/simulations/runtime/authoring/runtime.ts, src/web/scripts/domains/systems-comparisons/verify.cjs, src/web/scripts/verify-component-completion.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -18094,6 +18259,14 @@
           "symbols": [
             "acceptedCommandArguments"
           ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         },
         {
           "source": "src/web/scripts/verify-component-completion.cjs",
@@ -53345,6 +53518,1514 @@
       "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
     },
     {
+      "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+      "export": "FoodWebState",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "foodWebMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "foodWebMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodWebState",
+            "foodWebMeasure"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx, src/web/src/simulations/domains/ecology/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "foodWebMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "foodWebMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodWebState",
+            "foodWebMeasure"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+      "export": "foodWebMeasure",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "foodWebMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "foodWebMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodWebState",
+            "foodWebMeasure"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx, src/web/src/simulations/domains/ecology/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "foodWebMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "foodWebMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodWebState",
+            "foodWebMeasure"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/foodWebSpecies.ts",
+      "export": "foodWebSpecies",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts",
+          "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "src/web/scripts/domains/systems-comparisons/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/systems/ecology/foodWeb.ts, src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx, src/web/src/simulations/domains/ecology/index.ts, src/web/scripts/domains/systems-comparisons/food-web-browser.cjs, src/web/scripts/domains/systems-comparisons/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/foodWebSpecies.ts",
+      "export": "FoodSpeciesId",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts",
+          "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "src/web/scripts/domains/systems-comparisons/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/systems/ecology/foodWeb.ts, src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx, src/web/src/simulations/domains/ecology/index.ts, src/web/scripts/domains/systems-comparisons/food-web-browser.cjs, src/web/scripts/domains/systems-comparisons/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/foodWebSpecies.ts",
+      "export": "FeedingLink",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts",
+          "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "src/web/scripts/domains/systems-comparisons/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/systems/ecology/foodWeb.ts, src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx, src/web/src/simulations/domains/ecology/index.ts, src/web/scripts/domains/systems-comparisons/food-web-browser.cjs, src/web/scripts/domains/systems-comparisons/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/foodWebSpecies.ts",
+      "export": "foodWebLinks",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts",
+          "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "src/web/scripts/domains/systems-comparisons/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/systems/ecology/foodWeb.ts, src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx, src/web/src/simulations/domains/ecology/index.ts, src/web/scripts/domains/systems-comparisons/food-web-browser.cjs, src/web/scripts/domains/systems-comparisons/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/foodWebSpecies.ts",
+      "export": "speciesById",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts",
+          "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "src/web/scripts/domains/systems-comparisons/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/systems/ecology/foodWeb.ts, src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx, src/web/src/simulations/domains/ecology/index.ts, src/web/scripts/domains/systems-comparisons/food-web-browser.cjs, src/web/scripts/domains/systems-comparisons/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/foodWebSpecies.ts",
+      "export": "nutrientReturnLinks",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts",
+          "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "src/web/scripts/domains/systems-comparisons/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/systems/ecology/foodWeb.ts, src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx, src/web/src/simulations/domains/ecology/index.ts, src/web/scripts/domains/systems-comparisons/food-web-browser.cjs, src/web/scripts/domains/systems-comparisons/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/ecologyControls.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/ecology/foodWeb.ts",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodSpeciesId",
+            "foodWebLinks",
+            "foodWebSpecies",
+            "nutrientReturnLinks",
+            "speciesById"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "foodWebSpecies"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/food-web-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/domains/systems-comparisons/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/nutrients.ts",
+      "export": "NutrientState",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/NutrientLimitationVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "nutrientsMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "NutrientState",
+            "nutrientsMeasure"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/ecology/NutrientLimitationVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/visuals/ecology/NutrientLimitationVisual.tsx, src/web/src/simulations/domains/ecology/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/NutrientLimitationVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "nutrientsMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "NutrientState",
+            "nutrientsMeasure"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/nutrients.ts",
+      "export": "nutrientsMeasure",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/NutrientLimitationVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "nutrientsMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "NutrientState",
+            "nutrientsMeasure"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/ecology/NutrientLimitationVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/visuals/ecology/NutrientLimitationVisual.tsx, src/web/src/simulations/domains/ecology/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/NutrientLimitationVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "nutrientsMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "NutrientState",
+            "nutrientsMeasure"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/wildfire.ts",
+      "export": "WildfireState",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "WILDFIRE_MAP",
+            "wildfireMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "treatmentPatches",
+            "WILDFIRE_MAP",
+            "WildfireState",
+            "wildfireMeasure"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx, src/web/src/simulations/domains/ecology/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "WILDFIRE_MAP",
+            "wildfireMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "treatmentPatches",
+            "WILDFIRE_MAP",
+            "WildfireState",
+            "wildfireMeasure"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/wildfire.ts",
+      "export": "WILDFIRE_MAP",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "WILDFIRE_MAP",
+            "wildfireMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "treatmentPatches",
+            "WILDFIRE_MAP",
+            "WildfireState",
+            "wildfireMeasure"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx, src/web/src/simulations/domains/ecology/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "WILDFIRE_MAP",
+            "wildfireMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "treatmentPatches",
+            "WILDFIRE_MAP",
+            "WildfireState",
+            "wildfireMeasure"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/wildfire.ts",
+      "export": "treatmentPatches",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "WILDFIRE_MAP",
+            "wildfireMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "treatmentPatches",
+            "WILDFIRE_MAP",
+            "WildfireState",
+            "wildfireMeasure"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx, src/web/src/simulations/domains/ecology/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "WILDFIRE_MAP",
+            "wildfireMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "treatmentPatches",
+            "WILDFIRE_MAP",
+            "WildfireState",
+            "wildfireMeasure"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/ecology/wildfire.ts",
+      "export": "wildfireMeasure",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "WILDFIRE_MAP",
+            "wildfireMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "treatmentPatches",
+            "WILDFIRE_MAP",
+            "WildfireState",
+            "wildfireMeasure"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+          "src/web/src/simulations/domains/ecology/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx, src/web/src/simulations/domains/ecology/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "WILDFIRE_MAP",
+            "wildfireMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/ecology/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "treatmentPatches",
+            "WILDFIRE_MAP",
+            "WildfireState",
+            "wildfireMeasure"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
       "source": "src/web/src/simulations/components/systems/exploration/eclipse.ts",
       "export": "EclipseParameters",
       "activeConsumers": [
@@ -68307,6 +69988,134 @@
           "symbols": [
             "pendulumAngle",
             "pendulumPeriod"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/social-systems/production.ts",
+      "export": "ProductionState",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/social-systems/ProductionComparisonVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "productionMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/social-systems/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "ProductionState",
+            "productionMeasure"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/social-systems/ProductionComparisonVisual.tsx",
+          "src/web/src/simulations/domains/social-systems/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/visuals/social-systems/ProductionComparisonVisual.tsx, src/web/src/simulations/domains/social-systems/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/social-systems/ProductionComparisonVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "productionMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/social-systems/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "ProductionState",
+            "productionMeasure"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/social-systems/production.ts",
+      "export": "productionMeasure",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/social-systems/ProductionComparisonVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "productionMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/social-systems/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "ProductionState",
+            "productionMeasure"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/social-systems/ProductionComparisonVisual.tsx",
+          "src/web/src/simulations/domains/social-systems/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/visuals/social-systems/ProductionComparisonVisual.tsx, src/web/src/simulations/domains/social-systems/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/social-systems/ProductionComparisonVisual.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "productionMeasure"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/social-systems/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "ProductionState",
+            "productionMeasure"
           ]
         }
       ],
@@ -101808,6 +103617,13 @@
       "export": "AuthorControls",
       "activeConsumers": [
         {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "typeOnly": false,
           "symbols": [
@@ -101878,6 +103694,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
@@ -101887,7 +103704,7 @@
           "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
           "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
         ],
-        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -101901,6 +103718,13 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
         {
           "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "typeOnly": false,
@@ -101978,6 +103802,13 @@
       "export": "MotionContext",
       "activeConsumers": [
         {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "typeOnly": false,
           "symbols": [
@@ -102048,6 +103879,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
@@ -102057,7 +103889,7 @@
           "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
           "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
         ],
-        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -102071,6 +103903,13 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
         {
           "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "typeOnly": false,
@@ -102148,6 +103987,13 @@
       "export": "AuthorContext",
       "activeConsumers": [
         {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "typeOnly": false,
           "symbols": [
@@ -102218,6 +104064,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
@@ -102227,7 +104074,7 @@
           "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
           "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
         ],
-        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -102241,6 +104088,13 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
         {
           "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "typeOnly": false,
@@ -102318,6 +104172,13 @@
       "export": "SnapshotContext",
       "activeConsumers": [
         {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "typeOnly": false,
           "symbols": [
@@ -102388,6 +104249,7 @@
         "kind": "private implementation owned by static consumers",
         "packages": [],
         "consumers": [
+          "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
@@ -102397,7 +104259,7 @@
           "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
           "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
         ],
-        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -102411,6 +104273,13 @@
         "builderImports": false
       },
       "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
         {
           "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "typeOnly": false,
@@ -103217,6 +105086,53 @@
       "dependencies": [
         {
           "source": "src/web/src/simulations/components/views/SceneToolbar.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/systems-comparisons.css",
+      "export": "(file)",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/RecipeLesson.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/RecipeLesson.tsx"
+      },
+      "classification": "private presentation stylesheet",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -106669,6 +108585,147 @@
       "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
     },
     {
+      "source": "src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx",
+      "export": "FoodWebVisual",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodWebVisual"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "FoodWebVisual"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/ecology/NutrientLimitationVisual.tsx",
+      "export": "NutrientLimitationVisual",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "NutrientLimitationVisual"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "NutrientLimitationVisual"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx",
+      "export": "WildfireComparisonVisual",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "WildfireComparisonVisual"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "WildfireComparisonVisual"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
       "source": "src/web/src/simulations/components/visuals/exploration/EclipseVisual.tsx",
       "export": "EclipseVisual",
       "activeConsumers": [
@@ -107418,6 +109475,53 @@
       "destination": "public appearance owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/social-systems/ProductionComparisonVisual.tsx",
+      "export": "ProductionComparisonVisual",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ProductionComparisonVisual"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "ProductionComparisonVisual"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
       "source": "src/web/src/simulations/components/visuals/townGeometry.tsx",

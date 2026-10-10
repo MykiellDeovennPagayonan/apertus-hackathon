@@ -1,0 +1,506 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/wildfire",
+  "version": 1,
+  "title": "Wildfire & fuel treatment",
+  "description": "Compare the same wildfire and weather with and without an earlier prescribed fuel treatment.",
+  "tags": [
+    "science",
+    "systems",
+    "comparison"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/ecology/Wildfire",
+        "version": 1,
+        "label": "Wildfire & fuel treatment",
+        "scope": "scope/lab",
+        "configuration": {
+          "coverage": 50,
+          "wind": 35,
+          "moisture": 40,
+          "custom": 0,
+          "patches": []
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/ecology-wildfire",
+        "version": 1,
+        "label": "Visual comparison",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/coverage",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Treatment width",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Firebreak width preset",
+          "mode": "immediate",
+          "initial": "{\"value\":50}",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/wind",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Wind severity",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Wind severity",
+          "mode": "immediate",
+          "initial": "{\"value\":35}",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/moisture",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Fuel moisture",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Fuel moisture",
+          "mode": "immediate",
+          "initial": "{\"value\":40}",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/untreatedArea",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Untreated area burned",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Untreated area burned",
+          "precision": 0
+        }
+      },
+      {
+        "id": "result/treatedArea",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Treated area burned",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Treated area burned",
+          "precision": 0
+        }
+      },
+      {
+        "id": "result/reduction",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Area reduction",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Area reduction",
+          "precision": 0
+        }
+      },
+      {
+        "id": "result/community",
+        "definition": "displays/StatusMessage",
+        "version": 1,
+        "label": "Community \u00b7 untreated / treated",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Community \u00b7 untreated / treated",
+          "precision": 0
+        }
+      },
+      {
+        "id": "conclusion",
+        "definition": "displays/StatusMessage",
+        "version": 1,
+        "label": "What this shows",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "What this shows",
+          "precision": 0
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/input/coverage",
+        "kind": "command",
+        "from": {
+          "node": "input/coverage",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "FIRE_SET_COVERAGE"
+        }
+      },
+      {
+        "id": "link/input/wind",
+        "kind": "command",
+        "from": {
+          "node": "input/wind",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "FIRE_SET_WIND"
+        }
+      },
+      {
+        "id": "link/input/moisture",
+        "kind": "command",
+        "from": {
+          "node": "input/moisture",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "FIRE_SET_MOISTURE"
+        }
+      },
+      {
+        "id": "link/result/untreatedArea",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "untreatedArea"
+        },
+        "to": {
+          "node": "result/untreatedArea",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/treatedArea",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "treatedArea"
+        },
+        "to": {
+          "node": "result/treatedArea",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/reduction",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "reduction"
+        },
+        "to": {
+          "node": "result/reduction",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/community",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "community"
+        },
+        "to": {
+          "node": "result/community",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/conclusion",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "conclusion"
+        },
+        "to": {
+          "node": "conclusion",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Wildfire & fuel treatment"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/controls",
+          "kind": "stack",
+          "label": "Change one condition",
+          "gap": 12,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/coverage",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "input/coverage"
+            },
+            {
+              "id": "layout/input/wind",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "input/wind"
+            },
+            {
+              "id": "layout/input/moisture",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "input/moisture"
+            }
+          ]
+        },
+        {
+          "id": "layout/results",
+          "kind": "stack",
+          "label": "What happened",
+          "gap": 12,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/measurements",
+              "kind": "grid",
+              "label": "",
+              "gap": 14,
+              "columns": 3,
+              "children": [
+                {
+                  "id": "layout/result/untreatedArea",
+                  "kind": "stack",
+                  "label": "",
+                  "gap": 8,
+                  "columns": 1,
+                  "children": [],
+                  "node": "result/untreatedArea"
+                },
+                {
+                  "id": "layout/result/treatedArea",
+                  "kind": "stack",
+                  "label": "",
+                  "gap": 8,
+                  "columns": 1,
+                  "children": [],
+                  "node": "result/treatedArea"
+                },
+                {
+                  "id": "layout/result/reduction",
+                  "kind": "stack",
+                  "label": "",
+                  "gap": 8,
+                  "columns": 1,
+                  "children": [],
+                  "node": "result/reduction"
+                }
+              ]
+            },
+            {
+              "id": "layout/result/community",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "result/community"
+            }
+          ]
+        },
+        {
+          "id": "layout/conclusion",
+          "kind": "stack",
+          "label": "Why it happens",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "conclusion",
+          "fontSize": 16
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Wildfire & fuel treatment",
+      "instruction": "Choose tree patches for earlier fuel treatment. Compare both fires, then test whether your firebreak still works in stronger wind.",
+      "explanation": "Same ignition, fixed vegetation pattern, wind and moisture in both maps. A fixed central strip has reduced fuel; width is rounded to whole patches. A deterministic downwind heat-spread model illustrates reduced severity and crossing under extreme conditions. Intensity is a relative index, not a real fire forecast. Fire is a natural ecological process in many landscapes. Real prescribed burning requires qualified professionals, an approved plan and suitable conditions."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 820,
+            "height": 475
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 180
+        },
+        {
+          "id": "board/layout/controls",
+          "layoutId": "layout/controls",
+          "rect": {
+            "x": 844,
+            "y": 0,
+            "width": 350,
+            "height": 444
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 200
+        },
+        {
+          "id": "board/layout/results",
+          "layoutId": "layout/results",
+          "rect": {
+            "x": 844,
+            "y": 464,
+            "width": 350,
+            "height": 218
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 115
+        },
+        {
+          "id": "board/layout/conclusion",
+          "layoutId": "layout/conclusion",
+          "rect": {
+            "x": 0,
+            "y": 495,
+            "width": 820,
+            "height": 96
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 115
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1242,
+        "height": 792
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/controls"
+        ],
+        [
+          "board/layout/results"
+        ],
+        [
+          "board/layout/conclusion"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/ecology/Wildfire",
+      "version": 1
+    },
+    {
+      "id": "appearance/ecology-wildfire",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    },
+    {
+      "id": "displays/StatusMessage",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Same ignition, fixed vegetation pattern, wind and moisture in both maps. A fixed central strip has reduced fuel; width is rounded to whole patches.",
+    "A deterministic downwind heat-spread model illustrates reduced severity and crossing under extreme conditions. Intensity is a relative index, not a real fire forecast.",
+    "Fire is a natural ecological process in many landscapes. Real prescribed burning requires qualified professionals, an approved plan and suitable conditions."
+  ],
+  "catalog": {
+    "icon": "\u2668",
+    "category": "science",
+    "order": 18
+  }
+}

@@ -20,6 +20,7 @@ import "./chemistry/ChemistryLesson.css";
 import "./dynamic-systems/DynamicSystemsLesson.css";
 import "./natural-systems/natural-systems.css";
 import "./math.css";
+import "./systems-comparisons.css";
 
 import {
   AuthorContext,

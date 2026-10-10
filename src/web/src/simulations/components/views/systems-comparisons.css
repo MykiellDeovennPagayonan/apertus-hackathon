@@ -1,0 +1,477 @@
+.systems-scene {
+  margin: 0;
+  width: 100%;
+  color: var(--lesson-ink, #30362e);
+}
+.systems-scene figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.systems-scene figcaption strong {
+  font-size: 23px;
+  line-height: 1.2;
+  font-weight: 650;
+  letter-spacing: -0.4px;
+}
+.systems-scene figcaption span {
+  color: var(--lesson-muted, #626c60);
+  font-size: 16px;
+  line-height: 1.4;
+}
+.systems-scene svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+.systems-scene svg text {
+  fill: #30362e;
+  font-family: inherit;
+}
+.systems-label {
+  font-size: 17px;
+  font-weight: 600;
+}
+.systems-small {
+  font-size: 15px;
+}
+.systems-value {
+  font-size: 21px;
+  font-weight: 650;
+  fill: #285e56;
+}
+.systems-scene .systems-warning {
+  fill: #8d5d22;
+  font-weight: 650;
+}
+.systems-footnote {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--lesson-muted, #626c60);
+}
+.systems-limiter {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #f4ecd9;
+  color: #725123;
+  font-size: 16px;
+  margin: 8px 0;
+}
+.systems-limiter strong {
+  font-size: 20px;
+}
+.systems-map-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 13px;
+}
+.systems-map-key span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.systems-map-key i {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+}
+.map-unburned {
+  background: #d4dfbd;
+}
+.map-treated {
+  background: repeating-linear-gradient(
+    135deg,
+    #e6d7af,
+    #e6d7af 3px,
+    #795e32 3px,
+    #795e32 4px
+  );
+}
+.map-low {
+  background: radial-gradient(circle, #715522 2px, #e4a656 3px);
+}
+.map-high {
+  background: #a14c35;
+}
+
+.systems-trace {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 16px;
+}
+.systems-trace button {
+  min-height: 50px;
+  padding: 8px 14px;
+  border: 1px solid var(--lesson-border);
+  border-radius: 8px;
+  background: var(--lesson-panel);
+  color: var(--lesson-ink);
+  font: inherit;
+  cursor: pointer;
+}
+.systems-trace button:focus-visible {
+  outline: 3px solid var(--recipe-accent);
+  outline-offset: 3px;
+}
+
+/* Systems cards use a consistent inset and keep content at its natural height. */
+.recipe-lesson:has(.systems-scene) .board-item:not([data-board-scene="true"])
+  > .board-content {
+  padding: 20px;
+}
+.recipe-lesson:has(.systems-scene) .board-content > .recipe-layout {
+  justify-content: flex-start;
+}
+.recipe-lesson:has(.systems-scene) .recipe-status {
+  align-items: flex-start;
+  line-height: 1.5;
+}
+.recipe-lesson:has(.systems-scene) .recipe-status-dot {
+  margin-top: 8px;
+}
+.recipe-lesson:has(.systems-scene) .number-field--compact {
+  row-gap: 10px;
+}
+.recipe-lesson:has(.systems-scene) .catalog-form .catalog-help {
+  padding-top: 4px;
+}
+.food-explorer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 12px;
+}
+.food-explorer button,
+.food-population-control button,
+.food-population-control select {
+  min-height: 56px;
+  border: 1px solid #c7cebf;
+  border-radius: 8px;
+  padding: 10px 14px;
+  background: #fffbef;
+  color: #30362e;
+  font: inherit;
+  cursor: pointer;
+}
+.food-explorer button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.food-explorer :is(button, a):focus-visible,
+.food-population-control :is(button, select):focus-visible {
+  outline: 3px solid #285e56;
+  outline-offset: 3px;
+}
+.food-population-control {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.food-population-control > label {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: -8px;
+}
+.food-population-control select {
+  width: 100%;
+  padding-right: 8px;
+}
+.food-population-control .catalog-form {
+  gap: 10px;
+}
+.food-control-actions {
+  display: flex;
+  gap: 10px;
+}
+.food-control-actions button {
+  flex: 1;
+  padding-inline: 8px;
+  font-size: 14px;
+}
+.food-population-control .food-reset {
+  align-self: flex-start;
+  background: transparent;
+}
+.food-species-dialog {
+  width: min(700px, calc(100vw - 48px));
+  max-height: calc(100vh - 64px);
+  padding: 28px;
+  border: 1px solid #bdcaba;
+  border-radius: 16px;
+  background: #fffbef;
+  color: #30362e;
+  box-shadow: 0 16px 70px #30362e30;
+}
+.food-species-dialog::backdrop {
+  background: #30362e66;
+}
+.food-dialog-close {
+  display: block;
+  margin: 0 0 24px auto;
+}
+.food-species-heading {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.food-species-heading > span {
+  font-size: 36px;
+}
+.food-species-heading > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.food-species-heading strong {
+  font-size: 24px;
+}
+.food-species-heading a {
+  font-size: 14px;
+  color: #285e56;
+}
+.food-species-detail > p {
+  margin: 24px 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.food-diet-links {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+.recipe-lesson:has(.systems-scene):not(:has(.food-explorer))
+  .board-content
+  > .recipe-layout:has(
+    > .recipe-component-item[data-component-definition="displays/StatusMessage"]
+  ) {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  align-items: start;
+}
+.recipe-lesson:has(.systems-scene)
+  .board-content
+  > .recipe-layout:has(
+    > .recipe-component-item[data-component-definition="displays/StatusMessage"]
+  )
+  .recipe-status-dot {
+  display: none;
+}
+.food-diet-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.food-diet-links h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+/* Invalid drafts replace the scale hint in the same place, rather than growing
+   the entire board or repeating information already present in the error. */
+.recipe-lesson:has(.systems-scene) .number-field--compact .experiment-error {
+  max-width: none;
+}
+.recipe-lesson:has(.systems-scene)
+  .catalog-form:has(.number-field--compact .experiment-error)
+  > .catalog-help {
+  display: none;
+}
+
+/* A food web is explored as one explicit path, rather than overlapping edges. */
+.food-path {
+  display: grid;
+  grid-template-columns: 1fr 28px 1fr 28px 1fr;
+  gap: 10px;
+  margin-top: 28px;
+  align-items: start;
+}
+.food-path section {
+  min-width: 0;
+}
+.food-path h3 {
+  margin: 0 0 14px;
+  font-size: 16px;
+}
+.food-path .food-path-card {
+  width: 100%;
+  min-height: 218px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 12px;
+  text-align: center;
+  background: #f8f4e8;
+}
+.food-path .food-path-card.is-selected {
+  background: #e1ece3;
+  border: 2px solid #39776d;
+}
+.food-path-animal {
+  font-size: 56px;
+  line-height: 1.1;
+}
+.food-path-card strong {
+  font-size: 20px;
+}
+.food-path-card > span:not(.food-path-animal) {
+  font-size: 14px;
+}
+.food-path-card small {
+  font-size: 13px;
+  color: #285e56;
+}
+.food-path-arrow {
+  align-self: start;
+  margin-top: 134px;
+  font-size: 28px;
+  color: #39776d;
+}
+.food-path section > p {
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 18px 0 0;
+}
+.food-path label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  margin-top: 18px;
+}
+.food-path select {
+  width: 100%;
+  font: inherit;
+  min-height: 56px;
+  padding: 8px;
+  border: 1px solid #c7cebf;
+  border-radius: 8px;
+  background: #fffbef;
+}
+.food-path-empty {
+  min-height: 218px;
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  border: 1px dashed #c7cebf;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.food-path-sentence {
+  padding: 16px 20px;
+  margin: 24px 0 12px;
+  background: #f2ead8;
+  border-radius: 8px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+.food-directory h2 {
+  margin-top: 0;
+}
+.food-directory > label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.food-directory input {
+  min-height: 48px;
+  padding: 12px;
+  border: 1px solid #c7cebf;
+  border-radius: 8px;
+  font: inherit;
+}
+.food-directory-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 24px;
+}
+.food-directory-list button {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 6px 12px;
+  text-align: left;
+}
+.food-directory-list button > span:first-child {
+  grid-row: span 2;
+  font-size: 28px;
+}
+.food-directory-list button > span:last-child {
+  font-size: 13px;
+}
+.factory-station {
+  cursor: pointer;
+}
+.factory-station:focus-visible {
+  outline: none;
+}
+.factory-station:focus-visible rect:first-child {
+  stroke: #285e56;
+  stroke-width: 4;
+}
+.factory-warning {
+  font-size: 13px;
+  fill: #8d5d22;
+  font-weight: 650;
+}
+
+.fire-edit-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+.fire-edit-toolbar button {
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid #c7cebf;
+  border-radius: 8px;
+  background: #fffbef;
+  color: #30362e;
+  font: inherit;
+  cursor: pointer;
+}
+.fire-edit-toolbar span {
+  font-size: 13px;
+  color: #626c60;
+}
+.fire-edit-toolbar button:focus-visible {
+  outline: 3px solid #285e56;
+  outline-offset: 2px;
+}
+.fire-tree {
+  cursor: pointer;
+  outline: none;
+}
+.fire-tree:hover .fire-cell,
+.fire-tree:focus-visible .fire-cell {
+  stroke: #203e36;
+  stroke-width: 2;
+}
+.factory-operation {
+  font-size: 12px;
+}
+.factory-floor-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  fill: #626c60;
+}
+.food-path {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.wildfire-scene > svg {
+  height: 300px;
+}

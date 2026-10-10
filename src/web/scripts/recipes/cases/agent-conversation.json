@@ -1,5 +1,6 @@
 {
   "slug": "agent-conversation",
   "title": "Two perspectives, one city",
-  "visibleItems": 4
+  "visibleItems": 4,
+  "visualSelector": ".agent-conversation"
 }

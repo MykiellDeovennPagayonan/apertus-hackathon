@@ -1,0 +1,7 @@
+{
+  "slug": "food-web",
+  "title": "Food-web connections",
+  "visibleItems": 4,
+  "desktopOnly": true,
+  "visualSelector": ".food-path"
+}

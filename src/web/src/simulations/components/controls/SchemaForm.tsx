@@ -42,6 +42,8 @@ export type FieldPresentation = Record<
     widget?: string;
     showNumber?: boolean;
     exactLabel?: boolean;
+    limits?: boolean;
+    compact?: boolean;
   }
 >;
 
@@ -219,6 +221,7 @@ function Field({
     return (
       <NumberField
         label={label}
+        compact={presentation[path]?.compact}
         commitOnBlur={commitOnBlur}
         inputLabel={
           widget === "Slider" && presentation[path]?.exactLabel !== false
@@ -236,7 +239,7 @@ function Field({
         presentation={widget === "Slider" ? "slider" : "field"}
         showNumber={presentation[path]?.showNumber !== false}
         unit={unit}
-        limits={widget === "Slider"}
+        limits={widget === "Slider" && presentation[path]?.limits !== false}
         onValidityChange={(valid) => onValidityChange?.(id, valid)}
         onChange={(next) => {
           return onChange(next) ?? { accepted: true };

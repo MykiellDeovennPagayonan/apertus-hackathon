@@ -177,6 +177,18 @@ export function commandPresentation(command: string, definition: string) {
     presentation.value = { help: help[command] };
   }
   const consequences: Record<string, string> = {
+    NUTRIENT_SET_NITROGEN: "0–150 relative supply · 100 is sufficient.",
+    NUTRIENT_SET_PHOSPHORUS: "0–150 relative supply · 100 is sufficient.",
+    NUTRIENT_SET_POTASSIUM: "0–150 relative supply · 100 is sufficient.",
+    FIRE_SET_COVERAGE: "Preset replaces your chosen patches.",
+    FIRE_SET_WIND: "0 = mild · 100 = extreme wind.",
+    FIRE_SET_MOISTURE: "0 = dry · 100 = very moist fuel.",
+    WEB_SET_PRESSURE: "0 = removed · 100 = baseline · 150 = stronger pressure.",
+    PRODUCTION_SET_SPECIALIZATION:
+      "0 = broad tasks · 100 = narrow specialization.",
+    PRODUCTION_SET_DELAY: "0 = balanced · 100 = sixfold delay at Join.",
+    PRODUCTION_SET_DISRUPTION: "0 = normal · 100 = four-hour interruption.",
+
     PEND_SET_LENGTH: "Longer rods swing more slowly.",
     PEND_SET_AMPLITUDE: "Release angle (0–90°). Larger swings take longer.",
     TRAFFIC_SET_HEADWAY:
@@ -205,6 +217,12 @@ export function commandPresentation(command: string, definition: string) {
   };
   if (consequences[command])
     presentation.value = { ...presentation.value, help: consequences[command] };
+  if (/^(NUTRIENT|FIRE|WEB|PRODUCTION)_SET_/.test(command))
+    presentation.value = {
+      ...presentation.value,
+      limits: false,
+      compact: true,
+    };
   const propertyLabels: Record<string, string> = {
     moonAngle: "Moon position",
     moonOffset: "Alignment offset",
@@ -276,6 +294,10 @@ export function acceptedCommandArguments(
   draft?: Record<string, unknown>,
 ): Record<string, unknown> | undefined {
   if (!state) return;
+  if (command.startsWith("WEB_SET_")) {
+    const key = command.slice("WEB_SET_".length).toLowerCase();
+    if (Object.hasOwn(state, key)) return { value: state[key] };
+  }
   const inputs = state.inputs as Record<string, unknown> | undefined;
   if (command.startsWith("set:")) {
     const key = command.slice(4);
@@ -284,6 +306,17 @@ export function acceptedCommandArguments(
     return;
   }
   const scalar: Record<string, string> = {
+    NUTRIENT_SET_NITROGEN: "nitrogen",
+    NUTRIENT_SET_PHOSPHORUS: "phosphorus",
+    NUTRIENT_SET_POTASSIUM: "potassium",
+    FIRE_SET_COVERAGE: "coverage",
+    FIRE_SET_WIND: "wind",
+    FIRE_SET_MOISTURE: "moisture",
+    WEB_SET_PRESSURE: "pressure",
+    PRODUCTION_SET_SPECIALIZATION: "specialization",
+    PRODUCTION_SET_DELAY: "delay",
+    PRODUCTION_SET_DISRUPTION: "disruption",
+
     MOVE_LOAD: "position",
     SET_LOAD: "magnitude",
     CHEM_SET_TEMPERATURE: "temperature",

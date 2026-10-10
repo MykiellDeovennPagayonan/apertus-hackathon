@@ -23,6 +23,9 @@ import {
   DimensionLabelVisual,
   RatioBarVisual,
 } from "../../visuals/ElementaryVisuals";
+import { FoodWebVisual } from "../../visuals/ecology/FoodWebVisual";
+import { NutrientLimitationVisual } from "../../visuals/ecology/NutrientLimitationVisual";
+import { WildfireComparisonVisual } from "../../visuals/ecology/WildfireComparisonVisual";
 import { EclipseVisual } from "../../visuals/exploration/EclipseVisual";
 import {
   DiffusionHeatmap,
@@ -34,6 +37,7 @@ import {
   CircuitVisual,
   TrackVisual,
 } from "../../visuals/physical-systems/PhysicalVisuals";
+import { ProductionComparisonVisual } from "../../visuals/social-systems/ProductionComparisonVisual";
 import { ArithmeticScene } from "../ArithmeticScene";
 import { BridgeScene } from "../BridgeScene";
 import { CountingScene } from "../CountingScene";
@@ -62,8 +66,16 @@ const ScopedWorld = dynamic(() => import("../ScopedWorldView"), {
 
 const appearances: Record<
   string,
-  (p: { instance: ModelInstance }) => React.ReactNode
+  (p: {
+    instance: ModelInstance;
+    onSelect?: (selection: number) => void;
+    onCommand?: (command: string, value?: unknown) => void;
+  }) => React.ReactNode
 > = {
+  "ecology-nutrients": NutrientLimitationVisual,
+  "ecology-wildfire": WildfireComparisonVisual,
+  "ecology-food-web": FoodWebVisual,
+  "social-production": ProductionComparisonVisual,
   "chemistry-dilution": BeakerVisual,
   "chemistry-conservation": MoleculeVisual,
   "chemistry-rate": ReactionCurveVisual,
@@ -246,7 +258,30 @@ export function Appearance({
     );
   const name = node.definition.slice("appearance/".length),
     View = appearances[name];
-  if (View) return <View instance={instance} />;
+  if (View)
+    return (
+      <View
+        instance={instance}
+        onCommand={(command, value) =>
+          runtime.dispatch([
+            {
+              node: model.id,
+              command,
+              arguments: value === undefined ? {} : { value },
+            },
+          ])
+        }
+        onSelect={(selection) =>
+          runtime.dispatch([
+            {
+              node: model.id,
+              command: "WEB_SET_SELECTION",
+              arguments: { value: selection },
+            },
+          ])
+        }
+      />
+    );
   if (name.startsWith("physical-"))
     return <PhysicalAppearance instance={instance} />;
   const onCommand = (command: import("../../../runtime/types").UIAction) =>
