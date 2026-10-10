@@ -41,6 +41,7 @@ import { ScienceScene } from "../../visuals/science/ScienceScene";
 import { ProductionComparisonVisual } from "../../visuals/social-systems/ProductionComparisonVisual";
 import { ArithmeticScene } from "../ArithmeticScene";
 import { BridgeScene } from "../BridgeScene";
+import { CycleScene } from "../biogeochemistry/CycleScene";
 import { CountingScene } from "../CountingScene";
 import { DatasetDisplay } from "../DatasetDisplay";
 import { PropertyInspector } from "../EntityInspectorView";
@@ -74,6 +75,9 @@ const appearances: Record<
     question?: string;
   }) => React.ReactNode
 > = {
+  "cycle-oxygen": CycleScene,
+  "cycle-nitrogen": CycleScene,
+  "cycle-carbon": CycleScene,
   "science-cell": ScienceScene,
   "science-immune": ScienceScene,
   "science-genome": ScienceScene,
@@ -274,7 +278,7 @@ export function Appearance({
       <View
         instance={instance}
         question={
-          name.startsWith("science-")
+          name.startsWith("science-") || name.startsWith("cycle-")
             ? String(
                 node.configuration.question ||
                   runtime.document.lesson.instruction,

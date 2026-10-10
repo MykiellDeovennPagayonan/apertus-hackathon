@@ -1,10 +1,11 @@
-import { science } from "../domains/science";
+import { biogeochemistry } from "../domains/biogeochemistry";
 import { chemistry } from "../domains/chemistry";
 import { dynamicSystems } from "../domains/dynamic-systems";
 import { ecology } from "../domains/ecology";
 import { mathFoundations } from "../domains/math-foundations";
 import { naturalSystems } from "../domains/natural-systems";
 import { physicalSystems } from "../domains/physical-systems";
+import { science } from "../domains/science";
 import { socialSystems } from "../domains/social-systems";
 import type {
   Assembly,
@@ -34,12 +35,24 @@ export const domainContributions: readonly DomainContribution[] = immutable([
   ecology,
   socialSystems,
   science,
+  biogeochemistry,
 ]);
 export const assemblyModels: readonly DomainModel[] =
   domainContributions.flatMap((d) => d.models);
 /** Matches concrete adapters in the assembly client view. Integration adds adapters serially. */
 export const assemblyPresentationContracts = {
-  "science-cell": true, "science-immune": true, "science-genome": true, "science-pollination": true, "science-invasive": true, "science-earth": true, "science-plates": true, "science-volcano": true, "science-water": true,
+  "cycle-oxygen": true,
+  "cycle-nitrogen": true,
+  "cycle-carbon": true,
+  "science-cell": true,
+  "science-immune": true,
+  "science-genome": true,
+  "science-pollination": true,
+  "science-invasive": true,
+  "science-earth": true,
+  "science-plates": true,
+  "science-volcano": true,
+  "science-water": true,
   "ecology-nutrients": true,
   "ecology-wildfire": true,
   "ecology-food-web": true,

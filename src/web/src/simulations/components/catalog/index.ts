@@ -6,6 +6,7 @@ import { liveExplorationCommands } from "../controls/interactionPolicy";
 import { componentDefinitions } from "../registry";
 import { agentDefinitions } from "./agents";
 import { authoringDefinitions } from "./authoring";
+import { cycleDefinitions } from "./biogeochemistry";
 import { definitionDiscovery } from "./discovery";
 import { ecologyControlDefinitions } from "./ecologyControls";
 import { explorationDefinitions } from "./exploration";
@@ -31,6 +32,7 @@ for (const d of [
   ...genericDefinitions,
   ...ecologyControlDefinitions,
   ...scienceDefinitions,
+  ...cycleDefinitions,
   ...agentDefinitions,
   ...explorationDefinitions,
   ...authoringDefinitions,
@@ -216,21 +218,33 @@ for (const m of assemblyModels) {
     id,
     version: 1,
     title: `${m.name} appearance`,
-    description: `Display an attached ${m.name} model snapshot`,
+    learnerLayout: m.ref.startsWith("prefabs/biogeochemistry/")
+      ? "scene-first"
+      : undefined,
+    description: m.ref.startsWith("prefabs/biogeochemistry/")
+      ? `Display an attached ${m.name} model snapshot. ${m.description}`
+      : `Display an attached ${m.name} model snapshot`,
     category: "appearance",
     tags: [m.ref.split("/")[1]],
-    configuration: m.ref.startsWith("prefabs/science/")
-      ? object({ question: { type: "string", minLength: 0, maxLength: 180 } }, [
-          "question",
-        ])
-      : object({}),
+    configuration:
+      m.ref.startsWith("prefabs/science/") ||
+      m.ref.startsWith("prefabs/biogeochemistry/")
+        ? object(
+            { question: { type: "string", minLength: 0, maxLength: 180 } },
+            ["question"],
+          )
+        : object({}),
     defaults: {},
     inputs: { model: { kind: "attachment", unit: m.ref } },
     outputs: {},
     commands: {},
     placement: ["lesson"],
     lifecycle: {
-      authored: m.ref.startsWith("prefabs/science/") ? ["question"] : [],
+      authored:
+        m.ref.startsWith("prefabs/science/") ||
+        m.ref.startsWith("prefabs/biogeochemistry/")
+          ? ["question"]
+          : [],
       presentation: [],
       clock: false,
       reset: "authored",

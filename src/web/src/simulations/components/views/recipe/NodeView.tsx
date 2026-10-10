@@ -7,8 +7,13 @@ import { publicDefinition } from "../../catalog";
 import { AgentActions } from "../../controls/AgentActions";
 import { FoodWebPopulationControl } from "../../controls/FoodWebPopulationControl";
 import { AgentProfileView, AgentTranscriptView } from "../agents/AgentViews";
-import { ScienceControls, ScienceObservations } from "../SciencePanels";
+import {
+  CycleAction,
+  CycleActivity,
+  CycleCaption,
+} from "../biogeochemistry/CyclePanels";
 import { MathReadoutView } from "../MathReadoutView";
+import { ScienceControls, ScienceObservations } from "../SciencePanels";
 import { CanvasPresentation } from "./CanvasPresentation";
 import { ControlPresentation } from "./ControlPresentation";
 import { SnapshotContext } from "./contexts";
@@ -33,8 +38,20 @@ export function NodeView({
     return <AgentActions node={node} runtime={runtime} />;
   if (node.definition === "controls/FoodWebPopulation")
     return <FoodWebPopulationControl node={node} runtime={runtime} />;
-  if (node.definition.startsWith("controls/science-")) return <ScienceControls node={node} runtime={runtime} />;
-  if (node.definition === "displays/ScienceObservations") return <ScienceObservations node={node} runtime={runtime} />;
+  if (node.definition.startsWith("controls/science-"))
+    return <ScienceControls node={node} runtime={runtime} />;
+  if (node.definition === "displays/ScienceObservations")
+    return <ScienceObservations node={node} runtime={runtime} />;
+  if (/^controls\/cycle-(oxygen|nitrogen|carbon)-action$/.test(node.definition))
+    return <CycleAction node={node} runtime={runtime} />;
+  if (
+    /^controls\/cycle-(oxygen|nitrogen|carbon)-activity$/.test(node.definition)
+  )
+    return <CycleActivity node={node} runtime={runtime} />;
+  if (
+    /^displays\/cycle-(oxygen|nitrogen|carbon)-caption$/.test(node.definition)
+  )
+    return <CycleCaption node={node} runtime={runtime} />;
   if (def.category === "models") return null;
   if (def.category === "controls")
     return <ControlPresentation node={node} runtime={runtime} />;

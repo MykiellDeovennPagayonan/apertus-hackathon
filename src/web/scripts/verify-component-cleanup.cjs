@@ -96,6 +96,7 @@ if (process.argv.includes("--capture")) {
   // in isolation so approved additions cannot displace old top-12 retrieval cards.
   // Implementation 023 explicitly admits nine science models, their views and controls.
   // Historical hashes remain unchanged; the science suite checks new contracts.
+  // Implementation 024 admits three cycle models and their independent UI nodes.
   // Their own contracts and real round trips are covered by test:systems/test:recipes.
   const newSlugs = new Set([
     "nutrient-limitation",
@@ -111,15 +112,25 @@ if (process.argv.includes("--capture")) {
     "plate-boundaries",
     "volcano-life-cycle",
     "water-cycle",
+    "oxygen-cycle",
+    "nitrogen-cycle",
+    "carbon-cycle",
   ]);
   const newModels = assemblyModels.filter((m) =>
-    ["ecology", "social-systems", "science"].includes(m.ref.split("/")[1]),
+    ["ecology", "social-systems", "science", "biogeochemistry"].includes(
+      m.ref.split("/")[1],
+    ),
   );
   assert.equal(
     newModels.filter((m) => m.ref.startsWith("prefabs/science/")).length,
     9,
   );
-  assert.equal(newModels.length, 13);
+  assert.equal(newModels.length, 16);
+  assert.equal(
+    newModels.filter((m) => m.ref.startsWith("prefabs/biogeochemistry/"))
+      .length,
+    3,
+  );
   const newIds = newModels.flatMap((m) => [
     m.ref,
     `appearance/${m.presentation}`,
@@ -132,6 +143,12 @@ if (process.argv.includes("--capture")) {
       .filter((m) => m.ref.startsWith("prefabs/science/"))
       .map((m) => `controls/${m.presentation}`),
   );
+  for (const kind of ["oxygen", "nitrogen", "carbon"])
+    newIds.push(
+      `controls/cycle-${kind}-action`,
+      `controls/cycle-${kind}-activity`,
+      `displays/cycle-${kind}-caption`,
+    );
   const restored = new Map(newIds.map((id) => [id, publicDefinitions.get(id)]));
   const allRecipes = registry.listPremadeRecipes;
   const historicalRecipes = allRecipes().filter(
@@ -174,7 +191,10 @@ if (process.argv.includes("--capture")) {
   );
   for (const id of appearances) {
     const definition = publicDefinitions.get(id);
-    if (id.startsWith("appearance/science-")) {
+    if (
+      id.startsWith("appearance/science-") ||
+      id.startsWith("appearance/cycle-")
+    ) {
       assert.deepEqual(definition.lifecycle.authored, ["question"], id);
       assert.deepEqual(
         Object.keys(definition.configuration.properties),

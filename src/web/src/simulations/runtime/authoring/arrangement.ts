@@ -141,6 +141,48 @@ export function arrangeDocument(
     const results = items.filter(
       (i) => !scenes.includes(i) && !controls.includes(i),
     );
+    const sceneNode = scenes.length === 1 ? nodeFor(scenes[0]) : undefined;
+    const sceneFirst =
+      sceneNode &&
+      publicDefinition(sceneNode.definition).learnerLayout === "scene-first";
+    if (sceneFirst) {
+      board.responsiveGap = 16;
+      const place = (
+        item: ComponentBoardItem,
+        rect: ComponentBoardItem["rect"],
+      ) => {
+        if (!item.locked) item.rect = rect;
+      };
+      const y = nextScopeY;
+      place(scenes[0], { x: 0, y, width: 1080, height: 480 });
+      scenes[0].responsiveMinHeight = 360;
+      rows.push([scenes[0].id]);
+      const primary = controls.find((i) =>
+        nodeFor(i)?.definition.endsWith("-action"),
+      );
+      for (const [n, item] of results.entries()) {
+        place(item, { x: 0, y: y + 504 + n * 100, width: 740, height: 80 });
+        item.responsiveMinHeight = 80;
+        rows.push([item.id]);
+      }
+      if (primary) {
+        place(primary, { x: 784, y: y + 504, width: 296, height: 64 });
+        primary.responsiveMinHeight = 64;
+        rows.push([primary.id]);
+      }
+      const rest = controls.filter((i) => i !== primary);
+      for (const [n, item] of rest.entries()) {
+        place(item, { x: 620, y: y + 596 + n * 84, width: 460, height: 64 });
+        item.responsiveMinHeight = 64;
+        rows.push([item.id]);
+      }
+      nextScopeY = Math.max(
+        y + 684,
+        y + 604 + results.length * 100,
+        y + 596 + rest.length * 84,
+      );
+      continue;
+    }
     const order = request.narrowOrder;
     const ranked = [...scenes, ...controls, ...results].sort((a, b) => {
       const rank = (i: ComponentBoardItem) => {

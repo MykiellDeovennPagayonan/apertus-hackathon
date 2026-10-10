@@ -37,6 +37,8 @@ export type PublicDefinition = {
     | "behaviors"
     | "resources"
     | "layout";
+  /** Scene-led lessons place small controls and captions below the visual. */
+  learnerLayout?: "scene-first";
   tags: readonly string[];
   configuration: ParameterSchema;
   defaults: Record<string, unknown>;

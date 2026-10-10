@@ -1,6 +1,8 @@
+import { cycleKinds, cycleModels } from "../../domains/biogeochemistry";
 import { scienceCommand } from "../../domains/science";
 import { scienceSpecs } from "../../domains/science/specs";
 import type { PublicDefinition } from "../../runtime/authoring/types";
+import { cycleCommand } from "../systems/biogeochemistry/contracts";
 export interface CompositionRequirements {
   topic: string;
   guidance?: string;
@@ -25,6 +27,28 @@ const scienceTopics: Record<string, string> = {
 };
 export const compositionRequirements: Record<string, CompositionRequirements> =
   {
+    ...Object.fromEntries(
+      cycleKinds.map((kind, i) => [
+        cycleModels[i].ref,
+        {
+          topic: `${kind} cycle`,
+          selectionKey: `${kind}-cycle`,
+          guidance: `${cycleModels[i].description} Keep the opening to its scene, one primary action, one short caption and a quiet activity entry. Use the independent cycle action/activity/caption components; no generic metric dashboard.`,
+          commands: [
+            cycleCommand(kind, "ADVANCE"),
+            cycleCommand(kind, "ACTIVITY"),
+            cycleCommand(kind, "RESTART"),
+          ],
+          observations: ["scene"],
+          appearance: `appearance/cycle-${kind}`,
+          dependencies: [
+            `controls/cycle-${kind}-action`,
+            `controls/cycle-${kind}-activity`,
+            `displays/cycle-${kind}-caption`,
+          ],
+        },
+      ]),
+    ),
     ...Object.fromEntries(
       scienceSpecs.map((spec) => [
         `prefabs/science/${spec.name}`,

@@ -1,0 +1,345 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/oxygen-cycle",
+  "version": 1,
+  "title": "Oxygen cycle",
+  "description": "Why can pond oxygen fall at night?",
+  "tags": [
+    "science",
+    "oxygen",
+    "cycle",
+    "biogeochemistry"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/biogeochemistry/OxygenCycle",
+        "version": 1,
+        "label": "Oxygen cycle",
+        "scope": "scope/lab",
+        "configuration": {
+          "activity": "day-night",
+          "variant": 0,
+          "seed": 17
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/cycle-oxygen",
+        "version": 1,
+        "label": "Teaching scene",
+        "scope": "scope/lab",
+        "configuration": {
+          "question": "Why can pond oxygen fall at night?"
+        }
+      },
+      {
+        "id": "caption",
+        "definition": "displays/cycle-oxygen-caption",
+        "version": 1,
+        "label": "What changed",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "action",
+        "definition": "controls/cycle-oxygen-action",
+        "version": 1,
+        "label": "Next action",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "activity",
+        "definition": "controls/cycle-oxygen-activity",
+        "version": 1,
+        "label": "Choose an investigation",
+        "scope": "scope/lab",
+        "configuration": {}
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/caption/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "caption",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/action/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "action",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/activity/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "activity",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/action/ADVANCE",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "CYCLE_OXYGEN_ADVANCE"
+        },
+        "to": {
+          "node": "model",
+          "port": "CYCLE_OXYGEN_ADVANCE"
+        }
+      },
+      {
+        "id": "link/action/RESTART",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "CYCLE_OXYGEN_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "CYCLE_OXYGEN_RESTART"
+        }
+      },
+      {
+        "id": "link/activity/ACTIVITY",
+        "kind": "command",
+        "from": {
+          "node": "activity",
+          "port": "CYCLE_OXYGEN_ACTIVITY"
+        },
+        "to": {
+          "node": "model",
+          "port": "CYCLE_OXYGEN_ACTIVITY"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Oxygen cycle"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/caption",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "caption"
+        },
+        {
+          "id": "layout/action",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "action"
+        },
+        {
+          "id": "layout/activity",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "activity"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Oxygen cycle",
+      "instruction": "Why can pond oxygen fall at night?",
+      "explanation": "A simplified teaching model. One well-mixed 100 L freshwater teaching pond; illustrative biological rates, fixed 1 atm, no stratification or anaerobic chemistry. It is not a real pond forecast."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1080,
+            "height": 480
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 360
+        },
+        {
+          "id": "board/caption",
+          "layoutId": "layout/caption",
+          "rect": {
+            "x": 0,
+            "y": 504,
+            "width": 740,
+            "height": 80
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 80
+        },
+        {
+          "id": "board/action",
+          "layoutId": "layout/action",
+          "rect": {
+            "x": 784,
+            "y": 504,
+            "width": 296,
+            "height": 64
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/activity",
+          "layoutId": "layout/activity",
+          "rect": {
+            "x": 620,
+            "y": 596,
+            "width": 460,
+            "height": 64
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 64
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -20,
+        "width": 1128,
+        "height": 684
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "learnerArea": {
+        "x": -24,
+        "y": -20,
+        "width": 1128,
+        "height": 684
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/scene"
+        ],
+        [
+          "board/caption"
+        ],
+        [
+          "board/action"
+        ],
+        [
+          "board/activity"
+        ]
+      ],
+      "responsiveGap": 16
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/biogeochemistry/OxygenCycle",
+      "version": 1
+    },
+    {
+      "id": "appearance/cycle-oxygen",
+      "version": 1
+    },
+    {
+      "id": "displays/cycle-oxygen-caption",
+      "version": 1
+    },
+    {
+      "id": "controls/cycle-oxygen-action",
+      "version": 1
+    },
+    {
+      "id": "controls/cycle-oxygen-activity",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "One well-mixed 100 L freshwater teaching pond; illustrative biological rates, fixed 1 atm, no stratification or anaerobic chemistry. It is not a real pond forecast.",
+    "Equilibrium oxygen uses Benson/Krause USGS memo 2011.03 equation 7 at zero salinity. Warming and mixing activities isolate physical exchange and hold biology inactive.",
+    "Carrier mmol and weighted oxygen-atom budget include O2, H2O, CO2 and simplified CH2O organic material. Released photosynthetic O2 originates in water. Large representative air store is not the global atmosphere.",
+    "Stage actions integrate 12 modeled hours using fixed 0.125 h substeps. Plants and aerobic microbes respire in light and darkness. Representative O2 marks are not a molecular count."
+  ],
+  "catalog": {
+    "icon": "O\u2082",
+    "category": "science",
+    "order": 29
+  }
+}

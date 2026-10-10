@@ -126,6 +126,7 @@ export function SpatialBoard({
                         ("responsiveMinHeight" in item
                           ? item.responsiveMinHeight
                           : undefined) ?? 260,
+                        naturalHeights[item.id] ?? 0,
                         Math.min(
                           430,
                           (item.rect.height * columnWidth) / item.rect.width,
@@ -408,7 +409,7 @@ export function SpatialBoard({
                 ? parseFloat(getComputedStyle(content).paddingTop) +
                   parseFloat(getComputedStyle(content).paddingBottom)
                 : 0) +
-              2,
+              (element.hasAttribute("data-responsive-height") ? 0 : 2),
           );
           if (Math.abs((next[id] ?? 0) - height) > 1) {
             next[id] = height;
@@ -424,8 +425,13 @@ export function SpatialBoard({
         if (
           !requestedAutoLayout &&
           element.closest('[data-board-scene="true"]')
-        )
+        ) {
+          const content = element.querySelector(
+            '[data-responsive-height="content"]',
+          );
+          if (content) observer.observe(content);
           return;
+        }
         observer.observe(element);
       });
     return () => observer.disconnect();
@@ -1760,7 +1766,17 @@ export function SpatialBoard({
                   const viewportBounds =
                     viewport.current?.getBoundingClientRect();
                   if (!viewportBounds) return;
+                  // Reflowed views may choose native vertical scrolling. Let the
+                  // browser reveal focused controls without a second camera pan.
+                  if (
+                    viewport.current &&
+                    getComputedStyle(viewport.current).overflowY === "auto"
+                  )
+                    return;
                   const target = event.target as HTMLElement;
+                  // Native top-layer dialogs have viewport coordinates, not board coordinates.
+                  // Focusing their fields must never pan the lesson behind the modal.
+                  if (target.closest("dialog[open]")) return;
                   const bounds = target.getBoundingClientRect();
                   const margin = 24;
                   const host = viewport.current?.closest(

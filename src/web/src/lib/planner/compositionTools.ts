@@ -106,7 +106,30 @@ export function focusCompositionTools(
             c.to.node === node.id &&
             c.to.port === command,
         )
-      )
+      ) {
+        const source = document.nodes.find(
+          (candidate) =>
+            publicDefinition(candidate.definition).outputs[command]?.kind ===
+            "event",
+        );
+        if (source) {
+          const matches = tools.filter((t) => {
+            if (t.tool !== "connect" || t.schema.type !== "object")
+              return false;
+            const { from, to } = t.schema.properties;
+            const endpoint = (schema: typeof from, id: string, port: string) =>
+              schema.type === "object" &&
+              schema.properties.node.type === "enum" &&
+              schema.properties.node.values.includes(id) &&
+              schema.properties.port.type === "enum" &&
+              schema.properties.port.values.includes(port);
+            return (
+              endpoint(from, source.id, command) &&
+              endpoint(to, node.id, command)
+            );
+          });
+          if (matches.length) return matches;
+        }
         return tools
           .filter(
             (t) =>
@@ -140,6 +163,7 @@ export function focusCompositionTools(
                 }
               : t;
           });
+      }
     for (const output of requirement.observations)
       if (
         !document.connections.some(

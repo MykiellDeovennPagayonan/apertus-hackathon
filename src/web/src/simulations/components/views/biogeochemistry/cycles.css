@@ -1,0 +1,254 @@
+.recipe-component-item[data-component-definition^="appearance/cycle-"]
+  > .recipe-scene-content {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+}
+.board-item:has(.cycle-actions, .cycle-caption, .cycle-activity)
+  > .board-content {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.board-item:has(.cycle-actions, .cycle-caption, .cycle-activity) {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.cycle-scene {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  color: var(--text, #30362e);
+  padding: 16px 20px 8px;
+  box-sizing: border-box;
+  background: var(--panel, #fffbef);
+  border-radius: 18px;
+}
+.cycle-question {
+  margin: 0 0 8px;
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+.cycle-plots {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  justify-content: center;
+  gap: 16px;
+}
+.cycle-plots figure {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: 0;
+  min-width: 0;
+  align-items: center;
+  min-height: 0;
+}
+.cycle-art {
+  width: 100%;
+  height: 0;
+  flex: 1;
+  min-height: 0;
+  max-width: 740px;
+  display: block;
+  color: var(--text);
+  font-family: inherit;
+}
+.cycle-art text {
+  fill: currentColor;
+}
+.cycle-art text[fill="#fffbef"] {
+  fill: #fffbef;
+}
+.cycle-plot-title {
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 4px 0 8px;
+}
+.cycle-context {
+  font-size: 14px;
+  margin: 8px 0 0;
+  color: #626c60;
+  line-height: 1.4;
+}
+.cycle-caption {
+  font-size: 17px;
+  line-height: 1.55;
+  margin: 0;
+  padding: 4px 0;
+  color: var(--text, #30362e);
+}
+.cycle-actions,
+.cycle-activity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+}
+.cycle-actions .cycle-primary,
+.cycle-dialog .cycle-primary {
+  border: 1px solid #285e56;
+  background: #285e56;
+  color: #fff;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  min-height: 56px;
+  padding: 12px 20px;
+  cursor: pointer;
+  line-height: 1.3;
+}
+.cycle-activity .cycle-secondary,
+.cycle-dialog .cycle-secondary {
+  color: #285e56;
+  border: 1px solid transparent;
+  background: transparent;
+  font: inherit;
+  font-size: 15px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  min-height: 56px;
+  padding: 10px 4px;
+  cursor: pointer;
+}
+.cycle-actions button:focus-visible,
+.cycle-activity button:focus-visible,
+.cycle-dialog :focus-visible {
+  outline: 3px solid #285e56;
+  outline-offset: 4px;
+}
+.cycle-dialog {
+  width: min(470px, calc(100vw - 48px));
+  max-height: calc(100vh - 64px);
+  overflow: auto;
+  background: var(--panel, #fffbef);
+  color: var(--text, #30362e);
+  border: 1px solid var(--border, #d5cdbb);
+  border-radius: 16px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+.cycle-dialog::backdrop {
+  background: #30362e55;
+}
+.cycle-dialog h2 {
+  font-size: 22px;
+  margin: 0 0 24px;
+}
+.cycle-dialog label {
+  display: grid;
+  gap: 8px;
+  font-size: 16px;
+  margin: 16px 0;
+}
+.cycle-dialog select {
+  width: 100%;
+  font: inherit;
+  min-height: 46px;
+  padding: 8px 10px;
+  border: 1px solid #d5cdbb;
+  border-radius: 8px;
+  background: #fffbef;
+}
+.cycle-dialog p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+.cycle-dialog-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+.cycle-measurement {
+  font-size: 16px;
+  margin: 8px 0 0;
+}
+.cycle-ocean-values {
+  display: flex;
+  gap: 28px;
+  font-size: 14px;
+}
+.cycle-ocean-values p {
+  margin: 4px 0;
+  flex: 1;
+}
+.cycle-ocean-values strong {
+  display: block;
+  font-size: 17px;
+  font-weight: 600;
+}
+@media (max-width: 700px) {
+  .recipe-component-item[data-component-definition^="appearance/cycle-"]
+    > .recipe-scene-content {
+    height: auto;
+  }
+  .board-item:has(.cycle-actions, .cycle-caption, .cycle-activity)
+    .recipe-layout,
+  .board-item:has(.cycle-actions, .cycle-caption, .cycle-activity)
+    .recipe-component-item {
+    height: auto;
+    min-height: 0;
+  }
+  .cycle-scene {
+    height: auto;
+    min-height: 360px;
+    padding: 12px;
+  }
+  .cycle-question {
+    font-size: 20px;
+  }
+  .cycle-pair {
+    flex-direction: column;
+    min-height: 0;
+  }
+  .cycle-pair figure {
+    min-height: 0;
+  }
+  .cycle-art {
+    flex: none;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 520 / 380;
+  }
+  .cycle-ocean-values {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .cycle-caption {
+    font-size: 16px;
+  }
+}
+
+/* Four short lesson components do not need an additional content finder. */
+.experiment-workspace:has(.cycle-scene) .board-workspace-tools {
+  display: none;
+}
+@media (max-width: 700px) {
+  .cycle-art text {
+    font-size: 24px;
+  }
+  .cycle-art .cycle-path-label,
+  .cycle-art .cycle-air-label {
+    display: none;
+  }
+  .cycle-art .cycle-chemical text {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 700px) {
+  .experiment-workspace:has(.cycle-scene) .board-viewport {
+    overflow-y: auto;
+    touch-action: pan-y;
+  }
+}

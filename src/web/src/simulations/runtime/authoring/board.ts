@@ -94,9 +94,17 @@ export function boardItemMinimum(
   )?.definition;
   if (definition?.startsWith("controls/science-")) {
     const node = d.nodes.find((node) => node.id === layout?.node);
-    return { width: 200, height: node?.configuration.panel === "playback" ? 96 : 100 };
+    return {
+      width: 200,
+      height: node?.configuration.panel === "playback" ? 96 : 100,
+    };
   }
-  if (definition === "displays/ScienceObservations") return { width: 200, height: 96 };
+  if (definition === "displays/ScienceObservations")
+    return { width: 200, height: 96 };
+  if (definition?.startsWith("controls/cycle-"))
+    return { width: 240, height: 64 };
+  if (definition?.startsWith("displays/cycle-"))
+    return { width: 320, height: 80 };
   if (definition === "controls/Button") return { width: 160, height: 48 };
   if (definition === "controls/FoodWebPopulation")
     return { width: 280, height: 330 };

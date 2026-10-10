@@ -1,7 +1,8 @@
 # Oxygen, nitrogen, and carbon cycles: researched implementation plan
 
 Date: 2026-10-10  
-Status: planning only; simulation code, runtime checks, and browser review have not been performed for these three concepts.  
+Status: implemented; this document retains the researched design plan. See [implementation and UX review](024-CYCLES-IMPLEMENTATION-REVIEW.md) for delivered behavior and validation evidence.
+
 Target: three ordinary editable lessons, each with a distinct teaching scene and a sequence of focused investigations.  
 Research checked: 2026-10-10. Source facts, teaching assumptions, and proposed implementation decisions are distinguished below.
 

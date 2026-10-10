@@ -1,8 +1,8 @@
 {
   "generatedBy": "src/web/scripts/builder/audit-public-catalog.cjs",
-  "originalSourceFiles": 313,
-  "sourceFiles": 323,
-  "exportRecords": 761,
+  "originalSourceFiles": 323,
+  "sourceFiles": 336,
+  "exportRecords": 800,
   "records": [
     {
       "source": "src/web/src/simulations/components/README.md",
@@ -665,6 +665,53 @@
           "typeOnly": false,
           "symbols": [
             "conversionPairs"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public infrastructure owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+      "export": "cycleDefinitions",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleDefinitions"
+          ]
+        }
+      ],
+      "responsibility": "infrastructure",
+      "finalOwner": {
+        "kind": "catalog/recipe infrastructure",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/index.ts"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleDefinitions"
           ]
         }
       ],
@@ -1608,6 +1655,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "typeOnly": true,
           "symbols": [
@@ -1650,13 +1704,14 @@
         "consumers": [
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/catalog/authoring.ts",
+          "src/web/src/simulations/components/catalog/biogeochemistry.ts",
           "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "src/web/src/simulations/components/catalog/ecologyControls.ts",
           "src/web/src/simulations/components/catalog/exploration.ts",
           "src/web/src/simulations/components/catalog/index.ts",
           "src/web/src/simulations/components/catalog/science.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts, src/web/src/simulations/components/catalog/science.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/biogeochemistry.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts, src/web/src/simulations/components/catalog/science.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -1679,6 +1734,13 @@
         },
         {
           "source": "src/web/src/simulations/components/catalog/authoring.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
           "typeOnly": false,
           "symbols": [
             "base"
@@ -1745,6 +1807,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "typeOnly": true,
           "symbols": [
@@ -1787,13 +1856,14 @@
         "consumers": [
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/catalog/authoring.ts",
+          "src/web/src/simulations/components/catalog/biogeochemistry.ts",
           "src/web/src/simulations/components/catalog/controlDefinitions.ts",
           "src/web/src/simulations/components/catalog/ecologyControls.ts",
           "src/web/src/simulations/components/catalog/exploration.ts",
           "src/web/src/simulations/components/catalog/index.ts",
           "src/web/src/simulations/components/catalog/science.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts, src/web/src/simulations/components/catalog/science.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/catalog/authoring.ts, src/web/src/simulations/components/catalog/biogeochemistry.ts, src/web/src/simulations/components/catalog/controlDefinitions.ts, src/web/src/simulations/components/catalog/ecologyControls.ts, src/web/src/simulations/components/catalog/exploration.ts, src/web/src/simulations/components/catalog/index.ts, src/web/src/simulations/components/catalog/science.ts"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -1816,6 +1886,13 @@
         },
         {
           "source": "src/web/src/simulations/components/catalog/authoring.ts",
+          "typeOnly": false,
+          "symbols": [
+            "base"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
           "typeOnly": false,
           "symbols": [
             "base"
@@ -45536,6 +45613,3791 @@
           "symbols": [
             "observePerson"
           ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+      "export": "carbonInitial",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "carbonAdvance",
+            "carbonInitial"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "carbonAdvance",
+            "carbonInitial"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+      "export": "carbonAdvance",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "carbonAdvance",
+            "carbonInitial"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "carbonAdvance",
+            "carbonInitial"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+      "export": "CycleKind",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/biogeochemistry.ts, src/web/src/simulations/components/catalog/explorationTeaching.ts, src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+      "export": "CycleRun",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/biogeochemistry.ts, src/web/src/simulations/components/catalog/explorationTeaching.ts, src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+      "export": "CycleState",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/biogeochemistry.ts, src/web/src/simulations/components/catalog/explorationTeaching.ts, src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+      "export": "Activity",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/biogeochemistry.ts, src/web/src/simulations/components/catalog/explorationTeaching.ts, src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+      "export": "activities",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/biogeochemistry.ts, src/web/src/simulations/components/catalog/explorationTeaching.ts, src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+      "export": "cycleNames",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/biogeochemistry.ts, src/web/src/simulations/components/catalog/explorationTeaching.ts, src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+      "export": "cycleCommand",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/biogeochemistry.ts, src/web/src/simulations/components/catalog/explorationTeaching.ts, src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+      "export": "activityFor",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/biogeochemistry.ts, src/web/src/simulations/components/catalog/explorationTeaching.ts, src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+      "export": "run",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/biogeochemistry.ts, src/web/src/simulations/components/catalog/explorationTeaching.ts, src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+      "export": "traceNext",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/biogeochemistry.ts, src/web/src/simulations/components/catalog/explorationTeaching.ts, src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/biogeochemistry.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/catalog/explorationTeaching.ts",
+          "typeOnly": false,
+          "symbols": [
+            "cycleCommand"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "CycleRun",
+            "CycleState",
+            "run",
+            "traceNext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "activityFor",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "CycleRun",
+            "CycleState"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "activities",
+            "activityFor",
+            "CycleKind",
+            "CycleState",
+            "cycleCommand",
+            "cycleNames"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+      "export": "nitrogenInitial",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "nitrogenAdvance",
+            "nitrogenInitial"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "nitrogenAdvance",
+            "nitrogenInitial"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+      "export": "nitrogenAdvance",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "nitrogenAdvance",
+            "nitrogenInitial"
+          ]
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/domains/biogeochemistry/index.ts"
+        ],
+        "destination": "src/web/src/simulations/domains/biogeochemistry/index.ts"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "nitrogenAdvance",
+            "nitrogenInitial"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+      "export": "oxygenEquilibrium",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "oxygenAdvance",
+            "oxygenInitial"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "src/web/scripts/domains/biogeochemistry/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts, src/web/scripts/domains/biogeochemistry/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "oxygenAdvance",
+            "oxygenInitial"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+      "export": "dissolvedOxygen",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "oxygenAdvance",
+            "oxygenInitial"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "src/web/scripts/domains/biogeochemistry/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts, src/web/scripts/domains/biogeochemistry/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "oxygenAdvance",
+            "oxygenInitial"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+      "export": "oxygenInitial",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "oxygenAdvance",
+            "oxygenInitial"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "src/web/scripts/domains/biogeochemistry/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts, src/web/scripts/domains/biogeochemistry/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "oxygenAdvance",
+            "oxygenInitial"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+      "export": "oxygenAdvance",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "oxygenAdvance",
+            "oxygenInitial"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "src/web/scripts/domains/biogeochemistry/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx, src/web/src/simulations/domains/biogeochemistry/index.ts, src/web/scripts/domains/biogeochemistry/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "dissolvedOxygen"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/domains/biogeochemistry/index.ts",
+          "typeOnly": false,
+          "symbols": [
+            "oxygenAdvance",
+            "oxygenInitial"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/transfers.ts",
+      "export": "Reaction",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/scripts/domains/biogeochemistry/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/contracts.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/scripts/domains/biogeochemistry/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/transfers.ts",
+      "export": "Flux",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/scripts/domains/biogeochemistry/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/contracts.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/scripts/domains/biogeochemistry/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/transfers.ts",
+      "export": "Budget",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/scripts/domains/biogeochemistry/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/contracts.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/scripts/domains/biogeochemistry/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/transfers.ts",
+      "export": "total",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/scripts/domains/biogeochemistry/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/contracts.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/scripts/domains/biogeochemistry/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/transfers.ts",
+      "export": "audit",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/scripts/domains/biogeochemistry/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/contracts.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/scripts/domains/biogeochemistry/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/transfers.ts",
+      "export": "transfer",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/scripts/domains/biogeochemistry/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/contracts.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/scripts/domains/biogeochemistry/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/biogeochemistry/transfers.ts",
+      "export": "move",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "src/web/scripts/domains/biogeochemistry/verify.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts, src/web/src/simulations/components/systems/biogeochemistry/contracts.ts, src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts, src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts, src/web/scripts/domains/biogeochemistry/verify.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/carbon.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/contracts.ts",
+          "typeOnly": true,
+          "symbols": [
+            "Budget",
+            "Flux"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/nitrogen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "move",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/biogeochemistry/oxygen.ts",
+          "typeOnly": false,
+          "symbols": [
+            "audit",
+            "Reaction",
+            "transfer"
+          ]
+        },
+        {
+          "source": "src/web/scripts/domains/biogeochemistry/verify.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "identity": [],
@@ -104274,6 +108136,319 @@
       "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
+      "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+      "export": "cycleCaption",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "CycleAction",
+            "CycleActivity",
+            "CycleCaption"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "CycleAction",
+            "CycleActivity",
+            "CycleCaption"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+      "export": "CycleCaption",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "CycleAction",
+            "CycleActivity",
+            "CycleCaption"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "CycleAction",
+            "CycleActivity",
+            "CycleCaption"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+      "export": "CycleAction",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "CycleAction",
+            "CycleActivity",
+            "CycleCaption"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "CycleAction",
+            "CycleActivity",
+            "CycleCaption"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+      "export": "CycleActivity",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "CycleAction",
+            "CycleActivity",
+            "CycleCaption"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "CycleAction",
+            "CycleActivity",
+            "CycleCaption"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+      "export": "CycleScene",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "CycleScene"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "CycleScene"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/biogeochemistry/cycles.css",
+      "export": "(file)",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx"
+      },
+      "classification": "private presentation stylesheet",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
       "source": "src/web/src/simulations/components/views/board/DrawingEditor.tsx",
       "export": "DrawingTool",
       "activeConsumers": [
@@ -107840,6 +112015,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "typeOnly": false,
           "symbols": [
@@ -107905,6 +112087,7 @@
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "src/web/src/simulations/components/views/SciencePanels.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx",
@@ -107913,7 +112096,7 @@
           "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx",
           "src/web/scripts/domains/science/verify-presentation.cjs"
         ],
-        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -107954,6 +112137,13 @@
         },
         {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
           "typeOnly": false,
           "symbols": [
             "SnapshotContext"
@@ -108059,6 +112249,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "typeOnly": false,
           "symbols": [
@@ -108124,6 +112321,7 @@
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "src/web/src/simulations/components/views/SciencePanels.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx",
@@ -108132,7 +112330,7 @@
           "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx",
           "src/web/scripts/domains/science/verify-presentation.cjs"
         ],
-        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -108173,6 +112371,13 @@
         },
         {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
           "typeOnly": false,
           "symbols": [
             "SnapshotContext"
@@ -108278,6 +112483,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "typeOnly": false,
           "symbols": [
@@ -108343,6 +112555,7 @@
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "src/web/src/simulations/components/views/SciencePanels.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx",
@@ -108351,7 +112564,7 @@
           "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx",
           "src/web/scripts/domains/science/verify-presentation.cjs"
         ],
-        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -108392,6 +112605,13 @@
         },
         {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
           "typeOnly": false,
           "symbols": [
             "SnapshotContext"
@@ -108497,6 +112717,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "typeOnly": false,
           "symbols": [
@@ -108562,6 +112789,7 @@
           "src/web/src/simulations/components/views/RecipeLesson.tsx",
           "src/web/src/simulations/components/views/SciencePanels.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
           "src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/ControlPresentation.tsx",
           "src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx",
@@ -108570,7 +112798,7 @@
           "src/web/src/simulations/components/views/recipe/RecipeLayout.tsx",
           "src/web/scripts/domains/science/verify-presentation.cjs"
         ],
-        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
+        "destination": "src/web/src/simulations/components/controls/FoodWebPopulationControl.tsx, src/web/src/simulations/components/views/RecipeLesson.tsx, src/web/src/simulations/components/views/SciencePanels.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx, src/web/src/simulations/components/views/recipe/CanvasPresentation.tsx, src/web/src/simulations/components/views/recipe/ControlPresentation.tsx, src/web/src/simulations/components/views/recipe/DisplayPresentation.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx, src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx, src/web/src/simulations/components/views/recipe/RecipeLayout.tsx, src/web/scripts/domains/science/verify-presentation.cjs"
       },
       "classification": "public implementation/private helper",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -108611,6 +112839,13 @@
         },
         {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "SnapshotContext"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CyclePanels.tsx",
           "typeOnly": false,
           "symbols": [
             "SnapshotContext"
@@ -112475,6 +116710,519 @@
       "destination": "public appearance owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+      "export": "CarbonScene",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "CarbonScene"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "CarbonScene"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+      "export": "NitrogenScene",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "NitrogenScene"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "NitrogenScene"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+      "export": "OxygenScene",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "OxygenScene"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/biogeochemistry/CycleScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "OxygenScene"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/biogeochemistry/SceneParts.tsx",
+      "export": "Tree",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/biogeochemistry/SceneParts.tsx",
+      "export": "Mark",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/biogeochemistry/SceneParts.tsx",
+      "export": "Arrow",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/visuals/biogeochemistry/SceneParts.tsx",
+      "export": "Art",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark"
+          ]
+        }
+      ],
+      "responsibility": "appearance",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx, src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx"
+      },
+      "classification": "public appearance or colocated private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/CarbonScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/NitrogenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark",
+            "Tree"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/visuals/biogeochemistry/OxygenScene.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "Arrow",
+            "Art",
+            "Mark"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public appearance owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
       "source": "src/web/src/simulations/components/visuals/bridgeDeformation.ts",
