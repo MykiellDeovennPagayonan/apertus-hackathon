@@ -4,6 +4,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { ConstructionUpdate } from "../../../lib/planner/construction";
 import { requireRecord } from "../../runtime/records";
 import { ConnectionNode } from "../ConnectionNode";
 import { ConnectionViewport } from "../ConnectionViewport";
@@ -24,6 +25,7 @@ import {
 import { compositionGraph, type Endpoint } from "../graph/deriveGraph";
 import { type GraphWire, portPoint } from "../graph/types";
 import { isTextEditing } from "../history/entries";
+import { useGraphMotion } from "./useGraphMotion";
 import "../connections.css";
 import { InputEditor } from "./InputEditor";
 
@@ -37,6 +39,8 @@ let pasteCount = 0;
 
 export function CompositionGraph({
   doc,
+  constructing = false,
+  construction,
   selected,
   onSelect,
   onAdd,
@@ -50,6 +54,8 @@ export function CompositionGraph({
   onSaveComposite?: (ids: string[]) => void;
   onSelectionChange?: (ids: string[]) => void;
   doc: ExperimentDocument;
+  constructing?: boolean;
+  construction?: ConstructionUpdate | null;
   selected: string;
   onSelect: (id: string) => void;
   onAdd: (category: string, target?: string) => void;
@@ -117,7 +123,32 @@ export function CompositionGraph({
   const portClickSuppressed = useRef(false);
   const surface = useRef<HTMLDivElement>(null);
   const graph = compositionGraph(doc);
-  const blocks = graph.blocks.map((b) => ({ ...b, ...(moving[b.id] ?? {}) }));
+  const blocks = useGraphMotion(
+    graph.blocks.map((b) => ({ ...b, ...(moving[b.id] ?? {}) })),
+    constructing,
+  );
+  const [follow, setFollow] = useState(true);
+  const wasConstructing = useRef(false);
+  useEffect(() => {
+    if (wasConstructing.current && !constructing && follow)
+      setFit((value) => value + 1);
+    wasConstructing.current = constructing;
+  }, [constructing, follow]);
+  const phase = construction?.phase;
+  const sequence = construction?.sequence;
+  useEffect(() => {
+    if (constructing && follow && phase === "checking" && sequence)
+      setFit((value) => value + 1);
+  }, [constructing, follow, phase, sequence]);
+  useEffect(() => {
+    if (constructing) {
+      setFollow(true);
+      setSelection([]);
+      setSource(null);
+      setEditingInput(null);
+      setContextMenu(null);
+    }
+  }, [constructing]);
   const wires = graph.wires;
   const node = (id: string) => blocks.find((b) => b.id === id);
   const graphSelection = (ids: string[]) =>
@@ -152,6 +183,7 @@ export function CompositionGraph({
     setWireSelection(null);
   };
   const run = (label: string, change: (d: ExperimentDocument) => void) =>
+    !constructing &&
     edit(
       (d) => {
         change(d);
@@ -231,7 +263,7 @@ export function CompositionGraph({
     event: ReactPointerEvent<HTMLButtonElement>,
     id: string,
   ) => {
-    if (event.button !== 0) return;
+    if (constructing || event.button !== 0) return;
     setWireSelection(null);
     nodeClickSuppressed.current = false;
     const ids = selectedIds.includes(id)
@@ -297,7 +329,7 @@ export function CompositionGraph({
     remove,
     group,
     ungroup,
-    active,
+    active: active && !constructing,
     selectedIds,
     wireSelection,
     removeConnection,
@@ -308,7 +340,7 @@ export function CompositionGraph({
     remove,
     group,
     ungroup,
-    active,
+    active: active && !constructing,
     selectedIds,
     wireSelection,
     removeConnection,
@@ -456,9 +488,11 @@ export function CompositionGraph({
     // biome-ignore lint/a11y/noStaticElementInteractions: Delegates pointer gestures; selection also has keyboard and toolbar controls.
     <div
       ref={surface}
-      className="composition-graph"
+      className={`composition-graph ${constructing ? "is-constructing" : ""}`}
+      data-construction-phase={construction?.phase}
       hidden={!active}
       onContextMenu={(event) => {
+        if (constructing) return;
         if ((event.target as Element).closest("input, textarea")) return;
         event.preventDefault();
         const target = (event.target as Element).closest<HTMLElement>(
@@ -483,6 +517,7 @@ export function CompositionGraph({
         });
       }}
       onPointerDownCapture={(event) => {
+        if (constructing) return;
         if (
           !event.shiftKey ||
           event.button !== 0 ||
@@ -540,6 +575,7 @@ export function CompositionGraph({
       <section className="connection-workspace" aria-label="Block workspace">
         {selectedIds.length > 0 && (
           <fieldset
+            inert={constructing}
             className="connection-selection-actions"
             aria-label="Selection actions"
           >
@@ -596,6 +632,16 @@ export function CompositionGraph({
             </span>
           </div>
           <div className="connection-workspace-actions">
+            {constructing && (
+              <label className="construction-follow">
+                <input
+                  type="checkbox"
+                  checked={follow}
+                  onChange={(event) => setFollow(event.target.checked)}
+                />{" "}
+                Follow build
+              </label>
+            )}
             <select
               aria-label="Find a component"
               value=""
@@ -615,6 +661,7 @@ export function CompositionGraph({
             </select>
             <button
               type="button"
+              disabled={constructing}
               onClick={() => {
                 const arranged = compositionGraph(doc, null, false);
                 run("Arrange components", (d) => {
@@ -639,7 +686,19 @@ export function CompositionGraph({
           onZoom={onZoom}
           selectedId={selected}
           fitRequest={fit}
-          reveal={jump ?? reveal}
+          reveal={
+            constructing && follow && construction?.affected.nodes.length
+              ? {
+                  id: construction.affected.nodes[
+                    construction.affected.nodes.length - 1
+                  ],
+                  sequence: construction.sequence,
+                }
+              : (jump ?? reveal)
+          }
+          onNavigate={() => {
+            if (constructing) setFollow(false);
+          }}
           onBackground={() => {
             setSource(null);
             setWireSelection(null);
@@ -813,6 +872,7 @@ export function CompositionGraph({
               >
                 <button
                   type="button"
+                  disabled={constructing}
                   onClick={() => {
                     if (nodeClickSuppressed.current) {
                       nodeClickSuppressed.current = false;
@@ -878,11 +938,15 @@ export function CompositionGraph({
                   {/* biome-ignore lint/a11y/useSemanticElements: SVG wires need keyboard-accessible path hit targets. */}
                   <path
                     className="connection-wire-hit"
+                    style={
+                      constructing
+                        ? { pointerEvents: "none", outline: "none" }
+                        : { outline: "none" }
+                    }
                     d={d}
                     role="button"
                     tabIndex={0}
                     vectorEffect="non-scaling-stroke"
-                    style={{ outline: "none" }}
                     aria-pressed={isSelected}
                     aria-label={`${a.label} → ${b.label}: ${w.label}`}
                     onFocus={() => selectConnection(w)}
@@ -919,6 +983,8 @@ export function CompositionGraph({
             <ConnectionNode
               key={b.id}
               node={b}
+              readOnly={constructing}
+              changed={construction?.affected.nodes.includes(b.id)}
               selected={selectedIds.includes(b.id)}
               compatible={
                 !!source &&

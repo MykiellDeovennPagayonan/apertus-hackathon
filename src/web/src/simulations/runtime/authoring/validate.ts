@@ -72,7 +72,8 @@ export function validateAuthoredDocument(
     d.connections.length > limits.connections
   )
     throw new Error("Expanded document exceeds component/connection limit");
-  validateBoard(d, runnable);
+  // Boundary overflow is a sharing concern; drafts and previews remain editable.
+  validateBoard(d);
   const ids = new Set<string>();
   const claim = (id: string, path: string) => {
     if (typeof id !== "string" || !idPattern.test(id) || ids.has(id))

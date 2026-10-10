@@ -9,3 +9,6 @@
 /docs/agent-only/implementation/023-validation/
 
 /docs/agent-only/implementation/024-validation/
+
+# Local live-construction browser captures; keep the implementation report tracked.
+/docs/agent-only/implementation/025-validation/runs/

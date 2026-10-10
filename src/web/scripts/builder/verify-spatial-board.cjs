@@ -257,3 +257,45 @@ emptied.layout.children[0].children = [];
 reconcileBoard(emptied);
 assert.deepEqual(emptied.presentation.separatedLayouts, []);
 validateAuthoredDocument(emptied);
+
+// Custom boundaries warn during authoring and preview, and are checked when sharing.
+const overflow = structuredClone(d);
+overflow.presentation.learnerArea = { x: 0, y: 0, width: 10, height: 10 };
+validateAuthoredDocument(overflow, true);
+new DocumentRuntime(overflow);
+const { validateRunnableDocument } = load(
+  "src/simulations/builder/document/validateDocument.ts",
+);
+const overflowDocument = canonicalDocument(overflow);
+validateRunnableDocument(overflowDocument, false);
+assert.throws(
+  () => validateRunnableDocument(overflowDocument),
+  /Expand to fit/,
+);
+delete overflowDocument.authored.presentation.learnerArea;
+validateRunnableDocument(overflowDocument);
+overflowDocument.authored.presentation.items[0].rect.x -= 1000;
+validateRunnableDocument(overflowDocument);
+console.log(
+  "Learner view: editable overflow, clipped preview, sharing guard and automatic bounds passed",
+);
+
+const { arrangeDocument } = load(
+  "src/simulations/runtime/authoring/arrangement.ts",
+);
+const arrangement = {
+  template: "vertical",
+  main: [],
+  controls: [],
+  results: [],
+  narrowOrder: [],
+  preserveLocked: true,
+};
+assert.equal(
+  arrangeDocument(d, arrangement).presentation.learnerArea,
+  undefined,
+);
+assert.deepEqual(
+  arrangeDocument(overflow, arrangement).presentation.learnerArea,
+  overflow.presentation.learnerArea,
+);

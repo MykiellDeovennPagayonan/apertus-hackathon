@@ -149,6 +149,8 @@ if (process.argv.includes("--capture")) {
       `controls/cycle-${kind}-activity`,
       `displays/cycle-${kind}-caption`,
     );
+  // Implementation 025 adds spring capabilities without changing historical contracts.
+  newIds.push("models/SpringMass", "appearance/SpringMass");
   const restored = new Map(newIds.map((id) => [id, publicDefinitions.get(id)]));
   const allRecipes = registry.listPremadeRecipes;
   const historicalRecipes = allRecipes().filter(
@@ -249,12 +251,15 @@ if (process.argv.includes("--capture")) {
       path.join(__dirname, "fixtures/component-cleanup-markup.json"),
       `${JSON.stringify(rendered, null, 2)}\n`,
     );
-  } else
+  } else {
+    assert.ok(rendered["prebuilt/models-SpringMass"]);
+    delete rendered["prebuilt/models-SpringMass"];
     assert.deepEqual(
       rendered,
       markupBaseline,
       "Built-in recipe markup changed beyond React IDs/dynamic stack traces",
     );
+  }
   console.log(
     `${builtInRecipes.length} built-in recipes preserve their pre-refactor initial markup.`,
   );

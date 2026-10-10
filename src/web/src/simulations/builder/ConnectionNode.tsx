@@ -19,6 +19,8 @@ const symbols = {
 };
 export function ConnectionNode({
   node,
+  readOnly = false,
+  changed = false,
   selected,
   compatible,
   activePort,
@@ -35,6 +37,8 @@ export function ConnectionNode({
   onKeyMove,
 }: {
   node: GraphNode;
+  readOnly?: boolean;
+  changed?: boolean;
   selected: boolean;
   compatible: boolean;
   activePort: string | null;
@@ -116,7 +120,8 @@ export function ConnectionNode({
   };
   return (
     <article
-      className={`builder-block connection-node connection-node--${node.kind.toLowerCase()} ${selected ? "is-selected" : ""} ${compatible ? "is-compatible" : ""}`}
+      inert={readOnly}
+      className={`builder-block connection-node ${changed ? "is-changing" : ""} connection-node--${node.kind.toLowerCase()} ${selected ? "is-selected" : ""} ${compatible ? "is-compatible" : ""}`}
       style={{ left: node.x, top: node.y }}
       data-node-id={node.id}
       aria-label={`${node.kind}: ${node.label}`}

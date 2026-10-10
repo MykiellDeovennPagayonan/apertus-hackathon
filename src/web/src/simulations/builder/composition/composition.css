@@ -2003,7 +2003,9 @@ never beside the workspace. */
   transform: translateX(-50%);
   width: min(640px, calc(100% - 32px));
   pointer-events: auto;
-  transition: width 0.2s ease, transform 0.2s ease;
+  transition:
+    width 0.2s ease,
+    transform 0.2s ease;
 }
 .builder-composer .command-bar {
   width: 100%;
@@ -2031,8 +2033,13 @@ never beside the workspace. */
 .catalog-ai-builder {
   margin-bottom: 12px;
   padding: 10px 14px;
-  background: color-mix(in srgb, var(--accent, #3b82f6) 8%, var(--panel, #ffffff));
-  border: 1px solid color-mix(in srgb, var(--accent, #3b82f6) 24%, var(--border, #cccccc));
+  background: color-mix(
+    in srgb,
+    var(--accent, #3b82f6) 8%,
+    var(--panel, #ffffff)
+  );
+  border: 1px solid
+    color-mix(in srgb, var(--accent, #3b82f6) 24%, var(--border, #cccccc));
   border-radius: 8px;
 }
 .catalog-ai-label {
@@ -2072,3 +2079,75 @@ never beside the workspace. */
   cursor: not-allowed;
 }
 
+/* Construction uses temporary presentation state; edit controls remain inert. */
+.is-constructing .connection-node {
+  animation: construction-enter 180ms ease-out;
+}
+.is-constructing .connection-node.is-changing {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.is-constructing .connection-wire-line {
+  stroke-dasharray: 1200;
+  animation: construction-wire 260ms ease-out;
+}
+.construction-follow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+.construction-board-preview {
+  padding: 24px;
+  width: 100%;
+}
+.construction-board-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.construction-board-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  animation: construction-enter 180ms ease-out;
+}
+.construction-board-item.is-appearance {
+  min-height: 220px;
+}
+.construction-board-item span {
+  color: var(--muted);
+  font-size: 14px;
+}
+@keyframes construction-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes construction-wire {
+  from {
+    stroke-dashoffset: 1200;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .is-constructing .connection-node,
+  .is-constructing .connection-wire-line,
+  .construction-board-item {
+    animation: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .composition-graph .connection-camera-tools {
+    bottom: calc(var(--builder-composer-height, 140px) + 28px);
+  }
+}

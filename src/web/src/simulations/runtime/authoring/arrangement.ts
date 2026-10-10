@@ -335,12 +335,7 @@ export function arrangeDocument(
   for (const item of board.items)
     if (!rows.flat().includes(item.id)) rows.push([item.id]);
   board.startView = extent(board.items.map((i) => i.rect));
-  // Include breathing room in a new composition's opening extent. The canvas
-  // remains full size and freely navigable; locked component bounds are preserved.
-  board.learnerArea = {
-    ...board.startView,
-    height: board.startView.height + 48,
-  };
+  // Automatic learner bounds follow content. Preserve an explicitly authored boundary.
   arrangeGraph(next);
   validateAuthoredDocument(next);
   return next;

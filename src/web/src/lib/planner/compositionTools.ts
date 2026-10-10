@@ -8,12 +8,46 @@ import type { AuthoredDocument } from "../../simulations/runtime/authoring/types
 import type { ComponentBucketCard } from "./bucket";
 import type { AllowedTurnTool } from "./turnSchema";
 
+/** Resolve informal additions against real command fields, including "add mass changing". */
+export function requestedControlTools(
+  document: AuthoredDocument,
+  tools: AllowedTurnTool[],
+  prompt: string,
+): AllowedTurnTool[] {
+  if (!/\b(?:add|insert|include|create|provide|give)\b/i.test(prompt))
+    return [];
+  const words = new Set(prompt.toLowerCase().match(/[a-z0-9]+/g) ?? []);
+  const controls = tools.filter((tool) => tool.tool === "add_control");
+  const matching = controls.filter((tool) => {
+    if (tool.schema.type !== "object") return false;
+    const { target, command } = tool.schema.properties;
+    if (target.type !== "enum" || command.type !== "enum") return false;
+    const node = document.nodes.find((node) => node.id === target.values[0]);
+    if (!node) return false;
+    const contract = publicDefinition(node.definition).commands[
+      String(command.values[0])
+    ];
+    const names = [
+      String(command.values[0]).replace(/^set[:_]/i, ""),
+      ...parameterLeaves(contract.arguments).map(({ path }) => path),
+    ];
+    return names.some((name) =>
+      name.split(/[.:_-]/).some((part) => words.has(part.toLowerCase())),
+    );
+  });
+  if (matching.length) return matching;
+  return /\b(?:slider|control|input|dial|button)\b/i.test(prompt)
+    ? controls
+    : [];
+}
+
 /** Narrow schemas to the next unresolved graph responsibility, not to a prompt phrase. */
 export function focusCompositionTools(
   document: AuthoredDocument,
   bucket: ComponentBucketCard[],
   tools: AllowedTurnTool[],
   root: string,
+  additions: AllowedTurnTool[] = [],
 ): AllowedTurnTool[] {
   const property = (tool: AllowedTurnTool, key: string): unknown => {
     const schema =
@@ -204,6 +238,7 @@ export function focusCompositionTools(
   const supported = new Set(bucket.map((c) => c.id));
   return tools.filter(
     (t) =>
+      additions.includes(t) ||
       ["configure", "set_lesson", "arrange"].includes(t.tool) ||
       (t.tool === "insert_component" &&
         supported.has(String(property(t, "definition"))) &&

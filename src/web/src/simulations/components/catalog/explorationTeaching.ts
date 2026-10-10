@@ -78,6 +78,15 @@ export const compositionRequirements: Record<string, CompositionRequirements> =
         },
       ]),
     ),
+    "models/SpringMass": {
+      topic: "How springs work: stiffness, mass and damping",
+      selectionKey: "spring",
+      guidance:
+        "For follow-up changes: a stronger spring means increase stiffness; less bouncing means increase damping while preserving stiffness, mass and amplitude. Stiffness changes frequency but does not dissipate energy. Damping dissipates energy and makes bouncing decay. At fixed mass quadrupling stiffness doubles frequency. For initial construction use a spring visual, stiffness slider and release button, without a measurement dashboard.",
+      commands: ["set:stiffness", "RELEASE"],
+      observations: [],
+      appearance: "appearance/SpringMass",
+    },
     "prefabs/physical-systems/Pendulum": {
       topic: "Pendulum simulation",
       guidance:

@@ -23,7 +23,10 @@ import { buildInitialCard, retrieveComponentBucket } from "./bucket";
 import type { GenerationBudget } from "./budget";
 import { requiresLayaComposition } from "./compositionPolicy";
 import { compositionIssues } from "./compositionQuality";
-import { focusCompositionTools } from "./compositionTools";
+import {
+  focusCompositionTools,
+  requestedControlTools,
+} from "./compositionTools";
 import { computeOpenCompositionCoverage } from "./coverage";
 import { PlannerError } from "./errors";
 import { focusedTurn } from "./focusedTurn";
@@ -61,16 +64,21 @@ export async function compose(
   budget.enableCompositionMode();
   budget.check();
 
+  const shouldStartFresh =
+    /\b(?:start over|from scratch|new experiment|clear all|reset all|replace everything)\b/i.test(
+      request.prompt,
+    );
   // 1. Retrieve component bucket
-  const activeContextText = request.active
-    ? [
-        request.active.recipe.title,
-        request.active.recipe.description || "",
-        ...request.active.recipe.document.nodes.map((n) => n.definition),
-      ].join(" ")
-    : "";
+  const activeContextText =
+    request.active && !shouldStartFresh
+      ? [
+          request.active.recipe.title,
+          request.active.recipe.description || "",
+          ...request.active.recipe.document.nodes.map((n) => n.definition),
+        ].join(" ")
+      : "";
   const bucketPrompt = activeContextText
-    ? `${request.prompt} ${activeContextText}`
+    ? `${request.prompt}\nActive experiment: ${activeContextText}`
     : request.prompt;
   const bucket = retrieveComponentBucket(bucketPrompt, intent);
 
@@ -102,15 +110,11 @@ export async function compose(
 
   const requiredLaya = requiresLayaComposition();
   const strategy = requiredLaya
-    ? await selectCompositionStrategy(request.prompt, intent, bucket, budget)
+    ? await selectCompositionStrategy(bucketPrompt, intent, bucket, budget)
     : null;
   if (strategy) intent = { ...intent, suggestedStructure: strategy.structure };
 
   // 2. Initialize authoring transaction
-  const shouldStartFresh =
-    /\b(?:start over|from scratch|new experiment|clear all|reset all|replace everything)\b/i.test(
-      request.prompt,
-    );
   const initialDoc = structuredClone(
     (!shouldStartFresh && request.active?.recipe.document) ||
       emptyAuthoredDocument(),
@@ -144,16 +148,79 @@ export async function compose(
     budget.check();
 
     const allTools = buildTurnTools(draft.document, bucket);
+    const controlAdditions = requestedControlTools(
+      draft.document,
+      allTools,
+      request.prompt,
+    );
+    const wantsMoreControls = controlAdditions.length > 0;
+    const wantsMoreObservations =
+      /\b(?:add|insert|include|create|provide|give)\b/i.test(request.prompt) &&
+      /\b(?:readout|observation|display|meter|graph|monitor)\b/i.test(
+        request.prompt,
+      );
+    const additions = [
+      ...controlAdditions,
+      ...(wantsMoreObservations
+        ? allTools.filter((tool) => tool.tool === "add_observation")
+        : []),
+    ];
+    const pendingControls = controlAdditions.filter((tool) => {
+      if (tool.schema.type !== "object") return false;
+      const { target, command } = tool.schema.properties;
+      return !draft.document.connections.some(
+        (wire) =>
+          target.type === "enum" &&
+          command.type === "enum" &&
+          wire.to.node === target.values[0] &&
+          wire.to.port === command.values[0] &&
+          draft.document.nodes.some(
+            (node) =>
+              node.id === wire.from.node &&
+              publicDefinition(node.definition).category === "controls",
+          ),
+      );
+    });
+    const isControlExtension =
+      Boolean(request.active) &&
+      !shouldStartFresh &&
+      wantsMoreControls &&
+      !wantsMoreObservations;
     let turnTools = strategy
       ? focusCompositionTools(
           draft.document,
           bucket,
           allTools,
           strategy.definition,
+          additions,
         )
       : allTools;
     if (
+      request.active &&
+      !shouldStartFresh &&
+      executedPayloads.size === 0 &&
+      additions.length > 0 &&
+      additions.some((tool) => turnTools.includes(tool)) &&
+      compositionIssues(draft.document).length === 0
+    ) {
+      // A requested extension must create an interactive component before edits
+      // to existing settings can be considered a successful response.
+      turnTools = additions;
+    }
+    if (
+      isControlExtension &&
+      compositionIssues(draft.document).length === 0 &&
+      controlAdditions.some((tool) => turnTools.includes(tool))
+    ) {
+      // The requested command wiring is the completion criterion. Once present,
+      // arrange the new controls rather than asking inference to change model values.
+      turnTools = pendingControls.length
+        ? pendingControls
+        : allTools.filter((tool) => tool.tool === "arrange");
+    }
+    if (
       requiredLaya &&
+      (!request.active || shouldStartFresh) &&
       compositionIssues(draft.document).length === 0 &&
       draft.document.nodes.some(
         (node) => node.definition === strategy?.definition,
@@ -173,6 +240,20 @@ export async function compose(
             : false,
       );
     }
+    // A complete existing capability needs editing tools; unrelated optional insertions
+    // make small local models copy schemas instead of making the requested edit.
+    if (
+      requiredLaya &&
+      request.active &&
+      !shouldStartFresh &&
+      strategy?.structure === "single" &&
+      draft.document.nodes.some(
+        (node) => node.definition === strategy.definition,
+      ) &&
+      compositionIssues(draft.document).length === 0
+    ) {
+      turnTools = turnTools.filter((tool) => tool.tool !== "insert_component");
+    }
     if (requiredLaya) {
       turnTools = turnTools.map((tool) => {
         if (tool.tool !== "arrange" || tool.schema.type !== "object")
@@ -189,10 +270,12 @@ export async function compose(
             )
             .map((n) => n.id);
           const field = properties[role];
-          if (field.type === "array" && ids.length)
+          if (field.type === "array")
             properties[role] = {
               ...field,
-              items: { type: "enum", values: ids },
+              ...(ids.length
+                ? { items: { type: "enum" as const, values: ids } }
+                : { maxItems: 0 }),
             };
         }
         return { ...tool, schema: { ...tool.schema, properties } };
@@ -296,15 +379,6 @@ export async function compose(
       (n) => publicDefinition(n.definition).category === "displays",
     ).length;
 
-    const wantsMoreControls =
-      /\b(?:add|insert|include|create|provide|give)\b/i.test(request.prompt) &&
-      /\b(?:slider|control|input|dial|button)\b/i.test(request.prompt);
-    const wantsMoreObservations =
-      /\b(?:add|insert|include|create|provide|give)\b/i.test(request.prompt) &&
-      /\b(?:readout|observation|display|meter|graph|monitor)\b/i.test(
-        request.prompt,
-      );
-
     let stepHint = "";
     if (isCompositeBuilder) {
       if (modelNodes.length === 0) {
@@ -383,6 +457,22 @@ export async function compose(
           request.prompt,
           turnTools,
           {
+            acceptedIntent: {
+              goal: intent.goal,
+              interactions: intent.interactions,
+              ...(wantsMoreControls && executedPayloads.size === 0
+                ? {
+                    requiredNextOperation:
+                      "add_control: add and connect a persistent interactive control for the requested parameter; changing its current configuration alone does not satisfy this request",
+                  }
+                : {}),
+            },
+            originalNodes: initialDoc.nodes.map((node) => ({
+              id: node.id,
+              definition: node.definition,
+              config: node.configuration,
+            })),
+            originalConnections: initialDoc.connections,
             aliases: Object.keys(draft.handles),
             fidelity: [
               ...new Set(
@@ -414,12 +504,26 @@ export async function compose(
               operationId: `op_turn_${turn + 1}`,
               request: operation,
             });
+            if (
+              operation.tool === "configure" &&
+              JSON.stringify(candidate.document) ===
+                JSON.stringify(draft.document)
+            )
+              throw new Error(
+                "The configuration patch changed nothing. Choose new values to implement the requested condition; current settings are context, not the requested result.",
+              );
             if (receipt.status !== "applied")
               throw new Error(
                 receipt.issues.map((issue) => issue.message).join("; ") ||
                   receipt.summary,
               );
           },
+          Boolean(
+            request.active &&
+              !shouldStartFresh &&
+              lastReceipt?.status === "applied" &&
+              compositionIssues(draft.document).length === 0,
+          ),
         )
       : await requestStructured<FixerResult>(
           messages,
@@ -545,6 +649,13 @@ export async function compose(
         request: turnResult.request,
       });
 
+      if (lastReceipt.status === "applied")
+        await budget.construction?.publish(
+          draft.document,
+          draft.revision,
+          turnResult.request.tool === "arrange" ? "arrangement" : undefined,
+        );
+
       budget.trace?.("turn.executed", {
         turn: turn + 1,
         tool: turnResult.request.tool,
@@ -552,6 +663,27 @@ export async function compose(
         issues: lastReceipt.issues,
         revision: draft.revision,
       });
+      if (
+        isControlExtension &&
+        pendingControls.length === 0 &&
+        turnResult.request.tool === "arrange" &&
+        lastReceipt.status === "applied"
+      )
+        break;
+      // A focused parameter patch contains all requested fields and completes a
+      // refinement in one operation, rather than repeatedly amplifying a relative change.
+      if (
+        requiredLaya &&
+        request.active &&
+        !shouldStartFresh &&
+        strategy?.structure === "single" &&
+        turnResult.request.tool === "configure" &&
+        lastReceipt.status === "applied" &&
+        !wantsMoreControls &&
+        !wantsMoreObservations &&
+        compositionIssues(draft.document).length === 0
+      )
+        break;
 
       if (requiredLaya && lastReceipt.status !== "applied")
         throw new PlannerError(
@@ -589,6 +721,7 @@ export async function compose(
         },
       });
     }
+    await budget.construction?.publish(draft.document, draft.revision);
     budget.trace?.("autoConnected", {
       count: auto.connected.length,
       connections: auto.connected,
@@ -648,6 +781,7 @@ export async function compose(
           });
         }
       }
+      await budget.construction?.publish(draft.document, draft.revision);
       runCheck = checkRunnable(draft.document);
     }
     if (!runCheck.runnable) {
@@ -696,14 +830,27 @@ export async function compose(
       finalDoc.nodes.flatMap((n) => publicDefinition(n.definition).assumptions),
     ),
   ];
-  finalDoc.lesson.explanation = [finalDoc.lesson.explanation, ...assumptions]
+  finalDoc.lesson.explanation = [
+    finalDoc.lesson.explanation,
+    ...assumptions.filter(
+      (assumption) => !finalDoc.lesson.explanation.includes(assumption),
+    ),
+  ]
     .filter(Boolean)
     .join("\n");
 
   // 9. Finalize recipe
+  const existingRecipe =
+    request.active && !shouldStartFresh ? request.active.recipe : undefined;
   const recipe = finalizeRecipe(finalDoc, {
-    id: `generated/${request.requestId}`,
-    assumptions,
+    ...existingRecipe,
+    id:
+      request.active && !shouldStartFresh
+        ? request.active.recipe.id
+        : `generated/${request.requestId}`,
+    assumptions: [
+      ...new Set([...(existingRecipe?.assumptions ?? []), ...assumptions]),
+    ],
     title: finalDoc.lesson.title,
     description: finalDoc.lesson.instruction,
   });
@@ -714,6 +861,7 @@ export async function compose(
     throw new PlannerError("Failed to initialize simulation runtime", 502);
   }
 
+  loaded.runtime.dispose();
   const isUpdated = Boolean(request.active && !shouldStartFresh);
   return {
     protocolVersion: 1,

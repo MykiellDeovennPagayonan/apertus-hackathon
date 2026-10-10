@@ -28,6 +28,8 @@ import {
 import { compose } from "./compose";
 import { requiresLayaComposition } from "./compositionPolicy";
 import { verifyExplicitQuantities } from "./constraints";
+import type { ConstructionSink } from "./construction";
+import { ConstructionPublisher } from "./constructionPublisher";
 import { parseStageJson, stageMessages } from "./context";
 import { coverageFor, verifyCoverage } from "./coverage";
 import { PlannerError } from "./errors";
@@ -212,7 +214,10 @@ async function followup(
 ): Promise<GenerationResult | null> {
   const current = request.active;
   if (!current) throw new Error("A follow-up requires an active recipe");
-  if (current.sessionId.startsWith("builder-")) {
+  if (
+    request.destination === "builder" ||
+    current.sessionId.startsWith("builder-")
+  ) {
     // Builder sessions are authoring workflows that compose or modify components and composites.
     return null;
   }
@@ -599,10 +604,9 @@ async function followup(
     learnerExplanation: response.message,
   };
 }
-export async function planPrompt(
+async function planPromptInternal(
   input: GenerationRequest,
-  signal?: AbortSignal,
-  trace?: TraceSink,
+  budget: GenerationBudget,
 ): Promise<GenerationResult> {
   const request = parseGenerationRequest(input);
   const mode = process.env.PLANNER_MODE ?? "hybrid";
@@ -612,7 +616,6 @@ export async function planPrompt(
   if (!Number.isInteger(limit) || limit < 1 || limit > 16)
     throw new PlannerError("Invalid planner concurrency.", 503);
   const requiredComposition = requiresLayaComposition();
-  const budget = new GenerationBudget(signal, trace);
   budget.check();
   if (activeRequests >= limit)
     throw new PlannerError("Planner is busy. Please try again shortly.", 429);
@@ -816,6 +819,11 @@ export async function planPrompt(
     );
     budget.trace?.("validation.start", {});
     let { draft, recipe, coverage } = construct(configuration, true);
+    await budget.construction?.publish(
+      draft.document,
+      draft.revision,
+      "arrangement",
+    );
     if (configuration.extend) {
       const applyExtensions = (
         target: AuthoringTransaction,
@@ -876,9 +884,14 @@ export async function planPrompt(
         },
         intent,
       );
-      if (extension.status === "authored")
+      if (extension.status === "authored") {
         recipe = applyExtensions(draft, extension.operations, true);
-      else {
+        await budget.construction?.publish(
+          draft.document,
+          draft.revision,
+          "arrangement",
+        );
+      } else {
         coverage = {
           level: "partial",
           covered: coverage.covered,
@@ -907,7 +920,7 @@ export async function planPrompt(
       },
       request,
     );
-    trace?.("finalization", {
+    budget.trace?.("finalization", {
       status: result.status,
       nodes: recipe.document.nodes.length,
       connections: recipe.document.connections.length,
@@ -931,5 +944,52 @@ export async function planPrompt(
         );
   } finally {
     activeRequests--;
+  }
+}
+
+/** Shared interpretation/selection; the destination only changes presentation and activation. */
+export async function planPrompt(
+  input: GenerationRequest,
+  signal?: AbortSignal,
+  trace?: TraceSink,
+  sink?: ConstructionSink,
+): Promise<GenerationResult> {
+  const request = parseGenerationRequest(input);
+  const budget = new GenerationBudget(signal, trace);
+  const initial =
+    /\b(?:start over|from scratch|new experiment|clear all|reset all|replace everything)\b/i.test(
+      request.prompt,
+    )
+      ? emptyAuthoredDocument()
+      : (request.active?.recipe.document ?? emptyAuthoredDocument());
+  const publisher =
+    request.destination === "builder" && request.construction === "live" && sink
+      ? new ConstructionPublisher(
+          request.requestId,
+          initial,
+          sink,
+          budget.signal,
+        )
+      : undefined;
+  budget.construction = publisher;
+  try {
+    const result = await planPromptInternal(request, budget);
+    if (
+      publisher &&
+      (result.status === "created" || result.status === "updated")
+    ) {
+      result.recipe.document = publisher.finalize(result.recipe.document);
+      parseGenerationResult(result, request);
+      await publisher.publish(
+        result.recipe.document,
+        publisher.latestRevision,
+        "checking",
+      );
+    }
+    budget.check();
+    return parseGenerationResult(result, request);
+  } catch (error) {
+    budget.check();
+    throw error;
   }
 }

@@ -19,6 +19,7 @@ import {
   convertToBoard,
   extent,
   fit,
+  outsideLearnerView,
   type Rect,
   reorderBoardItems,
   resizeBoardRect,
@@ -37,7 +38,7 @@ import { SceneIcon, SceneIconButton } from "../SceneToolbar";
 import { DrawingEditor, type DrawingTool } from "./DrawingEditor";
 import "./board.css";
 const BOARD_CHROME =
-  ".drawing-toolbar, .drawing-inspector, .board-toolbar, .board-selection, .board-area-banner, .board-settings, .board-camera-tools, .board-workspace-tools";
+  ".drawing-toolbar, .drawing-inspector, .board-toolbar, .board-selection, .board-area-banner, .board-view-warning, .board-settings, .board-camera-tools, .board-workspace-tools";
 
 export function SpatialBoard({
   document,
@@ -650,6 +651,13 @@ export function SpatialBoard({
     fn(next);
     commit(next, message);
   };
+  const expandLearnerView = () =>
+    update((next) => {
+      next.learnerArea = extent(next.items.map((item) => item.rect));
+    }, "Learner view expanded to fit all content");
+  const outsideContent = p.items.some((item) =>
+    outsideLearnerView(p, preview[item.id] ?? item.rect),
+  );
   const selected = p.items.filter((i) => selection.includes(i.id));
   const cancel = () => {
     marqueeGesture.current = null;
@@ -1135,15 +1143,36 @@ export function SpatialBoard({
           </>
         )}
       </div>
+      {authoring && outsideContent && !immersive && (
+        <div className="board-view-warning">
+          <output>
+            Some content falls outside the learner view. Preview will show it
+            clipped.
+          </output>
+          <button type="button" onClick={expandLearnerView}>
+            Expand to fit
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setEditArea(true);
+              setSelection([]);
+              setCamera(fit(area, size.width - 48, size.height - 48));
+            }}
+          >
+            Show boundary
+          </button>
+        </div>
+      )}
       {authoring && editArea && (
         <div className="board-area-banner">
-          <strong>Edit learner area</strong>
+          <strong>Edit learner view</strong>
           <span>
             Drag the boundary handles or use numeric fields in Board settings.
             Escape cancels a drag.
           </span>
           <button type="button" onClick={() => setEditArea(false)}>
-            Done editing area
+            Done editing boundary
           </button>
         </div>
       )}
@@ -1187,63 +1216,67 @@ export function SpatialBoard({
           >
             Capture starting view
           </button>
-          <button
-            type="button"
-            onClick={() =>
-              update((n) => {
-                n.learnerArea = extent(n.items.map((i) => i.rect));
-              })
-            }
-          >
-            Set learner area from content
-          </button>
-          {p.learnerArea && (
-            <>
-              <button
-                type="button"
-                onClick={() => {
-                  setEditArea(true);
-                  setSelection([]);
-                  setSettings(false);
+          <fieldset className="board-learner-view">
+            <legend>Learner view</legend>
+            <p>Choose the area learners can explore.</p>
+            <label>
+              <input
+                type="radio"
+                name="learner-view"
+                checked={!p.learnerArea}
+                onChange={() => {
+                  setEditArea(false);
+                  update((next) => {
+                    delete next.learnerArea;
+                  }, "Learner view now fits all content automatically");
                 }}
-              >
-                Edit learner area on board
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  update((n) => {
-                    delete n.learnerArea;
-                  })
-                }
-              >
-                Use automatic area
-              </button>
-              <Geometry
-                label="Learner area"
-                maxSize={1000000}
-                rect={p.learnerArea}
-                onApply={(r) =>
-                  update((n) => {
-                    n.learnerArea = r;
-                  })
-                }
               />
-            </>
-          )}
-          {p.learnerArea &&
-            p.items.some(
-              (i) =>
-                i.rect.x < area.x ||
-                i.rect.y < area.y ||
-                i.rect.x + i.rect.width > area.x + area.width ||
-                i.rect.y + i.rect.height > area.y + area.height,
-            ) && (
-              <p role="alert">
-                Some content is outside the learner area. Enlarge the area with
-                “Set learner area from content” before sharing.
-              </p>
+              Fit all content
+            </label>
+            <p>
+              Automatically follows components as you add, move, or resize them.
+            </p>
+            <label>
+              <input
+                type="radio"
+                name="learner-view"
+                checked={!!p.learnerArea}
+                onChange={() => {
+                  expandLearnerView();
+                  setEditArea(true);
+                }}
+              />
+              Custom boundary
+            </label>
+            {p.learnerArea && (
+              <>
+                <button type="button" onClick={expandLearnerView}>
+                  Expand to fit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditArea(true);
+                    setSelection([]);
+                    setSettings(false);
+                    setCamera(fit(area, size.width - 48, size.height - 48));
+                  }}
+                >
+                  Edit boundary on board
+                </button>
+                <Geometry
+                  label="Learner view"
+                  maxSize={1000000}
+                  rect={p.learnerArea}
+                  onApply={(rect) =>
+                    update((next) => {
+                      next.learnerArea = rect;
+                    })
+                  }
+                />
+              </>
             )}
+          </fieldset>
           {p.navigation.mode === "fixed" && (
             <p>
               Fixed views keep controls at their original readable size. Preview
@@ -1646,7 +1679,7 @@ export function SpatialBoard({
                 {group.label}
               </span>
             ))}
-            {authoring && p.learnerArea && (editArea || !workspace) && (
+            {authoring && p.learnerArea && (
               <div
                 className="board-area"
                 style={{
@@ -1656,7 +1689,7 @@ export function SpatialBoard({
                   height: area.height,
                 }}
               >
-                <span>Learner area</span>
+                <span>Learner view</span>
                 {editArea && (
                   <>
                     <button
@@ -1664,12 +1697,12 @@ export function SpatialBoard({
                       className="board-area-move"
                       onPointerDown={(e) => begin(e, "area-move", "__area")}
                     >
-                      Move learner area
+                      Move learner boundary
                     </button>
                     <button
                       type="button"
                       className="board-area-resize"
-                      aria-label="Resize learner area"
+                      aria-label="Resize learner boundary"
                       onPointerDown={(e) => begin(e, "area-resize", "__area")}
                     >
                       <SceneIcon name="resize" />
@@ -1875,7 +1908,7 @@ export function SpatialBoard({
               tabIndex={authoring || layout.node ? 0 : -1}
               aria-label={title(i.id)}
               hidden={hidden}
-              className={`board-item ${selection.includes(i.id) && authoring ? "is-selected" : ""} ${promoted ? "is-immersive" : ""} ${overlay ? `is-overlay anchor-${overlay.anchor}` : ""}`}
+              className={`board-item ${authoring && outsideLearnerView(p, r) ? "is-outside-view" : ""} ${selection.includes(i.id) && authoring ? "is-selected" : ""} ${promoted ? "is-immersive" : ""} ${overlay ? `is-overlay anchor-${overlay.anchor}` : ""}`}
               style={position}
             >
               {authoring && !immersive && (

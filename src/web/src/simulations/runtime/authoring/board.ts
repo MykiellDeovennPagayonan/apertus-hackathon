@@ -45,6 +45,17 @@ export type BoardPresentation = {
     }[];
   };
 };
+/** Missing bounds keep the learner view fitted to the current content. */
+export function outsideLearnerView(p: BoardPresentation, rect: Rect) {
+  const area = p.learnerArea;
+  return (
+    !!area &&
+    (rect.x < area.x ||
+      rect.y < area.y ||
+      rect.x + rect.width > area.x + area.width ||
+      rect.y + rect.height > area.y + area.height)
+  );
+}
 export const clamp = (v: number, lo: number, hi: number) =>
   Math.max(lo, Math.min(hi, v));
 export function resizeBoardRect(
@@ -585,21 +596,9 @@ export function validateBoard(d: AuthoredDocument, runnable = false) {
       grouped.add(id);
     }
   }
-  if (
-    runnable &&
-    p.learnerArea &&
-    p.items.some((i) => {
-      const r = p.learnerArea as Rect;
-      return (
-        i.rect.x < r.x ||
-        i.rect.y < r.y ||
-        i.rect.x + i.rect.width > r.x + r.width ||
-        i.rect.y + i.rect.height > r.y + r.height
-      );
-    })
-  )
+  if (runnable && p.items.some((i) => outsideLearnerView(p, i.rect)))
     fail(
-      "content is outside the learner area. Use Set learner area from content before running or sharing.",
+      "some content falls outside the learner view. Choose Expand to fit on the board before sharing.",
     );
   const n = p.navigation;
   if (

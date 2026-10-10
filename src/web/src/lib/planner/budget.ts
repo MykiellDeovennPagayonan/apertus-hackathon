@@ -2,6 +2,7 @@ import { readDecisionConfig } from "../decisions/config";
 import { createDecisionProvider } from "../decisions/factory";
 import { type LlmConfig, readLlmConfig } from "../llm/config";
 import { compositionDeadlineMs } from "./compositionPolicy";
+import type { ConstructionPublisher } from "./constructionPublisher";
 import { PlannerError } from "./errors";
 import { readSelectionPolicy } from "./selection/policy";
 import type { DecisionSelectionDependencies } from "./selection/selectCapability";
@@ -13,6 +14,7 @@ export class GenerationBudget {
     this.configuration ??= readLlmConfig();
     return this.configuration;
   }
+  construction?: ConstructionPublisher;
   calls = 0;
   repairs = 0;
   turns = 0;

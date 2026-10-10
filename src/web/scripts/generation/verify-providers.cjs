@@ -493,6 +493,10 @@ function response(provider, content, overrides = {}) {
       choices: [{ finish_reason: "stop", message: { content: '{"width":7}' } }],
     });
   };
+  await assert.rejects(
+    () => requestStructured(messages, parse, "Repair", {}),
+    /AbortSignal/,
+  );
   assert.deepEqual(
     await requestStructured(messages, parse, "Repair"),
     { width: 7 },

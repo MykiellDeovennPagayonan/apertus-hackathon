@@ -1,19 +1,13 @@
 import { publicDefinition } from "../../components/catalog";
+import {
+  automaticGraphPositions,
+  graphRole,
+} from "../../runtime/authoring/graphLayout";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import type { Endpoint, Port } from "../../runtime/authoring/types";
 import type { ExperimentDocument } from "../document";
 import type { GraphNode, GraphPort, GraphWire, MovingBlock } from "./types";
 
-const role: Record<string, GraphNode["kind"]> = {
-  models: "Object",
-  controls: "Control",
-  displays: "Result",
-  canvases: "View",
-  appearance: "Placement",
-  behaviors: "Behavior",
-  resources: "Resource",
-  layout: "Placement",
-};
 export const portLabel = (name: string) =>
   name
     .replace(/^set:/, "Set ")
@@ -76,7 +70,7 @@ export function authoredGraph(
         id: n.id,
         label: n.label,
         componentType: def.title,
-        kind: role[def.category],
+        kind: graphRole[def.category] as GraphNode["kind"],
         displayKind: def.discovery?.kind === "object" ? "Object" : undefined,
         description: def.description,
         inputs: [
@@ -134,34 +128,8 @@ export function authoredGraph(
       y: 0,
     });
   }
-  let x = 48;
-  for (const kind of [
-    "Composite",
-    "Control",
-    "Object",
-    "View",
-    "Result",
-    "Behavior",
-    "Placement",
-    "Resource",
-  ]) {
-    let y = 80;
-    const column = blocks.filter((n) => n.kind === kind);
-    for (const n of column) {
-      const height =
-        96 +
-        Math.max(n.inputs.length, n.outputs.length, 1) * 40 +
-        (kind === "Object" ? 48 : 0);
-      if (y + height > 2900) {
-        x += 340;
-        y = 80;
-      }
-      n.x = x;
-      n.y = y;
-      y += height + 70;
-    }
-    if (column.length) x += 360;
-  }
+  const arranged = automaticGraphPositions(blocks);
+  for (const block of blocks) Object.assign(block, arranged[block.id]);
   for (const n of blocks)
     Object.assign(
       n,

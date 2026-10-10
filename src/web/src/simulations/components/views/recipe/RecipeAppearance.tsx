@@ -8,6 +8,7 @@ import type { ComponentInstance } from "../../../runtime/authoring/types";
 import type { ModelInstance } from "../../../runtime/contribution";
 import { DragHandleControl } from "../../controls/DragHandleControl";
 import type { eclipseGeometry } from "../../systems/exploration/eclipse";
+import type { SpringState } from "../../systems/exploration/spring";
 import {
   BeakerVisual,
   MoleculeVisual,
@@ -27,6 +28,7 @@ import { FoodWebVisual } from "../../visuals/ecology/FoodWebVisual";
 import { NutrientLimitationVisual } from "../../visuals/ecology/NutrientLimitationVisual";
 import { WildfireComparisonVisual } from "../../visuals/ecology/WildfireComparisonVisual";
 import { EclipseVisual } from "../../visuals/exploration/EclipseVisual";
+import { SpringVisual } from "../../visuals/exploration/SpringVisual";
 import {
   DiffusionHeatmap,
   PlantGrowthGraph,
@@ -236,6 +238,12 @@ export function Appearance({
     state: snapshot.state[model.id],
     outputs: snapshot.outputs[model.id],
   };
+  if (node.definition === "appearance/SpringMass")
+    return (
+      <SpringVisual
+        state={snapshot.state[model.id] as unknown as SpringState}
+      />
+    );
   if (node.definition === "appearance/EclipseGeometry")
     return (
       <EclipseVisual

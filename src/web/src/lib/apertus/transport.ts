@@ -51,7 +51,6 @@ export async function requestStructured<T>(
       `${config.label} is busy. Please try again shortly.`,
       429,
     );
-  active++;
   const timeout = AbortSignal.timeout(config.timeout);
   const combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
   const original = structuredClone(messages);
@@ -170,6 +169,7 @@ export async function requestStructured<T>(
       throw new Error("Expected one bounded JSON response");
     return providerRequest.restore(content);
   };
+  active++;
   try {
     const key = `${config.provider}/${config.baseUrl}/${config.model}`;
     if (
