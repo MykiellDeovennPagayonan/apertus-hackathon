@@ -67,6 +67,13 @@ for (const m of assemblyModels)
         ...structuredClone(m.defaults),
         ...structuredClone(n.configuration),
       }),
+    reinitialize: m.reconfigure
+      ? (s, n) =>
+          m.reconfigure?.(s, {
+            ...structuredClone(m.defaults),
+            ...structuredClone(n.configuration),
+          }) ?? m.initialize(n.configuration)
+      : undefined,
     apply: (s, command, args) => m.apply(s, command, args.value),
     measure: (s, n) => ({
       ...measureModel(m, s),

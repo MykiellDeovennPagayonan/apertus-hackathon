@@ -1,0 +1,431 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/shared-fishing-lake",
+  "version": 1,
+  "title": "Shared fishing lake",
+  "description": "Overfishing a shared lake: five fishermen, daily reproduction, catch agreements, visibility and reciprocal behavior.",
+  "tags": [
+    "social-systems",
+    "fish",
+    "overfishing",
+    "lake",
+    "commons"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/collective/fishing",
+        "version": 1,
+        "label": "Shared fishing lake",
+        "scope": "scope/lab",
+        "configuration": {
+          "initialStock": 2000,
+          "arrangement": 0,
+          "visibility": 1,
+          "policy": 0,
+          "quota": false
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/collective-fishing",
+        "version": 1,
+        "label": "Teaching scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "action",
+        "definition": "controls/collective-fishing-action",
+        "version": 1,
+        "label": "action",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "choice",
+        "definition": "controls/collective-fishing-choice",
+        "version": 1,
+        "label": "choice",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "caption",
+        "definition": "displays/collective-fishing-caption",
+        "version": 1,
+        "label": "caption",
+        "scope": "scope/lab",
+        "configuration": {}
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/state/action",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "action",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/action/COL_FISHING_RUN",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "COL_FISHING_RUN"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_FISHING_RUN"
+        }
+      },
+      {
+        "id": "link/action/COL_FISHING_PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "COL_FISHING_PAUSE"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_FISHING_PAUSE"
+        }
+      },
+      {
+        "id": "link/action/COL_FISHING_RESTART",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "COL_FISHING_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_FISHING_RESTART"
+        }
+      },
+      {
+        "id": "link/action/COL_FISHING_COMPLETE",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "COL_FISHING_COMPLETE"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_FISHING_COMPLETE"
+        }
+      },
+      {
+        "id": "link/state/choice",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "choice",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/choice/COL_FISHING_SET_arrangement",
+        "kind": "command",
+        "from": {
+          "node": "choice",
+          "port": "COL_FISHING_SET_arrangement"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_FISHING_SET_arrangement"
+        }
+      },
+      {
+        "id": "link/state/caption",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "caption",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Shared fishing lake"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/action",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "action"
+        },
+        {
+          "id": "layout/choice",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "choice"
+        },
+        {
+          "id": "layout/caption",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "caption"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Shared fishing lake",
+      "instruction": "Can the town keep its lake alive?",
+      "explanation": "Five fishermen share a stock. Births happen first: floor(opening stock / 100) each day; catches are simultaneous integer requests. Four each sustains only the initial 2,000 stock. No mortality, carrying capacity or fractional birth carry. Behavior policies are explicit rules, not predictions of people."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1080,
+            "height": 480
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 340
+        },
+        {
+          "id": "board/action",
+          "layoutId": "layout/action",
+          "rect": {
+            "x": 620,
+            "y": 504,
+            "width": 460,
+            "height": 64
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/choice",
+          "layoutId": "layout/choice",
+          "rect": {
+            "x": 0,
+            "y": 504,
+            "width": 600,
+            "height": 64
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/caption",
+          "layoutId": "layout/caption",
+          "rect": {
+            "x": 0,
+            "y": 578,
+            "width": 1080,
+            "height": 80
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 72
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -96,
+        "width": 1128,
+        "height": 820
+      },
+      "learnerArea": {
+        "x": -24,
+        "y": -96,
+        "width": 1128,
+        "height": 820
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 1,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/scene"
+        ],
+        [
+          "board/caption"
+        ],
+        [
+          "board/action"
+        ],
+        [
+          "board/choice"
+        ]
+      ],
+      "responsiveGap": 16
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "initialStock",
+      "node": "model",
+      "field": "initialStock",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10000,
+        "unit": "fish"
+      },
+      "default": 2000
+    },
+    {
+      "name": "arrangement",
+      "node": "model",
+      "field": "arrangement",
+      "schema": {
+        "type": "enum",
+        "values": [
+          0,
+          1,
+          2
+        ]
+      },
+      "default": 0
+    },
+    {
+      "name": "visibility",
+      "node": "model",
+      "field": "visibility",
+      "schema": {
+        "type": "enum",
+        "values": [
+          0,
+          1
+        ]
+      },
+      "default": 1
+    },
+    {
+      "name": "policy",
+      "node": "model",
+      "field": "policy",
+      "schema": {
+        "type": "enum",
+        "values": [
+          0,
+          1,
+          2
+        ]
+      },
+      "default": 0
+    },
+    {
+      "name": "quota",
+      "node": "model",
+      "field": "quota",
+      "schema": {
+        "type": "boolean"
+      },
+      "default": false
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/collective/fishing",
+      "version": 1
+    },
+    {
+      "id": "appearance/collective-fishing",
+      "version": 1
+    },
+    {
+      "id": "controls/collective-fishing-action",
+      "version": 1
+    },
+    {
+      "id": "controls/collective-fishing-choice",
+      "version": 1
+    },
+    {
+      "id": "displays/collective-fishing-caption",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Five fishermen share a stock. Births happen first: floor(opening stock / 100) each day; catches are simultaneous integer requests.",
+    "Four each sustains only the initial 2,000 stock. No mortality, carrying capacity or fractional birth carry. Behavior policies are explicit rules, not predictions of people."
+  ],
+  "catalog": {
+    "icon": "≈",
+    "category": "social-systems",
+    "order": 40
+  }
+}

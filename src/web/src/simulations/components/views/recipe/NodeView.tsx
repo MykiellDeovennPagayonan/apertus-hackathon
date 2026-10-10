@@ -12,6 +12,7 @@ import {
   CycleActivity,
   CycleCaption,
 } from "../biogeochemistry/CyclePanels";
+import { CollectiveControl } from "../collective/Controls";
 import { MathReadoutView } from "../MathReadoutView";
 import { ScienceControls, ScienceObservations } from "../SciencePanels";
 import { CanvasPresentation } from "./CanvasPresentation";
@@ -52,6 +53,8 @@ export function NodeView({
     /^displays\/cycle-(oxygen|nitrogen|carbon)-caption$/.test(node.definition)
   )
     return <CycleCaption node={node} runtime={runtime} />;
+  if (/^(controls|displays)\/collective-/.test(node.definition))
+    return <CollectiveControl node={node} runtime={runtime} />;
   if (def.category === "models") return null;
   if (def.category === "controls")
     return <ControlPresentation node={node} runtime={runtime} />;

@@ -161,19 +161,57 @@ export function arrangeDocument(
         nodeFor(i)?.definition.endsWith("-action"),
       );
       for (const [n, item] of results.entries()) {
-        place(item, { x: 0, y: y + 504 + n * 100, width: 740, height: 80 });
+        place(item, {
+          x: 0,
+          y:
+            y +
+            (sceneNode.definition.startsWith("appearance/collective-")
+              ? 578
+              : 504) +
+            n * 100,
+          width: sceneNode.definition.startsWith("appearance/collective-")
+            ? 1080
+            : 740,
+          height: 80,
+        });
         item.responsiveMinHeight = 80;
         rows.push([item.id]);
       }
       if (primary) {
-        place(primary, { x: 784, y: y + 504, width: 296, height: 64 });
+        place(primary, {
+          x: sceneNode.definition.startsWith("appearance/collective-")
+            ? 620
+            : 784,
+          y: y + 504,
+          width: sceneNode.definition.startsWith("appearance/collective-")
+            ? 460
+            : 296,
+          height: 64,
+        });
         primary.responsiveMinHeight = 64;
         rows.push([primary.id]);
       }
       const rest = controls.filter((i) => i !== primary);
       for (const [n, item] of rest.entries()) {
-        place(item, { x: 620, y: y + 596 + n * 84, width: 460, height: 64 });
-        item.responsiveMinHeight = 64;
+        place(item, {
+          x: sceneNode.definition.startsWith("appearance/collective-")
+            ? 0
+            : 620,
+          y:
+            y +
+            (sceneNode.definition.startsWith("appearance/collective-")
+              ? 504
+              : 596) +
+            n * 84,
+          width: sceneNode.definition.startsWith("appearance/collective-")
+            ? 600
+            : 460,
+          height: Math.max(64, boardItemMinimum(next, item.layoutId).height),
+        });
+        item.responsiveMinHeight = Math.max(
+          64,
+          boardItemMinimum(next, item.layoutId).height,
+        );
         rows.push([item.id]);
       }
       nextScopeY = Math.max(
@@ -335,6 +373,18 @@ export function arrangeDocument(
   for (const item of board.items)
     if (!rows.flat().includes(item.id)) rows.push([item.id]);
   board.startView = extent(board.items.map((i) => i.rect));
+  if (
+    next.nodes.some((n) => n.definition.startsWith("appearance/collective-"))
+  ) {
+    board.navigation.minZoom = 1;
+    board.navigation.maxZoom = Math.max(1, board.navigation.maxZoom);
+    board.startView = {
+      ...board.startView,
+      y: board.startView.y - 72,
+      height: board.startView.height + 162,
+    };
+    board.learnerArea ??= { ...board.startView };
+  }
   // Automatic learner bounds follow content. Preserve an explicitly authored boundary.
   arrangeGraph(next);
   validateAuthoredDocument(next);

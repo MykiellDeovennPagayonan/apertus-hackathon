@@ -36,6 +36,12 @@ export async function focusedTurn(
         tool.schema.properties.target?.type === "enum"
           ? tool.schema.properties.target.values[0]
           : undefined,
+      configurationFields:
+        tool.tool === "configure" &&
+        tool.schema.type === "object" &&
+        tool.schema.properties.changes?.type === "object"
+          ? Object.keys(tool.schema.properties.changes.properties)
+          : undefined,
       fields:
         tool.schema.type === "object"
           ? Object.keys(tool.schema.properties)
@@ -52,18 +58,26 @@ export async function focusedTurn(
             )
           : {},
     }));
-    const selectionSchema = object({
-      candidate: choice(
-        ...candidates.map((c) => c.candidate),
-        ...(allowDone ? ["done"] : []),
-      ),
-    });
-    const selected = await requestStructured<string>(
+    const selectionSchema = object(
+      {
+        candidate: choice(
+          "unsupported",
+          ...candidates.map((c) => c.candidate),
+          ...(allowDone ? ["done"] : []),
+        ),
+        reason: { type: "string", maxLength: 240 },
+      },
+      ["reason"],
+    );
+    const selected = await requestStructured<{
+      candidate: string;
+      reason?: string;
+    }>(
       [
         {
           role: "system",
           content:
-            'Choose the next operation to satisfy the user request. Return ONLY {"candidate":"candidate1"} with one supplied candidate ID. Prefer updating existing component settings for a parameter change. A request to add a way to change a parameter requires add_control for that parameter, not configure. Candidate choices identify the exact command or output. Preserve unrelated components. If done is offered and the requested change is satisfied compared with originalNodes and connections, return {"candidate":"done"}. Prioritize completion over repeating an already applied edit. A relative increase or decrease requires one meaningful change from the original settings, not repeated amplification.',
+            'Choose the next operation to satisfy the user request. If the requested behavior contradicts supplied fidelity or is explicitly unsupported, return {"candidate":"unsupported","reason":"brief capability limit"}; do not substitute a different behavior or alter the simulation.  Return ONLY {"candidate":"candidate1"} with one supplied candidate ID. Prefer updating existing component settings for a parameter change. A request to add a way to change a parameter requires add_control for that parameter, not configure. Candidate choices identify the exact command or output. Preserve unrelated components. If done is offered and the requested change is satisfied compared with originalNodes and connections, return {"candidate":"done"}. Prioritize completion over repeating an already applied edit. A relative increase or decrease requires one meaningful change from the original settings, not repeated amplification.',
         },
         {
           role: "user",
@@ -88,23 +102,33 @@ export async function focusedTurn(
       (content) => {
         const { value } = parseArgumentJson(content);
         validateValue(selectionSchema, value);
-        return (value as { candidate: string }).candidate;
+        return value as { candidate: string; reason?: string };
       },
       'Return only {"candidate":"candidate1"} using a listed ID. Do not return tool arguments or a schema.',
       budget.signal,
       {
         budget,
         schema: toJsonSchema(selectionSchema),
-        maxTokens: 64,
+        maxTokens: 128,
         stage: `turn_${turn + 1}_candidate`,
         onEvent: (event, data) =>
           budget.trace?.(`turn_${turn + 1}_candidate.${event}`, data),
       },
     );
-    if (selected === "done")
+    if (selected.candidate === "unsupported")
+      return {
+        action: "done",
+        request: null,
+        fixes: [],
+        issues: [],
+        unsupported:
+          selected.reason ||
+          "This behavior is outside the simulation’s declared capabilities.",
+      };
+    if (selected.candidate === "done")
       return { action: "done", request: null, fixes: [], issues: [] };
     const index = candidates.findIndex(
-      (candidate) => candidate.candidate === selected,
+      (candidate) => candidate.candidate === selected.candidate,
     );
     return focusedTurn(prompt, [tools[index]], context, budget, turn, verify);
   }
@@ -138,6 +162,25 @@ export async function focusedTurn(
       },
     };
   });
+  const editContext = (() => {
+    if (tools[0].tool !== "configure" || tools[0].schema.type !== "object")
+      return context;
+    const target = tools[0].schema.properties.target;
+    const current = context as {
+      nodes?: {
+        id: string;
+        definition: string;
+        config: Record<string, unknown>;
+      }[];
+      fidelity?: string[];
+    };
+    return {
+      node: current.nodes?.find(
+        (n) => target.type === "enum" && n.id === target.values[0],
+      ),
+      fidelity: current.fidelity,
+    };
+  })();
   if (tools[0].tool === "configure" && tools[0].schema.type === "object") {
     const changes = tools[0].schema.properties.changes;
     if (changes.type === "object") {
@@ -156,37 +199,34 @@ export async function focusedTurn(
         words.has(field.toLowerCase()),
       );
       const fields = interpreted.length ? interpreted : availableFields;
-      const fieldSchema = object({
-        fields: {
-          type: "array",
-          items: choice(...fields),
-          minItems: 1,
-          maxItems: fields.length,
-        },
-      });
+      const fieldSchema = object({ field: choice(...fields) });
       const selected = await requestStructured<string[]>(
         [
           {
             role: "system",
             content:
-              'Select only the existing setting names required by the request. Return ONLY {"fields":["setting-name"]}. Follow the fidelity facts. Include every requested setting and exclude unrelated settings. Choose names, not values or schemas.',
+              'Choose ONE existing setting whose value must change to satisfy the original user request. Return ONLY {"field":"setting-name"}. Choose the most directly requested change, never unrelated starting settings or protective interventions. Additional requested settings can be changed in a later operation. Follow fidelity facts and preserve everything else.',
           },
           {
             role: "user",
-            content: JSON.stringify({ request: prompt, fields, context }),
+            content: JSON.stringify({
+              request: prompt,
+              availableSettings: fields.map((name) => ({ name })),
+              currentModel: editContext,
+            }),
           },
         ],
         (content) => {
           const { value } = parseArgumentJson(content);
           validateValue(fieldSchema, value);
-          return [...new Set((value as { fields: string[] }).fields)];
+          return [(value as { field: string }).field];
         },
-        "Return only the fields array with existing setting names. Preserve unrelated settings.",
+        "Return only one field name that directly implements the request. All other settings remain unchanged.",
         budget.signal,
         {
           budget,
           schema: toJsonSchema(fieldSchema),
-          maxTokens: 96,
+          maxTokens: 64,
           stage: `turn_${turn + 1}_fields`,
           onEvent: (event, data) =>
             budget.trace?.(`turn_${turn + 1}_fields.${event}`, data),
@@ -320,7 +360,9 @@ export async function focusedTurn(
               ? { instance: insertionAlias }
               : tools[0]?.tool === "arrange"
                 ? undefined
-                : context,
+                : tools[0]?.tool === "configure"
+                  ? editContext
+                  : context,
           definitions,
           commandContracts: tools.flatMap((tool) => {
             if (tool.tool !== "add_control" || tool.schema.type !== "object")

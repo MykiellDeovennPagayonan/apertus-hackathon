@@ -45,6 +45,10 @@ import { ArithmeticScene } from "../ArithmeticScene";
 import { BridgeScene } from "../BridgeScene";
 import { CycleScene } from "../biogeochemistry/CycleScene";
 import { CountingScene } from "../CountingScene";
+import { CrowdScene } from "../collective/CrowdScene";
+import { FishingScene } from "../collective/FishingScene";
+import { SelectionScene } from "../collective/SelectionScene";
+import { VotingScene } from "../collective/VotingScene";
 import { DatasetDisplay } from "../DatasetDisplay";
 import { PropertyInspector } from "../EntityInspectorView";
 import { EqualGroupsScene } from "../EqualGroupsScene";
@@ -77,6 +81,10 @@ const appearances: Record<
     question?: string;
   }) => React.ReactNode
 > = {
+  "collective-fishing": FishingScene,
+  "collective-crowd": CrowdScene,
+  "collective-voting": VotingScene,
+  "collective-selection": SelectionScene,
   "cycle-oxygen": CycleScene,
   "cycle-nitrogen": CycleScene,
   "cycle-carbon": CycleScene,

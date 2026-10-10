@@ -115,9 +115,13 @@ if (process.argv.includes("--capture")) {
     "oxygen-cycle",
     "nitrogen-cycle",
     "carbon-cycle",
+    "shared-fishing-lake",
+    "crowd-exit",
+    "voting-systems",
+    "natural-selection",
   ]);
   const newModels = assemblyModels.filter((m) =>
-    ["ecology", "social-systems", "science", "biogeochemistry"].includes(
+    ["ecology", "social-systems", "science", "biogeochemistry", "collective"].includes(
       m.ref.split("/")[1],
     ),
   );
@@ -125,7 +129,7 @@ if (process.argv.includes("--capture")) {
     newModels.filter((m) => m.ref.startsWith("prefabs/science/")).length,
     9,
   );
-  assert.equal(newModels.length, 16);
+  assert.equal(newModels.length, 20);
   assert.equal(
     newModels.filter((m) => m.ref.startsWith("prefabs/biogeochemistry/"))
       .length,
@@ -148,6 +152,13 @@ if (process.argv.includes("--capture")) {
       `controls/cycle-${kind}-action`,
       `controls/cycle-${kind}-activity`,
       `displays/cycle-${kind}-caption`,
+    );
+  // Implementation 026 adds four independent collective lessons; old hashes remain protected.
+  for (const kind of ["fishing", "crowd", "voting", "selection"])
+    newIds.push(
+      `controls/collective-${kind}-action`,
+      `displays/collective-${kind}-caption`,
+      ...(kind === "crowd" ? [] : [`controls/collective-${kind}-choice`]),
     );
   // Implementation 025 adds spring capabilities without changing historical contracts.
   newIds.push("models/SpringMass", "appearance/SpringMass");

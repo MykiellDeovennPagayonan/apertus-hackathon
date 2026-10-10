@@ -1,5 +1,6 @@
 import { biogeochemistry } from "../domains/biogeochemistry";
 import { chemistry } from "../domains/chemistry";
+import { collective } from "../domains/collective";
 import { dynamicSystems } from "../domains/dynamic-systems";
 import { ecology } from "../domains/ecology";
 import { mathFoundations } from "../domains/math-foundations";
@@ -36,11 +37,16 @@ export const domainContributions: readonly DomainContribution[] = immutable([
   socialSystems,
   science,
   biogeochemistry,
+  collective,
 ]);
 export const assemblyModels: readonly DomainModel[] =
   domainContributions.flatMap((d) => d.models);
 /** Matches concrete adapters in the assembly client view. Integration adds adapters serially. */
 export const assemblyPresentationContracts = {
+  "collective-fishing": true,
+  "collective-crowd": true,
+  "collective-voting": true,
+  "collective-selection": true,
   "cycle-oxygen": true,
   "cycle-nitrogen": true,
   "cycle-carbon": true,

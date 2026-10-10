@@ -109,8 +109,21 @@ export async function compose(
   }
 
   const requiredLaya = requiresLayaComposition();
+  const activeTopics =
+    request.active && !shouldStartFresh
+      ? [
+          ...new Set(
+            request.active.recipe.document.nodes
+              .map((n) => compositionRequirements[n.definition]?.topic)
+              .filter(Boolean),
+          ),
+        ]
+      : [];
+  const decisionPrompt = activeTopics.length
+    ? `${request.prompt}\nCurrent simulation topic: ${activeTopics.join("; ")}`
+    : request.prompt;
   const strategy = requiredLaya
-    ? await selectCompositionStrategy(bucketPrompt, intent, bucket, budget)
+    ? await selectCompositionStrategy(decisionPrompt, intent, bucket, budget)
     : null;
   if (strategy) intent = { ...intent, suggestedStructure: strategy.structure };
 
@@ -554,6 +567,14 @@ export async function compose(
           },
         );
 
+    if (turnResult.unsupported) {
+      return {
+        protocolVersion: 1,
+        status: "unsupported",
+        requestId: request.requestId,
+        message: turnResult.unsupported,
+      };
+    }
     if (turnResult.action === "done") {
       const incomplete = requiredLaya ? compositionIssues(draft.document) : [];
       if (

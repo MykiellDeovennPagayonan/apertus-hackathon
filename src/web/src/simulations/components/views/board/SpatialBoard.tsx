@@ -29,7 +29,10 @@ import {
   zoomAt,
 } from "../../../runtime/authoring/board";
 import { isDrawingItem } from "../../../runtime/authoring/drawings";
-import { expandResponsiveContent } from "../../../runtime/authoring/responsiveLayout";
+import {
+  expandResponsiveContent,
+  reflowLearnerArea,
+} from "../../../runtime/authoring/responsiveLayout";
 import type {
   AuthoredDocument,
   Layout,
@@ -158,6 +161,10 @@ export function SpatialBoard({
               width: width + 32,
               height: openingHeight + 32,
             };
+            next.learnerArea = reflowLearnerArea(
+              sourcePresentation,
+              next.items,
+            );
             return next;
           }
 

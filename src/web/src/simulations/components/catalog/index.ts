@@ -7,6 +7,7 @@ import { componentDefinitions } from "../registry";
 import { agentDefinitions } from "./agents";
 import { authoringDefinitions } from "./authoring";
 import { cycleDefinitions } from "./biogeochemistry";
+import { collectiveDefinitions } from "./collective";
 import { definitionDiscovery } from "./discovery";
 import { ecologyControlDefinitions } from "./ecologyControls";
 import { explorationDefinitions } from "./exploration";
@@ -33,6 +34,7 @@ for (const d of [
   ...ecologyControlDefinitions,
   ...scienceDefinitions,
   ...cycleDefinitions,
+  ...collectiveDefinitions,
   ...agentDefinitions,
   ...explorationDefinitions,
   ...authoringDefinitions,
@@ -218,9 +220,11 @@ for (const m of assemblyModels) {
     id,
     version: 1,
     title: `${m.name} appearance`,
-    learnerLayout: m.ref.startsWith("prefabs/biogeochemistry/")
-      ? "scene-first"
-      : undefined,
+    learnerLayout:
+      m.ref.startsWith("prefabs/biogeochemistry/") ||
+      m.ref.startsWith("prefabs/collective/")
+        ? "scene-first"
+        : undefined,
     description: m.ref.startsWith("prefabs/biogeochemistry/")
       ? `Display an attached ${m.name} model snapshot. ${m.description}`
       : `Display an attached ${m.name} model snapshot`,

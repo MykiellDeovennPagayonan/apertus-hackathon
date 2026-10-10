@@ -1,4 +1,9 @@
 import { cycleKinds, cycleModels } from "../../domains/biogeochemistry";
+import {
+  collectiveKinds,
+  collectiveModels,
+  command,
+} from "../../domains/collective";
 import { scienceCommand } from "../../domains/science";
 import { scienceSpecs } from "../../domains/science/specs";
 import type { PublicDefinition } from "../../runtime/authoring/types";
@@ -8,6 +13,8 @@ export interface CompositionRequirements {
   guidance?: string;
   instanceNoun?: string;
   selectionKey: string;
+  /** Distinct neighboring topics give the decision model meaningful alternatives. */
+  selectionGroup?: string;
   commands: string[];
   observations: string[];
   appearance?: string;
@@ -25,8 +32,61 @@ const scienceTopics: Record<string, string> = {
   volcano: "Volcano eruptions: effusive and explosive",
   water: "Water cycle and watershed runoff",
 };
+const collectiveEditGuidance: Record<string, string> = {
+  fishing:
+    "Configuration meanings: arrangement=0 requests 4 fish each; arrangement=1 requests 8 from the first fisherman and 4 from each other; arrangement=2 requests 8 each. visibility=0 private catches, 1 public catches. policy=0 fixed requests, 1 copying the previous highest visible catch, 2 cooperating to share the current daily births. quota=true enforces a fixed four-fish cap; this is distinct from voluntary cooperation. For an agreement request set policy=2, preserve initialStock and all unrelated settings. Human negotiation is unsupported. Catch changes preserve current stock and day.",
+  crowd:
+    "placement=0 central pillar, 1 closer to exit, 2 offset. friction is a conflict probability, not physical pressure; higher friction represents stronger destination conflicts (default .9, stronger .99). Change only friction for stronger pushing and explain this approximation. Preserve count, seed, placement and radius. A placement change reruns the same initial crowd. A pillar cannot be guaranteed to help; measurements can show slower, faster or equal evacuation.",
+  voting:
+    "rule=0 plurality, 1 instant-runoff ranked choice, 2 approval allowing multiple candidates. A rule change must patch ONLY rule and preserve groups, ballots, candidateCount and seed, retaining the same electorate. There is no defined universally best candidate; a request to prove universal superiority is unsupported.",
+  selection:
+    "habitat=.1 light, .9 dark; trait=0 light, 1 dark. For a darker environment change ONLY habitat to .9, preserving living organisms and generation and all starting settings. To start identical with no mutations set uniform=true and mutationRate=0; this restarts the population. initialTrait describes a newly started population, never a living individual's adaptation. Living individuals cannot change trait to adapt: selection acts on variation, offspring inherit and may mutate. A request to recolor living individuals to adapt is unsupported.",
+};
 export const compositionRequirements: Record<string, CompositionRequirements> =
   {
+    ...Object.fromEntries(
+      collectiveKinds.map((kind, i) => [
+        collectiveModels[i].ref,
+        {
+          topic: {
+            fishing: "Overfishing a shared fishing lake",
+            crowd: "Obstacle effects on exit speed",
+            voting: "Alternate voting systems",
+            selection:
+              "Natural selection: evolution through survival and reproduction",
+          }[kind],
+          selectionKey: {
+            fishing: "overfishing",
+            crowd: "exit-obstacles",
+            voting: "voting",
+            selection: "natural-selection",
+          }[kind],
+          selectionGroup: "collective-learning",
+          guidance: `${collectiveModels[i].description} Scene first, one primary action, one essential choice, one short caption. Use independent controls/collective-${kind}-action and ${kind === "crowd" ? "no initial choice" : `controls/collective-${kind}-choice`} and displays/collective-${kind}-caption. Connect scene value to each control/caption, and their event outputs to corresponding model commands. Do not add generic slider/readout/playback dashboards. ${collectiveModels[i].assumptions.join(" ")} ${collectiveEditGuidance[kind]}`,
+          commands: [
+            ...["RUN", "PAUSE", "RESTART", "COMPLETE"].map((op) =>
+              command(kind, op),
+            ),
+            ...(kind === "crowd" ? [command(kind, "SET_placement")] : []),
+            ...(kind === "crowd"
+              ? []
+              : [
+                  command(
+                    kind,
+                    `SET_${kind === "fishing" ? "arrangement" : kind === "voting" ? "rule" : "habitat"}`,
+                  ),
+                ]),
+          ],
+          observations: [],
+          appearance: `appearance/collective-${kind}`,
+          dependencies: [
+            `controls/collective-${kind}-action`,
+            ...(kind === "crowd" ? [] : [`controls/collective-${kind}-choice`]),
+            `displays/collective-${kind}-caption`,
+          ],
+        },
+      ]),
+    ),
     ...Object.fromEntries(
       cycleKinds.map((kind, i) => [
         cycleModels[i].ref,

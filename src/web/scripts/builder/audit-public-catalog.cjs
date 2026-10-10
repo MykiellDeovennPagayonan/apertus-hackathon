@@ -126,6 +126,12 @@ const categories = {
   behaviors: "behavior",
 };
 const explicitOwners = new Map([
+  ...["fishing", "crowd", "voting", "selection"].flatMap((kind) => [
+    [`systems/collective/${kind}.ts`, [`prefabs/collective/${kind}`]],
+    [`views/collective/${kind[0].toUpperCase() + kind.slice(1)}Scene.tsx`, [`appearance/collective-${kind}`]],
+  ]),
+  ["views/collective/Controls.tsx", ["fishing", "crowd", "voting", "selection"].flatMap((kind) => [`controls/collective-${kind}-action`, `displays/collective-${kind}-caption`, ...(kind === "crowd" ? [] : [`controls/collective-${kind}-choice`])])],
+
   ["visuals/BeamVisual.tsx", ["appearance/Beam"]],
   ["visuals/BridgeSupportVisual.tsx", ["appearance/BridgeSupport"]],
   ["visuals/LoadTruckVisual.tsx", ["appearance/LoadTruck"]],

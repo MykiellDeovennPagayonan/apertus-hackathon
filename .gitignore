@@ -12,3 +12,6 @@
 
 # Local live-construction browser captures; keep the implementation report tracked.
 /docs/agent-only/implementation/025-validation/runs/
+
+# Four-simulation browser and inference evidence
+/docs/agent-only/implementation/026-validation/runs/

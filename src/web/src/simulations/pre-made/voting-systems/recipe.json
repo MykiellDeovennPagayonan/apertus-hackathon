@@ -1,0 +1,471 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/voting-systems",
+  "version": 1,
+  "title": "Alternate voting systems",
+  "description": "Individual voter dots compare first-past-the-post, ranked choice instant-runoff and approval voting; fixed preferences and visible transfers.",
+  "tags": [
+    "social-systems",
+    "vote",
+    "voting",
+    "ranked choice",
+    "approval"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/collective/voting",
+        "version": 1,
+        "label": "Alternate voting systems",
+        "scope": "scope/lab",
+        "configuration": {
+          "groups": [
+            40,
+            35,
+            25
+          ],
+          "candidateCount": 3,
+          "ballots": [],
+          "rule": 0,
+          "seed": 17
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/collective-voting",
+        "version": 1,
+        "label": "Teaching scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "action",
+        "definition": "controls/collective-voting-action",
+        "version": 1,
+        "label": "action",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "choice",
+        "definition": "controls/collective-voting-choice",
+        "version": 1,
+        "label": "choice",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "caption",
+        "definition": "displays/collective-voting-caption",
+        "version": 1,
+        "label": "caption",
+        "scope": "scope/lab",
+        "configuration": {}
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/state/action",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "action",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/action/COL_VOTING_RUN",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "COL_VOTING_RUN"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_VOTING_RUN"
+        }
+      },
+      {
+        "id": "link/action/COL_VOTING_PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "COL_VOTING_PAUSE"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_VOTING_PAUSE"
+        }
+      },
+      {
+        "id": "link/action/COL_VOTING_RESTART",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "COL_VOTING_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_VOTING_RESTART"
+        }
+      },
+      {
+        "id": "link/action/COL_VOTING_COMPLETE",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "COL_VOTING_COMPLETE"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_VOTING_COMPLETE"
+        }
+      },
+      {
+        "id": "link/state/choice",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "choice",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/choice/COL_VOTING_SET_rule",
+        "kind": "command",
+        "from": {
+          "node": "choice",
+          "port": "COL_VOTING_SET_rule"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_VOTING_SET_rule"
+        }
+      },
+      {
+        "id": "link/state/caption",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "caption",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Alternate voting systems"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/action",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "action"
+        },
+        {
+          "id": "layout/choice",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "choice"
+        },
+        {
+          "id": "layout/caption",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "caption"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Alternate voting systems",
+      "instruction": "Who wins when the rule changes?",
+      "explanation": "Two to five fictional candidates (three by default), one elected position. Preferences are fixed; transfers change the counted allocation, not the voter's mind. Approval sets are explicit. Active-ballot majorities exclude exhausted ballots; a seeded tie order is recorded before counting."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1080,
+            "height": 480
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 340
+        },
+        {
+          "id": "board/action",
+          "layoutId": "layout/action",
+          "rect": {
+            "x": 620,
+            "y": 504,
+            "width": 460,
+            "height": 64
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/choice",
+          "layoutId": "layout/choice",
+          "rect": {
+            "x": 0,
+            "y": 504,
+            "width": 600,
+            "height": 64
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/caption",
+          "layoutId": "layout/caption",
+          "rect": {
+            "x": 0,
+            "y": 578,
+            "width": 1080,
+            "height": 80
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 72
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -96,
+        "width": 1128,
+        "height": 820
+      },
+      "learnerArea": {
+        "x": -24,
+        "y": -96,
+        "width": 1128,
+        "height": 820
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 1,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/scene"
+        ],
+        [
+          "board/caption"
+        ],
+        [
+          "board/action"
+        ],
+        [
+          "board/choice"
+        ]
+      ],
+      "responsiveGap": 16
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "groups",
+      "node": "model",
+      "field": "groups",
+      "schema": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 500,
+          "unit": "people"
+        },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "default": [
+        40,
+        35,
+        25
+      ]
+    },
+    {
+      "name": "candidateCount",
+      "node": "model",
+      "field": "candidateCount",
+      "schema": {
+        "type": "integer",
+        "minimum": 2,
+        "maximum": 5,
+        "unit": "candidates"
+      },
+      "default": 3
+    },
+    {
+      "name": "ballots",
+      "node": "model",
+      "field": "ballots",
+      "schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "ranking": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4,
+                "unit": ""
+              },
+              "minItems": 0,
+              "maxItems": 5
+            },
+            "approvals": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4,
+                "unit": ""
+              },
+              "minItems": 0,
+              "maxItems": 5
+            }
+          },
+          "optional": []
+        },
+        "minItems": 0,
+        "maxItems": 500
+      },
+      "default": []
+    },
+    {
+      "name": "rule",
+      "node": "model",
+      "field": "rule",
+      "schema": {
+        "type": "enum",
+        "values": [
+          0,
+          1,
+          2
+        ]
+      },
+      "default": 0
+    },
+    {
+      "name": "seed",
+      "node": "model",
+      "field": "seed",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 999999,
+        "unit": ""
+      },
+      "default": 17
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/collective/voting",
+      "version": 1
+    },
+    {
+      "id": "appearance/collective-voting",
+      "version": 1
+    },
+    {
+      "id": "controls/collective-voting-action",
+      "version": 1
+    },
+    {
+      "id": "controls/collective-voting-choice",
+      "version": 1
+    },
+    {
+      "id": "displays/collective-voting-caption",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Two to five fictional candidates (three by default), one elected position. Preferences are fixed; transfers change the counted allocation, not the voter's mind.",
+    "Approval sets are explicit. Active-ballot majorities exclude exhausted ballots; a seeded tie order is recorded before counting."
+  ],
+  "catalog": {
+    "icon": "●",
+    "category": "social-systems",
+    "order": 42
+  }
+}
