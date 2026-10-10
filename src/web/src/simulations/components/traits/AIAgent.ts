@@ -9,17 +9,24 @@ const text = (maxLength: number): ParameterSchema => ({
   minLength: 1,
   maxLength,
 });
-export const agentProfileSchema = object({
-  name: text(80),
-  persona: text(1200),
-  objective: text(1200),
-  expertise: text(400),
-});
+export const agentProfileSchema = object(
+  {
+    name: text(80),
+    persona: text(1200),
+    objective: text(1200),
+    expertise: text(400),
+    team: { type: "string", enum: ["Proposition", "Opposition"] },
+    communicationStyle: text(400),
+  },
+  ["team", "communicationStyle"],
+);
 export interface AgentProfile {
   name: string;
   persona: string;
   objective: string;
   expertise: string;
+  team?: "Proposition" | "Opposition";
+  communicationStyle?: string;
 }
 export interface AgentConfiguration extends AgentProfile {
   id: string;

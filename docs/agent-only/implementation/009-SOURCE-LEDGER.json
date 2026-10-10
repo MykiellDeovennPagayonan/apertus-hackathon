@@ -1,8 +1,8 @@
 {
   "generatedBy": "src/web/scripts/builder/audit-public-catalog.cjs",
-  "originalSourceFiles": 290,
-  "sourceFiles": 298,
-  "exportRecords": 691,
+  "originalSourceFiles": 298,
+  "sourceFiles": 301,
+  "exportRecords": 703,
   "records": [
     {
       "source": "src/web/src/simulations/components/README.md",
@@ -34143,7 +34143,17 @@
           "typeOnly": false,
           "symbols": [
             "agentContext",
-            "parseAgentProposal"
+            "parseAgentProposal",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateObservationProposal"
           ]
         },
         {
@@ -34162,6 +34172,14 @@
             "*"
           ],
           "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "responsibility": "model operation",
@@ -34171,10 +34189,12 @@
         "consumers": [
           "src/web/src/lib/agents/http.ts",
           "src/web/src/lib/agents/model.ts",
+          "src/web/src/simulations/components/systems/debate/environment.ts",
           "src/web/src/simulations/runtime/agents/runner.ts",
-          "src/web/scripts/agents/verify-core.cjs"
+          "src/web/scripts/agents/verify-core.cjs",
+          "src/web/scripts/agents/verify-debate.cjs"
         ],
-        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs"
+        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/components/systems/debate/environment.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs, src/web/scripts/agents/verify-debate.cjs"
       },
       "classification": "private implementation of public model",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -34200,7 +34220,17 @@
           "typeOnly": false,
           "symbols": [
             "agentContext",
-            "parseAgentProposal"
+            "parseAgentProposal",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateObservationProposal"
           ]
         },
         {
@@ -34214,6 +34244,14 @@
         },
         {
           "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -34243,7 +34281,17 @@
           "typeOnly": false,
           "symbols": [
             "agentContext",
-            "parseAgentProposal"
+            "parseAgentProposal",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateObservationProposal"
           ]
         },
         {
@@ -34262,6 +34310,14 @@
             "*"
           ],
           "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "responsibility": "model operation",
@@ -34271,10 +34327,12 @@
         "consumers": [
           "src/web/src/lib/agents/http.ts",
           "src/web/src/lib/agents/model.ts",
+          "src/web/src/simulations/components/systems/debate/environment.ts",
           "src/web/src/simulations/runtime/agents/runner.ts",
-          "src/web/scripts/agents/verify-core.cjs"
+          "src/web/scripts/agents/verify-core.cjs",
+          "src/web/scripts/agents/verify-debate.cjs"
         ],
-        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs"
+        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/components/systems/debate/environment.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs, src/web/scripts/agents/verify-debate.cjs"
       },
       "classification": "private implementation of public model",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -34300,7 +34358,17 @@
           "typeOnly": false,
           "symbols": [
             "agentContext",
-            "parseAgentProposal"
+            "parseAgentProposal",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateObservationProposal"
           ]
         },
         {
@@ -34314,6 +34382,14 @@
         },
         {
           "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -34343,7 +34419,17 @@
           "typeOnly": false,
           "symbols": [
             "agentContext",
-            "parseAgentProposal"
+            "parseAgentProposal",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateObservationProposal"
           ]
         },
         {
@@ -34362,6 +34448,14 @@
             "*"
           ],
           "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "responsibility": "model operation",
@@ -34371,10 +34465,12 @@
         "consumers": [
           "src/web/src/lib/agents/http.ts",
           "src/web/src/lib/agents/model.ts",
+          "src/web/src/simulations/components/systems/debate/environment.ts",
           "src/web/src/simulations/runtime/agents/runner.ts",
-          "src/web/scripts/agents/verify-core.cjs"
+          "src/web/scripts/agents/verify-core.cjs",
+          "src/web/scripts/agents/verify-debate.cjs"
         ],
-        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs"
+        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/components/systems/debate/environment.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs, src/web/scripts/agents/verify-debate.cjs"
       },
       "classification": "private implementation of public model",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -34400,7 +34496,17 @@
           "typeOnly": false,
           "symbols": [
             "agentContext",
-            "parseAgentProposal"
+            "parseAgentProposal",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateObservationProposal"
           ]
         },
         {
@@ -34414,6 +34520,14 @@
         },
         {
           "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -34443,7 +34557,17 @@
           "typeOnly": false,
           "symbols": [
             "agentContext",
-            "parseAgentProposal"
+            "parseAgentProposal",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateObservationProposal"
           ]
         },
         {
@@ -34462,6 +34586,14 @@
             "*"
           ],
           "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "responsibility": "model operation",
@@ -34471,10 +34603,12 @@
         "consumers": [
           "src/web/src/lib/agents/http.ts",
           "src/web/src/lib/agents/model.ts",
+          "src/web/src/simulations/components/systems/debate/environment.ts",
           "src/web/src/simulations/runtime/agents/runner.ts",
-          "src/web/scripts/agents/verify-core.cjs"
+          "src/web/scripts/agents/verify-core.cjs",
+          "src/web/scripts/agents/verify-debate.cjs"
         ],
-        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs"
+        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/components/systems/debate/environment.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs, src/web/scripts/agents/verify-debate.cjs"
       },
       "classification": "private implementation of public model",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -34500,7 +34634,17 @@
           "typeOnly": false,
           "symbols": [
             "agentContext",
-            "parseAgentProposal"
+            "parseAgentProposal",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateObservationProposal"
           ]
         },
         {
@@ -34514,6 +34658,14 @@
         },
         {
           "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -34543,7 +34695,17 @@
           "typeOnly": false,
           "symbols": [
             "agentContext",
-            "parseAgentProposal"
+            "parseAgentProposal",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateObservationProposal"
           ]
         },
         {
@@ -34562,6 +34724,14 @@
             "*"
           ],
           "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
         }
       ],
       "responsibility": "model operation",
@@ -34571,10 +34741,12 @@
         "consumers": [
           "src/web/src/lib/agents/http.ts",
           "src/web/src/lib/agents/model.ts",
+          "src/web/src/simulations/components/systems/debate/environment.ts",
           "src/web/src/simulations/runtime/agents/runner.ts",
-          "src/web/scripts/agents/verify-core.cjs"
+          "src/web/scripts/agents/verify-core.cjs",
+          "src/web/scripts/agents/verify-debate.cjs"
         ],
-        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs"
+        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/components/systems/debate/environment.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs, src/web/scripts/agents/verify-debate.cjs"
       },
       "classification": "private implementation of public model",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -34600,7 +34772,17 @@
           "typeOnly": false,
           "symbols": [
             "agentContext",
-            "parseAgentProposal"
+            "parseAgentProposal",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateObservationProposal"
           ]
         },
         {
@@ -34614,6 +34796,152 @@
         },
         {
           "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/AgentSystems.ts",
+      "export": "validateObservationProposal",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/lib/agents/http.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/agents/model.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentContext",
+            "parseAgentProposal",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/runner.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/lib/agents/http.ts",
+          "src/web/src/lib/agents/model.ts",
+          "src/web/src/simulations/components/systems/debate/environment.ts",
+          "src/web/src/simulations/runtime/agents/runner.ts",
+          "src/web/scripts/agents/verify-core.cjs",
+          "src/web/scripts/agents/verify-debate.cjs"
+        ],
+        "destination": "src/web/src/lib/agents/http.ts, src/web/src/lib/agents/model.ts, src/web/src/simulations/components/systems/debate/environment.ts, src/web/src/simulations/runtime/agents/runner.ts, src/web/scripts/agents/verify-core.cjs, src/web/scripts/agents/verify-debate.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/lib/agents/http.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/lib/agents/model.ts",
+          "typeOnly": false,
+          "symbols": [
+            "agentContext",
+            "parseAgentProposal",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateObservationProposal"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/runner.ts",
+          "typeOnly": false,
+          "symbols": [
+            "applyAgentProposal",
+            "observeAgent",
+            "validateRunConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-core.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
           "typeOnly": false,
           "symbols": [
             "*"
@@ -47567,6 +47895,1144 @@
       "destination": "public model operation owner; preserve serialized aliases",
       "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
       "completion": "Registered owner verified by permanent catalog/model/spatial/browser suites"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+      "export": "debatePolicy",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateEnvironment",
+            "debatePolicy"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-presentation-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "src/web/scripts/agents/verify-debate.cjs",
+          "src/web/scripts/agents/verify-presentation-browser.cjs"
+        ],
+        "destination": "src/web/src/simulations/runtime/agents/scenarios.ts, src/web/scripts/agents/verify-debate.cjs, src/web/scripts/agents/verify-presentation-browser.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateEnvironment",
+            "debatePolicy"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-presentation-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+      "export": "debateEnvironment",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateEnvironment",
+            "debatePolicy"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-presentation-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "src/web/scripts/agents/verify-debate.cjs",
+          "src/web/scripts/agents/verify-presentation-browser.cjs"
+        ],
+        "destination": "src/web/src/simulations/runtime/agents/scenarios.ts, src/web/scripts/agents/verify-debate.cjs, src/web/scripts/agents/verify-presentation-browser.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateEnvironment",
+            "debatePolicy"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-presentation-browser.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/debate/protocol.ts",
+      "export": "debateSessionSchema",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults",
+            "debateSessionSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateOrder",
+            "debateRound",
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate-live.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "src/web/src/simulations/components/systems/debate/environment.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/providers.ts",
+          "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "src/web/scripts/agents/verify-debate-live.cjs",
+          "src/web/scripts/agents/verify-debate.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/controls/AgentActions.tsx, src/web/src/simulations/components/systems/debate/environment.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/providers.ts, src/web/src/simulations/runtime/agents/scenarios.ts, src/web/scripts/agents/verify-debate-live.cjs, src/web/scripts/agents/verify-debate.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults",
+            "debateSessionSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateOrder",
+            "debateRound",
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate-live.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/debate/protocol.ts",
+      "export": "debateDefaults",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults",
+            "debateSessionSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateOrder",
+            "debateRound",
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate-live.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "src/web/src/simulations/components/systems/debate/environment.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/providers.ts",
+          "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "src/web/scripts/agents/verify-debate-live.cjs",
+          "src/web/scripts/agents/verify-debate.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/controls/AgentActions.tsx, src/web/src/simulations/components/systems/debate/environment.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/providers.ts, src/web/src/simulations/runtime/agents/scenarios.ts, src/web/scripts/agents/verify-debate-live.cjs, src/web/scripts/agents/verify-debate.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults",
+            "debateSessionSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateOrder",
+            "debateRound",
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate-live.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/debate/protocol.ts",
+      "export": "debateRounds",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults",
+            "debateSessionSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateOrder",
+            "debateRound",
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate-live.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "src/web/src/simulations/components/systems/debate/environment.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/providers.ts",
+          "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "src/web/scripts/agents/verify-debate-live.cjs",
+          "src/web/scripts/agents/verify-debate.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/controls/AgentActions.tsx, src/web/src/simulations/components/systems/debate/environment.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/providers.ts, src/web/src/simulations/runtime/agents/scenarios.ts, src/web/scripts/agents/verify-debate-live.cjs, src/web/scripts/agents/verify-debate.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults",
+            "debateSessionSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateOrder",
+            "debateRound",
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate-live.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/debate/protocol.ts",
+      "export": "debateRound",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults",
+            "debateSessionSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateOrder",
+            "debateRound",
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate-live.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "src/web/src/simulations/components/systems/debate/environment.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/providers.ts",
+          "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "src/web/scripts/agents/verify-debate-live.cjs",
+          "src/web/scripts/agents/verify-debate.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/controls/AgentActions.tsx, src/web/src/simulations/components/systems/debate/environment.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/providers.ts, src/web/src/simulations/runtime/agents/scenarios.ts, src/web/scripts/agents/verify-debate-live.cjs, src/web/scripts/agents/verify-debate.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults",
+            "debateSessionSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateOrder",
+            "debateRound",
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate-live.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/debate/protocol.ts",
+      "export": "debateOrder",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults",
+            "debateSessionSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateOrder",
+            "debateRound",
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate-live.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "src/web/src/simulations/components/systems/debate/environment.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/providers.ts",
+          "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "src/web/scripts/agents/verify-debate-live.cjs",
+          "src/web/scripts/agents/verify-debate.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/controls/AgentActions.tsx, src/web/src/simulations/components/systems/debate/environment.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/providers.ts, src/web/src/simulations/runtime/agents/scenarios.ts, src/web/scripts/agents/verify-debate-live.cjs, src/web/scripts/agents/verify-debate.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults",
+            "debateSessionSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateOrder",
+            "debateRound",
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate-live.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/systems/debate/protocol.ts",
+      "export": "validateDebateConfiguration",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults",
+            "debateSessionSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateOrder",
+            "debateRound",
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate-live.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "responsibility": "model operation",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/catalog/agents.ts",
+          "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "src/web/src/simulations/components/systems/debate/environment.ts",
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "src/web/src/simulations/runtime/agents/providers.ts",
+          "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "src/web/scripts/agents/verify-debate-live.cjs",
+          "src/web/scripts/agents/verify-debate.cjs"
+        ],
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/controls/AgentActions.tsx, src/web/src/simulations/components/systems/debate/environment.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/providers.ts, src/web/src/simulations/runtime/agents/scenarios.ts, src/web/scripts/agents/verify-debate-live.cjs, src/web/scripts/agents/verify-debate.cjs"
+      },
+      "classification": "private implementation of public model",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "owning domain model is the sole runtime writer; lifecycle operations initialize/reset",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/catalog/agents.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults",
+            "debateSessionSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/systems/debate/environment.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateOrder",
+            "debateRound",
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "debateRound"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/providers.ts",
+          "typeOnly": false,
+          "symbols": [
+            "debateDefaults"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/runtime/agents/scenarios.ts",
+          "typeOnly": false,
+          "symbols": [
+            "validateDebateConfiguration"
+          ]
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate-live.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        },
+        {
+          "source": "src/web/scripts/agents/verify-debate.cjs",
+          "typeOnly": false,
+          "symbols": [
+            "*"
+          ],
+          "kind": "verification load"
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public model operation owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
     },
     {
       "source": "src/web/src/simulations/components/systems/dynamic-systems/models.ts",
@@ -67567,6 +69033,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": true,
           "symbols": [
@@ -67598,11 +69071,12 @@
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/prefabs/AIAgent.ts",
           "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/runtime/agents/contracts.ts",
           "src/web/src/simulations/runtime/agents/providers.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentAvatar.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
       },
       "classification": "private/infrastructure",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -67640,6 +69114,13 @@
           "symbols": [
             "AgentConfiguration",
             "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
           ]
         },
         {
@@ -67703,6 +69184,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": true,
           "symbols": [
@@ -67734,11 +69222,12 @@
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/prefabs/AIAgent.ts",
           "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/runtime/agents/contracts.ts",
           "src/web/src/simulations/runtime/agents/providers.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentAvatar.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
       },
       "classification": "private/infrastructure",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -67776,6 +69265,13 @@
           "symbols": [
             "AgentConfiguration",
             "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
           ]
         },
         {
@@ -67839,6 +69335,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": true,
           "symbols": [
@@ -67870,11 +69373,12 @@
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/prefabs/AIAgent.ts",
           "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/runtime/agents/contracts.ts",
           "src/web/src/simulations/runtime/agents/providers.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentAvatar.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
       },
       "classification": "private/infrastructure",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -67912,6 +69416,13 @@
           "symbols": [
             "AgentConfiguration",
             "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
           ]
         },
         {
@@ -67975,6 +69486,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": true,
           "symbols": [
@@ -68006,11 +69524,12 @@
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/prefabs/AIAgent.ts",
           "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/runtime/agents/contracts.ts",
           "src/web/src/simulations/runtime/agents/providers.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentAvatar.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
       },
       "classification": "private/infrastructure",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -68048,6 +69567,13 @@
           "symbols": [
             "AgentConfiguration",
             "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
           ]
         },
         {
@@ -68111,6 +69637,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": true,
           "symbols": [
@@ -68142,11 +69675,12 @@
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/prefabs/AIAgent.ts",
           "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/runtime/agents/contracts.ts",
           "src/web/src/simulations/runtime/agents/providers.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentAvatar.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
       },
       "classification": "private/infrastructure",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -68184,6 +69718,13 @@
           "symbols": [
             "AgentConfiguration",
             "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
           ]
         },
         {
@@ -68247,6 +69788,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": true,
           "symbols": [
@@ -68278,11 +69826,12 @@
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/prefabs/AIAgent.ts",
           "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/runtime/agents/contracts.ts",
           "src/web/src/simulations/runtime/agents/providers.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentAvatar.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
       },
       "classification": "private/infrastructure",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -68320,6 +69869,13 @@
           "symbols": [
             "AgentConfiguration",
             "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
           ]
         },
         {
@@ -68383,6 +69939,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": true,
           "symbols": [
@@ -68414,11 +69977,12 @@
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/prefabs/AIAgent.ts",
           "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/runtime/agents/contracts.ts",
           "src/web/src/simulations/runtime/agents/providers.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentAvatar.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
       },
       "classification": "private/infrastructure",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -68456,6 +70020,13 @@
           "symbols": [
             "AgentConfiguration",
             "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
           ]
         },
         {
@@ -68519,6 +70090,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": true,
           "symbols": [
@@ -68550,11 +70128,12 @@
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/prefabs/AIAgent.ts",
           "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/runtime/agents/contracts.ts",
           "src/web/src/simulations/runtime/agents/providers.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentAvatar.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
       },
       "classification": "private/infrastructure",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -68592,6 +70171,13 @@
           "symbols": [
             "AgentConfiguration",
             "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
           ]
         },
         {
@@ -68655,6 +70241,13 @@
           ]
         },
         {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
+          ]
+        },
+        {
           "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "typeOnly": true,
           "symbols": [
@@ -68686,11 +70279,12 @@
           "src/web/src/simulations/components/catalog/agents.ts",
           "src/web/src/simulations/components/prefabs/AIAgent.ts",
           "src/web/src/simulations/components/systems/AgentSystems.ts",
+          "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
           "src/web/src/simulations/components/views/agents/AgentViews.tsx",
           "src/web/src/simulations/runtime/agents/contracts.ts",
           "src/web/src/simulations/runtime/agents/providers.ts"
         ],
-        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
+        "destination": "src/web/src/simulations/components/catalog/agents.ts, src/web/src/simulations/components/prefabs/AIAgent.ts, src/web/src/simulations/components/systems/AgentSystems.ts, src/web/src/simulations/components/views/agents/AgentAvatar.tsx, src/web/src/simulations/components/views/agents/AgentViews.tsx, src/web/src/simulations/runtime/agents/contracts.ts, src/web/src/simulations/runtime/agents/providers.ts"
       },
       "classification": "private/infrastructure",
       "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
@@ -68728,6 +70322,13 @@
           "symbols": [
             "AgentConfiguration",
             "agentProfileSchema"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+          "typeOnly": true,
+          "symbols": [
+            "AgentConfiguration"
           ]
         },
         {
@@ -96281,13 +97882,112 @@
       "completion": "No active static consumer; retained data/type/export has no independent public registration"
     },
     {
+      "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+      "export": "AgentAvatar",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentAvatar",
+            "agentShortName"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/agents/AgentViews.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentAvatar",
+            "agentShortName"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/agents/AgentAvatar.tsx",
+      "export": "agentShortName",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentAvatar",
+            "agentShortName"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/views/agents/AgentViews.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/views/agents/AgentViews.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentAvatar",
+            "agentShortName"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
       "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
-      "export": "useAgentValue",
+      "export": "agentDetailsDialogId",
       "activeConsumers": [
         {
           "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
           "typeOnly": false,
           "symbols": [
+            "agentDetailsDialogId",
             "useAgentValue"
           ]
         },
@@ -96326,6 +98026,73 @@
           "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
           "typeOnly": false,
           "symbols": [
+            "agentDetailsDialogId",
+            "useAgentValue"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentProfileView",
+            "AgentTranscriptView"
+          ]
+        }
+      ],
+      "identity": [],
+      "ownershipEvidence": "Static import/re-export consumers identify the current compatibility owner",
+      "destination": "public display/layout/composite owner; preserve serialized aliases",
+      "verification": "baseline suite plus public-catalog contract and browser suites; see 009-IMPLEMENTATION-EVIDENCE.md",
+      "completion": "Private/infrastructure owner and active consumers recorded; not an independent selectable package"
+    },
+    {
+      "source": "src/web/src/simulations/components/views/agents/AgentViews.tsx",
+      "export": "useAgentValue",
+      "activeConsumers": [
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "agentDetailsDialogId",
+            "useAgentValue"
+          ]
+        },
+        {
+          "source": "src/web/src/simulations/components/views/recipe/NodeView.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "AgentProfileView",
+            "AgentTranscriptView"
+          ]
+        }
+      ],
+      "responsibility": "display/layout/composite",
+      "finalOwner": {
+        "kind": "private implementation owned by static consumers",
+        "packages": [],
+        "consumers": [
+          "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "src/web/src/simulations/components/views/recipe/NodeView.tsx"
+        ],
+        "destination": "src/web/src/simulations/components/controls/AgentActions.tsx, src/web/src/simulations/components/views/recipe/NodeView.tsx"
+      },
+      "classification": "public implementation/private helper",
+      "readiness": "private, infrastructure, or compatibility implementation; active consumers retained",
+      "stateOwnership": "presentation consumes snapshots; control invokes declared command",
+      "commands": [],
+      "outputs": [],
+      "space": [],
+      "coupling": {
+        "singletonImports": [],
+        "singletonReads": false,
+        "builderImports": false
+      },
+      "dependencies": [
+        {
+          "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
+          "typeOnly": false,
+          "symbols": [
+            "agentDetailsDialogId",
             "useAgentValue"
           ]
         },
@@ -96352,6 +98119,7 @@
           "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
           "typeOnly": false,
           "symbols": [
+            "agentDetailsDialogId",
             "useAgentValue"
           ]
         },
@@ -96390,6 +98158,7 @@
           "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
           "typeOnly": false,
           "symbols": [
+            "agentDetailsDialogId",
             "useAgentValue"
           ]
         },
@@ -96416,6 +98185,7 @@
           "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
           "typeOnly": false,
           "symbols": [
+            "agentDetailsDialogId",
             "useAgentValue"
           ]
         },
@@ -96454,6 +98224,7 @@
           "source": "src/web/src/simulations/components/controls/AgentActions.tsx",
           "typeOnly": false,
           "symbols": [
+            "agentDetailsDialogId",
             "useAgentValue"
           ]
         },

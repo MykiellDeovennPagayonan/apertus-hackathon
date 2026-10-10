@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import {
   agentContext,
   parseAgentProposal,
+  validateObservationProposal,
 } from "../../simulations/components/systems/AgentSystems";
 import {
   AgentError,
@@ -100,25 +101,13 @@ export function createAgentModel(identity: ModelIdentity): AgentModel {
           {
             config: { ...config, timeout: Math.min(config.timeout, 110000) },
             schema,
-            maxTokens: 1024,
+            maxTokens: observation.outputTokens ?? 1024,
             stage: "agent.decision",
             onInferenceStarted() {
               startedCalls++;
             },
             verify(result) {
-              if (!observation.allowed.includes(result.action))
-                throw new Error("Action is not allowed.");
-              if (
-                result.references.some(
-                  (id) => !observation.events.some((event) => event.id === id),
-                )
-              )
-                throw new Error("Use only visible event IDs.");
-              if (
-                result.action === "speak" &&
-                result.text.trim().split(/\s+/u).length > observation.maxWords
-              )
-                throw new Error(`Use at most ${observation.maxWords} words.`);
+              validateObservationProposal(observation, result);
               if (
                 result.action === "setMetric" &&
                 !Object.hasOwn(observation.metrics, result.key)

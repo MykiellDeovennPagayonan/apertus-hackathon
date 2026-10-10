@@ -46,37 +46,33 @@ const origin = process.env.AGENT_TEST_ORIGIN || "http://localhost:43100";
     await page
       .locator(".agent-messages li")
       .nth(0)
-      .waitFor({ timeout: 125000 });
+      .waitFor({ state: "attached", timeout: 125000 });
     await page
       .getByRole("button", { name: "Next response", exact: true })
       .click();
     await page
       .locator(".agent-messages li")
       .nth(1)
-      .waitFor({ timeout: 125000 });
+      .waitFor({ state: "attached", timeout: 125000 });
     assert.equal(await page.locator(".agent-messages li").count(), 2);
     await page.screenshot({
       path: "/tmp/apertus-agents-responses.png",
       fullPage: true,
     });
-    await page
-      .getByRole("button", { name: "Continue automatically", exact: true })
-      .click();
+    await page.getByRole("button", { name: "Autoplay", exact: true }).click();
     await page
       .getByRole("button", { name: "Pause after response", exact: true })
       .click();
     await page
       .locator(".agent-messages li")
       .nth(2)
-      .waitFor({ timeout: 125000 });
+      .waitFor({ state: "attached", timeout: 125000 });
     assert.equal(await page.locator(".agent-messages li").count(), 3);
-    await page
-      .getByRole("button", { name: "Continue automatically", exact: true })
-      .click();
+    await page.getByRole("button", { name: "Autoplay", exact: true }).click();
     await page
       .locator(".agent-messages li")
       .nth(7)
-      .waitFor({ timeout: 600000 });
+      .waitFor({ state: "attached", timeout: 600000 });
     assert.equal(await page.locator(".agent-messages li").count(), 8);
     assert.ok(
       await page
@@ -110,6 +106,9 @@ const origin = process.env.AGENT_TEST_ORIGIN || "http://localhost:43100";
     assert.ok(nextBox && nextBox.width >= 100 && nextBox.height >= 36);
     const requestCount = responses.length;
     await page
+      .getByRole("button", { name: "More options", exact: true })
+      .click();
+    await page
       .getByRole("button", { name: "Replay conversation", exact: true })
       .click();
     assert.equal(await page.locator(".agent-messages li").count(), 0);
@@ -126,6 +125,9 @@ const origin = process.env.AGENT_TEST_ORIGIN || "http://localhost:43100";
       requestCount,
       "Replay performs no inference",
     );
+    await page
+      .getByRole("button", { name: "More options", exact: true })
+      .click();
     await page
       .getByRole("button", { name: "Restart conversation", exact: true })
       .click();
@@ -155,7 +157,7 @@ const origin = process.env.AGENT_TEST_ORIGIN || "http://localhost:43100";
     await page
       .locator(".agent-messages li")
       .nth(0)
-      .waitFor({ timeout: 125000 });
+      .waitFor({ state: "attached", timeout: 125000 });
     assert.deepEqual(errors, []);
     console.log(
       "Browser: live step, pause, autoplay completion, restart, mobile targets, Remix and Try lesson passed. Evidence in /tmp/apertus-agents-*.png",

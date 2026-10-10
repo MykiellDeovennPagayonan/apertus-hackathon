@@ -9,6 +9,7 @@ import {
   AgentRunner,
   createAgentRun,
 } from "../../simulations/runtime/agents/runner";
+import { resolveAgentScenario } from "../../simulations/runtime/agents/scenarios";
 import { AgentWorkQueue } from "../../simulations/runtime/agents/scheduler";
 import { getLibrarySession } from "../auth/server";
 import { getDatabase } from "../database/client";
@@ -81,6 +82,7 @@ export async function handleAgentRequest(request: Request) {
       : guests();
     if (body.operation === "create") {
       validateRunConfiguration(body.configuration);
+      const scenario = resolveAgentScenario(body.configuration);
       // The public communication adapter admits speech; arbitrary tool capabilities are not exposed by HTTP.
       if (body.configuration.capabilities.some((action) => action !== "speak"))
         throw new AgentError(
@@ -96,6 +98,7 @@ export async function handleAgentRequest(request: Request) {
         body.configuration,
         configuredModelIdentity(),
       );
+      if (scenario) run.nextActor = scenario.policy.selectActor(run);
       await repository.create(run);
       return respond({
         handle: { id: run.id, ...(token ? { token } : {}) },
@@ -124,7 +127,14 @@ export async function handleAgentRequest(request: Request) {
           await new AgentRunner(repository).cancel(handle.id, owner),
         ),
       });
-    const runner = new AgentRunner(repository, createAgentModel(current.model));
+    const scenario = resolveAgentScenario(current.configuration);
+    const runner = new AgentRunner(
+      repository,
+      createAgentModel(current.model),
+      scenario?.environment,
+      undefined,
+      scenario?.policy,
+    );
     if (
       body.operation !== "step" ||
       !Number.isSafeInteger(body.expectedRevision) ||

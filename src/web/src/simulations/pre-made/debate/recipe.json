@@ -1,0 +1,854 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/debate",
+  "version": 1,
+  "title": "Three-versus-three AI debate",
+  "description": "How does changing team personalities affect arguments and responses on the same motion?",
+  "tags": ["social-systems", "ai", "agents", "debate"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "agent/P1",
+        "definition": "models/AIAgent",
+        "version": 1,
+        "label": "P1 \u00b7 Careful education researcher",
+        "scope": "scope/debate",
+        "configuration": {
+          "name": "Maya \u00b7 Careful education researcher",
+          "persona": "Careful education researcher",
+          "communicationStyle": "Evidence-seeking and measured",
+          "expertise": "Education research",
+          "objective": "Establish learning and workload arguments.",
+          "team": "Proposition"
+        }
+      },
+      {
+        "id": "profile/P1",
+        "definition": "displays/AgentProfile",
+        "version": 1,
+        "label": "P1",
+        "scope": "scope/debate",
+        "configuration": {
+          "label": "P1"
+        }
+      },
+      {
+        "id": "agent/P2",
+        "definition": "models/AIAgent",
+        "version": 1,
+        "label": "P2 \u00b7 Pragmatic school administrator",
+        "scope": "scope/debate",
+        "configuration": {
+          "name": "Noah \u00b7 Pragmatic school administrator",
+          "persona": "Pragmatic school administrator",
+          "communicationStyle": "Practical and implementation-focused",
+          "expertise": "School administration",
+          "objective": "Address feasibility, schedules, and tradeoffs.",
+          "team": "Proposition"
+        }
+      },
+      {
+        "id": "profile/P2",
+        "definition": "displays/AgentProfile",
+        "version": 1,
+        "label": "P2",
+        "scope": "scope/debate",
+        "configuration": {
+          "label": "P2"
+        }
+      },
+      {
+        "id": "agent/P3",
+        "definition": "models/AIAgent",
+        "version": 1,
+        "label": "P3 \u00b7 Empathetic student advocate",
+        "scope": "scope/debate",
+        "configuration": {
+          "name": "Zoe \u00b7 Empathetic student advocate",
+          "persona": "Empathetic student advocate",
+          "communicationStyle": "Direct and reflective",
+          "expertise": "Student access and wellbeing",
+          "objective": "Discuss access, wellbeing, and student experience.",
+          "team": "Proposition"
+        }
+      },
+      {
+        "id": "profile/P3",
+        "definition": "displays/AgentProfile",
+        "version": 1,
+        "label": "P3",
+        "scope": "scope/debate",
+        "configuration": {
+          "label": "P3"
+        }
+      },
+      {
+        "id": "agent/O1",
+        "definition": "models/AIAgent",
+        "version": 1,
+        "label": "O1 \u00b7 Skeptical learning researcher",
+        "scope": "scope/debate",
+        "configuration": {
+          "name": "Theo \u00b7 Skeptical learning researcher",
+          "persona": "Skeptical learning researcher",
+          "communicationStyle": "Precise and analytical",
+          "expertise": "Learning, practice, and retention",
+          "objective": "Challenge assumptions about practice and retention.",
+          "team": "Opposition"
+        }
+      },
+      {
+        "id": "profile/O1",
+        "definition": "displays/AgentProfile",
+        "version": 1,
+        "label": "O1",
+        "scope": "scope/debate",
+        "configuration": {
+          "label": "O1"
+        }
+      },
+      {
+        "id": "agent/O2",
+        "definition": "models/AIAgent",
+        "version": 1,
+        "label": "O2 \u00b7 Cautious teacher",
+        "scope": "scope/debate",
+        "configuration": {
+          "name": "Ada \u00b7 Cautious teacher",
+          "persona": "Cautious teacher",
+          "communicationStyle": "Concrete and resource-aware",
+          "expertise": "Classroom teaching",
+          "objective": "Explain classroom capacity and individual practice needs.",
+          "team": "Opposition"
+        }
+      },
+      {
+        "id": "profile/O2",
+        "definition": "displays/AgentProfile",
+        "version": 1,
+        "label": "O2",
+        "scope": "scope/debate",
+        "configuration": {
+          "label": "O2"
+        }
+      },
+      {
+        "id": "agent/O3",
+        "definition": "models/AIAgent",
+        "version": 1,
+        "label": "O3 \u00b7 Curious parent representative",
+        "scope": "scope/debate",
+        "configuration": {
+          "name": "Ravi \u00b7 Curious parent representative",
+          "persona": "Curious parent representative",
+          "communicationStyle": "Respectful and probing",
+          "expertise": "Family needs and accountability",
+          "objective": "Explore independence, family needs, and accountability.",
+          "team": "Opposition"
+        }
+      },
+      {
+        "id": "profile/O3",
+        "definition": "displays/AgentProfile",
+        "version": 1,
+        "label": "O3",
+        "scope": "scope/debate",
+        "configuration": {
+          "label": "O3"
+        }
+      },
+      {
+        "id": "environment",
+        "definition": "models/DebateSession",
+        "version": 1,
+        "label": "Debate motion and rules",
+        "scope": "scope/debate",
+        "configuration": {
+          "topic": "Should schools replace most homework with projects completed during school hours?",
+          "scope": "Secondary schools; replace most routine take-home assignments, while preserving optional reading and necessary individual practice.",
+          "minWords": 80,
+          "maxWords": 150,
+          "outputTokens": 1024
+        }
+      },
+      {
+        "id": "conversation",
+        "definition": "displays/AgentTranscript",
+        "version": 1,
+        "label": "Debate transcript",
+        "scope": "scope/debate",
+        "configuration": {
+          "label": "Debate transcript"
+        }
+      },
+      {
+        "id": "actions",
+        "definition": "controls/AgentActions",
+        "version": 1,
+        "label": "Debate controls",
+        "scope": "scope/debate",
+        "configuration": {
+          "label": "Debate controls"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/agent/P1",
+        "kind": "value",
+        "from": {
+          "node": "agent/P1",
+          "port": "profile"
+        },
+        "to": {
+          "node": "environment",
+          "port": "agents"
+        }
+      },
+      {
+        "id": "link/profile/P1",
+        "kind": "value",
+        "from": {
+          "node": "agent/P1",
+          "port": "profile"
+        },
+        "to": {
+          "node": "profile/P1",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/agent/P2",
+        "kind": "value",
+        "from": {
+          "node": "agent/P2",
+          "port": "profile"
+        },
+        "to": {
+          "node": "environment",
+          "port": "agents"
+        }
+      },
+      {
+        "id": "link/profile/P2",
+        "kind": "value",
+        "from": {
+          "node": "agent/P2",
+          "port": "profile"
+        },
+        "to": {
+          "node": "profile/P2",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/agent/P3",
+        "kind": "value",
+        "from": {
+          "node": "agent/P3",
+          "port": "profile"
+        },
+        "to": {
+          "node": "environment",
+          "port": "agents"
+        }
+      },
+      {
+        "id": "link/profile/P3",
+        "kind": "value",
+        "from": {
+          "node": "agent/P3",
+          "port": "profile"
+        },
+        "to": {
+          "node": "profile/P3",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/agent/O1",
+        "kind": "value",
+        "from": {
+          "node": "agent/O1",
+          "port": "profile"
+        },
+        "to": {
+          "node": "environment",
+          "port": "agents"
+        }
+      },
+      {
+        "id": "link/profile/O1",
+        "kind": "value",
+        "from": {
+          "node": "agent/O1",
+          "port": "profile"
+        },
+        "to": {
+          "node": "profile/O1",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/agent/O2",
+        "kind": "value",
+        "from": {
+          "node": "agent/O2",
+          "port": "profile"
+        },
+        "to": {
+          "node": "environment",
+          "port": "agents"
+        }
+      },
+      {
+        "id": "link/profile/O2",
+        "kind": "value",
+        "from": {
+          "node": "agent/O2",
+          "port": "profile"
+        },
+        "to": {
+          "node": "profile/O2",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/agent/O3",
+        "kind": "value",
+        "from": {
+          "node": "agent/O3",
+          "port": "profile"
+        },
+        "to": {
+          "node": "environment",
+          "port": "agents"
+        }
+      },
+      {
+        "id": "link/profile/O3",
+        "kind": "value",
+        "from": {
+          "node": "agent/O3",
+          "port": "profile"
+        },
+        "to": {
+          "node": "profile/O3",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/transcript",
+        "kind": "value",
+        "from": {
+          "node": "environment",
+          "port": "session"
+        },
+        "to": {
+          "node": "conversation",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/control-state",
+        "kind": "value",
+        "from": {
+          "node": "environment",
+          "port": "session"
+        },
+        "to": {
+          "node": "actions",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/action/NEXT",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "NEXT"
+        },
+        "to": {
+          "node": "environment",
+          "port": "NEXT"
+        }
+      },
+      {
+        "id": "link/action/PLAY",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "PLAY"
+        },
+        "to": {
+          "node": "environment",
+          "port": "PLAY"
+        }
+      },
+      {
+        "id": "link/action/PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "PAUSE"
+        },
+        "to": {
+          "node": "environment",
+          "port": "PAUSE"
+        }
+      },
+      {
+        "id": "link/action/CANCEL",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "CANCEL"
+        },
+        "to": {
+          "node": "environment",
+          "port": "CANCEL"
+        }
+      },
+      {
+        "id": "link/action/RESET",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "RESET"
+        },
+        "to": {
+          "node": "environment",
+          "port": "RESTART"
+        }
+      },
+      {
+        "id": "link/action/REPLAY",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "REPLAY"
+        },
+        "to": {
+          "node": "environment",
+          "port": "REPLAY"
+        }
+      },
+      {
+        "id": "link/status/profile/P1",
+        "kind": "value",
+        "from": {
+          "node": "environment",
+          "port": "session"
+        },
+        "to": {
+          "node": "profile/P1",
+          "port": "session"
+        }
+      },
+      {
+        "id": "link/status/profile/P2",
+        "kind": "value",
+        "from": {
+          "node": "environment",
+          "port": "session"
+        },
+        "to": {
+          "node": "profile/P2",
+          "port": "session"
+        }
+      },
+      {
+        "id": "link/status/profile/P3",
+        "kind": "value",
+        "from": {
+          "node": "environment",
+          "port": "session"
+        },
+        "to": {
+          "node": "profile/P3",
+          "port": "session"
+        }
+      },
+      {
+        "id": "link/status/profile/O1",
+        "kind": "value",
+        "from": {
+          "node": "environment",
+          "port": "session"
+        },
+        "to": {
+          "node": "profile/O1",
+          "port": "session"
+        }
+      },
+      {
+        "id": "link/status/profile/O2",
+        "kind": "value",
+        "from": {
+          "node": "environment",
+          "port": "session"
+        },
+        "to": {
+          "node": "profile/O2",
+          "port": "session"
+        }
+      },
+      {
+        "id": "link/status/profile/O3",
+        "kind": "value",
+        "from": {
+          "node": "environment",
+          "port": "session"
+        },
+        "to": {
+          "node": "profile/O3",
+          "port": "session"
+        }
+      },
+      {
+        "id": "link/action/RESUME",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "RESUME"
+        },
+        "to": {
+          "node": "environment",
+          "port": "RESUME"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/debate",
+        "label": "Debate"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/actions",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "actions"
+        },
+        {
+          "id": "layout/conversation",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "conversation"
+        },
+        {
+          "id": "layout/profile/P1",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "profile/P1"
+        },
+        {
+          "id": "layout/profile/P2",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "profile/P2"
+        },
+        {
+          "id": "layout/profile/P3",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "profile/P3"
+        },
+        {
+          "id": "layout/profile/O1",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "profile/O1"
+        },
+        {
+          "id": "layout/profile/O2",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "profile/O2"
+        },
+        {
+          "id": "layout/profile/O3",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "profile/O3"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Three-versus-three AI debate",
+      "instruction": "Meet the speakers, follow the conversation, and change a personality in the builder to compare a new run.",
+      "explanation": "The application schedules eighteen speeches: openings, rebuttals, and closings. Follow rebuttal links to earlier opposing claims. Repeat runs before drawing conclusions: model output varies, and factual claims are unverified."
+    },
+    "editor": {
+      "positions": {
+        "agent/P1": {
+          "x": 0,
+          "y": 0
+        },
+        "profile/P1": {
+          "x": 340,
+          "y": 0
+        },
+        "agent/P2": {
+          "x": 680,
+          "y": 0
+        },
+        "profile/P2": {
+          "x": 1020,
+          "y": 0
+        },
+        "agent/P3": {
+          "x": 0,
+          "y": 220
+        },
+        "profile/P3": {
+          "x": 340,
+          "y": 220
+        },
+        "agent/O1": {
+          "x": 680,
+          "y": 220
+        },
+        "profile/O1": {
+          "x": 1020,
+          "y": 220
+        },
+        "agent/O2": {
+          "x": 0,
+          "y": 440
+        },
+        "profile/O2": {
+          "x": 340,
+          "y": 440
+        },
+        "agent/O3": {
+          "x": 680,
+          "y": 440
+        },
+        "profile/O3": {
+          "x": 1020,
+          "y": 440
+        },
+        "environment": {
+          "x": 0,
+          "y": 660
+        },
+        "conversation": {
+          "x": 340,
+          "y": 660
+        },
+        "actions": {
+          "x": 680,
+          "y": 660
+        }
+      },
+      "zoom": 1
+    },
+    "presentation": {
+      "mode": "board",
+      "version": 2,
+      "responsive": true,
+      "items": [
+        {
+          "id": "board/actions",
+          "layoutId": "layout/actions",
+          "rect": {
+            "x": 162,
+            "y": 0,
+            "width": 720,
+            "height": 112
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 110
+        },
+        {
+          "id": "board/conversation",
+          "layoutId": "layout/conversation",
+          "rect": {
+            "x": 162,
+            "y": 128,
+            "width": 720,
+            "height": 400
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 490
+        },
+        {
+          "id": "board/profile/P1",
+          "layoutId": "layout/profile/P1",
+          "rect": {
+            "x": 0,
+            "y": 128,
+            "width": 160,
+            "height": 160
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 148
+        },
+        {
+          "id": "board/profile/P2",
+          "layoutId": "layout/profile/P2",
+          "rect": {
+            "x": 0,
+            "y": 306,
+            "width": 160,
+            "height": 160
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 148
+        },
+        {
+          "id": "board/profile/P3",
+          "layoutId": "layout/profile/P3",
+          "rect": {
+            "x": 0,
+            "y": 484,
+            "width": 160,
+            "height": 160
+          },
+          "zIndex": 4,
+          "locked": false,
+          "responsiveMinHeight": 148
+        },
+        {
+          "id": "board/profile/O1",
+          "layoutId": "layout/profile/O1",
+          "rect": {
+            "x": 906,
+            "y": 128,
+            "width": 160,
+            "height": 160
+          },
+          "zIndex": 5,
+          "locked": false,
+          "responsiveMinHeight": 148
+        },
+        {
+          "id": "board/profile/O2",
+          "layoutId": "layout/profile/O2",
+          "rect": {
+            "x": 906,
+            "y": 306,
+            "width": 160,
+            "height": 160
+          },
+          "zIndex": 6,
+          "locked": false,
+          "responsiveMinHeight": 148
+        },
+        {
+          "id": "board/profile/O3",
+          "layoutId": "layout/profile/O3",
+          "rect": {
+            "x": 906,
+            "y": 484,
+            "width": 160,
+            "height": 160
+          },
+          "zIndex": 7,
+          "locked": false,
+          "responsiveMinHeight": 148
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -20,
+        "y": -20,
+        "width": 1106,
+        "height": 650
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsiveRows": [
+        ["board/actions"],
+        ["board/conversation"],
+        ["board/profile/P1", "board/profile/O1"],
+        ["board/profile/P2", "board/profile/O2"],
+        ["board/profile/P3", "board/profile/O3"]
+      ],
+      "responsiveGap": 16
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "models/AIAgent",
+      "version": 1
+    },
+    {
+      "id": "displays/AgentProfile",
+      "version": 1
+    },
+    {
+      "id": "models/DebateSession",
+      "version": 1
+    },
+    {
+      "id": "displays/AgentTranscript",
+      "version": 1
+    },
+    {
+      "id": "controls/AgentActions",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Fictional participants; generated claims are not verified facts.",
+    "Replay is the recorded conversation; rerunning may produce different responses.",
+    "The fictional personas do not predict real human behavior.",
+    "Eighteen accepted speeches; sequential public visibility; no private team channel, evidence retrieval, or judging."
+  ],
+  "catalog": {
+    "icon": "\u2696",
+    "category": "social-systems",
+    "order": 43
+  }
+}

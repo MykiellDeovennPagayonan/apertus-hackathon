@@ -41,6 +41,7 @@ assert.deepEqual(
   d,
 );
 const sized = structuredClone(d);
+sized.presentation.responsiveGap = 16;
 sized.presentation.items[0].aspectRatio = 16 / 9;
 const resized = resizeBoardRect(
   sized.presentation.items[0].rect,
@@ -51,6 +52,16 @@ const resized = resizeBoardRect(
 );
 assert.equal(resized.width / resized.height, 16 / 9);
 validateAuthoredDocument(sized);
+assert.equal(
+  parseDocument(serializeDocument(canonicalDocument(sized))).authored
+    .presentation.responsiveGap,
+  16,
+  "authored narrow-screen spacing survives save and reopen",
+);
+assert.equal(
+  remapDocument(sized, (id) => `copy/${id}`).presentation.responsiveGap,
+  16,
+);
 assert.equal(
   parseDocument(serializeDocument(canonicalDocument(sized))).authored
     .presentation.items[0].aspectRatio,
@@ -70,6 +81,9 @@ for (const mutate of [
   (p) => p.items.push(p.items[0]),
   (p) => (p.items[0].layoutId = "missing"),
   (p) => (p.navigation.minZoom = 0),
+  (p) => (p.responsiveGap = 7),
+  (p) => (p.responsiveGap = 129),
+  (p) => (p.responsiveGap = NaN),
   (p) => (p.immersive.startup = "scene"),
   (p) => (p.groups = [{ id: "group", label: "x", members: ["missing"] }]),
   (p) => p.items.pop(),

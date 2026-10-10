@@ -39,7 +39,16 @@ export type AgentProposal =
       memory: string;
       plan: string[];
     };
+export interface DebateRules {
+  kind: "debate";
+  version: 1;
+  scope: string;
+  minWords: number;
+  outputTokens: number;
+  visibility: "sequential-public";
+}
 export interface AgentRunConfiguration {
+  scenario?: DebateRules;
   schemaVersion: 1;
   agents: AgentConfiguration[];
   environment: string;
@@ -114,6 +123,10 @@ export interface AgentObservation {
   metrics: Record<string, number>;
   allowed: AgentRunConfiguration["capabilities"];
   maxWords: number;
+  minWords?: number;
+  outputTokens?: number;
+  instruction?: string;
+  requiredReferenceActors?: string[];
 }
 export interface AgentModel {
   generate(
@@ -150,6 +163,10 @@ export type AgentRunView = Pick<
   nextActor: string;
   count: number;
   maxSteps: number;
+  configuration: AgentRunConfiguration;
+  receipts: Record<string, AttemptMetadata>;
+  attempts: number;
+  attemptReceipts: Record<string, AttemptReceipt>;
   usage: {
     inputTokens: number | null;
     outputTokens: number | null;
@@ -183,6 +200,10 @@ export function runView(run: AgentRun): AgentRunView {
     ).name,
     count: run.events.length,
     maxSteps: run.configuration.maxSteps,
+    configuration: structuredClone(run.configuration),
+    receipts: structuredClone(run.receipts),
+    attempts: run.attempts,
+    attemptReceipts: structuredClone(run.attemptReceipts ?? {}),
     usage: {
       inputTokens: tokens("inputTokens"),
       outputTokens: tokens("outputTokens"),

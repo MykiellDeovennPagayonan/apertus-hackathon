@@ -31,6 +31,10 @@ import { type RuntimeInputs, spatialProviders } from "./spatialProviders";
 import type { ComponentInstance } from "./types";
 import { assertData } from "./validate";
 export type RuntimeProvider = {
+  reinitialize?(
+    state: Record<string, unknown>,
+    node: ComponentInstance,
+  ): Record<string, unknown>;
   initialize(node: ComponentInstance): Record<string, unknown>;
   apply(
     state: Record<string, unknown>,

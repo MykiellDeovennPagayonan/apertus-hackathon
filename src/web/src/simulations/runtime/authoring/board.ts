@@ -22,6 +22,8 @@ export type BoardPresentation = {
   responsive?: boolean;
   /** Explicit item ordering and paired rows for narrow learner viewports. */
   responsiveRows?: string[][];
+  /** Authored spacing between responsive rows; existing boards retain their default. */
+  responsiveGap?: number;
   mode: "board";
   items: BoardItem[];
   /** Layout groups whose children have independent board placement. */
@@ -472,6 +474,13 @@ export function validateBoard(d: AuthoredDocument, runnable = false) {
     )
       fail("invalid separated layout group");
   }
+  if (
+    p.responsiveGap !== undefined &&
+    (!Number.isFinite(p.responsiveGap) ||
+      p.responsiveGap < 8 ||
+      p.responsiveGap > 128)
+  )
+    fail("responsive gap must be between 8 and 128 pixels");
   if (p.responsiveRows !== undefined) {
     if (
       !Array.isArray(p.responsiveRows) ||

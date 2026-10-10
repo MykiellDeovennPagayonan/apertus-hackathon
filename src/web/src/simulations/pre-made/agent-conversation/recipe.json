@@ -4,12 +4,7 @@
   "version": 1,
   "title": "Two perspectives, one city",
   "description": "Let two AI agents explore how to improve daily travel. Change their personalities and compare the conversation.",
-  "tags": [
-    "social-systems",
-    "ai",
-    "agents",
-    "conversation"
-  ],
+  "tags": ["social-systems", "ai", "agents", "conversation"],
   "document": {
     "formatVersion": 3,
     "nodes": [
@@ -236,6 +231,42 @@
           "node": "environment",
           "port": "REPLAY"
         }
+      },
+      {
+        "id": "link/status/profile/planner",
+        "kind": "value",
+        "from": {
+          "node": "environment",
+          "port": "session"
+        },
+        "to": {
+          "node": "profile/planner",
+          "port": "session"
+        }
+      },
+      {
+        "id": "link/status/profile/resident",
+        "kind": "value",
+        "from": {
+          "node": "environment",
+          "port": "session"
+        },
+        "to": {
+          "node": "profile/resident",
+          "port": "session"
+        }
+      },
+      {
+        "id": "link/action/RESUME",
+        "kind": "command",
+        "from": {
+          "node": "actions",
+          "port": "RESUME"
+        },
+        "to": {
+          "node": "environment",
+          "port": "RESUME"
+        }
       }
     ],
     "resources": [],
@@ -293,7 +324,7 @@
     },
     "lesson": {
       "title": "Two perspectives, one city",
-      "instruction": "Hear two agents explore a shared topic. Change their personalities in the builder and compare a new conversation.",
+      "instruction": "Meet the speakers, follow the conversation, and change a personality in the builder to compare a new run.",
       "explanation": "Each response comes from the configured AI model. The participants keep their own context and take turns responding to the shared conversation."
     },
     "editor": {
@@ -338,61 +369,61 @@
           "id": "board/conversation",
           "layoutId": "layout/conversation",
           "rect": {
-            "x": 0,
-            "y": 148,
-            "width": 710,
-            "height": 480
+            "x": 162,
+            "y": 128,
+            "width": 720,
+            "height": 400
           },
           "zIndex": 0,
           "locked": false,
-          "responsiveMinHeight": 100
+          "responsiveMinHeight": 490
         },
         {
           "id": "board/actions",
           "layoutId": "layout/actions",
           "rect": {
-            "x": 0,
+            "x": 162,
             "y": 0,
-            "width": 710,
-            "height": 124
+            "width": 720,
+            "height": 112
           },
           "zIndex": 1,
           "locked": false,
-          "responsiveMinHeight": 100
+          "responsiveMinHeight": 110
         },
         {
           "id": "board/profile/planner",
           "layoutId": "layout/profile/planner",
           "rect": {
-            "x": 734,
-            "y": 0,
-            "width": 300,
-            "height": 240
+            "x": 0,
+            "y": 208,
+            "width": 160,
+            "height": 160
           },
           "zIndex": 2,
           "locked": false,
-          "responsiveMinHeight": 100
+          "responsiveMinHeight": 148
         },
         {
           "id": "board/profile/resident",
           "layoutId": "layout/profile/resident",
           "rect": {
-            "x": 734,
-            "y": 265,
-            "width": 300,
-            "height": 240
+            "x": 906,
+            "y": 208,
+            "width": 160,
+            "height": 160
           },
           "zIndex": 3,
           "locked": false,
-          "responsiveMinHeight": 100
+          "responsiveMinHeight": 148
         }
       ],
       "groups": [],
       "startView": {
-        "x": -24,
-        "y": -24,
-        "width": 1082,
-        "height": 680
+        "x": -20,
+        "y": -20,
+        "width": 1106,
+        "height": 650
       },
       "navigation": {
         "mode": "bounded",
@@ -405,19 +436,11 @@
         "overlays": []
       },
       "responsiveRows": [
-        [
-          "board/actions"
-        ],
-        [
-          "board/conversation"
-        ],
-        [
-          "board/profile/planner"
-        ],
-        [
-          "board/profile/resident"
-        ]
-      ]
+        ["board/actions"],
+        ["board/conversation"],
+        ["board/profile/planner", "board/profile/resident"]
+      ],
+      "responsiveGap": 16
     }
   },
   "nested": [],

@@ -1,6 +1,10 @@
 import type { PublicDefinition } from "../../runtime/authoring/types";
 import { object } from "../../runtime/parameterSchema";
 import {
+  debateDefaults,
+  debateSessionSchema,
+} from "../systems/debate/protocol";
+import {
   agentDefaults,
   agentEnvironmentSchema,
   agentProfileSchema,
@@ -85,22 +89,26 @@ export const agentDefinitions: PublicDefinition[] = [
       count: { kind: "value", unit: "actions", crossScope: true },
     },
     commands: Object.fromEntries(
-      ["NEXT", "PLAY", "PAUSE", "CANCEL", "RESET", "REPLAY"].map((command) => [
-        command,
-        {
-          arguments: object({}),
-          description:
-            {
-              NEXT: "Generate the next agent response",
-              PLAY: "Continue responses automatically",
-              PAUSE: "Stop after the current response",
-              CANCEL: "Cancel pending work",
-              RESET: "Start a new run from the authored setup",
-              REPLAY: "Replay accepted responses without calling the model",
-            }[command] ?? command,
-          timing: command === "RESET" ? "rebuild" : "live",
-        },
-      ]),
+      ["NEXT", "PLAY", "PAUSE", "CANCEL", "RESET", "REPLAY", "RESUME"].map(
+        (command) => [
+          command,
+          {
+            arguments: object({}),
+            description:
+              {
+                RESUME:
+                  "Restore the previous run for this setup from the browser tab",
+                NEXT: "Generate the next agent response",
+                PLAY: "Continue responses automatically",
+                PAUSE: "Stop after the current response",
+                CANCEL: "Cancel pending work",
+                RESET: "Start a new run from the authored setup",
+                REPLAY: "Replay accepted responses without calling the model",
+              }[command] ?? command,
+            timing: command === "RESET" ? "rebuild" : "live",
+          },
+        ],
+      ),
     ),
     assumptions: [
       "Generated arguments are not verified facts.",
@@ -110,6 +118,20 @@ export const agentDefinitions: PublicDefinition[] = [
   {
     ...display("displays/AgentProfile", "Agent profile", "agent/profile"),
     description: "Inspect one agent's persona and objective.",
+    inputs: {
+      value: {
+        kind: "value",
+        unit: "agent/profile",
+        optional: true,
+        crossScope: true,
+      },
+      session: {
+        kind: "value",
+        unit: "agent/session",
+        optional: true,
+        crossScope: true,
+      },
+    },
   },
   {
     ...display(
@@ -127,10 +149,41 @@ export const agentDefinitions: PublicDefinition[] = [
       "Step, continue, pause, cancel, or restart a connected agent environment.",
     inputs: { value: { kind: "value", unit: "agent/session", optional: true } },
     outputs: Object.fromEntries(
-      ["NEXT", "PLAY", "PAUSE", "CANCEL", "RESET", "REPLAY"].map((command) => [
-        command,
-        { kind: "event", unit: "", schema: object({}) },
-      ]),
+      ["NEXT", "PLAY", "PAUSE", "CANCEL", "RESET", "REPLAY", "RESUME"].map(
+        (command) => [command, { kind: "event", unit: "", schema: object({}) }],
+      ),
     ),
   },
 ];
+
+const sessionDefinition = agentDefinitions.find(
+  (definition) => definition.id === "models/AgentSession",
+);
+if (!sessionDefinition) throw new Error("Agent session definition is missing.");
+agentDefinitions.push({
+  ...structuredClone(sessionDefinition),
+  id: "models/DebateSession",
+  title: "AI debate session",
+  description:
+    "A motion, two teams of three, and eighteen speeches in opening, rebuttal, and closing rounds. Connect six independent AI agents.",
+  runtimeProvider: "models/DebateSession",
+  configuration: debateSessionSchema,
+  defaults: { ...debateDefaults },
+  lifecycle: {
+    ...sessionDefinition.lifecycle,
+    authored: Object.keys(debateDefaults),
+  },
+  commands: {
+    ...sessionDefinition.commands,
+    RESTART: {
+      arguments: object({}),
+      description: "Start a fresh debate and retain the previous transcript",
+      timing: "live",
+    },
+  },
+  assumptions: [
+    ...sessionDefinition.assumptions,
+    "Rebuttal links establish valid references, not meaningful engagement or truth.",
+    "One comparison cannot establish a causal personality effect.",
+  ],
+});

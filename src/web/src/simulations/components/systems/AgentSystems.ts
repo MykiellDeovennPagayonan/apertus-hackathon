@@ -18,6 +18,7 @@ export function validateRunConfiguration(
     Object.keys(config).some(
       (key) =>
         ![
+          "scenario",
           "schemaVersion",
           "agents",
           "environment",
@@ -35,6 +36,14 @@ export function validateRunConfiguration(
     config.agents.length > 12
   )
     throw new AgentError("Configure between one and twelve agents.");
+  if (
+    config.scenario !== undefined &&
+    (!config.scenario ||
+      typeof config.scenario !== "object" ||
+      typeof config.scenario.kind !== "string" ||
+      !Number.isInteger(config.scenario.version))
+  )
+    throw new AgentError("Invalid scenario configuration.");
   const ids = new Set<string>();
   for (const agent of config.agents) {
     if (
@@ -127,7 +136,7 @@ export function agentContext(observation: AgentObservation) {
     },
     {
       role: "user",
-      content: `Observation: ${JSON.stringify(observation)}\n${latest ? `When speaking, respond directly to ${latest.name}'s latest point and include "${latest.id}" in references.` : "Introduce one concrete idea about the environment."}\nRequired JSON shape (include EVERY field; no extra fields): ${JSON.stringify(examples)}\nReturn exactly ONE object matching one of these examples, replacing its sample content.`,
+      content: `Observation: ${JSON.stringify(observation)}\n${observation.instruction ?? (latest ? `When speaking, respond directly to ${latest.name}'s latest point and include "${latest.id}" in references.` : "Introduce one concrete idea about the environment.")}\nRequired JSON shape (include EVERY field; no extra fields): ${JSON.stringify(examples)}\nReturn exactly ONE object matching one of these examples, replacing its sample content.`,
     },
   ];
 }
@@ -195,19 +204,7 @@ export function applyAgentProposal(
 ): AgentRun {
   const p = parseAgentProposal(proposal),
     observation = observeAgent(run, actor);
-  if (!observation.allowed.includes(p.action))
-    throw new AgentError("This agent cannot perform that action.");
-  if (
-    p.references.some(
-      (id) => !observation.events.some((event) => event.id === id),
-    )
-  )
-    throw new AgentError("Reference an event visible in this context.");
-  if (
-    p.action === "speak" &&
-    p.text.trim().split(/\s+/u).length > observation.maxWords
-  )
-    throw new AgentError(`Use at most ${observation.maxWords} words.`);
+  validateObservationProposal(observation, p);
   if (p.action === "setMetric" && !Object.hasOwn(run.metrics, p.key))
     throw new AgentError("Only an existing environment metric may be changed.");
   const next = structuredClone(run);
@@ -229,4 +226,42 @@ export function applyAgentProposal(
   next.pending = null;
   next.error = "";
   return next;
+}
+
+/** Validates model-independent bounds, including environment-supplied response constraints. */
+export function validateObservationProposal(
+  observation: AgentObservation,
+  proposal: AgentProposal,
+): void {
+  const p = parseAgentProposal(proposal);
+  if (!observation.allowed.includes(p.action))
+    throw new AgentError("This agent cannot perform that action.");
+  if (
+    p.references.some(
+      (id) => !observation.events.some((event) => event.id === id),
+    )
+  )
+    throw new AgentError("Use only visible event IDs.");
+  if (p.action === "speak") {
+    const words = p.text.trim().split(/\s+/u).length;
+    if (words > observation.maxWords || words < (observation.minWords ?? 1))
+      throw new AgentError(
+        observation.minWords
+          ? `Use ${observation.minWords}–${observation.maxWords} words.`
+          : `Use at most ${observation.maxWords} words.`,
+      );
+    if (
+      observation.requiredReferenceActors?.length &&
+      !p.references.some((id) =>
+        observation.events.some(
+          (event) =>
+            event.id === id &&
+            observation.requiredReferenceActors?.includes(event.actor),
+        ),
+      )
+    )
+      throw new AgentError(
+        "Include at least one visible opposing speech reference.",
+      );
+  }
 }

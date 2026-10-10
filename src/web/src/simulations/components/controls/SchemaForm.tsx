@@ -189,9 +189,14 @@ function Field({
           id={id}
           aria-describedby={errorId}
           aria-invalid={!!errorId || undefined}
-          value={JSON.stringify(value)}
+          value={JSON.stringify(value) ?? ""}
           onChange={(event) => onChange(JSON.parse(event.target.value))}
         >
+          {value === undefined && (
+            <option value="" disabled>
+              Not set
+            </option>
+          )}
           {choices.map((choice) => (
             <option key={JSON.stringify(choice)} value={JSON.stringify(choice)}>
               {presentation[path]?.choices?.[String(choice)] ?? String(choice)}

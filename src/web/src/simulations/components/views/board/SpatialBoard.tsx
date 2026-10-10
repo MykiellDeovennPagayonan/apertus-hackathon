@@ -97,7 +97,9 @@ export function SpatialBoard({
                 ? Math.min(720, size.width - 32)
                 : size.width - 32,
             );
-            const rowGap = size.width >= 700 ? 96 : size.width <= 340 ? 16 : 80;
+            const rowGap =
+              next.responsiveGap ??
+              (size.width >= 700 ? 96 : size.width <= 340 ? 16 : 80);
             let top = 0;
             let openingHeight = 0;
             const rows =
@@ -539,8 +541,15 @@ export function SpatialBoard({
         }
       : area;
   const freeCanvas = !!workspace;
+  // Accepted content may grow; it must not shrink or recenter the learner's view.
+  // The opening frame comes from authored bounds, while navigation uses live bounds.
+  const openingArea =
+    !authoring && sourcePresentation
+      ? (sourcePresentation.learnerArea ??
+        extent(sourcePresentation.items.map((item) => item.rect)))
+      : area;
   const initial = freeCanvas
-    ? fit(area, size.width, size.height)
+    ? fit(openingArea, size.width, size.height)
     : fit(
         p.startView,
         Math.max(1, size.width - 48),
@@ -873,6 +882,13 @@ export function SpatialBoard({
         ),
       );
   };
+  // Reflowed lessons zoom from their opening corner, keeping the first action reachable.
+  const zoomFromToolbar = (factor: number) =>
+    zoom(
+      factor,
+      autoLayout && !authoring ? 16 - size.width / 2 : 0,
+      autoLayout && !authoring ? 96 - size.height / 2 : 0,
+    );
   const fitContent = () => {
     const next = fit(
       authoring ? extent(p.items.map((i) => i.rect)) : area,
@@ -1016,7 +1032,7 @@ export function SpatialBoard({
                 icon="zoom-out"
                 label="Zoom out"
                 disabled={fixed}
-                onClick={() => zoom(1 / 1.2)}
+                onClick={() => zoomFromToolbar(1 / 1.2)}
               />
               <output aria-label="Board zoom">
                 {Math.round(c.zoom * 100)}%
@@ -1025,7 +1041,7 @@ export function SpatialBoard({
                 icon="zoom-in"
                 label="Zoom in"
                 disabled={fixed}
-                onClick={() => zoom(1.2)}
+                onClick={() => zoomFromToolbar(1.2)}
               />
               <SceneIconButton
                 icon="fit"
@@ -1228,6 +1244,25 @@ export function SpatialBoard({
               at your smallest target screen size and capture a smaller starting
               frame if needed.
             </p>
+          )}
+          {p.responsive && (
+            <label>
+              Space between narrow-screen rows (px)
+              <input
+                type="number"
+                aria-label="Space between narrow-screen rows"
+                min="8"
+                max="128"
+                value={p.responsiveGap ?? 80}
+                onChange={(event) => {
+                  const gap = Number(event.target.value);
+                  if (Number.isFinite(gap) && gap >= 8 && gap <= 128)
+                    update((next) => {
+                      next.responsiveGap = gap;
+                    });
+                }}
+              />
+            </label>
           )}
           <label>
             Learner navigation

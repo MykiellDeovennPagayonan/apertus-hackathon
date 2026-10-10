@@ -99,6 +99,7 @@ if (process.argv.includes("--capture")) {
   const added = [
     "models/AIAgent",
     "models/AgentSession",
+    "models/DebateSession",
     "controls/AgentActions",
     "displays/AgentProfile",
     "displays/AgentTranscript",
@@ -110,6 +111,8 @@ if (process.argv.includes("--capture")) {
   }
   assert.ok(current.compositeCards["agent-conversation"]);
   delete current.compositeCards["agent-conversation"];
+  assert.ok(current.compositeCards.debate);
+  delete current.compositeCards.debate;
   assert.deepEqual(
     current,
     JSON.parse(fs.readFileSync(fixture, "utf8")),

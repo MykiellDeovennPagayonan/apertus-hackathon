@@ -5,12 +5,13 @@ import recipe2 from "../../pre-made/arithmetic/recipe.json";
 import recipe3 from "../../pre-made/bridge/recipe.json";
 import recipe4 from "../../pre-made/coordinates/recipe.json";
 import recipe5 from "../../pre-made/counting/recipe.json";
-import recipe6 from "../../pre-made/equal-groups/recipe.json";
-import recipe7 from "../../pre-made/fraction-builder/recipe.json";
-import recipe8 from "../../pre-made/fraction-number-line/recipe.json";
-import recipe9 from "../../pre-made/probability/recipe.json";
-import recipe10 from "../../pre-made/projectile/recipe.json";
-import recipe11 from "../../pre-made/ratio/recipe.json";
+import recipe6 from "../../pre-made/debate/recipe.json";
+import recipe7 from "../../pre-made/equal-groups/recipe.json";
+import recipe8 from "../../pre-made/fraction-builder/recipe.json";
+import recipe9 from "../../pre-made/fraction-number-line/recipe.json";
+import recipe10 from "../../pre-made/probability/recipe.json";
+import recipe11 from "../../pre-made/projectile/recipe.json";
+import recipe12 from "../../pre-made/ratio/recipe.json";
 export const premadeSources = {
   "agent-conversation": recipe0,
   "area-perimeter": recipe1,
@@ -18,10 +19,11 @@ export const premadeSources = {
   "bridge": recipe3,
   "coordinates": recipe4,
   "counting": recipe5,
-  "equal-groups": recipe6,
-  "fraction-builder": recipe7,
-  "fraction-number-line": recipe8,
-  "probability": recipe9,
-  "projectile": recipe10,
-  "ratio": recipe11,
+  "debate": recipe6,
+  "equal-groups": recipe7,
+  "fraction-builder": recipe8,
+  "fraction-number-line": recipe9,
+  "probability": recipe10,
+  "projectile": recipe11,
+  "ratio": recipe12,
 } as const;

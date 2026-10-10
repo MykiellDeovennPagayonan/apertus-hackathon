@@ -1,6 +1,7 @@
 import type { Snapshot } from "../authoring/runtime";
 import type { AuthoredDocument } from "../authoring/types";
 import type { AgentRunView } from "./contracts";
+import { browserHandleStore, type RunHandleStore } from "./handleStore";
 import { type SessionProjection, sessionProjection } from "./providers";
 
 export type AgentTransport = (
@@ -51,11 +52,12 @@ export class AgentEffects {
       patch: Partial<SessionProjection>,
     ) => void,
     private transport: AgentTransport = httpAgentTransport,
+    private handles: RunHandleStore = browserHandleStore,
   ) {}
   reconcile() {
     if (this.disposed) return;
-    const nodes = this.document().nodes.filter(
-      (node) => node.definition === "models/AgentSession",
+    const nodes = this.document().nodes.filter((node) =>
+      ["models/AgentSession", "models/DebateSession"].includes(node.definition),
     );
     for (const [id, work] of this.work) {
       const state = this.read().state[id];
@@ -108,15 +110,46 @@ export class AgentEffects {
       if (!controller.signal.aborted && !this.disposed)
         this.publish(node, initial.generation, value);
     };
+    const cacheKey = JSON.stringify({
+      node,
+      agents: initial.agents,
+      topic: initial.topic,
+      maxSteps: initial.maxSteps,
+      maxWords: initial.maxWords,
+      scenario: initial.scenario,
+    });
     let handle = initial.handle;
     try {
       let view = initial.view;
+      if (initial.resuming) {
+        handle = this.handles.read(cacheKey);
+        if (!handle)
+          throw new Error(
+            "No saved run is available for this setup in this browser tab.",
+          );
+        const result = await this.transport(
+          { operation: "read", handle },
+          controller.signal,
+        );
+        if (!result.run)
+          throw new Error(result.error || "Saved run unavailable.");
+        patch({
+          handle,
+          view: result.run,
+          busy: false,
+          playing: false,
+          resuming: false,
+          persistence: handle.token ? "process" : "database",
+        });
+        return;
+      }
       if (!handle) {
         const result = await this.transport(
           {
             operation: "create",
             configuration: {
               schemaVersion: 1,
+              ...(initial.scenario ? { scenario: initial.scenario } : {}),
               agents: initial.agents,
               environment: initial.topic,
               maxSteps: initial.maxSteps,
@@ -129,6 +162,7 @@ export class AgentEffects {
         if (!result.handle || !result.run)
           throw new Error("Could not create this run.");
         handle = result.handle;
+        this.handles.write(cacheKey, handle);
         const work = this.work.get(node);
         if (work?.controller === controller) work.handle = handle;
         view = result.run;
@@ -173,8 +207,14 @@ export class AgentEffects {
           }
         patch({
           busy: false,
+          resuming: false,
           playing: false,
-          error: error instanceof Error ? error.message : "Agent unavailable.",
+          error:
+            view && view.count > (initial.view?.count ?? 0)
+              ? ""
+              : error instanceof Error
+                ? error.message
+                : "Agent unavailable.",
           ...(view ? { view } : {}),
         });
       }

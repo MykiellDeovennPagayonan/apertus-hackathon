@@ -281,7 +281,7 @@ export function retrieveComponentBucket(
     }
     if (contains(query, card.title)) score += 5;
     if (contains(query, id)) score += 6;
-    for (const word of words(card.title).split(" ")) {
+    for (const word of new Set(words(card.title).split(" "))) {
       if (word.length > 3 && contains(query, word)) score += 2;
     }
     // Baseline scores for essential UI scaffolding

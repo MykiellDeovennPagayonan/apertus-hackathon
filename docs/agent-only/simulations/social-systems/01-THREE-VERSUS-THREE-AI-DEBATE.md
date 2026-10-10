@@ -1,7 +1,7 @@
 # 01 — Three-versus-three AI debate
 
 Date: 2026-10-09  
-Status: Proposed simulation concept; defaults below are design proposals.  
+Status: Protocol and shared-builder experience implemented on 2026-10-10; live Apertus acceptance remains pending approval. See [implementation evidence and release gaps](01-THREE-VERSUS-THREE-AI-DEBATE-IMPLEMENTATION-EVIDENCE.md).
 Dependency: [021 — AI agent simulation foundations](../../implementation/021-AI-AGENT-SIMULATION-FOUNDATIONS.md).
 
 ## 1. Concept and learning question
@@ -65,7 +65,7 @@ The model returns a speech proposal with optional links to earlier messages and 
 
 ## 6. Composition in the existing builder
 
-The target premade lives at `src/web/src/simulations/pre-made/debate/recipe.json` and loads through the normal shared registry. This path is proposed; the concept document does not add a recipe or advertise a capability that has no implementation.
+The target premade lives at `src/web/src/simulations/pre-made/debate/recipe.json` and loads through the normal shared registry. The recipe and registered debate session are implemented; live model quality remains a separate acceptance gate.
 
 | Piece | Ownership | Connection |
 | --- | --- | --- |

@@ -100,7 +100,9 @@ export class DocumentRuntime {
           JSON.stringify(authored(n.configuration));
       staged.state[n.id] = same
         ? structuredClone(this.snapshot.state[n.id])
-        : p.initialize(n);
+        : previous?.definition === n.definition && p.reinitialize
+          ? p.reinitialize(this.snapshot.state[n.id], n)
+          : p.initialize(n);
       if (same && def.lifecycle.presentation.length)
         for (const key of def.lifecycle.presentation)
           if (Object.hasOwn(n.configuration, key))

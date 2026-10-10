@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "test": "node scripts/recipes/verify-structure.cjs && node scripts/recipes/verify-contract.cjs && node scripts/verify-control-contracts.cjs && node scripts/verify-component-cleanup.cjs && node scripts/verify-gas-recipe.cjs && node scripts/verify-component-completion.cjs && node scripts/verify-inspector-presentation.cjs && node scripts/verify-data-presentation.cjs && node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs && node scripts/builder/verify-builder.cjs && node scripts/builder/verify-composition.cjs && node scripts/builder/verify-composition-graph.cjs && node scripts/builder/verify-canvas-editor.cjs && node scripts/builder/verify-builder-parity.cjs && node scripts/builder/verify-architecture.cjs && node scripts/builder/verify-public-catalog.cjs && node scripts/builder/verify-spatial-catalog.cjs && node scripts/builder/verify-unified-builder.cjs && node scripts/builder/verify-builder-ux-reliability.cjs && node scripts/builder/verify-spatial-board.cjs && node scripts/builder/verify-decorations.cjs && node scripts/generation/verify-contract.cjs && node scripts/generation/verify-architecture.cjs && node scripts/generation/verify-faults.cjs && node scripts/generation/verify-open-composition.cjs && node scripts/projects/verify-contract.cjs && node scripts/generation/verify-providers.cjs && node scripts/generation/verify-decision-providers.cjs && node scripts/generation/verify-realistic-contracts.cjs && node scripts/agents/verify-core.cjs && node scripts/agents/verify-providers.cjs",
+    "test": "node scripts/recipes/verify-structure.cjs && node scripts/recipes/verify-contract.cjs && node scripts/verify-control-contracts.cjs && node scripts/verify-component-cleanup.cjs && node scripts/verify-gas-recipe.cjs && node scripts/verify-component-completion.cjs && node scripts/verify-inspector-presentation.cjs && node scripts/verify-data-presentation.cjs && node scripts/verify-simulations.cjs && node scripts/verify-integration.cjs && node scripts/builder/verify-builder.cjs && node scripts/builder/verify-composition.cjs && node scripts/builder/verify-composition-graph.cjs && node scripts/builder/verify-canvas-editor.cjs && node scripts/builder/verify-builder-parity.cjs && node scripts/builder/verify-architecture.cjs && node scripts/builder/verify-public-catalog.cjs && node scripts/builder/verify-spatial-catalog.cjs && node scripts/builder/verify-unified-builder.cjs && node scripts/builder/verify-builder-ux-reliability.cjs && node scripts/builder/verify-spatial-board.cjs && node scripts/builder/verify-decorations.cjs && node scripts/generation/verify-contract.cjs && node scripts/generation/verify-architecture.cjs && node scripts/generation/verify-faults.cjs && node scripts/generation/verify-open-composition.cjs && node scripts/projects/verify-contract.cjs && node scripts/generation/verify-providers.cjs && node scripts/generation/verify-decision-providers.cjs && node scripts/generation/verify-realistic-contracts.cjs && node scripts/agents/verify-core.cjs && node scripts/agents/verify-providers.cjs && node scripts/agents/verify-debate.cjs",
     "test:gas-recipe": "node scripts/verify-gas-recipe.cjs",
     "test:browser": "node scripts/generation/verify-fixture-browser.cjs",
     "test:components:browser": "node scripts/verify-component-presentation-browser.cjs && node scripts/verify-data-presentation-browser.cjs && node scripts/verify-component-completion-browser.cjs",
@@ -75,7 +75,11 @@
     "test:agents": "node scripts/agents/verify-core.cjs && node scripts/agents/verify-providers.cjs",
     "test:agents:live": "node scripts/agents/verify-live.cjs",
     "test:agents:browser": "node scripts/agents/verify-browser.cjs",
-    "test:agents:database": "node scripts/agents/verify-mongo.cjs"
+    "test:agents:database": "node scripts/agents/verify-mongo.cjs",
+    "test:debate": "node scripts/agents/verify-debate.cjs",
+    "test:debate:browser": "node scripts/agents/verify-debate-browser.cjs",
+    "test:debate:live": "node scripts/agents/verify-debate-live.cjs",
+    "test:agents:presentation": "node scripts/agents/verify-presentation-browser.cjs"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "3.11.3",
