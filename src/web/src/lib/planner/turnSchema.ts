@@ -230,10 +230,10 @@ export function buildTurnTools(
   return tools;
 }
 
-/**
- * Builds the turn schema envelope { action: "tool" | "done", tool?: ToolRequest, note?: string }
- */
-export function buildTurnEnvelopeSchema(tools: AllowedTurnTool[]): JsonSchema {
+export function buildTurnEnvelopeSchema(
+  tools: AllowedTurnTool[],
+  allowDone = true,
+): JsonSchema {
   const toolChoices = tools.map((t) =>
     toJsonSchema(
       object({
@@ -247,13 +247,13 @@ export function buildTurnEnvelopeSchema(tools: AllowedTurnTool[]): JsonSchema {
     type: "object",
     additionalProperties: false,
     properties: {
-      action: { enum: ["tool", "done"] },
+      action: { enum: allowDone ? ["tool", "done"] : ["tool"] },
       tool: {
         type: "object",
         anyOf: toolChoices,
       },
       note: { type: "string", maxLength: 200 },
     },
-    required: ["action"],
+    required: allowDone ? ["action"] : ["action", "tool"],
   };
 }

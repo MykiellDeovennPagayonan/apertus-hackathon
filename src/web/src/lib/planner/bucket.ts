@@ -173,6 +173,153 @@ export function buildInitialCard(id: string): ComponentBucketCard | null {
   if (idLower.includes("line") || descLower.includes("slope")) {
     supports.push("line slope", "linear function", "slope", "intercept");
   }
+  if (
+    idLower.includes("titration") ||
+    descLower.includes("titration") ||
+    descLower.includes("neutralization")
+  ) {
+    supports.push(
+      "titration",
+      "acid base",
+      "neutralization",
+      "ph",
+      "equivalence point",
+      "buret",
+      "phenolphthalein",
+    );
+  }
+  if (
+    idLower.includes("gasequilibrium") ||
+    descLower.includes("gas equilibrium") ||
+    descLower.includes("le chatelier")
+  ) {
+    supports.push(
+      "gas equilibrium",
+      "le chatelier",
+      "equilibrium constant",
+      "n2o4",
+      "no2",
+      "chemical equilibrium",
+    );
+  }
+  if (
+    idLower.includes("beerlambert") ||
+    descLower.includes("beer lambert") ||
+    descLower.includes("spectrophotometry") ||
+    descLower.includes("absorbance")
+  ) {
+    supports.push(
+      "beer lambert",
+      "beer lambert law",
+      "beer's law",
+      "spectrophotometry",
+      "absorbance",
+      "transmittance",
+      "optical path length",
+      "cuvette",
+      "molar absorptivity",
+      "light attenuation",
+    );
+  }
+  if (
+    idLower.includes("galvaniccell") ||
+    descLower.includes("galvanic cell") ||
+    descLower.includes("nernst") ||
+    descLower.includes("voltaic")
+  ) {
+    supports.push(
+      "galvanic cell",
+      "voltaic cell",
+      "daniell cell",
+      "nernst equation",
+      "electrochemistry",
+      "cell potential",
+      "cell voltage",
+      "zinc and copper",
+      "salt bridge",
+      "redox",
+      "anode and cathode",
+    );
+  }
+  if (
+    idLower.includes("marketequilibrium") ||
+    descLower.includes("market equilibrium") ||
+    descLower.includes("supply and demand")
+  ) {
+    supports.push(
+      "market equilibrium",
+      "supply and demand",
+      "equilibrium price",
+      "consumer surplus",
+      "producer surplus",
+      "price control",
+      "price ceiling",
+      "deadweight loss",
+    );
+  }
+  if (
+    idLower.includes("priceelasticity") ||
+    descLower.includes("price elasticity") ||
+    descLower.includes("elasticity of demand")
+  ) {
+    supports.push(
+      "price elasticity",
+      "elasticity",
+      "total revenue",
+      "elastic",
+      "inelastic",
+      "choke price",
+    );
+  }
+  if (
+    idLower.includes("costandprofit") ||
+    descLower.includes("cost and profit") ||
+    descLower.includes("profit maximization")
+  ) {
+    supports.push(
+      "production costs",
+      "cost and profit",
+      "marginal cost",
+      "average total cost",
+      "profit maximization",
+      "fixed cost",
+      "break even",
+    );
+  }
+  if (
+    idLower.includes("tradeandtariffs") ||
+    descLower.includes("tariffs and import") ||
+    descLower.includes("trade tariffs") ||
+    descLower.includes("import tariff")
+  ) {
+    supports.push(
+      "trade tariffs",
+      "tariffs and imports",
+      "tariff",
+      "import quota",
+      "world price",
+      "tariff revenue",
+      "deadweight loss with imports",
+      "deadweight loss",
+    );
+  }
+  if (
+    idLower.includes("monopolypricing") ||
+    descLower.includes("monopoly pricing") ||
+    descLower.includes("monopoly power") ||
+    descLower.includes("market power")
+  ) {
+    supports.push(
+      "monopoly pricing",
+      "monopoly power",
+      "market power",
+      "marginal revenue",
+      "deadweight loss with market power",
+      "mark-up",
+      "lerner index",
+      "deadweight loss",
+    );
+  }
 
   return {
     id: def.id,

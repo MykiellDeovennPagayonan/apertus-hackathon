@@ -111,6 +111,46 @@ const TEST_CASES = [
     buildPrompt: "Build a circle geometry composite with radius slider and circumference readout",
     refinePrompt: "Add a diameter readout",
   },
+  {
+    id: "case-11-market-equilibrium",
+    name: "Market Equilibrium Economics",
+    description: "Supply and demand market equilibrium exploring equilibrium price, quantity, and market clearing",
+    expectedModel: "prefabs/economics/MarketEquilibrium",
+    buildPrompt: "Build a market equilibrium composite with demand shift slider and equilibrium price readout",
+    refinePrompt: "Add a price control slider and quantity readout",
+  },
+  {
+    id: "case-12-price-elasticity",
+    name: "Price Elasticity of Demand",
+    description: "Price elasticity economics exploring price elasticity of demand, total revenue, and elasticity regime",
+    expectedModel: "prefabs/economics/PriceElasticity",
+    buildPrompt: "Build a price elasticity composite with current price slider and elasticity readout",
+    refinePrompt: "Add a choke price slider and total revenue readout",
+  },
+  {
+    id: "case-13-cost-and-profit",
+    name: "Cost and Profit Economics",
+    description: "Firm production costs exploring marginal cost, average total cost, and profit maximization",
+    expectedModel: "prefabs/economics/CostAndProfit",
+    buildPrompt: "Build a cost and profit composite with market price slider and economic profit readout",
+    refinePrompt: "Add a fixed cost slider and optimal quantity readout",
+  },
+  {
+    id: "case-14-acid-base-titration",
+    name: "Acid-Base Titration Chemistry",
+    description: "Strong acid and strong base titration exploring buret titrant volume, neutralization, and pH curve",
+    expectedModel: "prefabs/chemistry/AcidBaseTitration",
+    buildPrompt: "Build an acid base titration composite with titrant volume slider and pH readout",
+    refinePrompt: "Add an analyte volume slider and hydronium concentration readout",
+  },
+  {
+    id: "case-15-gas-equilibrium",
+    name: "Gas Chemical Equilibrium",
+    description: "N2O4 to NO2 reversible gas equilibrium exploring temperature, Le Chatelier shifts, and reaction quotient",
+    expectedModel: "prefabs/chemistry/GasEquilibrium",
+    buildPrompt: "Build a gas equilibrium composite with temperature slider and reaction quotient readout",
+    refinePrompt: "Add a chamber volume slider and total pressure readout",
+  },
 ];
 
 async function executeStage(requestId, prompt, active) {
@@ -175,11 +215,21 @@ async function executeStage(requestId, prompt, active) {
   console.log(`  Base URL: ${process.env.APERTUS_LOCAL_BASE_URL} | Model: ${process.env.APERTUS_LOCAL_MODEL}`);
   console.log("===============================================================================\n");
 
+  const filterArg = process.argv[2];
+  const targetCases = filterArg
+    ? TEST_CASES.filter(
+        (c) =>
+          c.id.toLowerCase().includes(filterArg.toLowerCase()) ||
+          c.expectedModel.toLowerCase().includes(filterArg.toLowerCase()) ||
+          c.name.toLowerCase().includes(filterArg.toLowerCase()),
+      )
+    : TEST_CASES;
+
   const results = [];
 
-  for (let i = 0; i < TEST_CASES.length; i++) {
-    const testCase = TEST_CASES[i];
-    console.log(`\n>>> [${i + 1}/${TEST_CASES.length}] ${testCase.name} (${testCase.id})`);
+  for (let i = 0; i < targetCases.length; i++) {
+    const testCase = targetCases[i];
+    console.log(`\n>>> [${i + 1}/${targetCases.length}] ${testCase.name} (${testCase.id})`);
     console.log(`    Goal: ${testCase.description}`);
 
     // --- Stage A: Initial Build from Empty Canvas ---

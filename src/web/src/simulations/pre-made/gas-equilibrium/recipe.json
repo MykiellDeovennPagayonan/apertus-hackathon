@@ -1,0 +1,410 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-gas-equilibrium",
+  "version": 1,
+  "title": "Gas equilibrium & Le Chatelier",
+  "description": "How do temperature and volume shifts affect N₂O₄ ⇌ 2 NO₂ equilibrium?",
+  "tags": ["chemistry", "equilibrium", "le-chatelier", "lab"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/chemistry/GasEquilibrium",
+        "version": 1,
+        "label": "Gas equilibrium",
+        "scope": "scope/lab",
+        "configuration": {
+          "temperature": 298,
+          "volume": 5,
+          "initialN2O4": 1,
+          "initialNO2": 0
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/chemistry-gas-equilibrium",
+        "version": 1,
+        "label": "Gas equilibrium scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/temp",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Temperature (K)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Temperature (K)",
+          "mode": "immediate",
+          "initial": "{\"value\": 298}",
+          "parameter": "value",
+          "step": 5,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/vol",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Volume (L)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Volume (L)",
+          "mode": "immediate",
+          "initial": "{\"value\": 5}",
+          "parameter": "value",
+          "step": 0.5,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/pressure",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Pressure (atm)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Pressure (atm)",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/kc",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Equilibrium constant Kc",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Equilibrium constant Kc",
+          "precision": 4
+        }
+      },
+      {
+        "id": "result/no2",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "[NO₂] (mol/L)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "[NO₂] (mol/L)",
+          "precision": 3
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/pressure",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "totalPressure"
+        },
+        "to": {
+          "node": "result/pressure",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/kc",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "equilibriumConstant"
+        },
+        "to": {
+          "node": "result/kc",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/no2",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "concNO2"
+        },
+        "to": {
+          "node": "result/no2",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/temp",
+        "kind": "command",
+        "from": {
+          "node": "input/temp",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "CHEM_SET_EQ_TEMP"
+        }
+      },
+      {
+        "id": "link/input/vol",
+        "kind": "command",
+        "from": {
+          "node": "input/vol",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "CHEM_SET_EQ_VOLUME"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Gas equilibrium"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/pressure",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/pressure"
+        },
+        {
+          "id": "layout/result/kc",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/kc"
+        },
+        {
+          "id": "layout/result/no2",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/no2"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Conditions",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/temp",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/temp"
+            },
+            {
+              "id": "layout/input/vol",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/vol"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Gas equilibrium & Le Chatelier",
+      "instruction": "Shift temperature and cylinder volume. Watch the gas color change as NO₂ concentration responds.",
+      "explanation": "N₂O₄ ⇌ 2 NO₂ is endothermic. Heating shifts equilibrium to brown NO₂. Compressing volume increases pressure, favoring colorless N₂O₄ with fewer gas moles."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 350
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/result/pressure",
+          "layoutId": "layout/result/pressure",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/kc",
+          "layoutId": "layout/result/kc",
+          "rect": {
+            "x": 822,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/no2",
+          "layoutId": "layout/result/no2",
+          "rect": {
+            "x": 644,
+            "y": 126,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 252,
+            "width": 340,
+            "height": 180
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/appearance"],
+        ["board/layout/task"],
+        ["board/layout/result/pressure", "board/layout/result/kc"],
+        ["board/layout/result/no2"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "temperature",
+      "node": "model",
+      "field": "temperature",
+      "schema": {
+        "type": "number",
+        "minimum": 250,
+        "maximum": 450,
+        "unit": "K"
+      },
+      "default": 298
+    },
+    {
+      "name": "volume",
+      "node": "model",
+      "field": "volume",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 20,
+        "unit": "L"
+      },
+      "default": 5
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/chemistry/GasEquilibrium",
+      "version": 1
+    },
+    {
+      "id": "appearance/chemistry-gas-equilibrium",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Reversible gas reaction N₂O₄ ⇌ 2 NO₂ in a closed container.",
+    "Ideal gas behavior and temperature-dependent equilibrium constant."
+  ],
+  "catalog": {
+    "icon": "⚖",
+    "category": "chemistry",
+    "order": 14
+  }
+}

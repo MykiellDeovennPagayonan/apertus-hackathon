@@ -7,6 +7,7 @@ import { collective } from "../domains/collective";
 import { dynamicSystems } from "../domains/dynamic-systems";
 import { earthAtmosphere } from "../domains/earth-atmosphere";
 import { ecology } from "../domains/ecology";
+import { economics } from "../domains/economics";
 import { mathFoundations } from "../domains/math-foundations";
 import {
   mathGeometry,
@@ -52,6 +53,7 @@ export const domainContributions: readonly DomainContribution[] = immutable([
   biogeochemistry,
   collective,
   earthAtmosphere,
+  economics,
 ]);
 export const assemblyModels: readonly DomainModel[] =
   domainContributions.flatMap((d) => d.models);
@@ -96,6 +98,11 @@ export const assemblyPresentationContracts = {
   "chemistry-dilution": true,
   "chemistry-conservation": true,
   "chemistry-rate": true,
+  "chemistry-titration": true,
+  "chemistry-gas-equilibrium": true,
+  "chemistry-phase-change": true,
+  "chemistry-beer-lambert": true,
+  "chemistry-galvanic-cell": true,
   "physical-pendulum": true,
   "physical-track": true,
   "physical-circuit": true,
@@ -105,6 +112,11 @@ export const assemblyPresentationContracts = {
   "dynamic-growth": true,
   "dynamic-traffic": true,
   "dynamic-queue": true,
+  "economics-market-equilibrium": true,
+  "economics-price-elasticity": true,
+  "economics-cost-and-profit": true,
+  "economics-trade-and-tariffs": true,
+  "economics-monopoly-pricing": true,
 };
 export function validateAssemblyInstances(instances: readonly ModelInstance[]) {
   for (const contribution of domainContributions)

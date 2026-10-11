@@ -555,7 +555,7 @@ export function SpatialBoard({
   // NEVER reserve or clip canvas space for UI. Workspace navigation, tools, and
   // the composer must float above the full canvas. Do not override this rule by
   // subtracting their sizes from the viewport or applying chrome-based clipping.
-  const topClearance = workspace ? 0 : 24;
+  const topClearance = workspace ? (size.width < 700 ? 128 : 0) : 24;
   const bottomClearance = workspace ? 0 : 24;
   const navigationArea =
     workspace && p.navigation.mode !== "fixed"
@@ -573,7 +573,7 @@ export function SpatialBoard({
       ? (sourcePresentation.learnerArea ??
         extent(sourcePresentation.items.map((item) => item.rect)))
       : area;
-  const initial = freeCanvas
+  const initial = freeCanvas && !autoLayout
     ? fit(openingArea, size.width, size.height)
     : fit(
         p.startView,
@@ -587,8 +587,8 @@ export function SpatialBoard({
       p.navigation.maxZoom,
     );
   if (
-    !freeCanvas &&
-    (autoLayout || (workspace && !authoring && p.navigation.mode !== "fixed"))
+    autoLayout ||
+    (!freeCanvas && (workspace && !authoring && p.navigation.mode !== "fixed"))
   ) {
     initial.zoom =
       (autoLayout && !requestedAutoLayout) || p.responsive

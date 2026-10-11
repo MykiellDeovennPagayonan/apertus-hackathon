@@ -23,6 +23,33 @@ import {
 import { operationDefinitions } from "./operations";
 import { scienceDefinitions } from "./science";
 import { spatialDefinitions } from "./spatial";
+import {
+  acidBaseTitrationTeaching,
+  beerLambertTeaching,
+  conservationTeaching,
+  costAndProfitTeaching,
+  galvanicCellTeaching,
+  gasEquilibriumTeaching,
+  marketEquilibriumTeaching,
+  monopolyPricingTeaching,
+  phaseChangeTeaching,
+  priceElasticityTeaching,
+  tradeAndTariffsTeaching,
+} from "./teaching";
+
+const domainTeachingMap: Record<string, PublicDefinition["teaching"]> = {
+  "prefabs/economics/MarketEquilibrium": marketEquilibriumTeaching,
+  "prefabs/economics/PriceElasticity": priceElasticityTeaching,
+  "prefabs/economics/CostAndProfit": costAndProfitTeaching,
+  "prefabs/economics/TradeAndTariffs": tradeAndTariffsTeaching,
+  "prefabs/economics/MonopolyPricing": monopolyPricingTeaching,
+  "prefabs/chemistry/AcidBaseTitration": acidBaseTitrationTeaching,
+  "prefabs/chemistry/GasEquilibrium": gasEquilibriumTeaching,
+  "prefabs/chemistry/PhaseChange": phaseChangeTeaching,
+  "prefabs/chemistry/BeerLambert": beerLambertTeaching,
+  "prefabs/chemistry/GalvanicCell": galvanicCellTeaching,
+  "prefabs/chemistry/Conservation": conservationTeaching,
+};
 
 /** Data-only definitions; executable legacy implementations are adapted in runtime/authoring/providers. */
 export const publicDefinitions = new Map<string, PublicDefinition>();
@@ -161,6 +188,7 @@ for (const m of assemblyModels) {
     description: m.description,
     category: "models",
     tags: [m.ref.split("/")[1], m.presentation, ...(m.tags ?? [])],
+    teaching: domainTeachingMap[m.ref],
     configuration: m.parameters,
     defaults: m.defaults,
     inputs: {},
