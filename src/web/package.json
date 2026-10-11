@@ -23,6 +23,8 @@
     "test:builder:parity:browser": "node scripts/verify-builder-parity-browser.cjs",
     "test:builder": "node scripts/builder/verify-builder.cjs",
     "test:database": "node scripts/database/verify-library.cjs && node scripts/database/verify-api.cjs",
+    "test:deployment": "node scripts/deployment/verify-offline.cjs",
+    "test:deployment:browser": "node scripts/deployment/verify-offline-browser.cjs",
     "test:builder:browser": "node scripts/verify-unified-builder-browser.cjs && node scripts/verify-spatial-catalog-browser.cjs && node scripts/verify-builder-ux-reliability-browser.cjs",
     "test:composition": "node scripts/builder/verify-composition.cjs && node scripts/builder/verify-composition-graph.cjs && node scripts/builder/verify-architecture.cjs",
     "test:composition:browser": "node scripts/verify-composition-browser.cjs",

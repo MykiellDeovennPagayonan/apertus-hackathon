@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useOffline } from "../../app/_components/DeploymentProvider";
 import PublishDialog from "../../app/_components/PublishDialog";
 import UnsavedDialog from "../../app/_components/UnsavedDialog";
 import {
@@ -47,6 +48,7 @@ import {
 const message = (e: unknown) =>
   e instanceof Error ? e.message : "Something went wrong";
 export default function Builder() {
+  const offline = useOffline();
   const { data: account } = useSession();
   const ownerId = account?.user.id;
   const params = useSearchParams();
@@ -210,6 +212,10 @@ export default function Builder() {
         const query = new URLSearchParams(queryKey);
         const requestedProject = query.get("project");
         const publicId = query.get("community") ?? query.get("insert");
+        if (offline && publicId)
+          throw new Error(
+            "Community imports are unavailable offline. Import a downloaded recipe instead.",
+          );
         if (query.has("new")) {
           const fresh = createFreshDocument();
           open(fresh);
@@ -364,7 +370,7 @@ export default function Builder() {
     return () => {
       disposed = true;
     };
-  }, [open, ownerId, queryKey]);
+  }, [open, ownerId, queryKey, offline]);
   useEffect(() => {
     if (!ready || !doc || !valid || playingSaved) return;
     try {
@@ -882,15 +888,17 @@ export default function Builder() {
               >
                 Download recipe
               </button>
-              <button
-                type="button"
-                disabled={!ownerId || saving || !sharingAllowed}
-                onClick={() => {
-                  void reviewPublication();
-                }}
-              >
-                Publish
-              </button>
+              {!offline && (
+                <button
+                  type="button"
+                  disabled={!ownerId || saving || !sharingAllowed}
+                  onClick={() => {
+                    void reviewPublication();
+                  }}
+                >
+                  Publish
+                </button>
+              )}
               <Link
                 href="/projects"
                 onClick={(event) => {
@@ -900,15 +908,17 @@ export default function Builder() {
               >
                 My projects
               </Link>
-              <Link
-                href="/community"
-                onClick={(event) => {
-                  event.preventDefault();
-                  requestTransition(() => router.push("/community"));
-                }}
-              >
-                Community
-              </Link>
+              {!offline && (
+                <Link
+                  href="/community"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    requestTransition(() => router.push("/community"));
+                  }}
+                >
+                  Community
+                </Link>
+              )}
             </div>
           }
           storageNotice={
@@ -934,8 +944,12 @@ export default function Builder() {
                 <>
                   You're working locally. Browser data can be cleared; download
                   a recipe to keep a portable copy.{" "}
-                  <Link href="/auth/sign-in">Sign in</Link> to save to your
-                  account and publish.
+                  {!offline && (
+                    <>
+                      <Link href="/auth/sign-in">Sign in</Link> to save to your
+                      account and publish.
+                    </>
+                  )}
                 </>
               )}
             </div>

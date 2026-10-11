@@ -2,6 +2,7 @@ import { env } from "node:process";
 import { getLibrarySession } from "../auth/server";
 import { getDatabase } from "../database/client";
 import { LibraryError, LibraryRepository } from "../database/LibraryRepository";
+import { offlineEnabled } from "../deployment";
 
 const BYTE_LIMIT = 2_000_000;
 
@@ -52,6 +53,14 @@ export async function handleLibraryRequest(
       headers: { "Cache-Control": "no-store" },
     });
   try {
+    if (offlineEnabled())
+      return respond(
+        {
+          message:
+            "Account and community services are disabled in offline mode.",
+        },
+        503,
+      );
     const session = await getLibrarySession();
     if (!session?.user.id)
       throw new LibraryError("Sign in to access your library.", 401);

@@ -1,0 +1,117 @@
+name: apertus-pi
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "5m"
+    max-file: "2"
+
+services:
+  apertus:
+    platform: linux/arm64
+    build:
+      context: ../..
+      dockerfile: deploy/raspberry-pi/Dockerfile.apertus
+    command:
+      - --model
+      - /models/apertus-v1.5-8b-text-q4_k_m.gguf
+      - --alias
+      - apertus-v1.5-8b-text
+      - --host
+      - 0.0.0.0
+      - --port
+      - "43101"
+      - --ctx-size
+      - "${APERTUS_CONTEXT_TOKENS:-8192}"
+      - --threads
+      - "${APERTUS_THREADS:-3}"
+      - --threads-batch
+      - "${APERTUS_THREADS:-3}"
+      - --parallel
+      - "1"
+      - --n-gpu-layers
+      - "0"
+      - --jinja
+      - --metrics
+    volumes:
+      - ./models/apertus:/models:ro
+    networks: [inference]
+    restart: unless-stopped
+    logging: *logging
+
+  laya:
+    platform: linux/arm64
+    build:
+      context: ../..
+      dockerfile: src/inference/Dockerfile.laya
+    environment:
+      LAYA_THREADS: "${LAYA_THREADS:-1}"
+      OMP_NUM_THREADS: "${LAYA_THREADS:-1}"
+      MKL_NUM_THREADS: "${LAYA_THREADS:-1}"
+    volumes:
+      - ./models/laya:/models/laya:ro
+      - laya-cache:/models/cache
+    networks: [inference]
+    restart: unless-stopped
+    logging: *logging
+
+  web:
+    platform: linux/arm64
+    build:
+      context: ../..
+      dockerfile: src/web/Dockerfile
+    environment:
+      OFFLINE: "true"
+      LLM_PROVIDER: apertus
+      APERTUS_PROVIDER: local
+      APERTUS_LOCAL_RUNTIME: llamacpp
+      APERTUS_LOCAL_BASE_URL: http://apertus:43101/v1
+      APERTUS_LOCAL_MODEL: apertus-v1.5-8b-text
+      APERTUS_CONTEXT_TOKENS: "${APERTUS_CONTEXT_TOKENS:-8192}"
+      APERTUS_STRUCTURED_OUTPUT: auto
+      APERTUS_TIMEOUT_MS: "${APERTUS_TIMEOUT_MS:-600000}"
+      APERTUS_MAX_TOKENS: "1024"
+      APERTUS_MAX_CONCURRENT_REQUESTS: "1"
+      PLANNER_TIMEOUT_MS: "${PLANNER_TIMEOUT_MS:-600000}"
+      PLANNER_MAX_CONCURRENT_REQUESTS: "1"
+      PLANNER_MODE: hybrid
+      COMPOSITION_DECISION_POLICY: required-laya
+      DECISION_PROVIDER: laya
+      LAYA_BASE_URL: http://laya:43102
+      DECISION_TIMEOUT_MS: "30000"
+      NEXTAUTH_URL: "https://${PI_HOSTNAME:-apertus.local}"
+    ports:
+      # Local benchmark access; phones use the HTTPS proxy.
+      - "127.0.0.1:43100:3000"
+    depends_on:
+      apertus: { condition: service_healthy }
+      laya: { condition: service_healthy }
+    networks: [frontend, inference]
+    restart: unless-stopped
+    logging: *logging
+
+  proxy:
+    image: caddy:2.10.2-alpine
+    platform: linux/arm64
+    environment:
+      PI_HOSTNAME: "${PI_HOSTNAME:-apertus.local}"
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      web: { condition: service_healthy }
+    networks: [frontend]
+    restart: unless-stopped
+    logging: *logging
+
+networks:
+  frontend:
+  inference:
+    internal: true
+
+volumes:
+  laya-cache:
+  caddy-data:
+  caddy-config:

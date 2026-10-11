@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import { useOffline } from "./DeploymentProvider";
 
 export default function AccountControl({
   navigation = true,
@@ -8,15 +9,18 @@ export default function AccountControl({
   navigation?: boolean;
 }) {
   const { data } = useSession();
+  const offline = useOffline();
   return (
     <>
       {navigation && (
         <>
-          <Link href="/community">Community</Link>{" "}
+          {!offline && <Link href="/community">Community</Link>}{" "}
           <Link href="/projects">My projects</Link>{" "}
         </>
       )}
-      {data?.user.id ? (
+      {offline ? (
+        <span>Saved on this device</span>
+      ) : data?.user.id ? (
         <button
           type="button"
           onClick={() => void signOut({ callbackUrl: "/" })}

@@ -19,9 +19,11 @@ import type {
 import { RecipeRepository } from "../../simulations/builder/library/RecipeRepository";
 import { readLibrary } from "../../simulations/builder/persistence/storage";
 import AccountControl from "../_components/AccountControl";
+import { useOffline } from "../_components/DeploymentProvider";
 import NameAvailability from "../_components/NameAvailability";
 import PublishDialog from "../_components/PublishDialog";
 export default function Projects() {
+  const offline = useOffline();
   const { data } = useSession(),
     owner = data?.user.id;
   const [entries, setEntries] = useState<ProjectSummary[]>([]),
@@ -154,12 +156,16 @@ export default function Projects() {
         <Link href="/">Apertus</Link>
         <nav>
           <Link href="/experiments/builder?new=1">New experiment</Link>
-          <Link href="/community">Community</Link>
+          {!offline && <Link href="/community">Community</Link>}
           <AccountControl navigation={false} />
         </nav>
       </header>
       <h1>My projects</h1>
-      <p>Save privately. Publish a snapshot when you are ready to share.</p>
+      <p>
+        {offline
+          ? "Projects are saved in this browser. Export a copy to keep a backup."
+          : "Save privately. Publish a snapshot when you are ready to share."}
+      </p>
       {error && (
         <p role="alert" className="project-error">
           {error}
@@ -169,8 +175,13 @@ export default function Projects() {
       {!owner && (
         <p className="local-notice">
           You're working locally. Browser data can be cleared; download recipes
-          to keep a portable copy. <Link href="/auth/sign-in">Sign in</Link> to
-          save to your account and publish.
+          to keep a portable copy.{" "}
+          {!offline && (
+            <>
+              <Link href="/auth/sign-in">Sign in</Link> to save to your account
+              and publish.
+            </>
+          )}
         </p>
       )}
       {owner && (
@@ -312,8 +323,9 @@ export default function Projects() {
         <section>
           <h2>Saved on this device</h2>
           <p>
-            Import is explicit. Local originals are retained after a successful
-            account save.
+            {offline
+              ? "Download recipes to keep portable copies of your work."
+              : "Import is explicit. Local originals are retained after a successful account save."}
           </p>
           <div className="project-grid">
             {local.map((item) => (

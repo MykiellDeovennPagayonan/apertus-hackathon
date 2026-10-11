@@ -1,0 +1,17 @@
+FROM python:3.12.12-slim-bookworm
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 USE_TF=0 \
+    HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 HF_HOME=/models/cache \
+    LAYA_BACKEND=torch LAYA_DEVICE=cpu LAYA_DTYPE=float32 \
+    LAYA_HOST=0.0.0.0 LAYA_PORT=43102 LAYA_MODEL=/models/laya LAYA_THREADS=1
+WORKDIR /app
+COPY src/inference/requirements-laya-cpu.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt \
+    && useradd --uid 10001 --create-home inference \
+    && mkdir -p /models/cache && chown inference:inference /models/cache
+# The upstream CPU library is also named laya. Keep the HTTP wrapper separate.
+COPY --chown=inference:inference src/inference/laya ./laya_service
+USER inference
+EXPOSE 43102
+HEALTHCHECK --interval=15s --timeout=5s --start-period=180s --retries=8 \
+    CMD python -c "import json,urllib.request; assert json.load(urllib.request.urlopen('http://127.0.0.1:43102/api/status', timeout=4))['state']=='ready'"
+CMD ["python", "-m", "laya_service"]

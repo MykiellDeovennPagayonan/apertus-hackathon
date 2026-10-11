@@ -1,0 +1,10 @@
+# CPU wheels must be available for Linux aarch64; do not install the MLX lock here.
+torch==2.8.0
+transformers==4.57.6
+numpy==1.26.4
+safetensors==0.6.2
+huggingface-hub==0.36.0
+fastapi==0.141.1
+uvicorn==0.54.0
+# Pin upstream source rather than relying on an unrelated package named laya.
+laya @ https://github.com/NandhaKishorM/laya/archive/68804629e8ccd9d616d48a40e87de9fabbeae069.tar.gz

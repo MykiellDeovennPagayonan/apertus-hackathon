@@ -1,3 +1,4 @@
+import { offlineEnabled, requireLocalEndpoint } from "../deployment";
 import { DecisionError } from "./errors";
 
 interface ConnectionConfig {
@@ -13,6 +14,8 @@ function parseDecisionConfig(
   env: NodeJS.ProcessEnv = process.env,
 ): DecisionConfig {
   const provider = env.DECISION_PROVIDER?.trim() || "laya";
+  if (offlineEnabled(env) && provider !== "laya")
+    throw new Error("OFFLINE requires local Laya decisions.");
   if (provider !== "laya" && provider !== "jev")
     throw new Error("DECISION_PROVIDER must be laya or jev.");
   const urlKey = provider === "jev" ? "JEV_BASE_URL" : "LAYA_BASE_URL";
@@ -22,6 +25,7 @@ function parseDecisionConfig(
         ? "https://api.typesafe.ai/v1"
         : "http://127.0.0.1:43102"),
   );
+  if (offlineEnabled(env)) requireLocalEndpoint(url.href);
   if (
     !["http:", "https:"].includes(url.protocol) ||
     url.username ||

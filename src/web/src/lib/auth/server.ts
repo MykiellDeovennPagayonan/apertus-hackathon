@@ -5,15 +5,18 @@ import { type AuthOptions, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { getDatabase } from "../database/client";
+import { offlineEnabled } from "../deployment";
 import { authorizePassword, type LabUser } from "./accounts";
 
 export function googleConfigured() {
+  if (offlineEnabled()) return false;
   return Boolean(
     env.GOOGLE_CLIENT_ID?.trim() && env.GOOGLE_CLIENT_SECRET?.trim(),
   );
 }
 
 export function authConfigured() {
+  if (offlineEnabled()) return false;
   return Boolean(
     env.MONGODB_URI?.trim() &&
       env.MONGODB_DB_NAME?.trim() &&
