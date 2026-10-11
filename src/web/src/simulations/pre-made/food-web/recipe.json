@@ -1,0 +1,422 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/food-web",
+  "version": 1,
+  "title": "Food-web connections",
+  "description": "Explore a Yellowstone food web with 18 named animals. Follow feeding paths and change any population.",
+  "tags": [
+    "science",
+    "systems",
+    "comparison"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/ecology/FoodWeb",
+        "version": 1,
+        "label": "Food-web connections",
+        "scope": "scope/lab",
+        "configuration": {
+          "selection": 12,
+          "pressure": 100,
+          "cougar": 100,
+          "lynx": 100,
+          "eagle": 100,
+          "hawk": 100,
+          "owl": 100,
+          "coyote": 100,
+          "fox": 100,
+          "grizzly": 100,
+          "blackbear": 100,
+          "raven": 100,
+          "magpie": 100,
+          "elk": 100,
+          "deer": 100,
+          "bison": 100,
+          "hare": 100,
+          "vole": 100,
+          "squirrel": 100,
+          "grasses": 100,
+          "willow": 100,
+          "berries": 100,
+          "pine": 100,
+          "carrion": 100,
+          "fungi": 100
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/ecology-food-web",
+        "version": 1,
+        "label": "Visual comparison",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/population",
+        "definition": "controls/FoodWebPopulation",
+        "version": 1,
+        "label": "Organism population",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Explore and change a population"
+        }
+      },
+      {
+        "id": "result/selectedPopulation",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Selected population",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Population after the change",
+          "precision": 0
+        }
+      },
+      {
+        "id": "result/affectedCount",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Other organisms changed",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Other organisms changed",
+          "precision": 0
+        }
+      },
+      {
+        "id": "conclusion",
+        "definition": "displays/StatusMessage",
+        "version": 1,
+        "label": "What this shows",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "What this shows",
+          "precision": 0
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/directChange",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "selectedPopulation"
+        },
+        "to": {
+          "node": "result/selectedPopulation",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/indirectChange",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "affectedCount"
+        },
+        "to": {
+          "node": "result/affectedCount",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/conclusion",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "conclusion"
+        },
+        "to": {
+          "node": "conclusion",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/population/snapshot",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "input/population",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/population/select",
+        "kind": "command",
+        "from": {
+          "node": "input/population",
+          "port": "SELECT"
+        },
+        "to": {
+          "node": "model",
+          "port": "WEB_SET_SELECTION"
+        }
+      },
+      {
+        "id": "link/population/change",
+        "kind": "command",
+        "from": {
+          "node": "input/population",
+          "port": "CHANGE"
+        },
+        "to": {
+          "node": "model",
+          "port": "WEB_SET_POPULATION"
+        }
+      },
+      {
+        "id": "link/population/reset",
+        "kind": "command",
+        "from": {
+          "node": "input/population",
+          "port": "RESET"
+        },
+        "to": {
+          "node": "model",
+          "port": "RESET"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Food-web connections"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/controls",
+          "kind": "stack",
+          "label": "Explore and change",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/population",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "input/population"
+            }
+          ]
+        },
+        {
+          "id": "layout/results",
+          "kind": "stack",
+          "label": "Effect of your changes",
+          "gap": 12,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/measurements",
+              "kind": "grid",
+              "label": "",
+              "gap": 14,
+              "columns": 2,
+              "children": [
+                {
+                  "id": "layout/result/selectedPopulation",
+                  "kind": "stack",
+                  "label": "",
+                  "gap": 8,
+                  "columns": 1,
+                  "children": [],
+                  "node": "result/selectedPopulation"
+                },
+                {
+                  "id": "layout/result/affectedCount",
+                  "kind": "stack",
+                  "label": "",
+                  "gap": 8,
+                  "columns": 1,
+                  "children": [],
+                  "node": "result/affectedCount"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "layout/conclusion",
+          "kind": "stack",
+          "label": "Why it happens",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "conclusion",
+          "fontSize": 16
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Food-web connections",
+      "instruction": "Follow one feeding path. Try removing wolves, then follow elk to discover what happens to their food.",
+      "explanation": "Real organisms, illustrative responses. Explore food sources and consumers, then change multiple populations. Indices are relative to each organism\u2019s own baseline; this is not a population forecast."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 900,
+            "height": 720
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 180
+        },
+        {
+          "id": "board/layout/controls",
+          "layoutId": "layout/controls",
+          "rect": {
+            "x": 924,
+            "y": 0,
+            "width": 360,
+            "height": 445
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 200
+        },
+        {
+          "id": "board/layout/results",
+          "layoutId": "layout/results",
+          "rect": {
+            "x": 924,
+            "y": 465,
+            "width": 360,
+            "height": 160
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 115
+        },
+        {
+          "id": "board/layout/conclusion",
+          "layoutId": "layout/conclusion",
+          "rect": {
+            "x": 924,
+            "y": 645,
+            "width": 360,
+            "height": 202
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 115
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1332,
+        "height": 895
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/controls"
+        ],
+        [
+          "board/layout/results"
+        ],
+        [
+          "board/layout/conclusion"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/ecology/FoodWeb",
+      "version": 1
+    },
+    {
+      "id": "appearance/ecology-food-web",
+      "version": 1
+    },
+    {
+      "id": "controls/FoodWebPopulation",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    },
+    {
+      "id": "displays/StatusMessage",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Real organisms, illustrative responses. Explore food sources and consumers, then change multiple populations. Indices are relative to each organism\u2019s own baseline; this is not a population forecast."
+  ],
+  "catalog": {
+    "icon": "\u2197",
+    "category": "science",
+    "order": 19
+  }
+}

@@ -54,7 +54,7 @@ export function readBuilderRecovery(entries = readLibrary(), ownerId?: string) {
       "This saved lesson is unavailable in this library. Import its experiment JSON to open it here.",
     );
   if (entry) {
-    validateRunnableDocument(entry.document);
+    validateRunnableDocument(entry.document, false);
     return {
       entries: usable,
       unreadable: entries.length !== usable.length,

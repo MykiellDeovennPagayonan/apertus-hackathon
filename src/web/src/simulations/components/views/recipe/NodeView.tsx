@@ -4,7 +4,18 @@ import { useContext } from "react";
 import type { DocumentRuntime } from "../../../runtime/authoring/runtime";
 import type { ComponentInstance } from "../../../runtime/authoring/types";
 import { publicDefinition } from "../../catalog";
+import { AgentActions } from "../../controls/AgentActions";
+import { FoodWebPopulationControl } from "../../controls/FoodWebPopulationControl";
+import { AgentProfileView, AgentTranscriptView } from "../agents/AgentViews";
+import {
+  CycleAction,
+  CycleActivity,
+  CycleCaption,
+} from "../biogeochemistry/CyclePanels";
+import { LessonControls } from "../earth-atmosphere/LessonControls";
+import { CollectiveControl } from "../collective/Controls";
 import { MathReadoutView } from "../MathReadoutView";
+import { ScienceControls, ScienceObservations } from "../SciencePanels";
 import { CanvasPresentation } from "./CanvasPresentation";
 import { ControlPresentation } from "./ControlPresentation";
 import { SnapshotContext } from "./contexts";
@@ -21,6 +32,32 @@ export function NodeView({
 }) {
   const snapshot = useContext(SnapshotContext);
   const def = publicDefinition(node.definition);
+  if (/^(controls|displays)\/earth-atmosphere-/.test(node.definition))
+    return <LessonControls node={node} runtime={runtime} />;
+  if (node.definition === "displays/AgentProfile")
+    return <AgentProfileView node={node} runtime={runtime} />;
+  if (node.definition === "displays/AgentTranscript")
+    return <AgentTranscriptView node={node} runtime={runtime} />;
+  if (node.definition === "controls/AgentActions")
+    return <AgentActions node={node} runtime={runtime} />;
+  if (node.definition === "controls/FoodWebPopulation")
+    return <FoodWebPopulationControl node={node} runtime={runtime} />;
+  if (node.definition.startsWith("controls/science-"))
+    return <ScienceControls node={node} runtime={runtime} />;
+  if (node.definition === "displays/ScienceObservations")
+    return <ScienceObservations node={node} runtime={runtime} />;
+  if (/^controls\/cycle-(oxygen|nitrogen|carbon)-action$/.test(node.definition))
+    return <CycleAction node={node} runtime={runtime} />;
+  if (
+    /^controls\/cycle-(oxygen|nitrogen|carbon)-activity$/.test(node.definition)
+  )
+    return <CycleActivity node={node} runtime={runtime} />;
+  if (
+    /^displays\/cycle-(oxygen|nitrogen|carbon)-caption$/.test(node.definition)
+  )
+    return <CycleCaption node={node} runtime={runtime} />;
+  if (/^(controls|displays)\/collective-/.test(node.definition))
+    return <CollectiveControl node={node} runtime={runtime} />;
   if (def.category === "models") return null;
   if (def.category === "controls")
     return <ControlPresentation node={node} runtime={runtime} />;

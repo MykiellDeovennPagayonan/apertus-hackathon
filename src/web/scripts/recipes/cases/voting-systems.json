@@ -1,0 +1,7 @@
+{
+  "slug": "voting-systems",
+  "visibleItems": 4,
+  "title": "Alternate voting systems",
+  "visualSelector": ".voter-grid",
+  "desktopOnly": true
+}

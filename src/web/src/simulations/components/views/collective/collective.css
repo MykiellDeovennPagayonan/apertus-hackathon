@@ -1,0 +1,543 @@
+/* Keep lesson controls quiet and independent from authoring cards. */
+.board-item:has(.collective-control),
+.board-item:has(.collective-control) > .board-content {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.experiment-workspace:has(.collective-scene) .board-workspace-tools {
+  display: none;
+}
+.recipe-component-item[data-component-definition^="appearance/collective-"]
+  > .recipe-scene-content {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+}
+.collective-scene {
+  width: 100%;
+  height: 480px;
+  display: flex;
+  flex-direction: column;
+  color: var(--text, #30362e);
+  padding: 20px 24px 16px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+.collective-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.collective-heading h2 {
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.2;
+  margin: 7px 0 0;
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+.collective-eyebrow {
+  font-size: 12px;
+  color: #626c60;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.collective-stamp {
+  white-space: nowrap;
+  font-size: 13px;
+  color: #536652;
+  background: #e8eddf;
+  border-radius: 30px;
+  padding: 8px 13px;
+  margin-top: 4px;
+}
+.collective-scene svg {
+  display: block;
+  width: 100%;
+  height: 0;
+  flex: 1;
+  min-height: 0;
+  max-height: 360px;
+}
+.collective-scene .scene-small {
+  font-family: inherit;
+  font-size: 14px;
+  fill: #30362e;
+}
+.collective-scene .scene-footnote {
+  font-family: inherit;
+  font-size: 12px;
+  fill: #536652;
+}
+.collective-scene .lake-count {
+  font-family: inherit;
+  font-size: 36px;
+  font-weight: 650;
+  fill: #285e56;
+}
+.fishing-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  font-size: 14px;
+  margin-top: 5px;
+}
+.fishing-bottom strong {
+  margin-left: 6px;
+  font-weight: 650;
+  color: #285e56;
+}
+.fishing-rule {
+  font-size: 12px;
+  color: #626c60;
+}
+.crowd-pair {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.crowd-pair figure {
+  min-height: 0;
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.crowd-pair svg {
+  min-height: 0;
+  max-height: none;
+}
+.crowd-pair figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  margin: 0 16px 10px;
+}
+.crowd-pair figcaption span {
+  font-size: 13px;
+  color: #626c60;
+}
+.crowd-result {
+  text-align: center;
+  font-size: 13px;
+  color: #626c60;
+  margin-top: 3px;
+}
+.crowd-result strong {
+  color: #285e56;
+  font-size: 21px;
+  margin-right: 4px;
+}
+.crowd-dot {
+  transition:
+    cx 0.05s linear,
+    cy 0.05s linear;
+}
+.scene-note {
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 12px 0 0;
+  color: #626c60;
+}
+.vote-legend {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 0 0 20px;
+}
+.vote-legend > div {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f4f0e5;
+}
+.vote-legend span {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  color: white;
+  font-size: 13px;
+  font-weight: 650;
+}
+.vote-legend strong {
+  font-size: 14px;
+  font-weight: 550;
+}
+.vote-legend b {
+  font-size: 14px;
+  font-weight: 650;
+  margin-left: auto;
+}
+.vote-legend em {
+  font-size: 12px;
+  font-style: normal;
+  color: #285e56;
+  width: 100%;
+  padding-left: 33px;
+}
+.vote-legend .vote-winner {
+  outline: 2px solid #2f7b70;
+  background: #e3eee7;
+}
+.voter-grid {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  gap: 10px;
+  border: 0;
+  padding: 0;
+  min-width: 0;
+  max-width: 920px;
+  max-height: 280px;
+  overflow-y: auto;
+  margin: 0 auto;
+}
+.voter-grid .voter-dot {
+  width: 34px;
+  height: 34px;
+  min-height: 0;
+  justify-self: center;
+  padding: 0;
+  border: 2px solid #fffbef;
+  border-radius: 50%;
+  box-shadow: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition:
+    background 0.35s,
+    transform 0.35s;
+  font: 600 9px / 1 inherit;
+  color: white;
+}
+.voter-dot span {
+  font-size: 9px;
+  color: white;
+  text-shadow: 0 1px 2px #30362e;
+}
+.voter-dot.dot-selected,
+.voter-dot:focus-visible {
+  outline: 2px solid #30362e;
+  outline-offset: 3px;
+}
+.vote-transfer {
+  animation: vote-transfer 0.65s ease-out;
+}
+@keyframes vote-transfer {
+  50% {
+    transform: scale(1.3);
+  }
+}
+.vote-detail {
+  min-height: 28px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  margin-top: 18px;
+  color: #626c60;
+  justify-content: center;
+}
+.vote-detail strong {
+  color: #30362e;
+}
+.selection-stage {
+  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.habitat-label {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  background: #fffbefeb;
+  color: #30362e;
+  border-radius: 24px;
+  font-size: 12px;
+  padding: 6px 12px;
+}
+.organism-dot {
+  cursor: pointer;
+  transition: opacity 0.5s;
+}
+.organism-dot:focus-visible {
+  outline: 2px solid #dca74e;
+  outline-offset: 4px;
+}
+.trait-strip {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  font-size: 12px;
+  color: #626c60;
+  margin-top: 14px;
+}
+.trait-strip > div {
+  display: flex;
+  align-items: end;
+  gap: 3px;
+  flex: 1;
+  height: 42px;
+}
+.trait-strip > div > div {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  min-height: 4px;
+}
+.trait-strip strong {
+  align-self: center;
+  margin-left: 16px;
+  font-size: 13px;
+  white-space: nowrap;
+  color: #30362e;
+}
+.collective-control {
+  font-family: inherit;
+  color: var(--text, #30362e);
+}
+.collective-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.collective-control .collective-primary {
+  border: 0;
+  background: #285e56;
+  color: #fffbef;
+  min-height: 52px;
+  border-radius: 10px;
+  padding: 11px 23px;
+  font: 600 15px / 1.3 inherit;
+  cursor: pointer;
+  box-shadow: 0 2px 4px #285e5615;
+}
+.collective-control .collective-secondary {
+  background: transparent;
+  border: 0;
+  padding: 10px 4px;
+  min-height: 50px;
+  color: #285e56;
+  font: 500 14px / 1.3 inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.collective-control button:focus-visible,
+.collective-choice select:focus-visible {
+  outline: 3px solid #8d9982;
+  outline-offset: 3px;
+}
+.collective-choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: #626c60;
+}
+.collective-choice select {
+  font: 500 14px / 1.3 inherit;
+  min-height: 50px;
+  color: #30362e;
+  background: #fffbef;
+  border: 1px solid #d5cdbb;
+  border-radius: 9px;
+  padding: 9px 30px 9px 12px;
+  min-width: 170px;
+  max-width: 100%;
+}
+.collective-caption {
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: 700px;
+  margin: 0;
+  color: #52624f;
+}
+@media (max-width: 700px) {
+  .recipe-component-item[data-component-definition^="appearance/collective-"]
+    > .recipe-scene-content {
+    height: auto;
+  }
+  .collective-scene {
+    height: auto;
+    padding: 16px 10px;
+  }
+  .collective-scene svg {
+    height: auto;
+    flex: none;
+  }
+  .experiment-workspace:has(.collective-scene) .board-viewport {
+    overflow-y: auto;
+    touch-action: pan-y;
+  }
+  .collective-heading {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .collective-heading h2 {
+    font-size: 22px;
+  }
+  .collective-stamp {
+    font-size: 12px;
+    margin: 0;
+  }
+  .collective-eyebrow {
+    font-size: 10px;
+  }
+  .crowd-pair {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .fishing-bottom {
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .fishing-rule {
+    width: 100%;
+    text-align: center;
+  }
+  .voter-grid {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 12px 4px;
+  }
+  .voter-grid .voter-dot {
+    width: 44px;
+    height: 44px;
+  }
+  .vote-legend {
+    gap: 6px;
+  }
+  .vote-legend > div {
+    padding: 7px;
+    gap: 5px;
+  }
+  .vote-legend strong {
+    font-size: 11px;
+  }
+  .vote-legend b {
+    font-size: 12px;
+    margin: 0;
+  }
+  .vote-legend em {
+    padding: 0;
+  }
+  .trait-strip {
+    gap: 6px;
+  }
+  .trait-strip strong {
+    margin: 0;
+    font-size: 11px;
+  }
+  .collective-choice {
+    flex-wrap: wrap;
+  }
+  .collective-caption {
+    font-size: 14px;
+  }
+  .selection-stage {
+    min-height: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .crowd-dot,
+  .voter-dot,
+  .organism-dot {
+    transition: none;
+    animation: none;
+  }
+}
+
+.catch-path {
+  animation: catch-flow 0.8s linear infinite;
+}
+@keyframes catch-flow {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .catch-path {
+    animation: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .fishing-scene .scene-small {
+    font-size: 32px;
+  }
+  .fishing-scene .lake-count {
+    font-size: 48px;
+  }
+  .fishing-scene .scene-footnote {
+    font-size: 24px;
+  }
+}
+
+/* The lesson uses direct controls; keep only the explanation affordance. */
+.experiment-workspace:has(.collective-scene) .board-camera-tools > button,
+.experiment-workspace:has(.collective-scene) .board-camera-tools > output {
+  display: none;
+}
+
+@media (max-width: 700px), (max-height: 700px) {
+  .experiment-workspace:has(.collective-scene) .board-viewport {
+    flex: 0 0
+      calc(
+        100dvh -
+        var(--composer-height, 64px) -
+        var(--composer-bottom, 20px) -
+        24px
+      );
+    height: calc(
+      100dvh -
+      var(--composer-height, 64px) -
+      var(--composer-bottom, 20px) -
+      24px
+    );
+    overflow-y: auto;
+    overflow-x: hidden;
+    touch-action: pan-y;
+    scroll-padding-top: calc(var(--workspace-top, 112px) + 12px);
+    scroll-padding-bottom: calc(
+      var(--composer-height, 64px) +
+      var(--composer-bottom, 20px) +
+      24px
+    );
+  }
+}
+@media (min-width: 701px) {
+  .vote-legend[data-candidates="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .vote-legend[data-candidates="4"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .vote-legend[data-candidates="5"] {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* Scrolled scene text must not show through fixed navigation. */
+@media (max-width: 700px), (max-height: 700px) {
+  .experiment-workspace:has(.collective-scene) .workspace-header {
+    background: #f3efe3f5;
+    border-radius: 10px;
+    backdrop-filter: blur(12px);
+  }
+}

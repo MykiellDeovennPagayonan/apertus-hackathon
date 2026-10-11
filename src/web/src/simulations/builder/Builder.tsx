@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useOffline } from "../../app/_components/DeploymentProvider";
 import PublishDialog from "../../app/_components/PublishDialog";
 import UnsavedDialog from "../../app/_components/UnsavedDialog";
 import {
@@ -47,6 +48,7 @@ import {
 const message = (e: unknown) =>
   e instanceof Error ? e.message : "Something went wrong";
 export default function Builder() {
+  const offline = useOffline();
   const { data: account } = useSession();
   const ownerId = account?.user.id;
   const params = useSearchParams();
@@ -115,6 +117,8 @@ export default function Builder() {
   const [draftState, setDraftState] = useState("Saved locally");
   const storageBusy = useRef(false);
   const [recovery, setRecovery] = useState("");
+  const [constructionBusy, setConstructionBusy] = useState(false);
+  const constructionLock = useRef(false);
   const [playingSaved, setPlayingSaved] = useState(false);
   const { past, future, edit, undo, redo, resetHistory } = useDocumentHistory(
     doc,
@@ -124,6 +128,7 @@ export default function Builder() {
     setNotice,
     expanded,
     playingSaved,
+    constructionBusy,
   );
   const open = useCallback(
     (
@@ -207,6 +212,10 @@ export default function Builder() {
         const query = new URLSearchParams(queryKey);
         const requestedProject = query.get("project");
         const publicId = query.get("community") ?? query.get("insert");
+        if (offline && publicId)
+          throw new Error(
+            "Community imports are unavailable offline. Import a downloaded recipe instead.",
+          );
         if (query.has("new")) {
           const fresh = createFreshDocument();
           open(fresh);
@@ -361,7 +370,7 @@ export default function Builder() {
     return () => {
       disposed = true;
     };
-  }, [open, ownerId, queryKey]);
+  }, [open, ownerId, queryKey, offline]);
   useEffect(() => {
     if (!ready || !doc || !valid || playingSaved) return;
     try {
@@ -416,6 +425,7 @@ export default function Builder() {
     return () => window.removeEventListener("beforeunload", guard);
   }, [dirty]);
   const requestTransition = (action: () => void) => {
+    if (constructionLock.current) return;
     if (dirty) setTransition(() => action);
     else action();
   };
@@ -442,7 +452,7 @@ export default function Builder() {
     </details>
   );
   const save = async (): Promise<boolean> => {
-    if (!doc || storageBusy.current) return false;
+    if (!doc || storageBusy.current || constructionLock.current) return false;
     storageBusy.current = true;
     setSaving(true);
     const snapshot = structuredClone(doc);
@@ -582,7 +592,7 @@ export default function Builder() {
     void save();
   };
   const download = () => {
-    if (!doc) return;
+    if (!doc || constructionLock.current) return;
     try {
       const url = URL.createObjectURL(
         new Blob(
@@ -612,6 +622,7 @@ export default function Builder() {
     }
   };
   const importText = (text: string) => {
+    if (constructionLock.current) return;
     try {
       const portable = unwrapPortable(JSON.parse(text));
       const imported = parseDocument(text);
@@ -742,38 +753,28 @@ export default function Builder() {
   const setWorkspaceZoom = (zoom: number) => {
     if (!Number.isFinite(zoom) || zoom < 0.2 || zoom > 2) return;
     // Camera navigation is editor metadata, not a lesson edit or an undo step.
-    setDoc((current) =>
-      current
-        ? {
-            ...current,
-            editor: { ...current.editor, zoom },
-            ...(current.authored
-              ? {
-                  authored: {
-                    ...current.authored,
-                    editor: { ...current.editor, zoom },
-                  },
-                }
-              : {}),
-          }
-        : current,
-    );
-    setValid((current) =>
-      current
-        ? {
-            ...current,
-            editor: { ...current.editor, zoom },
-            ...(current.authored
-              ? {
-                  authored: {
-                    ...current.authored,
-                    editor: { ...current.editor, zoom },
-                  },
-                }
-              : {}),
-          }
-        : current,
-    );
+    const update = (current: ExperimentDocument | null) => {
+      if (
+        !current ||
+        (current.editor.zoom === zoom &&
+          (!current.authored || current.authored.editor.zoom === zoom))
+      )
+        return current;
+      return {
+        ...current,
+        editor: { ...current.editor, zoom },
+        ...(current.authored
+          ? {
+              authored: {
+                ...current.authored,
+                editor: { ...current.authored.editor, zoom },
+              },
+            }
+          : {}),
+      };
+    };
+    setDoc(update);
+    setValid(update);
   };
   if (doc.authored && valid.authored)
     return (
@@ -829,6 +830,10 @@ export default function Builder() {
           />
         )}
         <CompositionBuilder
+          onBusyChange={(busy) => {
+            constructionLock.current = busy;
+            setConstructionBusy(busy);
+          }}
           key={`${sessionRevision}/${doc.template}`}
           doc={doc}
           valid={valid}
@@ -883,15 +888,17 @@ export default function Builder() {
               >
                 Download recipe
               </button>
-              <button
-                type="button"
-                disabled={!ownerId || saving || !sharingAllowed}
-                onClick={() => {
-                  void reviewPublication();
-                }}
-              >
-                Publish
-              </button>
+              {!offline && (
+                <button
+                  type="button"
+                  disabled={!ownerId || saving || !sharingAllowed}
+                  onClick={() => {
+                    void reviewPublication();
+                  }}
+                >
+                  Publish
+                </button>
+              )}
               <Link
                 href="/projects"
                 onClick={(event) => {
@@ -901,15 +908,17 @@ export default function Builder() {
               >
                 My projects
               </Link>
-              <Link
-                href="/community"
-                onClick={(event) => {
-                  event.preventDefault();
-                  requestTransition(() => router.push("/community"));
-                }}
-              >
-                Community
-              </Link>
+              {!offline && (
+                <Link
+                  href="/community"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    requestTransition(() => router.push("/community"));
+                  }}
+                >
+                  Community
+                </Link>
+              )}
             </div>
           }
           storageNotice={
@@ -935,8 +944,12 @@ export default function Builder() {
                 <>
                   You're working locally. Browser data can be cleared; download
                   a recipe to keep a portable copy.{" "}
-                  <Link href="/auth/sign-in">Sign in</Link> to save to your
-                  account and publish.
+                  {!offline && (
+                    <>
+                      <Link href="/auth/sign-in">Sign in</Link> to save to your
+                      account and publish.
+                    </>
+                  )}
                 </>
               )}
             </div>

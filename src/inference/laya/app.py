@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 def create_app(config=None, runtime=None):
     config = config or read_config()
-    runtime = runtime or ModelRuntime(config.model, config.device, config.dtype)
+    runtime = runtime or ModelRuntime(config.model, config.device, config.dtype, config.backend, config.threads)
 
     @asynccontextmanager
     async def lifespan(app):

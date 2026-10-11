@@ -50,6 +50,7 @@ fs.mkdirSync(captures, { recursive: true });
     ]) {
       await page.setViewportSize(viewport);
       for (const recipeCase of cases) {
+        if (recipeCase.desktopOnly && viewport.width !== 1440) continue;
         await open(recipeCase.slug);
         assert.equal(
           await page.locator(".board-item").count(),
@@ -60,17 +61,21 @@ fs.mkdirSync(captures, { recursive: true });
           recipeCase.title,
         );
         const geometry = await page
-          .locator(".board-item")
+          .locator(recipeCase.visualSelector || ".board-item")
           .first()
-          .evaluate((item) => {
-            const svg = item.querySelector("svg[viewBox]");
+          .evaluate((element, htmlVisual) => {
+            const item = element.closest(".board-item") || element;
+            const svg = htmlVisual
+              ? element
+              : element.querySelector("svg[viewBox]");
             return {
               item: item.getBoundingClientRect().toJSON(),
               svg: svg?.getBoundingClientRect().toJSON(),
             };
-          });
+          }, Boolean(recipeCase.visualSelector));
         assert.ok(
-          geometry.svg.width > 180 && geometry.svg.height > 100,
+          geometry.svg.width > (recipeCase.visualMinWidth ?? 180) &&
+            geometry.svg.height > (recipeCase.visualMinHeight ?? 100),
           `${recipeCase.slug} ${viewport.width}: scene too small ${JSON.stringify(geometry)}`,
         );
         assert.ok(

@@ -160,6 +160,7 @@ export function computeOpenCompositionCoverage(
   const simulatesMass =
     presentDefs.has("prefabs/chemistry/Dilution") ||
     presentDefs.has("prefabs/natural-systems/DiffusionField") ||
+    presentDefs.has("models/SpringMass") ||
     presentDefs.has("models/BridgeLoad");
 
   if (requested(/weight|mass/i) && !simulatesMass) {

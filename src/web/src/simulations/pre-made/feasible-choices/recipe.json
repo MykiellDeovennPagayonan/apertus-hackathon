@@ -1,0 +1,274 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/feasible-choices",
+  "version": 1,
+  "title": "Affordable notebooks and pens",
+  "description": "Show every affordable integer basket under a budget, minimum count and stock constraints.",
+  "tags": [
+    "feasible-choices",
+    "mathematics",
+    "notebooks",
+    "notebook",
+    "pens",
+    "pen",
+    "affordable",
+    "budget",
+    "inequality",
+    "inequalities",
+    "combinations",
+    "feasible choices"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-analysis/feasible-choices",
+        "version": 1,
+        "label": "Affordable notebooks and pens",
+        "scope": "scope/lab",
+        "configuration": {
+          "budget": 100,
+          "notebookPrice": 30,
+          "penPrice": 10,
+          "notebookStock": 10,
+          "penStock": 10,
+          "minimumNotebooks": 0,
+          "minimumPens": 0,
+          "notebooks": 2,
+          "pens": 4
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-analysis-feasible-choices",
+        "version": 1,
+        "label": "Affordable notebooks and pens",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/0",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Notebooks",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Notebooks",
+          "mode": "immediate",
+          "initial": "{\"value\":2}",
+          "parameter": "value",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/1",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Pens",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Pens",
+          "mode": "immediate",
+          "initial": "{\"value\":4}",
+          "parameter": "value",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "showNumber": true
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/input/0",
+        "kind": "command",
+        "from": {
+          "node": "input/0",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MA_FEASIBLE-CHOICES_SET_NOTEBOOKS"
+        }
+      },
+      {
+        "id": "link/input/1",
+        "kind": "command",
+        "from": {
+          "node": "input/1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MA_FEASIBLE-CHOICES_SET_PENS"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Affordable notebooks and pens"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/input/0",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/0"
+        },
+        {
+          "id": "layout/input/1",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/1"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Affordable notebooks and pens",
+      "instruction": "Show every affordable integer basket under a budget, minimum count and stock constraints.",
+      "explanation": "Whole items only, inclusive budget boundary. Counts and stock are bounded at 20 per item; prices and budget are represented in hundredths of a currency unit."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 450
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/input/0",
+          "layoutId": "layout/input/0",
+          "rect": {
+            "x": 0,
+            "y": 470,
+            "width": 378,
+            "height": 190
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/input/1",
+          "layoutId": "layout/input/1",
+          "rect": {
+            "x": 402,
+            "y": 470,
+            "width": 378,
+            "height": 190
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 708
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/scene"
+        ],
+        [
+          "board/layout/input/0",
+          "board/layout/input/1"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-analysis/feasible-choices",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-analysis-feasible-choices",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Whole items only, inclusive budget boundary. Counts and stock are bounded at 20 per item; prices and budget are represented in hundredths of a currency unit."
+  ],
+  "catalog": {
+    "icon": "∑",
+    "category": "mathematics",
+    "order": 30
+  }
+}

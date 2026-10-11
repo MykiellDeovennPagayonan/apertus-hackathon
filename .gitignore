@@ -4,3 +4,27 @@
 /docs/agent-only/implementation/014-validation/
 /docs/agent-only/implementation/015-validation/
 /docs/agent-only/implementation/019-validation/
+/docs/agent-only/implementation/022-validation/
+
+/docs/agent-only/implementation/023-validation/
+
+/docs/agent-only/implementation/024-validation/
+
+# Local live-construction browser captures; keep the implementation report tracked.
+/docs/agent-only/implementation/025-validation/runs/
+
+# Four-simulation browser and inference evidence
+/docs/agent-only/implementation/026-validation/runs/
+
+# Earth and atmosphere numbered verification evidence
+/docs/agent-only/implementation/027-validation/runs/
+/docs/agent-only/implementation/027-validation/live-*.json
+/docs/agent-only/implementation/027-validation/checks/
+/docs/agent-only/implementation/028-validation/
+
+# Pi model downloads, local deployment configuration, and measured runs
+/deploy/raspberry-pi/models/
+/deploy/raspberry-pi/results/
+/deploy/raspberry-pi/.env
+
+/docs/paper/

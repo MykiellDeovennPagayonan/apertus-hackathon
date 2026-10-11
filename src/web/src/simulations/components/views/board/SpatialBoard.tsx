@@ -4,6 +4,7 @@ import {
   type PointerEvent,
   type ReactNode,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -19,6 +20,7 @@ import {
   convertToBoard,
   extent,
   fit,
+  outsideLearnerView,
   type Rect,
   reorderBoardItems,
   resizeBoardRect,
@@ -28,7 +30,10 @@ import {
   zoomAt,
 } from "../../../runtime/authoring/board";
 import { isDrawingItem } from "../../../runtime/authoring/drawings";
-import { expandResponsiveContent } from "../../../runtime/authoring/responsiveLayout";
+import {
+  expandResponsiveContent,
+  reflowLearnerArea,
+} from "../../../runtime/authoring/responsiveLayout";
 import type {
   AuthoredDocument,
   Layout,
@@ -37,7 +42,7 @@ import { SceneIcon, SceneIconButton } from "../SceneToolbar";
 import { DrawingEditor, type DrawingTool } from "./DrawingEditor";
 import "./board.css";
 const BOARD_CHROME =
-  ".drawing-toolbar, .drawing-inspector, .board-toolbar, .board-selection, .board-area-banner, .board-settings, .board-camera-tools, .board-workspace-tools";
+  ".drawing-toolbar, .drawing-inspector, .board-toolbar, .board-selection, .board-area-banner, .board-view-warning, .board-settings, .board-camera-tools, .board-workspace-tools";
 
 export function SpatialBoard({
   document,
@@ -97,7 +102,9 @@ export function SpatialBoard({
                 ? Math.min(720, size.width - 32)
                 : size.width - 32,
             );
-            const rowGap = size.width >= 700 ? 96 : size.width <= 340 ? 16 : 80;
+            const rowGap =
+              next.responsiveGap ??
+              (size.width >= 700 ? 96 : size.width <= 340 ? 16 : 80);
             let top = 0;
             let openingHeight = 0;
             const rows =
@@ -124,6 +131,7 @@ export function SpatialBoard({
                         ("responsiveMinHeight" in item
                           ? item.responsiveMinHeight
                           : undefined) ?? 260,
+                        naturalHeights[item.id] ?? 0,
                         Math.min(
                           430,
                           (item.rect.height * columnWidth) / item.rect.width,
@@ -154,6 +162,10 @@ export function SpatialBoard({
               width: width + 32,
               height: openingHeight + 32,
             };
+            next.learnerArea = reflowLearnerArea(
+              sourcePresentation,
+              next.items,
+            );
             return next;
           }
 
@@ -399,14 +411,15 @@ export function SpatialBoard({
           const host = element.closest<HTMLElement>(".board-item");
           const id = host?.dataset.boardId;
           if (!id) continue;
-          const content = element.parentElement;
+          const content =
+            element.closest(".board-content") ?? element.parentElement;
           const height = Math.ceil(
             element.offsetHeight +
               (content
                 ? parseFloat(getComputedStyle(content).paddingTop) +
                   parseFloat(getComputedStyle(content).paddingBottom)
                 : 0) +
-              2,
+              (element.hasAttribute("data-responsive-height") ? 0 : 2),
           );
           if (Math.abs((next[id] ?? 0) - height) > 1) {
             next[id] = height;
@@ -419,11 +432,23 @@ export function SpatialBoard({
     viewport.current
       .querySelectorAll(".board-content > .recipe-layout")
       .forEach((element) => {
+        const measuredContent = element.querySelector(
+          '[data-responsive-height="content"]',
+        );
+        if (measuredContent) {
+          observer.observe(measuredContent);
+          return;
+        }
         if (
           !requestedAutoLayout &&
           element.closest('[data-board-scene="true"]')
-        )
+        ) {
+          const content = element.querySelector(
+            '[data-responsive-height="content"]',
+          );
+          if (content) observer.observe(content);
           return;
+        }
         observer.observe(element);
       });
     return () => observer.disconnect();
@@ -467,15 +492,17 @@ export function SpatialBoard({
       });
     return () => observer.disconnect();
   }, [hasBoard, document.nodes]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!hasBoard || !viewport.current) return;
+    const element = viewport.current;
+    // Frame imported boards before paint, without waiting for ResizeObserver.
+    setSize({ width: element.clientWidth, height: element.clientHeight });
     const observer = new ResizeObserver(([entry]) =>
       setSize({
         width: entry.contentRect.width,
         height: entry.contentRect.height,
       }),
     );
-    const element = viewport.current;
     observer.observe(element);
     const wheel = (event: WheelEvent) => {
       if (
@@ -539,14 +566,20 @@ export function SpatialBoard({
         }
       : area;
   const freeCanvas = !!workspace;
-  const initial =
-    freeCanvas && !autoLayout
-      ? fit(area, size.width, size.height)
-      : fit(
-          p.startView,
-          Math.max(1, size.width - 48),
-          Math.max(1, size.height - topClearance - bottomClearance),
-        );
+  // Accepted content may grow; it must not shrink or recenter the learner's view.
+  // The opening frame comes from authored bounds, while navigation uses live bounds.
+  const openingArea =
+    !authoring && sourcePresentation
+      ? (sourcePresentation.learnerArea ??
+        extent(sourcePresentation.items.map((item) => item.rect)))
+      : area;
+  const initial = freeCanvas && !autoLayout
+    ? fit(openingArea, size.width, size.height)
+    : fit(
+        p.startView,
+        Math.max(1, size.width - 48),
+        Math.max(1, size.height - topClearance - bottomClearance),
+      );
   if (freeCanvas && !autoLayout && p.navigation.mode !== "fixed")
     initial.zoom = clamp(
       initial.zoom / 1.2,
@@ -572,6 +605,14 @@ export function SpatialBoard({
     initial.centerY = startingTop + size.height / (2 * initial.zoom);
   }
   if (authoring) initial.zoom = Math.min(1, initial.zoom);
+  // Reflowed learner content stays at readable scale even in the full workspace.
+  // Frame its opening row below floating headings without shrinking the canvas.
+  if (freeCanvas && autoLayout && !authoring) {
+    initial.zoom = 1;
+    initial.centerX = p.startView.x + size.width / 2;
+    initial.centerY =
+      Math.min(...p.items.map((item) => item.rect.y)) - 96 + size.height / 2;
+  }
   const base = camera ?? initial;
   const fixed = !authoring && p.navigation.mode === "fixed";
   const navigable = fixed
@@ -628,6 +669,13 @@ export function SpatialBoard({
     fn(next);
     commit(next, message);
   };
+  const expandLearnerView = () =>
+    update((next) => {
+      next.learnerArea = extent(next.items.map((item) => item.rect));
+    }, "Learner view expanded to fit all content");
+  const outsideContent = p.items.some((item) =>
+    outsideLearnerView(p, preview[item.id] ?? item.rect),
+  );
   const selected = p.items.filter((i) => selection.includes(i.id));
   const cancel = () => {
     marqueeGesture.current = null;
@@ -866,6 +914,13 @@ export function SpatialBoard({
         ),
       );
   };
+  // Reflowed lessons zoom from their opening corner, keeping the first action reachable.
+  const zoomFromToolbar = (factor: number) =>
+    zoom(
+      factor,
+      autoLayout && !authoring ? 16 - size.width / 2 : 0,
+      autoLayout && !authoring ? 96 - size.height / 2 : 0,
+    );
   const fitContent = () => {
     const next = fit(
       authoring ? extent(p.items.map((i) => i.rect)) : area,
@@ -1009,7 +1064,7 @@ export function SpatialBoard({
                 icon="zoom-out"
                 label="Zoom out"
                 disabled={fixed}
-                onClick={() => zoom(1 / 1.2)}
+                onClick={() => zoomFromToolbar(1 / 1.2)}
               />
               <output aria-label="Board zoom">
                 {Math.round(c.zoom * 100)}%
@@ -1018,7 +1073,7 @@ export function SpatialBoard({
                 icon="zoom-in"
                 label="Zoom in"
                 disabled={fixed}
-                onClick={() => zoom(1.2)}
+                onClick={() => zoomFromToolbar(1.2)}
               />
               <SceneIconButton
                 icon="fit"
@@ -1106,15 +1161,36 @@ export function SpatialBoard({
           </>
         )}
       </div>
+      {authoring && outsideContent && !immersive && (
+        <div className="board-view-warning">
+          <output>
+            Some content falls outside the learner view. Preview will show it
+            clipped.
+          </output>
+          <button type="button" onClick={expandLearnerView}>
+            Expand to fit
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setEditArea(true);
+              setSelection([]);
+              setCamera(fit(area, size.width - 48, size.height - 48));
+            }}
+          >
+            Show boundary
+          </button>
+        </div>
+      )}
       {authoring && editArea && (
         <div className="board-area-banner">
-          <strong>Edit learner area</strong>
+          <strong>Edit learner view</strong>
           <span>
             Drag the boundary handles or use numeric fields in Board settings.
             Escape cancels a drag.
           </span>
           <button type="button" onClick={() => setEditArea(false)}>
-            Done editing area
+            Done editing boundary
           </button>
         </div>
       )}
@@ -1158,69 +1234,92 @@ export function SpatialBoard({
           >
             Capture starting view
           </button>
-          <button
-            type="button"
-            onClick={() =>
-              update((n) => {
-                n.learnerArea = extent(n.items.map((i) => i.rect));
-              })
-            }
-          >
-            Set learner area from content
-          </button>
-          {p.learnerArea && (
-            <>
-              <button
-                type="button"
-                onClick={() => {
-                  setEditArea(true);
-                  setSelection([]);
-                  setSettings(false);
+          <fieldset className="board-learner-view">
+            <legend>Learner view</legend>
+            <p>Choose the area learners can explore.</p>
+            <label>
+              <input
+                type="radio"
+                name="learner-view"
+                checked={!p.learnerArea}
+                onChange={() => {
+                  setEditArea(false);
+                  update((next) => {
+                    delete next.learnerArea;
+                  }, "Learner view now fits all content automatically");
                 }}
-              >
-                Edit learner area on board
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  update((n) => {
-                    delete n.learnerArea;
-                  })
-                }
-              >
-                Use automatic area
-              </button>
-              <Geometry
-                label="Learner area"
-                maxSize={1000000}
-                rect={p.learnerArea}
-                onApply={(r) =>
-                  update((n) => {
-                    n.learnerArea = r;
-                  })
-                }
               />
-            </>
-          )}
-          {p.learnerArea &&
-            p.items.some(
-              (i) =>
-                i.rect.x < area.x ||
-                i.rect.y < area.y ||
-                i.rect.x + i.rect.width > area.x + area.width ||
-                i.rect.y + i.rect.height > area.y + area.height,
-            ) && (
-              <p role="alert">
-                Some content is outside the learner area. Enlarge the area with
-                “Set learner area from content” before sharing.
-              </p>
+              Fit all content
+            </label>
+            <p>
+              Automatically follows components as you add, move, or resize them.
+            </p>
+            <label>
+              <input
+                type="radio"
+                name="learner-view"
+                checked={!!p.learnerArea}
+                onChange={() => {
+                  expandLearnerView();
+                  setEditArea(true);
+                }}
+              />
+              Custom boundary
+            </label>
+            {p.learnerArea && (
+              <>
+                <button type="button" onClick={expandLearnerView}>
+                  Expand to fit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditArea(true);
+                    setSelection([]);
+                    setSettings(false);
+                    setCamera(fit(area, size.width - 48, size.height - 48));
+                  }}
+                >
+                  Edit boundary on board
+                </button>
+                <Geometry
+                  label="Learner view"
+                  maxSize={1000000}
+                  rect={p.learnerArea}
+                  onApply={(rect) =>
+                    update((next) => {
+                      next.learnerArea = rect;
+                    })
+                  }
+                />
+              </>
             )}
+          </fieldset>
           {p.navigation.mode === "fixed" && (
             <p>
               Fixed views keep controls at their original readable size. Preview
               at your smallest target screen size and capture a smaller starting
               frame if needed.
             </p>
+          )}
+          {p.responsive && (
+            <label>
+              Space between narrow-screen rows (px)
+              <input
+                type="number"
+                aria-label="Space between narrow-screen rows"
+                min="8"
+                max="128"
+                value={p.responsiveGap ?? 80}
+                onChange={(event) => {
+                  const gap = Number(event.target.value);
+                  if (Number.isFinite(gap) && gap >= 8 && gap <= 128)
+                    update((next) => {
+                      next.responsiveGap = gap;
+                    });
+                }}
+              />
+            </label>
           )}
           <label>
             Learner navigation
@@ -1598,7 +1697,7 @@ export function SpatialBoard({
                 {group.label}
               </span>
             ))}
-            {authoring && p.learnerArea && (editArea || !workspace) && (
+            {authoring && p.learnerArea && (
               <div
                 className="board-area"
                 style={{
@@ -1608,7 +1707,7 @@ export function SpatialBoard({
                   height: area.height,
                 }}
               >
-                <span>Learner area</span>
+                <span>Learner view</span>
                 {editArea && (
                   <>
                     <button
@@ -1616,12 +1715,12 @@ export function SpatialBoard({
                       className="board-area-move"
                       onPointerDown={(e) => begin(e, "area-move", "__area")}
                     >
-                      Move learner area
+                      Move learner boundary
                     </button>
                     <button
                       type="button"
                       className="board-area-resize"
-                      aria-label="Resize learner area"
+                      aria-label="Resize learner boundary"
                       onPointerDown={(e) => begin(e, "area-resize", "__area")}
                     >
                       <SceneIcon name="resize" />
@@ -1718,7 +1817,17 @@ export function SpatialBoard({
                   const viewportBounds =
                     viewport.current?.getBoundingClientRect();
                   if (!viewportBounds) return;
+                  // Reflowed views may choose native vertical scrolling. Let the
+                  // browser reveal focused controls without a second camera pan.
+                  if (
+                    viewport.current &&
+                    getComputedStyle(viewport.current).overflowY === "auto"
+                  )
+                    return;
                   const target = event.target as HTMLElement;
+                  // Native top-layer dialogs have viewport coordinates, not board coordinates.
+                  // Focusing their fields must never pan the lesson behind the modal.
+                  if (target.closest("dialog[open]")) return;
                   const bounds = target.getBoundingClientRect();
                   const margin = 24;
                   const host = viewport.current?.closest(
@@ -1817,7 +1926,7 @@ export function SpatialBoard({
               tabIndex={authoring || layout.node ? 0 : -1}
               aria-label={title(i.id)}
               hidden={hidden}
-              className={`board-item ${selection.includes(i.id) && authoring ? "is-selected" : ""} ${promoted ? "is-immersive" : ""} ${overlay ? `is-overlay anchor-${overlay.anchor}` : ""}`}
+              className={`board-item ${authoring && outsideLearnerView(p, r) ? "is-outside-view" : ""} ${selection.includes(i.id) && authoring ? "is-selected" : ""} ${promoted ? "is-immersive" : ""} ${overlay ? `is-overlay anchor-${overlay.anchor}` : ""}`}
               style={position}
             >
               {authoring && !immersive && (

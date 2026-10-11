@@ -21,6 +21,7 @@ export function NumberField({
   inputLabel = label,
   rangeLabel = `Adjust ${label.toLowerCase()}`,
   commitOnBlur = false,
+  compact = false,
 }: {
   label: string;
   value: number;
@@ -38,6 +39,7 @@ export function NumberField({
   inputLabel?: string;
   rangeLabel?: string;
   commitOnBlur?: boolean;
+  compact?: boolean;
   onChange: (value: number) => ActionResult;
 }) {
   const [draft, setDraft] = useState<{
@@ -81,7 +83,7 @@ export function NumberField({
   };
   return (
     <div
-      className={`experiment-number catalog-field number-field--${presentation}`}
+      className={`experiment-number catalog-field number-field--${presentation}${compact && presentation === "slider" ? " number-field--compact" : ""}`}
     >
       <div className="number-field-heading">
         <label htmlFor={showNumber ? `${id}-value` : `${id}-range`}>
@@ -161,8 +163,9 @@ export function NumberField({
       )}
       {error && (
         <span id={id} role="alert" className="experiment-error">
-          {error}
-          {` Current value: ${value}. Press Escape to restore it.`}
+          {compact
+            ? `Use ${integer ? "whole " : ""}${min}–${max}. Current value: ${value}. Esc restores.`
+            : `${error} Current value: ${value}. Press Escape to restore it.`}
         </span>
       )}
     </div>

@@ -1093,3 +1093,49 @@
   height: 100%;
   max-height: 100%;
 }
+
+.board-learner-view {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+.board-learner-view p {
+  margin: 6px 0 12px;
+  font-size: 12px;
+}
+.board-view-warning {
+  position: absolute;
+  top: 64px;
+  left: 12px;
+  z-index: 1150;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  width: min(440px, calc(100% - 24px));
+  padding: 12px;
+  border: 1px solid #ad7c28;
+  border-radius: 10px;
+  background: #fff7df;
+  color: #654811;
+  font-size: 13px;
+}
+.board-view-warning output {
+  flex-basis: 100%;
+}
+.board-view-warning button {
+  padding: 6px 10px;
+  border: 1px solid #ad7c28;
+  border-radius: 6px;
+  background: var(--panel);
+  color: inherit;
+  cursor: pointer;
+}
+.board-item.is-outside-view {
+  outline: 2px dashed #ad7c28;
+  outline-offset: 3px;
+}
+.board-item.is-outside-view.is-selected {
+  outline-style: solid;
+  outline-color: var(--accent);
+}

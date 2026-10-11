@@ -62,6 +62,8 @@ export type GenerationRequest = {
   protocolVersion: 1;
   requestId: string;
   prompt: string;
+  destination?: "lesson" | "builder";
+  construction?: "live";
   viewport: { width: number; height: number };
   active: null | {
     sessionId: string;
@@ -168,12 +170,25 @@ export function parseGenerationRequest(value: unknown): GenerationRequest {
     "protocolVersion",
     "requestId",
     "prompt",
+    "destination",
+    "construction",
     "viewport",
     "active",
   ]);
   if (value.protocolVersion !== 1)
     throw new Error("Unsupported generation protocol");
   identity(value.requestId);
+  if (
+    value.destination !== undefined &&
+    value.destination !== "lesson" &&
+    value.destination !== "builder"
+  )
+    throw new Error("Invalid generation destination");
+  if (
+    value.construction !== undefined &&
+    (value.construction !== "live" || value.destination !== "builder")
+  )
+    throw new Error("Live construction requires a builder destination");
   validateValue(text(4000), value.prompt, "prompt");
   if (!(value.prompt as string).trim())
     throw new Error("Prompt must not be blank");

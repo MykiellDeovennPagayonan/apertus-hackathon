@@ -5,10 +5,12 @@ import time
 from typing import Any, Literal
 
 class ModelRuntime:
-    def __init__(self, model_id: str, device: str | None, dtype: str):
+    def __init__(self, model_id: str, device: str | None, dtype: str, backend: str = "mlx", threads: int = 1):
         self.model_id = model_id
         self.device = device
         self.dtype = dtype
+        self.backend = backend
+        self.threads = threads
         self.agent = None
         self.state: Literal["loading", "ready", "error"] = "loading"
         self.load_ms: float | None = None
@@ -19,12 +21,23 @@ class ModelRuntime:
     def load(self) -> None:
         started = time.perf_counter()
         try:
-            import laya_mlx as laya
+            if self.backend == "torch":
+                import torch
+                import laya as cpu_laya
 
-            load_options = {"dtype": self.dtype}
-            if self.device:
-                load_options["device"] = self.device
-            self.agent = laya.load(self.model_id, **load_options)
+                # Docker installs this wrapper as laya_service so upstream laya is unshadowed.
+                if not hasattr(cpu_laya, "load"):
+                    raise RuntimeError("Launch the CPU wrapper as laya_service using its Docker image; the local laya package shadows upstream Laya")
+                torch.set_num_threads(self.threads)
+                torch.set_num_interop_threads(1)
+                self.agent = cpu_laya.load(self.model_id, device="cpu", backend="eager")
+            else:
+                import laya_mlx as mlx_laya
+
+                load_options = {"dtype": self.dtype}
+                if self.device:
+                    load_options["device"] = self.device
+                self.agent = mlx_laya.load(self.model_id, **load_options)
             self.load_ms = (time.perf_counter() - started) * 1000
             warmup_started = time.perf_counter()
             self.agent.predict(
@@ -51,4 +64,3 @@ class ModelRuntime:
             result = self.agent.predict(state, questions)
             inference_ms = (time.perf_counter() - started) * 1000
         return result, inference_ms
-

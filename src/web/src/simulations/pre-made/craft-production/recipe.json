@@ -1,0 +1,536 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/craft-production",
+  "version": 1,
+  "title": "Craft or assembly line?",
+  "description": "Compare eight independent craft workers with eight serial specialists over the same eight-hour shift.",
+  "tags": [
+    "social-systems",
+    "systems",
+    "comparison"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/social-systems/Production",
+        "version": 1,
+        "label": "Craft or assembly line?",
+        "scope": "scope/lab",
+        "configuration": {
+          "specialization": 80,
+          "delay": 0,
+          "disruption": 0
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/social-production",
+        "version": 1,
+        "label": "Visual comparison",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/specialization",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Division of work",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Division of work",
+          "mode": "immediate",
+          "initial": "{\"value\":80}",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/delay",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Slowest-stage delay",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Slowest-stage delay",
+          "mode": "immediate",
+          "initial": "{\"value\":0}",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/disruption",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Temporary disruption",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Temporary disruption",
+          "mode": "immediate",
+          "initial": "{\"value\":0}",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/craftCompleted",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Craft completed",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Craft completed",
+          "precision": 0
+        }
+      },
+      {
+        "id": "result/assemblyCompleted",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Assembly completed",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Assembly completed",
+          "precision": 0
+        }
+      },
+      {
+        "id": "result/unfinished",
+        "definition": "displays/StatusMessage",
+        "version": 1,
+        "label": "Unfinished \u00b7 craft / line",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Unfinished \u00b7 craft / line",
+          "precision": 0
+        }
+      },
+      {
+        "id": "result/idle",
+        "definition": "displays/StatusMessage",
+        "version": 1,
+        "label": "Idle time \u00b7 craft / line",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Idle time \u00b7 craft / line",
+          "precision": 0
+        }
+      },
+      {
+        "id": "result/defects",
+        "definition": "displays/StatusMessage",
+        "version": 1,
+        "label": "Defect rate \u00b7 craft / line",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Defect rate \u00b7 craft / line",
+          "precision": 0
+        }
+      },
+      {
+        "id": "conclusion",
+        "definition": "displays/StatusMessage",
+        "version": 1,
+        "label": "What this shows",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "What this shows",
+          "precision": 0
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/input/specialization",
+        "kind": "command",
+        "from": {
+          "node": "input/specialization",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PRODUCTION_SET_SPECIALIZATION"
+        }
+      },
+      {
+        "id": "link/input/delay",
+        "kind": "command",
+        "from": {
+          "node": "input/delay",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PRODUCTION_SET_DELAY"
+        }
+      },
+      {
+        "id": "link/input/disruption",
+        "kind": "command",
+        "from": {
+          "node": "input/disruption",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PRODUCTION_SET_DISRUPTION"
+        }
+      },
+      {
+        "id": "link/result/craftCompleted",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "craftCompleted"
+        },
+        "to": {
+          "node": "result/craftCompleted",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/assemblyCompleted",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "assemblyCompleted"
+        },
+        "to": {
+          "node": "result/assemblyCompleted",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/unfinished",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "unfinished"
+        },
+        "to": {
+          "node": "result/unfinished",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/idle",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "idle"
+        },
+        "to": {
+          "node": "result/idle",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/defects",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "defects"
+        },
+        "to": {
+          "node": "result/defects",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/conclusion",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "conclusion"
+        },
+        "to": {
+          "node": "conclusion",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Craft or assembly line?"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/controls",
+          "kind": "stack",
+          "label": "Change one condition",
+          "gap": 12,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/specialization",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "input/specialization"
+            },
+            {
+              "id": "layout/input/delay",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "input/delay"
+            },
+            {
+              "id": "layout/input/disruption",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "input/disruption"
+            }
+          ]
+        },
+        {
+          "id": "layout/results",
+          "kind": "stack",
+          "label": "What happened",
+          "gap": 12,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/measurements",
+              "kind": "grid",
+              "label": "",
+              "gap": 14,
+              "columns": 2,
+              "children": [
+                {
+                  "id": "layout/result/craftCompleted",
+                  "kind": "stack",
+                  "label": "",
+                  "gap": 8,
+                  "columns": 1,
+                  "children": [],
+                  "node": "result/craftCompleted"
+                },
+                {
+                  "id": "layout/result/assemblyCompleted",
+                  "kind": "stack",
+                  "label": "",
+                  "gap": 8,
+                  "columns": 1,
+                  "children": [],
+                  "node": "result/assemblyCompleted"
+                }
+              ]
+            },
+            {
+              "id": "layout/result/unfinished",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "result/unfinished"
+            },
+            {
+              "id": "layout/result/idle",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "result/idle"
+            },
+            {
+              "id": "layout/result/defects",
+              "kind": "stack",
+              "label": "",
+              "gap": 8,
+              "columns": 1,
+              "children": [],
+              "node": "result/defects"
+            }
+          ]
+        },
+        {
+          "id": "layout/conclusion",
+          "kind": "stack",
+          "label": "Why it happens",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "conclusion",
+          "fontSize": 16
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Craft or assembly line?",
+      "instruction": "Watch one chair being built. Slow the joining station and look for waiting chairs and workers.",
+      "explanation": "Same item, eight workers and eight-hour shift. Craft takes 80 minutes per item; specialization shortens assembly tasks from 10 to 4.55 minutes. Stage four alone receives the delay and the interruption. One craft worker has the same interruption; other craft workers keep working. Queues are unbounded and unfinished work remains at shift end. Idle time is the share of total worker time not spent processing. Illustrative defect rates describe a quality tradeoff, not an industrial forecast. No product variety, learning or fatigue dynamics."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 820,
+            "height": 550
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 180
+        },
+        {
+          "id": "board/layout/controls",
+          "layoutId": "layout/controls",
+          "rect": {
+            "x": 844,
+            "y": 0,
+            "width": 350,
+            "height": 444
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 200
+        },
+        {
+          "id": "board/layout/results",
+          "layoutId": "layout/results",
+          "rect": {
+            "x": 844,
+            "y": 464,
+            "width": 350,
+            "height": 232
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 115
+        },
+        {
+          "id": "board/layout/conclusion",
+          "layoutId": "layout/conclusion",
+          "rect": {
+            "x": 0,
+            "y": 560,
+            "width": 820,
+            "height": 96
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 115
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1242,
+        "height": 784
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/controls"
+        ],
+        [
+          "board/layout/results"
+        ],
+        [
+          "board/layout/conclusion"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/social-systems/Production",
+      "version": 1
+    },
+    {
+      "id": "appearance/social-production",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    },
+    {
+      "id": "displays/StatusMessage",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Same item, eight workers and eight-hour shift. Craft takes 80 minutes per item; specialization shortens assembly tasks from 10 to 4.55 minutes.",
+    "Stage four alone receives the delay and the interruption. One craft worker has the same interruption; other craft workers keep working. Queues are unbounded and unfinished work remains at shift end.",
+    "Idle time is the share of total worker time not spent processing. Illustrative defect rates describe a quality tradeoff, not an industrial forecast. No product variety, learning or fatigue dynamics."
+  ],
+  "catalog": {
+    "icon": "\u21e2",
+    "category": "social-systems",
+    "order": 17
+  }
+}

@@ -1,3 +1,9 @@
+import {
+  type ConstructionUpdate,
+  parseConstructionUpdate,
+  STREAM_BYTE_LIMIT,
+  STREAM_FRAME_BYTE_LIMIT,
+} from "./construction";
 import { type GenerationStage, isGenerationStage } from "./progress";
 import {
   type GenerationRequest,
@@ -10,13 +16,16 @@ export async function requestGeneration(
   signal: AbortSignal,
   onResultReceived?: () => void,
   onProgress?: (stage: GenerationStage) => void,
+  onConstruction?: (update: ConstructionUpdate) => Promise<void> | void,
 ) {
   const request = parseGenerationRequest(input);
   const response = await fetch("/api/apertus", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      ...(onProgress ? { Accept: "application/x-ndjson" } : {}),
+      ...(onProgress || onConstruction
+        ? { Accept: "application/x-ndjson" }
+        : {}),
     },
     body: JSON.stringify(request),
     signal,
@@ -31,8 +40,13 @@ export async function requestGeneration(
     const decoder = new TextDecoder("utf-8", { fatal: true });
     let buffer = "";
     let received = false;
-    const consume = (line: string) => {
+    let sequence = 0;
+    let draftRevision = 0;
+    let bytes = 0;
+    const consume = async (line: string) => {
       if (!line.trim()) return;
+      if (new TextEncoder().encode(line).byteLength > STREAM_FRAME_BYTE_LIMIT)
+        throw new Error("Generation frame exceeds byte budget");
       const event = JSON.parse(line);
       if (!event || event.requestId !== request.requestId)
         throw new Error(
@@ -42,7 +56,25 @@ export async function requestGeneration(
         throw new Error("Unexpected event after generation result.");
       if (event.type === "progress" && isGenerationStage(event.stage))
         onProgress?.(event.stage);
-      else if (event.type === "result") {
+      else if (event.type === "construction") {
+        if (
+          request.destination !== "builder" ||
+          request.construction !== "live" ||
+          !onConstruction
+        )
+          throw new Error("Unexpected construction event");
+        const update = parseConstructionUpdate(event);
+        if (
+          update.sequence !== sequence + 1 ||
+          update.draftRevision < draftRevision
+        )
+          throw new Error(
+            "Construction event order does not match the current draft",
+          );
+        sequence = update.sequence;
+        draftRevision = update.draftRevision;
+        await onConstruction(update);
+      } else if (event.type === "result") {
         data = event.result;
         received = true;
       } else throw new Error("Invalid generation progress event.");
@@ -52,17 +84,25 @@ export async function requestGeneration(
         const { done, value } = await reader.read();
         if (signal.aborted)
           throw new DOMException("Request cancelled", "AbortError");
+        bytes += value?.byteLength ?? 0;
+        if (bytes > STREAM_BYTE_LIMIT)
+          throw new Error("Generation stream exceeds byte budget");
         buffer += done
           ? decoder.decode()
           : decoder.decode(value, { stream: true });
         let newline = buffer.indexOf("\n");
         while (newline >= 0) {
-          consume(buffer.slice(0, newline));
+          await consume(buffer.slice(0, newline));
           buffer = buffer.slice(newline + 1);
           newline = buffer.indexOf("\n");
         }
+        if (
+          buffer.length > STREAM_FRAME_BYTE_LIMIT ||
+          new TextEncoder().encode(buffer).byteLength > STREAM_FRAME_BYTE_LIMIT
+        )
+          throw new Error("Generation frame exceeds byte budget");
         if (done) {
-          consume(buffer);
+          await consume(buffer);
           break;
         }
       }

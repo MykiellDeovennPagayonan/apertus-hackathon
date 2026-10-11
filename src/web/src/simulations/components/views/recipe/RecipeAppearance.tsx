@@ -8,6 +8,7 @@ import type { ComponentInstance } from "../../../runtime/authoring/types";
 import type { ModelInstance } from "../../../runtime/contribution";
 import { DragHandleControl } from "../../controls/DragHandleControl";
 import type { eclipseGeometry } from "../../systems/exploration/eclipse";
+import type { SpringState } from "../../systems/exploration/spring";
 import {
   AcidBaseTitrationVisual,
   BeakerVisual,
@@ -35,7 +36,11 @@ import {
   DimensionLabelVisual,
   RatioBarVisual,
 } from "../../visuals/ElementaryVisuals";
+import { FoodWebVisual } from "../../visuals/ecology/FoodWebVisual";
+import { NutrientLimitationVisual } from "../../visuals/ecology/NutrientLimitationVisual";
+import { WildfireComparisonVisual } from "../../visuals/ecology/WildfireComparisonVisual";
 import { EclipseVisual } from "../../visuals/exploration/EclipseVisual";
+import { SpringVisual } from "../../visuals/exploration/SpringVisual";
 import {
   DiffusionHeatmap,
   PlantGrowthGraph,
@@ -46,14 +51,27 @@ import {
   CircuitVisual,
   TrackVisual,
 } from "../../visuals/physical-systems/PhysicalVisuals";
+import { thermalOpticsAppearances } from "../../visuals/physics/ThermalOpticsScenes";
+import { mechanicsAppearances } from "../../visuals/physics/MechanicsScenes";
+import { LeverScene } from "../../visuals/physics/LeverScene";
+import { ScienceScene } from "../../visuals/science/ScienceScene";
+import { ProductionComparisonVisual } from "../../visuals/social-systems/ProductionComparisonVisual";
 import { ArithmeticScene } from "../ArithmeticScene";
 import { BridgeScene } from "../BridgeScene";
+import { CycleScene } from "../biogeochemistry/CycleScene";
 import { CountingScene } from "../CountingScene";
+import { CrowdScene } from "../collective/CrowdScene";
+import { FishingScene } from "../collective/FishingScene";
+import { SelectionScene } from "../collective/SelectionScene";
+import { VotingScene } from "../collective/VotingScene";
 import { DatasetDisplay } from "../DatasetDisplay";
 import { PropertyInspector } from "../EntityInspectorView";
 import { EqualGroupsScene } from "../EqualGroupsScene";
+import { LessonScene } from "../earth-atmosphere/LessonScene";
 import { FractionBuilderScene } from "../FractionBuilderScene";
 import { FractionNumberLineScene } from "../FractionNumberLineScene";
+import { mathAnalysisAppearances } from "../math-analysis/MathAnalysisScenes";
+import { mathGeometryAppearances } from "../math-geometry";
 import { ProbabilityScene } from "../ProbabilityScene";
 import { ProjectileScene } from "../ProjectileScene";
 import { SVGWorldView } from "../SVGWorldView";
@@ -74,8 +92,45 @@ const ScopedWorld = dynamic(() => import("../ScopedWorldView"), {
 
 const appearances: Record<
   string,
-  (p: { instance: ModelInstance }) => React.ReactNode
+  (p: {
+    instance: ModelInstance;
+    onSelect?: (selection: number) => void;
+    onCommand?: (command: string, value?: unknown) => void;
+    question?: string;
+  }) => React.ReactNode
 > = {
+  ...mathAnalysisAppearances,
+  ...mathGeometryAppearances,
+  "physics-lever": LeverScene,
+  ...mechanicsAppearances,
+  ...thermalOpticsAppearances,
+  "earth-atmosphere-earthquake": LessonScene,
+  "earth-atmosphere-tsunami": LessonScene,
+  "earth-atmosphere-atmosphere": LessonScene,
+  "earth-atmosphere-greenhouse": LessonScene,
+  "earth-atmosphere-lightning": LessonScene,
+  "earth-atmosphere-rainbow": LessonScene,
+  "earth-atmosphere-weather": LessonScene,
+  "collective-fishing": FishingScene,
+  "collective-crowd": CrowdScene,
+  "collective-voting": VotingScene,
+  "collective-selection": SelectionScene,
+  "cycle-oxygen": CycleScene,
+  "cycle-nitrogen": CycleScene,
+  "cycle-carbon": CycleScene,
+  "science-cell": ScienceScene,
+  "science-immune": ScienceScene,
+  "science-genome": ScienceScene,
+  "science-pollination": ScienceScene,
+  "science-invasive": ScienceScene,
+  "science-earth": ScienceScene,
+  "science-plates": ScienceScene,
+  "science-volcano": ScienceScene,
+  "science-water": ScienceScene,
+  "ecology-nutrients": NutrientLimitationVisual,
+  "ecology-wildfire": WildfireComparisonVisual,
+  "ecology-food-web": FoodWebVisual,
+  "social-production": ProductionComparisonVisual,
   "chemistry-dilution": BeakerVisual,
   "chemistry-conservation": MoleculeVisual,
   "chemistry-rate": ReactionCurveVisual,
@@ -231,6 +286,12 @@ export function Appearance({
     state: snapshot.state[model.id],
     outputs: snapshot.outputs[model.id],
   };
+  if (node.definition === "appearance/SpringMass")
+    return (
+      <SpringVisual
+        state={snapshot.state[model.id] as unknown as SpringState}
+      />
+    );
   if (node.definition === "appearance/EclipseGeometry")
     return (
       <EclipseVisual
@@ -268,7 +329,38 @@ export function Appearance({
     );
   const name = node.definition.slice("appearance/".length),
     View = appearances[name];
-  if (View) return <View instance={instance} />;
+  if (View)
+    return (
+      <View
+        instance={instance}
+        question={
+          name.startsWith("science-") || name.startsWith("cycle-")
+            ? String(
+                node.configuration.question ||
+                  runtime.document.lesson.instruction,
+              )
+            : undefined
+        }
+        onCommand={(command, value) =>
+          runtime.dispatch([
+            {
+              node: model.id,
+              command,
+              arguments: value === undefined ? {} : { value },
+            },
+          ])
+        }
+        onSelect={(selection) =>
+          runtime.dispatch([
+            {
+              node: model.id,
+              command: "WEB_SET_SELECTION",
+              arguments: { value: selection },
+            },
+          ])
+        }
+      />
+    );
   if (name.startsWith("physical-"))
     return <PhysicalAppearance instance={instance} />;
   const onCommand = (command: import("../../../runtime/types").UIAction) =>

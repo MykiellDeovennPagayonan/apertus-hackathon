@@ -1,0 +1,339 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/pipe-flow",
+  "version": 1,
+  "title": "Water pipe constriction",
+  "description": "What changes when a pipe narrows at fixed volume flow?",
+  "tags": [
+    "physics",
+    "flow",
+    "water pipe constriction"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/physics/PipeFlow",
+        "version": 1,
+        "label": "Water pipe constriction",
+        "scope": "scope/lab",
+        "configuration": {
+          "wideArea": 0.02,
+          "narrowArea": 0.01,
+          "flowRate": 0.02,
+          "referencePressure": 101325,
+          "density": 1000,
+          "time": 0
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/physics-flow",
+        "version": 1,
+        "label": "Water pipe constriction scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/narrowArea",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Constriction area",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Constriction area",
+          "mode": "immediate",
+          "initial": "{\"value\": 0.01}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/time",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Follow water / start again",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Follow water / start again",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/narrowArea",
+        "kind": "command",
+        "from": {
+          "node": "control/narrowArea",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "FLOW_NARROWAREA"
+        }
+      },
+      {
+        "id": "link/time",
+        "kind": "command",
+        "from": {
+          "node": "control/time",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "FLOW_TIME"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Water pipe constriction"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/narrowArea",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/narrowArea"
+        },
+        {
+          "id": "layout/time",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/time"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Water pipe constriction",
+      "instruction": "What changes when a pipe narrows at fixed volume flow?",
+      "explanation": "Steady horizontal incompressible inviscid flow driven at fixed volume flow Q, not fixed pump pressure. Reference pressure is absolute. Reject narrow-section pressure at or below water vapour pressure 2340 Pa at 20\u00b0C; no cavitation, viscous losses or turbulence. Tracer state uses computed speed and elapsed time."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 340
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 280
+        },
+        {
+          "id": "board/layout/narrowArea",
+          "layoutId": "layout/narrowArea",
+          "rect": {
+            "x": 0,
+            "y": 360,
+            "width": 220,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/time",
+          "layoutId": "layout/time",
+          "rect": {
+            "x": 234,
+            "y": 360,
+            "width": 220,
+            "height": 80
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/narrowArea",
+          "board/layout/time"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1000,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "wideArea",
+      "node": "model",
+      "field": "wideArea",
+      "schema": {
+        "type": "number",
+        "minimum": 0.001,
+        "maximum": 0.1,
+        "unit": "m\u00b2"
+      },
+      "default": 0.02
+    },
+    {
+      "name": "narrowArea",
+      "node": "model",
+      "field": "narrowArea",
+      "schema": {
+        "type": "number",
+        "minimum": 0.001,
+        "maximum": 0.1,
+        "unit": "m\u00b2"
+      },
+      "default": 0.01
+    },
+    {
+      "name": "flowRate",
+      "node": "model",
+      "field": "flowRate",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 0.05,
+        "unit": "m\u00b3/s"
+      },
+      "default": 0.02
+    },
+    {
+      "name": "referencePressure",
+      "node": "model",
+      "field": "referencePressure",
+      "schema": {
+        "type": "number",
+        "minimum": 3000,
+        "maximum": 1000000,
+        "unit": "Pa absolute"
+      },
+      "default": 101325
+    },
+    {
+      "name": "density",
+      "node": "model",
+      "field": "density",
+      "schema": {
+        "type": "number",
+        "minimum": 800,
+        "maximum": 1400,
+        "unit": "kg/m\u00b3"
+      },
+      "default": 1000
+    },
+    {
+      "name": "time",
+      "node": "model",
+      "field": "time",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 10,
+        "unit": "s"
+      },
+      "default": 0
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/PipeFlow",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-flow",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Steady horizontal incompressible inviscid flow driven at fixed volume flow Q, not fixed pump pressure. Reference pressure is absolute. Reject narrow-section pressure at or below water vapour pressure 2340 Pa at 20\u00b0C; no cavitation, viscous losses or turbulence. Tracer state uses computed speed and elapsed time."
+  ],
+  "catalog": {
+    "icon": "\u2699",
+    "category": "physics",
+    "order": 149
+  }
+}

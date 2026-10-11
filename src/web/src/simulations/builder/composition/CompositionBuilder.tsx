@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import CommandBar from "../../../app/_components/CommandBar";
 import { publicDefinition } from "../../components/catalog";
 import { SchemaForm } from "../../components/controls/SchemaForm";
@@ -30,6 +30,8 @@ import { ComponentSettings } from "./ComponentSettings";
 import { CompositeInterfaceEditor } from "./CompositeInterfaceEditor";
 import { CompositionGraph } from "./CompositionGraph";
 import { CompositionLibrary } from "./CompositionLibrary";
+import { ConstructionBoardPreview } from "./ConstructionBoardPreview";
+import { constructionPreview } from "./constructionPreview";
 import { FeedbackView } from "./FeedbackView";
 import { makeFeedback } from "./feedback";
 import {
@@ -47,7 +49,8 @@ type Edit = (
 export default function CompositionBuilder({
   doc,
   valid,
-  edit,
+  edit: commit,
+  onBusyChange,
   undo,
   redo,
   canUndo,
@@ -70,6 +73,7 @@ export default function CompositionBuilder({
   doc: ExperimentDocument;
   valid: ExperimentDocument;
   edit: Edit;
+  onBusyChange?: (busy: boolean) => void;
   undo: () => void;
   redo: () => void;
   canUndo: boolean;
@@ -104,8 +108,22 @@ export default function CompositionBuilder({
       window.removeEventListener("keydown", close);
     };
   }, []);
+  const composer = useRef<HTMLDivElement>(null);
+  const mutationLock = useRef(false);
+  const edit: Edit = (...args) => !mutationLock.current && commit(...args);
   const catalog = useComponentCatalog(doc, edit);
-  const ai = useBuilderAi({ doc, edit });
+  const ai = useBuilderAi({
+    doc,
+    edit: commit,
+    onBusyChange: (busy) => {
+      mutationLock.current = busy;
+      onBusyChange?.(busy);
+    },
+  });
+  const visibleDocument = useMemo(
+    () => (ai.preview ? constructionPreview(doc, ai.preview) : doc),
+    [doc, ai.preview],
+  );
   const {
     document,
     components,
@@ -122,6 +140,32 @@ export default function CompositionBuilder({
   const [appearancePreview, setAppearancePreview] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
+  useEffect(() => {
+    if (ai.busy) {
+      setSelected("");
+      setLibraryOpen(false);
+      setSaveOpen(false);
+      setAppearancePreview(false);
+    }
+  }, [ai.busy]);
+  useEffect(() => {
+    if (expanded || appearancePreview) return;
+    const element = composer.current;
+    const root = element?.closest<HTMLElement>(".composition-builder");
+    if (!element || !root) return;
+    const measure = () =>
+      root.style.setProperty(
+        "--builder-composer-height",
+        `${element.getBoundingClientRect().height}px`,
+      );
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    measure();
+    return () => {
+      observer.disconnect();
+      root.style.removeProperty("--builder-composer-height");
+    };
+  }, [expanded, appearancePreview]);
   const noticeFailure = /Couldn't |could not|unsupported or invalid/i.test(
     notice,
   );
@@ -169,7 +213,7 @@ export default function CompositionBuilder({
             value={doc.lesson.title}
             placeholder="Untitled experiment"
             maxLength={100}
-            readOnly={expanded}
+            readOnly={expanded || ai.busy}
             onChange={(event) =>
               edit(
                 (d) => {
@@ -187,17 +231,17 @@ export default function CompositionBuilder({
         </output>
         {!expanded && (
           <>
-            <button type="button" disabled={!canUndo} onClick={undo}>
+            <button type="button" disabled={!canUndo || ai.busy} onClick={undo}>
               Undo
             </button>
-            <button type="button" disabled={!canRedo} onClick={redo}>
+            <button type="button" disabled={!canRedo || ai.busy} onClick={redo}>
               Redo
             </button>
             <button
               type="button"
               className="composition-save-action"
               aria-label={saveLabel}
-              disabled={!!error || saving}
+              disabled={!!error || saving || ai.busy}
               onClick={onSave}
             >
               <span className="toolbar-full-label">{saveLabel}</span>
@@ -207,6 +251,7 @@ export default function CompositionBuilder({
             </button>
             <details
               ref={documentMenu}
+              inert={ai.busy}
               className="composition-document-menu composition-view-menu"
             >
               <summary aria-label="More document actions">More</summary>
@@ -219,12 +264,13 @@ export default function CompositionBuilder({
         )}
         <button
           type="button"
+          disabled={ai.busy}
           className="builder-primary"
           aria-label={expanded ? "Return to builder" : "Try lesson ↗"}
           onClick={() => {
             if (!expanded) {
               try {
-                validateRunnableDocument(doc);
+                validateRunnableDocument(doc, false);
                 catalog.report("");
               } catch (e) {
                 catalog.report(
@@ -248,8 +294,12 @@ export default function CompositionBuilder({
           </span>
         </button>
       </header>
-      {!expanded && <div className="builder-project-toolbar">{lifecycle}</div>}
-      {!expanded && storageNotice}
+      {!expanded && (
+        <div className="builder-project-toolbar" inert={ai.busy}>
+          {lifecycle}
+        </div>
+      )}
+      {!expanded && <div inert={ai.busy}>{storageNotice}</div>}
       {error && (
         <section className="builder-feedback is-error" role="alert">
           <strong>Preview is using the last valid draft</strong>
@@ -296,12 +346,13 @@ export default function CompositionBuilder({
           </fieldset>
           <button
             type="button"
+            disabled={ai.busy}
             data-composition-add
             onClick={() => openLibrary()}
           >
             + Add component
           </button>
-          {tab === "Build" && (
+          {tab === "Build" && !ai.busy && (
             <button
               type="button"
               className="composition-appearance-toggle"
@@ -328,7 +379,7 @@ export default function CompositionBuilder({
               <span>{appearancePreview ? "Editing view" : "Preview"}</span>
             </button>
           )}
-          <details className="composition-view-menu">
+          <details className="composition-view-menu" inert={ai.busy}>
             <summary>Lesson settings</summary>
             <div>
               <button type="button" onClick={() => setSelected("lesson")}>
@@ -350,8 +401,10 @@ export default function CompositionBuilder({
 
       <div className="composition-workspace">
         <CompositionGraph
-          doc={doc}
-          selected={selected}
+          doc={visibleDocument}
+          constructing={ai.busy}
+          construction={ai.preview}
+          selected={ai.busy ? "" : selected}
           onSelect={selectSettings}
           onAdd={openLibrary}
           edit={edit}
@@ -369,109 +422,113 @@ export default function CompositionBuilder({
             hidden={!expanded && tab !== "Build"}
             className={`composition-preview ${!expanded && mobile ? "is-mobile" : ""} ${appearancePreview ? "is-appearance-preview" : ""} ${expanded || (!mobile && valid.authored?.presentation?.mode === "board") ? "is-board-workspace" : ""}`}
           >
-            <RecipeLesson
-              document={requireValue(valid.authored)}
-              authoring={!expanded && !appearancePreview && tab === "Build"}
-              workspace={expanded || !mobile}
-              onBoardAction={(action, layoutIds, itemIds = []) => {
-                if (action === "separate") {
-                  change("Arrange group contents separately", (d) => {
-                    layoutIds.forEach((id) => {
-                      separateBoardLayout(d, id);
+            {ai.busy ? (
+              <ConstructionBoardPreview update={ai.preview} />
+            ) : (
+              <RecipeLesson
+                document={requireValue(valid.authored)}
+                authoring={!expanded && !appearancePreview && tab === "Build"}
+                workspace={expanded || !mobile}
+                onBoardAction={(action, layoutIds, itemIds = []) => {
+                  if (action === "separate") {
+                    change("Arrange group contents separately", (d) => {
+                      layoutIds.forEach((id) => {
+                        separateBoardLayout(d, id);
+                      });
                     });
-                  });
-                  return;
-                }
-                const ids: string[] = [];
-                const collect = (
-                  layout: typeof document.layout,
-                  selected = false,
-                ) => {
-                  const inside = selected || layoutIds.includes(layout.id);
-                  if (inside && layout.node) ids.push(layout.node);
-                  layout.children.forEach((child) => {
-                    collect(child, inside);
-                  });
-                };
-                collect(document.layout);
-                if (action === "copy") {
-                  boardClipboard.current = {
-                    document: structuredClone(doc),
-                    ids,
-                    itemIds,
-                  };
-                  report("Content copied. Use Paste to place a copy.");
-                  return;
-                }
-                if (action === "paste" && !boardClipboard.current) {
-                  report("Copy some board content first.");
-                  return;
-                }
-                edit(
-                  (d) => {
-                    if (action === "delete") {
-                      deleteBoardDrawingContent(d, itemIds);
-                      deleteComponents(d, ids);
-                      if (d.authored) {
-                        const prune = (layout: typeof document.layout) => {
-                          layout.children = layout.children.filter(
-                            (child) => !layoutIds.includes(child.id),
-                          );
-                          layout.children.forEach(prune);
-                        };
-                        prune(d.authored.layout);
-                        if (layoutIds.includes(d.authored.layout.id)) {
-                          d.authored.layout.children = [];
-                          delete d.authored.layout.node;
-                        }
-                        reconcileBoard(d.authored);
-                      }
-                    } else
-                      pasteBoardContent(
-                        d,
-                        action === "duplicate"
-                          ? { document: doc, ids, itemIds }
-                          : requireValue(boardClipboard.current),
-                      );
-                  },
-                  null,
-                  action === "delete"
-                    ? "Delete board content"
-                    : "Paste board content",
-                );
-              }}
-              onPresentationChange={(presentation, group, action) =>
-                edit(
-                  (d) => {
-                    if (d.authored) d.authored.presentation = presentation;
-                  },
-                  group ?? null,
-                  action ?? "Edit board presentation",
-                )
-              }
-              selected={selected}
-              onSelect={selectSettings}
-              onAuthorChange={(node) =>
-                change("Edit starting geometry", (d) => {
-                  const target = d.nodes.find((n) => n.id === node.id);
-                  if (target) {
-                    const { id: _, ...configuration } = node;
-                    target.configuration = configuration;
+                    return;
                   }
-                })
-              }
-              onCanvasChange={(nodeId, viewport) =>
-                change("Set canvas starting view", (d) => {
-                  const target = d.nodes.find((node) => node.id === nodeId);
-                  if (target) Object.assign(target.configuration, viewport);
-                })
-              }
-              onCapture={
-                expanded || appearancePreview
-                  ? undefined
-                  : (next) => change("Capture starting values", () => next)
-              }
-            />
+                  const ids: string[] = [];
+                  const collect = (
+                    layout: typeof document.layout,
+                    selected = false,
+                  ) => {
+                    const inside = selected || layoutIds.includes(layout.id);
+                    if (inside && layout.node) ids.push(layout.node);
+                    layout.children.forEach((child) => {
+                      collect(child, inside);
+                    });
+                  };
+                  collect(document.layout);
+                  if (action === "copy") {
+                    boardClipboard.current = {
+                      document: structuredClone(doc),
+                      ids,
+                      itemIds,
+                    };
+                    report("Content copied. Use Paste to place a copy.");
+                    return;
+                  }
+                  if (action === "paste" && !boardClipboard.current) {
+                    report("Copy some board content first.");
+                    return;
+                  }
+                  edit(
+                    (d) => {
+                      if (action === "delete") {
+                        deleteBoardDrawingContent(d, itemIds);
+                        deleteComponents(d, ids);
+                        if (d.authored) {
+                          const prune = (layout: typeof document.layout) => {
+                            layout.children = layout.children.filter(
+                              (child) => !layoutIds.includes(child.id),
+                            );
+                            layout.children.forEach(prune);
+                          };
+                          prune(d.authored.layout);
+                          if (layoutIds.includes(d.authored.layout.id)) {
+                            d.authored.layout.children = [];
+                            delete d.authored.layout.node;
+                          }
+                          reconcileBoard(d.authored);
+                        }
+                      } else
+                        pasteBoardContent(
+                          d,
+                          action === "duplicate"
+                            ? { document: doc, ids, itemIds }
+                            : requireValue(boardClipboard.current),
+                        );
+                    },
+                    null,
+                    action === "delete"
+                      ? "Delete board content"
+                      : "Paste board content",
+                  );
+                }}
+                onPresentationChange={(presentation, group, action) =>
+                  edit(
+                    (d) => {
+                      if (d.authored) d.authored.presentation = presentation;
+                    },
+                    group ?? null,
+                    action ?? "Edit board presentation",
+                  )
+                }
+                selected={selected}
+                onSelect={selectSettings}
+                onAuthorChange={(node) =>
+                  change("Edit starting geometry", (d) => {
+                    const target = d.nodes.find((n) => n.id === node.id);
+                    if (target) {
+                      const { id: _, ...configuration } = node;
+                      target.configuration = configuration;
+                    }
+                  })
+                }
+                onCanvasChange={(nodeId, viewport) =>
+                  change("Set canvas starting view", (d) => {
+                    const target = d.nodes.find((node) => node.id === nodeId);
+                    if (target) Object.assign(target.configuration, viewport);
+                  })
+                }
+                onCapture={
+                  expanded || appearancePreview
+                    ? undefined
+                    : (next) => change("Capture starting values", () => next)
+                }
+              />
+            )}
           </div>
         }
       </div>
@@ -709,7 +766,7 @@ export default function CompositionBuilder({
       </ComponentDialog>
       <CompositionLibrary
         catalog={catalog}
-        open={libraryOpen}
+        open={libraryOpen && !ai.busy}
         onClose={() => setLibraryOpen(false)}
         onAiBuild={(prompt) => {
           ai.onPrompt(prompt);
@@ -719,7 +776,7 @@ export default function CompositionBuilder({
       />
       <SaveCompositeDialog
         catalog={catalog}
-        open={saveOpen}
+        open={saveOpen && !ai.busy}
         onClose={() => setSaveOpen(false)}
       />
       {document.compatibility && (
@@ -741,43 +798,53 @@ export default function CompositionBuilder({
           </button>
         </details>
       )}
-      <div className="builder-composer">
-        <CommandBar
-          placeholder={
-            doc.authored?.nodes?.length
-              ? "Add components, wire connections, or configure this composite…"
-              : "Describe a composite to build (e.g. spring-mass oscillator with slider and readout)…"
-          }
-          chips={
-            doc.authored?.nodes?.length
-              ? [
-                  "Add slider control component wired to model input",
-                  "Add observation readout component wired to output",
-                  "Connect available component ports",
-                  "Adjust model configuration parameters",
-                  "Group components into a reusable composite with exposed parameters",
-                ]
-              : [
-                  "Assemble harmonic oscillator composite with mass slider and readout",
-                  "Build inclined track composite with friction control and speedometer",
-                  "Create balance scale composite with weights and angle readout",
-                  "Assemble projectile launcher composite with launch angle control",
-                ]
-          }
-          disabled={ai.busy}
-          status={ai.status}
-          value={ai.draft}
-          onChange={ai.setDraft}
-          landing={false}
-          compact={true}
-          lastRequest={ai.lastRequest}
-          onSubmit={ai.onPrompt}
-          onStop={ai.cancel}
-          submitLabel={
-            doc.authored?.nodes?.length ? "Update Composite" : "Build Composite"
-          }
-        />
-      </div>
+      {!expanded && !appearancePreview && (
+        <div ref={composer} className="builder-composer">
+          <CommandBar
+            placeholder={
+              doc.authored?.nodes?.length
+                ? "What would you like to change or explore?…"
+                : "What would you like to explore? Try: Show me how springs work…"
+            }
+            chips={
+              doc.authored?.nodes?.length
+                ? doc.authored.nodes.some(
+                    (node) => node.definition === "models/SpringMass",
+                  )
+                  ? [
+                      "What happens if the spring is stronger?",
+                      "Make it stop bouncing so much",
+                      "Add another control I can change",
+                    ]
+                  : [
+                      "Make it easier to explore",
+                      "Show me another example",
+                      "Add another control I can change",
+                    ]
+                : [
+                    "Show me how springs work",
+                    "Show me how pendulums work",
+                    "Why do traffic jams happen?",
+                    "Show me how a ball flies",
+                  ]
+            }
+            disabled={ai.busy}
+            status={ai.status}
+            value={ai.draft}
+            onChange={ai.setDraft}
+            landing={false}
+            compact={true}
+            lastRequest={ai.lastRequest}
+            onSubmit={ai.onPrompt}
+            onStop={ai.cancel}
+            submitLabel={
+              doc.authored?.nodes?.length
+                ? "Update experiment"
+                : "Build experiment"
+            }
+          />
+        </div>
+      )}
     </main>
   );
 }

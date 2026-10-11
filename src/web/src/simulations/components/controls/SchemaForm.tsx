@@ -42,6 +42,8 @@ export type FieldPresentation = Record<
     widget?: string;
     showNumber?: boolean;
     exactLabel?: boolean;
+    limits?: boolean;
+    compact?: boolean;
   }
 >;
 
@@ -189,9 +191,14 @@ function Field({
           id={id}
           aria-describedby={errorId}
           aria-invalid={!!errorId || undefined}
-          value={JSON.stringify(value)}
+          value={JSON.stringify(value) ?? ""}
           onChange={(event) => onChange(JSON.parse(event.target.value))}
         >
+          {value === undefined && (
+            <option value="" disabled>
+              Not set
+            </option>
+          )}
           {choices.map((choice) => (
             <option key={JSON.stringify(choice)} value={JSON.stringify(choice)}>
               {presentation[path]?.choices?.[String(choice)] ?? String(choice)}
@@ -214,6 +221,7 @@ function Field({
     return (
       <NumberField
         label={label}
+        compact={presentation[path]?.compact}
         commitOnBlur={commitOnBlur}
         inputLabel={
           widget === "Slider" && presentation[path]?.exactLabel !== false
@@ -231,7 +239,7 @@ function Field({
         presentation={widget === "Slider" ? "slider" : "field"}
         showNumber={presentation[path]?.showNumber !== false}
         unit={unit}
-        limits={widget === "Slider"}
+        limits={widget === "Slider" && presentation[path]?.limits !== false}
         onValidityChange={(valid) => onValidityChange?.(id, valid)}
         onChange={(next) => {
           return onChange(next) ?? { accepted: true };

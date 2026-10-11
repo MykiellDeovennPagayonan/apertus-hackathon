@@ -141,6 +141,105 @@ export function arrangeDocument(
     const results = items.filter(
       (i) => !scenes.includes(i) && !controls.includes(i),
     );
+    const sceneNode = scenes.length === 1 ? nodeFor(scenes[0]) : undefined;
+    const sceneFirst =
+      sceneNode &&
+      publicDefinition(sceneNode.definition).learnerLayout === "scene-first";
+    if (sceneFirst) {
+      board.responsiveGap = 16;
+      const place = (
+        item: ComponentBoardItem,
+        rect: ComponentBoardItem["rect"],
+      ) => {
+        if (!item.locked) item.rect = rect;
+      };
+      const earthLesson = sceneNode.definition.startsWith(
+        "appearance/earth-atmosphere-",
+      );
+      const y = nextScopeY;
+      place(scenes[0], {
+        x: 0,
+        y,
+        width: 1080,
+        height: earthLesson ? 420 : 480,
+      });
+      scenes[0].responsiveMinHeight = 360;
+      rows.push([scenes[0].id]);
+      const primary = controls.find((i) =>
+        nodeFor(i)?.definition.endsWith("-action"),
+      );
+      for (const [n, item] of results.entries()) {
+        place(item, {
+          x: 0,
+          y:
+            y +
+            (earthLesson
+              ? 436
+              : sceneNode.definition.startsWith("appearance/collective-")
+                ? 578
+                : 504) +
+            n * 100,
+          width:
+            earthLesson ||
+            sceneNode.definition.startsWith("appearance/collective-")
+              ? 1080
+              : 740,
+          height: 80,
+        });
+        item.responsiveMinHeight = 80;
+        rows.push([item.id]);
+      }
+      if (
+        primary &&
+        sceneNode.definition.startsWith("appearance/earth-atmosphere-")
+      ) {
+        place(primary, { x: 0, y: y + 532, width: 1080, height: 80 });
+        primary.responsiveMinHeight = 80;
+        rows.push([primary.id]);
+      } else if (primary) {
+        place(primary, {
+          x: sceneNode.definition.startsWith("appearance/collective-")
+            ? 620
+            : 784,
+          y: y + 504,
+          width: sceneNode.definition.startsWith("appearance/collective-")
+            ? 460
+            : 296,
+          height: 64,
+        });
+        primary.responsiveMinHeight = 64;
+        rows.push([primary.id]);
+      }
+      const rest = controls.filter((i) => i !== primary);
+      for (const [n, item] of rest.entries()) {
+        place(item, {
+          x: sceneNode.definition.startsWith("appearance/collective-")
+            ? 0
+            : 620,
+          y:
+            y +
+            (sceneNode.definition.startsWith("appearance/collective-")
+              ? 504
+              : 596) +
+            n * 84,
+          width: sceneNode.definition.startsWith("appearance/collective-")
+            ? 600
+            : 460,
+          height: Math.max(64, boardItemMinimum(next, item.layoutId).height),
+        });
+        item.responsiveMinHeight = Math.max(
+          64,
+          boardItemMinimum(next, item.layoutId).height,
+        );
+        rows.push([item.id]);
+      }
+      nextScopeY = Math.max(
+        y + 684,
+        y + 604 + results.length * 100,
+        y + 596 + rest.length * 84,
+      );
+      continue;
+    }
     const order = request.narrowOrder;
     const ranked = [...scenes, ...controls, ...results].sort((a, b) => {
       const rank = (i: ComponentBoardItem) => {
@@ -293,12 +392,19 @@ export function arrangeDocument(
   for (const item of board.items)
     if (!rows.flat().includes(item.id)) rows.push([item.id]);
   board.startView = extent(board.items.map((i) => i.rect));
-  // Include breathing room in a new composition's opening extent. The canvas
-  // remains full size and freely navigable; locked component bounds are preserved.
-  board.learnerArea = {
-    ...board.startView,
-    height: board.startView.height + 48,
-  };
+  if (
+    next.nodes.some((n) => n.definition.startsWith("appearance/collective-"))
+  ) {
+    board.navigation.minZoom = 1;
+    board.navigation.maxZoom = Math.max(1, board.navigation.maxZoom);
+    board.startView = {
+      ...board.startView,
+      y: board.startView.y - 72,
+      height: board.startView.height + 162,
+    };
+    board.learnerArea ??= { ...board.startView };
+  }
+  // Automatic learner bounds follow content. Preserve an explicitly authored boundary.
   arrangeGraph(next);
   validateAuthoredDocument(next);
   return next;

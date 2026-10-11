@@ -205,19 +205,29 @@ export function createProviderRequest(
       max_tokens: tokens,
       stream: false,
       messages,
-      ...(config.connection === "local" && config.localRuntime === "mlx"
+      ...(config.connection === "local" &&
+      (config.localRuntime === "mlx" || config.localRuntime === "llamacpp")
         ? { chat_template_kwargs: { enable_thinking: false } }
+        : {}),
+      ...(config.localRuntime === "llamacpp"
+        ? { reasoning_effort: "none" }
         : {}),
       ...(wireSchema
         ? {
-            response_format: {
-              type: "json_schema",
-              json_schema: {
-                name: "authoring_stage",
-                strict: true,
-                schema: wireSchema,
-              },
-            },
+            response_format:
+              config.localRuntime === "llamacpp"
+                ? {
+                    type: "json_schema",
+                    schema: wireSchema,
+                  }
+                : {
+                    type: "json_schema",
+                    json_schema: {
+                      name: "authoring_stage",
+                      strict: true,
+                      schema: wireSchema,
+                    },
+                  },
           }
         : {}),
     };
@@ -355,6 +365,8 @@ interface ProviderEnvelope {
 }
 
 export function connectionError(config: LlmConfig) {
+  if (config.connection === "local" && config.localRuntime === "llamacpp")
+    return "Cannot reach local llama.cpp. Check the Apertus service and model readiness.";
   if (config.connection === "local")
     return config.localRuntime === "ollama"
       ? "Cannot reach local Ollama. Start it with ollama serve."

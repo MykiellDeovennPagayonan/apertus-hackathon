@@ -1,21 +1,28 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./community/community.css";
+import { connection } from "next/server";
+import { offlineEnabled } from "../lib/deployment";
 import AuthProvider from "./_components/AuthProvider";
+import DeploymentProvider from "./_components/DeploymentProvider";
 export const metadata: Metadata = {
   title: "Apertus Local Lab",
   description:
     "Interactive physics, structures, and a living town in a local-first simulation lab.",
 };
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  await connection();
+  const offline = offlineEnabled();
   return (
     <html lang="en">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <DeploymentProvider offline={offline}>
+          <AuthProvider offline={offline}>{children}</AuthProvider>
+        </DeploymentProvider>
       </body>
     </html>
   );

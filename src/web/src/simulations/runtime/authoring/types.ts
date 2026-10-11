@@ -37,6 +37,8 @@ export type PublicDefinition = {
     | "behaviors"
     | "resources"
     | "layout";
+  /** Scene-led lessons place small controls and captions below the visual. */
+  learnerLayout?: "scene-first";
   tags: readonly string[];
   configuration: ParameterSchema;
   defaults: Record<string, unknown>;
@@ -177,7 +179,7 @@ export type CompositeRecipe = {
   recipeVersion: 1 | 2;
   catalog?: {
     icon: string;
-    category: "physics" | "mathematics";
+    category: "physics" | "mathematics" | "science" | "social-systems";
     order: number;
   };
   id: string;

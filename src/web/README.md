@@ -274,3 +274,28 @@ Use `pnpm test:generation:realistic` for deterministic component/physics/transac
 Eclipse geometry is a scaled planar teaching model. Sound cancellation is ideal pressure superposition at one point with no audio output or real headphone controller. Existing pendulum/circuit/traffic fidelity assumptions remain visible in generated lessons.
 
 Replay a retained run with `REALISTIC_REPLAY_DIR=<absolute ignored live-run directory> pnpm test:generation:realistic:replay`. This imports the run's accepted recipes through the ordinary UI and checks both desktop motion preferences; it is UX replay, not new inference. `REALISTIC_REPLAY_REARRANGE=1` additionally reapplies only shared presentation arrangement for debugging; reports distinguish this from an unchanged accepted export. Failed attempts remain retained. The required local setup uses a bounded 20-second decision timeout to accommodate cold MLX inference; the optional decision default remains 3 seconds.
+
+## Runtime AI agents
+
+Open `/experiments?experiment=agent-conversation` for **Two perspectives, one city**. Mira and Leo discuss ways to improve daily travel using the configured LLM. Choose **Next response**, or **Continue automatically** for a bounded eight-response run. Pause finishes the reserved response; cancel fences pending work. Restart creates a fresh run. Replay reveals accepted responses without inference. Run information offers a public transcript download.
+
+The premade is a normal shared JSON recipe. Its two agent profiles, environment, profile displays, transcript, and command controls are independent builder components. Remix and Try lesson use the same runtime. Edit the environment topic and limits or the individual personas/objectives before starting a new run. Views and animation frames never start inference.
+
+Agent infrastructure lives in `simulations/runtime/agents/`; pure systems, traits, behaviors, prefab, catalog definitions, views, and controls live under the existing component kinds. The asynchronous runner injects model, environment, execution policy, and repository contracts. It validates proposals, visibility, permissions and preconditions before acceptance. The model adapter reuses existing Apertus/OpenAI/Anthropic transports with dedicated bounds and frozen non-secret settings. The public HTTP adapter currently admits speech; a metric environment adapter is exercised in deterministic tests. Read-only tool registration, scoped dataset retrieval, goal predicates, activation policies and a bounded FIFO scheduler are reusable infrastructure, not automatically enabled LLM tools.
+
+`POST /api/agents` accepts `create`, `read`, `step`, and `cancel`. Creation takes a versioned bounded agent configuration. Subsequent requests take the returned handle; step also requires the last observed revision. Same-origin requests are required. Guest handles contain a scoped bearer token; never publish them. Signed-in runs use the verified account session and MongoDB `agentRuns`. Guest runs use bounded process-local storage and expire an hour after their last state change, or on server restart. There is no automatic background worker or automatic run restoration on recipe reopen.
+
+Persistent runs are bounded single-document aggregates: event, memory, world state, receipt and revision commit in one conditional majority write. Leases and fencing reject stale workers; retries cannot duplicate an accepted logical action. The LLM call happens outside the database write and may execute more than once. Recipes save initial configuration; run history and private notes are separate. Public projections/downloads exclude private memory and plans.
+
+Verification commands from `src/web`:
+
+```sh
+pnpm test:agents                  # Deterministic core and mocked provider contracts
+pnpm test:agents:live             # Existing app and actual configured LLM required
+pnpm test:agents:browser          # Existing app, real LLM and Chromium/Chrome required
+MONGODB_TEST_URI=... pnpm test:agents:database  # Disposable database only
+```
+
+Live/browser tests default to `http://localhost:43100`; override `AGENT_TEST_ORIGIN` to match the configured application origin. Cloud model calls use the configured account and may incur costs. Local verification used actual Apertus through MLX; cloud transport verification is mocked. The Mongo integration test creates and drops a uniquely named test database. It is separate from the default suite and requires a provided test service.
+
+See [general foundations](../../docs/agent-only/implementation/021-AI-AGENT-SIMULATION-FOUNDATIONS.md) and [implementation evidence](../../docs/agent-only/implementation/021-IMPLEMENTATION-EVIDENCE.md) for boundaries, coverage, and optional extensions.

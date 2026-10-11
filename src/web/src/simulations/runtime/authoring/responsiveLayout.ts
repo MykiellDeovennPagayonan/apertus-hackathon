@@ -44,3 +44,35 @@ export function expandResponsiveContent(
   }
   return next;
 }
+
+/** Preserve authored outside margins when valid learner items reflow into rows. */
+export function reflowLearnerArea(
+  source: BoardPresentation,
+  items: BoardPresentation["items"],
+): BoardPresentation["learnerArea"] {
+  const area = source.learnerArea;
+  if (
+    !area ||
+    !source.items.length ||
+    source.items.some(
+      ({ rect: r }) =>
+        r.x < area.x ||
+        r.y < area.y ||
+        r.x + r.width > area.x + area.width ||
+        r.y + r.height > area.y + area.height,
+    )
+  )
+    return area;
+  const before = extent(source.items.map((item) => item.rect)),
+    after = extent(items.map((item) => item.rect));
+  const left = before.x - area.x,
+    top = before.y - area.y,
+    right = area.x + area.width - before.x - before.width,
+    bottom = area.y + area.height - before.y - before.height;
+  return {
+    x: after.x - left,
+    y: after.y - top,
+    width: after.width + left + right,
+    height: after.height + top + bottom,
+  };
+}

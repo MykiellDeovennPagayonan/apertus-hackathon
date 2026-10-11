@@ -5,6 +5,11 @@ import {
   sampleSignal,
   sumSignals,
 } from "../../components/systems/exploration/signals";
+import {
+  type SpringState,
+  springFrequency,
+  stepSpring,
+} from "../../components/systems/exploration/spring";
 import { validateValue } from "../parameterSchema";
 import type { RuntimeProvider } from "./providers";
 
@@ -48,7 +53,50 @@ function configurable(
     capture: (s) => s,
   };
 }
+const springId = "models/SpringMass";
+const springConfiguration = (state: Record<string, unknown>) =>
+  Object.fromEntries(
+    ["mass", "stiffness", "damping", "amplitude", "playing"].map((key) => [
+      key,
+      state[key],
+    ]),
+  );
+const springProvider: RuntimeProvider = {
+  initialize: (node) => ({
+    ...node.configuration,
+    displacement: node.configuration.amplitude,
+    velocity: 0,
+  }),
+  apply: (state, command, args) => {
+    if (command === "RELEASE")
+      return {
+        ...state,
+        displacement: state.amplitude,
+        velocity: 0,
+        playing: true,
+      };
+    if (!command.startsWith("set:"))
+      throw new Error("Unsupported spring command");
+    const next = { ...state, [command.slice(4)]: args.value };
+    validateValue(
+      publicDefinition(springId).configuration,
+      springConfiguration(next),
+    );
+    return command === "set:amplitude"
+      ? { ...next, displacement: next.amplitude, velocity: 0 }
+      : next;
+  },
+  step: (state, delta) => ({
+    ...stepSpring(state as unknown as SpringState, delta),
+  }),
+  measure: (state) => ({
+    displacement: state.displacement,
+    frequency: springFrequency(state as unknown as SpringState),
+  }),
+  capture: springConfiguration,
+};
 export const explorationProviders = new Map<string, RuntimeProvider>([
+  [springId, springProvider],
   [
     "models/SinusoidalSignal",
     configurable("models/SinusoidalSignal", (s) => ({

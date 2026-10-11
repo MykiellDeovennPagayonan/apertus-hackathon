@@ -1,0 +1,609 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/plate-boundaries",
+  "version": 1,
+  "title": "Plate boundaries",
+  "description": "How do different plate interactions create different landscapes?",
+  "tags": [
+    "science",
+    "plates",
+    "exploration"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/science/PlateBoundaries",
+        "version": 1,
+        "label": "Plate boundaries",
+        "scope": "scope/lab",
+        "configuration": {
+          "settings": {
+            "boundary": 0,
+            "motion": 60
+          },
+          "seed": 17
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/science-plates",
+        "version": 1,
+        "label": "Explore the scene",
+        "scope": "scope/lab",
+        "configuration": {
+          "question": "How do different plate interactions create different landscapes?"
+        }
+      },
+      {
+        "id": "conditions",
+        "definition": "controls/science-plates",
+        "version": 1,
+        "label": "Explore a view",
+        "scope": "scope/lab",
+        "configuration": {
+          "panel": "conditions"
+        }
+      },
+      {
+        "id": "playback",
+        "definition": "controls/science-plates",
+        "version": 1,
+        "label": "Next action",
+        "scope": "scope/lab",
+        "configuration": {
+          "panel": "playback"
+        }
+      },
+      {
+        "id": "observations",
+        "definition": "displays/ScienceObservations",
+        "version": 1,
+        "label": "What you can see",
+        "scope": "scope/lab",
+        "configuration": {
+          "panel": "observations"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/conditions/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "conditions",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/playback/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "playback",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/observations/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "observations",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_PLATES_STEP",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_PLATES_STEP"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_STEP"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_PLATES_PLAY",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_PLATES_PLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_PLAY"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_PLATES_PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_PLATES_PAUSE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_PAUSE"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_PLATES_SET",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_PLATES_SET"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_SET"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_PLATES_SELECT",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_PLATES_SELECT"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_SELECT"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_PLATES_SPEED",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_PLATES_SPEED"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_SPEED"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_PLATES_OVERLAY",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_PLATES_OVERLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_OVERLAY"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_PLATES_BASELINE",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_PLATES_BASELINE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_BASELINE"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_PLATES_SET_BOUNDARY",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_PLATES_SET_BOUNDARY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_SET_BOUNDARY"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_PLATES_SET_MOTION",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_PLATES_SET_MOTION"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_SET_MOTION"
+        }
+      },
+      {
+        "id": "link/conditions/RESET",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "RESET"
+        },
+        "to": {
+          "node": "model",
+          "port": "RESET"
+        }
+      },
+      {
+        "id": "link/playback/SCI_PLATES_STEP",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_PLATES_STEP"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_STEP"
+        }
+      },
+      {
+        "id": "link/playback/SCI_PLATES_PLAY",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_PLATES_PLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_PLAY"
+        }
+      },
+      {
+        "id": "link/playback/SCI_PLATES_PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_PLATES_PAUSE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_PAUSE"
+        }
+      },
+      {
+        "id": "link/playback/SCI_PLATES_SET",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_PLATES_SET"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_SET"
+        }
+      },
+      {
+        "id": "link/playback/SCI_PLATES_SELECT",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_PLATES_SELECT"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_SELECT"
+        }
+      },
+      {
+        "id": "link/playback/SCI_PLATES_SPEED",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_PLATES_SPEED"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_SPEED"
+        }
+      },
+      {
+        "id": "link/playback/SCI_PLATES_OVERLAY",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_PLATES_OVERLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_OVERLAY"
+        }
+      },
+      {
+        "id": "link/playback/SCI_PLATES_BASELINE",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_PLATES_BASELINE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_BASELINE"
+        }
+      },
+      {
+        "id": "link/playback/SCI_PLATES_SET_BOUNDARY",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_PLATES_SET_BOUNDARY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_SET_BOUNDARY"
+        }
+      },
+      {
+        "id": "link/playback/SCI_PLATES_SET_MOTION",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_PLATES_SET_MOTION"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_SET_MOTION"
+        }
+      },
+      {
+        "id": "link/playback/RESET",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "RESET"
+        },
+        "to": {
+          "node": "model",
+          "port": "RESET"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_PLATES_RESTART",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_PLATES_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_RESTART"
+        }
+      },
+      {
+        "id": "link/playback/SCI_PLATES_RESTART",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_PLATES_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_RESTART"
+        }
+      },
+      {
+        "id": "link/observations/SELECT",
+        "kind": "command",
+        "from": {
+          "node": "observations",
+          "port": "SELECT"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_PLATES_SELECT"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Plate boundaries"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/conditions",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "conditions"
+        },
+        {
+          "id": "layout/observations",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "observations"
+        },
+        {
+          "id": "layout/playback",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "playback"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Plate boundaries",
+      "instruction": "Choose an interaction and move the plates.",
+      "explanation": "Kinematic teaching geometry over compressed geological time, not a geodynamic or hazard solver. Surface and cross-section use the same state. Plates are lithosphere; convergence does not always mean subduction or volcanism."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1120,
+            "height": 485
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 340
+        },
+        {
+          "id": "board/conditions",
+          "layoutId": "layout/conditions",
+          "rect": {
+            "x": 0,
+            "y": 509,
+            "width": 260,
+            "height": 160
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 130
+        },
+        {
+          "id": "board/observations",
+          "layoutId": "layout/observations",
+          "rect": {
+            "x": 290,
+            "y": 509,
+            "width": 508,
+            "height": 160
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        },
+        {
+          "id": "board/playback",
+          "layoutId": "layout/playback",
+          "rect": {
+            "x": 828,
+            "y": 509,
+            "width": 292,
+            "height": 160
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -32,
+        "y": -28,
+        "width": 1184,
+        "height": 733
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "learnerArea": {
+        "x": -32,
+        "y": -28,
+        "width": 1184,
+        "height": 733
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/appearance"
+        ],
+        [
+          "board/conditions"
+        ],
+        [
+          "board/observations"
+        ],
+        [
+          "board/playback"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/science/PlateBoundaries",
+      "version": 1
+    },
+    {
+      "id": "appearance/science-plates",
+      "version": 1
+    },
+    {
+      "id": "controls/science-plates",
+      "version": 1
+    },
+    {
+      "id": "displays/ScienceObservations",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Kinematic teaching geometry over compressed geological time, not a geodynamic or hazard solver.",
+    "Surface and cross-section use the same state. Plates are lithosphere; convergence does not always mean subduction or volcanism."
+  ],
+  "catalog": {
+    "icon": "\u21c4",
+    "category": "science",
+    "order": 26
+  }
+}

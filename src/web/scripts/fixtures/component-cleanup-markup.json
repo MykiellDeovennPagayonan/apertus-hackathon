@@ -33,7 +33,7 @@
   "prebuilt/prefabs-natural-systems-DiffusionField": "75d6609a4a3fba90f085f03d6d00d902d5bd272e58031c3424a5839aadb08d41",
   "prebuilt/prefabs-natural-systems-PredatorPrey": "e5ae0e56beca0ccbf3c3b024c0cdb4c8d03d5908e8228fd85f402500fe3ff42b",
   "prebuilt/prefabs-natural-systems-PlantGrowth": "5270fde6f4ce7bfa8e275087ca5ba4305ea81267b8034f9a6f05a55e461a6421",
-  "prebuilt/prefabs-dynamic-systems-CompoundGrowth": "0bcee80fb07d63e6055d67e137ee9b26649f982fdbcdbbab41116f32d777e280",
+  "prebuilt/prefabs-dynamic-systems-CompoundGrowth": "45f14c5f2ec97c4feba6a98d314cca01f47490b5ed3305ca99b51751a219a9db",
   "prebuilt/prefabs-dynamic-systems-RingTraffic": "65336ac57188646f83bb3e86ae39a4440de8f677dca637e37aed98fb8ee21c21",
   "prebuilt/prefabs-dynamic-systems-CheckoutQueue": "5e4a5ecbee66ada4cbb5dbe03fb3f529a3ab05805c4f8b8b7704d678659da3a0",
   "recipes/ScheduledTrip": "a8e5f91e6029fa934dea2c823c7d82f72ae137e30d64faeb8f046c9b7071dfde",

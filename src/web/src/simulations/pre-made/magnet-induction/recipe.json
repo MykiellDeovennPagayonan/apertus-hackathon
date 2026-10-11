@@ -1,0 +1,409 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/magnet-induction",
+  "version": 1,
+  "title": "Moving magnet and coil",
+  "description": "Why does changing magnetic flux produce voltage?",
+  "tags": [
+    "physics",
+    "moving magnet",
+    "generate electricity",
+    "coil",
+    "electromagnetic induction",
+    "Faraday",
+    "Lenz"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model0",
+        "definition": "prefabs/physics/Induction",
+        "version": 1,
+        "label": "Moving magnet and coil",
+        "scope": "scope/lab",
+        "configuration": {
+          "position": -0.08,
+          "speed": 0.04,
+          "turns": 100,
+          "polarity": 1,
+          "resistance": 10,
+          "peakFlux": 0.002,
+          "width": 0.05
+        }
+      },
+      {
+        "id": "appearance0",
+        "definition": "appearance/physics-induction",
+        "version": 1,
+        "label": "Moving magnet and coil scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/position",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Magnet position",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Magnet position",
+          "mode": "immediate",
+          "initial": "{\"value\":-0.08}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/speed",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Signed magnet speed",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Signed magnet speed",
+          "mode": "immediate",
+          "initial": "{\"value\":0.04}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/advance",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Move magnet 0.1 second",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Move magnet 0.1 second",
+          "mode": "immediate",
+          "initial": "{}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance0",
+        "kind": "attachment",
+        "from": {
+          "node": "model0",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance0",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/position0",
+        "kind": "command",
+        "from": {
+          "node": "control/position",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_INDUCTION_POSITION"
+        }
+      },
+      {
+        "id": "link/speed0",
+        "kind": "command",
+        "from": {
+          "node": "control/speed",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_INDUCTION_SPEED"
+        }
+      },
+      {
+        "id": "link/advance0",
+        "kind": "command",
+        "from": {
+          "node": "control/advance",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_INDUCTION_ADVANCE"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Moving magnet and coil"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance0",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance0"
+        },
+        {
+          "id": "layout/control/position",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/position"
+        },
+        {
+          "id": "layout/control/speed",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/speed"
+        },
+        {
+          "id": "layout/control/advance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/advance"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Moving magnet and coil",
+      "instruction": "Why does changing magnetic flux produce voltage?",
+      "explanation": "Prescribed externally driven magnet path with per-turn teaching flux polarity*peakFlux*exp(-x²/(2width²)); emf=−N*dphi/dx*speed. Negligible self-inductance, resistive loop current=emf/R and dissipation=emf²/R. External work supplies electrical energy. No detailed bar-magnet solver or back-force dynamics."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance0",
+          "layoutId": "layout/appearance0",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 390
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 390
+        },
+        {
+          "id": "board/layout/control/position",
+          "layoutId": "layout/control/position",
+          "rect": {
+            "x": 0,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 128
+        },
+        {
+          "id": "board/layout/control/speed",
+          "layoutId": "layout/control/speed",
+          "rect": {
+            "x": 344,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 128
+        },
+        {
+          "id": "board/layout/control/advance",
+          "layoutId": "layout/control/advance",
+          "rect": {
+            "x": 688,
+            "y": 410,
+            "width": 328,
+            "height": 80
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 80
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1064,
+        "height": 640
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance0"
+        ],
+        [
+          "board/layout/control/position",
+          "board/layout/control/speed"
+        ],
+        [
+          "board/layout/control/advance"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1064,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "position0",
+      "node": "model0",
+      "field": "position",
+      "schema": {
+        "type": "number",
+        "minimum": -0.3,
+        "maximum": 0.3,
+        "unit": "m"
+      },
+      "default": -0.08
+    },
+    {
+      "name": "speed0",
+      "node": "model0",
+      "field": "speed",
+      "schema": {
+        "type": "number",
+        "minimum": -0.1,
+        "maximum": 0.1,
+        "unit": "m/s"
+      },
+      "default": 0.04
+    },
+    {
+      "name": "turns0",
+      "node": "model0",
+      "field": "turns",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000,
+        "unit": "1"
+      },
+      "default": 100
+    },
+    {
+      "name": "polarity0",
+      "node": "model0",
+      "field": "polarity",
+      "schema": {
+        "type": "enum",
+        "values": [
+          -1,
+          1
+        ]
+      },
+      "default": 1
+    },
+    {
+      "name": "resistance0",
+      "node": "model0",
+      "field": "resistance",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 1000,
+        "unit": "Ω"
+      },
+      "default": 10
+    },
+    {
+      "name": "peakFlux0",
+      "node": "model0",
+      "field": "peakFlux",
+      "schema": {
+        "type": "number",
+        "minimum": 0.0001,
+        "maximum": 0.01,
+        "unit": "Wb"
+      },
+      "default": 0.002
+    },
+    {
+      "name": "width0",
+      "node": "model0",
+      "field": "width",
+      "schema": {
+        "type": "number",
+        "minimum": 0.02,
+        "maximum": 0.1,
+        "unit": "m"
+      },
+      "default": 0.05
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Induction",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-induction",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Prescribed externally driven magnet path with per-turn teaching flux polarity*peakFlux*exp(-x²/(2width²)); emf=−N*dphi/dx*speed. Negligible self-inductance, resistive loop current=emf/R and dissipation=emf²/R. External work supplies electrical energy. No detailed bar-magnet solver or back-force dynamics."
+  ],
+  "catalog": {
+    "icon": "◉",
+    "category": "physics",
+    "order": 159
+  }
+}

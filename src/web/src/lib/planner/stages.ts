@@ -30,7 +30,7 @@ import { type Coverage, coverageSchema, exactKeys, record } from "./schema";
 const text: ParameterSchema = { type: "string", maxLength: 500 };
 const alias: ParameterSchema = { type: "string", maxLength: 32 };
 export const lessonSchema = object({
-  title: { type: "string", maxLength: 120 },
+  title: { type: "string", maxLength: 100 },
   instruction: text,
   explanation: { type: "string", minLength: 0, maxLength: 1500 },
 });

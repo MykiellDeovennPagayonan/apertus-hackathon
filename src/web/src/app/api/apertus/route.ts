@@ -1,7 +1,9 @@
 import { randomUUID } from "node:crypto";
+import { setTimeout as yieldToBrowser } from "node:timers/promises";
 import { planPrompt } from "../../../lib/planner";
 import { startTrace } from "../../../lib/planner/diagnostics";
 import { PlannerError } from "../../../lib/planner/errors";
+import { generationEventStream } from "../../../lib/planner/eventStream";
 import {
   type GenerationStage,
   progressFromTrace,
@@ -88,28 +90,36 @@ export async function POST(request: Request) {
     }
     trace = startTrace(correlationId, input.prompt);
     if (request.headers.get("Accept")?.includes("application/x-ndjson")) {
-      const cancellation = new AbortController();
-      const signal = AbortSignal.any([request.signal, cancellation.signal]);
       const diagnostic = trace;
-      const encoder = new TextEncoder();
-      let closed = false;
-      const body = new ReadableStream<Uint8Array>({
-        async start(controller) {
-          const send = (event: unknown) => {
-            if (!closed && !signal.aborted)
-              controller.enqueue(encoder.encode(`${JSON.stringify(event)}\n`));
-          };
+      const body = generationEventStream(
+        request.signal,
+        async (writer, signal) => {
           let previous: GenerationStage | null = null;
           const report = (event: string, data: unknown) => {
             diagnostic(event, data);
             const stage = progressFromTrace(event, data);
             if (stage && stage !== previous) {
               previous = stage;
-              send({ type: "progress", requestId: correlationId, stage });
+              writer.progress({
+                type: "progress",
+                requestId: correlationId,
+                stage,
+              });
             }
           };
           try {
-            const result = await planPrompt(input, signal, report);
+            const result = await planPrompt(
+              input,
+              signal,
+              report,
+              async (update, constructionSignal) => {
+                await writer.send(update, constructionSignal);
+                // Give the browser a frame to display atomic recipe expansion before the terminal event.
+                await yieldToBrowser(32, undefined, {
+                  signal: constructionSignal,
+                });
+              },
+            );
             report("result", {
               status: result.status,
               ...("recipe" in result
@@ -119,15 +129,20 @@ export async function POST(request: Request) {
                   }
                 : {}),
             });
-            send({ type: "result", requestId: correlationId, result });
+            await writer.send({
+              type: "result",
+              requestId: correlationId,
+              result,
+            });
           } catch (error) {
+            if (signal.aborted) return;
             const status = error instanceof PlannerError ? error.status : 500;
             const message =
               error instanceof PlannerError
                 ? error.message
                 : "Unable to process the prompt.";
             diagnostic("failure", { status, message });
-            send({
+            await writer.send({
               type: "result",
               requestId: correlationId,
               result: {
@@ -138,18 +153,9 @@ export async function POST(request: Request) {
                 retryable: [429, 502, 503, 504, 500].includes(status),
               },
             });
-          } finally {
-            if (!closed) {
-              closed = true;
-              controller.close();
-            }
           }
         },
-        cancel() {
-          closed = true;
-          cancellation.abort();
-        },
-      });
+      );
       return new Response(body, {
         headers: {
           "Content-Type": "application/x-ndjson",

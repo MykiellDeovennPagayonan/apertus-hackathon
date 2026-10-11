@@ -1,0 +1,301 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/decimal-place-value",
+  "version": 1,
+  "title": "Why does × 10 change a decimal so much?",
+  "description": "Multiply and divide 12.34 by ten on a place-value board, and trade blocks without changing the number.",
+  "tags": ["mathematics", "decimals", "place value", "base-ten blocks"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-geometry/PlaceValue",
+        "version": 1,
+        "label": "Place-value board",
+        "scope": "scope/lab",
+        "configuration": {
+          "start": 12.34,
+          "counts": [0, 1, 2, 3, 4, 0],
+          "lastAction": "start"
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-place-value",
+        "version": 1,
+        "label": "Place-value blocks",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/1",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "× 10",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "× 10",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      },
+      {
+        "id": "control/2",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "÷ 10",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "÷ 10",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      },
+      {
+        "id": "control/3",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Break 1 tenth into 10 hundredths",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Break 1 tenth into 10 hundredths",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/control/1",
+        "kind": "command",
+        "from": {
+          "node": "control/1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PLACE_TIMES_TEN"
+        }
+      },
+      {
+        "id": "link/control/2",
+        "kind": "command",
+        "from": {
+          "node": "control/2",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PLACE_DIVIDE_TEN"
+        }
+      },
+      {
+        "id": "link/control/3",
+        "kind": "command",
+        "from": {
+          "node": "control/3",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PLACE_BREAK_TENTH"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Why does × 10 change a decimal so much?"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/control/1",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "control/1"
+        },
+        {
+          "id": "layout/control/2",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "control/2"
+        },
+        {
+          "id": "layout/control/3",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "control/3"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Why does × 10 change a decimal so much?",
+      "instruction": "Multiply 12.34 by ten. Where does each block go?",
+      "explanation": "Each column is worth ten times the one to its right. Multiplying by ten moves every block one column left past a fixed decimal point; trading one tenth for ten hundredths keeps the number the same."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 430
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 260
+        },
+        {
+          "id": "board/layout/control/1",
+          "layoutId": "layout/control/1",
+          "rect": {
+            "x": 0,
+            "y": 450,
+            "width": 246.66666666666666,
+            "height": 80
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/layout/control/2",
+          "layoutId": "layout/control/2",
+          "rect": {
+            "x": 266.66666666666663,
+            "y": 450,
+            "width": 246.66666666666666,
+            "height": 80
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/layout/control/3",
+          "layoutId": "layout/control/3",
+          "rect": {
+            "x": 533.3333333333333,
+            "y": 450,
+            "width": 246.66666666666666,
+            "height": 80
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 64
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 578
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/scene"],
+        ["board/layout/control/1", "board/layout/control/2"],
+        ["board/layout/control/3"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "start",
+      "node": "model",
+      "field": "start",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 999.99,
+        "unit": ""
+      },
+      "default": 12.34
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-geometry/PlaceValue",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-place-value",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Columns from hundreds to thousandths; values are held exactly as whole numbers of thousandths. Start numbers have at most two decimal places and are below 1000.",
+    "Multiplying by ten is rejected when hundreds are present and dividing by ten is rejected when thousandths are present; negative numbers are unsupported."
+  ],
+  "catalog": {
+    "icon": "0.1",
+    "category": "mathematics",
+    "order": 13
+  }
+}

@@ -17,6 +17,7 @@ import type {
 } from "../../components/traits/ElementaryBoards";
 import type { MathBoard } from "../../components/traits/MathBoards";
 import type { SceneObject } from "../../components/traits/SceneObjects";
+import { agentProviders } from "../agents/providers";
 import { assemblyModels, measureModel } from "../assembly";
 import {
   mathDemos,
@@ -30,6 +31,10 @@ import { type RuntimeInputs, spatialProviders } from "./spatialProviders";
 import type { ComponentInstance } from "./types";
 import { assertData } from "./validate";
 export type RuntimeProvider = {
+  reinitialize?(
+    state: Record<string, unknown>,
+    node: ComponentInstance,
+  ): Record<string, unknown>;
   initialize(node: ComponentInstance): Record<string, unknown>;
   apply(
     state: Record<string, unknown>,
@@ -50,6 +55,7 @@ export type RuntimeProvider = {
   capture?(state: Record<string, unknown>): Record<string, unknown>;
 };
 export const runtimeProviders = new Map<string, RuntimeProvider>([
+  ...agentProviders,
   ...spatialProviders,
   ...dataProviders,
   ...explorationProviders,
@@ -61,6 +67,13 @@ for (const m of assemblyModels)
         ...structuredClone(m.defaults),
         ...structuredClone(n.configuration),
       }),
+    reinitialize: m.reconfigure
+      ? (s, n) =>
+          m.reconfigure?.(s, {
+            ...structuredClone(m.defaults),
+            ...structuredClone(n.configuration),
+          }) ?? m.initialize(n.configuration)
+      : undefined,
     apply: (s, command, args) => m.apply(s, command, args.value),
     measure: (s, n) => ({
       ...measureModel(m, s),

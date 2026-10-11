@@ -8,12 +8,46 @@ import type { AuthoredDocument } from "../../simulations/runtime/authoring/types
 import type { ComponentBucketCard } from "./bucket";
 import type { AllowedTurnTool } from "./turnSchema";
 
+/** Resolve informal additions against real command fields, including "add mass changing". */
+export function requestedControlTools(
+  document: AuthoredDocument,
+  tools: AllowedTurnTool[],
+  prompt: string,
+): AllowedTurnTool[] {
+  if (!/\b(?:add|insert|include|create|provide|give)\b/i.test(prompt))
+    return [];
+  const words = new Set(prompt.toLowerCase().match(/[a-z0-9]+/g) ?? []);
+  const controls = tools.filter((tool) => tool.tool === "add_control");
+  const matching = controls.filter((tool) => {
+    if (tool.schema.type !== "object") return false;
+    const { target, command } = tool.schema.properties;
+    if (target.type !== "enum" || command.type !== "enum") return false;
+    const node = document.nodes.find((node) => node.id === target.values[0]);
+    if (!node) return false;
+    const contract = publicDefinition(node.definition).commands[
+      String(command.values[0])
+    ];
+    const names = [
+      String(command.values[0]).replace(/^set[:_]/i, ""),
+      ...parameterLeaves(contract.arguments).map(({ path }) => path),
+    ];
+    return names.some((name) =>
+      name.split(/[.:_-]/).some((part) => words.has(part.toLowerCase())),
+    );
+  });
+  if (matching.length) return matching;
+  return /\b(?:slider|control|input|dial|button)\b/i.test(prompt)
+    ? controls
+    : [];
+}
+
 /** Narrow schemas to the next unresolved graph responsibility, not to a prompt phrase. */
 export function focusCompositionTools(
   document: AuthoredDocument,
   bucket: ComponentBucketCard[],
   tools: AllowedTurnTool[],
   root: string,
+  additions: AllowedTurnTool[] = [],
 ): AllowedTurnTool[] {
   const property = (tool: AllowedTurnTool, key: string): unknown => {
     const schema =
@@ -42,13 +76,44 @@ export function focusCompositionTools(
     if (!requirement) continue;
     if (
       requirement.appearance &&
-      !document.nodes.some((n) => n.definition === requirement.appearance)
-    )
-      return tools.filter(
-        (t) =>
-          t.tool === "insert_component" &&
-          property(t, "definition") === requirement.appearance,
+      !document.connections.some(
+        (c) =>
+          c.kind === "attachment" &&
+          c.from.node === node.id &&
+          c.to.port === "model" &&
+          document.nodes.find((n) => n.id === c.to.node)?.definition ===
+            requirement.appearance,
+      )
+    ) {
+      const free = document.nodes.find(
+        (n) =>
+          n.definition === requirement.appearance &&
+          n.scope === node.scope &&
+          !document.connections.some(
+            (c) => c.to.node === n.id && c.to.port === "model",
+          ),
       );
+      if (!free)
+        return tools.filter(
+          (t) =>
+            t.tool === "insert_component" &&
+            property(t, "definition") === requirement.appearance,
+        );
+      return tools.filter((t) => {
+        if (t.tool !== "connect" || t.schema.type !== "object") return false;
+        const { from, to } = t.schema.properties;
+        return (
+          from.type === "object" &&
+          from.properties.node.type === "enum" &&
+          from.properties.node.values.includes(node.id) &&
+          to.type === "object" &&
+          to.properties.node.type === "enum" &&
+          to.properties.node.values.includes(free.id) &&
+          to.properties.port.type === "enum" &&
+          to.properties.port.values.includes("model")
+        );
+      });
+    }
   }
   // Required data/appearance ports must be resolved before adding observations.
   const unbound = document.nodes.flatMap((n) =>
@@ -106,7 +171,47 @@ export function focusCompositionTools(
             c.to.node === node.id &&
             c.to.port === command,
         )
-      )
+      ) {
+        const shared = requirement.sharedCommands?.includes(command)
+          ? document.connections.find(
+              (c) =>
+                c.kind === "command" &&
+                c.to.port === command &&
+                document.nodes.find((n) => n.id === c.to.node)?.definition ===
+                  node.definition &&
+                document.nodes.some(
+                  (n) =>
+                    n.id === c.from.node &&
+                    n.scope === node.scope &&
+                    publicDefinition(n.definition).category === "controls",
+                ),
+            )
+          : undefined;
+        const source = shared
+          ? document.nodes.find((n) => n.id === shared.from.node)
+          : document.nodes.find(
+              (candidate) =>
+                publicDefinition(candidate.definition).outputs[command]
+                  ?.kind === "event",
+            );
+        if (source) {
+          const matches = tools.filter((t) => {
+            if (t.tool !== "connect" || t.schema.type !== "object")
+              return false;
+            const { from, to } = t.schema.properties;
+            const endpoint = (schema: typeof from, id: string, port: string) =>
+              schema.type === "object" &&
+              schema.properties.node.type === "enum" &&
+              schema.properties.node.values.includes(id) &&
+              schema.properties.port.type === "enum" &&
+              schema.properties.port.values.includes(port);
+            return (
+              endpoint(from, source.id, shared?.from.port ?? command) &&
+              endpoint(to, node.id, command)
+            );
+          });
+          if (matches.length) return matches;
+        }
         return tools
           .filter(
             (t) =>
@@ -140,6 +245,7 @@ export function focusCompositionTools(
                 }
               : t;
           });
+      }
     for (const output of requirement.observations)
       if (
         !document.connections.some(
@@ -180,6 +286,7 @@ export function focusCompositionTools(
   const supported = new Set(bucket.map((c) => c.id));
   return tools.filter(
     (t) =>
+      additions.includes(t) ||
       ["configure", "set_lesson", "arrange"].includes(t.tool) ||
       (t.tool === "insert_component" &&
         supported.has(String(property(t, "definition"))) &&

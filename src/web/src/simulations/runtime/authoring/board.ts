@@ -22,6 +22,8 @@ export type BoardPresentation = {
   responsive?: boolean;
   /** Explicit item ordering and paired rows for narrow learner viewports. */
   responsiveRows?: string[][];
+  /** Authored spacing between responsive rows; existing boards retain their default. */
+  responsiveGap?: number;
   mode: "board";
   items: BoardItem[];
   /** Layout groups whose children have independent board placement. */
@@ -43,6 +45,17 @@ export type BoardPresentation = {
     }[];
   };
 };
+/** Missing bounds keep the learner view fitted to the current content. */
+export function outsideLearnerView(p: BoardPresentation, rect: Rect) {
+  const area = p.learnerArea;
+  return (
+    !!area &&
+    (rect.x < area.x ||
+      rect.y < area.y ||
+      rect.x + rect.width > area.x + area.width ||
+      rect.y + rect.height > area.y + area.height)
+  );
+}
 export const clamp = (v: number, lo: number, hi: number) =>
   Math.max(lo, Math.min(hi, v));
 export function resizeBoardRect(
@@ -90,9 +103,37 @@ export function boardItemMinimum(
   const definition = d.nodes.find(
     (node) => node.id === layout?.node,
   )?.definition;
+  if (definition?.startsWith("controls/science-")) {
+    const node = d.nodes.find((node) => node.id === layout?.node);
+    return {
+      width: 200,
+      height: node?.configuration.panel === "playback" ? 96 : 100,
+    };
+  }
+  if (definition === "displays/ScienceObservations")
+    return { width: 200, height: 96 };
+  if (definition?.startsWith("controls/earth-atmosphere-"))
+    return { width: 240, height: 80 };
+  if (definition?.startsWith("displays/earth-atmosphere-"))
+    return { width: 320, height: 64 };
+  if (definition?.startsWith("controls/collective-"))
+    return { width: 240, height: 64 };
+  if (definition?.startsWith("displays/collective-"))
+    return { width: 320, height: 80 };
+  if (definition?.startsWith("controls/cycle-"))
+    return { width: 240, height: 64 };
+  if (definition?.startsWith("displays/cycle-"))
+    return { width: 320, height: 80 };
   if (definition === "controls/Button") return { width: 160, height: 48 };
+  if (definition === "controls/FoodWebPopulation")
+    return { width: 280, height: 330 };
+  if (definition === "controls/AgentActions") return { width: 280, height: 96 };
   if (definition === "controls/Toggle") return { width: 160, height: 80 };
-  if (definition === "displays/Readout") return { width: 128, height: 96 };
+  if (
+    definition === "displays/Readout" ||
+    definition === "displays/StatusMessage"
+  )
+    return { width: 128, height: 96 };
   if (definition === "displays/Inspector") {
     const node = d.nodes.find((node) => node.id === layout?.node);
     const binding = d.connections.find(
@@ -471,6 +512,13 @@ export function validateBoard(d: AuthoredDocument, runnable = false) {
     )
       fail("invalid separated layout group");
   }
+  if (
+    p.responsiveGap !== undefined &&
+    (!Number.isFinite(p.responsiveGap) ||
+      p.responsiveGap < 8 ||
+      p.responsiveGap > 128)
+  )
+    fail("responsive gap must be between 8 and 128 pixels");
   if (p.responsiveRows !== undefined) {
     if (
       !Array.isArray(p.responsiveRows) ||
@@ -556,21 +604,9 @@ export function validateBoard(d: AuthoredDocument, runnable = false) {
       grouped.add(id);
     }
   }
-  if (
-    runnable &&
-    p.learnerArea &&
-    p.items.some((i) => {
-      const r = p.learnerArea as Rect;
-      return (
-        i.rect.x < r.x ||
-        i.rect.y < r.y ||
-        i.rect.x + i.rect.width > r.x + r.width ||
-        i.rect.y + i.rect.height > r.y + r.height
-      );
-    })
-  )
+  if (runnable && p.items.some((i) => outsideLearnerView(p, i.rect)))
     fail(
-      "content is outside the learner area. Use Set learner area from content before running or sharing.",
+      "some content falls outside the learner view. Choose Expand to fit on the board before sharing.",
     );
   const n = p.navigation;
   if (

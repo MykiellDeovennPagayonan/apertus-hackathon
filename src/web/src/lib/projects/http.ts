@@ -2,6 +2,7 @@ import { env } from "node:process";
 import { getLibrarySession } from "../auth/server";
 import { getDatabase } from "../database/client";
 import { LibraryError } from "../database/LibraryRepository";
+import { offlineEnabled } from "../deployment";
 import { readJson } from "../library/http";
 import { migrateOwner } from "./migration";
 import { CommunityRepository, ProjectRepository } from "./Repository";
@@ -15,6 +16,14 @@ export async function projectRequest(
   const respond = (body: unknown, status = 200) =>
     Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
   try {
+    if (offlineEnabled())
+      return respond(
+        {
+          message:
+            "Account and community services are disabled in offline mode.",
+        },
+        503,
+      );
     const url = new URL(request.url),
       mutation = request.method !== "GET";
     let ownerId = "",

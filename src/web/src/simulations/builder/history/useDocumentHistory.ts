@@ -20,6 +20,7 @@ export function useDocumentHistory(
   setNotice: Dispatch<SetStateAction<string>>,
   expanded: boolean,
   playingSaved: boolean,
+  locked = false,
 ) {
   const [past, setPast] = useState<HistoryEntry[]>([]),
     [future, setFuture] = useState<HistoryEntry[]>([]);
@@ -78,7 +79,7 @@ export function useDocumentHistory(
   };
   const undo = () => {
     editingGroup.current = null;
-    if (!doc || !past.length) return;
+    if (locked || !doc || !past.length) return;
     const entry = past[past.length - 1];
     setFuture((f) => [
       { id: entry.id, document: doc, label: entry.label },
@@ -92,7 +93,7 @@ export function useDocumentHistory(
   };
   const redo = () => {
     editingGroup.current = null;
-    if (!doc || !future.length) return;
+    if (locked || !doc || !future.length) return;
     setPast((p) => [
       ...p.slice(-99),
       { id: future[0].id, document: doc, label: future[0].label },
@@ -107,7 +108,7 @@ export function useDocumentHistory(
   keyboardHistory.current = {
     undo,
     redo,
-    enabled: Boolean(doc) && !playingSaved && !expanded,
+    enabled: Boolean(doc) && !playingSaved && !expanded && !locked,
   };
   useEffect(() => {
     const key = (event: KeyboardEvent) => {

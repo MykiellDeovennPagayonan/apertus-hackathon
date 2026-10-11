@@ -94,7 +94,14 @@ export function buildTurnTools(
 
   // 3. connect (from live outputs to live inputs/commands)
   const candidates = suggestConnections(document);
-  for (const c of candidates.slice(0, 16)) {
+  // Prefer explicit named event-command contracts before the bounded shortlist.
+  // Otherwise several empty-payload actions can displace an essential setter.
+  const rankedConnections = [...candidates].sort((a, b) => {
+    const priority = (c: typeof a) =>
+      c.kind === "command" ? (c.from.port === c.to.port ? 0 : 2) : 1;
+    return priority(a) - priority(b);
+  });
+  for (const c of rankedConnections.slice(0, 16)) {
     tools.push({
       tool: "connect",
       schema: object({
@@ -108,7 +115,12 @@ export function buildTurnTools(
   if (nodeIds.length > 0) {
     for (const node of document.nodes) {
       const def = publicDefinitions.get(node.definition);
-      if (!def) continue;
+      if (
+        !def ||
+        (def.configuration.type === "object" &&
+          !Object.keys(def.configuration.properties).length)
+      )
+        continue;
       tools.push({
         tool: "configure",
         schema: object({
@@ -175,7 +187,7 @@ export function buildTurnTools(
   tools.push({
     tool: "set_lesson",
     schema: object({
-      title: { type: "string", maxLength: 120 },
+      title: { type: "string", maxLength: 100 },
       instruction: { type: "string", maxLength: 500 },
       explanation: { type: "string", minLength: 0, maxLength: 1500 },
     }),

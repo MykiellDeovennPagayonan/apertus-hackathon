@@ -1,9 +1,23 @@
+import { thermalOptics, thermalOpticsPresentations } from "../domains/physics/thermalOptics";
+import { mathAnalysis } from "../domains/math-analysis/models";
+import { mechanicsPresentations } from "../domains/physics/mechanics";
+import { biogeochemistry } from "../domains/biogeochemistry";
 import { chemistry } from "../domains/chemistry";
+import { collective } from "../domains/collective";
 import { dynamicSystems } from "../domains/dynamic-systems";
+import { earthAtmosphere } from "../domains/earth-atmosphere";
+import { ecology } from "../domains/ecology";
 import { economics } from "../domains/economics";
 import { mathFoundations } from "../domains/math-foundations";
+import {
+  mathGeometry,
+  mathGeometryPresentations,
+} from "../domains/math-geometry";
 import { naturalSystems } from "../domains/natural-systems";
 import { physicalSystems } from "../domains/physical-systems";
+import { physics } from "../domains/physics";
+import { science } from "../domains/science";
+import { socialSystems } from "../domains/social-systems";
 import type {
   Assembly,
   DomainContribution,
@@ -25,16 +39,59 @@ import {
 /** Explicit integration list. Contributions must never mutate this registry on import. */
 export const domainContributions: readonly DomainContribution[] = immutable([
   mathFoundations,
+  mathAnalysis,
+  mathGeometry,
   chemistry,
   physicalSystems,
+  physics,
+  thermalOptics,
   naturalSystems,
   dynamicSystems,
+  ecology,
+  socialSystems,
+  science,
+  biogeochemistry,
+  collective,
+  earthAtmosphere,
   economics,
 ]);
 export const assemblyModels: readonly DomainModel[] =
   domainContributions.flatMap((d) => d.models);
 /** Matches concrete adapters in the assembly client view. Integration adds adapters serially. */
 export const assemblyPresentationContracts = {
+  ...Object.fromEntries(mathAnalysis.models.map((model) => [model.presentation, true])),
+  ...mechanicsPresentations,
+  ...thermalOpticsPresentations,
+  ...mathGeometryPresentations,
+  "physics-lever": true,
+  "earth-atmosphere-earthquake": true,
+  "earth-atmosphere-tsunami": true,
+  "earth-atmosphere-atmosphere": true,
+  "earth-atmosphere-greenhouse": true,
+  "earth-atmosphere-lightning": true,
+  "earth-atmosphere-rainbow": true,
+  "earth-atmosphere-weather": true,
+
+  "collective-fishing": true,
+  "collective-crowd": true,
+  "collective-voting": true,
+  "collective-selection": true,
+  "cycle-oxygen": true,
+  "cycle-nitrogen": true,
+  "cycle-carbon": true,
+  "science-cell": true,
+  "science-immune": true,
+  "science-genome": true,
+  "science-pollination": true,
+  "science-invasive": true,
+  "science-earth": true,
+  "science-plates": true,
+  "science-volcano": true,
+  "science-water": true,
+  "ecology-nutrients": true,
+  "ecology-wildfire": true,
+  "ecology-food-web": true,
+  "social-production": true,
   balance: true,
   line: true,
   circle: true,

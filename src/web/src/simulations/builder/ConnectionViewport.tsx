@@ -7,6 +7,7 @@ const clamp = (value: number, min: number, max: number) =>
 export function ConnectionViewport({
   zoom,
   onZoom,
+  onNavigate,
   children,
   active = true,
   fitRequest = 0,
@@ -19,6 +20,7 @@ export function ConnectionViewport({
 }: {
   zoom: number;
   onZoom: (zoom: number) => void;
+  onNavigate?: () => void;
   children: ReactNode;
   active?: boolean;
   fitRequest?: number;
@@ -67,6 +69,7 @@ export function ConnectionViewport({
   // Navigation is unbounded; the drawing surface grows to cover the visible world.
   const bounded = (x: number, y: number, _scale = zoom) => ({ x, y });
   const zoomAt = (next: number, x: number, y: number) => {
+    onNavigate?.();
     const scale = clamp(next, 0.2, 2);
     setPan(
       bounded(
@@ -86,10 +89,29 @@ export function ConnectionViewport({
     const top = Math.min(...nodes.map((n) => n.offsetTop));
     const right = Math.max(...nodes.map((n) => n.offsetLeft + n.offsetWidth));
     const bottom = Math.max(...nodes.map((n) => n.offsetTop + n.offsetHeight));
+    const host = viewport.current.closest(".composition-builder");
+    const composerHeight = host
+      ? Number.parseFloat(
+          getComputedStyle(host).getPropertyValue("--builder-composer-height"),
+        ) || 0
+      : 0;
+    const composer = host?.querySelector<HTMLElement>(".builder-composer");
+    const viewportBounds = viewport.current.getBoundingClientRect();
+    const composerTop = composer?.getBoundingClientRect().top;
+    const availableHeight =
+      composerTop !== undefined &&
+      composerTop > viewportBounds.top &&
+      composerTop < viewportBounds.bottom
+        ? composerTop - viewportBounds.top
+        : viewport.current.clientHeight - composerHeight;
+    const visibleHeight = Math.max(
+      120,
+      availableHeight - (composerHeight ? 40 : 0),
+    );
     const scale = clamp(
       Math.min(
         (viewport.current.clientWidth - 48) / (right - left),
-        (viewport.current.clientHeight - 48) / (bottom - top),
+        (visibleHeight - 48) / (bottom - top),
       ),
       0.2,
       1,
@@ -98,15 +120,22 @@ export function ConnectionViewport({
       bounded(
         (viewport.current.clientWidth - (right - left) * scale) / 2 -
           left * scale,
-        (viewport.current.clientHeight - (bottom - top) * scale) / 2 -
-          top * scale,
+        (visibleHeight - (bottom - top) * scale) / 2 - top * scale,
         scale,
       ),
     );
     onZoom(scale);
   };
-  const navigation = useRef({ pan, zoom, zoomAt, bounded, fit, onZoom });
-  navigation.current = { pan, zoom, zoomAt, bounded, fit, onZoom };
+  const navigation = useRef({
+    pan,
+    zoom,
+    zoomAt,
+    bounded,
+    fit,
+    onZoom,
+    onNavigate,
+  });
+  navigation.current = { pan, zoom, zoomAt, bounded, fit, onZoom, onNavigate };
   const initiallyFitted = useRef(false);
   useEffect(() => {
     if (!active || initiallyFitted.current) return;
@@ -118,8 +147,16 @@ export function ConnectionViewport({
   }, [active]);
   useEffect(() => {
     if (!fitRequest) return;
-    const frame = requestAnimationFrame(() => navigation.current.fit());
-    return () => cancelAnimationFrame(frame);
+    // Allow the completed composer to resize and publish its reserved height
+    // before measuring the available canvas area.
+    let measurementFrame = 0;
+    const frame = requestAnimationFrame(() => {
+      measurementFrame = requestAnimationFrame(() => navigation.current.fit());
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+      cancelAnimationFrame(measurementFrame);
+    };
   }, [fitRequest]);
   useEffect(() => {
     if (!reveal || !viewport.current) return;
@@ -128,8 +165,7 @@ export function ConnectionViewport({
       world.current?.querySelectorAll<HTMLElement>(".builder-block") ?? [],
     ).find((node) => node.dataset.nodeId === reveal.id);
     if (!target) return;
-    const scale = Math.max(current.zoom, 0.8);
-    current.onZoom(scale);
+    const scale = current.zoom;
     setPan(
       current.bounded(
         viewport.current.clientWidth / 2 -
@@ -171,6 +207,7 @@ export function ConnectionViewport({
     // Native non-passive listener prevents browser zoom and page scroll inside this viewport.
     const wheel = (event: WheelEvent) => {
       event.preventDefault();
+      navigation.current.onNavigate?.();
       const current = navigation.current;
       if (event.ctrlKey || event.metaKey) {
         const rect = element.getBoundingClientRect();
@@ -252,7 +289,13 @@ export function ConnectionViewport({
         >
           +
         </button>
-        <button type="button" onClick={fit}>
+        <button
+          type="button"
+          onClick={() => {
+            onNavigate?.();
+            fit();
+          }}
+        >
           Fit to content
         </button>
         <details className="connection-help">
@@ -302,6 +345,7 @@ export function ConnectionViewport({
           }
         }}
         onPointerDown={(event) => {
+          onNavigate?.();
           if (
             event.defaultPrevented ||
             event.button !== 0 ||

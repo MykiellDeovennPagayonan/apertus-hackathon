@@ -613,7 +613,7 @@
   align-items: center;
   gap: 8px;
   color: var(--muted, #626c60);
-  font-size: 13px;
+  font-size: var(--recipe-font-size, 13px);
   line-height: 1.6;
 }
 .recipe-status-dot {
@@ -2036,4 +2036,40 @@ fieldset.math-stepper {
 }
 .recipe-lesson .catalog-form .catalog-help {
   margin: 0;
+}
+
+/* Compact exploration pairs the range and exact field beneath one label. */
+.recipe-lesson .catalog-form .number-field--compact {
+  grid-template-columns: minmax(0, 1fr) 88px;
+  gap: 6px 12px;
+}
+.recipe-lesson .catalog-form .number-field--compact .number-field-heading {
+  display: contents;
+}
+.recipe-lesson
+  .catalog-form
+  .number-field--compact
+  .number-field-heading
+  > label {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+.recipe-lesson
+  .catalog-form
+  .number-field--compact
+  .number-field-heading
+  > input {
+  grid-column: 2;
+  grid-row: 2;
+  min-height: 56px;
+}
+.recipe-lesson .catalog-form .number-field--compact .catalog-slider-inputs {
+  grid-column: 1;
+  grid-row: 2;
+}
+.recipe-lesson .catalog-form .number-field--compact input[type="range"] {
+  min-height: 56px;
+}
+.recipe-lesson .catalog-form .number-field--compact .experiment-error {
+  grid-column: 1 / -1;
 }

@@ -142,13 +142,15 @@ export function selectedContract(slug: string) {
 }
 export function activeHandles(document: AuthoredDocument) {
   return document.nodes
-    .filter((n) =>
-      [
-        "models/arithmetic",
-        "models/area-perimeter",
-        "models/BridgeResponse",
-        "models/BridgeLoad",
-      ].includes(n.definition),
+    .filter(
+      (n) =>
+        n.definition.startsWith("prefabs/earth-atmosphere/") ||
+        [
+          "models/arithmetic",
+          "models/area-perimeter",
+          "models/BridgeResponse",
+          "models/BridgeLoad",
+        ].includes(n.definition),
     )
     .slice(0, 12)
     .map((n) => {

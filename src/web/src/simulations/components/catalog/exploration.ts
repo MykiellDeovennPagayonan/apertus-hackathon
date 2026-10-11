@@ -1,5 +1,5 @@
 import type { PublicDefinition } from "../../runtime/authoring/types";
-import { num, object } from "../../runtime/parameterSchema";
+import { boolean, num, object } from "../../runtime/parameterSchema";
 import { base } from "./generic";
 
 function model(
@@ -163,7 +163,47 @@ function appearance(target: PublicDefinition, id: string): PublicDefinition {
     },
   };
 }
+const spring = model(
+  "models/SpringMass",
+  "Spring and mass",
+  object({
+    mass: num(0.2, 5, "kg"),
+    stiffness: num(1, 100, "N/m"),
+    damping: num(0, 10, "N s/m"),
+    amplitude: num(0.05, 0.5, "m"),
+    playing: boolean,
+  }),
+  { mass: 1, stiffness: 20, damping: 0.3, amplitude: 0.3, playing: false },
+  [
+    "spring",
+    "springs",
+    "spring mass",
+    "stiffness",
+    "damping",
+    "bouncing",
+    "harmonic oscillator",
+    "oscillation",
+  ],
+  [
+    "Ideal linear spring with viscous damping on a horizontal frictionless track; displacement is measured from equilibrium. No nonlinear deformation or real spring stress prediction.",
+  ],
+);
+spring.description =
+  "Explore how a stronger spring changes bouncing. At fixed mass, higher stiffness increases frequency; damping reduces motion. Attach appearance/SpringMass and add a stiffness slider plus RELEASE button. Keep the initial experiment simple.";
+spring.lifecycle.clock = true;
+spring.commands.RELEASE = {
+  arguments: object({}),
+  description: "Release the mass",
+  timing: "live",
+};
+spring.outputs = {
+  displacement: { kind: "value", unit: "m" },
+  frequency: { kind: "value", unit: "Hz" },
+  appearance: { kind: "attachment", unit: spring.id, cardinality: "many" },
+};
 export const explorationDefinitions = [
+  spring,
+  appearance(spring, "appearance/SpringMass"),
   signal,
   superposition,
   eclipse,

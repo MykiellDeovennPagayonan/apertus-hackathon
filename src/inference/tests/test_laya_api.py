@@ -58,3 +58,41 @@ def test_config_validation():
     assert client.post("/api/decide", json=payload).status_code == 503
     with pytest.raises(RuntimeError):
         Config("test", "invalid", "float16").validate()
+
+def test_cpu_configuration(monkeypatch):
+    from laya.config import read_config
+    monkeypatch.setenv("LAYA_BACKEND", "torch")
+    config = read_config()
+    config.validate()
+    assert config.device == "cpu"
+    assert config.dtype == "float32"
+    assert config.model == "convaiinnovations/laya-multilingual"
+    with pytest.raises(RuntimeError):
+        Config("test", "cpu", "float16", "torch").validate()
+    with pytest.raises(RuntimeError):
+        Config("test", "cpu", "float32", "torch", 0).validate()
+
+def test_cpu_runtime_preserves_decision_contract(monkeypatch):
+    import sys
+    from types import SimpleNamespace
+    calls = []
+    class Agent:
+        def predict(self, state, questions):
+            calls.append((state, questions))
+            return {"answers": {"action": {"choice": "pause"}}}
+    def load(model, **options):
+        assert model == "/models/laya"
+        assert options == {"device": "cpu", "backend": "eager"}
+        return Agent()
+    monkeypatch.setitem(sys.modules, "torch", SimpleNamespace(
+        set_num_threads=lambda count: calls.append(("threads", count)),
+        set_num_interop_threads=lambda count: calls.append(("interop", count))))
+    monkeypatch.setitem(sys.modules, "laya", SimpleNamespace(load=load))
+    runtime = ModelRuntime("/models/laya", "cpu", "float32", "torch", 1)
+    runtime.load()
+    assert runtime.state == "ready"
+    assert calls[0] == ("threads", 1)
+    result, elapsed = runtime.predict(payload["state"], payload["questions"])
+    assert result["answers"]["action"]["choice"] == "pause"
+    assert calls[-1] == (payload["state"], payload["questions"])
+    assert elapsed >= 0

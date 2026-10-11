@@ -1,0 +1,74 @@
+.math-analysis-scene {
+  color: #183044;
+  width: 100%;
+}
+.math-analysis-scene svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+.math-analysis-scene text {
+  font:
+    16px system-ui,
+    sans-serif;
+  fill: currentColor;
+}
+.math-analysis-scene p {
+  font:
+    17px / 1.5 system-ui,
+    sans-serif;
+  margin: 12px 0 0;
+}
+.ma-axis {
+  fill: none;
+  stroke: #637787;
+  stroke-width: 2;
+}
+.ma-dot,
+.ma-water {
+  fill: #2375ab;
+}
+.ma-red {
+  fill: #bc5a35;
+}
+.ma-excluded {
+  fill: #bec8cf;
+}
+.ma-mean {
+  fill: none;
+  stroke: #2375ab;
+  stroke-width: 3;
+}
+.ma-median {
+  fill: none;
+  stroke: #bc5a35;
+  stroke-width: 3;
+  stroke-dasharray: 8 5;
+}
+.ma-curve {
+  fill: none;
+  stroke: #566874;
+  stroke-width: 2;
+}
+.ma-region {
+  fill: #2375ab22;
+  stroke: #2375ab;
+  stroke-width: 1;
+}
+.ma-selected {
+  fill: none;
+  stroke: #132c40;
+  stroke-width: 3;
+}
+.ma-tank {
+  fill: #f4f8fa;
+  stroke: #637787;
+  stroke-width: 2;
+}
+.math-analysis-scene .ma-blue-text {
+  fill: #2375ab;
+}
+.math-analysis-scene .ma-orange-text {
+  fill: #bc5a35;
+}

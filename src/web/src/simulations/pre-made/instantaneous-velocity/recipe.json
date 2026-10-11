@@ -1,0 +1,272 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/instantaneous-velocity",
+  "version": 1,
+  "title": "Average and instantaneous velocity",
+  "description": "Shrink a signed time interval and compare a secant estimate with the analytic tangent velocity.",
+  "tags": [
+    "instantaneous-velocity",
+    "mathematics",
+    "car",
+    "fast",
+    "exact moment",
+    "travelled",
+    "instantaneous speed",
+    "motion",
+    "position",
+    "instantaneous rate",
+    "derivative",
+    "derivatives",
+    "calculus",
+    "velocity",
+    "speed",
+    "tangent",
+    "secant"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-analysis/instantaneous-velocity",
+        "version": 1,
+        "label": "Average and instantaneous velocity",
+        "scope": "scope/lab",
+        "configuration": {
+          "time": 3,
+          "increment": 1,
+          "preset": "quadratic"
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-analysis-instantaneous-velocity",
+        "version": 1,
+        "label": "Average and instantaneous velocity",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/0",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Halve the time interval",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Halve the time interval",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      },
+      {
+        "id": "input/1",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Selected time (s)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Selected time (s)",
+          "mode": "immediate",
+          "initial": "{\"value\":3}",
+          "parameter": "value",
+          "min": 0,
+          "max": 9,
+          "step": 0.1,
+          "showNumber": true
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/input/0",
+        "kind": "command",
+        "from": {
+          "node": "input/0",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MA_INSTANTANEOUS-VELOCITY_SHRINK"
+        }
+      },
+      {
+        "id": "link/input/1",
+        "kind": "command",
+        "from": {
+          "node": "input/1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MA_INSTANTANEOUS-VELOCITY_SET_TIME"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Average and instantaneous velocity"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/input/0",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/0"
+        },
+        {
+          "id": "layout/input/1",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/1"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Average and instantaneous velocity",
+      "instruction": "Shrink a signed time interval and compare a secant estimate with the analytic tangent velocity.",
+      "explanation": "Supported smooth position presets: s=t² or s=(t−5)² metres. Signed velocity differs from speed. Nonzero h is an average velocity estimate, never the exact derivative."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 450
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/input/0",
+          "layoutId": "layout/input/0",
+          "rect": {
+            "x": 0,
+            "y": 470,
+            "width": 378,
+            "height": 140
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/input/1",
+          "layoutId": "layout/input/1",
+          "rect": {
+            "x": 402,
+            "y": 470,
+            "width": 378,
+            "height": 190
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 708
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/scene"
+        ],
+        [
+          "board/layout/input/0",
+          "board/layout/input/1"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-analysis/instantaneous-velocity",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-analysis-instantaneous-velocity",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Supported smooth position presets: s=t² or s=(t−5)² metres. Signed velocity differs from speed. Nonzero h is an average velocity estimate, never the exact derivative."
+  ],
+  "catalog": {
+    "icon": "∑",
+    "category": "mathematics",
+    "order": 38
+  }
+}

@@ -15,6 +15,7 @@ import type { CreationArguments } from "./stages";
 export type FixerResult = {
   request: ToolRequest | null;
   action: "tool" | "done";
+  unsupported?: string;
   fixes: string[];
   issues: string[];
 };
@@ -211,6 +212,7 @@ const CANONICAL_TOOL_MAP: Record<string, ToolRequest["tool"]> = {
 export function normalizeEnvelope(obj: unknown): {
   normalized: unknown;
   action: "tool" | "done";
+  unsupported?: string;
   fixes: string[];
 } {
   const fixes: string[] = [];

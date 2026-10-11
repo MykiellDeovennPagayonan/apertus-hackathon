@@ -1,10 +1,11 @@
 import { readConfig as readApertusConfig } from "../apertus/config";
+import { offlineEnabled } from "../deployment";
 
 export interface LlmConfig {
   provider: "apertus" | "openai" | "anthropic";
   connection: "local" | "huggingface" | "openai" | "anthropic";
   label: string;
-  localRuntime?: "mlx" | "ollama";
+  localRuntime?: "mlx" | "ollama" | "llamacpp";
   baseUrl: string;
   model: string;
   token?: string;
@@ -19,6 +20,8 @@ export interface LlmConfig {
 /** Server configuration only; never import this module into a client component. */
 export function readLlmConfig(env: NodeJS.ProcessEnv = process.env): LlmConfig {
   const provider = env.LLM_PROVIDER?.trim() || "apertus";
+  if (offlineEnabled(env) && provider !== "apertus")
+    throw new Error("OFFLINE requires local Apertus inference.");
   if (
     provider !== "apertus" &&
     provider !== "openai" &&
@@ -42,7 +45,7 @@ export function readLlmConfig(env: NodeJS.ProcessEnv = process.env): LlmConfig {
       ...legacy,
       provider,
       connection: legacy.provider === "local" ? "local" : "huggingface",
-      localRuntime: legacy.localRuntime === "mlx" ? "mlx" : "ollama",
+      localRuntime: legacy.localRuntime as LlmConfig["localRuntime"],
       structuredOutput:
         legacy.structuredOutput === "auto" ? "auto" : "strict-json",
       label: "Apertus",
