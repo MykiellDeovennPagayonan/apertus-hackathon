@@ -209,16 +209,23 @@ export class RecipeSession {
     };
     const runtimeContext = Object.fromEntries(
       this.document.nodes
-        .filter((n) =>
-          [
-            "models/arithmetic",
-            "models/area-perimeter",
-            "models/BridgeLoad",
-            "models/BridgeResponse",
-          ].includes(n.definition),
+        .filter(
+          (n) =>
+            [
+              "models/arithmetic",
+              "models/area-perimeter",
+              "models/BridgeLoad",
+              "models/BridgeResponse",
+            ].includes(n.definition) ||
+            n.definition.startsWith("prefabs/earth-atmosphere/"),
         )
         .slice(0, 12)
-        .map((n) => [n.id, compact(snapshot.state[n.id]) ?? {}]),
+        .map((n) => [
+          n.id,
+          n.definition.startsWith("prefabs/earth-atmosphere/")
+            ? structuredClone(snapshot.state[n.id])
+            : (compact(snapshot.state[n.id]) ?? {}),
+        ]),
     );
     return {
       sessionId: this.sessionId,

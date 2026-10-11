@@ -875,6 +875,43 @@ function mockInference(queue, calls, decisionChoice = null) {
     active: { ...session.requestContext(), recipe: rectangle.recipe },
   });
   assert.equal(action.status, "runtime_action");
+  const wrappedCalls = [],
+    wrappedEvents = [];
+  mockInference(
+    [
+      { mode: "runtime" },
+      { selections: ["A/model:1"] },
+      { runtime_command_arguments: { width: "invalid", height: 4 } },
+      { runtime_command_arguments: { width: 7, height: 4 } },
+    ],
+    wrappedCalls,
+  );
+  const wrappedAction = await planPrompt(
+    {
+      ...request,
+      prompt: "Set A width to 7 now",
+      active: { ...session.requestContext(), recipe: rectangle.recipe },
+    },
+    undefined,
+    (event, data) => wrappedEvents.push({ event, data }),
+  );
+  assert.equal(wrappedAction.status, "runtime_action");
+  assert.deepEqual(wrappedAction.commands, action.commands);
+  assert.equal(
+    wrappedCalls.length,
+    4,
+    "Invalid wrapped values still require bounded provider repair",
+  );
+  assert.ok(
+    wrappedEvents.some(
+      (e) => e.event === "runtime_command_arguments.schemaFailure",
+    ),
+  );
+  assert.ok(
+    wrappedEvents.some(
+      (e) => e.event === "runtime_command_arguments.formatNormalized",
+    ),
+  );
   const arithmeticFollowupSession = activateRecipeSession(authored[0].recipe);
   const arithmeticFollowupCalls = [];
   mockInference(

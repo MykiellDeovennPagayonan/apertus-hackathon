@@ -79,6 +79,21 @@ export function RecipeLesson({
     runtime.activateEffects();
     return () => runtime.dispose();
   }, [runtime, supplied]);
+  // Read-only browser diagnostics, gated by the same explicit flag as the learner shell.
+  useEffect(() => {
+    if (supplied || process.env.NEXT_PUBLIC_EXPERIMENT_DIAGNOSTICS !== "true")
+      return;
+    Object.defineProperty(window, "__builderLessonSnapshot", {
+      value: () => ({
+        recipe: { document: runtime.document },
+        state: runtime.getSnapshot(),
+      }),
+      configurable: true,
+    });
+    return () => {
+      Reflect.deleteProperty(window, "__builderLessonSnapshot");
+    };
+  }, [runtime, supplied]);
   const lastRuntimeSource = useRef<string | null>(null);
   const runtimeSource = JSON.stringify({
     ...document,

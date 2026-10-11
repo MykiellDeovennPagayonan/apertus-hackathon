@@ -112,6 +112,10 @@ export function boardItemMinimum(
   }
   if (definition === "displays/ScienceObservations")
     return { width: 200, height: 96 };
+  if (definition?.startsWith("controls/earth-atmosphere-"))
+    return { width: 240, height: 80 };
+  if (definition?.startsWith("displays/earth-atmosphere-"))
+    return { width: 320, height: 64 };
   if (definition?.startsWith("controls/collective-"))
     return { width: 240, height: 64 };
   if (definition?.startsWith("displays/collective-"))

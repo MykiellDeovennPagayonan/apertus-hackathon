@@ -1,7 +1,7 @@
 # Seven Earth and atmosphere simulations: implementation and verification plan
 
 Date: 2026-10-10  
-Status: Implementation plan. No new simulation, live inference acceptance, or screenshot review is claimed by this document.  
+Status: First-version implementation present. The [verification report](027-validation/REPORT.md) records actual acceptance, screenshot review and remaining limits; this plan does not itself claim acceptance.
 Scope: earthquakes, tsunamis, atmosphere and ozone, greenhouse effect, lightning, rainbows, and weather.  
 Primary audience: a first-time learner who enters a short ordinary question and expects an understandable interactive explanation.  
 Evidence destination: `docs/agent-only/implementation/027-validation/`.

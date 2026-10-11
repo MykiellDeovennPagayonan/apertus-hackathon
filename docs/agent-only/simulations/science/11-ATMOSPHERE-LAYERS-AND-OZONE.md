@@ -1,7 +1,7 @@
 # Layers of the atmosphere and the ozone layer
 
 Date: 2026-10-10  
-Status: Researched simulation proposal; not implemented.  
+Status: Research brief; first-version lesson implemented. See the [implementation and verification report](../../implementation/027-validation/REPORT.md) for shipped scope and actual checks.
 Recommended presentation: **2D vertical altitude explorer with an ozone close-up.**
 
 ## Concept and learning goals

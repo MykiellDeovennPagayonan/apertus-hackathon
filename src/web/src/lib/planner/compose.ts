@@ -50,8 +50,8 @@ Recommended sequence of operations:
 1. Insert required model/prefab components (insert_component with definition and alias).
 2. Connect required ports between components if needed (connect).
 3. Configure model parameters to reflect constraints (configure).
-4. Add interactive controls (add_control) for independent parameter exploration.
-5. Add observation readouts or graphs (add_observation) to show key outputs.
+4. Add only controls needed for the active learning question. Process lessons need one contextual primary action, not every adjustable parameter.
+5. Use one timely caption for process lessons. Add numerical observations or graphs only when the question requires them. Follow topic guidance for independent action/caption dependencies.
 6. Set composite metadata and lesson info (set_lesson) and layout arrangement (arrange).
 7. Return action "done" when the composite is fully assembled and configured.
 Only use valid tool names and arguments from the provided schema. Do not output markdown fences or explanatory text outside the JSON envelope.`;
@@ -60,11 +60,14 @@ export async function compose(
   request: GenerationRequest,
   intent: TeachingIntent,
   budget: GenerationBudget,
+  activeFollowup?: () => Promise<GenerationResult | null>,
+  replaceTopic = false,
 ): Promise<GenerationResult> {
   budget.enableCompositionMode();
   budget.check();
 
   const shouldStartFresh =
+    replaceTopic ||
     /\b(?:start over|from scratch|new experiment|clear all|reset all|replace everything)\b/i.test(
       request.prompt,
     );
@@ -120,12 +123,32 @@ export async function compose(
         ]
       : [];
   const decisionPrompt = activeTopics.length
-    ? `${request.prompt}\nCurrent simulation topic: ${activeTopics.join("; ")}`
+    ? `Active lesson: ${request.active?.recipe.document.nodes
+        .filter(
+          (n) => publicDefinitions.get(n.definition)?.category === "models",
+        )
+        .map((n) => publicDefinition(n.definition).title)
+        .join("; ")}. Follow-up within this lesson: ${request.prompt}`
     : request.prompt;
   const strategy = requiredLaya
     ? await selectCompositionStrategy(decisionPrompt, intent, bucket, budget)
     : null;
   if (strategy) intent = { ...intent, suggestedStructure: strategy.structure };
+  // Strict selection still validates the topic; supported active lessons then use
+  // the canonical runtime/authoring follow-up path instead of rebuilding a lesson.
+  if (
+    activeFollowup &&
+    strategy &&
+    !shouldStartFresh &&
+    request.active?.recipe.document.nodes.some(
+      (node) =>
+        node.definition === strategy.definition &&
+        node.definition.startsWith("prefabs/earth-atmosphere/"),
+    )
+  ) {
+    const result = await activeFollowup();
+    if (result) return result;
+  }
 
   // 2. Initialize authoring transaction
   const initialDoc = structuredClone(

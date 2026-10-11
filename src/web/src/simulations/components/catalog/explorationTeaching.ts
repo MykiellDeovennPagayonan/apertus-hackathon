@@ -8,6 +8,7 @@ import { scienceCommand } from "../../domains/science";
 import { scienceSpecs } from "../../domains/science/specs";
 import type { PublicDefinition } from "../../runtime/authoring/types";
 import { cycleCommand } from "../systems/biogeochemistry/contracts";
+import { earthRequirements } from "./earthAtmosphere";
 export interface CompositionRequirements {
   topic: string;
   guidance?: string;
@@ -27,7 +28,8 @@ const scienceTopics: Record<string, string> = {
   genome: "Genetics and inheritance",
   pollination: "Pollination",
   invasive: "Spread and removal of invasive species",
-  earth: "Earth layers and mantle convection",
+  earth:
+    "Earth interior: crust, mantle, outer core and inner core; mantle convection.",
   plates: "Plate boundaries and tectonics",
   volcano: "Volcano eruptions: effusive and explosive",
   water: "Water cycle and watershed runoff",
@@ -44,6 +46,7 @@ const collectiveEditGuidance: Record<string, string> = {
 };
 export const compositionRequirements: Record<string, CompositionRequirements> =
   {
+    ...earthRequirements,
     ...Object.fromEntries(
       collectiveKinds.map((kind, i) => [
         collectiveModels[i].ref,

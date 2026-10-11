@@ -45,6 +45,7 @@ import { ArithmeticScene } from "../ArithmeticScene";
 import { BridgeScene } from "../BridgeScene";
 import { CycleScene } from "../biogeochemistry/CycleScene";
 import { CountingScene } from "../CountingScene";
+import { LessonScene } from "../earth-atmosphere/LessonScene";
 import { CrowdScene } from "../collective/CrowdScene";
 import { FishingScene } from "../collective/FishingScene";
 import { SelectionScene } from "../collective/SelectionScene";
@@ -81,6 +82,13 @@ const appearances: Record<
     question?: string;
   }) => React.ReactNode
 > = {
+  "earth-atmosphere-earthquake": LessonScene,
+  "earth-atmosphere-tsunami": LessonScene,
+  "earth-atmosphere-atmosphere": LessonScene,
+  "earth-atmosphere-greenhouse": LessonScene,
+  "earth-atmosphere-lightning": LessonScene,
+  "earth-atmosphere-rainbow": LessonScene,
+  "earth-atmosphere-weather": LessonScene,
   "collective-fishing": FishingScene,
   "collective-crowd": CrowdScene,
   "collective-voting": VotingScene,

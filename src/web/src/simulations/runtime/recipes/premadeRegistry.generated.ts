@@ -2,68 +2,82 @@
 import recipe0 from "../../pre-made/agent-conversation/recipe.json";
 import recipe1 from "../../pre-made/area-perimeter/recipe.json";
 import recipe2 from "../../pre-made/arithmetic/recipe.json";
-import recipe3 from "../../pre-made/bridge/recipe.json";
-import recipe4 from "../../pre-made/carbon-cycle/recipe.json";
-import recipe5 from "../../pre-made/cell-division/recipe.json";
-import recipe6 from "../../pre-made/coordinates/recipe.json";
-import recipe7 from "../../pre-made/counting/recipe.json";
-import recipe8 from "../../pre-made/craft-production/recipe.json";
-import recipe9 from "../../pre-made/crowd-exit/recipe.json";
-import recipe10 from "../../pre-made/debate/recipe.json";
-import recipe11 from "../../pre-made/equal-groups/recipe.json";
-import recipe12 from "../../pre-made/food-web/recipe.json";
-import recipe13 from "../../pre-made/fraction-builder/recipe.json";
-import recipe14 from "../../pre-made/fraction-number-line/recipe.json";
-import recipe15 from "../../pre-made/genome-to-organism/recipe.json";
-import recipe16 from "../../pre-made/immune-defense/recipe.json";
-import recipe17 from "../../pre-made/inside-earth/recipe.json";
-import recipe18 from "../../pre-made/invasive-species/recipe.json";
-import recipe19 from "../../pre-made/natural-selection/recipe.json";
-import recipe20 from "../../pre-made/nitrogen-cycle/recipe.json";
-import recipe21 from "../../pre-made/nutrient-limitation/recipe.json";
-import recipe22 from "../../pre-made/oxygen-cycle/recipe.json";
-import recipe23 from "../../pre-made/plate-boundaries/recipe.json";
-import recipe24 from "../../pre-made/pollination-network/recipe.json";
-import recipe25 from "../../pre-made/probability/recipe.json";
-import recipe26 from "../../pre-made/projectile/recipe.json";
-import recipe27 from "../../pre-made/ratio/recipe.json";
-import recipe28 from "../../pre-made/shared-fishing-lake/recipe.json";
-import recipe29 from "../../pre-made/volcano-life-cycle/recipe.json";
-import recipe30 from "../../pre-made/voting-systems/recipe.json";
-import recipe31 from "../../pre-made/water-cycle/recipe.json";
-import recipe32 from "../../pre-made/wildfire/recipe.json";
+import recipe3 from "../../pre-made/atmosphere-ozone/recipe.json";
+import recipe4 from "../../pre-made/bridge/recipe.json";
+import recipe5 from "../../pre-made/carbon-cycle/recipe.json";
+import recipe6 from "../../pre-made/cell-division/recipe.json";
+import recipe7 from "../../pre-made/coordinates/recipe.json";
+import recipe8 from "../../pre-made/counting/recipe.json";
+import recipe9 from "../../pre-made/craft-production/recipe.json";
+import recipe10 from "../../pre-made/crowd-exit/recipe.json";
+import recipe11 from "../../pre-made/debate/recipe.json";
+import recipe12 from "../../pre-made/earthquake-formation/recipe.json";
+import recipe13 from "../../pre-made/equal-groups/recipe.json";
+import recipe14 from "../../pre-made/food-web/recipe.json";
+import recipe15 from "../../pre-made/fraction-builder/recipe.json";
+import recipe16 from "../../pre-made/fraction-number-line/recipe.json";
+import recipe17 from "../../pre-made/genome-to-organism/recipe.json";
+import recipe18 from "../../pre-made/greenhouse-effect/recipe.json";
+import recipe19 from "../../pre-made/immune-defense/recipe.json";
+import recipe20 from "../../pre-made/inside-earth/recipe.json";
+import recipe21 from "../../pre-made/invasive-species/recipe.json";
+import recipe22 from "../../pre-made/lightning-formation/recipe.json";
+import recipe23 from "../../pre-made/natural-selection/recipe.json";
+import recipe24 from "../../pre-made/nitrogen-cycle/recipe.json";
+import recipe25 from "../../pre-made/nutrient-limitation/recipe.json";
+import recipe26 from "../../pre-made/oxygen-cycle/recipe.json";
+import recipe27 from "../../pre-made/plate-boundaries/recipe.json";
+import recipe28 from "../../pre-made/pollination-network/recipe.json";
+import recipe29 from "../../pre-made/probability/recipe.json";
+import recipe30 from "../../pre-made/projectile/recipe.json";
+import recipe31 from "../../pre-made/rainbow-formation/recipe.json";
+import recipe32 from "../../pre-made/ratio/recipe.json";
+import recipe33 from "../../pre-made/shared-fishing-lake/recipe.json";
+import recipe34 from "../../pre-made/tsunami-formation/recipe.json";
+import recipe35 from "../../pre-made/volcano-life-cycle/recipe.json";
+import recipe36 from "../../pre-made/voting-systems/recipe.json";
+import recipe37 from "../../pre-made/water-cycle/recipe.json";
+import recipe38 from "../../pre-made/weather-formation/recipe.json";
+import recipe39 from "../../pre-made/wildfire/recipe.json";
 export const premadeSources = {
   "agent-conversation": recipe0,
   "area-perimeter": recipe1,
   "arithmetic": recipe2,
-  "bridge": recipe3,
-  "carbon-cycle": recipe4,
-  "cell-division": recipe5,
-  "coordinates": recipe6,
-  "counting": recipe7,
-  "craft-production": recipe8,
-  "crowd-exit": recipe9,
-  "debate": recipe10,
-  "equal-groups": recipe11,
-  "food-web": recipe12,
-  "fraction-builder": recipe13,
-  "fraction-number-line": recipe14,
-  "genome-to-organism": recipe15,
-  "immune-defense": recipe16,
-  "inside-earth": recipe17,
-  "invasive-species": recipe18,
-  "natural-selection": recipe19,
-  "nitrogen-cycle": recipe20,
-  "nutrient-limitation": recipe21,
-  "oxygen-cycle": recipe22,
-  "plate-boundaries": recipe23,
-  "pollination-network": recipe24,
-  "probability": recipe25,
-  "projectile": recipe26,
-  "ratio": recipe27,
-  "shared-fishing-lake": recipe28,
-  "volcano-life-cycle": recipe29,
-  "voting-systems": recipe30,
-  "water-cycle": recipe31,
-  "wildfire": recipe32,
+  "atmosphere-ozone": recipe3,
+  "bridge": recipe4,
+  "carbon-cycle": recipe5,
+  "cell-division": recipe6,
+  "coordinates": recipe7,
+  "counting": recipe8,
+  "craft-production": recipe9,
+  "crowd-exit": recipe10,
+  "debate": recipe11,
+  "earthquake-formation": recipe12,
+  "equal-groups": recipe13,
+  "food-web": recipe14,
+  "fraction-builder": recipe15,
+  "fraction-number-line": recipe16,
+  "genome-to-organism": recipe17,
+  "greenhouse-effect": recipe18,
+  "immune-defense": recipe19,
+  "inside-earth": recipe20,
+  "invasive-species": recipe21,
+  "lightning-formation": recipe22,
+  "natural-selection": recipe23,
+  "nitrogen-cycle": recipe24,
+  "nutrient-limitation": recipe25,
+  "oxygen-cycle": recipe26,
+  "plate-boundaries": recipe27,
+  "pollination-network": recipe28,
+  "probability": recipe29,
+  "projectile": recipe30,
+  "rainbow-formation": recipe31,
+  "ratio": recipe32,
+  "shared-fishing-lake": recipe33,
+  "tsunami-formation": recipe34,
+  "volcano-life-cycle": recipe35,
+  "voting-systems": recipe36,
+  "water-cycle": recipe37,
+  "weather-formation": recipe38,
+  "wildfire": recipe39,
 } as const;

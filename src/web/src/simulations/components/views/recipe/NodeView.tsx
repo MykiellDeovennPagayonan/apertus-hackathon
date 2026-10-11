@@ -12,6 +12,7 @@ import {
   CycleActivity,
   CycleCaption,
 } from "../biogeochemistry/CyclePanels";
+import { LessonControls } from "../earth-atmosphere/LessonControls";
 import { CollectiveControl } from "../collective/Controls";
 import { MathReadoutView } from "../MathReadoutView";
 import { ScienceControls, ScienceObservations } from "../SciencePanels";
@@ -31,6 +32,8 @@ export function NodeView({
 }) {
   const snapshot = useContext(SnapshotContext);
   const def = publicDefinition(node.definition);
+  if (/^(controls|displays)\/earth-atmosphere-/.test(node.definition))
+    return <LessonControls node={node} runtime={runtime} />;
   if (node.definition === "displays/AgentProfile")
     return <AgentProfileView node={node} runtime={runtime} />;
   if (node.definition === "displays/AgentTranscript")

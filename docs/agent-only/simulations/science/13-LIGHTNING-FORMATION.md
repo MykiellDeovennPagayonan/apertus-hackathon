@@ -1,7 +1,7 @@
 # How lightning forms
 
 Date: 2026-10-10  
-Status: Researched simulation proposal; not implemented.  
+Status: Research brief; first-version lesson implemented. See the [implementation and verification report](../../implementation/027-validation/REPORT.md) for shipped scope and actual checks.
 Recommended presentation: **2D thundercloud cutaway with a slowed discharge sequence.**
 
 ## Concept and learning goals

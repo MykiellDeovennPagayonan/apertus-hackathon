@@ -1,7 +1,7 @@
 # How tsunamis form
 
 Date: 2026-10-10  
-Status: Researched simulation proposal; not implemented.  
+Status: Research brief; first-version lesson implemented. See the [implementation and verification report](../../implementation/027-validation/REPORT.md) for shipped scope and actual checks.
 Recommended presentation: **2D ocean cross-section with a synchronized overhead map.**
 
 ## Concept and learning goals

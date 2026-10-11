@@ -331,7 +331,8 @@ export async function focusedTurn(
   const scienceInstruction = contextNodes.some(
     (node) =>
       node.definition.startsWith("prefabs/science/") ||
-      node.definition.startsWith("prefabs/biogeochemistry/"),
+      node.definition.startsWith("prefabs/biogeochemistry/") ||
+      node.definition.startsWith("prefabs/earth-atmosphere/"),
   )
     ? " For a science lesson, write the lesson instruction as one concise learning question specific to the user's investigation. A science appearance may override it with its editable question field (maximum 180 characters). Choose only condition controls needed for that investigation; retain trusted scientific feedback from model outputs."
     : "";
@@ -392,7 +393,22 @@ export async function focusedTurn(
       },
     ],
     (content) => {
-      const { value, removed } = parseArgumentJson(content);
+      const parsed = parseArgumentJson(content);
+      let value = parsed.value;
+      const removed = parsed.removed;
+      if (
+        value &&
+        typeof value === "object" &&
+        !Array.isArray(value) &&
+        Object.keys(value).length === 1 &&
+        tools[0].tool in value
+      ) {
+        value = (value as Record<string, unknown>)[tools[0].tool];
+        budget.trace?.(`turn_${turn + 1}.formatNormalized`, {
+          kind: "single known tool wrapper",
+          tool: tools[0].tool,
+        });
+      }
       if (
         allowDone &&
         value &&

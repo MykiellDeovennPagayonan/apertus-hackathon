@@ -125,12 +125,46 @@ const categories = {
   compositions: "recipe",
   behaviors: "behavior",
 };
+const earthKinds = [
+  "earthquake",
+  "tsunami",
+  "atmosphere",
+  "greenhouse",
+  "lightning",
+  "rainbow",
+  "weather",
+];
 const explicitOwners = new Map([
+  [
+    "systems/earth-atmosphere/physics.ts",
+    earthKinds.map((k) => `prefabs/earth-atmosphere/${k}`),
+  ],
+  ...["LessonScene.tsx", "Scene3D.tsx", "Diagrams.tsx"].map((file) => [
+    `views/earth-atmosphere/${file}`,
+    earthKinds.map((k) => `appearance/earth-atmosphere-${k}`),
+  ]),
+  [
+    "views/earth-atmosphere/LessonControls.tsx",
+    earthKinds.flatMap((k) => [
+      `controls/earth-atmosphere-${k}-action`,
+      `displays/earth-atmosphere-${k}-caption`,
+    ]),
+  ],
   ...["fishing", "crowd", "voting", "selection"].flatMap((kind) => [
     [`systems/collective/${kind}.ts`, [`prefabs/collective/${kind}`]],
-    [`views/collective/${kind[0].toUpperCase() + kind.slice(1)}Scene.tsx`, [`appearance/collective-${kind}`]],
+    [
+      `views/collective/${kind[0].toUpperCase() + kind.slice(1)}Scene.tsx`,
+      [`appearance/collective-${kind}`],
+    ],
   ]),
-  ["views/collective/Controls.tsx", ["fishing", "crowd", "voting", "selection"].flatMap((kind) => [`controls/collective-${kind}-action`, `displays/collective-${kind}-caption`, ...(kind === "crowd" ? [] : [`controls/collective-${kind}-choice`])])],
+  [
+    "views/collective/Controls.tsx",
+    ["fishing", "crowd", "voting", "selection"].flatMap((kind) => [
+      `controls/collective-${kind}-action`,
+      `displays/collective-${kind}-caption`,
+      ...(kind === "crowd" ? [] : [`controls/collective-${kind}-choice`]),
+    ]),
+  ],
 
   ["visuals/BeamVisual.tsx", ["appearance/Beam"]],
   ["visuals/BridgeSupportVisual.tsx", ["appearance/BridgeSupport"]],

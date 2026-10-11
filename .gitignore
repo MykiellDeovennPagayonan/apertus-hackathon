@@ -15,3 +15,8 @@
 
 # Four-simulation browser and inference evidence
 /docs/agent-only/implementation/026-validation/runs/
+
+# Earth and atmosphere numbered verification evidence
+/docs/agent-only/implementation/027-validation/runs/
+/docs/agent-only/implementation/027-validation/live-*.json
+/docs/agent-only/implementation/027-validation/checks/

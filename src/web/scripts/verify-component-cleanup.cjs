@@ -119,17 +119,29 @@ if (process.argv.includes("--capture")) {
     "crowd-exit",
     "voting-systems",
     "natural-selection",
+    "earthquake-formation",
+    "tsunami-formation",
+    "atmosphere-ozone",
+    "greenhouse-effect",
+    "lightning-formation",
+    "rainbow-formation",
+    "weather-formation",
   ]);
   const newModels = assemblyModels.filter((m) =>
-    ["ecology", "social-systems", "science", "biogeochemistry", "collective"].includes(
-      m.ref.split("/")[1],
-    ),
+    [
+      "ecology",
+      "social-systems",
+      "science",
+      "biogeochemistry",
+      "collective",
+      "earth-atmosphere",
+    ].includes(m.ref.split("/")[1]),
   );
   assert.equal(
     newModels.filter((m) => m.ref.startsWith("prefabs/science/")).length,
     9,
   );
-  assert.equal(newModels.length, 20);
+  assert.equal(newModels.length, 27);
   assert.equal(
     newModels.filter((m) => m.ref.startsWith("prefabs/biogeochemistry/"))
       .length,
@@ -159,6 +171,19 @@ if (process.argv.includes("--capture")) {
       `controls/collective-${kind}-action`,
       `displays/collective-${kind}-caption`,
       ...(kind === "crowd" ? [] : [`controls/collective-${kind}-choice`]),
+    );
+  for (const kind of [
+    "earthquake",
+    "tsunami",
+    "atmosphere",
+    "greenhouse",
+    "lightning",
+    "rainbow",
+    "weather",
+  ])
+    newIds.push(
+      `controls/earth-atmosphere-${kind}-action`,
+      `displays/earth-atmosphere-${kind}-caption`,
     );
   // Implementation 025 adds spring capabilities without changing historical contracts.
   newIds.push("models/SpringMass", "appearance/SpringMass");

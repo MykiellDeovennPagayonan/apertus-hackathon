@@ -410,7 +410,8 @@ export function SpatialBoard({
           const host = element.closest<HTMLElement>(".board-item");
           const id = host?.dataset.boardId;
           if (!id) continue;
-          const content = element.parentElement;
+          const content =
+            element.closest(".board-content") ?? element.parentElement;
           const height = Math.ceil(
             element.offsetHeight +
               (content
@@ -430,6 +431,13 @@ export function SpatialBoard({
     viewport.current
       .querySelectorAll(".board-content > .recipe-layout")
       .forEach((element) => {
+        const measuredContent = element.querySelector(
+          '[data-responsive-height="content"]',
+        );
+        if (measuredContent) {
+          observer.observe(measuredContent);
+          return;
+        }
         if (
           !requestedAutoLayout &&
           element.closest('[data-board-scene="true"]')

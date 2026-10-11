@@ -153,8 +153,16 @@ export function arrangeDocument(
       ) => {
         if (!item.locked) item.rect = rect;
       };
+      const earthLesson = sceneNode.definition.startsWith(
+        "appearance/earth-atmosphere-",
+      );
       const y = nextScopeY;
-      place(scenes[0], { x: 0, y, width: 1080, height: 480 });
+      place(scenes[0], {
+        x: 0,
+        y,
+        width: 1080,
+        height: earthLesson ? 420 : 480,
+      });
       scenes[0].responsiveMinHeight = 360;
       rows.push([scenes[0].id]);
       const primary = controls.find((i) =>
@@ -165,19 +173,30 @@ export function arrangeDocument(
           x: 0,
           y:
             y +
-            (sceneNode.definition.startsWith("appearance/collective-")
-              ? 578
-              : 504) +
+            (earthLesson
+              ? 436
+              : sceneNode.definition.startsWith("appearance/collective-")
+                ? 578
+                : 504) +
             n * 100,
-          width: sceneNode.definition.startsWith("appearance/collective-")
-            ? 1080
-            : 740,
+          width:
+            earthLesson ||
+            sceneNode.definition.startsWith("appearance/collective-")
+              ? 1080
+              : 740,
           height: 80,
         });
         item.responsiveMinHeight = 80;
         rows.push([item.id]);
       }
-      if (primary) {
+      if (
+        primary &&
+        sceneNode.definition.startsWith("appearance/earth-atmosphere-")
+      ) {
+        place(primary, { x: 0, y: y + 532, width: 1080, height: 80 });
+        primary.responsiveMinHeight = 80;
+        rows.push([primary.id]);
+      } else if (primary) {
         place(primary, {
           x: sceneNode.definition.startsWith("appearance/collective-")
             ? 620

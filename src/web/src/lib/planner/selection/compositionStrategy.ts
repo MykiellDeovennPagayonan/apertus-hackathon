@@ -45,7 +45,7 @@ export async function selectCompositionStrategy(
     )
     .map(([id]) => buildInitialCard(id))
     .filter((card): card is ComponentBucketCard => card !== null)
-    .slice(0, 3);
+    .slice(0, groups.has("earth-atmosphere") ? 6 : 3);
   const choices = [...candidates, ...contrasting].map((c) => ({
     card: c,
     key:
@@ -54,17 +54,41 @@ export async function selectCompositionStrategy(
         .replace(/([a-z])([A-Z])/g, "$1-$2")
         .toLowerCase(),
   }));
+  if (groups.has("earth-atmosphere")) {
+    // Town objects are geometry, not scientific processes. Keep them available
+    // for authoring, but do not let a generic Ground/House title compete with
+    // ground shaking or the greenhouse effect in this topic decision.
+    for (let index = choices.length - 1; index >= 0; index--)
+      if (
+        publicDefinitions.get(choices[index].card.id)?.outputs.data?.unit ===
+        "town/object"
+      )
+        choices.splice(index, 1);
+    const order = Object.keys(compositionRequirements);
+    choices.sort((a, b) => {
+      const position = (id: string) => {
+        const index = order.indexOf(id);
+        return index < 0 ? order.length : index;
+      };
+      return position(a.card.id) - position(b.card.id);
+    });
+  }
   const question: ChoiceQuestion = {
     type: "choice" as const,
-    instructions: "Select the simulation matching the user request.",
+    instructions: groups.has("earth-atmosphere")
+      ? "Which scientific process does the user want to understand? When a current simulation topic is supplied, keep that topic for changes to its conditions or stages. Select a different topic only if the learner explicitly requests it."
+      : "Select the simulation matching the user request.",
     criteria: {
       ...Object.fromEntries(
         choices.map(({ card, key }) => [
           key,
-          compositionRequirements[card.id]?.topic ?? card.title,
+          compositionRequirements[card.id]?.topic ??
+            (groups.has("earth-atmosphere") ? card.summary : card.title),
         ]),
       ),
-      unclear: "None of these topics",
+      unclear: groups.has("earth-atmosphere")
+        ? "An unrelated request with no teaching overlap."
+        : "None of these topics",
     },
   };
   try {

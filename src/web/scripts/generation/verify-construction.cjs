@@ -562,9 +562,9 @@ function result(document) {
         content = JSON.stringify({
           candidate: choices === 1 ? "candidate1" : "done",
         });
-      } else if (input.fields) {
+      } else if (input.availableSettings) {
         fieldsCalls++;
-        content = JSON.stringify({ fields: ["stiffness"] });
+        content = JSON.stringify({ field: "stiffness" });
       } else {
         argumentsCalls++;
         content = JSON.stringify({
