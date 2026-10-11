@@ -1,0 +1,316 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-acid-base-titration",
+  "version": 1,
+  "title": "Acid-base titration & pH neutralization",
+  "description": "How does buret dispensing neutralize analyte acid and shift the indicator color?",
+  "tags": ["chemistry", "titration", "neutralization", "lab"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/chemistry/AcidBaseTitration",
+        "version": 1,
+        "label": "Acid-base titration",
+        "scope": "scope/lab",
+        "configuration": {
+          "analyteVolume": 25,
+          "acidConcentration": 0.1,
+          "baseConcentration": 0.1,
+          "titrantVolumeAdded": 0
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/chemistry-titration",
+        "version": 1,
+        "label": "Acid-base titration scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/titrantVolume",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Titrant added (mL)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Titrant dispensed (mL)",
+          "mode": "immediate",
+          "initial": "{\"value\": 0}",
+          "parameter": "value",
+          "step": 0.5,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/ph",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Solution pH",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Solution pH",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/veq",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Equivalence volume (mL)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Equivalence volume",
+          "precision": 1
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/ph",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "currentPH"
+        },
+        "to": {
+          "node": "result/ph",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/veq",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "equivalenceVolume"
+        },
+        "to": {
+          "node": "result/veq",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/titrantVolume",
+        "kind": "command",
+        "from": {
+          "node": "input/titrantVolume",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "CHEM_SET_TITRANT_VOLUME"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Acid-base titration"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/ph",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/ph"
+        },
+        {
+          "id": "layout/result/veq",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/veq"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Buret control",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/titrantVolume",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/titrantVolume"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Acid-base titration & pH neutralization",
+      "instruction": "Dispense base titrant from the buret into the flask. Watch the pH jump at equivalence and the indicator turn pink.",
+      "explanation": "At the equivalence point, hydronium and hydroxide moles match exactly. Strong acid-strong base titration neutralizes at pH 7.0."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 350
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/result/ph",
+          "layoutId": "layout/result/ph",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/veq",
+          "layoutId": "layout/result/veq",
+          "rect": {
+            "x": 822,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 126,
+            "width": 340,
+            "height": 180
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/appearance"],
+        ["board/layout/task"],
+        ["board/layout/result/ph", "board/layout/result/veq"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "titrantVolumeAdded",
+      "node": "model",
+      "field": "titrantVolumeAdded",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "unit": "mL"
+      },
+      "default": 0
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/chemistry/AcidBaseTitration",
+      "version": 1
+    },
+    {
+      "id": "appearance/chemistry-titration",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Monoprotic strong acid and base titration at 25°C.",
+    "Phenolphthalein turns pink between pH 8.2 and 10.0."
+  ],
+  "catalog": {
+    "icon": "🧪",
+    "category": "chemistry",
+    "order": 13
+  }
+}

@@ -1,0 +1,362 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-galvanic-cell",
+  "version": 1,
+  "title": "Galvanic cell & Nernst potential",
+  "description": "How do zinc and copper ion concentrations shift cell potential in a Daniell galvanic cell?",
+  "tags": ["chemistry", "galvanic-cell", "nernst", "electrochemistry", "redox", "voltmeter", "lab"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/chemistry/GalvanicCell",
+        "version": 1,
+        "label": "Galvanic cell model",
+        "scope": "scope/lab",
+        "configuration": {
+          "znConcentration": 1,
+          "cuConcentration": 1
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/chemistry-galvanic-cell",
+        "version": 1,
+        "label": "Galvanic cell scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/znConcentration",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "[Zn²⁺] (M)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "[Zn²⁺] Concentration (M)",
+          "mode": "immediate",
+          "initial": "{\"value\": 1.0}",
+          "parameter": "value",
+          "step": 0.05,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/cuConcentration",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "[Cu²⁺] (M)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "[Cu²⁺] Concentration (M)",
+          "mode": "immediate",
+          "initial": "{\"value\": 1.0}",
+          "parameter": "value",
+          "step": 0.05,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/cellPotential",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Cell potential (V)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Cell potential (V)",
+          "precision": 3
+        }
+      },
+      {
+        "id": "result/reactionQuotient",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Reaction quotient Q",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Reaction quotient Q",
+          "precision": 4
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/cellPotential",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "cellPotential"
+        },
+        "to": {
+          "node": "result/cellPotential",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/reactionQuotient",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "reactionQuotient"
+        },
+        "to": {
+          "node": "result/reactionQuotient",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/znConcentration",
+        "kind": "command",
+        "from": {
+          "node": "input/znConcentration",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "CHEM_SET_ZN_CONC"
+        }
+      },
+      {
+        "id": "link/input/cuConcentration",
+        "kind": "command",
+        "from": {
+          "node": "input/cuConcentration",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "CHEM_SET_CU_CONC"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Galvanic electrochemistry"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/cellPotential",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/cellPotential"
+        },
+        {
+          "id": "layout/result/reactionQuotient",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/reactionQuotient"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Half-cell ion concentrations",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/znConcentration",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/znConcentration"
+            },
+            {
+              "id": "layout/input/cuConcentration",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/cuConcentration"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Galvanic cell & Nernst potential",
+      "instruction": "Vary zinc and copper ion concentrations. Observe how cell voltage shifts relative to the standard 1.10 V Daniell cell according to the Nernst equation.",
+      "explanation": "Standard cell potential is E° = +1.10 V (Cu²⁺/Cu = +0.34 V, Zn²⁺/Zn = -0.76 V). The Nernst equation E_cell = E° - (RT/2F)*ln([Zn²⁺]/[Cu²⁺]) shows that increasing reactant [Cu²⁺] raises voltage, while increasing product [Zn²⁺] lowers voltage."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 350
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/result/cellPotential",
+          "layoutId": "layout/result/cellPotential",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/reactionQuotient",
+          "layoutId": "layout/result/reactionQuotient",
+          "rect": {
+            "x": 822,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 126,
+            "width": 340,
+            "height": 180
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/appearance"],
+        ["board/layout/task"],
+        ["board/layout/result/cellPotential", "board/layout/result/reactionQuotient"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "znConcentration",
+      "node": "model",
+      "field": "znConcentration",
+      "schema": {
+        "type": "number",
+        "minimum": 0.001,
+        "maximum": 2,
+        "unit": "mol/L"
+      },
+      "default": 1
+    },
+    {
+      "name": "cuConcentration",
+      "node": "model",
+      "field": "cuConcentration",
+      "schema": {
+        "type": "number",
+        "minimum": 0.001,
+        "maximum": 2,
+        "unit": "mol/L"
+      },
+      "default": 1
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/chemistry/GalvanicCell",
+      "version": 1
+    },
+    {
+      "id": "appearance/chemistry-galvanic-cell",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Daniell galvanic cell: Zn(s) | Zn²⁺(aq) || Cu²⁺(aq) | Cu(s) at 298.15 K.",
+    "Standard potential E° = +1.10 V governed by Nernst equation."
+  ],
+  "catalog": {
+    "icon": "⚡",
+    "category": "chemistry",
+    "order": 16
+  }
+}

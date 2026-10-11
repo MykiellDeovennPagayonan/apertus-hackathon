@@ -3,6 +3,10 @@ import {
   publicDefinitions,
 } from "../../simulations/components/catalog";
 import { compositionRequirements } from "../../simulations/components/catalog/explorationTeaching";
+import {
+  convertToBoard,
+  reconcileBoard,
+} from "../../simulations/runtime/authoring/board";
 import { finalizeRecipe } from "../../simulations/runtime/authoring/operations";
 import {
   autoConnectUnambiguous,
@@ -198,7 +202,6 @@ export async function compose(
         return { ...tool, schema: { ...tool.schema, properties } };
       });
     }
-    const turnJsonSchema = buildTurnEnvelopeSchema(turnTools);
 
     const liveHandles = requiredLaya
       ? draft.document.nodes.map((n) => n.id)
@@ -228,11 +231,14 @@ export async function compose(
     const suggestions = suggestConnections(draft.document);
 
     const isCompositeBuilder =
-      request.active?.sessionId?.startsWith("builder-") ?? false;
+      (request.active?.sessionId?.startsWith("builder-") ?? false) ||
+      /\b(?:builder|composite|component)\b/i.test(request.prompt) ||
+      Boolean(request.requestId?.includes("builder")) ||
+      request.active == null;
 
     const contextData = {
       strategy,
-      allowedTools: turnTools,
+      allowedTools: [...new Set(turnTools.map((t) => t.tool))],
       requirements: Object.fromEntries(
         bucket
           .filter((c) => compositionRequirements[c.id])
@@ -297,10 +303,13 @@ export async function compose(
     ).length;
 
     const wantsMoreControls =
-      /\b(?:add|insert|include|create|provide|give)\b/i.test(request.prompt) &&
-      /\b(?:slider|control|input|dial|button)\b/i.test(request.prompt);
+      /\b(?:build|make|add|insert|include|create|provide|give|with)\b/i.test(
+        request.prompt,
+      ) && /\b(?:slider|control|input|dial|button)\b/i.test(request.prompt);
     const wantsMoreObservations =
-      /\b(?:add|insert|include|create|provide|give)\b/i.test(request.prompt) &&
+      /\b(?:build|make|add|insert|include|create|provide|give|with)\b/i.test(
+        request.prompt,
+      ) &&
       /\b(?:readout|observation|display|meter|graph|monitor)\b/i.test(
         request.prompt,
       );
@@ -370,6 +379,14 @@ export async function compose(
             )}\n\nChoose the next single tool operation to perform, or choose done if complete.`,
       },
     ];
+
+    const canFinish = !(
+      modelNodes.length === 0 ||
+      (controlCount === 0 && observationCount === 0) ||
+      (wantsMoreControls && controlCount === 0) ||
+      (wantsMoreObservations && observationCount === 0)
+    );
+    const turnJsonSchema = buildTurnEnvelopeSchema(turnTools, canFinish);
 
     if (requiredLaya) budget.beginTurn();
     budget.trace?.("turn.start", {
@@ -473,24 +490,24 @@ export async function compose(
         turn++;
         continue;
       }
+      const missingRequestedControl =
+        wantsMoreControls && controlCount === 0;
+      const missingRequestedObservation =
+        wantsMoreObservations && observationCount === 0;
       if (
-        isCompositeBuilder &&
-        executedPayloads.size === 0 &&
-        (wantsMoreControls || wantsMoreObservations) &&
-        turn === 0
+        (missingRequestedControl || missingRequestedObservation) &&
+        turn < maxTurns - 1
       ) {
         lastReceipt = {
           operationId: "op_premature_done",
           draftRevision: draft.revision,
           handles: draft.handles,
           status: "rejected",
-          summary:
-            "User requested adding components; please perform add_control or add_observation before finishing.",
+          summary: `User requested ${missingRequestedControl ? "controls/sliders" : ""}${missingRequestedControl && missingRequestedObservation ? " and " : ""}${missingRequestedObservation ? "observations/readouts" : ""}; please add them before finishing.`,
           issues: [
             {
               code: "premature_done",
-              message:
-                "User requested adding components; please perform add_control or add_observation before finishing.",
+              message: `User requested ${missingRequestedControl ? "controls/sliders" : ""}${missingRequestedControl && missingRequestedObservation ? " and " : ""}${missingRequestedObservation ? "observations/readouts" : ""}; perform add_control or add_observation before finishing.`,
             },
           ],
         };
@@ -595,7 +612,184 @@ export async function compose(
     });
   }
 
-  // 5. Enforce lesson title and instructions
+  // 5.5 Auto-attach visual appearance and basic interaction if missing
+  const composedModelNodes = draft.document.nodes.filter(
+    (n) => publicDefinition(n.definition).category === "models",
+  );
+  for (const modelNode of composedModelNodes) {
+    const def = publicDefinition(modelNode.definition);
+    const hasAppearance = draft.document.nodes.some(
+      (n) =>
+        publicDefinition(n.definition).category === "appearance" &&
+        draft.document.connections.some(
+          (c) =>
+            c.kind === "attachment" &&
+            ((c.from.node === modelNode.id && c.to.node === n.id) ||
+              (c.to.node === modelNode.id && c.from.node === n.id)),
+        ),
+    );
+    if (!hasAppearance) {
+      const req = compositionRequirements[modelNode.definition];
+      const candidateAppearance =
+        req?.appearance ??
+        (publicDefinitions.has(
+          `appearance/${modelNode.definition.replace(/^models\//, "")}`,
+        )
+          ? `appearance/${modelNode.definition.replace(/^models\//, "")}`
+          : undefined);
+      if (candidateAppearance && publicDefinitions.has(candidateAppearance)) {
+        const appAlias = `vis_${Math.random().toString(36).slice(2, 8)}`;
+        try {
+          const r1 = draft.execute({
+            draftId: draft.draftId,
+            expectedRevision: draft.revision,
+            operationId: `op_autoapp_${turn++}`,
+            request: {
+              tool: "insert_component",
+              arguments: {
+                definition: candidateAppearance,
+                version: 1,
+                alias: appAlias,
+                configuration: {},
+              },
+            },
+          });
+          if (r1.status === "applied") {
+            const appId = draft.handles[appAlias] ?? appAlias;
+            draft.execute({
+              draftId: draft.draftId,
+              expectedRevision: draft.revision,
+              operationId: `op_autoappconn_${turn++}`,
+              request: {
+                tool: "connect",
+                arguments: {
+                  from: { node: modelNode.id, port: "appearance" },
+                  to: { node: appId, port: "model" },
+                },
+              },
+            });
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+
+    const hasControl = draft.document.nodes.some(
+      (n) => publicDefinition(n.definition).category === "controls",
+    );
+    if (!hasControl) {
+      const req = compositionRequirements[modelNode.definition];
+      const cmd =
+        req?.commands?.[0] ??
+        Object.keys(def.commands).find(
+          (k) => k !== "RESET" && !k.startsWith("set:"),
+        );
+      if (cmd && def.commands[cmd]) {
+        const cmdObj = def.commands[cmd];
+        const argProps =
+          cmdObj.arguments.type === "object"
+            ? Object.keys(cmdObj.arguments.properties ?? {})
+            : [];
+        const isActionWithoutArgs = argProps.length === 0;
+        const field = isActionWithoutArgs ? "" : argProps[0];
+        const widget = isActionWithoutArgs ? "button" : "slider";
+        try {
+          const ctrlReceipt = draft.execute({
+            draftId: draft.draftId,
+            expectedRevision: draft.revision,
+            operationId: `op_autoctrl_${turn++}`,
+            request: {
+              tool: "add_control",
+              arguments: {
+                target: modelNode.id,
+                command: cmd,
+                field,
+                widget,
+                label: cmdObj.description || cmd,
+              },
+            },
+          });
+          if (ctrlReceipt.status !== "applied" && !isActionWithoutArgs) {
+            const altCmd = Object.keys(def.commands).find(
+              (k) =>
+                def.commands[k].arguments.type === "object" &&
+                Object.keys(def.commands[k].arguments.properties ?? {}).length === 0,
+            );
+            if (altCmd) {
+              draft.execute({
+                draftId: draft.draftId,
+                expectedRevision: draft.revision,
+                operationId: `op_autoctrl_btn_${turn++}`,
+                request: {
+                  tool: "add_control",
+                  arguments: {
+                    target: modelNode.id,
+                    command: altCmd,
+                    field: "",
+                    widget: "button",
+                    label: def.commands[altCmd].description || altCmd,
+                  },
+                },
+              });
+            }
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+
+    const hasObservation = draft.document.nodes.some(
+      (n) => publicDefinition(n.definition).category === "displays",
+    );
+    if (!hasObservation) {
+      const req = compositionRequirements[modelNode.definition];
+      const obsName =
+        req?.observations?.[0] ??
+        Object.keys(def.outputs).find(
+          (k) => k !== "appearance" && k !== "configuration",
+        );
+      if (obsName && def.outputs[obsName]) {
+        try {
+          const obsReceipt = draft.execute({
+            draftId: draft.draftId,
+            expectedRevision: draft.revision,
+            operationId: `op_autoobs_${turn++}`,
+            request: {
+              tool: "add_observation",
+              arguments: {
+                source: modelNode.id,
+                output: obsName,
+                widget: "readout",
+                label: obsName,
+              },
+            },
+          });
+          if (obsReceipt.status !== "applied") {
+            draft.execute({
+              draftId: draft.draftId,
+              expectedRevision: draft.revision,
+              operationId: `op_autoobs_insp_${turn++}`,
+              request: {
+                tool: "add_observation",
+                arguments: {
+                  source: modelNode.id,
+                  output: obsName,
+                  widget: "inspector",
+                  label: obsName,
+                },
+              },
+            });
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+  }
+
+  // 5.8 Enforce lesson title and instructions
   const currentDoc = draft.document;
   if (
     !currentDoc.lesson.title.trim() ||
@@ -625,6 +819,18 @@ export async function compose(
         });
       }
     }
+  }
+
+  // 6.5 Reconcile board presentation
+  if (
+    !currentDoc.presentation ||
+    currentDoc.presentation.mode !== "board" ||
+    currentDoc.presentation.items.length === 0 ||
+    currentDoc.presentation.items.length < currentDoc.layout.children.length
+  ) {
+    currentDoc.presentation = convertToBoard(currentDoc);
+  } else {
+    reconcileBoard(currentDoc);
   }
 
   // 7. Check runnable
@@ -664,6 +870,7 @@ export async function compose(
   const finalDoc = draft.document;
   finalDoc.lesson = currentDoc.lesson;
   finalDoc.layout = currentDoc.layout;
+  finalDoc.presentation = currentDoc.presentation;
 
   const coverage = computeOpenCompositionCoverage(
     request.prompt,

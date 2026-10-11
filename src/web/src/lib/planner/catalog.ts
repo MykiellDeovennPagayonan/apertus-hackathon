@@ -15,6 +15,16 @@ export const generationEligibility = [
   { slug: "arithmetic", version: 1 },
   { slug: "area-perimeter", version: 1 },
   { slug: "bridge", version: 1 },
+  { slug: "market-equilibrium", version: 1 },
+  { slug: "price-elasticity", version: 1 },
+  { slug: "cost-and-profit", version: 1 },
+  { slug: "trade-and-tariffs", version: 1 },
+  { slug: "monopoly-pricing", version: 1 },
+  { slug: "acid-base-titration", version: 1 },
+  { slug: "gas-equilibrium", version: 1 },
+  { slug: "phase-change", version: 1 },
+  { slug: "beer-lambert", version: 1 },
+  { slug: "galvanic-cell", version: 1 },
 ] as const;
 export type CapabilityCard = {
   id: string;

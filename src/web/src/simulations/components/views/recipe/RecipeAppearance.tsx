@@ -9,10 +9,22 @@ import type { ModelInstance } from "../../../runtime/contribution";
 import { DragHandleControl } from "../../controls/DragHandleControl";
 import type { eclipseGeometry } from "../../systems/exploration/eclipse";
 import {
+  AcidBaseTitrationVisual,
   BeakerVisual,
+  BeerLambertVisual,
+  GalvanicCellVisual,
+  GasEquilibriumVisual,
   MoleculeVisual,
+  PhaseChangeVisual,
   ReactionCurveVisual,
 } from "../../visuals/chemistry/ChemistryVisuals";
+import {
+  CostAndProfitVisual,
+  MarketEquilibriumVisual,
+  MonopolyPricingVisual,
+  PriceElasticityVisual,
+  TradeAndTariffsVisual,
+} from "../../visuals/economics/EconomicsVisuals";
 import {
   GrowthVisual,
   QueueVisual,
@@ -67,12 +79,22 @@ const appearances: Record<
   "chemistry-dilution": BeakerVisual,
   "chemistry-conservation": MoleculeVisual,
   "chemistry-rate": ReactionCurveVisual,
+  "chemistry-titration": AcidBaseTitrationVisual,
+  "chemistry-gas-equilibrium": GasEquilibriumVisual,
+  "chemistry-phase-change": PhaseChangeVisual,
+  "chemistry-beer-lambert": BeerLambertVisual,
+  "chemistry-galvanic-cell": GalvanicCellVisual,
   "dynamic-growth": GrowthVisual,
   "dynamic-traffic": TrafficVisual,
   "dynamic-queue": QueueVisual,
   "natural-diffusion": DiffusionHeatmap,
   "natural-predator-prey": PopulationGraph,
   "natural-plant-growth": PlantGrowthGraph,
+  "economics-market-equilibrium": MarketEquilibriumVisual,
+  "economics-price-elasticity": PriceElasticityVisual,
+  "economics-cost-and-profit": CostAndProfitVisual,
+  "economics-trade-and-tariffs": TradeAndTariffsVisual,
+  "economics-monopoly-pricing": MonopolyPricingVisual,
 };
 function PhysicalAppearance({ instance }: { instance: ModelInstance }) {
   if (instance.provider.endsWith("/Pendulum"))

@@ -867,6 +867,24 @@
   padding: 8px 12px;
   font-size: 13px;
 }
+.board-item[data-board-scene="true"] figure > .scene-guidance,
+.board-item[data-board-scene="true"] figure > figcaption,
+.board-item[data-board-scene="true"] .scene-caption {
+  position: static;
+  left: auto;
+  bottom: auto;
+  z-index: auto;
+  margin: 8px auto 0;
+  max-width: 100%;
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--text-dim, #64748b);
+}
 .board-item[data-board-scene="true"] .scene-help[open] {
   max-height: calc(100% - 84px);
   overflow: auto;
