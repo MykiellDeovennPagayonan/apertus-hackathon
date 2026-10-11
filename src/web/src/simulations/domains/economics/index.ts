@@ -6,9 +6,15 @@ import {
   marketEquilibriumApply,
   marketEquilibriumInitial,
   marketEquilibriumMeasure,
+  monopolyPricingApply,
+  monopolyPricingInitial,
+  monopolyPricingMeasure,
   priceElasticityApply,
   priceElasticityInitial,
   priceElasticityMeasure,
+  tradeAndTariffsApply,
+  tradeAndTariffsInitial,
+  tradeAndTariffsMeasure,
 } from "../../components/systems/economics/models";
 import type {
   DomainContribution,
@@ -259,9 +265,186 @@ export const costAndProfit: DomainModel = {
   configuration: (s) => ({ ...s }),
 };
 
+export const tradeAndTariffs: DomainModel = {
+  ref: "prefabs/economics/TradeAndTariffs",
+  version: 1,
+  name: "Trade, tariffs and import quotas",
+  presentation: "economics-trade-and-tariffs",
+  maximumInstances: 2,
+  description:
+    "Domestic supply and demand interacting with world price P_w and import tariff t. Explore domestic production Q_s, consumption Q_d, import volume, consumer surplus loss, producer surplus gain, tariff revenue box, and dual deadweight loss triangles.",
+  assumptions: [
+    "Small open economy taking world price P_w as given.",
+    "Import tariff t raises domestic price to min(P_autarky, P_w + t); if tariff is prohibitive, imports drop to zero and domestic market clears at autarky equilibrium.",
+  ],
+  parameters: object(
+    {
+      demandIntercept: num(40, 300, "$"),
+      demandSlope: num(0.1, 5, "$/unit"),
+      supplyIntercept: num(0, 100, "$"),
+      supplySlope: num(0.1, 5, "$/unit"),
+      worldPrice: num(10, 150, "$"),
+      tariff: num(0, 80, "$/unit"),
+    },
+    [
+      "demandIntercept",
+      "demandSlope",
+      "supplyIntercept",
+      "supplySlope",
+      "worldPrice",
+      "tariff",
+    ],
+  ),
+  defaults: { ...economicsDefaults.tradeAndTariffs },
+  outputs: {
+    demandIntercept: output("$", "Maximum domestic willingness to pay"),
+    demandSlope: output("$/unit", "Domestic demand price slope"),
+    supplyIntercept: output("$", "Minimum domestic supply threshold price"),
+    supplySlope: output("$/unit", "Domestic supply price slope"),
+    worldPrice: output("$", "World market clearing price"),
+    tariff: output("$/unit", "Per-unit import tariff"),
+    autarkyPrice: output("$", "Domestic price without trade (autarky)"),
+    autarkyQuantity: output("units", "Domestic quantity without trade"),
+    domesticPrice: output("$", "Effective domestic price (Pw + tariff)"),
+    domesticProduction: output("units", "Domestic quantity supplied (Qs)"),
+    domesticConsumption: output("units", "Domestic quantity demanded (Qd)"),
+    imports: output("units", "Volume of imports (Qd - Qs)"),
+    tariffRevenue: output("$", "Government tariff revenue collected"),
+    consumerSurplusLoss: output("$", "Consumer surplus loss relative to free trade"),
+    producerSurplusGain: output("$", "Producer surplus gain relative to free trade"),
+    deadweightLossProd: output("$", "Production efficiency loss triangle"),
+    deadweightLossCons: output("$", "Consumption efficiency loss triangle"),
+    deadweightLoss: output("$", "Total deadweight loss (DWL prod + DWL cons)"),
+    points: output("$", "Supply and demand curve points"),
+  },
+  requiredObservations: [
+    "worldPrice",
+    "domesticPrice",
+    "domesticProduction",
+    "domesticConsumption",
+    "imports",
+    "tariffRevenue",
+    "deadweightLoss",
+    "points",
+  ],
+  graphOutput: "points",
+  actions: {
+    ECON_SET_TARIFF: action(
+      num(0, 80, "$/unit"),
+      "Set per-unit import tariff rate",
+    ),
+    ECON_SET_WORLD_PRICE: action(
+      num(10, 150, "$"),
+      "Set prevailing world market price",
+    ),
+    ECON_SET_DOMESTIC_DEMAND: action(
+      num(40, 300, "$"),
+      "Shift domestic demand curve intercept",
+    ),
+    ECON_SET_DOMESTIC_SUPPLY: action(
+      num(0, 100, "$"),
+      "Shift domestic supply curve intercept",
+    ),
+  },
+  dependencies: dependencies("TradeAndTariffs", "TradeTariffSystem"),
+  initialize: tradeAndTariffsInitial,
+  apply: tradeAndTariffsApply,
+  measure: tradeAndTariffsMeasure,
+  configuration: (s) => ({ ...s }),
+};
+
+export const monopolyPricing: DomainModel = {
+  ref: "prefabs/economics/MonopolyPricing",
+  version: 1,
+  name: "Monopoly pricing and deadweight loss",
+  presentation: "economics-monopoly-pricing",
+  maximumInstances: 2,
+  description:
+    "Single-price monopoly equilibrium where Marginal Revenue equals Marginal Cost (MR = MC) compared against the socially optimal competitive benchmark (P = MC). Observe monopoly price mark-up, economic profit box, deadweight loss triangle, and Lerner index of market power.",
+  assumptions: [
+    "Monopolist faces downward-sloping linear market demand P = a - bQ.",
+    "Marginal revenue has identical intercept a and twice the slope: MR = a - 2bQ.",
+    "Monopoly profit maximization occurs at MR = MC; competitive social optimum occurs at P = MC.",
+  ],
+  parameters: object(
+    {
+      demandIntercept: num(50, 300, "$"),
+      demandSlope: num(0.2, 5, "$/unit"),
+      marginalCostSlope: num(0, 2, "$/unit²"),
+      marginalCostBase: num(0, 50, "$/unit"),
+      fixedCost: num(0, 500, "$"),
+    },
+    [
+      "demandIntercept",
+      "demandSlope",
+      "marginalCostSlope",
+      "marginalCostBase",
+      "fixedCost",
+    ],
+  ),
+  defaults: { ...economicsDefaults.monopolyPricing },
+  outputs: {
+    demandIntercept: output("$", "Market demand choke price"),
+    demandSlope: output("$/unit", "Market demand slope coefficient"),
+    marginalCostBase: output("$/unit", "Baseline marginal cost"),
+    marginalCostSlope: output("$/unit²", "Marginal cost slope coefficient"),
+    fixedCost: output("$", "Overhead fixed cost"),
+    monopolyQuantity: output("units", "Monopoly output quantity where MR = MC"),
+    monopolyPrice: output("$", "Monopoly profit-maximizing price"),
+    competitiveQuantity: output("units", "Competitive benchmark output where P = MC"),
+    competitivePrice: output("$", "Competitive benchmark price"),
+    marginalCostAtMonopoly: output("$/unit", "Marginal cost at monopoly output"),
+    markup: output("$/unit", "Price mark-up over marginal cost (P - MC)"),
+    lernerIndex: output("ratio", "Lerner index of market power (P - MC)/P"),
+    totalRevenue: output("$", "Total sales revenue earned"),
+    totalCost: output("$", "Total production cost"),
+    monopolyProfit: output("$", "Monopoly economic profit"),
+    consumerSurplus: output("$", "Consumer surplus under monopoly"),
+    deadweightLoss: output("$", "Deadweight loss from monopoly restriction"),
+    points: output("$/unit", "Demand, MR, and MC curve coordinates"),
+  },
+  requiredObservations: [
+    "monopolyQuantity",
+    "monopolyPrice",
+    "competitiveQuantity",
+    "competitivePrice",
+    "markup",
+    "monopolyProfit",
+    "deadweightLoss",
+    "points",
+  ],
+  graphOutput: "points",
+  actions: {
+    ECON_SET_DEMAND_INTERCEPT: action(
+      num(50, 300, "$"),
+      "Adjust market demand choke price",
+    ),
+    ECON_SET_MARGINAL_COST_BASE: action(
+      num(0, 50, "$/unit"),
+      "Adjust base marginal cost",
+    ),
+    ECON_SET_MONOPOLY_FIXED_COST: action(
+      num(0, 500, "$"),
+      "Adjust fixed overhead production costs",
+    ),
+  },
+  dependencies: dependencies("MonopolyPricing", "MonopolySystem"),
+  initialize: monopolyPricingInitial,
+  apply: monopolyPricingApply,
+  measure: monopolyPricingMeasure,
+  configuration: (s) => ({ ...s }),
+};
+
 /** Independent knowledge domain contribution for Economics. */
 export const economics: DomainContribution = {
   namespace: "economics",
   version: 1,
-  models: [marketEquilibrium, priceElasticity, costAndProfit],
+  models: [
+    marketEquilibrium,
+    priceElasticity,
+    costAndProfit,
+    tradeAndTariffs,
+    monopolyPricing,
+  ],
 };
+

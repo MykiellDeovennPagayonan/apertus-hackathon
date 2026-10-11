@@ -16,7 +16,7 @@ import {
 } from "./elementarySession";
 import { gasInitializer, useGasStore } from "./gasSession";
 import type { ExperimentContext, Plan, TargetedCommand } from "./legacyPlan";
-import { parsePlan } from "./legacyPlan";
+import { isDemo, parsePlan } from "./legacyPlan";
 import { isMathDemo } from "./mathModel";
 import { mathInitializer, useMathStore } from "./mathSession";
 import {
@@ -55,16 +55,16 @@ let definition: CompositionDefinition | null = null,
   acceptedRecipe: Recipe | null = null;
 let authoredSession: RecipeSession | null = null;
 export const getAuthoredSession = getRecipeSession;
-export function activatePremadeSession(slug: Exclude<DemoType, "assembly">) {
+export function activatePremadeSession(slug: string) {
   return activateAuthoredSession(loadAuthoredRecipe(premadeRecipe(slug)), slug);
 }
 function activateAuthoredSession(
   candidate: ReturnType<typeof loadAuthoredRecipe>,
-  slug: DemoType,
+  slug: string,
 ) {
   disposeSession();
   authoredSession = activateRecipeSession(candidate.recipe);
-  active = slug;
+  active = isDemo(slug) ? slug : null;
   sessionId = authoredSession.sessionId;
   revision = 0;
   return authoredSession;

@@ -24,6 +24,9 @@ export function commandPresentation(command: string, definition: string) {
     CHEM_SET_EQ_TEMP: "Equilibrium temperature",
     CHEM_SET_EQ_VOLUME: "Chamber volume",
     CHEM_ADD_GAS: "Inject gas",
+    CHEM_SET_MATERIAL: "Material substance",
+    CHEM_SET_PHASE_TEMP: "Substance temperature",
+    CHEM_SET_PHASE_PRESSURE: "Chamber pressure",
     ECON_SET_DEMAND: "Demand intercept",
     ECON_SET_SUPPLY: "Supply intercept",
     ECON_SET_PRICE_CONTROL: "Price ceiling / floor",
@@ -181,6 +184,16 @@ export function commandPresentation(command: string, definition: string) {
       choices: { series: "Series", parallel: "Parallel" },
       help: "Series: bulbs share one path. Parallel: each bulb has its own path.",
     };
+  if (command === "CHEM_SET_MATERIAL")
+    presentation.value = {
+      widget: "Select",
+      choices: {
+        water: "Water (H₂O)",
+        "carbon-dioxide": "Carbon Dioxide (CO₂)",
+        nitrogen: "Nitrogen (N₂)",
+      },
+      help: "Select material substance to observe its distinctive phase diagram and critical points.",
+    };
   if (definition === "models/EclipseGeometry") {
     const help: Record<string, string> = {
       "set:moonAngle":
@@ -308,6 +321,9 @@ export function acceptedCommandArguments(
     CHEM_SET_ACID_CONC: "acidConcentration",
     CHEM_SET_EQ_TEMP: "temperature",
     CHEM_SET_EQ_VOLUME: "volume",
+    CHEM_SET_MATERIAL: "material",
+    CHEM_SET_PHASE_TEMP: "temperature",
+    CHEM_SET_PHASE_PRESSURE: "pressure",
     ECON_SET_DEMAND: "demandIntercept",
     ECON_SET_SUPPLY: "supplyIntercept",
     ECON_SET_PRICE_CONTROL: "priceControl",

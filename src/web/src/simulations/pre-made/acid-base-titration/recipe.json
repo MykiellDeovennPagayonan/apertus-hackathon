@@ -203,7 +203,7 @@
           },
           "zIndex": 0,
           "locked": false,
-          "responsiveMinHeight": 180
+          "responsiveMinHeight": 300
         },
         {
           "id": "board/layout/result/ph",

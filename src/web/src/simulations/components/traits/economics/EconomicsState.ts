@@ -21,3 +21,21 @@ export type CostAndProfitState = Record<string, unknown> & {
   quadraticCost: number;
   marketPrice: number;
 };
+
+export type TradeAndTariffsState = Record<string, unknown> & {
+  demandIntercept: number;
+  demandSlope: number;
+  supplyIntercept: number;
+  supplySlope: number;
+  worldPrice: number;
+  tariff: number;
+};
+
+export type MonopolyPricingState = Record<string, unknown> & {
+  demandIntercept: number;
+  demandSlope: number;
+  marginalCostSlope: number;
+  marginalCostBase: number;
+  fixedCost: number;
+};
+

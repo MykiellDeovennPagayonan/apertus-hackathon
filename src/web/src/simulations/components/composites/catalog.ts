@@ -77,7 +77,7 @@ export function modelRecipe(definition: string): CompositeRecipe {
     details = {
       ...emptyLayout("layout/details"),
       kind: "disclosure" as const,
-      label: "More observations and model assumptions",
+      label: "More observations and Model assumptions",
     };
   d.layout.kind = "split";
   d.layout.children = [scene, controls, details];

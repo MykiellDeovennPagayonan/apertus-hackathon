@@ -1,0 +1,458 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-phase-change",
+  "version": 1,
+  "title": "Phases of matter & supercritical fluid",
+  "description": "How do temperature and pressure shifts change states of matter and create supercritical fluids?",
+  "tags": ["chemistry", "thermodynamics", "phase-change", "supercritical", "lab"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/chemistry/PhaseChange",
+        "version": 1,
+        "label": "Phase change",
+        "scope": "scope/lab",
+        "configuration": {
+          "material": "water",
+          "temperature": 300,
+          "pressure": 1
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/chemistry-phase-change",
+        "version": 1,
+        "label": "Phase change scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/material",
+        "definition": "controls/Select",
+        "version": 1,
+        "label": "Material substance",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Material substance",
+          "mode": "immediate",
+          "parameter": "value",
+          "initial": "{\"value\": \"water\"}"
+        }
+      },
+      {
+        "id": "input/temp",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Temperature (K)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Temperature (K)",
+          "mode": "immediate",
+          "initial": "{\"value\": 300}",
+          "parameter": "value",
+          "step": 5,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/pressure",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Chamber pressure (atm)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Chamber pressure (atm)",
+          "mode": "immediate",
+          "initial": "{\"value\": 1}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/phase",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Physical phase",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Physical phase",
+          "precision": 0
+        }
+      },
+      {
+        "id": "result/density",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Density (g/cm³)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Density (g/cm³)",
+          "precision": 3
+        }
+      },
+      {
+        "id": "result/supercritical",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Thermodynamic state",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Thermodynamic state",
+          "precision": 0
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/phase",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "phase"
+        },
+        "to": {
+          "node": "result/phase",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/density",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "density"
+        },
+        "to": {
+          "node": "result/density",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/supercritical",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "transitionState"
+        },
+        "to": {
+          "node": "result/supercritical",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/material",
+        "kind": "command",
+        "from": {
+          "node": "input/material",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "CHEM_SET_MATERIAL"
+        }
+      },
+      {
+        "id": "link/input/temp",
+        "kind": "command",
+        "from": {
+          "node": "input/temp",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "CHEM_SET_PHASE_TEMP"
+        }
+      },
+      {
+        "id": "link/input/pressure",
+        "kind": "command",
+        "from": {
+          "node": "input/pressure",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "CHEM_SET_PHASE_PRESSURE"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Phase change"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/phase",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/phase"
+        },
+        {
+          "id": "layout/result/density",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/density"
+        },
+        {
+          "id": "layout/result/supercritical",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/supercritical"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Thermodynamic chamber controls",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/material",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/material"
+            },
+            {
+              "id": "layout/input/temp",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/temp"
+            },
+            {
+              "id": "layout/input/pressure",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/pressure"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Phases of matter & supercritical fluid",
+      "instruction": "Adjust temperature and pressure sliders to witness phase changes (solid, liquid, gas) and supercritical transitions across substances.",
+      "explanation": "Beyond the critical point (Tc, Pc), the distinction between liquid and gas ceases, forming a supercritical fluid with gas-like diffusion and liquid-like density."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 350
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/result/phase",
+          "layoutId": "layout/result/phase",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/density",
+          "layoutId": "layout/result/density",
+          "rect": {
+            "x": 822,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/supercritical",
+          "layoutId": "layout/result/supercritical",
+          "rect": {
+            "x": 644,
+            "y": 126,
+            "width": 340,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 252,
+            "width": 340,
+            "height": 240
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 200
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/appearance"],
+        ["board/layout/task"],
+        ["board/layout/result/phase", "board/layout/result/density"],
+        ["board/layout/result/supercritical"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "material",
+      "node": "model",
+      "field": "material",
+      "schema": {
+        "type": "enum",
+        "values": ["water", "carbon-dioxide", "nitrogen"]
+      },
+      "default": "water"
+    },
+    {
+      "name": "temperature",
+      "node": "model",
+      "field": "temperature",
+      "schema": {
+        "type": "number",
+        "minimum": 50,
+        "maximum": 750,
+        "unit": "K"
+      },
+      "default": 300
+    },
+    {
+      "name": "pressure",
+      "node": "model",
+      "field": "pressure",
+      "schema": {
+        "type": "number",
+        "minimum": 0.001,
+        "maximum": 300,
+        "unit": "atm"
+      },
+      "default": 1
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/chemistry/PhaseChange",
+      "version": 1
+    },
+    {
+      "id": "appearance/chemistry-phase-change",
+      "version": 1
+    },
+    {
+      "id": "controls/Select",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Clausius-Clapeyron curves define vaporization and sublimation boundaries.",
+    "Beyond critical temperature and pressure (Tc, Pc), a supercritical fluid forms.",
+    "Substance-specific triple points, critical points, and fusion slopes determine thermodynamic phase transitions."
+  ],
+  "catalog": {
+    "icon": "🧊",
+    "category": "chemistry",
+    "order": 15
+  }
+}

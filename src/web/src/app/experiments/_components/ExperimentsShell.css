@@ -1375,3 +1375,16 @@
     display: none;
   }
 }
+@media (max-width: 700px) {
+  .experiment-workspace .is-workspace .is-floating .board-workspace-tools,
+  .experiment-workspace
+    .recipe-lesson:has(:is(.activity-control, .scalar-control--parameter))
+    .spatial-board.is-compact
+    .is-floating
+    .board-workspace-tools {
+    top: 76px;
+    bottom: auto;
+    right: 12px;
+  }
+}
+

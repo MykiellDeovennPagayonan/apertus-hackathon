@@ -203,6 +203,45 @@ export function buildInitialCard(id: string): ComponentBucketCard | null {
     );
   }
   if (
+    idLower.includes("beerlambert") ||
+    descLower.includes("beer lambert") ||
+    descLower.includes("spectrophotometry") ||
+    descLower.includes("absorbance")
+  ) {
+    supports.push(
+      "beer lambert",
+      "beer lambert law",
+      "beer's law",
+      "spectrophotometry",
+      "absorbance",
+      "transmittance",
+      "optical path length",
+      "cuvette",
+      "molar absorptivity",
+      "light attenuation",
+    );
+  }
+  if (
+    idLower.includes("galvaniccell") ||
+    descLower.includes("galvanic cell") ||
+    descLower.includes("nernst") ||
+    descLower.includes("voltaic")
+  ) {
+    supports.push(
+      "galvanic cell",
+      "voltaic cell",
+      "daniell cell",
+      "nernst equation",
+      "electrochemistry",
+      "cell potential",
+      "cell voltage",
+      "zinc and copper",
+      "salt bridge",
+      "redox",
+      "anode and cathode",
+    );
+  }
+  if (
     idLower.includes("marketequilibrium") ||
     descLower.includes("market equilibrium") ||
     descLower.includes("supply and demand")
@@ -245,6 +284,40 @@ export function buildInitialCard(id: string): ComponentBucketCard | null {
       "profit maximization",
       "fixed cost",
       "break even",
+    );
+  }
+  if (
+    idLower.includes("tradeandtariffs") ||
+    descLower.includes("tariffs and import") ||
+    descLower.includes("trade tariffs") ||
+    descLower.includes("import tariff")
+  ) {
+    supports.push(
+      "trade tariffs",
+      "tariffs and imports",
+      "tariff",
+      "import quota",
+      "world price",
+      "tariff revenue",
+      "deadweight loss with imports",
+      "deadweight loss",
+    );
+  }
+  if (
+    idLower.includes("monopolypricing") ||
+    descLower.includes("monopoly pricing") ||
+    descLower.includes("monopoly power") ||
+    descLower.includes("market power")
+  ) {
+    supports.push(
+      "monopoly pricing",
+      "monopoly power",
+      "market power",
+      "marginal revenue",
+      "deadweight loss with market power",
+      "mark-up",
+      "lerner index",
+      "deadweight loss",
     );
   }
 

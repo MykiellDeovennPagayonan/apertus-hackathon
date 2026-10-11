@@ -471,13 +471,23 @@
 .recipe-layout .recipe-measurement-value {
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   gap: 7px;
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-size: clamp(2rem, 3.2vw, 3rem);
   font-weight: 550;
   color: var(--recipe-accent);
   letter-spacing: -0.04em;
   line-height: 1.2;
   font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+.recipe-layout .recipe-measurement-value--text {
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+  line-height: 1.35;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  word-break: normal;
+  display: block;
 }
 .recipe-measurement-value small {
   font-size: 16px;
@@ -573,6 +583,15 @@
 .recipe-lesson .recipe-measurement-value small {
   font-size: 13px;
   font-weight: 500;
+}
+.recipe-measurement-value.recipe-measurement-value--text,
+.recipe-lesson .recipe-measurement-value.recipe-measurement-value--text {
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  word-break: normal;
+  display: block;
 }
 
 @media (max-width: 700px) {

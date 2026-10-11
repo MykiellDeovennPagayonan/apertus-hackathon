@@ -1,0 +1,457 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-trade-and-tariffs",
+  "version": 1,
+  "title": "Trade tariffs and deadweight loss with imports",
+  "description": "How do import tariffs distort domestic production, reduce consumption, collect revenue, and create deadweight loss?",
+  "tags": ["economics", "trade-and-tariffs", "international-trade", "lab"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/economics/TradeAndTariffs",
+        "version": 1,
+        "label": "Trade and tariffs model",
+        "scope": "scope/lab",
+        "configuration": {
+          "demandIntercept": 120,
+          "demandSlope": 1,
+          "supplyIntercept": 10,
+          "supplySlope": 1,
+          "worldPrice": 40,
+          "tariff": 15
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/economics-trade-and-tariffs",
+        "version": 1,
+        "label": "Trade and tariffs scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/tariff",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Import tariff ($/unit)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Import tariff ($/unit)",
+          "mode": "immediate",
+          "initial": "{\"value\": 15}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/worldPrice",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "World price ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "World price ($)",
+          "mode": "immediate",
+          "initial": "{\"value\": 40}",
+          "parameter": "value",
+          "step": 2,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/domesticPrice",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Domestic price ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Domestic price ($)",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/imports",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Import volume (units)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Import volume (units)",
+          "precision": 1
+        }
+      },
+      {
+        "id": "result/tariffRevenue",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Tariff revenue ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Tariff revenue ($)",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/deadweightLoss",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Deadweight loss ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Deadweight loss ($)",
+          "precision": 2
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/domesticPrice",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "domesticPrice"
+        },
+        "to": {
+          "node": "result/domesticPrice",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/imports",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "imports"
+        },
+        "to": {
+          "node": "result/imports",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/tariffRevenue",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "tariffRevenue"
+        },
+        "to": {
+          "node": "result/tariffRevenue",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/deadweightLoss",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "deadweightLoss"
+        },
+        "to": {
+          "node": "result/deadweightLoss",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/tariff",
+        "kind": "command",
+        "from": {
+          "node": "input/tariff",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "ECON_SET_TARIFF"
+        }
+      },
+      {
+        "id": "link/input/worldPrice",
+        "kind": "command",
+        "from": {
+          "node": "input/worldPrice",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "ECON_SET_WORLD_PRICE"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Trade and tariffs"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/domesticPrice",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/domesticPrice"
+        },
+        {
+          "id": "layout/result/imports",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/imports"
+        },
+        {
+          "id": "layout/result/tariffRevenue",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/tariffRevenue"
+        },
+        {
+          "id": "layout/result/deadweightLoss",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/deadweightLoss"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Trade parameters",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/tariff",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/tariff"
+            },
+            {
+              "id": "layout/input/worldPrice",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/worldPrice"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Trade tariffs and deadweight loss with imports",
+      "instruction": "Adjust the per-unit tariff and world market price. Observe how higher tariffs protect domestic producers but tax consumers and shrink imports.",
+      "explanation": "A tariff raises domestic price from P_w to P_dom. Domestic production expands and domestic consumption falls. The government collects tariff revenue (shaded purple), while production and consumption distortions create deadweight loss (shaded red)."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 350
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/result/domesticPrice",
+          "layoutId": "layout/result/domesticPrice",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/imports",
+          "layoutId": "layout/result/imports",
+          "rect": {
+            "x": 822,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/tariffRevenue",
+          "layoutId": "layout/result/tariffRevenue",
+          "rect": {
+            "x": 644,
+            "y": 126,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/deadweightLoss",
+          "layoutId": "layout/result/deadweightLoss",
+          "rect": {
+            "x": 822,
+            "y": 126,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 252,
+            "width": 340,
+            "height": 190
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 140
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/appearance"],
+        ["board/layout/task"],
+        ["board/layout/result/domesticPrice", "board/layout/result/imports"],
+        ["board/layout/result/tariffRevenue", "board/layout/result/deadweightLoss"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "tariff",
+      "node": "model",
+      "field": "tariff",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 80,
+        "unit": "$/unit"
+      },
+      "default": 15
+    },
+    {
+      "name": "worldPrice",
+      "node": "model",
+      "field": "worldPrice",
+      "schema": {
+        "type": "number",
+        "minimum": 10,
+        "maximum": 150,
+        "unit": "$"
+      },
+      "default": 40
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/economics/TradeAndTariffs",
+      "version": 1
+    },
+    {
+      "id": "appearance/economics-trade-and-tariffs",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Small open economy taking world price P_w as given.",
+    "Import tariff t raises domestic price to min(P_autarky, P_w + t); if tariff is prohibitive, imports drop to zero."
+  ],
+  "catalog": {
+    "icon": "🚢",
+    "category": "economics",
+    "order": 14
+  }
+}

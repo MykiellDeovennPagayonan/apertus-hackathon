@@ -1,14 +1,23 @@
 import { chemistryDefaults } from "../../components/resources/chemistry/definitions";
 import {
+  beerLambertApply,
+  beerLambertInitial,
+  beerLambertMeasure,
   conservationApply,
   conservationInitial,
   conservationMeasure,
   dilutionApply,
   dilutionInitial,
   dilutionMeasure,
+  galvanicCellApply,
+  galvanicCellInitial,
+  galvanicCellMeasure,
   gasEquilibriumApply,
   gasEquilibriumInitial,
   gasEquilibriumMeasure,
+  phaseChangeApply,
+  phaseChangeInitial,
+  phaseChangeMeasure,
   rateApply,
   rateConfiguration,
   rateInitial,
@@ -241,10 +250,10 @@ export const acidBaseTitration: DomainModel = {
   presentation: "chemistry-titration",
   maximumInstances: 2,
   description:
-    "Strong acid titration with strong base. Observe pH curve changes as titrant is added from a buret, phenolphthalein indicator color changes, hydronium and hydroxide concentrations, and the neutral equivalence point.",
+    "Acid-base titration and neutralization for strong and weak acids. Observe buffer region, Henderson-Hasselbalch inflection, equivalence point, phenolphthalein indicator transitions (colorless to pink/magenta), and pH curves bounded in [0, 14].",
   assumptions: [
-    "Monoprotic strong acid (e.g. HCl) titrated with strong base (e.g. NaOH) at 25°C.",
-    "Autoionization of water Kw = 1.0e-14 is accounted for near the equivalence point (pH 7.0). Phenolphthalein transitions from colorless to pink between pH 8.2 and 10.0.",
+    "Monoprotic strong acid (e.g. HCl) or weak acid (e.g. CH₃COOH, pKa=4.76) titrated with strong base (e.g. NaOH) at 25°C.",
+    "Autoionization of water Kw = 1.0e-14 is accounted for. Phenolphthalein transitions from colorless to pink between pH 8.2 and 10.0.",
   ],
   parameters: object(
     {
@@ -252,12 +261,14 @@ export const acidBaseTitration: DomainModel = {
       acidConcentration: num(0.01, 2, "mol/L"),
       baseConcentration: num(0.01, 2, "mol/L"),
       titrantVolumeAdded: num(0, 100, "mL"),
+      acidType: choice("strong", "weak"),
     },
     [
       "analyteVolume",
       "acidConcentration",
       "baseConcentration",
       "titrantVolumeAdded",
+      "acidType",
     ],
   ),
   defaults: { ...chemistryDefaults.titration },
@@ -266,6 +277,7 @@ export const acidBaseTitration: DomainModel = {
     acidConcentration: output("mol/L", "Flask acid concentration"),
     baseConcentration: output("mol/L", "Buret base concentration"),
     titrantVolumeAdded: output("mL", "Volume of titrant added"),
+    acidType: output("type", "Acid classification (strong or weak)"),
     equivalenceVolume: output("mL", "Equivalence point volume"),
     currentPH: output("pH", "Solution pH"),
     hConcentration: output("mol/L", "Hydronium concentration [H₃O⁺]"),
@@ -298,6 +310,10 @@ export const acidBaseTitration: DomainModel = {
     CHEM_SET_ACID_CONC: action(
       num(0.01, 2, "mol/L"),
       "Change initial analyte acid concentration in flask",
+    ),
+    CHEM_SET_ACID_TYPE: action(
+      choice("strong", "weak"),
+      "Switch between strong acid (e.g. HCl, equivalence pH 7.0) and weak acid (e.g. CH₃COOH, buffer region pKa 4.76, basic equivalence pH 8.7)",
     ),
   },
   dependencies: dependencies("AcidBaseTitration", "TitrationSystem"),
@@ -334,6 +350,7 @@ export const gasEquilibrium: DomainModel = {
     volume: output("L", "Chamber gas volume"),
     initialN2O4: output("mol", "Initial moles of N₂O₄"),
     initialNO2: output("mol", "Initial moles of NO₂"),
+    reactionQuotient: output("mol/L", "Initial reaction quotient Qc"),
     equilibriumConstant: output("mol/L", "Equilibrium constant Kc"),
     molesN2O4: output("mol", "Equilibrium moles of N₂O₄"),
     molesNO2: output("mol", "Equilibrium moles of NO₂"),
@@ -375,6 +392,219 @@ export const gasEquilibrium: DomainModel = {
   configuration: (s) => ({ ...s }),
 };
 
+export const phaseChange: DomainModel = {
+  ref: "prefabs/chemistry/PhaseChange",
+  version: 1,
+  name: "Phases of matter and supercritical fluids",
+  presentation: "chemistry-phase-change",
+  maximumInstances: 2,
+  description:
+    "Explore thermodynamic phase changes (solid, liquid, gas) and the supercritical fluid regime for water, carbon dioxide, and nitrogen across temperature and pressure gradients.",
+  assumptions: [
+    "Clausius-Clapeyron equations govern liquid-gas vaporization and solid-gas sublimation phase boundaries.",
+    "Beyond the critical temperature Tc and critical pressure Pc, matter transitions into a dense, non-condensing supercritical fluid.",
+    "Material-specific triple points and critical points dictate sublimation, melting, and boiling transitions.",
+  ],
+  parameters: object(
+    {
+      material: choice("water", "carbon-dioxide", "nitrogen"),
+      temperature: num(50, 750, "K"),
+      pressure: num(0.001, 300, "atm"),
+    },
+    ["material", "temperature", "pressure"],
+  ),
+  defaults: { ...chemistryDefaults.phaseChange },
+  outputs: {
+    material: output("substance", "Material substance"),
+    materialName: output("name", "Material common name"),
+    formula: output("formula", "Chemical formula"),
+    temperature: output("K", "Current temperature"),
+    pressure: output("atm", "Current pressure"),
+    phase: output("state", "Physical phase state"),
+    isSupercritical: output("bool", "Supercritical fluid state"),
+    transitionState: output("state", "Phase boundary and regime description"),
+    density: output("g/cm³", "Approximate physical density"),
+    triplePointTemp: output("K", "Triple point temperature"),
+    triplePointPressure: output("atm", "Triple point pressure"),
+    criticalPointTemp: output("K", "Critical point temperature"),
+    criticalPointPressure: output("atm", "Critical point pressure"),
+    normalBoilingTemp: output("K", "Normal boiling point at 1 atm"),
+    normalMeltingTemp: output("K", "Normal melting point at 1 atm"),
+    points: output("atm", "Phase boundary temperature-pressure points"),
+  },
+  requiredObservations: [
+    "material",
+    "temperature",
+    "pressure",
+    "phase",
+    "density",
+    "points",
+  ],
+  graphOutput: "points",
+  actions: {
+    CHEM_SET_MATERIAL: action(
+      choice("water", "carbon-dioxide", "nitrogen"),
+      "Change material substance: water, carbon-dioxide, or nitrogen",
+    ),
+    CHEM_SET_PHASE_TEMP: action(
+      num(50, 750, "K"),
+      "Adjust substance temperature in Kelvin",
+    ),
+    CHEM_SET_PHASE_PRESSURE: action(
+      num(0.001, 300, "atm"),
+      "Adjust chamber pressure in atmospheres",
+    ),
+  },
+  dependencies: dependencies("PhaseChange", "ThermodynamicPhaseSystem"),
+  initialize: phaseChangeInitial,
+  apply: phaseChangeApply,
+  measure: phaseChangeMeasure,
+  configuration: (s) => ({
+    material: s.material,
+    temperature: s.temperature,
+    pressure: s.pressure,
+  }),
+};
+
+export const beerLambert: DomainModel = {
+  ref: "prefabs/chemistry/BeerLambert",
+  version: 1,
+  name: "Beer-Lambert law and spectrophotometry",
+  presentation: "chemistry-beer-lambert",
+  maximumInstances: 2,
+  description:
+    "Beer-Lambert law relating solute concentration, cuvette path length, and molar absorptivity to absorbance and light transmittance. Observe beam attenuation through solution and dual spectrophotometer readouts.",
+  assumptions: [
+    "Monochromatic incident light beam traveling through a homogeneous liquid solution.",
+    "Beer-Lambert law A = ε * b * c holds linearly; transmittance T = 10^(-A) * 100%.",
+    "Concentration c (0 to 400 mM), path length b (0.5 to 3.0 cm), and molar absorptivity ε (0.01 to 0.10 mM⁻¹ cm⁻¹).",
+  ],
+  parameters: object(
+    {
+      concentration: num(0, 400, "mM"),
+      pathLength: num(0.5, 3.0, "cm"),
+      molarAbsorptivity: num(0.01, 0.1, "mM⁻¹ cm⁻¹"),
+    },
+    ["concentration", "pathLength", "molarAbsorptivity"],
+  ),
+  defaults: { ...chemistryDefaults.beerLambert },
+  outputs: {
+    concentration: output("mM", "Solute concentration c"),
+    pathLength: output("cm", "Cuvette path length b"),
+    molarAbsorptivity: output("mM⁻¹ cm⁻¹", "Molar absorptivity ε"),
+    absorbance: output("A", "Absorbance A = ε * b * c"),
+    transmittance: output("%", "Transmittance T = 10^(-A) * 100%"),
+    transmittanceFraction: output("1", "Transmittance fraction (0 to 1)"),
+    transmittedIntensity: output("mW/cm²", "Transmitted beam intensity"),
+    colorIntensity: output("1", "Solution visual opacity fraction"),
+    points: output("A", "Absorbance versus concentration curve"),
+  },
+  requiredObservations: [
+    "concentration",
+    "pathLength",
+    "absorbance",
+    "transmittance",
+    "points",
+  ],
+  graphOutput: "points",
+  actions: {
+    CHEM_SET_BEER_CONCENTRATION: action(
+      num(0, 400, "mM"),
+      "Set solution solute concentration in millimolar (mM)",
+    ),
+    CHEM_SET_BEER_PATH_LENGTH: action(
+      num(0.5, 3.0, "cm"),
+      "Set optical cuvette path length in centimeters (cm)",
+    ),
+    CHEM_SET_BEER_EPSILON: action(
+      num(0.01, 0.1, "mM⁻¹ cm⁻¹"),
+      "Set molar absorptivity constant ε",
+    ),
+    CHEM_RESET_BEER: action(
+      undefined,
+      "Reset spectrophotometer cuvette parameters to defaults",
+    ),
+  },
+  dependencies: dependencies("BeerLambert", "SpectrophotometrySystem"),
+  initialize: beerLambertInitial,
+  apply: beerLambertApply,
+  measure: beerLambertMeasure,
+  configuration: (s) => ({ ...s }),
+};
+
+export const galvanicCell: DomainModel = {
+  ref: "prefabs/chemistry/GalvanicCell",
+  version: 1,
+  name: "Galvanic cell and Nernst equation",
+  presentation: "chemistry-galvanic-cell",
+  maximumInstances: 2,
+  description:
+    "Voltaic / Galvanic Daniell cell (Zn/Cu). Standard potential E° = +1.10 V (Cu²⁺/Cu = +0.34 V, Zn²⁺/Zn = -0.76 V). Explore redox half-reactions, salt bridge ion migration, electron flow, and cell electromotive force governed by the Nernst equation: E_cell = E° - (RT/(2F)) * ln([Zn²⁺]/[Cu²⁺]).",
+  assumptions: [
+    "Daniell galvanic cell: Zn(s) | Zn²⁺(aq) || Cu²⁺(aq) | Cu(s) at 298.15 K.",
+    "Standard potential E° = +1.10 V (E°_cathode = +0.34 V, E°_anode = -0.76 V).",
+    "Nernst equation E_cell = E° - (RT / (2F)) * ln([Zn²⁺] / [Cu²⁺]), where RT / (2F) ≈ 0.01285 V.",
+    "Concentrations [Zn²⁺] and [Cu²⁺] range from 0.001 M to 2.0 M. Zero concentrations are guarded against log(0).",
+  ],
+  parameters: object(
+    {
+      znConcentration: num(0.001, 2.0, "mol/L"),
+      cuConcentration: num(0.001, 2.0, "mol/L"),
+    },
+    ["znConcentration", "cuConcentration"],
+  ),
+  defaults: { ...chemistryDefaults.galvanicCell },
+  outputs: {
+    znConcentration: output("mol/L", "Zinc ion concentration [Zn²⁺]"),
+    cuConcentration: output("mol/L", "Copper ion concentration [Cu²⁺]"),
+    temperature: output("K", "Cell temperature in Kelvin"),
+    standardPotential: output("V", "Standard cell potential E°"),
+    cellPotential: output("V", "Cell electromotive force E_cell"),
+    reactionQuotient: output("1", "Reaction quotient Q = [Zn²⁺] / [Cu²⁺]"),
+    deltaG: output("kJ/mol", "Gibbs free energy change ΔG"),
+    isSpontaneous: output("bool", "Spontaneous reaction (E > 0)"),
+    electronFlowDirection: output(
+      "direction",
+      "Electron flow: Zn anode to Cu cathode",
+    ),
+    electronFlowRate: output("1", "Relative electron flux rate"),
+    znColorIntensity: output("1", "Zinc beaker solution opacity"),
+    cuColorIntensity: output("1", "Copper beaker solution opacity"),
+    points: output("V", "Cell potential curve across zinc concentrations"),
+  },
+  requiredObservations: [
+    "znConcentration",
+    "cuConcentration",
+    "cellPotential",
+    "reactionQuotient",
+    "deltaG",
+    "points",
+  ],
+  graphOutput: "points",
+  actions: {
+    CHEM_SET_ZN_CONC: action(
+      num(0.001, 2.0, "mol/L"),
+      "Set zinc ion concentration [Zn²⁺] in anode beaker",
+    ),
+    CHEM_SET_CU_CONC: action(
+      num(0.001, 2.0, "mol/L"),
+      "Set copper ion concentration [Cu²⁺] in cathode beaker",
+    ),
+    CHEM_RESET_CELL: action(
+      undefined,
+      "Reset galvanic cell to standard states (1.0 M each, 298.15 K)",
+    ),
+  },
+  dependencies: dependencies("GalvanicCell", "ElectrochemicalCellSystem"),
+  initialize: galvanicCellInitial,
+  apply: galvanicCellApply,
+  measure: galvanicCellMeasure,
+  configuration: (s) => ({
+    znConcentration: s.znConcentration,
+    cuConcentration: s.cuConcentration,
+  }),
+};
+
 /** Explicit integration imports this value; importing chemistry has no registration side effects. */
 export const chemistry: DomainContribution = {
   namespace: "chemistry",
@@ -385,5 +615,9 @@ export const chemistry: DomainContribution = {
     reactionRate,
     acidBaseTitration,
     gasEquilibrium,
+    phaseChange,
+    beerLambert,
+    galvanicCell,
   ],
 };
+
