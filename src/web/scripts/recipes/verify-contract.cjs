@@ -25,6 +25,18 @@ const cases = fs
     JSON.parse(fs.readFileSync(path.join(__dirname, "cases", file))),
   );
 assert.equal(listPremadeRecipes().length, cases.length);
+const { premadeExperiments } = load(
+  "src/app/experiments/_lib/premadeExperiments.ts",
+);
+assert.deepEqual(
+  Object.keys(premadeExperiments).sort(),
+  [...listPremadeRecipes().map(({ slug }) => slug), "gas", "town"].sort(),
+);
+for (const { slug, recipe } of listPremadeRecipes()) {
+  assert.equal(premadeExperiments[slug].title, recipe.title);
+  assert.equal(premadeExperiments[slug].description, recipe.description);
+  assert.equal(premadeExperiments[slug].icon, recipe.catalog.icon);
+}
 // A simple observation need not reserve the height of a full control panel.
 const compactObservation = structuredClone(premadeRecipe("area-perimeter"));
 compactObservation.document.presentation.items[1].responsiveMinHeight = 100;
