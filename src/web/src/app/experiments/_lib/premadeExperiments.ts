@@ -1,9 +1,7 @@
-import { templateNames } from "../../../simulations/runtime/capabilities";
 import { listPremadeRecipes } from "../../../simulations/runtime/recipes/registry";
-import type { DemoType } from "../../../simulations/runtime/types";
 
 const entries: Record<
-  Exclude<DemoType, "assembly">,
+  string,
   {
     title: string;
     description: string;
@@ -11,27 +9,17 @@ const entries: Record<
     parameters: Record<string, unknown>;
   }
 > = {
-  ...(Object.fromEntries(
-    listPremadeRecipes()
-      .filter(({ slug }) => slug in templateNames)
-      .map(({ slug, recipe }) => [
-        slug,
-        {
-          title: recipe.title,
-          description: recipe.description,
-          icon: recipe.catalog.icon,
-          parameters: {},
-        },
-      ]),
-  ) as Record<
-    Exclude<DemoType, "assembly" | "gas" | "town">,
-    {
-      title: string;
-      description: string;
-      icon: string;
-      parameters: Record<string, unknown>;
-    }
-  >),
+  ...Object.fromEntries(
+    listPremadeRecipes().map(({ slug, recipe }) => [
+      slug,
+      {
+        title: recipe.title,
+        description: recipe.description,
+        icon: recipe.catalog.icon,
+        parameters: {},
+      },
+    ]),
+  ),
   gas: {
     title: "Gas pressure",
     description: "Squeeze a gas and discover how volume changes pressure.",
