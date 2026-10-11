@@ -1,0 +1,359 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/bicycle-gears",
+  "version": 1,
+  "title": "Bicycle chain drive",
+  "description": "Why does a lower gear give less distance per pedal turn?",
+  "tags": [
+    "physics",
+    "gears",
+    "bicycle chain drive"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/physics/BicycleGears",
+        "version": 1,
+        "label": "Bicycle chain drive",
+        "scope": "scope/lab",
+        "configuration": {
+          "front": 30,
+          "rear": 15,
+          "wheelRadius": 0.33,
+          "pedalTorque": 20,
+          "turns": 0
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/physics-gears",
+        "version": 1,
+        "label": "Bicycle chain drive scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/rear",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Rear sprocket teeth",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Rear sprocket teeth",
+          "mode": "immediate",
+          "initial": "{\"value\": 15}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/front",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Front chainring teeth",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Front chainring teeth",
+          "mode": "immediate",
+          "initial": "{\"value\": 30}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/turns",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Turn pedals / start again",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Turn pedals / start again",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/rear",
+        "kind": "command",
+        "from": {
+          "node": "control/rear",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "GEARS_REAR"
+        }
+      },
+      {
+        "id": "link/front",
+        "kind": "command",
+        "from": {
+          "node": "control/front",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "GEARS_FRONT"
+        }
+      },
+      {
+        "id": "link/turns",
+        "kind": "command",
+        "from": {
+          "node": "control/turns",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "GEARS_TURNS"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Bicycle chain drive"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/controls",
+          "kind": "grid",
+          "font": "inherit",
+          "label": "",
+          "gap": 16,
+          "columns": 3,
+          "mobileColumns": 1,
+          "children": [
+            {
+              "id": "layout/rear",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/rear"
+            },
+            {
+              "id": "layout/front",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/front"
+            },
+            {
+              "id": "layout/turns",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/turns"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Bicycle chain drive",
+      "instruction": "Why does a lower gear give less distance per pedal turn?",
+      "explanation": "Ideal uncrossed no-slip chain: both sprockets rotate in the same direction. Tooth counts set speed ratio; torque ratio is reciprocal. No direct-mesh gears, tyre slip, drivetrain losses or shift dynamics."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 340
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 280
+        },
+        {
+          "id": "board/layout/controls",
+          "layoutId": "layout/controls",
+          "rect": {
+            "x": 0,
+            "y": 360,
+            "width": 680,
+            "height": 160
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/controls"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1000,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "front",
+      "node": "model",
+      "field": "front",
+      "schema": {
+        "type": "integer",
+        "minimum": 20,
+        "maximum": 60,
+        "unit": "teeth"
+      },
+      "default": 30
+    },
+    {
+      "name": "rear",
+      "node": "model",
+      "field": "rear",
+      "schema": {
+        "type": "integer",
+        "minimum": 10,
+        "maximum": 40,
+        "unit": "teeth"
+      },
+      "default": 15
+    },
+    {
+      "name": "wheelRadius",
+      "node": "model",
+      "field": "wheelRadius",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 0.5,
+        "unit": "m"
+      },
+      "default": 0.33
+    },
+    {
+      "name": "pedalTorque",
+      "node": "model",
+      "field": "pedalTorque",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 100,
+        "unit": "N\u00b7m"
+      },
+      "default": 20
+    },
+    {
+      "name": "turns",
+      "node": "model",
+      "field": "turns",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 10,
+        "unit": "turns"
+      },
+      "default": 0
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/BicycleGears",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-gears",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Ideal uncrossed no-slip chain: both sprockets rotate in the same direction. Tooth counts set speed ratio; torque ratio is reciprocal. No direct-mesh gears, tyre slip, drivetrain losses or shift dynamics."
+  ],
+  "catalog": {
+    "icon": "\u2699",
+    "category": "physics",
+    "order": 143
+  }
+}

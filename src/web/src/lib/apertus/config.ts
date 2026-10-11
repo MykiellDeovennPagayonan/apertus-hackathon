@@ -1,15 +1,20 @@
+import { offlineEnabled, requireLocalEndpoint } from "../deployment";
+
 export function readConfig(env: NodeJS.ProcessEnv = process.env) {
   const provider = env.APERTUS_PROVIDER ?? "local";
   if (provider !== "local" && provider !== "huggingface")
     throw new Error("APERTUS_PROVIDER must be local or huggingface.");
   const localRuntime = env.APERTUS_LOCAL_RUNTIME ?? "mlx";
-  if (localRuntime !== "mlx" && localRuntime !== "ollama")
-    throw new Error("APERTUS_LOCAL_RUNTIME must be mlx or ollama.");
+  if (!["mlx", "ollama", "llamacpp"].includes(localRuntime))
+    throw new Error("APERTUS_LOCAL_RUNTIME must be mlx, ollama, or llamacpp.");
   const online = provider === "huggingface";
+  if (offlineEnabled(env) && online)
+    throw new Error("OFFLINE requires local Apertus inference.");
   const baseUrl = online
     ? env.APERTUS_HF_BASE_URL || "https://router.huggingface.co/v1"
     : env.APERTUS_LOCAL_BASE_URL || "http://127.0.0.1:43101/v1";
   const url = new URL(baseUrl);
+  if (offlineEnabled(env)) requireLocalEndpoint(baseUrl);
   if (
     !["http:", "https:"].includes(url.protocol) ||
     url.username ||
@@ -22,7 +27,10 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env) {
     );
   const model = online
     ? env.APERTUS_HF_MODEL
-    : env.APERTUS_LOCAL_MODEL || "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4";
+    : env.APERTUS_LOCAL_MODEL ||
+      (localRuntime === "llamacpp"
+        ? "apertus-v1.5-8b-text"
+        : "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4");
   const token = online ? env.HF_TOKEN : undefined;
   if (!model?.trim() || (online && !token?.trim()))
     throw new Error("Hosted Apertus requires APERTUS_HF_MODEL and HF_TOKEN.");

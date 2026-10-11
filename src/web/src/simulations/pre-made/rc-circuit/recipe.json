@@ -1,0 +1,390 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/rc-circuit",
+  "version": 1,
+  "title": "Charging and discharging",
+  "description": "Why does a capacitor supply energy briefly through a connected load?",
+  "tags": [
+    "physics",
+    "capacitor",
+    "charging",
+    "discharging",
+    "battery disconnected",
+    "RC circuit"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model0",
+        "definition": "prefabs/physics/Capacitor",
+        "version": 1,
+        "label": "Charging and discharging",
+        "scope": "scope/lab",
+        "configuration": {
+          "resistance": 10000,
+          "capacitance": 0.0001,
+          "source": 10,
+          "voltage": 0,
+          "mode": "charge",
+          "time": 0
+        }
+      },
+      {
+        "id": "appearance0",
+        "definition": "appearance/physics-capacitor",
+        "version": 1,
+        "label": "Charging and discharging scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/mode",
+        "definition": "controls/Select",
+        "version": 1,
+        "label": "Circuit connection",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Circuit connection",
+          "mode": "immediate",
+          "initial": "{\"value\":\"charge\"}"
+        }
+      },
+      {
+        "id": "control/advance",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Advance one second",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Advance one second",
+          "mode": "immediate",
+          "initial": "{}"
+        }
+      },
+      {
+        "id": "control/restart",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Start uncharged",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Start uncharged",
+          "mode": "immediate",
+          "initial": "{}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance0",
+        "kind": "attachment",
+        "from": {
+          "node": "model0",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance0",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/mode0",
+        "kind": "command",
+        "from": {
+          "node": "control/mode",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_CAPACITOR_MODE"
+        }
+      },
+      {
+        "id": "link/advance0",
+        "kind": "command",
+        "from": {
+          "node": "control/advance",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_CAPACITOR_ADVANCE"
+        }
+      },
+      {
+        "id": "link/restart0",
+        "kind": "command",
+        "from": {
+          "node": "control/restart",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_CAPACITOR_RESTART"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Charging and discharging"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance0",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance0"
+        },
+        {
+          "id": "layout/control/mode",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/mode"
+        },
+        {
+          "id": "layout/control/advance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/advance"
+        },
+        {
+          "id": "layout/control/restart",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/restart"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Charging and discharging",
+      "instruction": "Why does a capacitor supply energy briefly through a connected load?",
+      "explanation": "Ideal resistor-capacitor circuit with charge/isolate/discharge switch. Resistance Ω, capacitance F, time seconds. Isolation has no leakage; switching preserves voltage. No nonlinear LEDs or dielectric breakdown."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance0",
+          "layoutId": "layout/appearance0",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 390
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 390
+        },
+        {
+          "id": "board/layout/control/mode",
+          "layoutId": "layout/control/mode",
+          "rect": {
+            "x": 0,
+            "y": 410,
+            "width": 328,
+            "height": 160
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 160
+        },
+        {
+          "id": "board/layout/control/advance",
+          "layoutId": "layout/control/advance",
+          "rect": {
+            "x": 344,
+            "y": 410,
+            "width": 328,
+            "height": 80
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 80
+        },
+        {
+          "id": "board/layout/control/restart",
+          "layoutId": "layout/control/restart",
+          "rect": {
+            "x": 688,
+            "y": 410,
+            "width": 328,
+            "height": 80
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 80
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1064,
+        "height": 640
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance0"
+        ],
+        [
+          "board/layout/control/mode",
+          "board/layout/control/advance"
+        ],
+        [
+          "board/layout/control/restart"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1064,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "resistance0",
+      "node": "model0",
+      "field": "resistance",
+      "schema": {
+        "type": "number",
+        "minimum": 100,
+        "maximum": 1000000,
+        "unit": "Ω"
+      },
+      "default": 10000
+    },
+    {
+      "name": "capacitance0",
+      "node": "model0",
+      "field": "capacitance",
+      "schema": {
+        "type": "number",
+        "minimum": 0.000001,
+        "maximum": 0.01,
+        "unit": "F"
+      },
+      "default": 0.0001
+    },
+    {
+      "name": "source0",
+      "node": "model0",
+      "field": "source",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 24,
+        "unit": "V"
+      },
+      "default": 10
+    },
+    {
+      "name": "voltage0",
+      "node": "model0",
+      "field": "voltage",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 24,
+        "unit": "V"
+      },
+      "default": 0
+    },
+    {
+      "name": "mode0",
+      "node": "model0",
+      "field": "mode",
+      "schema": {
+        "type": "enum",
+        "values": [
+          "charge",
+          "isolate",
+          "discharge"
+        ]
+      },
+      "default": "charge"
+    },
+    {
+      "name": "time0",
+      "node": "model0",
+      "field": "time",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100000,
+        "unit": "s"
+      },
+      "default": 0
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Capacitor",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-capacitor",
+      "version": 1
+    },
+    {
+      "id": "controls/Select",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Ideal resistor-capacitor circuit with charge/isolate/discharge switch. Resistance Ω, capacitance F, time seconds. Isolation has no leakage; switching preserves voltage. No nonlinear LEDs or dielectric breakdown."
+  ],
+  "catalog": {
+    "icon": "◉",
+    "category": "physics",
+    "order": 160
+  }
+}

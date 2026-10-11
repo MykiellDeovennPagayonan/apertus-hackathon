@@ -1,0 +1,51 @@
+import type { DecisionConfig } from "../config";
+import type { DecisionProvider } from "../contracts";
+import type { HttpTransport } from "../transport/http";
+import { readAnswers, readModel, record } from "./validation";
+export function createLayaProvider(
+  config: Extract<DecisionConfig, { provider: "laya" }>,
+  transport: HttpTransport,
+): DecisionProvider {
+  return async (request, signal) => {
+    const started = Date.now();
+    const data = record(
+      await transport(
+        { url: `${config.baseUrl}/api/decide`, body: request },
+        signal,
+      ),
+    );
+    const timing =
+      data.timing && typeof data.timing === "object" ? record(data.timing) : {};
+    const duration = (key: string) =>
+      typeof timing[key] === "number" &&
+      Number.isFinite(timing[key]) &&
+      (timing[key] as number) >= 0
+        ? (timing[key] as number)
+        : undefined;
+    const result = record(data.result);
+    const usage =
+      result.usage && typeof result.usage === "object"
+        ? record(result.usage)
+        : {};
+    const validCount = (value: unknown): value is number =>
+      typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+    return {
+      ...(validCount(usage.input_tokens) && validCount(usage.output_tokens)
+        ? {
+            usage: {
+              input_tokens: usage.input_tokens,
+              output_tokens: usage.output_tokens,
+            },
+          }
+        : {}),
+      provider: "laya",
+      model: readModel(data.model),
+      answers: readAnswers(result.answers, request, false),
+      durationMs: Date.now() - started,
+      timing: {
+        inference_ms: duration("inference_ms"),
+        server_ms: duration("server_ms"),
+      },
+    };
+  };
+}

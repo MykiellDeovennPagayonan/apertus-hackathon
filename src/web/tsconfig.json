@@ -52,7 +52,25 @@
     ".next-parity-build/types/**/*.ts",
     ".next-parity-build/dev/types/**/*.ts",
     ".next-drawing-tools/types/**/*.ts",
-    ".next-drawing-tools/dev/types/**/*.ts"
+    ".next-drawing-tools/dev/types/**/*.ts",
+    ".next-realistic-validation/types/**/*.ts",
+    ".next-realistic-validation/dev/types/**/*.ts",
+    ".next-realistic-build/types/**/*.ts",
+    ".next-realistic-build/dev/types/**/*.ts",
+    ".next-science-validation/types/**/*.ts",
+    ".next-science-validation/dev/types/**/*.ts",
+    ".next-science-build/types/**/*.ts",
+    ".next-science-build/dev/types/**/*.ts",
+    ".next-028/types/**/*.ts",
+    ".next-028/dev/types/**/*.ts",
+    ".next-028-build/types/**/*.ts",
+    ".next-028-build/dev/types/**/*.ts",
+    ".next-a3/types/**/*.ts",
+    ".next-a3/dev/types/**/*.ts",
+    ".next-028-fixes/types/**/*.ts",
+    ".next-028-fixes/dev/types/**/*.ts",
+    ".next-027/types/**/*.ts",
+    ".next-027/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

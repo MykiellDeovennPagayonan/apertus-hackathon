@@ -41,6 +41,7 @@ assert.deepEqual(
   d,
 );
 const sized = structuredClone(d);
+sized.presentation.responsiveGap = 16;
 sized.presentation.items[0].aspectRatio = 16 / 9;
 const resized = resizeBoardRect(
   sized.presentation.items[0].rect,
@@ -51,6 +52,16 @@ const resized = resizeBoardRect(
 );
 assert.equal(resized.width / resized.height, 16 / 9);
 validateAuthoredDocument(sized);
+assert.equal(
+  parseDocument(serializeDocument(canonicalDocument(sized))).authored
+    .presentation.responsiveGap,
+  16,
+  "authored narrow-screen spacing survives save and reopen",
+);
+assert.equal(
+  remapDocument(sized, (id) => `copy/${id}`).presentation.responsiveGap,
+  16,
+);
 assert.equal(
   parseDocument(serializeDocument(canonicalDocument(sized))).authored
     .presentation.items[0].aspectRatio,
@@ -70,6 +81,9 @@ for (const mutate of [
   (p) => p.items.push(p.items[0]),
   (p) => (p.items[0].layoutId = "missing"),
   (p) => (p.navigation.minZoom = 0),
+  (p) => (p.responsiveGap = 7),
+  (p) => (p.responsiveGap = 129),
+  (p) => (p.responsiveGap = NaN),
   (p) => (p.immersive.startup = "scene"),
   (p) => (p.groups = [{ id: "group", label: "x", members: ["missing"] }]),
   (p) => p.items.pop(),
@@ -243,3 +257,45 @@ emptied.layout.children[0].children = [];
 reconcileBoard(emptied);
 assert.deepEqual(emptied.presentation.separatedLayouts, []);
 validateAuthoredDocument(emptied);
+
+// Custom boundaries warn during authoring and preview, and are checked when sharing.
+const overflow = structuredClone(d);
+overflow.presentation.learnerArea = { x: 0, y: 0, width: 10, height: 10 };
+validateAuthoredDocument(overflow, true);
+new DocumentRuntime(overflow);
+const { validateRunnableDocument } = load(
+  "src/simulations/builder/document/validateDocument.ts",
+);
+const overflowDocument = canonicalDocument(overflow);
+validateRunnableDocument(overflowDocument, false);
+assert.throws(
+  () => validateRunnableDocument(overflowDocument),
+  /Expand to fit/,
+);
+delete overflowDocument.authored.presentation.learnerArea;
+validateRunnableDocument(overflowDocument);
+overflowDocument.authored.presentation.items[0].rect.x -= 1000;
+validateRunnableDocument(overflowDocument);
+console.log(
+  "Learner view: editable overflow, clipped preview, sharing guard and automatic bounds passed",
+);
+
+const { arrangeDocument } = load(
+  "src/simulations/runtime/authoring/arrangement.ts",
+);
+const arrangement = {
+  template: "vertical",
+  main: [],
+  controls: [],
+  results: [],
+  narrowOrder: [],
+  preserveLocked: true,
+};
+assert.equal(
+  arrangeDocument(d, arrangement).presentation.learnerArea,
+  undefined,
+);
+assert.deepEqual(
+  arrangeDocument(overflow, arrangement).presentation.learnerArea,
+  overflow.presentation.learnerArea,
+);

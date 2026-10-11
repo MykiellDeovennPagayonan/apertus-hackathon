@@ -2,6 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { unwrapPortable } from "../../../lib/projects/portable";
 import { publicDefinition } from "../../components/catalog";
 import {
   builtInRecipe,
@@ -22,6 +23,7 @@ import type {
   Layout,
 } from "../../runtime/authoring/types";
 import { validateAuthoredDocument } from "../../runtime/authoring/validate";
+import { parseRecipe } from "../../runtime/recipes/schema";
 import type { ExperimentDocument } from "../document";
 import { planInsertion } from "../editor/insertionPlan";
 import {
@@ -317,7 +319,8 @@ export function useComponentCatalog(
   const importRecipe = async (text: string, saveCopy = false) => {
     retain(text);
     try {
-      const recipe: CompositeRecipe = JSON.parse(text);
+      const portable = unwrapPortable(JSON.parse(text));
+      const recipe = parseRecipe(portable.payload);
       validateRecipe(recipe);
       if (saveCopy) {
         recipe.id = `user/${crypto.randomUUID()}`;
@@ -326,7 +329,9 @@ export function useComponentCatalog(
         throw new Error(
           "This identity already exists. Save a separate copy to keep both assemblies.",
         );
-      setRecipes(await saveComponentRecipe(recipe, ownerId));
+      setRecipes(
+        await saveComponentRecipe(recipe, ownerId, portable.publicationId),
+      );
       retain("");
       report(
         `Saved ${recipe.title} to your library.`,

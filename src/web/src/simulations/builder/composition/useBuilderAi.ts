@@ -3,15 +3,22 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ComposerStatus } from "../../../app/_components/CommandBar";
 import { requestGeneration } from "../../../lib/planner/browser";
+import type { ConstructionUpdate } from "../../../lib/planner/construction";
 import {
   formatUserFacingDetails,
   formatUserFacingStatus,
 } from "../../../lib/planner/errorFormatting";
+import { generationStages } from "../../../lib/planner/progress";
 import type { GenerationRequest } from "../../../lib/planner/schema";
+import { publicDefinition } from "../../components/catalog";
 import { reconcileBoard } from "../../runtime/authoring/board";
 import { finalizeRecipe } from "../../runtime/authoring/operations";
-import { publicDefinition } from "../../components/catalog";
 import type { ExperimentDocument } from "../document/types";
+import {
+  completedExperiment,
+  contentFingerprint,
+  presentationPause,
+} from "./constructionPreview";
 
 export function activeFromBuilderDocument(
   doc: ExperimentDocument,
@@ -40,7 +47,9 @@ export function activeFromBuilderDocument(
     }
     reconcileBoard(authored);
 
-    const normalizeParam = (p: import("../../runtime/authoring/types").ExposedParameter) => {
+    const normalizeParam = (
+      p: import("../../runtime/authoring/types").ExposedParameter,
+    ) => {
       const targetNode = authored.nodes.find((n) => n.id === p.node);
       if (targetNode) {
         try {
@@ -57,7 +66,8 @@ export function activeFromBuilderDocument(
               default:
                 p.default !== undefined
                   ? p.default
-                  : (targetNode.configuration[p.field] ?? def.defaults[p.field]),
+                  : (targetNode.configuration[p.field] ??
+                    def.defaults[p.field]),
             };
           }
         } catch {}
@@ -65,7 +75,9 @@ export function activeFromBuilderDocument(
       return p;
     };
 
-    const normalizePort = (ep: import("../../runtime/authoring/types").ExposedPort) => {
+    const normalizePort = (
+      ep: import("../../runtime/authoring/types").ExposedPort,
+    ) => {
       const targetNode = authored.nodes.find((n) => n.id === ep.endpoint.node);
       if (targetNode) {
         try {
@@ -130,7 +142,9 @@ export function activeFromBuilderDocument(
       id: doc.recipeMetadata?.id ?? `composite/${doc.template || "custom"}`,
       version: doc.recipeMetadata?.version ?? 1,
       title:
-        doc.lesson?.title?.trim() || authored.lesson.title || "Custom Composite",
+        doc.lesson?.title?.trim() ||
+        authored.lesson.title ||
+        "Custom Composite",
       description:
         doc.lesson?.instruction?.trim() ||
         authored.lesson.instruction ||
@@ -160,14 +174,23 @@ export function activeFromBuilderDocument(
 export function useBuilderAi({
   doc,
   edit,
+  onBusyChange,
 }: {
   doc: ExperimentDocument;
+  onBusyChange?: (busy: boolean) => void;
   edit: (
     change: (d: ExperimentDocument) => void,
     group?: string | null,
     action?: string,
   ) => boolean;
 }) {
+  const latest = useRef({ doc, edit, onBusyChange });
+  latest.current = { doc, edit, onBusyChange };
+  const workspace = useRef<{
+    sessionId: string | null;
+    revision: number;
+    fingerprint: string;
+  }>({ sessionId: null, revision: 0, fingerprint: "" });
   const [draft, setDraft] = useState("");
   const [lastRequest, setLastRequest] = useState<{
     prompt: string;
@@ -175,6 +198,7 @@ export function useBuilderAi({
   } | null>(null);
   const [status, setStatus] = useState<ComposerStatus | null>(null);
   const [busy, setBusy] = useState(false);
+  const [preview, setPreview] = useState<ConstructionUpdate | null>(null);
   const pending = useRef<{
     controller: AbortController;
     request: GenerationRequest;
@@ -190,6 +214,7 @@ export function useBuilderAi({
     return () => {
       pending.current?.controller.abort();
       pending.current = null;
+      latest.current.onBusyChange?.(false);
     };
   }, []);
 
@@ -198,42 +223,71 @@ export function useBuilderAi({
       if (!text.trim()) return;
       pending.current?.controller.abort();
       const controller = new AbortController();
+      const active = activeFromBuilderDocument(doc);
+      if (!workspace.current.sessionId)
+        workspace.current.sessionId = `builder-${crypto.randomUUID()}`;
+      if (active) {
+        const fingerprint = JSON.stringify(doc.authored);
+        if (workspace.current.fingerprint !== fingerprint) {
+          workspace.current.revision++;
+          workspace.current.fingerprint = fingerprint;
+        }
+        active.sessionId = workspace.current.sessionId;
+        active.authoredRevision = workspace.current.revision;
+      }
       const request: GenerationRequest = {
         protocolVersion: 1,
         requestId: crypto.randomUUID(),
         prompt: text.trim(),
+        destination: "builder",
+        construction: "live",
         viewport: {
           width: typeof window !== "undefined" ? window.innerWidth : 1280,
           height: typeof window !== "undefined" ? window.innerHeight : 800,
         },
-        active: activeFromBuilderDocument(doc),
+        active,
       };
       const owner = { controller, request };
       pending.current = owner;
       setDraft(text);
       setBusy(true);
+      setPreview(null);
+      latest.current.onBusyChange?.(true);
       setStatus({
         kind: "working",
         text: doc.authored?.nodes?.length
-          ? "Assembling composite changes…"
-          : "Building composite components…",
+          ? "Planning your changes…"
+          : "Understanding your request…",
       });
 
       try {
         const result = await requestGeneration(
           request,
           controller.signal,
-          () => {
-            if (pending.current === owner && !controller.signal.aborted) {
-              setStatus({
-                kind: "working",
-                text: "Validating composite connections and layout…",
-              });
-            }
+          undefined,
+          (stage) => {
+            if (pending.current === owner && !controller.signal.aborted)
+              setStatus({ kind: "working", text: generationStages[stage] });
+          },
+          async (update) => {
+            if (pending.current !== owner || controller.signal.aborted) return;
+            setPreview(update);
+            setStatus({ kind: "working", text: update.activity });
+            const reducedMotion = window.matchMedia(
+              "(prefers-reduced-motion: reduce)",
+            ).matches;
+            await presentationPause(
+              controller.signal,
+              reducedMotion ? 0 : update.phase === "arrangement" ? 260 : 90,
+            );
           },
         );
 
         if (pending.current !== owner || controller.signal.aborted) return;
+        if (contentFingerprint(latest.current.doc) !== contentFingerprint(doc))
+          throw new Error(
+            "Your experiment changed during generation. Submit the request again to preserve your edits.",
+          );
 
         if (result.status === "failed") {
           setStatus({
@@ -255,31 +309,22 @@ export function useBuilderAi({
         }
 
         if (result.status === "created" || result.status === "updated") {
-          const promptLabel =
-            text.length > 36 ? `${text.slice(0, 33)}…` : text;
-          edit(
-            (d) => {
-              d.authored = structuredClone(result.recipe.document);
-              d.lesson = {
-                title:
-                  result.recipe.document.lesson.title ||
-                  d.lesson.title ||
-                  "Untitled experiment",
-                instruction:
-                  result.recipe.document.lesson.instruction ||
-                  d.lesson.instruction ||
-                  "",
-                explanation:
-                  result.recipe.document.lesson.explanation ||
-                  d.lesson.explanation ||
-                  "",
-              };
-              reconcileBoard(d.authored);
-            },
-            null,
-            `AI Composite: ${promptLabel}`,
-          );
-
+          const promptLabel = text.length > 36 ? `${text.slice(0, 33)}…` : text;
+          const completed = completedExperiment(latest.current.doc, result);
+          const unchanged =
+            contentFingerprint(completed) ===
+            contentFingerprint(latest.current.doc);
+          const applied =
+            unchanged ||
+            latest.current.edit(
+              (d) => Object.assign(d, completed),
+              null,
+              `AI Build: ${promptLabel}`,
+            );
+          if (!applied)
+            throw new Error(
+              "The generated change was rejected. Your experiment is unchanged.",
+            );
           setDraft("");
           const details = [
             result.learnerExplanation,
@@ -294,8 +339,8 @@ export function useBuilderAi({
             kind: result.coverage.level === "partial" ? "info" : "success",
             text:
               result.status === "created"
-                ? "Composite built — components connected and arranged on canvas."
-                : "Composite updated — components and connections integrated.",
+                ? "Ready — your experiment is built."
+                : "Ready — your experiment is updated.",
             details,
           });
           return;
@@ -304,8 +349,9 @@ export function useBuilderAi({
         if (result.status === "runtime_action") {
           setStatus({
             kind: "info",
-            text: "Action applied.",
-            details: result.message,
+            text: "Open Try lesson to apply runtime actions.",
+            details:
+              "The builder edits authored content. No runtime action was applied.",
           });
         }
       } catch (error) {
@@ -324,16 +370,20 @@ export function useBuilderAi({
         if (pending.current === owner) {
           pending.current = null;
           setBusy(false);
+          setPreview(null);
+          latest.current.onBusyChange?.(false);
         }
       }
     },
-    [doc, edit],
+    [doc],
   );
 
   const cancel = useCallback(() => {
     pending.current?.controller.abort();
     pending.current = null;
     setBusy(false);
+    setPreview(null);
+    latest.current.onBusyChange?.(false);
     setStatus({ kind: "info", text: "Stopped — your prompt is still here." });
   }, []);
 
@@ -343,6 +393,7 @@ export function useBuilderAi({
     status,
     setStatus,
     busy,
+    preview,
     lastRequest,
     onPrompt,
     cancel,

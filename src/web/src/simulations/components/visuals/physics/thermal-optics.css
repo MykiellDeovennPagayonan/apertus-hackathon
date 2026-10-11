@@ -1,0 +1,22 @@
+.thermal-optics-scene {
+  margin: 0;
+  width: 100%;
+  color: var(--text);
+}
+.thermal-optics-scene svg {
+  display: block;
+  width: 100%;
+  max-height: 380px;
+}
+.thermal-optics-scene text {
+  font:
+    17px var(--font-sans),
+    sans-serif;
+  fill: currentColor;
+}
+.thermal-optics-scene figcaption {
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 8px 16px;
+  text-align: center;
+}

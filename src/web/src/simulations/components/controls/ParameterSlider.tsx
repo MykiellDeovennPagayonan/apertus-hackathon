@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import type { ActionResult } from "../../runtime/commands";
 import { NumberField } from "./NumberField";
+import { RangeInput } from "./RangeInput";
 export function ParameterSlider({
   label,
   value,
@@ -29,9 +30,8 @@ export function ParameterSlider({
         <span className="catalog-current-value">{display ?? value}</span>
       </div>
       <div className="catalog-slider-inputs">
-        <input
+        <RangeInput
           id={id}
-          type="range"
           aria-label={label}
           aria-invalid={!!error || undefined}
           aria-describedby={error ? `${id}-error` : undefined}
@@ -39,8 +39,8 @@ export function ParameterSlider({
           max={max}
           step={step}
           value={value}
-          onChange={(e) => {
-            const result = onChange(Number(e.target.value));
+          onChange={onChange}
+          onResult={(result) => {
             setError(result.accepted ? undefined : result.error);
           }}
         />

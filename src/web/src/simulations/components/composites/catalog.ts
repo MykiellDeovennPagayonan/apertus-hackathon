@@ -77,7 +77,7 @@ export function modelRecipe(definition: string): CompositeRecipe {
     details = {
       ...emptyLayout("layout/details"),
       kind: "disclosure" as const,
-      label: "More observations and model assumptions",
+      label: "More observations and Model assumptions",
     };
   d.layout.kind = "split";
   d.layout.children = [scene, controls, details];
@@ -643,6 +643,9 @@ const legacyBuiltInRecipes = [...publicDefinitions.values()]
           "models/Market",
           "models/DailyRoutine",
           "models/TownNavigation",
+          "models/AIAgent",
+          "models/AgentSession",
+          "models/DebateSession",
         ].includes(d.id)) ||
         /Authored(Line|Square|GasContainer|FractionBar)$/.test(d.id) ||
         /prefabs\/(chemistry|math-foundations|physical-systems|natural-systems|dynamic-systems)\//.test(

@@ -1,5 +1,7 @@
 import { publicDefinition } from "../../components/catalog";
+import { isPlaybackCommand } from "../../components/controls/interactionPolicy";
 import {
+  boardItemMinimum,
   boardLayouts,
   type ComponentBoardItem,
   convertToBoard,
@@ -92,12 +94,33 @@ export function arrangeDocument(
             ? publicDefinition(node.definition).category
             : "layout";
   };
+  // Data-connected models share presentation space while runtime scopes stay
+  // isolated. Independent comparison models remain separate columns/sections.
+  const clusters = new Map(next.scopes.map((scope) => [scope.id, scope.id]));
+  const cluster = (scope: string): string => {
+    const parent = clusters.get(scope) ?? scope;
+    return parent === scope ? scope : cluster(parent);
+  };
+  for (const connection of next.connections) {
+    if (connection.kind !== "value") continue;
+    const source = next.nodes.find((node) => node.id === connection.from.node);
+    const target = next.nodes.find((node) => node.id === connection.to.node);
+    if (
+      source &&
+      target &&
+      publicDefinition(source.definition).category === "models" &&
+      publicDefinition(target.definition).category === "models"
+    )
+      clusters.set(cluster(source.scope), cluster(target.scope));
+  }
   const scopes = [
     ...new Set(
       board.items
         .filter((i): i is ComponentBoardItem => !!i.layoutId)
-        .map((i) => nodeFor(i)?.scope)
-        .filter(Boolean),
+        .flatMap((i) => {
+          const scope = nodeFor(i)?.scope;
+          return scope ? [cluster(scope)] : [];
+        }),
     ),
   ];
   const rows: string[][] = [];
@@ -109,7 +132,7 @@ export function arrangeDocument(
   for (const [index, scope] of scopes.entries()) {
     const items = board.items.filter(
       (i): i is ComponentBoardItem =>
-        !!i.layoutId && nodeFor(i)?.scope === scope,
+        !!i.layoutId && cluster(nodeFor(i)?.scope ?? "") === scope,
     );
     const scenes = items.filter((i) =>
       ["appearance", "canvases"].includes(category(i)),
@@ -118,6 +141,105 @@ export function arrangeDocument(
     const results = items.filter(
       (i) => !scenes.includes(i) && !controls.includes(i),
     );
+    const sceneNode = scenes.length === 1 ? nodeFor(scenes[0]) : undefined;
+    const sceneFirst =
+      sceneNode &&
+      publicDefinition(sceneNode.definition).learnerLayout === "scene-first";
+    if (sceneFirst) {
+      board.responsiveGap = 16;
+      const place = (
+        item: ComponentBoardItem,
+        rect: ComponentBoardItem["rect"],
+      ) => {
+        if (!item.locked) item.rect = rect;
+      };
+      const earthLesson = sceneNode.definition.startsWith(
+        "appearance/earth-atmosphere-",
+      );
+      const y = nextScopeY;
+      place(scenes[0], {
+        x: 0,
+        y,
+        width: 1080,
+        height: earthLesson ? 420 : 480,
+      });
+      scenes[0].responsiveMinHeight = 360;
+      rows.push([scenes[0].id]);
+      const primary = controls.find((i) =>
+        nodeFor(i)?.definition.endsWith("-action"),
+      );
+      for (const [n, item] of results.entries()) {
+        place(item, {
+          x: 0,
+          y:
+            y +
+            (earthLesson
+              ? 436
+              : sceneNode.definition.startsWith("appearance/collective-")
+                ? 578
+                : 504) +
+            n * 100,
+          width:
+            earthLesson ||
+            sceneNode.definition.startsWith("appearance/collective-")
+              ? 1080
+              : 740,
+          height: 80,
+        });
+        item.responsiveMinHeight = 80;
+        rows.push([item.id]);
+      }
+      if (
+        primary &&
+        sceneNode.definition.startsWith("appearance/earth-atmosphere-")
+      ) {
+        place(primary, { x: 0, y: y + 532, width: 1080, height: 80 });
+        primary.responsiveMinHeight = 80;
+        rows.push([primary.id]);
+      } else if (primary) {
+        place(primary, {
+          x: sceneNode.definition.startsWith("appearance/collective-")
+            ? 620
+            : 784,
+          y: y + 504,
+          width: sceneNode.definition.startsWith("appearance/collective-")
+            ? 460
+            : 296,
+          height: 64,
+        });
+        primary.responsiveMinHeight = 64;
+        rows.push([primary.id]);
+      }
+      const rest = controls.filter((i) => i !== primary);
+      for (const [n, item] of rest.entries()) {
+        place(item, {
+          x: sceneNode.definition.startsWith("appearance/collective-")
+            ? 0
+            : 620,
+          y:
+            y +
+            (sceneNode.definition.startsWith("appearance/collective-")
+              ? 504
+              : 596) +
+            n * 84,
+          width: sceneNode.definition.startsWith("appearance/collective-")
+            ? 600
+            : 460,
+          height: Math.max(64, boardItemMinimum(next, item.layoutId).height),
+        });
+        item.responsiveMinHeight = Math.max(
+          64,
+          boardItemMinimum(next, item.layoutId).height,
+        );
+        rows.push([item.id]);
+      }
+      nextScopeY = Math.max(
+        y + 684,
+        y + 604 + results.length * 100,
+        y + 596 + rest.length * 84,
+      );
+      continue;
+    }
     const order = request.narrowOrder;
     const ranked = [...scenes, ...controls, ...results].sort((a, b) => {
       const rank = (i: ComponentBoardItem) => {
@@ -144,7 +266,15 @@ export function arrangeDocument(
           : comparison &&
               nodeFor(item)?.definition === "appearance/area-perimeter"
             ? 160
-            : 360,
+            : ((
+                {
+                  "appearance/physical-pendulum": 450,
+                  "appearance/dynamic-traffic": 360,
+                  "appearance/physical-circuit": 400,
+                  "appearance/EclipseGeometry": 420,
+                  "appearance/SignalSuperposition": 480,
+                } as Record<string, number>
+              )[nodeFor(item)?.definition ?? ""] ?? 480),
       };
       item.responsiveMinHeight = nodeFor(item)?.definition.includes(
         "arithmetic",
@@ -153,47 +283,128 @@ export function arrangeDocument(
         : 280;
       sceneY += item.rect.height + 20;
     }
-    let y = request.template === "vertical" || comparison ? sceneY : scopeY;
+    const sidebarLayout = request.template === "scene-with-sidebar";
+    const controlTarget = (item: ComponentBoardItem) =>
+      next.connections.find(
+        (connection) =>
+          connection.kind === "command" &&
+          connection.from.node === nodeFor(item)?.id,
+      )?.to.node;
+    const controlTargets = [...new Set(controls.map(controlTarget))];
+    const controlColumns = controlTargets.map((target) =>
+      controls.filter((item) => controlTarget(item) === target),
+    );
+    const wideSidebar =
+      sidebarLayout &&
+      controlColumns.length === 2 &&
+      controlColumns[0].length === controlColumns[1].length;
+    const playbackFirst = (items: ComponentBoardItem[]) =>
+      [...items].sort((a, b) => {
+        const rank = (item: ComponentBoardItem) => {
+          const command = next.connections.find(
+            (connection) =>
+              connection.kind === "command" &&
+              connection.from.node === nodeFor(item)?.id,
+          )?.to.port;
+          return command && isPlaybackCommand(command) ? 0 : 1;
+        };
+        return rank(a) - rank(b);
+      });
     const sidebarX =
       request.template === "vertical" || comparison ? x : x + 644;
-    const width = comparison
-      ? 266
-      : request.template === "vertical"
-        ? 620
-        : 320;
-    for (const [itemIndex, item] of (comparison
-      ? [...controls, ...results]
-      : [...results, ...controls]
-    ).entries()) {
-      if (item.locked) continue;
+    const width = wideSidebar
+      ? 280
+      : comparison
+        ? 266
+        : request.template === "vertical"
+          ? 620
+          : 360;
+    const heightFor = (item: ComponentBoardItem) => {
       const node = nodeFor(item);
-      const height =
-        node?.definition === "controls/ArithmeticActivity"
-          ? 262
-          : node?.definition === "displays/Inspector"
-            ? 240
-            : category(item) === "controls"
-              ? comparison
-                ? 144
-                : 160
-              : comparison
-                ? 96
-                : 164;
-      item.rect = {
-        x: sidebarX + (comparison ? (itemIndex % 2) * 286 : 0),
-        y,
-        width,
-        height,
-      };
-      if (!comparison || itemIndex % 2 === 1) y += height + 16;
+      const minimum = boardItemMinimum(next, item.layoutId);
+      const command = next.connections.find(
+        (connection) =>
+          connection.kind === "command" && connection.from.node === node?.id,
+      )?.to.port;
+      const preferred =
+        command && isPlaybackCommand(command)
+          ? 96
+          : node?.definition === "controls/ArithmeticActivity"
+            ? 262
+            : node?.definition === "displays/Inspector"
+              ? minimum.height === 96
+                ? 112
+                : 240
+              : node?.definition === "controls/Slider"
+                ? 176
+                : node?.definition === "controls/NumberInput"
+                  ? 160
+                  : category(item) === "controls"
+                    ? node?.definition === "controls/Button"
+                      ? 80
+                      : 136
+                    : 112;
+      return Math.max(preferred, minimum.height);
+    };
+    let y = request.template === "vertical" || comparison ? sceneY : scopeY;
+    let resultsBottom = sceneY;
+    if (sidebarLayout) {
+      for (const item of results) {
+        if (item.locked) continue;
+        const height = heightFor(item);
+        item.rect = { x, y: resultsBottom, width: 620, height };
+        resultsBottom += height + 20;
+      }
     }
-    nextScopeY = Math.max(sceneY, y) + 24;
+    const columnControls =
+      wideSidebar &&
+      controlColumns.length === 2 &&
+      controlColumns[0].length === controlColumns[1].length
+        ? controlColumns[0].flatMap((item, index) => [
+            item,
+            controlColumns[1][index],
+          ])
+        : playbackFirst(controls);
+    const sidebarItems = sidebarLayout
+      ? columnControls
+      : comparison
+        ? [...controls, ...results]
+        : [...results, ...controls];
+    const columns = comparison || wideSidebar ? 2 : 1;
+    for (let row = 0; row < sidebarItems.length; row += columns) {
+      const items = sidebarItems.slice(row, row + columns);
+      const rowHeight = Math.max(...items.map(heightFor));
+      for (const [column, item] of items.entries()) {
+        if (item.locked) continue;
+        item.rect = {
+          x: sidebarX + column * (width + 20),
+          y,
+          width,
+          height: rowHeight,
+        };
+      }
+      y += rowHeight + 20;
+    }
+    nextScopeY = Math.max(resultsBottom, y) + 24;
   }
   board.responsive = true;
   board.responsiveRows = rows;
   for (const item of board.items)
     if (!rows.flat().includes(item.id)) rows.push([item.id]);
   board.startView = extent(board.items.map((i) => i.rect));
+  if (
+    next.nodes.some((n) => n.definition.startsWith("appearance/collective-"))
+  ) {
+    board.navigation.minZoom = 1;
+    board.navigation.maxZoom = Math.max(1, board.navigation.maxZoom);
+    board.startView = {
+      ...board.startView,
+      y: board.startView.y - 72,
+      height: board.startView.height + 162,
+    };
+    board.learnerArea ??= { ...board.startView };
+  }
+  // Automatic learner bounds follow content. Preserve an explicitly authored boundary.
   arrangeGraph(next);
   validateAuthoredDocument(next);
   return next;

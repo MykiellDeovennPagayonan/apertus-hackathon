@@ -1,0 +1,270 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/conditional-bags",
+  "version": 1,
+  "title": "Blue marbles and hidden origins",
+  "description": "Reveal blue evidence and compare the prior with the weighted probability of the first bag.",
+  "tags": [
+    "conditional-bags",
+    "mathematics",
+    "marble",
+    "marbles",
+    "bag",
+    "bags",
+    "blue",
+    "conditional probability",
+    "probability",
+    "first bag",
+    "Bayes",
+    "origins"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-analysis/conditional-bags",
+        "version": 1,
+        "label": "Blue marbles and hidden origins",
+        "scope": "scope/lab",
+        "configuration": {
+          "blueA": 8,
+          "redA": 2,
+          "blueB": 2,
+          "redB": 8,
+          "prior": 0.5,
+          "revealed": 0
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-analysis-conditional-bags",
+        "version": 1,
+        "label": "Blue marbles and hidden origins",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/0",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Reveal blue evidence",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Reveal blue evidence",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      },
+      {
+        "id": "input/1",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Chance of first bag",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Chance of first bag",
+          "mode": "immediate",
+          "initial": "{\"value\":0.5}",
+          "parameter": "value",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "showNumber": true
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/input/0",
+        "kind": "command",
+        "from": {
+          "node": "input/0",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MA_CONDITIONAL-BAGS_REVEAL"
+        }
+      },
+      {
+        "id": "link/input/1",
+        "kind": "command",
+        "from": {
+          "node": "input/1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MA_CONDITIONAL-BAGS_SET_PRIOR"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Blue marbles and hidden origins"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/input/0",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/0"
+        },
+        {
+          "id": "layout/input/1",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/1"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Blue marbles and hidden origins",
+      "instruction": "Reveal blue evidence and compare the prior with the weighted probability of the first bag.",
+      "explanation": "Fixed contents with replacement. Branch widths use bag-selection weights, not equally weighted marbles across bags. Impossible blue evidence has undefined conditional probability."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 450
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/input/0",
+          "layoutId": "layout/input/0",
+          "rect": {
+            "x": 0,
+            "y": 470,
+            "width": 378,
+            "height": 140
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/input/1",
+          "layoutId": "layout/input/1",
+          "rect": {
+            "x": 402,
+            "y": 470,
+            "width": 378,
+            "height": 190
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 708
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/scene"
+        ],
+        [
+          "board/layout/input/0",
+          "board/layout/input/1"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-analysis/conditional-bags",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-analysis-conditional-bags",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Fixed contents with replacement. Branch widths use bag-selection weights, not equally weighted marbles across bags. Impossible blue evidence has undefined conditional probability."
+  ],
+  "catalog": {
+    "icon": "\u2211",
+    "category": "mathematics",
+    "order": 35
+  }
+}

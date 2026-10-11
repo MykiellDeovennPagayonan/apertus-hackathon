@@ -1,5 +1,5 @@
-import { requireValue } from "../../runtime/authoring/requireValue";
 import gasPressureRecipe from "../../pre-made/gas/gas-pressure.recipe.json";
+import { requireValue } from "../../runtime/authoring/requireValue";
 
 /** Versioned defaults shared by planning, runtime, controls and acceptance tests. */
 export const learningPolicies = {

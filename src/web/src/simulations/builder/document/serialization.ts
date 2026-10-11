@@ -1,3 +1,4 @@
+import { unwrapPortable } from "../../../lib/projects/portable";
 import {
   builtInRecipe,
   modelRecipe,
@@ -25,7 +26,7 @@ import { fromRecipe } from "./legacy";
 import type { ExperimentDocument } from "./types";
 import { validateDocument } from "./validateDocument";
 export function parseDocument(source: string): ExperimentDocument {
-  const input: unknown = JSON.parse(source);
+  const input: unknown = unwrapPortable(JSON.parse(source)).payload;
   if (input && typeof input === "object" && "documentVersion" in input) {
     if ("authored" in input && input.authored) {
       const original =

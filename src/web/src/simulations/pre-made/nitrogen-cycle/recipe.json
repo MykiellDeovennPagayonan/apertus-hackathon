@@ -1,0 +1,345 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/nitrogen-cycle",
+  "version": 1,
+  "title": "Nitrogen cycle",
+  "description": "How does nitrogen in the air become available to a plant?",
+  "tags": [
+    "science",
+    "nitrogen",
+    "cycle",
+    "biogeochemistry"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/biogeochemistry/NitrogenCycle",
+        "version": 1,
+        "label": "Nitrogen cycle",
+        "scope": "scope/lab",
+        "configuration": {
+          "activity": "route",
+          "variant": 0,
+          "seed": 17
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/cycle-nitrogen",
+        "version": 1,
+        "label": "Teaching scene",
+        "scope": "scope/lab",
+        "configuration": {
+          "question": "How does nitrogen in the air become available to a plant?"
+        }
+      },
+      {
+        "id": "caption",
+        "definition": "displays/cycle-nitrogen-caption",
+        "version": 1,
+        "label": "What changed",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "action",
+        "definition": "controls/cycle-nitrogen-action",
+        "version": 1,
+        "label": "Next action",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "activity",
+        "definition": "controls/cycle-nitrogen-activity",
+        "version": 1,
+        "label": "Choose an investigation",
+        "scope": "scope/lab",
+        "configuration": {}
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/caption/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "caption",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/action/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "action",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/activity/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "activity",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/action/ADVANCE",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "CYCLE_NITROGEN_ADVANCE"
+        },
+        "to": {
+          "node": "model",
+          "port": "CYCLE_NITROGEN_ADVANCE"
+        }
+      },
+      {
+        "id": "link/action/RESTART",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "CYCLE_NITROGEN_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "CYCLE_NITROGEN_RESTART"
+        }
+      },
+      {
+        "id": "link/activity/ACTIVITY",
+        "kind": "command",
+        "from": {
+          "node": "activity",
+          "port": "CYCLE_NITROGEN_ACTIVITY"
+        },
+        "to": {
+          "node": "model",
+          "port": "CYCLE_NITROGEN_ACTIVITY"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Nitrogen cycle"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/caption",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "caption"
+        },
+        {
+          "id": "layout/action",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "action"
+        },
+        {
+          "id": "layout/activity",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "activity"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Nitrogen cycle",
+      "instruction": "How does nitrogen in the air become available to a plant?",
+      "explanation": "A simplified teaching model. All amounts use mmol elemental N, including the nitrogen in N2. Fixed fictional daily process rates and light/space growth limit; not fertilizer advice."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1080,
+            "height": 480
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 360
+        },
+        {
+          "id": "board/caption",
+          "layoutId": "layout/caption",
+          "rect": {
+            "x": 0,
+            "y": 504,
+            "width": 740,
+            "height": 80
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 80
+        },
+        {
+          "id": "board/action",
+          "layoutId": "layout/action",
+          "rect": {
+            "x": 784,
+            "y": 504,
+            "width": 296,
+            "height": 64
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/activity",
+          "layoutId": "layout/activity",
+          "rect": {
+            "x": 620,
+            "y": 596,
+            "width": 460,
+            "height": 64
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 64
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -20,
+        "width": 1128,
+        "height": 684
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "learnerArea": {
+        "x": -24,
+        "y": -20,
+        "width": 1128,
+        "height": 684
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/scene"
+        ],
+        [
+          "board/caption"
+        ],
+        [
+          "board/action"
+        ],
+        [
+          "board/activity"
+        ]
+      ],
+      "responsiveGap": 16
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/biogeochemistry/NitrogenCycle",
+      "version": 1
+    },
+    {
+      "id": "appearance/cycle-nitrogen",
+      "version": 1
+    },
+    {
+      "id": "displays/cycle-nitrogen-caption",
+      "version": 1
+    },
+    {
+      "id": "controls/cycle-nitrogen-action",
+      "version": 1
+    },
+    {
+      "id": "controls/cycle-nitrogen-activity",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "All amounts use mmol elemental N, including the nitrogen in N2. Fixed fictional daily process rates and light/space growth limit; not fertilizer advice.",
+    "Compatible microbes fix N into nodule material, then the legume; roots take up ammonium and nitrate. Bulk soil aeration is distinct from regulated nodule oxygen.",
+    "Nitrification has a retained nitrite intermediate. Denitrification has a fixed schematic donor-capacity ceiling and aggregated atmospheric gas product; N2O, volatilization, adsorption and detailed carbon chemistry are omitted.",
+    "Rain is one matched drainage/runoff pulse, not a hydrology forecast. Below-root leaching and surface runoff remain separate accounted stores; neither automatically arrives in a pond."
+  ],
+  "catalog": {
+    "icon": "N",
+    "category": "science",
+    "order": 30
+  }
+}

@@ -1,0 +1,455 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-cost-and-profit",
+  "version": 1,
+  "title": "Cost and profit maximization",
+  "description": "How do marginal and average cost curves govern a firm's profit-maximizing output where MR = MC?",
+  "tags": ["economics", "cost-and-profit", "microeconomics", "lab"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/economics/CostAndProfit",
+        "version": 1,
+        "label": "Cost and profit model",
+        "scope": "scope/lab",
+        "configuration": {
+          "fixedCost": 50,
+          "linearCost": 2,
+          "quadraticCost": 0.5,
+          "marketPrice": 20
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/economics-cost-and-profit",
+        "version": 1,
+        "label": "Cost and profit curves scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/marketPrice",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Market price ($/unit)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Market price ($/unit)",
+          "mode": "immediate",
+          "initial": "{\"value\": 20}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/fixedCost",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Fixed overhead cost ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Fixed overhead cost ($)",
+          "mode": "immediate",
+          "initial": "{\"value\": 50}",
+          "parameter": "value",
+          "step": 5,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/quantity",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Optimal output (units)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Optimal quantity (units)",
+          "precision": 1
+        }
+      },
+      {
+        "id": "result/profit",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Economic profit ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Economic profit ($)",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/mc",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Marginal cost ($/unit)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Marginal cost ($/unit)",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/atc",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Average total cost ($/unit)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Average total cost ($/unit)",
+          "precision": 2
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/quantity",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "optimalQuantity"
+        },
+        "to": {
+          "node": "result/quantity",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/profit",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "economicProfit"
+        },
+        "to": {
+          "node": "result/profit",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/mc",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "marginalCost"
+        },
+        "to": {
+          "node": "result/mc",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/atc",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "averageTotalCost"
+        },
+        "to": {
+          "node": "result/atc",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/marketPrice",
+        "kind": "command",
+        "from": {
+          "node": "input/marketPrice",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "ECON_SET_MARKET_PRICE"
+        }
+      },
+      {
+        "id": "link/input/fixedCost",
+        "kind": "command",
+        "from": {
+          "node": "input/fixedCost",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "ECON_SET_FIXED_COST"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Cost and profit"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/quantity",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/quantity"
+        },
+        {
+          "id": "layout/result/profit",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/profit"
+        },
+        {
+          "id": "layout/result/mc",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/mc"
+        },
+        {
+          "id": "layout/result/atc",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/atc"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Production parameters",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/marketPrice",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/marketPrice"
+            },
+            {
+              "id": "layout/input/fixedCost",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/fixedCost"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Cost and profit maximization",
+      "instruction": "Set the market price and fixed overhead costs. Find the quantity that maximizes firm profit where MR = MC.",
+      "explanation": "A competitive price-taking firm maximizes profit where Marginal Revenue equals Marginal Cost (MR = MC). When price exceeds average total cost, the firm earns positive economic profit shown by the profit rectangle."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 350
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/result/quantity",
+          "layoutId": "layout/result/quantity",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/profit",
+          "layoutId": "layout/result/profit",
+          "rect": {
+            "x": 822,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/mc",
+          "layoutId": "layout/result/mc",
+          "rect": {
+            "x": 644,
+            "y": 126,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/atc",
+          "layoutId": "layout/result/atc",
+          "rect": {
+            "x": 822,
+            "y": 126,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 252,
+            "width": 340,
+            "height": 190
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 140
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/appearance"],
+        ["board/layout/task"],
+        ["board/layout/result/quantity", "board/layout/result/profit"],
+        ["board/layout/result/mc", "board/layout/result/atc"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "marketPrice",
+      "node": "model",
+      "field": "marketPrice",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 100,
+        "unit": "$/unit"
+      },
+      "default": 20
+    },
+    {
+      "name": "fixedCost",
+      "node": "model",
+      "field": "fixedCost",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 500,
+        "unit": "$"
+      },
+      "default": 50
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/economics/CostAndProfit",
+      "version": 1
+    },
+    {
+      "id": "appearance/economics-cost-and-profit",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Competitive price-taking firm where price equals marginal revenue.",
+    "Short-run production cost curves MC, ATC, AVC determine optimal quantity and economic profit."
+  ],
+  "catalog": {
+    "icon": "📈",
+    "category": "economics",
+    "order": 13
+  }
+}

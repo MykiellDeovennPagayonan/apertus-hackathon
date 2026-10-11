@@ -178,6 +178,14 @@ Trait files include field units, edit timing, ranges, and ownership metadata. Th
 
 `pnpm test` verifies the preserved formulas/prompts plus prefab independence, invalid commands, topology references, paused edits, synchronized market relocation, full reset, arrival task identity, clock cancellation, canonical recipes, and version-3 migration. `pnpm exec tsc --noEmit` and scoped Biome checks verify the changed app source. Browser acceptance runs against a local server, and `next build --webpack` provides the production-build check when the default Turbopack build stalls in the local environment.
 
+### Presentation ownership and cleanup verification
+
+`views/RecipeLesson.tsx` assembles the lesson and preserves the existing runtime subscription and clock coordination. Its `views/recipe/` modules separately own recursive layouts, node selection, control bindings, display rendering, appearances, and canvas interaction. Shared contexts have one identity in `contexts.tsx`; renderers never import back through the lesson entry point. Snapshot adapters narrow known provider results before presentation; the runtime remains responsible for full validation and state updates.
+
+`controls/RangeInput.tsx` supplies the controlled range event adapter used by both numeric control wrappers. `NumberField` keeps unfinished or rejected text local, while accepted input follows authoritative value changes. Explicit-submit forms retain their own draft/discard policy. Retained natural-system controls return the actual command result to their form. Compatibility entry points remain available.
+
+`pnpm test:components:cleanup` compares public contracts, AI cards/buckets, and all 41 built-in recipes' initial markup against the pre-cleanup baseline. It also verifies command rejection and snapshot discriminants; it runs inside `pnpm test`. `pnpm test:components:cleanup:browser` exercises real React numeric controls without adding a production test route. See [implementation 018 and its evidence](../../../../../docs/agent-only/implementation/018-SAFE-COMPONENT-CLEANUP-AND-AI-COMPATIBILITY.md) for completed changes and remaining verification limits.
+
 ### Spatial public recipes
 
 `catalog/spatial.ts` and `composites/spatial.ts` expose projectile, truss, load/response, town building/market/routine/navigation, World presentation attachments, and authored Scheduled Trip clock contracts. Instances enter `runtime/authoring/DocumentRuntime`; views receive snapshots and command callbacks. Model calculations remain in shared systems and pure runtime model owners. Public definitions declare configuration-reference paths so duplication never guesses which text contains an ID.

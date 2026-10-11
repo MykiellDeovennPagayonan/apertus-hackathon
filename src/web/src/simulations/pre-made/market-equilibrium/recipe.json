@@ -1,0 +1,493 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-market-equilibrium",
+  "version": 1,
+  "title": "Market equilibrium",
+  "description": "How do supply and demand interact to establish market clearing price and quantity?",
+  "tags": ["economics", "market-equilibrium", "lab"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/economics/MarketEquilibrium",
+        "version": 1,
+        "label": "Market equilibrium",
+        "scope": "scope/lab",
+        "configuration": {
+          "demandIntercept": 100,
+          "demandSlope": 1,
+          "supplyIntercept": 20,
+          "supplySlope": 1,
+          "priceControl": 0,
+          "tax": 0
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/economics-market-equilibrium",
+        "version": 1,
+        "label": "Market equilibrium scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/demand",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Demand intercept ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Demand intercept ($)",
+          "mode": "immediate",
+          "initial": "{\"value\": 100}",
+          "parameter": "value",
+          "step": 5,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/supply",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Supply intercept ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Supply intercept ($)",
+          "mode": "immediate",
+          "initial": "{\"value\": 20}",
+          "parameter": "value",
+          "step": 5,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/priceControl",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Price ceiling / floor ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Price control ($)",
+          "mode": "immediate",
+          "initial": "{\"value\": 0}",
+          "parameter": "value",
+          "step": 5,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/price",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Equilibrium price ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Equilibrium price ($)",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/quantity",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Equilibrium quantity",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Equilibrium quantity",
+          "precision": 1
+        }
+      },
+      {
+        "id": "result/cs",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Consumer surplus ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Consumer surplus ($)",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/ps",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Producer surplus ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Producer surplus ($)",
+          "precision": 2
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/price",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "actualPrice"
+        },
+        "to": {
+          "node": "result/price",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/quantity",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "actualQuantity"
+        },
+        "to": {
+          "node": "result/quantity",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/cs",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "consumerSurplus"
+        },
+        "to": {
+          "node": "result/cs",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/ps",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "producerSurplus"
+        },
+        "to": {
+          "node": "result/ps",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/demand",
+        "kind": "command",
+        "from": {
+          "node": "input/demand",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "ECON_SET_DEMAND"
+        }
+      },
+      {
+        "id": "link/input/supply",
+        "kind": "command",
+        "from": {
+          "node": "input/supply",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "ECON_SET_SUPPLY"
+        }
+      },
+      {
+        "id": "link/input/priceControl",
+        "kind": "command",
+        "from": {
+          "node": "input/priceControl",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "ECON_SET_PRICE_CONTROL"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Market equilibrium"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/price",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/price"
+        },
+        {
+          "id": "layout/result/quantity",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/quantity"
+        },
+        {
+          "id": "layout/result/cs",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/cs"
+        },
+        {
+          "id": "layout/result/ps",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/ps"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Market parameters",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/demand",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/demand"
+            },
+            {
+              "id": "layout/input/supply",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/supply"
+            },
+            {
+              "id": "layout/input/priceControl",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/priceControl"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Market equilibrium",
+      "instruction": "Shift supply and demand curves. Observe the market clearing price, traded quantity, and economic surplus.",
+      "explanation": "In a competitive market, equilibrium is reached where quantity demanded equals quantity supplied. Price ceilings below equilibrium create shortages, while floors above create surpluses."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 350
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/result/price",
+          "layoutId": "layout/result/price",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/quantity",
+          "layoutId": "layout/result/quantity",
+          "rect": {
+            "x": 822,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/cs",
+          "layoutId": "layout/result/cs",
+          "rect": {
+            "x": 644,
+            "y": 126,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/ps",
+          "layoutId": "layout/result/ps",
+          "rect": {
+            "x": 822,
+            "y": 126,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 252,
+            "width": 340,
+            "height": 200
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/appearance"],
+        ["board/layout/task"],
+        ["board/layout/result/price", "board/layout/result/quantity"],
+        ["board/layout/result/cs", "board/layout/result/ps"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "demandIntercept",
+      "node": "model",
+      "field": "demandIntercept",
+      "schema": {
+        "type": "number",
+        "minimum": 40,
+        "maximum": 300,
+        "unit": "$"
+      },
+      "default": 100
+    },
+    {
+      "name": "supplyIntercept",
+      "node": "model",
+      "field": "supplyIntercept",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "unit": "$"
+      },
+      "default": 20
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/economics/MarketEquilibrium",
+      "version": 1
+    },
+    {
+      "id": "appearance/economics-market-equilibrium",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Competitive market with linear demand and supply schedules.",
+    "Deadweight loss occurs when government controls distort transactions away from clearing equilibrium."
+  ],
+  "catalog": {
+    "icon": "⚖",
+    "category": "economics",
+    "order": 11
+  }
+}

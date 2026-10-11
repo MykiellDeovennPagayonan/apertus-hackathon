@@ -1,0 +1,371 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/tipping",
+  "version": 1,
+  "title": "Cabinet stability",
+  "description": "When does the centre of mass move beyond the supporting edge?",
+  "tags": [
+    "physics",
+    "tipping",
+    "cabinet stability"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/physics/Tipping",
+        "version": 1,
+        "label": "Cabinet stability",
+        "scope": "scope/lab",
+        "configuration": {
+          "width": 0.6,
+          "height": 2,
+          "bodyMass": 20,
+          "loadMass": 10,
+          "loadHeight": 1,
+          "tilt": 0
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/physics-tipping",
+        "version": 1,
+        "label": "Cabinet stability scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/tilt",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Tilt cabinet",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Tilt cabinet",
+          "mode": "immediate",
+          "initial": "{\"value\": 0}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/loadHeight",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Load shelf height",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Load shelf height",
+          "mode": "immediate",
+          "initial": "{\"value\": 1}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/height",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Cabinet height",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Cabinet height",
+          "mode": "immediate",
+          "initial": "{\"value\": 2}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/tilt",
+        "kind": "command",
+        "from": {
+          "node": "control/tilt",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "TIPPING_TILT"
+        }
+      },
+      {
+        "id": "link/loadHeight",
+        "kind": "command",
+        "from": {
+          "node": "control/loadHeight",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "TIPPING_LOADHEIGHT"
+        }
+      },
+      {
+        "id": "link/height",
+        "kind": "command",
+        "from": {
+          "node": "control/height",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "TIPPING_HEIGHT"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Cabinet stability"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/controls",
+          "kind": "grid",
+          "font": "inherit",
+          "label": "",
+          "gap": 16,
+          "columns": 3,
+          "mobileColumns": 1,
+          "children": [
+            {
+              "id": "layout/tilt",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/tilt"
+            },
+            {
+              "id": "layout/loadHeight",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/loadHeight"
+            },
+            {
+              "id": "layout/height",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/height"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Cabinet stability",
+      "instruction": "When does the centre of mass move beyond the supporting edge?",
+      "explanation": "Rigid uniform centred cabinet and a centred movable load. Quasi-static clockwise tilt about the right lower edge, sufficient friction to prevent sliding. Height alone does not cause spontaneous tipping; no furniture safety prediction."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 340
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 280
+        },
+        {
+          "id": "board/layout/controls",
+          "layoutId": "layout/controls",
+          "rect": {
+            "x": 0,
+            "y": 360,
+            "width": 680,
+            "height": 160
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/controls"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1000,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "width",
+      "node": "model",
+      "field": "width",
+      "schema": {
+        "type": "number",
+        "minimum": 0.2,
+        "maximum": 2,
+        "unit": "m"
+      },
+      "default": 0.6
+    },
+    {
+      "name": "height",
+      "node": "model",
+      "field": "height",
+      "schema": {
+        "type": "number",
+        "minimum": 0.5,
+        "maximum": 3,
+        "unit": "m"
+      },
+      "default": 2
+    },
+    {
+      "name": "bodyMass",
+      "node": "model",
+      "field": "bodyMass",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 100,
+        "unit": "kg"
+      },
+      "default": 20
+    },
+    {
+      "name": "loadMass",
+      "node": "model",
+      "field": "loadMass",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "unit": "kg"
+      },
+      "default": 10
+    },
+    {
+      "name": "loadHeight",
+      "node": "model",
+      "field": "loadHeight",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 3,
+        "unit": "m"
+      },
+      "default": 1
+    },
+    {
+      "name": "tilt",
+      "node": "model",
+      "field": "tilt",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 80,
+        "unit": "deg"
+      },
+      "default": 0
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Tipping",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-tipping",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Rigid uniform centred cabinet and a centred movable load. Quasi-static clockwise tilt about the right lower edge, sufficient friction to prevent sliding. Height alone does not cause spontaneous tipping; no furniture safety prediction."
+  ],
+  "catalog": {
+    "icon": "\u2699",
+    "category": "physics",
+    "order": 144
+  }
+}

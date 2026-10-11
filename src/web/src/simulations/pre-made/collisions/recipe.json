@@ -1,0 +1,369 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/collisions",
+  "version": 1,
+  "title": "Two-cart collision",
+  "description": "Where does the motion energy go when carts stick together?",
+  "tags": [
+    "physics",
+    "collision",
+    "two-cart collision"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/physics/Collision",
+        "version": 1,
+        "label": "Two-cart collision",
+        "scope": "scope/lab",
+        "configuration": {
+          "mass1": 2,
+          "mass2": 1,
+          "speed1": 3,
+          "speed2": 0,
+          "restitution": 0,
+          "collided": false
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/physics-collision",
+        "version": 1,
+        "label": "Two-cart collision scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/speed1",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Left cart starting speed",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Left cart starting speed",
+          "mode": "immediate",
+          "initial": "{\"value\": 3}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/speed2",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Right cart starting speed",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Right cart starting speed",
+          "mode": "immediate",
+          "initial": "{\"value\": 0}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/collided",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Collide / return to start",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Collide / return to start",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/speed1",
+        "kind": "command",
+        "from": {
+          "node": "control/speed1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "COLLISION_SPEED1"
+        }
+      },
+      {
+        "id": "link/speed2",
+        "kind": "command",
+        "from": {
+          "node": "control/speed2",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "COLLISION_SPEED2"
+        }
+      },
+      {
+        "id": "link/collided",
+        "kind": "command",
+        "from": {
+          "node": "control/collided",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "COLLISION_COLLIDED"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Two-cart collision"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/controls",
+          "kind": "grid",
+          "font": "inherit",
+          "label": "",
+          "gap": 16,
+          "columns": 3,
+          "mobileColumns": 1,
+          "children": [
+            {
+              "id": "layout/speed1",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/speed1"
+            },
+            {
+              "id": "layout/speed2",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/speed2"
+            },
+            {
+              "id": "layout/collided",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/collided"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Two-cart collision",
+      "instruction": "Where does the motion energy go when carts stick together?",
+      "explanation": "Isolated frictionless one-dimensional instantaneous collision. Left cart collides only when its velocity exceeds the right cart velocity. Restitution 0 means sticking and 1 elastic. Kinetic energy transferred into internal energy is not destroyed; no deformation or external impulse."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 340
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 280
+        },
+        {
+          "id": "board/layout/controls",
+          "layoutId": "layout/controls",
+          "rect": {
+            "x": 0,
+            "y": 360,
+            "width": 680,
+            "height": 160
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/controls"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1000,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "mass1",
+      "node": "model",
+      "field": "mass1",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 20,
+        "unit": "kg"
+      },
+      "default": 2
+    },
+    {
+      "name": "mass2",
+      "node": "model",
+      "field": "mass2",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 20,
+        "unit": "kg"
+      },
+      "default": 1
+    },
+    {
+      "name": "speed1",
+      "node": "model",
+      "field": "speed1",
+      "schema": {
+        "type": "number",
+        "minimum": -10,
+        "maximum": 10,
+        "unit": "m/s"
+      },
+      "default": 3
+    },
+    {
+      "name": "speed2",
+      "node": "model",
+      "field": "speed2",
+      "schema": {
+        "type": "number",
+        "minimum": -10,
+        "maximum": 10,
+        "unit": "m/s"
+      },
+      "default": 0
+    },
+    {
+      "name": "restitution",
+      "node": "model",
+      "field": "restitution",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "unit": "1"
+      },
+      "default": 0
+    },
+    {
+      "name": "collided",
+      "node": "model",
+      "field": "collided",
+      "schema": {
+        "type": "boolean"
+      },
+      "default": false
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Collision",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-collision",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Isolated frictionless one-dimensional instantaneous collision. Left cart collides only when its velocity exceeds the right cart velocity. Restitution 0 means sticking and 1 elastic. Kinetic energy transferred into internal energy is not destroyed; no deformation or external impulse."
+  ],
+  "catalog": {
+    "icon": "\u2699",
+    "category": "physics",
+    "order": 145
+  }
+}

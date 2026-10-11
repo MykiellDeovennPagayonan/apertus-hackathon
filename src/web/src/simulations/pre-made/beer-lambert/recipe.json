@@ -1,0 +1,363 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-beer-lambert",
+  "version": 1,
+  "title": "Beer-Lambert law & spectrophotometry",
+  "description": "How do solute concentration and cuvette path length govern light absorbance and transmittance?",
+  "tags": ["chemistry", "beer-lambert", "spectrophotometry", "absorbance", "transmittance", "lab"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/chemistry/BeerLambert",
+        "version": 1,
+        "label": "Beer-Lambert model",
+        "scope": "scope/lab",
+        "configuration": {
+          "concentration": 50,
+          "pathLength": 1.0,
+          "molarAbsorptivity": 0.02
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/chemistry-beer-lambert",
+        "version": 1,
+        "label": "Beer-Lambert spectrophotometer scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/concentration",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Concentration (mM)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Concentration (mM)",
+          "mode": "immediate",
+          "initial": "{\"value\": 50}",
+          "parameter": "value",
+          "step": 5,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/pathLength",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Path length (cm)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Path length (cm)",
+          "mode": "immediate",
+          "initial": "{\"value\": 1.0}",
+          "parameter": "value",
+          "step": 0.1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/absorbance",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Absorbance (A)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Absorbance (A)",
+          "precision": 3
+        }
+      },
+      {
+        "id": "result/transmittance",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Transmittance (%T)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Transmittance (%T)",
+          "precision": 1
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/absorbance",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "absorbance"
+        },
+        "to": {
+          "node": "result/absorbance",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/transmittance",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "transmittance"
+        },
+        "to": {
+          "node": "result/transmittance",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/concentration",
+        "kind": "command",
+        "from": {
+          "node": "input/concentration",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "CHEM_SET_BEER_CONCENTRATION"
+        }
+      },
+      {
+        "id": "link/input/pathLength",
+        "kind": "command",
+        "from": {
+          "node": "input/pathLength",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "CHEM_SET_BEER_PATH_LENGTH"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Beer-Lambert spectrophotometry"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/absorbance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/absorbance"
+        },
+        {
+          "id": "layout/result/transmittance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/transmittance"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Cuvette & Solute controls",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/concentration",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/concentration"
+            },
+            {
+              "id": "layout/input/pathLength",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/pathLength"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Beer-Lambert law & spectrophotometry",
+      "instruction": "Adjust solute concentration and cuvette path length. Observe how absorbance increases linearly and light transmittance attenuates exponentially.",
+      "explanation": "The Beer-Lambert law states A = ε · b · c. Transmittance follows T = 10^(-A) * 100%. Doubling path length or concentration doubles absorbance and exponentially cuts transmitted light."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 350
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/result/absorbance",
+          "layoutId": "layout/result/absorbance",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/transmittance",
+          "layoutId": "layout/result/transmittance",
+          "rect": {
+            "x": 822,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 126,
+            "width": 340,
+            "height": 180
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/appearance"],
+        ["board/layout/task"],
+        ["board/layout/result/absorbance", "board/layout/result/transmittance"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "concentration",
+      "node": "model",
+      "field": "concentration",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 400,
+        "unit": "mM"
+      },
+      "default": 50
+    },
+    {
+      "name": "pathLength",
+      "node": "model",
+      "field": "pathLength",
+      "schema": {
+        "type": "number",
+        "minimum": 0.5,
+        "maximum": 3,
+        "unit": "cm"
+      },
+      "default": 1
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/chemistry/BeerLambert",
+      "version": 1
+    },
+    {
+      "id": "appearance/chemistry-beer-lambert",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Monochromatic light beam traveling through a homogeneous liquid solution.",
+    "Beer-Lambert law A = ε · b · c holds linearly with T = 10^(-A) * 100%."
+  ],
+  "catalog": {
+    "icon": "🔦",
+    "category": "chemistry",
+    "order": 15
+  }
+}

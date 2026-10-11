@@ -4,7 +4,9 @@ const path = require("node:path");
 const { load } = require("../test-loader.cjs");
 const { retrieveCapabilities } = load("src/lib/planner/catalog.ts");
 const { GenerationBudget } = load("src/lib/planner/budget.ts");
-const { selectCapability } = load("src/lib/laya/selection.ts");
+const { selectCapability } = load(
+  "src/lib/planner/selection/selectCapability.ts",
+);
 const out = path.resolve(
   process.env.GENERATION_EVIDENCE_DIR ||
     "/tmp/apertus-generation-live-selection",
@@ -35,31 +37,35 @@ fs.mkdirSync(out, { recursive: true });
     intent,
     ranked.map((r) => r.card),
     budget,
+    () => budget.decision,
   );
+  const capability =
+    selected.status === "selected" ? selected.capability : null;
   const result = {
-    evidence: "live-laya-selection",
+    evidence: "live-decision-selection",
     prompt,
     intent,
     ranked,
-    selected: selected?.recipeSlug ?? null,
+    selected: capability?.recipeSlug ?? null,
     events,
   };
   fs.writeFileSync(
     path.join(out, "selection.json"),
     JSON.stringify(result, null, 2),
   );
-  assert.equal(budget.layaCalls, 1);
+  assert.equal(budget.decisionCalls, 1);
   assert.equal(budget.calls, 0);
-  const event = events.find((e) => e.event === "selection.laya");
+  const event = events.find((e) => e.event === "selection.decision");
   assert.ok(
     event && ["accepted", "rejected"].includes(event.data.status),
-    "The real Laya service must answer, not fall back from unavailability",
+    "The real decision service must answer, not fall back from unavailability",
   );
   assert.ok(
-    !selected || ranked.some((r) => r.card.recipeSlug === selected.recipeSlug),
+    !capability ||
+      ranked.some((r) => r.card.recipeSlug === capability.recipeSlug),
   );
   console.log(
-    `Real ambiguous Laya selection: ${event.data.status}; selected=${selected?.recipeSlug ?? "none"}. Evidence: ${out}. This verifies selection transport and gating, not multi-domain creation.`,
+    `Real ambiguous decision selection: ${event.data.status}; selected=${capability?.recipeSlug ?? "none"}. Evidence: ${out}. This verifies selection transport and gating, not multi-domain creation.`,
   );
 })().catch((e) => {
   console.error(e);

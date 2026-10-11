@@ -1,0 +1,358 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/hydraulics",
+  "version": 1,
+  "title": "Two-piston hydraulic lift",
+  "description": "How does a larger output piston trade force for travel?",
+  "tags": [
+    "physics",
+    "hydraulics",
+    "two-piston hydraulic lift"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/physics/HydraulicLift",
+        "version": 1,
+        "label": "Two-piston hydraulic lift",
+        "scope": "scope/lab",
+        "configuration": {
+          "inputArea": 1,
+          "outputArea": 20,
+          "inputForce": 100,
+          "loadForce": 2000,
+          "stroke": 20
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/physics-hydraulics",
+        "version": 1,
+        "label": "Two-piston hydraulic lift scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/outputArea",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Output piston area",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Output piston area",
+          "mode": "immediate",
+          "initial": "{\"value\": 20}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/inputForce",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Available input force",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Available input force",
+          "mode": "immediate",
+          "initial": "{\"value\": 100}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/stroke",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Requested input stroke",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Requested input stroke",
+          "mode": "immediate",
+          "initial": "{\"value\": 20}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/outputArea",
+        "kind": "command",
+        "from": {
+          "node": "control/outputArea",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "HYDRAULICS_OUTPUTAREA"
+        }
+      },
+      {
+        "id": "link/inputForce",
+        "kind": "command",
+        "from": {
+          "node": "control/inputForce",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "HYDRAULICS_INPUTFORCE"
+        }
+      },
+      {
+        "id": "link/stroke",
+        "kind": "command",
+        "from": {
+          "node": "control/stroke",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "HYDRAULICS_STROKE"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Two-piston hydraulic lift"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/controls",
+          "kind": "grid",
+          "font": "inherit",
+          "label": "",
+          "gap": 16,
+          "columns": 3,
+          "mobileColumns": 1,
+          "children": [
+            {
+              "id": "layout/outputArea",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/outputArea"
+            },
+            {
+              "id": "layout/inputForce",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/inputForce"
+            },
+            {
+              "id": "layout/stroke",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/stroke"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Two-piston hydraulic lift",
+      "instruction": "How does a larger output piston trade force for travel?",
+      "explanation": "Equal hydraulic head, massless frictionless pistons and incompressible fluid. Available force is a ceiling; a slow stroke uses exactly the balancing force. Below threshold both pistons remain fixed. Work is calculated using balancing load force, not the unused force ceiling. No pump/check-valve mechanism, leaks or acceleration."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 340
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 280
+        },
+        {
+          "id": "board/layout/controls",
+          "layoutId": "layout/controls",
+          "rect": {
+            "x": 0,
+            "y": 360,
+            "width": 680,
+            "height": 160
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/controls"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1000,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "inputArea",
+      "node": "model",
+      "field": "inputArea",
+      "schema": {
+        "type": "number",
+        "minimum": 0.5,
+        "maximum": 20,
+        "unit": "cm\u00b2"
+      },
+      "default": 1
+    },
+    {
+      "name": "outputArea",
+      "node": "model",
+      "field": "outputArea",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 100,
+        "unit": "cm\u00b2"
+      },
+      "default": 20
+    },
+    {
+      "name": "inputForce",
+      "node": "model",
+      "field": "inputForce",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 500,
+        "unit": "N"
+      },
+      "default": 100
+    },
+    {
+      "name": "loadForce",
+      "node": "model",
+      "field": "loadForce",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 10000,
+        "unit": "N"
+      },
+      "default": 2000
+    },
+    {
+      "name": "stroke",
+      "node": "model",
+      "field": "stroke",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 50,
+        "unit": "cm"
+      },
+      "default": 20
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/HydraulicLift",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-hydraulics",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Equal hydraulic head, massless frictionless pistons and incompressible fluid. Available force is a ceiling; a slow stroke uses exactly the balancing force. Below threshold both pistons remain fixed. Work is calculated using balancing load force, not the unused force ceiling. No pump/check-valve mechanism, leaks or acceleration."
+  ],
+  "catalog": {
+    "icon": "\u2699",
+    "category": "physics",
+    "order": 148
+  }
+}

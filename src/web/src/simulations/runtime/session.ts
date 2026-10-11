@@ -55,8 +55,11 @@ let definition: CompositionDefinition | null = null,
   acceptedRecipe: Recipe | null = null;
 let authoredSession: RecipeSession | null = null;
 export const getAuthoredSession = getRecipeSession;
-export function activatePremadeSession(slug: Exclude<DemoType, "assembly">) {
-  return activateAuthoredSession(loadAuthoredRecipe(premadeRecipe(slug)), slug);
+export function activatePremadeSession(slug: string) {
+  return activateAuthoredSession(
+    loadAuthoredRecipe(premadeRecipe(slug)),
+    Object.hasOwn(templateNames, slug) ? (slug as DemoType) : "assembly",
+  );
 }
 function activateAuthoredSession(
   candidate: ReturnType<typeof loadAuthoredRecipe>,

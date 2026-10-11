@@ -1,0 +1,390 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/tsunami-formation",
+  "version": 1,
+  "title": "How tsunamis form",
+  "description": "How does a seabed disturbance reach the coast? Interactive staged explanation of tsunami, tsunamis, seabed.",
+  "tags": [
+    "science",
+    "tsunami",
+    "tsunamis",
+    "seabed",
+    "ocean waves",
+    "coastal surge"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/earth-atmosphere/tsunami",
+        "version": 1,
+        "label": "How tsunamis form",
+        "scope": "scope/lab",
+        "configuration": {
+          "depth": 4000,
+          "displacement": 1,
+          "speed": 1
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/earth-atmosphere-tsunami",
+        "version": 1,
+        "label": "Teaching scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "action",
+        "definition": "controls/earth-atmosphere-tsunami-action",
+        "version": 1,
+        "label": "Learning action",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "caption",
+        "definition": "displays/earth-atmosphere-tsunami-caption",
+        "version": 1,
+        "label": "Current explanation",
+        "scope": "scope/lab",
+        "configuration": {}
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/state/action",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "action",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/state/caption",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "caption",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/action/EA_TSUNAMI_RUN",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "EA_TSUNAMI_RUN"
+        },
+        "to": {
+          "node": "model",
+          "port": "EA_TSUNAMI_RUN"
+        }
+      },
+      {
+        "id": "link/action/EA_TSUNAMI_ADVANCE",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "EA_TSUNAMI_ADVANCE"
+        },
+        "to": {
+          "node": "model",
+          "port": "EA_TSUNAMI_ADVANCE"
+        }
+      },
+      {
+        "id": "link/action/EA_TSUNAMI_PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "EA_TSUNAMI_PAUSE"
+        },
+        "to": {
+          "node": "model",
+          "port": "EA_TSUNAMI_PAUSE"
+        }
+      },
+      {
+        "id": "link/action/EA_TSUNAMI_RESTART",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "EA_TSUNAMI_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "EA_TSUNAMI_RESTART"
+        }
+      },
+      {
+        "id": "link/action/EA_TSUNAMI_SET_depth",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "EA_TSUNAMI_SET_depth"
+        },
+        "to": {
+          "node": "model",
+          "port": "EA_TSUNAMI_SET_depth"
+        }
+      },
+      {
+        "id": "link/action/EA_TSUNAMI_SET_displacement",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "EA_TSUNAMI_SET_displacement"
+        },
+        "to": {
+          "node": "model",
+          "port": "EA_TSUNAMI_SET_displacement"
+        }
+      },
+      {
+        "id": "link/action/EA_TSUNAMI_SET_speed",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "EA_TSUNAMI_SET_speed"
+        },
+        "to": {
+          "node": "model",
+          "port": "EA_TSUNAMI_SET_speed"
+        }
+      },
+      {
+        "id": "link/action/EA_TSUNAMI_NEXT_WAVE",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "EA_TSUNAMI_NEXT_WAVE"
+        },
+        "to": {
+          "node": "model",
+          "port": "EA_TSUNAMI_NEXT_WAVE"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "How tsunamis form"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/caption",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "caption"
+        },
+        {
+          "id": "layout/action",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "action"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "How tsunamis form",
+      "instruction": "How does a seabed disturbance reach the coast?",
+      "explanation": "Long-wave offshore propagation uses sqrt(g\u00b7depth); shelf amplitude uses Green's-law approximation. Coastal arrival and map are prescribed illustrations, not inundation or evacuation forecasts. Vertical scale exaggerated."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1080,
+            "height": 420
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 360
+        },
+        {
+          "id": "board/caption",
+          "layoutId": "layout/caption",
+          "rect": {
+            "x": 0,
+            "y": 436,
+            "width": 1080,
+            "height": 64
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/action",
+          "layoutId": "layout/action",
+          "rect": {
+            "x": 0,
+            "y": 516,
+            "width": 1080,
+            "height": 80
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 80
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1128,
+        "height": 650
+      },
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1128,
+        "height": 650
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 1,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/scene"
+        ],
+        [
+          "board/caption"
+        ],
+        [
+          "board/action"
+        ]
+      ],
+      "responsiveGap": 16
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "depth",
+      "node": "model",
+      "field": "depth",
+      "schema": {
+        "type": "number",
+        "minimum": 500,
+        "maximum": 6000,
+        "unit": "m"
+      },
+      "default": 4000
+    },
+    {
+      "name": "displacement",
+      "node": "model",
+      "field": "displacement",
+      "schema": {
+        "type": "number",
+        "minimum": -2,
+        "maximum": 2,
+        "unit": "m"
+      },
+      "default": 1
+    },
+    {
+      "name": "speed",
+      "node": "model",
+      "field": "speed",
+      "schema": {
+        "type": "number",
+        "minimum": 0.2,
+        "maximum": 2,
+        "unit": ""
+      },
+      "default": 1
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/earth-atmosphere/tsunami",
+      "version": 1
+    },
+    {
+      "id": "appearance/earth-atmosphere-tsunami",
+      "version": 1
+    },
+    {
+      "id": "controls/earth-atmosphere-tsunami-action",
+      "version": 1
+    },
+    {
+      "id": "displays/earth-atmosphere-tsunami-caption",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Long-wave offshore propagation uses sqrt(g\u00b7depth); shelf amplitude uses Green's-law approximation. Coastal arrival and map are prescribed illustrations, not inundation or evacuation forecasts. Vertical scale exaggerated."
+  ],
+  "catalog": {
+    "icon": "\u25ce",
+    "category": "science",
+    "order": 45
+  }
+}

@@ -54,8 +54,8 @@ export function ProjectileScene({
           {s.instances.map((instance, index) => (
             <div key={instance.id} className={index ? "is-comparison" : ""}>
               <strong>
-                Ball {index + 1} · {instance.launch.angle}° ·{" "}
-                {instance.launch.velocity} m/s
+                Ball {index + 1} · {instance.launch.angle.toFixed(3)}° ·{" "}
+                {instance.launch.velocity.toFixed(3)} m/s
               </strong>
             </div>
           ))}

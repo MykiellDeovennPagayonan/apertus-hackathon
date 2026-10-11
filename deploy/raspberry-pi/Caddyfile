@@ -1,0 +1,4 @@
+{$PI_HOSTNAME:apertus.local} {
+    tls internal
+    reverse_proxy web:3000
+}

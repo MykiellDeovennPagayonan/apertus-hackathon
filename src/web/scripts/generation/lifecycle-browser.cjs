@@ -101,7 +101,7 @@ module.exports = async function lifecycle(browser, records) {
         "Initial failure fixture lesson did not activate",
       );
       if (storageFailure) {
-        await page.getByText(/couldn't be saved in this browser/).waitFor();
+        await page.getByText(/couldn't be saved\. Use Save recipe/).waitFor();
         assert.equal((await h.snapshot(page)).recipe.id, accepted.recipe.id);
         await h.exportRecipe(page, dir);
       } else {

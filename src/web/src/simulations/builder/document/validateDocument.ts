@@ -1,3 +1,4 @@
+import { validateBoard } from "../../runtime/authoring/board";
 import {
   validateAuthoredDocument,
   validateEditorMetadata,
@@ -406,10 +407,14 @@ function validateEditorGroups(doc: ExperimentDocument, ids: Set<string>) {
   }
 }
 
-export function validateRunnableDocument(doc: ExperimentDocument) {
+export function validateRunnableDocument(
+  doc: ExperimentDocument,
+  forSharing = true,
+) {
   validateDocument(doc);
   if (doc.authored) {
     validateAuthoredDocument(doc.authored, true);
+    if (forSharing) validateBoard(doc.authored, true);
     return;
   }
   if (doc.scene) {

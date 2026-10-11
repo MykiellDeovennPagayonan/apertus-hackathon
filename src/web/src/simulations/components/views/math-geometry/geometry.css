@@ -1,0 +1,100 @@
+.mg-scene {
+  width: 100%;
+  color: var(--text);
+}
+.mg-scene svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 240px;
+}
+.mg-scene text {
+  fill: currentColor;
+  font: 15px var(--font-sans, sans-serif);
+}
+.mg-scene .mg-small {
+  font-size: 13px;
+}
+.mg-scene .mg-large {
+  font-size: 26px;
+  font-weight: 600;
+}
+.mg-scene .mg-strong {
+  font-weight: 600;
+}
+.mg-caption {
+  margin: 8px 4px 0;
+  font-size: 16px;
+  line-height: 1.45;
+}
+.mg-line {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 2;
+}
+.mg-thin {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 1;
+  opacity: 0.35;
+}
+.mg-grid {
+  stroke: var(--text);
+  stroke-width: 1;
+  opacity: 0.12;
+}
+.mg-dashed {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 5;
+}
+.mg-accent {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.mg-fill-accent {
+  fill: var(--accent);
+}
+.mg-fill-green {
+  fill: #d9e9de;
+  stroke: var(--text);
+  stroke-width: 1.5;
+}
+.mg-fill-orange {
+  fill: #f0d8ba;
+  stroke: var(--text);
+  stroke-width: 1.5;
+}
+.mg-fill-teal {
+  fill: #c7dddd;
+  stroke: var(--text);
+  stroke-width: 1.5;
+}
+.mg-fill-faint {
+  fill: var(--text);
+  fill-opacity: 0.06;
+  stroke: var(--text);
+  stroke-opacity: 0.35;
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+}
+.mg-fill-problem {
+  fill: #f3c9c0;
+  stroke: #a33a26;
+  stroke-width: 2.5;
+}
+.mg-problem {
+  fill: #a33a26;
+}
+.mg-scene text.mg-problem {
+  fill: #a33a26;
+}
+.mg-hatch {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 6;
+  stroke-opacity: 0.45;
+}

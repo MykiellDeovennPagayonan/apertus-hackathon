@@ -1,6 +1,7 @@
 import { publicDefinition } from "../../components/catalog";
 import { validateControlConnection } from "../../components/controls/controlContract";
 import type { Joint, Member } from "../../components/traits/MemberEndpoints";
+import { assemblyModels } from "../assembly";
 import { validateValue } from "../parameterSchema";
 import { bridgeResponseFromParts } from "../trussModel";
 import { validateBoard } from "./board";
@@ -72,7 +73,16 @@ export function validateAuthoredDocument(
     d.connections.length > limits.connections
   )
     throw new Error("Expanded document exceeds component/connection limit");
-  validateBoard(d, runnable);
+  for (const model of assemblyModels)
+    if (
+      d.nodes.filter((node) => node.definition === model.ref).length >
+      model.maximumInstances
+    )
+      throw new Error(
+        `${model.ref}: exceeds maximum ${model.maximumInstances} independent objects`,
+      );
+  // Boundary overflow is a sharing concern; drafts and previews remain editable.
+  validateBoard(d);
   const ids = new Set<string>();
   const claim = (id: string, path: string) => {
     if (typeof id !== "string" || !idPattern.test(id) || ids.has(id))

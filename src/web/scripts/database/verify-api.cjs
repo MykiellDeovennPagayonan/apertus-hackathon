@@ -1,3 +1,4 @@
+const fs = require("node:fs");
 const assert = require("node:assert/strict");
 const { execFileSync, spawn } = require("node:child_process");
 const { randomUUID } = require("node:crypto");
@@ -20,6 +21,7 @@ async function freePort() {
 }
 
 async function main() {
+  const originalTsconfig = fs.readFileSync("tsconfig.json", "utf8");
   assert.ok(
     process.env.MONGODB_TEST_URI,
     "Set MONGODB_TEST_URI to a disposable local MongoDB server.",
@@ -306,8 +308,11 @@ async function main() {
         "src/lib/library/client.ts",
       );
       assert.equal((await loadRemoteSimulations(alice.id))[0].revision, 2);
+      const clientDocument = structuredClone(document);
+      clientDocument.lesson.title = clientDocument.authored.lesson.title =
+        "Client round trip";
       const remote = await saveRemoteSimulation(
-        { id: "client-saved", document },
+        { id: "client-saved", document: clientDocument },
         alice.id,
         null,
       );
@@ -422,7 +427,7 @@ async function main() {
       assert.equal(await title.inputValue(), "Unsaved local edit");
       const conflict = page.waitForResponse(
         (response) =>
-          response.url().endsWith("/api/library/simulations") &&
+          response.url().includes("/api/projects/") &&
           response.request().method() === "PUT",
       );
       await page
@@ -514,6 +519,7 @@ async function main() {
     );
   } finally {
     await stopServer();
+    fs.writeFileSync("tsconfig.json", originalTsconfig);
     await client.db(dbName).dropDatabase();
     await client.close();
   }

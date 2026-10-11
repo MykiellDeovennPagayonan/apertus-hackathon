@@ -1,10 +1,41 @@
+import { readDecisionConfig } from "../decisions/config";
+import { createDecisionProvider } from "../decisions/factory";
+import { type LlmConfig, readLlmConfig } from "../llm/config";
+import { compositionDeadlineMs } from "./compositionPolicy";
+import type { ConstructionPublisher } from "./constructionPublisher";
 import { PlannerError } from "./errors";
+import { readSelectionPolicy } from "./selection/policy";
+import type { DecisionSelectionDependencies } from "./selection/selectCapability";
 export type TraceSink = (event: string, data: unknown) => void;
 export class GenerationBudget {
+  private configuration?: LlmConfig;
+  /** A generation keeps one provider/model even if process configuration changes. */
+  get llmConfig(): LlmConfig {
+    this.configuration ??= readLlmConfig();
+    return this.configuration;
+  }
+  construction?: ConstructionPublisher;
   calls = 0;
   repairs = 0;
   turns = 0;
-  layaCalls = 0;
+  decisionCalls = 0;
+  private decisionDependencies?: DecisionSelectionDependencies;
+  get decision(): DecisionSelectionDependencies {
+    if (!this.decisionDependencies) {
+      const config = readDecisionConfig();
+      this.decisionDependencies = {
+        provider: createDecisionProvider(config),
+        policy: readSelectionPolicy(config.provider),
+      };
+    }
+    return this.decisionDependencies;
+  }
+  consumeDecisionCall() {
+    this.check();
+    if (this.decisionCalls >= 1)
+      throw new PlannerError("Decision selection budget exhausted", 502);
+    this.decisionCalls++;
+  }
   broaderSearches = 0;
   maxCalls = 6;
   maxRepairs = 2;
@@ -15,7 +46,7 @@ export class GenerationBudget {
     private readonly external?: AbortSignal,
     readonly trace?: TraceSink,
   ) {
-    const timeout = Number(process.env.PLANNER_TIMEOUT_MS ?? 120000);
+    const timeout = compositionDeadlineMs();
     if (!Number.isInteger(timeout) || timeout < 1 || timeout > 600000)
       throw new PlannerError("Invalid PLANNER_TIMEOUT_MS.", 503);
     this.deadline = AbortSignal.timeout(timeout);
@@ -24,9 +55,17 @@ export class GenerationBudget {
       : this.deadline;
   }
   enableCompositionMode() {
-    this.maxCalls = 14;
+    this.maxCalls =
+      process.env.COMPOSITION_DECISION_POLICY === "required-laya" ? 28 : 14;
     this.maxRepairs = 3;
-    this.maxTurns = 10;
+    this.maxTurns =
+      process.env.COMPOSITION_DECISION_POLICY === "required-laya" ? 24 : 10;
+  }
+  beginTurn() {
+    this.check();
+    if (this.turns >= this.maxTurns)
+      throw new PlannerError("Composition turn budget exhausted", 502);
+    this.turns++;
   }
   check() {
     if (this.external?.aborted)
@@ -49,7 +88,7 @@ export class GenerationBudget {
       calls: this.calls,
       repairs: this.repairs,
       turns: this.turns,
-      layaCalls: this.layaCalls,
+      decisionCalls: this.decisionCalls,
     });
   }
 }

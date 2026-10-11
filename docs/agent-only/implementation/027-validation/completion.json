@@ -1,0 +1,28 @@
+{
+  "completed": "2026-10-11",
+  "scope": "User-limited wrap-up; not full acceptance",
+  "fingerprint": "693c7d58e5229cb592cc568181f5e1fba70b5958d064df47fa9a0e02af2783f9",
+  "primaryRuns": [
+    "656",
+    "657",
+    "658",
+    "659",
+    "660",
+    "661",
+    "662"
+  ],
+  "primaryPassed": 7,
+  "primaryClean": 6,
+  "primaryWithRepair": 1,
+  "generatedBuilderRuns": [
+    "663",
+    "664",
+    "665",
+    "666",
+    "667",
+    "668",
+    "669"
+  ],
+  "generatedBuilderPassed": 7,
+  "full91AcceptanceComplete": false
+}

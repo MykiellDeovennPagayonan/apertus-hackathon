@@ -8,6 +8,10 @@ import {
   formatUserFacingDetails,
   formatUserFacingStatus,
 } from "../../../lib/planner/errorFormatting";
+import {
+  type GenerationStage,
+  generationStages,
+} from "../../../lib/planner/progress";
 import type { GenerationRequest } from "../../../lib/planner/schema";
 import { ControlsTarget } from "../../../simulations/components/views/ControlsOverlay";
 import { ExperimentView } from "../../../simulations/components/views/ExperimentView";
@@ -114,14 +118,10 @@ export default function ExperimentsShell({
     document.addEventListener("keydown", onEscape);
     return () => document.removeEventListener("keydown", onEscape);
   }, [controlsOpen]);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: A replacement session replaces the measured lesson header even while ready stays true.
   useEffect(() => {
     if (!ready) return;
     const composer = composerElement.current;
     const header = workspace.current?.querySelector(".workspace-header");
-    const lessonHeader = workspace.current?.querySelector(
-      ".recipe-lesson > header",
-    );
     const measure = () => {
       if (composer)
         workspace.current?.style.setProperty(
@@ -133,18 +133,14 @@ export default function ExperimentsShell({
         "--workspace-top",
         `${bottom + 16}px`,
       );
-      workspace.current?.style.setProperty(
-        "--lesson-heading-height",
-        `${lessonHeader?.getBoundingClientRect().height ?? 60}px`,
-      );
       refresh((value) => value + 1);
     };
     measure();
     const observer = new ResizeObserver(measure);
-    for (const element of [composer, header, lessonHeader])
+    for (const element of [composer, header])
       if (element) observer.observe(element);
     return () => observer.disconnect();
-  }, [ready, lesson, focused]);
+  }, [ready]);
   useEffect(() => {
     if (status?.kind !== "success") return;
     const timer = window.setTimeout(() => setStatus(null), 5000);
@@ -183,14 +179,17 @@ export default function ExperimentsShell({
           }
         return;
       }
-      if (!isDemo(selectedExperiment) || selectedExperiment === "assembly") {
+      if (
+        !hasPremadeRecipe(selectedExperiment) &&
+        (!isDemo(selectedExperiment) || selectedExperiment === "assembly")
+      ) {
         setStatus({ kind: "info", text: "Choose a premade experiment below." });
         return;
       }
       try {
         if (hasPremadeRecipe(selectedExperiment))
           activatePremadeSession(selectedExperiment);
-        else {
+        else if (isDemo(selectedExperiment)) {
           const result = executePlan({
             schemaVersion: 1,
             operation: "create",
@@ -204,7 +203,7 @@ export default function ExperimentsShell({
           if (!result.accepted) throw new Error(result.error);
         }
         if (revision === startupRevision.current) {
-          setDemo(selectedExperiment);
+          setDemo(isDemo(selectedExperiment) ? selectedExperiment : "assembly");
           syncSession();
           setReady(true);
         }
@@ -263,15 +262,42 @@ export default function ExperimentsShell({
     pending.current = owner;
     setDraft(text);
     setBusy(true);
-    setStatus({
-      kind: "working",
-      text: ready ? "Working out the changes…" : "Building your lesson…",
-    });
-    try {
-      const result = await requestGeneration(request, controller.signal, () => {
-        if (pending.current === owner && !controller.signal.aborted)
-          setStatus({ kind: "working", text: "Checking your lesson…" });
+    const startedAt = Date.now();
+    const updateProgress = (stage: GenerationStage) => {
+      if (pending.current !== owner || controller.signal.aborted) return;
+      setStatus((previous) => {
+        const progress =
+          previous?.kind === "working" &&
+          previous.progress?.startedAt === startedAt
+            ? previous.progress
+            : undefined;
+        const completed = progress ? [...progress.completed] : [];
+        // Adjustments can revisit a stage; only show each completed step once.
+        if (
+          progress &&
+          progress.stage !== stage &&
+          !completed.includes(progress.stage)
+        )
+          completed.push(progress.stage);
+        return {
+          kind: "working",
+          text: generationStages[stage],
+          progress: {
+            startedAt,
+            stage,
+            completed: completed.filter((item) => item !== stage),
+          },
+        };
       });
+    };
+    updateProgress(ready ? "planning_changes" : "understanding");
+    try {
+      const result = await requestGeneration(
+        request,
+        controller.signal,
+        undefined,
+        updateProgress,
+      );
       if (pending.current !== owner || controller.signal.aborted) return;
       if (result.status === "failed") {
         setStatus({
@@ -290,6 +316,7 @@ export default function ExperimentsShell({
         });
         return;
       }
+      updateProgress("opening");
       const session = acceptGenerationResult(result, request, disposeSession);
       syncSession();
       setDemo(null);

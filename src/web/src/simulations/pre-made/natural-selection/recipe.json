@@ -1,0 +1,476 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/natural-selection",
+  "version": 1,
+  "title": "Natural selection",
+  "description": "Organism dots survive by camouflage, reproduce with inherited traits and random mutations, and spawn distinct generations.",
+  "tags": [
+    "science",
+    "natural selection",
+    "evolution",
+    "inheritance",
+    "offspring",
+    "camouflage"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/collective/selection",
+        "version": 1,
+        "label": "Natural selection",
+        "scope": "scope/lab",
+        "configuration": {
+          "initialCount": 100,
+          "habitat": 0.1,
+          "mutationRate": 0.05,
+          "mutationSize": 0.1,
+          "uniform": false,
+          "initialTrait": 0.5,
+          "selection": true,
+          "cap": 200,
+          "seed": 17
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/collective-selection",
+        "version": 1,
+        "label": "Teaching scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "action",
+        "definition": "controls/collective-selection-action",
+        "version": 1,
+        "label": "action",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "choice",
+        "definition": "controls/collective-selection-choice",
+        "version": 1,
+        "label": "choice",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "caption",
+        "definition": "displays/collective-selection-caption",
+        "version": 1,
+        "label": "caption",
+        "scope": "scope/lab",
+        "configuration": {}
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/state/action",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "action",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/action/COL_SELECTION_RUN",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "COL_SELECTION_RUN"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_SELECTION_RUN"
+        }
+      },
+      {
+        "id": "link/action/COL_SELECTION_PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "COL_SELECTION_PAUSE"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_SELECTION_PAUSE"
+        }
+      },
+      {
+        "id": "link/action/COL_SELECTION_RESTART",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "COL_SELECTION_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_SELECTION_RESTART"
+        }
+      },
+      {
+        "id": "link/action/COL_SELECTION_COMPLETE",
+        "kind": "command",
+        "from": {
+          "node": "action",
+          "port": "COL_SELECTION_COMPLETE"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_SELECTION_COMPLETE"
+        }
+      },
+      {
+        "id": "link/state/choice",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "choice",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/choice/COL_SELECTION_SET_habitat",
+        "kind": "command",
+        "from": {
+          "node": "choice",
+          "port": "COL_SELECTION_SET_habitat"
+        },
+        "to": {
+          "node": "model",
+          "port": "COL_SELECTION_SET_habitat"
+        }
+      },
+      {
+        "id": "link/state/caption",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "caption",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Natural selection"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/action",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "action"
+        },
+        {
+          "id": "layout/choice",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "choice"
+        },
+        {
+          "id": "layout/caption",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "caption"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Natural selection",
+      "instruction": "Which shades reach the next generation?",
+      "explanation": "A fictional single-parent quantitative-trait model. Survival probability is 0.2+0.6*(1-abs(trait-habitat)); each survivor proposes two offspring. Mutations are random, not directed by need. Parents retire at generation replacement; population cap sampling introduces chance. No speciation or Mendelian genetics."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1080,
+            "height": 480
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 340
+        },
+        {
+          "id": "board/action",
+          "layoutId": "layout/action",
+          "rect": {
+            "x": 620,
+            "y": 504,
+            "width": 460,
+            "height": 64
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/choice",
+          "layoutId": "layout/choice",
+          "rect": {
+            "x": 0,
+            "y": 504,
+            "width": 600,
+            "height": 64
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/caption",
+          "layoutId": "layout/caption",
+          "rect": {
+            "x": 0,
+            "y": 578,
+            "width": 1080,
+            "height": 80
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 72
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -96,
+        "width": 1128,
+        "height": 820
+      },
+      "learnerArea": {
+        "x": -24,
+        "y": -96,
+        "width": 1128,
+        "height": 820
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 1,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/scene"
+        ],
+        [
+          "board/caption"
+        ],
+        [
+          "board/action"
+        ],
+        [
+          "board/choice"
+        ]
+      ],
+      "responsiveGap": 16
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "initialCount",
+      "node": "model",
+      "field": "initialCount",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 200,
+        "unit": "organisms"
+      },
+      "default": 100
+    },
+    {
+      "name": "habitat",
+      "node": "model",
+      "field": "habitat",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "unit": ""
+      },
+      "default": 0.1
+    },
+    {
+      "name": "mutationRate",
+      "node": "model",
+      "field": "mutationRate",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "unit": ""
+      },
+      "default": 0.05
+    },
+    {
+      "name": "mutationSize",
+      "node": "model",
+      "field": "mutationSize",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 0.5,
+        "unit": ""
+      },
+      "default": 0.1
+    },
+    {
+      "name": "uniform",
+      "node": "model",
+      "field": "uniform",
+      "schema": {
+        "type": "boolean"
+      },
+      "default": false
+    },
+    {
+      "name": "initialTrait",
+      "node": "model",
+      "field": "initialTrait",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "unit": ""
+      },
+      "default": 0.5
+    },
+    {
+      "name": "selection",
+      "node": "model",
+      "field": "selection",
+      "schema": {
+        "type": "boolean"
+      },
+      "default": true
+    },
+    {
+      "name": "cap",
+      "node": "model",
+      "field": "cap",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 200,
+        "unit": "organisms"
+      },
+      "default": 200
+    },
+    {
+      "name": "seed",
+      "node": "model",
+      "field": "seed",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 999999,
+        "unit": ""
+      },
+      "default": 17
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/collective/selection",
+      "version": 1
+    },
+    {
+      "id": "appearance/collective-selection",
+      "version": 1
+    },
+    {
+      "id": "controls/collective-selection-action",
+      "version": 1
+    },
+    {
+      "id": "controls/collective-selection-choice",
+      "version": 1
+    },
+    {
+      "id": "displays/collective-selection-caption",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "A fictional single-parent quantitative-trait model. Survival probability is 0.2+0.6*(1-abs(trait-habitat)); each survivor proposes two offspring.",
+    "Mutations are random, not directed by need. Parents retire at generation replacement; population cap sampling introduces chance. No speciation or Mendelian genetics."
+  ],
+  "catalog": {
+    "icon": "◌",
+    "category": "science",
+    "order": 43
+  }
+}

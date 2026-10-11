@@ -2,6 +2,11 @@ import {
   publicDefinition,
   publicDefinitions,
 } from "../../simulations/components/catalog";
+import { compositionRequirements } from "../../simulations/components/catalog/explorationTeaching";
+import {
+  convertToBoard,
+  reconcileBoard,
+} from "../../simulations/runtime/authoring/board";
 import { finalizeRecipe } from "../../simulations/runtime/authoring/operations";
 import {
   autoConnectUnambiguous,
@@ -20,14 +25,22 @@ import { loadRecipe } from "../../simulations/runtime/recipes/loadRecipe";
 import { type Message, requestStructured } from "../apertus/transport";
 import { buildInitialCard, retrieveComponentBucket } from "./bucket";
 import type { GenerationBudget } from "./budget";
+import { requiresLayaComposition } from "./compositionPolicy";
+import { compositionIssues } from "./compositionQuality";
+import {
+  focusCompositionTools,
+  requestedControlTools,
+} from "./compositionTools";
 import { computeOpenCompositionCoverage } from "./coverage";
 import { PlannerError } from "./errors";
+import { focusedTurn } from "./focusedTurn";
 import { type FixerResult, fixAndValidateToolResponse } from "./formatFixer";
 import type {
   GenerationRequest,
   GenerationResult,
   TeachingIntent,
 } from "./schema";
+import { selectCompositionStrategy } from "./selection/compositionStrategy";
 import { buildTurnEnvelopeSchema, buildTurnTools } from "./turnSchema";
 
 const TURN_SYSTEM_PROMPT = `You are the component and composite builder agent for Apertus.
@@ -41,8 +54,8 @@ Recommended sequence of operations:
 1. Insert required model/prefab components (insert_component with definition and alias).
 2. Connect required ports between components if needed (connect).
 3. Configure model parameters to reflect constraints (configure).
-4. Add interactive controls (add_control) for independent parameter exploration.
-5. Add observation readouts or graphs (add_observation) to show key outputs.
+4. Add only controls needed for the active learning question. Process lessons need one contextual primary action, not every adjustable parameter.
+5. Use one timely caption for process lessons. Add numerical observations or graphs only when the question requires them. Follow topic guidance for independent action/caption dependencies.
 6. Set composite metadata and lesson info (set_lesson) and layout arrangement (arrange).
 7. Return action "done" when the composite is fully assembled and configured.
 Only use valid tool names and arguments from the provided schema. Do not output markdown fences or explanatory text outside the JSON envelope.`;
@@ -51,20 +64,28 @@ export async function compose(
   request: GenerationRequest,
   intent: TeachingIntent,
   budget: GenerationBudget,
+  activeFollowup?: () => Promise<GenerationResult | null>,
+  replaceTopic = false,
 ): Promise<GenerationResult> {
   budget.enableCompositionMode();
   budget.check();
 
+  const shouldStartFresh =
+    replaceTopic ||
+    /\b(?:start over|from scratch|new experiment|clear all|reset all|replace everything)\b/i.test(
+      request.prompt,
+    );
   // 1. Retrieve component bucket
-  const activeContextText = request.active
-    ? [
-        request.active.recipe.title,
-        request.active.recipe.description || "",
-        ...request.active.recipe.document.nodes.map((n) => n.definition),
-      ].join(" ")
-    : "";
+  const activeContextText =
+    request.active && !shouldStartFresh
+      ? [
+          request.active.recipe.title,
+          request.active.recipe.description || "",
+          ...request.active.recipe.document.nodes.map((n) => n.definition),
+        ].join(" ")
+      : "";
   const bucketPrompt = activeContextText
-    ? `${request.prompt} ${activeContextText}`
+    ? `${request.prompt}\nActive experiment: ${activeContextText}`
     : request.prompt;
   const bucket = retrieveComponentBucket(bucketPrompt, intent);
 
@@ -94,11 +115,46 @@ export async function compose(
     };
   }
 
+  const requiredLaya = requiresLayaComposition();
+  const activeTopics =
+    request.active && !shouldStartFresh
+      ? [
+          ...new Set(
+            request.active.recipe.document.nodes
+              .map((n) => compositionRequirements[n.definition]?.topic)
+              .filter(Boolean),
+          ),
+        ]
+      : [];
+  const decisionPrompt = activeTopics.length
+    ? `Active lesson: ${request.active?.recipe.document.nodes
+        .filter(
+          (n) => publicDefinitions.get(n.definition)?.category === "models",
+        )
+        .map((n) => publicDefinition(n.definition).title)
+        .join("; ")}. Follow-up within this lesson: ${request.prompt}`
+    : request.prompt;
+  const strategy = requiredLaya
+    ? await selectCompositionStrategy(decisionPrompt, intent, bucket, budget)
+    : null;
+  if (strategy) intent = { ...intent, suggestedStructure: strategy.structure };
+  // Strict selection still validates the topic; supported active lessons then use
+  // the canonical runtime/authoring follow-up path instead of rebuilding a lesson.
+  if (
+    activeFollowup &&
+    strategy &&
+    !shouldStartFresh &&
+    request.active?.recipe.document.nodes.some(
+      (node) =>
+        node.definition === strategy.definition &&
+        node.definition.startsWith("prefabs/earth-atmosphere/"),
+    )
+  ) {
+    const result = await activeFollowup();
+    if (result) return result;
+  }
+
   // 2. Initialize authoring transaction
-  const shouldStartFresh =
-    /\b(?:start over|from scratch|new experiment|clear all|reset all|replace everything)\b/i.test(
-      request.prompt,
-    );
   const initialDoc = structuredClone(
     (!shouldStartFresh && request.active?.recipe.document) ||
       emptyAuthoredDocument(),
@@ -114,7 +170,11 @@ export async function compose(
       immersive: { startup: "board", allowReturnToBoard: true, overlays: [] },
     };
   }
-  const draft = new AuthoringTransaction(request.requestId, initialDoc);
+  const draft = new AuthoringTransaction(
+    request.requestId,
+    initialDoc,
+    requiredLaya ? { operations: 32, receipts: 48 } : undefined,
+  );
 
   const maxTurns = budget.maxTurns;
   let turn = 0;
@@ -127,10 +187,151 @@ export async function compose(
   while (turn < maxTurns) {
     budget.check();
 
-    const turnTools = buildTurnTools(draft.document, bucket);
-    const turnJsonSchema = buildTurnEnvelopeSchema(turnTools);
+    const allTools = buildTurnTools(draft.document, bucket);
+    const controlAdditions = requestedControlTools(
+      draft.document,
+      allTools,
+      request.prompt,
+    );
+    const wantsMoreControls =
+      controlAdditions.length > 0 ||
+      (/\b(?:build|make|add|insert|include|create|provide|give|with)\b/i.test(
+        request.prompt,
+      ) &&
+        /\b(?:slider|control|input|dial|button)\b/i.test(request.prompt));
+    const wantsMoreObservations =
+      /\b(?:build|make|add|insert|include|create|provide|give|with)\b/i.test(
+        request.prompt,
+      ) &&
+      /\b(?:readout|observation|display|meter|graph|monitor)\b/i.test(
+        request.prompt,
+      );
+    const additions = [
+      ...controlAdditions,
+      ...(wantsMoreObservations
+        ? allTools.filter((tool) => tool.tool === "add_observation")
+        : []),
+    ];
+    const pendingControls = controlAdditions.filter((tool) => {
+      if (tool.schema.type !== "object") return false;
+      const { target, command } = tool.schema.properties;
+      return !draft.document.connections.some(
+        (wire) =>
+          target.type === "enum" &&
+          command.type === "enum" &&
+          wire.to.node === target.values[0] &&
+          wire.to.port === command.values[0] &&
+          draft.document.nodes.some(
+            (node) =>
+              node.id === wire.from.node &&
+              publicDefinition(node.definition).category === "controls",
+          ),
+      );
+    });
+    const isControlExtension =
+      Boolean(request.active) &&
+      !shouldStartFresh &&
+      wantsMoreControls &&
+      !wantsMoreObservations;
+    let turnTools = strategy
+      ? focusCompositionTools(
+          draft.document,
+          bucket,
+          allTools,
+          strategy.definition,
+          additions,
+        )
+      : allTools;
+    if (
+      request.active &&
+      !shouldStartFresh &&
+      executedPayloads.size === 0 &&
+      additions.length > 0 &&
+      additions.some((tool) => turnTools.includes(tool)) &&
+      compositionIssues(draft.document).length === 0
+    ) {
+      // A requested extension must create an interactive component before edits
+      // to existing settings can be considered a successful response.
+      turnTools = additions;
+    }
+    if (
+      isControlExtension &&
+      compositionIssues(draft.document).length === 0 &&
+      controlAdditions.some((tool) => turnTools.includes(tool))
+    ) {
+      // The requested command wiring is the completion criterion. Once present,
+      // arrange the new controls rather than asking inference to change model values.
+      turnTools = pendingControls.length
+        ? pendingControls
+        : allTools.filter((tool) => tool.tool === "arrange");
+    }
+    if (
+      requiredLaya &&
+      (!request.active || shouldStartFresh) &&
+      compositionIssues(draft.document).length === 0 &&
+      draft.document.nodes.some(
+        (node) => node.definition === strategy?.definition,
+      )
+    ) {
+      const hasLesson = [...executedPayloads].some(
+        (p) => JSON.parse(p).tool === "set_lesson",
+      );
+      const hasArrangement = [...executedPayloads].some(
+        (p) => JSON.parse(p).tool === "arrange",
+      );
+      turnTools = allTools.filter((t) =>
+        !hasLesson
+          ? t.tool === "set_lesson"
+          : !hasArrangement
+            ? t.tool === "arrange"
+            : false,
+      );
+    }
+    // A complete existing capability needs editing tools; unrelated optional insertions
+    // make small local models copy schemas instead of making the requested edit.
+    if (
+      requiredLaya &&
+      request.active &&
+      !shouldStartFresh &&
+      strategy?.structure === "single" &&
+      draft.document.nodes.some(
+        (node) => node.definition === strategy.definition,
+      ) &&
+      compositionIssues(draft.document).length === 0
+    ) {
+      turnTools = turnTools.filter((tool) => tool.tool !== "insert_component");
+    }
+    if (requiredLaya) {
+      turnTools = turnTools.map((tool) => {
+        if (tool.tool !== "arrange" || tool.schema.type !== "object")
+          return tool;
+        const properties = { ...tool.schema.properties };
+        for (const [role, categories] of Object.entries({
+          main: ["appearance", "canvases"],
+          controls: ["controls"],
+          results: ["displays"],
+        })) {
+          const ids = draft.document.nodes
+            .filter((n) =>
+              categories.includes(publicDefinition(n.definition).category),
+            )
+            .map((n) => n.id);
+          const field = properties[role];
+          if (field.type === "array")
+            properties[role] = {
+              ...field,
+              ...(ids.length
+                ? { items: { type: "enum" as const, values: ids } }
+                : { maxItems: 0 }),
+            };
+        }
+        return { ...tool, schema: { ...tool.schema, properties } };
+      });
+    }
 
-    const liveHandles = Object.keys(draft.handles);
+    const liveHandles = requiredLaya
+      ? draft.document.nodes.map((n) => n.id)
+      : Object.keys(draft.handles);
     const nodesSummary = draft.document.nodes.map((n) => {
       const handle =
         Object.entries(draft.handles).find(([, id]) => id === n.id)?.[0] ??
@@ -139,6 +340,8 @@ export async function compose(
       return {
         handle,
         definition: n.definition,
+        label: n.label,
+        instanceLabel: `${compositionRequirements[n.definition]?.instanceNoun ?? def?.title ?? n.definition} ${draft.document.nodes.filter((peer) => peer.definition === n.definition).findIndex((peer) => peer.id === n.id) + 1}`,
         commands: def ? Object.keys(def.commands) : [],
         valueOutputs: def
           ? Object.entries(def.outputs)
@@ -154,9 +357,20 @@ export async function compose(
     const suggestions = suggestConnections(draft.document);
 
     const isCompositeBuilder =
-      request.active?.sessionId?.startsWith("builder-") ?? false;
+      (request.active?.sessionId?.startsWith("builder-") ?? false) ||
+      /\b(?:builder|composite|component)\b/i.test(request.prompt) ||
+      Boolean(request.requestId?.includes("builder")) ||
+      request.active == null;
 
     const contextData = {
+      strategy,
+      allowedTools: [...new Set(turnTools.map((t) => t.tool))],
+      requirements: Object.fromEntries(
+        bucket
+          .filter((c) => compositionRequirements[c.id])
+          .map((c) => [c.id, compositionRequirements[c.id]]),
+      ),
+      incomplete: requiredLaya ? compositionIssues(draft.document) : [],
       mode: isCompositeBuilder ? "composite_builder" : "experiment_planner",
       draftSummary: {
         nodes: nodesSummary,
@@ -213,13 +427,6 @@ export async function compose(
     const observationCount = draft.document.nodes.filter(
       (n) => publicDefinition(n.definition).category === "displays",
     ).length;
-
-    const wantsMoreControls =
-      /\b(?:add|insert|include|create|provide|give)\b/i.test(request.prompt) &&
-      /\b(?:slider|control|input|dial|button)\b/i.test(request.prompt);
-    const wantsMoreObservations =
-      /\b(?:add|insert|include|create|provide|give)\b/i.test(request.prompt) &&
-      /\b(?:readout|observation|display|meter|graph|monitor)\b/i.test(request.prompt);
 
     let stepHint = "";
     if (isCompositeBuilder) {
@@ -287,58 +494,171 @@ export async function compose(
       },
     ];
 
+    const canFinish = !(
+      modelNodes.length === 0 ||
+      (controlCount === 0 && observationCount === 0) ||
+      (wantsMoreControls && controlCount === 0) ||
+      (wantsMoreObservations && observationCount === 0)
+    );
+    const turnJsonSchema = buildTurnEnvelopeSchema(turnTools, canFinish);
+
+    if (requiredLaya) budget.beginTurn();
     budget.trace?.("turn.start", {
       turn: turn + 1,
       revision: draft.revision,
       availableTools: turnTools.map((t) => t.tool),
     });
 
-    const turnResult = await requestStructured<FixerResult>(
-      messages,
-      (content: string) => {
-        const fixed = fixAndValidateToolResponse(
-          content,
-          liveHandles,
-          undefined,
-          (event, data) => {
-            budget.trace?.(event, data);
+    const turnResult = requiredLaya
+      ? await focusedTurn(
+          request.prompt,
+          turnTools,
+          {
+            acceptedIntent: {
+              goal: intent.goal,
+              interactions: intent.interactions,
+              ...(wantsMoreControls && executedPayloads.size === 0
+                ? {
+                    requiredNextOperation:
+                      "add_control: add and connect a persistent interactive control for the requested parameter; changing its current configuration alone does not satisfy this request",
+                  }
+                : {}),
+            },
+            originalNodes: initialDoc.nodes.map((node) => ({
+              id: node.id,
+              definition: node.definition,
+              config: node.configuration,
+            })),
+            originalConnections: initialDoc.connections,
+            aliases: Object.keys(draft.handles),
+            fidelity: [
+              ...new Set(
+                draft.document.nodes
+                  .flatMap((n) => [
+                    ...publicDefinition(n.definition).assumptions,
+                    compositionRequirements[n.definition]?.guidance ?? "",
+                  ])
+                  .filter(Boolean),
+              ),
+            ],
+            nodes: nodesSummary.map((n) => ({
+              ...n,
+              id: draft.handles[n.handle] ?? n.handle,
+            })),
+            connections: connectionsSummary,
+            selectedCapability: strategy?.definition,
+            priorOperation: lastReceipt
+              ? { summary: lastReceipt.summary, issues: lastReceipt.issues }
+              : null,
           },
-          draft.document,
+          budget,
+          turn,
+          (operation) => {
+            const candidate = draft.fork();
+            const receipt = candidate.execute({
+              draftId: candidate.draftId,
+              expectedRevision: candidate.revision,
+              operationId: `op_turn_${turn + 1}`,
+              request: operation,
+            });
+            if (
+              operation.tool === "configure" &&
+              JSON.stringify(candidate.document) ===
+                JSON.stringify(draft.document)
+            )
+              throw new Error(
+                "The configuration patch changed nothing. Choose new values to implement the requested condition; current settings are context, not the requested result.",
+              );
+            if (receipt.status !== "applied")
+              throw new Error(
+                receipt.issues.map((issue) => issue.message).join("; ") ||
+                  receipt.summary,
+              );
+          },
+          Boolean(
+            request.active &&
+              !shouldStartFresh &&
+              lastReceipt?.status === "applied" &&
+              compositionIssues(draft.document).length === 0,
+          ),
+        )
+      : await requestStructured<FixerResult>(
+          messages,
+          (content: string) => {
+            const fixed = fixAndValidateToolResponse(
+              content,
+              liveHandles,
+              undefined,
+              (event, data) => {
+                budget.trace?.(event, data);
+              },
+              draft.document,
+            );
+            if (fixed.issues.length > 0) {
+              throw new Error(fixed.issues.join("; "));
+            }
+            return fixed;
+          },
+          'Return a single valid JSON turn envelope matching schema: {"action": "tool"|"done", "tool": {...}, "note": "..."}.',
+          budget.signal,
+          {
+            budget,
+            schema: turnJsonSchema,
+            maxTokens: 768,
+            onEvent: (event, data) =>
+              budget.trace?.(`turn_${turn + 1}.${event}`, data),
+            stage: `turn_${turn + 1}`,
+          },
         );
-        if (fixed.issues.length > 0) {
-          throw new Error(fixed.issues.join("; "));
-        }
-        return fixed;
-      },
-      'Return a single valid JSON turn envelope matching schema: {"action": "tool"|"done", "tool": {...}, "note": "..."}.',
-      budget.signal,
-      {
-        budget,
-        schema: turnJsonSchema,
-        maxTokens: 512,
-        stage: `turn_${turn + 1}`,
-      },
-    );
 
+    if (turnResult.unsupported) {
+      return {
+        protocolVersion: 1,
+        status: "unsupported",
+        requestId: request.requestId,
+        message: turnResult.unsupported,
+      };
+    }
     if (turnResult.action === "done") {
+      const incomplete = requiredLaya ? compositionIssues(draft.document) : [];
       if (
-        isCompositeBuilder &&
-        executedPayloads.size === 0 &&
-        (wantsMoreControls || wantsMoreObservations) &&
-        turn === 0
+        requiredLaya &&
+        (!draft.document.nodes.some(
+          (n) => publicDefinition(n.definition).category === "models",
+        ) ||
+          incomplete.length)
+      ) {
+        lastReceipt = {
+          operationId: "premature_done",
+          draftRevision: draft.revision,
+          handles: draft.handles,
+          status: "rejected",
+          summary: "Finish the required interactive graph before done.",
+          issues: incomplete.map((message) => ({
+            code: "incomplete_composition",
+            message,
+          })),
+        };
+        turn++;
+        continue;
+      }
+      const missingRequestedControl = wantsMoreControls && controlCount === 0;
+      const missingRequestedObservation =
+        wantsMoreObservations && observationCount === 0;
+      if (
+        (missingRequestedControl || missingRequestedObservation) &&
+        turn < maxTurns - 1
       ) {
         lastReceipt = {
           operationId: "op_premature_done",
           draftRevision: draft.revision,
           handles: draft.handles,
           status: "rejected",
-          summary:
-            "User requested adding components; please perform add_control or add_observation before finishing.",
+          summary: `User requested ${missingRequestedControl ? "controls/sliders" : ""}${missingRequestedControl && missingRequestedObservation ? " and " : ""}${missingRequestedObservation ? "observations/readouts" : ""}; please add them before finishing.`,
           issues: [
             {
               code: "premature_done",
-              message:
-                "User requested adding components; please perform add_control or add_observation before finishing.",
+              message: `User requested ${missingRequestedControl ? "controls/sliders" : ""}${missingRequestedControl && missingRequestedObservation ? " and " : ""}${missingRequestedObservation ? "observations/readouts" : ""}; perform add_control or add_observation before finishing.`,
             },
           ],
         };
@@ -393,6 +713,13 @@ export async function compose(
         request: turnResult.request,
       });
 
+      if (lastReceipt.status === "applied")
+        await budget.construction?.publish(
+          draft.document,
+          draft.revision,
+          turnResult.request.tool === "arrange" ? "arrangement" : undefined,
+        );
+
       budget.trace?.("turn.executed", {
         turn: turn + 1,
         tool: turnResult.request.tool,
@@ -400,7 +727,33 @@ export async function compose(
         issues: lastReceipt.issues,
         revision: draft.revision,
       });
+      if (
+        isControlExtension &&
+        pendingControls.length === 0 &&
+        turnResult.request.tool === "arrange" &&
+        lastReceipt.status === "applied"
+      )
+        break;
+      // A focused parameter patch contains all requested fields and completes a
+      // refinement in one operation, rather than repeatedly amplifying a relative change.
+      if (
+        requiredLaya &&
+        request.active &&
+        !shouldStartFresh &&
+        strategy?.structure === "single" &&
+        turnResult.request.tool === "configure" &&
+        lastReceipt.status === "applied" &&
+        !wantsMoreControls &&
+        !wantsMoreObservations &&
+        compositionIssues(draft.document).length === 0
+      )
+        break;
 
+      if (requiredLaya && lastReceipt.status !== "applied")
+        throw new PlannerError(
+          `Composition operation rejected: ${lastReceipt.summary}`,
+          422,
+        );
       if (draft.revision === lastRevision) {
         unchangedRevisionsCount++;
         if (unchangedRevisionsCount >= 2) {
@@ -417,7 +770,9 @@ export async function compose(
   }
 
   // 4. Auto-connect any remaining unambiguous ports
-  const auto = autoConnectUnambiguous(draft.document);
+  const auto = requiredLaya
+    ? { connected: [] }
+    : autoConnectUnambiguous(draft.document);
   if (auto.connected.length > 0) {
     for (const conn of auto.connected) {
       draft.execute({
@@ -430,13 +785,194 @@ export async function compose(
         },
       });
     }
+    await budget.construction?.publish(draft.document, draft.revision);
     budget.trace?.("autoConnected", {
       count: auto.connected.length,
       connections: auto.connected,
     });
   }
 
-  // 5. Enforce lesson title and instructions
+  // 5.5 Auto-attach visual appearance and basic interaction if missing
+  const composedModelNodes = draft.document.nodes.filter(
+    (n) =>
+      (!request.active || shouldStartFresh) &&
+      publicDefinition(n.definition).category === "models",
+  );
+  for (const modelNode of composedModelNodes) {
+    const def = publicDefinition(modelNode.definition);
+    const hasAppearance = draft.document.nodes.some(
+      (n) =>
+        publicDefinition(n.definition).category === "appearance" &&
+        draft.document.connections.some(
+          (c) =>
+            c.kind === "attachment" &&
+            ((c.from.node === modelNode.id && c.to.node === n.id) ||
+              (c.to.node === modelNode.id && c.from.node === n.id)),
+        ),
+    );
+    if (!hasAppearance) {
+      const req = compositionRequirements[modelNode.definition];
+      const candidateAppearance =
+        req?.appearance ??
+        (publicDefinitions.has(
+          `appearance/${modelNode.definition.replace(/^models\//, "")}`,
+        )
+          ? `appearance/${modelNode.definition.replace(/^models\//, "")}`
+          : undefined);
+      if (candidateAppearance && publicDefinitions.has(candidateAppearance)) {
+        const appAlias = `vis_${Math.random().toString(36).slice(2, 8)}`;
+        try {
+          const r1 = draft.execute({
+            draftId: draft.draftId,
+            expectedRevision: draft.revision,
+            operationId: `op_autoapp_${turn++}`,
+            request: {
+              tool: "insert_component",
+              arguments: {
+                definition: candidateAppearance,
+                version: 1,
+                alias: appAlias,
+                configuration: {},
+              },
+            },
+          });
+          if (r1.status === "applied") {
+            const appId = draft.handles[appAlias] ?? appAlias;
+            draft.execute({
+              draftId: draft.draftId,
+              expectedRevision: draft.revision,
+              operationId: `op_autoappconn_${turn++}`,
+              request: {
+                tool: "connect",
+                arguments: {
+                  from: { node: modelNode.id, port: "appearance" },
+                  to: { node: appId, port: "model" },
+                },
+              },
+            });
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+
+    const hasControl = draft.document.nodes.some(
+      (n) => publicDefinition(n.definition).category === "controls",
+    );
+    if (!hasControl) {
+      const req = compositionRequirements[modelNode.definition];
+      const cmd =
+        req?.commands?.[0] ??
+        Object.keys(def.commands).find(
+          (k) => k !== "RESET" && !k.startsWith("set:"),
+        );
+      if (cmd && def.commands[cmd]) {
+        const cmdObj = def.commands[cmd];
+        const argProps =
+          cmdObj.arguments.type === "object"
+            ? Object.keys(cmdObj.arguments.properties ?? {})
+            : [];
+        const isActionWithoutArgs = argProps.length === 0;
+        const field = isActionWithoutArgs ? "" : argProps[0];
+        const widget = isActionWithoutArgs ? "button" : "slider";
+        try {
+          const ctrlReceipt = draft.execute({
+            draftId: draft.draftId,
+            expectedRevision: draft.revision,
+            operationId: `op_autoctrl_${turn++}`,
+            request: {
+              tool: "add_control",
+              arguments: {
+                target: modelNode.id,
+                command: cmd,
+                field,
+                widget,
+                label: cmdObj.description || cmd,
+              },
+            },
+          });
+          if (ctrlReceipt.status !== "applied" && !isActionWithoutArgs) {
+            const altCmd = Object.keys(def.commands).find(
+              (k) =>
+                def.commands[k].arguments.type === "object" &&
+                Object.keys(def.commands[k].arguments.properties ?? {})
+                  .length === 0,
+            );
+            if (altCmd) {
+              draft.execute({
+                draftId: draft.draftId,
+                expectedRevision: draft.revision,
+                operationId: `op_autoctrl_btn_${turn++}`,
+                request: {
+                  tool: "add_control",
+                  arguments: {
+                    target: modelNode.id,
+                    command: altCmd,
+                    field: "",
+                    widget: "button",
+                    label: def.commands[altCmd].description || altCmd,
+                  },
+                },
+              });
+            }
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+
+    const hasObservation = draft.document.nodes.some(
+      (n) => publicDefinition(n.definition).category === "displays",
+    );
+    if (!hasObservation) {
+      const req = compositionRequirements[modelNode.definition];
+      const obsName =
+        req?.observations?.[0] ??
+        Object.keys(def.outputs).find(
+          (k) => k !== "appearance" && k !== "configuration",
+        );
+      if (obsName && def.outputs[obsName]) {
+        try {
+          const obsReceipt = draft.execute({
+            draftId: draft.draftId,
+            expectedRevision: draft.revision,
+            operationId: `op_autoobs_${turn++}`,
+            request: {
+              tool: "add_observation",
+              arguments: {
+                source: modelNode.id,
+                output: obsName,
+                widget: "readout",
+                label: obsName,
+              },
+            },
+          });
+          if (obsReceipt.status !== "applied") {
+            draft.execute({
+              draftId: draft.draftId,
+              expectedRevision: draft.revision,
+              operationId: `op_autoobs_insp_${turn++}`,
+              request: {
+                tool: "add_observation",
+                arguments: {
+                  source: modelNode.id,
+                  output: obsName,
+                  widget: "inspector",
+                  label: obsName,
+                },
+              },
+            });
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+  }
+
+  // 5.8 Enforce lesson title and instructions
   const currentDoc = draft.document;
   if (
     !currentDoc.lesson.title.trim() ||
@@ -468,7 +1004,20 @@ export async function compose(
     }
   }
 
+  // 6.5 Reconcile board presentation
+  if (
+    !currentDoc.presentation ||
+    currentDoc.presentation.mode !== "board" ||
+    currentDoc.presentation.items.length === 0 ||
+    currentDoc.presentation.items.length < currentDoc.layout.children.length
+  ) {
+    currentDoc.presentation = convertToBoard(currentDoc);
+  } else {
+    reconcileBoard(currentDoc);
+  }
+
   // 7. Check runnable
+  budget.trace?.("validation.start", {});
   let runCheck = checkRunnable(currentDoc);
   budget.trace?.("runnable.check", runCheck);
   if (!runCheck.runnable) {
@@ -488,6 +1037,7 @@ export async function compose(
           });
         }
       }
+      await budget.construction?.publish(draft.document, draft.revision);
       runCheck = checkRunnable(draft.document);
     }
     if (!runCheck.runnable) {
@@ -504,6 +1054,7 @@ export async function compose(
   const finalDoc = draft.document;
   finalDoc.lesson = currentDoc.lesson;
   finalDoc.layout = currentDoc.layout;
+  finalDoc.presentation = currentDoc.presentation;
 
   const coverage = computeOpenCompositionCoverage(
     request.prompt,
@@ -523,9 +1074,40 @@ export async function compose(
     }
   }
 
+  if (requiredLaya) {
+    const issues = compositionIssues(finalDoc);
+    if (issues.length)
+      throw new PlannerError(
+        `Incomplete interactive composition: ${issues.join("; ")}`,
+        422,
+      );
+  }
+  const assumptions = [
+    ...new Set(
+      finalDoc.nodes.flatMap((n) => publicDefinition(n.definition).assumptions),
+    ),
+  ];
+  finalDoc.lesson.explanation = [
+    finalDoc.lesson.explanation,
+    ...assumptions.filter(
+      (assumption) => !finalDoc.lesson.explanation.includes(assumption),
+    ),
+  ]
+    .filter(Boolean)
+    .join("\n");
+
   // 9. Finalize recipe
+  const existingRecipe =
+    request.active && !shouldStartFresh ? request.active.recipe : undefined;
   const recipe = finalizeRecipe(finalDoc, {
-    id: "generated/lesson",
+    ...existingRecipe,
+    id:
+      request.active && !shouldStartFresh
+        ? request.active.recipe.id
+        : `generated/${request.requestId}`,
+    assumptions: [
+      ...new Set([...(existingRecipe?.assumptions ?? []), ...assumptions]),
+    ],
     title: finalDoc.lesson.title,
     description: finalDoc.lesson.instruction,
   });
@@ -536,6 +1118,7 @@ export async function compose(
     throw new PlannerError("Failed to initialize simulation runtime", 502);
   }
 
+  loaded.runtime.dispose();
   const isUpdated = Boolean(request.active && !shouldStartFresh);
   return {
     protocolVersion: 1,

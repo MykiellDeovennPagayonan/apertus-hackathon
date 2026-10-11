@@ -1,0 +1,302 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/pulleys",
+  "version": 1,
+  "title": "Supporting rope strands",
+  "description": "Does less pulling force mean more rope travel?",
+  "tags": [
+    "physics",
+    "pulley",
+    "supporting rope strands"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/physics/Pulley",
+        "version": 1,
+        "label": "Supporting rope strands",
+        "scope": "scope/lab",
+        "configuration": {
+          "loadForce": 200,
+          "strands": 4,
+          "pull": 1
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/physics-pulley",
+        "version": 1,
+        "label": "Supporting rope strands scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/strands",
+        "definition": "controls/Select",
+        "version": 1,
+        "label": "Supporting strands",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Supporting strands",
+          "mode": "immediate",
+          "initial": "{\"value\": 4}"
+        }
+      },
+      {
+        "id": "control/pull",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Rope pulled",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Rope pulled",
+          "mode": "immediate",
+          "initial": "{\"value\": 1}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/strands",
+        "kind": "command",
+        "from": {
+          "node": "control/strands",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PULLEY_STRANDS"
+        }
+      },
+      {
+        "id": "link/pull",
+        "kind": "command",
+        "from": {
+          "node": "control/pull",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PULLEY_PULL"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Supporting rope strands"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/strands",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/strands"
+        },
+        {
+          "id": "layout/pull",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/pull"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Supporting rope strands",
+      "instruction": "Does less pulling force mean more rope travel?",
+      "explanation": "Validated fixed (1), single movable (2), and two-moving-wheel tackle (4) routings. One continuous rope, vertical supporting strands, massless frictionless pulleys; quasi-static, no acceleration or angled strands."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 340
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 280
+        },
+        {
+          "id": "board/layout/strands",
+          "layoutId": "layout/strands",
+          "rect": {
+            "x": 0,
+            "y": 360,
+            "width": 220,
+            "height": 160
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/pull",
+          "layoutId": "layout/pull",
+          "rect": {
+            "x": 234,
+            "y": 360,
+            "width": 220,
+            "height": 128
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/strands",
+          "board/layout/pull"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1000,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "loadForce",
+      "node": "model",
+      "field": "loadForce",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 2000,
+        "unit": "N"
+      },
+      "default": 200
+    },
+    {
+      "name": "strands",
+      "node": "model",
+      "field": "strands",
+      "schema": {
+        "type": "enum",
+        "values": [
+          1,
+          2,
+          4
+        ]
+      },
+      "default": 4
+    },
+    {
+      "name": "pull",
+      "node": "model",
+      "field": "pull",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 2,
+        "unit": "m"
+      },
+      "default": 1
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Pulley",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-pulley",
+      "version": 1
+    },
+    {
+      "id": "controls/Select",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Validated fixed (1), single movable (2), and two-moving-wheel tackle (4) routings. One continuous rope, vertical supporting strands, massless frictionless pulleys; quasi-static, no acceleration or angled strands."
+  ],
+  "catalog": {
+    "icon": "\u2699",
+    "category": "physics",
+    "order": 142
+  }
+}

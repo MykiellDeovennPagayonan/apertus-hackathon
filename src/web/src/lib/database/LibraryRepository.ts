@@ -1,27 +1,11 @@
-import { type Db, MongoServerError } from "mongodb";
-import { validateDocument } from "../../simulations/builder/document/validateDocument";
+import type { Db } from "mongodb";
 import type { SavedExperiment } from "../../simulations/builder/persistence/storage";
 import type { CompositeRecipe } from "../../simulations/runtime/authoring/types";
-import { assertData } from "../../simulations/runtime/authoring/validate";
 import { parseRecipe } from "../../simulations/runtime/recipes/schema";
-
-type SimulationRecord = {
-  ownerId: string;
-  experimentId: string;
-  document: SavedExperiment["document"];
-  recovery?: string;
-  revision: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
-type ComponentRecord = {
-  ownerId: string;
-  recipe: CompositeRecipe;
-  revision: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
+import { migrateOwner } from "../projects/migration";
+import { ProjectRepository } from "../projects/Repository";
+import { type Project, ProjectError } from "../projects/types";
+import { identity, record, revision } from "../projects/validation";
 export class LibraryError extends Error {
   constructor(
     message: string,
@@ -30,217 +14,143 @@ export class LibraryError extends Error {
     super(message);
   }
 }
-
-function identifier(value: unknown): string {
-  if (
-    typeof value !== "string" ||
-    !/^[a-zA-Z0-9][a-zA-Z0-9/_:.-]{0,159}$/.test(value)
-  )
-    throw new LibraryError("Invalid library identity.", 400);
-  return value;
-}
-
-function envelope(input: unknown, allowed: string[]) {
-  if (!input || typeof input !== "object" || Array.isArray(input))
-    throw new LibraryError("Expected a library record.", 400);
-  for (const key of Object.keys(input))
-    if (!allowed.includes(key))
-      throw new LibraryError(`Unexpected field: ${key}.`, 400);
-  if (!("expectedRevision" in input))
-    throw new LibraryError("The expected save revision is required.", 400);
-  const expectedRevision = input.expectedRevision;
-  if (
-    expectedRevision !== null &&
-    (typeof expectedRevision !== "number" ||
-      !Number.isSafeInteger(expectedRevision) ||
-      expectedRevision < 1)
-  )
-    throw new LibraryError("Invalid save revision.", 400);
-  return { input, expectedRevision };
-}
-
-function savedExperiment(
-  row: SimulationRecord,
-): SavedExperiment & { revision: number } {
-  return {
-    id: row.experimentId,
-    document: row.document,
-    revision: row.revision,
-    ...(row.recovery === undefined ? {} : { recovery: row.recovery }),
-  };
-}
-
-/** The owner must come from a verified server session, never the request body. */
+const experiment = (row: Project): SavedExperiment & { revision: number } => ({
+  id: row.projectId,
+  document: row.payload as SavedExperiment["document"],
+  revision: row.saveRevision,
+});
+/** Compatibility adapter. All new writes target projects; legacy collections are read-only. */
 export class LibraryRepository {
-  private simulations;
-  private components;
-
+  private repository: ProjectRepository;
   constructor(
-    db: Db,
-    private readonly ownerId: string,
+    private db: Db,
+    private ownerId: string,
   ) {
-    identifier(ownerId);
-    this.simulations = db.collection<SimulationRecord>("simulations");
-    this.components = db.collection<ComponentRecord>("components");
+    this.repository = new ProjectRepository(db, ownerId);
   }
-
+  private async run<T>(fn: () => Promise<T>) {
+    try {
+      await migrateOwner(this.db, this.ownerId);
+      return await fn();
+    } catch (error) {
+      if (error instanceof ProjectError)
+        throw new LibraryError(error.message, error.status);
+      throw error;
+    }
+  }
   async listSimulations() {
-    const rows = await this.simulations
-      .find({ ownerId: this.ownerId })
-      .sort({ updatedAt: -1, _id: -1 })
-      .toArray();
-    return rows.map(savedExperiment);
+    return this.run(async () =>
+      (await this.repository.all("experiment")).map((row) => ({
+        ...experiment(row),
+        ...(row.recovery === undefined ? {} : { recovery: row.recovery }),
+      })),
+    );
   }
-
   async getSimulation(id: string) {
-    const row = await this.simulations.findOne({
-      ownerId: this.ownerId,
-      experimentId: identifier(id),
-    });
-    return row ? savedExperiment(row) : null;
-  }
-
-  async saveSimulation(source: unknown) {
-    const { input, expectedRevision } = envelope(source, [
-      "id",
-      "document",
-      "recovery",
-      "expectedRevision",
-    ]);
-    if (!("id" in input) || !("document" in input))
-      throw new LibraryError(
-        "Experiment identity and document are required.",
-        400,
-      );
-    const id = identifier(input.id);
-    const document: unknown = structuredClone(input.document);
-    try {
-      assertData(document);
-      validateDocument(document);
-    } catch (error) {
-      throw new LibraryError(
-        error instanceof Error ? error.message : "Invalid experiment document.",
-        400,
-      );
-    }
-    const recovery = "recovery" in input ? input.recovery : undefined;
-    if (
-      recovery !== undefined &&
-      (typeof recovery !== "string" || recovery.length > 1_000_000)
-    )
-      throw new LibraryError("Invalid recovery copy.", 400);
-    const now = new Date();
-    if (expectedRevision === null) {
-      const row: SimulationRecord = {
-        ownerId: this.ownerId,
-        experimentId: id,
-        document,
-        ...(recovery === undefined ? {} : { recovery }),
-        revision: 1,
-        createdAt: now,
-        updatedAt: now,
-      };
+    return this.run(async () => {
       try {
-        await this.simulations.insertOne(row);
-      } catch (error) {
-        if (error instanceof MongoServerError && error.code === 11000)
-          throw new LibraryError(
-            "This experiment already exists. Reopen it before saving.",
-            409,
-          );
-        throw error;
-      }
-      return savedExperiment(row);
-    }
-    const row = await this.simulations.findOneAndUpdate(
-      { ownerId: this.ownerId, experimentId: id, revision: expectedRevision },
-      {
-        $set: {
-          document,
-          updatedAt: now,
+        const row = await this.repository.get(identity(id));
+        const recovery = await this.repository.recoveryCopy(id, "experiment");
+        return {
+          ...experiment(row),
           ...(recovery === undefined ? {} : { recovery }),
-        },
-        ...(recovery === undefined ? { $unset: { recovery: "" } } : {}),
-        $inc: { revision: 1 },
-      },
-      { returnDocument: "after" },
-    );
-    if (!row)
-      throw new LibraryError(
-        "This experiment changed. Reopen it before saving.",
-        409,
-      );
-    return savedExperiment(row);
-  }
-
-  async listComponents() {
-    const rows = await this.components
-      .find({ ownerId: this.ownerId })
-      .sort({ updatedAt: -1, _id: -1 })
-      .toArray();
-    return rows.map(({ recipe, revision }) => ({ recipe, revision }));
-  }
-
-  async getComponent(id: string) {
-    const row = await this.components.findOne({
-      ownerId: this.ownerId,
-      "recipe.id": identifier(id),
-    });
-    return row ? { recipe: row.recipe, revision: row.revision } : null;
-  }
-
-  async saveComponent(source: unknown) {
-    const { input, expectedRevision } = envelope(source, [
-      "recipe",
-      "expectedRevision",
-    ]);
-    if (!("recipe" in input))
-      throw new LibraryError("A component recipe is required.", 400);
-    let recipe: CompositeRecipe;
-    try {
-      recipe = parseRecipe(input.recipe);
-    } catch (error) {
-      throw new LibraryError(
-        error instanceof Error ? error.message : "Invalid component recipe.",
-        400,
-      );
-    }
-    identifier(recipe.id);
-    const now = new Date();
-    if (expectedRevision === null) {
-      const row: ComponentRecord = {
-        ownerId: this.ownerId,
-        recipe,
-        revision: 1,
-        createdAt: now,
-        updatedAt: now,
-      };
-      try {
-        await this.components.insertOne(row);
-      } catch (error) {
-        if (error instanceof MongoServerError && error.code === 11000)
-          throw new LibraryError(
-            "This component already exists. Reopen it before saving.",
-            409,
-          );
-        throw error;
+        };
+      } catch (e) {
+        if (e instanceof ProjectError && e.status === 404) return null;
+        throw e;
       }
-      return { recipe, revision: row.revision };
-    }
-    const row = await this.components.findOneAndUpdate(
-      {
-        ownerId: this.ownerId,
-        "recipe.id": recipe.id,
-        revision: expectedRevision,
-      },
-      { $set: { recipe, updatedAt: now }, $inc: { revision: 1 } },
-      { returnDocument: "after" },
-    );
-    if (!row)
-      throw new LibraryError(
-        "This component changed. Reopen it before saving.",
-        409,
+    });
+  }
+  async saveSimulation(source: unknown) {
+    return this.run(async () => {
+      const input = record(source, [
+        "id",
+        "document",
+        "recovery",
+        "expectedRevision",
+      ]);
+      const id = identity(input.id),
+        expected = revision(input.expectedRevision, true);
+      const document = input.document as SavedExperiment["document"];
+      let previous: Project | undefined;
+      if (expected !== null) {
+        try {
+          previous = await this.repository.get(id);
+        } catch {
+          /* revision failure handled below */
+        }
+      }
+      return experiment(
+        await this.repository.save({
+          projectId: id,
+          projectType: "experiment",
+          name: document?.lesson?.title,
+          description: previous?.description ?? "",
+          tags: previous?.tags ?? [],
+          payload: document,
+          sharingAllowed: previous?.sharingAllowed ?? false,
+          expectedRevision: expected,
+          ...(input.recovery === undefined ? {} : { recovery: input.recovery }),
+        }),
       );
-    return { recipe: row.recipe, revision: row.revision };
+    });
+  }
+  async listComponents() {
+    return this.run(async () =>
+      (await this.repository.all("composition")).map((row) => ({
+        recipe: row.payload as CompositeRecipe,
+        revision: row.saveRevision,
+      })),
+    );
+  }
+  async getComponent(id: string) {
+    return this.run(async () => {
+      try {
+        const row = await this.repository.get(identity(id), "composition");
+        return {
+          recipe: row.payload as CompositeRecipe,
+          revision: row.saveRevision,
+        };
+      } catch (e) {
+        if (e instanceof ProjectError && e.status === 404) return null;
+        throw e;
+      }
+    });
+  }
+  async saveComponent(source: unknown) {
+    return this.run(async () => {
+      const input = record(source, ["recipe", "expectedRevision"]),
+        expected = revision(input.expectedRevision, true);
+      let recipe: CompositeRecipe;
+      try {
+        recipe = parseRecipe(input.recipe);
+      } catch (error) {
+        throw new ProjectError(
+          error instanceof Error ? error.message : "Invalid recipe.",
+        );
+      }
+      let previous: Project | undefined;
+      if (expected !== null) {
+        try {
+          previous = await this.repository.get(recipe.id, "composition");
+        } catch {
+          /* handled on save */
+        }
+      }
+      const row = await this.repository.save({
+        projectId: recipe.id,
+        projectType: "composition",
+        name: recipe.title,
+        description: previous?.description ?? recipe.description,
+        tags: previous?.tags ?? recipe.tags,
+        payload: recipe,
+        sharingAllowed: previous?.sharingAllowed ?? false,
+        expectedRevision: expected,
+      });
+      return {
+        recipe: row.payload as CompositeRecipe,
+        revision: row.saveRevision,
+      };
+    });
   }
 }

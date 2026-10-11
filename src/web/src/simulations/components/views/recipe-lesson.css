@@ -471,13 +471,23 @@
 .recipe-layout .recipe-measurement-value {
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   gap: 7px;
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-size: clamp(2rem, 3.2vw, 3rem);
   font-weight: 550;
   color: var(--recipe-accent);
   letter-spacing: -0.04em;
   line-height: 1.2;
   font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+.recipe-layout .recipe-measurement-value--text {
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+  line-height: 1.35;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  word-break: normal;
+  display: block;
 }
 .recipe-measurement-value small {
   font-size: 16px;
@@ -574,6 +584,15 @@
   font-size: 13px;
   font-weight: 500;
 }
+.recipe-measurement-value.recipe-measurement-value--text,
+.recipe-lesson .recipe-measurement-value.recipe-measurement-value--text {
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  word-break: normal;
+  display: block;
+}
 
 @media (max-width: 700px) {
   .recipe-component-item[data-component-definition="appearance/Projectile"]
@@ -594,7 +613,7 @@
   align-items: center;
   gap: 8px;
   color: var(--muted, #626c60);
-  font-size: 13px;
+  font-size: var(--recipe-font-size, 13px);
   line-height: 1.6;
 }
 .recipe-status-dot {
@@ -687,7 +706,7 @@
 }
 .property-inspector__row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(64px, 1fr) minmax(0, 2fr);
   align-items: baseline;
   gap: 12px;
   min-width: 0;
@@ -1840,4 +1859,217 @@ fieldset.math-stepper {
 }
 .recipe-explanation p {
   white-space: pre-line;
+}
+
+/* Exploration controls: one decision, direct feedback, no nested form chrome. */
+.recipe-playback {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+.recipe-playback-label {
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.recipe-playback-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.recipe-playback .recipe-action {
+  min-height: 48px;
+  min-width: 116px;
+  font-size: 15px;
+  border-radius: 10px;
+}
+.recipe-playback .playback-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: currentColor;
+}
+.recipe-playback-state {
+  font-size: 13px;
+}
+.recipe-lesson .catalog-form .number-field-heading > label {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.catalog-slider-inputs input[type="range"] {
+  min-height: 44px;
+}
+.catalog-form .catalog-help {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.recipe-playback .recipe-action--primary {
+  background: var(--accent, #285e56);
+  border-color: var(--accent, #285e56);
+  color: #fffbef;
+}
+:is(.catalog-form, .recipe-playback) :is(button, input, select):focus-visible {
+  outline: 3px solid var(--accent, #285e56);
+  outline-offset: 3px;
+}
+/* Fixed authored bounds remain editable; compact controls use their content height. */
+.board-item[data-board-component^="controls/"] > .board-content
+  > .recipe-layout {
+  min-height: 0;
+  height: auto;
+}
+.recipe-layout .recipe-playback svg.playback-icon {
+  width: 18px;
+  height: 18px;
+  max-height: 18px;
+}
+/* Transport and one-shot actions need a button, not an empty surrounding panel. */
+.spatial-board .board-item:has(.recipe-playback),
+.spatial-board .board-item[data-board-component="controls/Button"] {
+  background: transparent;
+  box-shadow: none;
+  border-color: transparent;
+}
+.recipe-lesson .catalog-form .number-field-heading > input[type="text"],
+.recipe-lesson .catalog-form select,
+.recipe-lesson .catalog-form .recipe-action,
+.recipe-lesson .catalog-slider-inputs input[type="range"] {
+  min-height: 48px;
+}
+.recipe-component-item[data-component-definition="appearance/EclipseGeometry"]
+  > .recipe-scene-content {
+  height: 100%;
+  min-height: 0;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.eclipse-scene {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-content: stretch;
+  min-height: 0;
+  gap: 12px;
+  height: 100%;
+  margin: 0;
+}
+.eclipse-scene > svg {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
+  max-height: 100%;
+}
+.eclipse-scene figcaption {
+  color: var(--muted, #626c60);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.catalog-choice {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.catalog-choice legend {
+  padding: 0;
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 15px;
+}
+.catalog-choice-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.catalog-choice-options label {
+  position: relative;
+  display: flex;
+  flex: 1;
+  margin: 0;
+}
+.catalog-choice-options input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.catalog-choice-options span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--accent);
+  background: var(--panel);
+}
+.catalog-choice-options input:checked + span {
+  color: #fffbef;
+  background: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.catalog-choice-options input:focus-visible + span {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.recipe-event {
+  display: block;
+  padding: 12px 4px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--accent);
+}
+/* A live parameter is a compact label/value, track, and optional explanation. */
+.recipe-lesson .catalog-form {
+  gap: 8px;
+}
+.recipe-lesson .catalog-form .catalog-field {
+  gap: 2px;
+}
+.recipe-lesson .catalog-form .catalog-help {
+  margin: 0;
+}
+
+/* Compact exploration pairs the range and exact field beneath one label. */
+.recipe-lesson .catalog-form .number-field--compact {
+  grid-template-columns: minmax(0, 1fr) 88px;
+  gap: 6px 12px;
+}
+.recipe-lesson .catalog-form .number-field--compact .number-field-heading {
+  display: contents;
+}
+.recipe-lesson
+  .catalog-form
+  .number-field--compact
+  .number-field-heading
+  > label {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+.recipe-lesson
+  .catalog-form
+  .number-field--compact
+  .number-field-heading
+  > input {
+  grid-column: 2;
+  grid-row: 2;
+  min-height: 56px;
+}
+.recipe-lesson .catalog-form .number-field--compact .catalog-slider-inputs {
+  grid-column: 1;
+  grid-row: 2;
+}
+.recipe-lesson .catalog-form .number-field--compact input[type="range"] {
+  min-height: 56px;
+}
+.recipe-lesson .catalog-form .number-field--compact .experiment-error {
+  grid-column: 1 / -1;
 }

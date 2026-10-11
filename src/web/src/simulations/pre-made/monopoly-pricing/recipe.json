@@ -1,0 +1,457 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/models-monopoly-pricing",
+  "version": 1,
+  "title": "Monopoly pricing and deadweight loss",
+  "description": "How does a firm with market power set price where MR = MC, earn economic profit, and create deadweight loss relative to competitive pricing?",
+  "tags": ["economics", "monopoly-pricing", "market-power", "lab"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/economics/MonopolyPricing",
+        "version": 1,
+        "label": "Monopoly pricing model",
+        "scope": "scope/lab",
+        "configuration": {
+          "demandIntercept": 120,
+          "demandSlope": 1,
+          "marginalCostSlope": 0.2,
+          "marginalCostBase": 20,
+          "fixedCost": 100
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/economics-monopoly-pricing",
+        "version": 1,
+        "label": "Monopoly pricing scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/demandIntercept",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Demand choke price ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Demand choke price ($)",
+          "mode": "immediate",
+          "initial": "{\"value\": 120}",
+          "parameter": "value",
+          "step": 5,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/marginalCostBase",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Base marginal cost ($/unit)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Base marginal cost ($/unit)",
+          "mode": "immediate",
+          "initial": "{\"value\": 20}",
+          "parameter": "value",
+          "step": 2,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result/monopolyPrice",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Monopoly price ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Monopoly price ($)",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/monopolyQuantity",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Monopoly quantity (units)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Monopoly quantity (units)",
+          "precision": 1
+        }
+      },
+      {
+        "id": "result/markup",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Price mark-up ($/unit)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Price mark-up ($/unit)",
+          "precision": 2
+        }
+      },
+      {
+        "id": "result/deadweightLoss",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Deadweight loss ($)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Deadweight loss ($)",
+          "precision": 2
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/result/monopolyPrice",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "monopolyPrice"
+        },
+        "to": {
+          "node": "result/monopolyPrice",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/monopolyQuantity",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "monopolyQuantity"
+        },
+        "to": {
+          "node": "result/monopolyQuantity",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/markup",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "markup"
+        },
+        "to": {
+          "node": "result/markup",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/result/deadweightLoss",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "deadweightLoss"
+        },
+        "to": {
+          "node": "result/deadweightLoss",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/input/demandIntercept",
+        "kind": "command",
+        "from": {
+          "node": "input/demandIntercept",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "ECON_SET_DEMAND_INTERCEPT"
+        }
+      },
+      {
+        "id": "link/input/marginalCostBase",
+        "kind": "command",
+        "from": {
+          "node": "input/marginalCostBase",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "ECON_SET_MARGINAL_COST_BASE"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Monopoly pricing"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/result/monopolyPrice",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/monopolyPrice"
+        },
+        {
+          "id": "layout/result/monopolyQuantity",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/monopolyQuantity"
+        },
+        {
+          "id": "layout/result/markup",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/markup"
+        },
+        {
+          "id": "layout/result/deadweightLoss",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result/deadweightLoss"
+        },
+        {
+          "id": "layout/task",
+          "kind": "stack",
+          "label": "Market parameters",
+          "gap": 16,
+          "columns": 1,
+          "children": [
+            {
+              "id": "layout/input/demandIntercept",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/demandIntercept"
+            },
+            {
+              "id": "layout/input/marginalCostBase",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "input/marginalCostBase"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Monopoly pricing and deadweight loss",
+      "instruction": "Set the market demand intercept and base marginal cost. Observe where Marginal Revenue intersects Marginal Cost (MR = MC) to determine monopoly price and output.",
+      "explanation": "Because a monopolist must lower the price on all units to sell more, its Marginal Revenue curve lies below Demand and has twice the slope. Setting MR = MC restricts output below the competitive level (P = MC), generating mark-up profit (shaded green) and social deadweight loss (shaded red)."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 350
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/result/monopolyPrice",
+          "layoutId": "layout/result/monopolyPrice",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/monopolyQuantity",
+          "layoutId": "layout/result/monopolyQuantity",
+          "rect": {
+            "x": 822,
+            "y": 0,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/markup",
+          "layoutId": "layout/result/markup",
+          "rect": {
+            "x": 644,
+            "y": 126,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/result/deadweightLoss",
+          "layoutId": "layout/result/deadweightLoss",
+          "rect": {
+            "x": 822,
+            "y": 126,
+            "width": 162,
+            "height": 110
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 96
+        },
+        {
+          "id": "board/layout/task",
+          "layoutId": "layout/task",
+          "rect": {
+            "x": 644,
+            "y": 252,
+            "width": 340,
+            "height": 190
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 140
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1032,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/appearance"],
+        ["board/layout/task"],
+        ["board/layout/result/monopolyPrice", "board/layout/result/monopolyQuantity"],
+        ["board/layout/result/markup", "board/layout/result/deadweightLoss"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "demandIntercept",
+      "node": "model",
+      "field": "demandIntercept",
+      "schema": {
+        "type": "number",
+        "minimum": 50,
+        "maximum": 300,
+        "unit": "$"
+      },
+      "default": 120
+    },
+    {
+      "name": "marginalCostBase",
+      "node": "model",
+      "field": "marginalCostBase",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 50,
+        "unit": "$/unit"
+      },
+      "default": 20
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/economics/MonopolyPricing",
+      "version": 1
+    },
+    {
+      "id": "appearance/economics-monopoly-pricing",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Monopolist faces downward-sloping linear market demand P = a - bQ.",
+    "Marginal Revenue has the same intercept a and twice the slope: MR = a - 2bQ.",
+    "Profit maximization occurs at MR = MC; competitive benchmark occurs at P = MC."
+  ],
+  "catalog": {
+    "icon": "🏭",
+    "category": "economics",
+    "order": 15
+  }
+}

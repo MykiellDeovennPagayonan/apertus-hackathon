@@ -3,6 +3,7 @@ import {
   definitionDiscovery,
   searchRank,
 } from "../../simulations/components/catalog/discovery";
+import { compositionRequirements } from "../../simulations/components/catalog/explorationTeaching";
 import { listPremadeRecipes } from "../../simulations/runtime/recipes/registry";
 import type { TeachingIntent } from "./schema";
 
@@ -36,18 +37,6 @@ const words = (text: string) =>
 
 const contains = (text: string, phrase: string) =>
   ` ${words(text)} `.includes(` ${words(phrase)} `);
-
-const splitCamelCase = (text: string) =>
-  text.replace(/([a-z0-9])([A-Z])/g, "$1 $2").toLowerCase();
-
-const normalizeWord = (w: string) => {
-  const s = w.toLowerCase().replace(/[^a-z0-9]/g, "");
-  if (s.endsWith("ies") && s.length > 4) return s.slice(0, -3) + "y";
-  if (s.endsWith("es") && s.length > 4) return s.slice(0, -2);
-  if (s.endsWith("s") && s.length > 3) return s.slice(0, -1);
-  if (s.endsWith("ing") && s.length > 5) return s.slice(0, -3);
-  return s;
-};
 
 export function buildInitialCard(id: string): ComponentBucketCard | null {
   const def = publicDefinitions.get(id);
@@ -84,7 +73,13 @@ export function buildInitialCard(id: string): ComponentBucketCard | null {
     supports.push("friction", "rolling resistance", "stopping distance");
   }
   if (descLower.includes("pendulum")) {
-    supports.push("pendulum", "harmonic oscillator", "oscillator", "oscillation", "period");
+    supports.push(
+      "pendulum",
+      "harmonic oscillator",
+      "oscillator",
+      "oscillation",
+      "period",
+    );
   }
   if (
     descLower.includes("circuit") ||
@@ -97,27 +92,68 @@ export function buildInitialCard(id: string): ComponentBucketCard | null {
     supports.push("dilution", "saline", "salt", "concentration", "salt water");
   }
   if (idLower.includes("reactionrate") || descLower.includes("reaction rate")) {
-    supports.push("reaction rate", "half life", "half-life", "temperature", "chemical kinetics");
+    supports.push(
+      "reaction rate",
+      "half life",
+      "half-life",
+      "temperature",
+      "chemical kinetics",
+    );
   }
-  if (idLower.includes("conservation") || descLower.includes("balancing chemical")) {
-    supports.push("chemical equation", "balancing", "conservation", "molecules");
+  if (
+    idLower.includes("conservation") ||
+    descLower.includes("balancing chemical")
+  ) {
+    supports.push(
+      "chemical equation",
+      "balancing",
+      "conservation",
+      "molecules",
+    );
   }
   if (idLower.includes("predatorprey") || descLower.includes("lotka")) {
-    supports.push("predator prey", "lotka volterra", "rabbits", "foxes", "population");
+    supports.push(
+      "predator prey",
+      "lotka volterra",
+      "rabbits",
+      "foxes",
+      "population",
+    );
   }
   if (idLower.includes("plantgrowth") || descLower.includes("plant limiting")) {
     supports.push("plant growth", "biomass", "limiting resource", "nutrients");
   }
-  if (idLower.includes("diffusion") || descLower.includes("diffusion in water")) {
+  if (
+    idLower.includes("diffusion") ||
+    descLower.includes("diffusion in water")
+  ) {
     supports.push("diffusion", "dye", "concentration");
   }
-  if (idLower.includes("compoundgrowth") || descLower.includes("compound and simple")) {
-    supports.push("compound interest", "simple interest", "interest rate", "principal", "annual rate");
+  if (
+    idLower.includes("compoundgrowth") ||
+    descLower.includes("compound and simple")
+  ) {
+    supports.push(
+      "compound interest",
+      "simple interest",
+      "interest rate",
+      "principal",
+      "annual rate",
+    );
   }
   if (idLower.includes("ringtraffic") || descLower.includes("traffic")) {
-    supports.push("traffic jam", "congestion", "headway", "vehicles");
+    supports.push(
+      "traffic",
+      "traffic jam",
+      "congestion",
+      "headway",
+      "vehicles",
+    );
   }
-  if (idLower.includes("checkoutqueue") || descLower.includes("checkout cashiers")) {
+  if (
+    idLower.includes("checkoutqueue") ||
+    descLower.includes("checkout cashiers")
+  ) {
     supports.push(
       "queue",
       "checkout queue",
@@ -136,6 +172,153 @@ export function buildInitialCard(id: string): ComponentBucketCard | null {
   }
   if (idLower.includes("line") || descLower.includes("slope")) {
     supports.push("line slope", "linear function", "slope", "intercept");
+  }
+  if (
+    idLower.includes("titration") ||
+    descLower.includes("titration") ||
+    descLower.includes("neutralization")
+  ) {
+    supports.push(
+      "titration",
+      "acid base",
+      "neutralization",
+      "ph",
+      "equivalence point",
+      "buret",
+      "phenolphthalein",
+    );
+  }
+  if (
+    idLower.includes("gasequilibrium") ||
+    descLower.includes("gas equilibrium") ||
+    descLower.includes("le chatelier")
+  ) {
+    supports.push(
+      "gas equilibrium",
+      "le chatelier",
+      "equilibrium constant",
+      "n2o4",
+      "no2",
+      "chemical equilibrium",
+    );
+  }
+  if (
+    idLower.includes("beerlambert") ||
+    descLower.includes("beer lambert") ||
+    descLower.includes("spectrophotometry") ||
+    descLower.includes("absorbance")
+  ) {
+    supports.push(
+      "beer lambert",
+      "beer lambert law",
+      "beer's law",
+      "spectrophotometry",
+      "absorbance",
+      "transmittance",
+      "optical path length",
+      "cuvette",
+      "molar absorptivity",
+      "light attenuation",
+    );
+  }
+  if (
+    idLower.includes("galvaniccell") ||
+    descLower.includes("galvanic cell") ||
+    descLower.includes("nernst") ||
+    descLower.includes("voltaic")
+  ) {
+    supports.push(
+      "galvanic cell",
+      "voltaic cell",
+      "daniell cell",
+      "nernst equation",
+      "electrochemistry",
+      "cell potential",
+      "cell voltage",
+      "zinc and copper",
+      "salt bridge",
+      "redox",
+      "anode and cathode",
+    );
+  }
+  if (
+    idLower.includes("marketequilibrium") ||
+    descLower.includes("market equilibrium") ||
+    descLower.includes("supply and demand")
+  ) {
+    supports.push(
+      "market equilibrium",
+      "supply and demand",
+      "equilibrium price",
+      "consumer surplus",
+      "producer surplus",
+      "price control",
+      "price ceiling",
+      "deadweight loss",
+    );
+  }
+  if (
+    idLower.includes("priceelasticity") ||
+    descLower.includes("price elasticity") ||
+    descLower.includes("elasticity of demand")
+  ) {
+    supports.push(
+      "price elasticity",
+      "elasticity",
+      "total revenue",
+      "elastic",
+      "inelastic",
+      "choke price",
+    );
+  }
+  if (
+    idLower.includes("costandprofit") ||
+    descLower.includes("cost and profit") ||
+    descLower.includes("profit maximization")
+  ) {
+    supports.push(
+      "production costs",
+      "cost and profit",
+      "marginal cost",
+      "average total cost",
+      "profit maximization",
+      "fixed cost",
+      "break even",
+    );
+  }
+  if (
+    idLower.includes("tradeandtariffs") ||
+    descLower.includes("tariffs and import") ||
+    descLower.includes("trade tariffs") ||
+    descLower.includes("import tariff")
+  ) {
+    supports.push(
+      "trade tariffs",
+      "tariffs and imports",
+      "tariff",
+      "import quota",
+      "world price",
+      "tariff revenue",
+      "deadweight loss with imports",
+      "deadweight loss",
+    );
+  }
+  if (
+    idLower.includes("monopolypricing") ||
+    descLower.includes("monopoly pricing") ||
+    descLower.includes("monopoly power") ||
+    descLower.includes("market power")
+  ) {
+    supports.push(
+      "monopoly pricing",
+      "monopoly power",
+      "market power",
+      "marginal revenue",
+      "deadweight loss with market power",
+      "mark-up",
+      "lerner index",
+      "deadweight loss",
+    );
   }
 
   return {
@@ -228,7 +411,8 @@ export function retrieveComponentBucket(
     "controls/Slider",
     "controls/NumberInput",
     "controls/Toggle",
-    "controls/ActionButton",
+    "controls/Button",
+    "controls/Select",
     "displays/Readout",
     "displays/Inspector",
     "displays/Text",
@@ -244,7 +428,7 @@ export function retrieveComponentBucket(
     }
     if (contains(query, card.title)) score += 5;
     if (contains(query, id)) score += 6;
-    for (const word of words(card.title).split(" ")) {
+    for (const word of new Set(words(card.title).split(" "))) {
       if (word.length > 3 && contains(query, word)) score += 2;
     }
     // Baseline scores for essential UI scaffolding
@@ -322,6 +506,51 @@ export function retrieveComponentBucket(
 
   if (!hasModel) {
     return [];
+  }
+
+  // Reserve bounded room for the selected models' actual dependencies and views.
+  const directIds = new Set(
+    cards
+      .filter(
+        ({ card }) =>
+          card.kind === "initial" &&
+          publicDefinitions.get(card.id)?.category === "models" &&
+          (contains(prompt, card.title) ||
+            card.supports.some(
+              (term) => term.length > 3 && contains(prompt, term),
+            ) ||
+            words(card.title)
+              .split(" ")
+              .some((term) => term.length > 4 && contains(prompt, term))),
+      )
+      .map(({ card }) => card.id),
+  );
+  const roots = selected
+    .filter(
+      (c) =>
+        c.kind === "initial" &&
+        publicDefinitions.get(c.id)?.category === "models",
+    )
+    .filter((c) => !directIds.size || directIds.has(c.id))
+    .slice(0, 3);
+  if (roots.length) {
+    selected.splice(0);
+    selectedIds.clear();
+    const visit = (id: string) => {
+      if (selectedIds.has(id)) return;
+      const card = buildInitialCard(id);
+      if (!card) return;
+      addCard(card);
+      const requirements = compositionRequirements[id];
+      for (const dependency of requirements?.dependencies ?? [])
+        visit(dependency);
+      if (requirements?.appearance) visit(requirements.appearance);
+      else
+        for (const def of publicDefinitions.values())
+          if (def.category === "appearance" && def.inputs.model?.unit === id)
+            visit(def.id);
+    };
+    for (const root of roots) visit(root.id);
   }
 
   // Ensure standard displays and controls exist in the bucket

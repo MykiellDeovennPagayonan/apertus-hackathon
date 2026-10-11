@@ -1,0 +1,314 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/fibre-optics",
+  "version": 1,
+  "title": "Light in a fibre",
+  "description": "Which entry angles keep light confined in a straight fibre?",
+  "tags": [
+    "physics",
+    "fibre optic cable",
+    "fiber optics",
+    "light leaking",
+    "total internal reflection"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model0",
+        "definition": "prefabs/physics/Fibre",
+        "version": 1,
+        "label": "Light in a fibre",
+        "scope": "scope/lab",
+        "configuration": {
+          "core": 1.5,
+          "cladding": 1.45,
+          "entry": 15,
+          "external": 1
+        }
+      },
+      {
+        "id": "appearance0",
+        "definition": "appearance/physics-fibre",
+        "version": 1,
+        "label": "Light in a fibre scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/entry",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Entry angle from normal",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Entry angle from normal",
+          "mode": "immediate",
+          "initial": "{\"value\":15}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/cladding",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Cladding index",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Cladding index",
+          "mode": "immediate",
+          "initial": "{\"value\":1.45}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance0",
+        "kind": "attachment",
+        "from": {
+          "node": "model0",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance0",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/entry0",
+        "kind": "command",
+        "from": {
+          "node": "control/entry",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_FIBRE_ENTRY"
+        }
+      },
+      {
+        "id": "link/cladding0",
+        "kind": "command",
+        "from": {
+          "node": "control/cladding",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_FIBRE_CLADDING"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Light in a fibre"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance0",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance0"
+        },
+        {
+          "id": "layout/control/entry",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/entry"
+        },
+        {
+          "id": "layout/control/cladding",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/cladding"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Light in a fibre",
+      "instruction": "Which entry angles keep light confined in a straight fibre?",
+      "explanation": "Straight planar lossless core/cladding with refractive indices. External entry angle measured from entry-face normal; internal boundary incidence from its normal. Snell entry/refraction and unpolarized Fresnel reflected intensity. No bend losses, absorption, modes or dispersion."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance0",
+          "layoutId": "layout/appearance0",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 390
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 390
+        },
+        {
+          "id": "board/layout/control/entry",
+          "layoutId": "layout/control/entry",
+          "rect": {
+            "x": 0,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 128
+        },
+        {
+          "id": "board/layout/control/cladding",
+          "layoutId": "layout/control/cladding",
+          "rect": {
+            "x": 344,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 128
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 640
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance0"
+        ],
+        [
+          "board/layout/control/entry",
+          "board/layout/control/cladding"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "core0",
+      "node": "model0",
+      "field": "core",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 2,
+        "unit": "1"
+      },
+      "default": 1.5
+    },
+    {
+      "name": "cladding0",
+      "node": "model0",
+      "field": "cladding",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 2,
+        "unit": "1"
+      },
+      "default": 1.45
+    },
+    {
+      "name": "entry0",
+      "node": "model0",
+      "field": "entry",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 80,
+        "unit": "deg"
+      },
+      "default": 15
+    },
+    {
+      "name": "external0",
+      "node": "model0",
+      "field": "external",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 1.5,
+        "unit": "1"
+      },
+      "default": 1
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Fibre",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-fibre",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Straight planar lossless core/cladding with refractive indices. External entry angle measured from entry-face normal; internal boundary incidence from its normal. Snell entry/refraction and unpolarized Fresnel reflected intensity. No bend losses, absorption, modes or dispersion."
+  ],
+  "catalog": {
+    "icon": "◉",
+    "category": "physics",
+    "order": 153
+  }
+}

@@ -1,10 +1,19 @@
+import { mathAnalysisLiveCommands } from "./mathAnalysis";
 import { assemblyModels } from "../../runtime/assembly";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import type { Port, PublicDefinition } from "../../runtime/authoring/types";
 import { boolean, num, object } from "../../runtime/parameterSchema";
+import { liveExplorationCommands } from "../controls/interactionPolicy";
 import { componentDefinitions } from "../registry";
+import { agentDefinitions } from "./agents";
 import { authoringDefinitions } from "./authoring";
+import { cycleDefinitions } from "./biogeochemistry";
+import { collectiveDefinitions } from "./collective";
 import { definitionDiscovery } from "./discovery";
+import { earthDefinitions } from "./earthAtmosphere";
+import { ecologyControlDefinitions } from "./ecologyControls";
+import { explorationDefinitions } from "./exploration";
+import { applyExplorationTeaching } from "./explorationTeaching";
 import { genericDefinitions } from "./generic";
 import {
   learningAppearances,
@@ -12,7 +21,35 @@ import {
   resourceDefinitions,
 } from "./learningModels";
 import { operationDefinitions } from "./operations";
+import { scienceDefinitions } from "./science";
 import { spatialDefinitions } from "./spatial";
+import {
+  acidBaseTitrationTeaching,
+  beerLambertTeaching,
+  conservationTeaching,
+  costAndProfitTeaching,
+  galvanicCellTeaching,
+  gasEquilibriumTeaching,
+  marketEquilibriumTeaching,
+  monopolyPricingTeaching,
+  phaseChangeTeaching,
+  priceElasticityTeaching,
+  tradeAndTariffsTeaching,
+} from "./teaching";
+
+const domainTeachingMap: Record<string, PublicDefinition["teaching"]> = {
+  "prefabs/economics/MarketEquilibrium": marketEquilibriumTeaching,
+  "prefabs/economics/PriceElasticity": priceElasticityTeaching,
+  "prefabs/economics/CostAndProfit": costAndProfitTeaching,
+  "prefabs/economics/TradeAndTariffs": tradeAndTariffsTeaching,
+  "prefabs/economics/MonopolyPricing": monopolyPricingTeaching,
+  "prefabs/chemistry/AcidBaseTitration": acidBaseTitrationTeaching,
+  "prefabs/chemistry/GasEquilibrium": gasEquilibriumTeaching,
+  "prefabs/chemistry/PhaseChange": phaseChangeTeaching,
+  "prefabs/chemistry/BeerLambert": beerLambertTeaching,
+  "prefabs/chemistry/GalvanicCell": galvanicCellTeaching,
+  "prefabs/chemistry/Conservation": conservationTeaching,
+};
 
 /** Data-only definitions; executable legacy implementations are adapted in runtime/authoring/providers. */
 export const publicDefinitions = new Map<string, PublicDefinition>();
@@ -23,6 +60,13 @@ function register(definition: PublicDefinition) {
 }
 for (const d of [
   ...genericDefinitions,
+  ...ecologyControlDefinitions,
+  ...scienceDefinitions,
+  ...cycleDefinitions,
+  ...collectiveDefinitions,
+  ...earthDefinitions,
+  ...agentDefinitions,
+  ...explorationDefinitions,
   ...authoringDefinitions,
   ...spatialDefinitions,
   ...operationDefinitions,
@@ -143,7 +187,8 @@ for (const m of assemblyModels) {
     title: m.name,
     description: m.description,
     category: "models",
-    tags: [m.ref.split("/")[1], m.presentation],
+    tags: [m.ref.split("/")[1], m.presentation, ...(m.tags ?? [])],
+    teaching: domainTeachingMap[m.ref],
     configuration: m.parameters,
     defaults: m.defaults,
     inputs: {},
@@ -157,12 +202,20 @@ for (const m of assemblyModels) {
               ? "grid"
               : "value",
           unit: o.unit,
+          ...(o.schema ? { schema: o.schema } : {}),
           crossScope: true,
         } as Port,
       ]),
     ),
     commands: {
-      ...m.actions,
+      ...Object.fromEntries(
+        Object.entries(m.actions).map(([key, command]) => [
+          key,
+          (liveExplorationCommands.has(key) || mathAnalysisLiveCommands.has(key))
+            ? { ...command, submission: "continuous" as const }
+            : command,
+        ]),
+      ),
       RESET: {
         arguments: object({}),
         timing: "rebuild",
@@ -195,17 +248,45 @@ for (const m of assemblyModels) {
   });
   const id = `appearance/${m.presentation}`;
   register({
-    ...genericDefinitions[0],
     id,
+    version: 1,
     title: `${m.name} appearance`,
-    description: `Display an attached ${m.name} model snapshot`,
+    learnerLayout:
+      m.ref.startsWith("prefabs/biogeochemistry/") ||
+      m.ref.startsWith("prefabs/collective/") ||
+      m.ref.startsWith("prefabs/earth-atmosphere/") ||
+      m.ref.startsWith("prefabs/math-geometry/")
+        ? "scene-first"
+        : undefined,
+    description: m.ref.startsWith("prefabs/biogeochemistry/")
+      ? `Display an attached ${m.name} model snapshot. ${m.description}`
+      : `Display an attached ${m.name} model snapshot`,
     category: "appearance",
     tags: [m.ref.split("/")[1]],
-    configuration: object({}),
+    configuration:
+      m.ref.startsWith("prefabs/science/") ||
+      m.ref.startsWith("prefabs/biogeochemistry/")
+        ? object(
+            { question: { type: "string", minLength: 0, maxLength: 180 } },
+            ["question"],
+          )
+        : object({}),
     defaults: {},
     inputs: { model: { kind: "attachment", unit: m.ref } },
     outputs: {},
+    commands: {},
     placement: ["lesson"],
+    lifecycle: {
+      authored:
+        m.ref.startsWith("prefabs/science/") ||
+        m.ref.startsWith("prefabs/biogeochemistry/")
+          ? ["question"]
+          : [],
+      presentation: [],
+      clock: false,
+      reset: "authored",
+      capture: false,
+    },
     assumptions: m.assumptions,
     presentationProvider: id,
   });
@@ -256,6 +337,8 @@ publicDefinition("canvases/town").inputs.timeline = {
   unit: "town/timeline",
   optional: true,
 };
+
+applyExplorationTeaching(publicDefinitions);
 
 // Author-facing metadata is separate from runtime identity and execution contracts.
 for (const definition of publicDefinitions.values()) {

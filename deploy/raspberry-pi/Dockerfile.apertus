@@ -1,0 +1,22 @@
+FROM debian:bookworm-slim AS build
+ARG LLAMA_CPP_REV=62a6f74bab748b1755f4cd8dfc0871caf865c6c8
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates cmake g++ make \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /src
+RUN git init && git remote add origin https://github.com/ggml-org/llama.cpp.git \
+    && git fetch --depth=1 origin "$LLAMA_CPP_REV" && git checkout --detach FETCH_HEAD
+RUN cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DGGML_NATIVE=OFF \
+    -DGGML_OPENMP=OFF -DLLAMA_CURL=OFF -DLLAMA_BUILD_TESTS=OFF \
+    -DLLAMA_BUILD_EXAMPLES=OFF -DLLAMA_BUILD_SERVER=ON -DLLAMA_BUILD_UI=OFF \
+    -DLLAMA_USE_PREBUILT_UI=OFF -DBUILD_SHARED_LIBS=OFF \
+    && cmake --build build --target llama-server -j 2
+
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl libstdc++6 \
+    && rm -rf /var/lib/apt/lists/* && useradd --uid 10001 --create-home inference
+COPY --from=build /src/build/bin/llama-server /usr/local/bin/llama-server
+USER inference
+EXPOSE 43101
+HEALTHCHECK --interval=15s --timeout=5s --start-period=180s --retries=8 \
+    CMD curl --fail --silent http://127.0.0.1:43101/health || exit 1
+ENTRYPOINT ["llama-server"]

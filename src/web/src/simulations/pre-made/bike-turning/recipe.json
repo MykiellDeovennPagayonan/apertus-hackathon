@@ -1,0 +1,316 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/bike-turning",
+  "version": 1,
+  "title": "Speed and sharp turns",
+  "description": "Why does doubling speed require four times the turning force?",
+  "tags": [
+    "physics",
+    "bike",
+    "sharp turn",
+    "going fast",
+    "circular motion",
+    "centripetal force",
+    "grip"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model0",
+        "definition": "prefabs/physics/Turning",
+        "version": 1,
+        "label": "Speed and sharp turns",
+        "scope": "scope/lab",
+        "configuration": {
+          "speed": 5,
+          "radius": 10,
+          "mass": 80,
+          "friction": 0.5
+        }
+      },
+      {
+        "id": "appearance0",
+        "definition": "appearance/physics-turning",
+        "version": 1,
+        "label": "Speed and sharp turns scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/speed",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Bike speed",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Bike speed",
+          "mode": "immediate",
+          "initial": "{\"value\":5}",
+          "parameter": "value",
+          "step": 0.1,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/radius",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Turn radius",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Turn radius",
+          "mode": "immediate",
+          "initial": "{\"value\":10}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance0",
+        "kind": "attachment",
+        "from": {
+          "node": "model0",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance0",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/speed0",
+        "kind": "command",
+        "from": {
+          "node": "control/speed",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_TURNING_SPEED"
+        }
+      },
+      {
+        "id": "link/radius0",
+        "kind": "command",
+        "from": {
+          "node": "control/radius",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_TURNING_RADIUS"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Speed and sharp turns"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance0",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance0"
+        },
+        {
+          "id": "layout/control/speed",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/speed"
+        },
+        {
+          "id": "layout/control/radius",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/radius"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Speed and sharp turns",
+      "instruction": "Why does doubling speed require four times the turning force?",
+      "explanation": "Steady level requested circle; inward force m*v²/r, friction ceiling μmg, balanced lean atan(v²/(rg)). Static traction feasibility only: no animated skid trajectory, banking, braking or tyre dynamics."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance0",
+          "layoutId": "layout/appearance0",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 390
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 390
+        },
+        {
+          "id": "board/layout/control/speed",
+          "layoutId": "layout/control/speed",
+          "rect": {
+            "x": 0,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 128
+        },
+        {
+          "id": "board/layout/control/radius",
+          "layoutId": "layout/control/radius",
+          "rect": {
+            "x": 344,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 128
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 640
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance0"
+        ],
+        [
+          "board/layout/control/speed",
+          "board/layout/control/radius"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "speed0",
+      "node": "model0",
+      "field": "speed",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 20,
+        "unit": "m/s"
+      },
+      "default": 5
+    },
+    {
+      "name": "radius0",
+      "node": "model0",
+      "field": "radius",
+      "schema": {
+        "type": "number",
+        "minimum": 2,
+        "maximum": 50,
+        "unit": "m"
+      },
+      "default": 10
+    },
+    {
+      "name": "mass0",
+      "node": "model0",
+      "field": "mass",
+      "schema": {
+        "type": "number",
+        "minimum": 20,
+        "maximum": 200,
+        "unit": "kg"
+      },
+      "default": 80
+    },
+    {
+      "name": "friction0",
+      "node": "model0",
+      "field": "friction",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1.5,
+        "unit": "1"
+      },
+      "default": 0.5
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Turning",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-turning",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Steady level requested circle; inward force m*v²/r, friction ceiling μmg, balanced lean atan(v²/(rg)). Static traction feasibility only: no animated skid trajectory, banking, braking or tyre dynamics."
+  ],
+  "catalog": {
+    "icon": "◉",
+    "category": "physics",
+    "order": 151
+  }
+}

@@ -1,0 +1,526 @@
+/* Shared agent presentation: portraits, one readable speech, and quiet supporting tools. */
+.recipe-component-item[data-component-definition="displays/AgentProfile"],
+.recipe-component-item[data-component-definition="controls/AgentActions"] {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+.recipe-component-item[data-component-definition="displays/AgentTranscript"],
+.spatial-board
+  .board-content
+  .recipe-component-item[data-component-definition="displays/AgentTranscript"] {
+  padding: 24px 28px;
+  border-radius: 24px;
+  background: var(--panel, #fffbef);
+}
+.agent-profile,
+.agent-conversation,
+.agent-actions {
+  color: var(--text, #30362e);
+  min-width: 0;
+  font: inherit;
+}
+.agent-avatar {
+  width: 88px;
+  height: 88px;
+  flex-shrink: 0;
+}
+.recipe-component-item .agent-person {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 18px;
+}
+.recipe-component-item .agent-person > svg.agent-avatar {
+  width: 78px;
+  min-width: 78px;
+  max-width: 78px;
+  height: 78px;
+  transition: transform 0.16s ease;
+}
+.agent-person:hover .agent-avatar {
+  transform: scale(0.96);
+}
+.agent-person-name {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-weight: 750;
+  font-size: 18px;
+}
+.agent-person-team {
+  font-size: 11px;
+  font-weight: 650;
+  padding: 3px 6px;
+  border-radius: 20px;
+  background: #e2ece3;
+  color: #285e56;
+}
+.agent-person-team:empty {
+  display: none;
+}
+.agent-person-role {
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: center;
+  max-width: 138px;
+}
+.agent-person-hint {
+  font-size: 11px;
+  color: #64766a;
+}
+.agent-speaking-ring {
+  opacity: 0;
+}
+.agent-profile.is-speaking .agent-person .agent-speaking-ring {
+  opacity: 1;
+}
+.recipe-component-item .agent-stage-heading h2 {
+  margin: 8px 0 18px;
+  font-size: 26px;
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+}
+.agent-eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent, #285e56);
+}
+.agent-speech-stage {
+  min-height: 228px;
+}
+.agent-stage-intro {
+  min-height: 228px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(135deg, #eef3e8, #faf0e1);
+  border-radius: 20px;
+  padding: 12px 28px;
+}
+.agent-conversation-art {
+  width: 220px;
+  height: 106px;
+}
+.recipe-component-item .agent-stage-intro h3 {
+  margin: 8px 0;
+  font-size: 23px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.agent-stage-intro p {
+  max-width: 390px;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #626c60;
+}
+.agent-speaker-line {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.agent-conversation .agent-speaker-line > svg.agent-avatar {
+  width: 46px;
+  min-width: 46px;
+  max-width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+}
+.agent-speaker-line strong {
+  display: block;
+  font-size: 17px;
+}
+.agent-speaker-line span {
+  font-size: 12px;
+  color: #64766a;
+}
+.agent-speech-number {
+  margin-left: auto;
+  white-space: nowrap;
+}
+.agent-speech-bubble {
+  position: relative;
+  padding: 18px 24px;
+  background: #eaf1e7;
+  border-radius: 3px 22px 22px;
+  max-height: 320px;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.agent-speech-bubble p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.agent-speech-bubble nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+.agent-speech-bubble a {
+  color: var(--accent, #285e56);
+  font-size: 13px;
+  text-decoration: underline;
+}
+.agent-speech-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+.agent-speech-navigation span {
+  color: #64766a;
+  font-size: 12px;
+}
+.recipe-component-item .agent-speech-navigation button {
+  background: transparent;
+  border: 1px solid #d5cdbb;
+  border-radius: 12px;
+  min-height: 44px;
+  padding: 8px 14px;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.agent-context-details,
+.agent-full-transcript,
+.agent-run-details {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #626c60;
+}
+.agent-context-details summary,
+.agent-full-transcript summary,
+.agent-run-details summary {
+  cursor: pointer;
+  min-height: 32px;
+}
+.agent-context-details p,
+.agent-run-details p {
+  line-height: 1.6;
+}
+.agent-messages {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  max-height: 340px;
+  overflow: auto;
+}
+.agent-messages li {
+  padding: 14px 0;
+  border-top: 1px solid #d5cdbb;
+}
+.agent-message-heading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+}
+.agent-message-heading span,
+.agent-caption {
+  font-size: 13px;
+  color: #626c60;
+}
+.agent-messages li p {
+  font-size: 15px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.agent-messages nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.agent-messages a {
+  color: var(--accent, #285e56);
+}
+.agent-actions {
+  padding: 0 4px;
+}
+.agent-action-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.recipe-component-item .agent-actions button,
+.recipe-component-item .agent-run-details button {
+  border: 1px solid #d5cdbb;
+  background: var(--panel, #fffbef);
+  color: inherit;
+  padding: 12px 20px;
+  min-height: 48px;
+  border-radius: 12px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 15px;
+}
+.recipe-component-item .agent-actions .agent-primary {
+  background: var(--accent, #285e56);
+  border-color: var(--accent, #285e56);
+  color: white;
+  font-weight: 700;
+  min-width: 180px;
+}
+.agent-progress {
+  display: block;
+  font-size: 13px;
+  color: #626c60;
+  line-height: 1.5;
+}
+.agent-options-menu {
+  display: grid;
+  gap: 6px;
+  min-width: 240px;
+  padding: 10px;
+  background: #fffbef;
+  border: 1px solid #d5cdbb;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px #30362e20;
+}
+.agent-options-menu button {
+  text-align: left;
+  background: transparent;
+  border: 0;
+}
+.agent-options-menu button:hover {
+  background: #eaf1e7;
+}
+.agent-error {
+  font-size: 14px;
+  color: #943b30;
+  line-height: 1.4;
+  margin: 6px 0;
+}
+.agent-history {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0;
+  font-size: 13px;
+}
+.agent-history select {
+  max-width: 100%;
+  min-height: 44px;
+  padding: 8px;
+  border: 1px solid #d5cdbb;
+  border-radius: 8px;
+  font: inherit;
+  background: #fffbef;
+}
+.agent-person-dialog {
+  border: 1px solid #d5cdbb;
+  border-radius: 24px;
+  padding: 30px;
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 40px);
+  background: #fffbef;
+  color: #30362e;
+  box-shadow: 0 24px 80px #30362e30;
+}
+.agent-person-dialog::backdrop {
+  background: #30362e66;
+  backdrop-filter: blur(3px);
+}
+.agent-dialog-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: transparent;
+  border: 0;
+  width: 44px;
+  height: 44px;
+  font-size: 28px;
+  cursor: pointer;
+  color: inherit;
+}
+.agent-person-dialog h2 {
+  font-size: 25px;
+  line-height: 1.25;
+  margin: 10px 0;
+}
+.agent-person-dialog .agent-eyebrow {
+  margin-top: 18px;
+}
+.agent-personality {
+  color: #285e56;
+  font-size: 17px;
+  line-height: 1.5;
+}
+.agent-person-dialog dt {
+  margin-top: 18px;
+  font-size: 11px;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64766a;
+}
+.agent-person-dialog dd {
+  margin: 6px 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.agent-person-dialog .agent-caption {
+  margin-top: 24px;
+  line-height: 1.5;
+}
+.agent-conversation-dialog {
+  width: min(680px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  overflow: auto;
+  padding: 28px;
+  color: var(--text, #30362e);
+  background: var(--panel, #fffbef);
+  border: 1px solid #d5cdbb;
+  border-radius: 20px;
+}
+.agent-conversation-dialog::backdrop {
+  background: #30362e66;
+}
+.agent-conversation-dialog h2 {
+  margin: 0 44px 24px 0;
+  font-size: 24px;
+}
+.agent-conversation-dialog h3 {
+  font-size: 16px;
+}
+.agent-conversation-dialog .agent-dialog-close {
+  font-size: 28px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+.agent-person:focus-visible,
+.agent-conversation button:focus-visible,
+.agent-conversation a:focus-visible,
+.agent-conversation summary:focus-visible,
+.agent-actions button:focus-visible,
+.agent-person-dialog button:focus-visible,
+.agent-speech-bubble:focus-visible,
+.agent-history select:focus-visible {
+  outline: 3px solid var(--accent, #285e56);
+  outline-offset: 3px;
+}
+.agent-actions button:disabled,
+.agent-speech-navigation button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+@media (max-width: 600px) {
+  .recipe-component-item[data-component-definition="displays/AgentTranscript"],
+  .spatial-board
+    .board-content
+    .recipe-component-item[data-component-definition="displays/AgentTranscript"] {
+    padding: 20px 18px;
+  }
+  .recipe-component-item .agent-stage-heading h2 {
+    font-size: 23px;
+  }
+  .agent-stage-intro {
+    padding: 14px;
+  }
+  .recipe-component-item .agent-stage-intro h3 {
+    font-size: 21px;
+  }
+  .agent-conversation-art {
+    width: 180px;
+    height: 94px;
+  }
+  .agent-speech-bubble {
+    padding: 16px;
+    max-height: none;
+    overflow: visible;
+  }
+  .agent-speech-bubble p {
+    font-size: 17px;
+  }
+  .agent-action-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .recipe-component-item .agent-actions .agent-primary {
+    min-width: 0;
+    flex: 1;
+  }
+  .recipe-component-item .agent-actions button {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+  .agent-speech-navigation span {
+    font-size: 11px;
+    text-align: center;
+  }
+  .recipe-component-item .agent-person > svg.agent-avatar {
+    width: 74px;
+    min-width: 74px;
+    max-width: 74px;
+    height: 74px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .agent-person .agent-avatar {
+    transition: none;
+  }
+}
+.agent-options-menu[popover] {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: 280px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  height: fit-content;
+  overflow: auto;
+}
+.agent-options-menu[popover]:not(:popover-open) {
+  display: none;
+}
+.agent-options-menu::backdrop {
+  background: #30362e22;
+}
+.recipe-component-item .agent-actions .agent-options-trigger {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  font-size: 13px;
+}
+/* Keep portraits and transport controls independent, without another layer of cards. */
+.spatial-board .board-item[data-board-component="displays/AgentProfile"],
+.spatial-board .board-item[data-board-component="controls/AgentActions"] {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+.spatial-board
+  .board-item:is(
+    [data-board-component="displays/AgentProfile"],
+    [data-board-component="displays/AgentTranscript"],
+    [data-board-component="controls/AgentActions"]
+  )
+  > .board-content {
+  padding: 0;
+}

@@ -73,7 +73,7 @@ function dependencies(name: string, system: string) {
 const output = (unit: string, description: string) => ({ unit, description });
 /** Registry-derived educational assembly hints; not phrases or complete responses. */
 export const physicalCreationDefaults = {
-  ["prefabs/physical-systems/Pendulum"]: {
+  "prefabs/physical-systems/Pendulum": {
     structure: "comparison",
     objects: [
       { label: "First swing", parameters: { length: 1 } },
@@ -82,7 +82,7 @@ export const physicalCreationDefaults = {
     explanation:
       "Two simultaneous swings isolate the effect of length at shared gravity and amplitude.",
   },
-  ["prefabs/physical-systems/RollingTrack"]: {
+  "prefabs/physical-systems/RollingTrack": {
     structure: "comparison",
     objects: [
       { label: "Smooth floor", parameters: { resistance: 0.05 } },
@@ -102,17 +102,17 @@ export const pendulumModel: DomainModel = {
   presentation: "physical-pendulum",
   maximumInstances: 4,
   description:
-    "Independent small-angle ideal pendulum: T=2π√(L/g), angle/time observations and editable length. For a longer-swing question assemble two pendulums of lengths 1 m and 2 m, both at 5 degrees and shared gravity 9.81 m/s². Compare independent instances, not snapshots.",
+    "Independent nonlinear ideal pendulum with length and starting-angle exploration (0–90°). Period increases with length and with large starting angles; T≈2π√(L/g) is the small-angle limit. For a longer-swing question assemble two pendulums of lengths 1 m and 2 m, both at 5 degrees and shared gravity 9.81 m/s². Compare independent instances, not snapshots.",
   assumptions: [
-    "Ideal small-angle analytical pendulum, amplitude bounded to 0–10°. No friction.",
-    "Angle(t)=amplitude·cos(√(g/L)t). Length or gravity changes restart the run; period is measured in simulation time, independent of frame rate.",
+    "Ideal rigid-rod pendulum released at rest, starting angle 0–90°. No friction or air resistance.",
+    "Nonlinear motion solves θ″=−(g/L)sinθ using the elliptic time coordinate. The calculated period is 4√(L/g)K(sin(amplitude/2)); motion is independent of frame rate. Changing length, gravity or starting angle restarts the run.",
     "Comparisons use shared gravity and initial amplitude. Length is the independent variable.",
   ],
   parameters: object(
     {
       length: num(0.1, 20, "m"),
       gravity: num(0.1, 30, "m/s²"),
-      amplitude: num(0, 10, "deg"),
+      amplitude: num(0, 90, "deg"),
       playing: boolean,
     },
     ["length", "gravity", "amplitude", "playing"],
@@ -121,7 +121,10 @@ export const pendulumModel: DomainModel = {
   requiredObservations: ["period", "angle", "elapsed"],
   graphOutput: "points",
   outputs: {
-    period: output("s", "Period T=2π√(L/g)"),
+    period: output(
+      "s",
+      "Calculated time for a full oscillation; approaches 2π√(L/g) at small angles",
+    ),
     angle: output("deg", "Angle from vertical"),
     elapsed: output("s", "Simulation time"),
     cycles: output("1", "Completed oscillations"),
@@ -149,8 +152,8 @@ export const pendulumModel: DomainModel = {
       "relaunch",
     ),
     PEND_SET_AMPLITUDE: action(
-      num(0, 10, "deg"),
-      "Set small-angle amplitude and restart",
+      num(0, 90, "deg"),
+      "Set starting angle from 0 to 90 degrees and release from rest",
       "relaunch",
     ),
   },

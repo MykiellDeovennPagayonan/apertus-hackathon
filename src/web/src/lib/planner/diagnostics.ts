@@ -1,4 +1,5 @@
-import { readConfig } from "../apertus/config";
+import { readLlmConfig } from "../llm/config";
+import { compositionDeadlineMs } from "./compositionPolicy";
 export interface PlannerTrace {
   id: string;
   startedAt: string;
@@ -18,24 +19,27 @@ export function startTrace(id: string, prompt: string) {
   const started = Date.now();
   let configuration: unknown;
   try {
-    const a = readConfig();
+    const a = readLlmConfig();
     configuration = {
       mode: process.env.PLANNER_MODE ?? "hybrid",
-      apertus: {
+      llm: {
         model: a.model,
         provider: a.provider,
+        connection: a.connection,
         baseUrl: a.baseUrl,
         structuredOutput: a.structuredOutput,
         contextCapacity: a.contextTokens,
         maxTokens: a.maxTokens,
-        temperature: 0,
+        ...(a.provider === "apertus" ? { temperature: 0 } : {}),
+        reasoningEffort: a.reasoningEffort ?? null,
         timeout: a.timeout,
       },
-      laya: {
+      decision: {
+        provider: process.env.DECISION_PROVIDER?.trim() || "laya",
         policy:
-          "Constructed only for ambiguous selection; see selection.laya events.",
+          "See selection.decision or composition.decision for actual acceptance.",
       },
-      deadlineMs: Number(process.env.PLANNER_TIMEOUT_MS ?? 120000),
+      deadlineMs: compositionDeadlineMs(),
     };
   } catch {
     configuration = { invalid: true };
@@ -55,7 +59,7 @@ export function startTrace(id: string, prompt: string) {
     }
   }
   return (event: string, data: unknown) => {
-    if (enabled && trace.events.length < 50)
+    if (enabled && trace.events.length < 240)
       trace.events.push({ event, elapsedMs: Date.now() - started, data });
   };
 }

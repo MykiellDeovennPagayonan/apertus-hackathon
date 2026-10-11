@@ -480,6 +480,16 @@ const { premadeExperiments } = load(
 );
 const { templateNames } = load("src/simulations/runtime/capabilities.ts");
 for (const [demo, preset] of Object.entries(premadeExperiments)) {
+  if (!templateNames[demo]) {
+    const { premadeRecipe } = load(
+      "src/simulations/runtime/recipes/registry.ts",
+    );
+    const { loadRecipe } = load(
+      "src/simulations/runtime/recipes/loadRecipe.ts",
+    );
+    assert.doesNotThrow(() => loadRecipe(premadeRecipe(demo)));
+    continue;
+  }
   const result = fresh(create(templateNames[demo], preset.parameters));
   assert.equal(result.demo, demo);
 }

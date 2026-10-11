@@ -1,0 +1,243 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/house-prices",
+  "version": 1,
+  "title": "Average house price: mean, median and outliers",
+  "description": "Move one fictional house price and compare the mean balance point with the middle price.",
+  "tags": [
+    "house-prices",
+    "mathematics",
+    "house",
+    "houses",
+    "house price",
+    "average",
+    "mean",
+    "median",
+    "outlier",
+    "outliers",
+    "expensive",
+    "price"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-analysis/house-prices",
+        "version": 1,
+        "label": "Average house price: mean, median and outliers",
+        "scope": "scope/lab",
+        "configuration": {
+          "houses": [
+            {
+              "id": "house-1",
+              "value": 100
+            },
+            {
+              "id": "house-2",
+              "value": 110
+            },
+            {
+              "id": "house-3",
+              "value": 120
+            },
+            {
+              "id": "house-4",
+              "value": 130
+            },
+            {
+              "id": "house-5",
+              "value": 140
+            },
+            {
+              "id": "house-6",
+              "value": 150
+            },
+            {
+              "id": "house-7",
+              "value": 160
+            }
+          ]
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-analysis-house-prices",
+        "version": 1,
+        "label": "Average house price: mean, median and outliers",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/0",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Final house price (currency units)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Final house price (currency units)",
+          "mode": "immediate",
+          "initial": "{\"value\":160}",
+          "parameter": "value",
+          "min": 0,
+          "max": 1000,
+          "step": 10,
+          "showNumber": true
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/input/0",
+        "kind": "command",
+        "from": {
+          "node": "input/0",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MA_HOUSE-PRICES_PRICE"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Mean, median and expensive houses"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/input/0",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/0"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Average house price: mean, median and outliers",
+      "instruction": "Move one fictional house price and compare the mean balance point with the middle price.",
+      "explanation": "Fictional house prices in neutral currency units. Empty data has undefined mean and median; observation IDs survive sorting."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 450
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/input/0",
+          "layoutId": "layout/input/0",
+          "rect": {
+            "x": 0,
+            "y": 470,
+            "width": 780,
+            "height": 190
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 708
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/scene"
+        ],
+        [
+          "board/layout/input/0"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-analysis/house-prices",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-analysis-house-prices",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Fictional house prices in neutral currency units. Empty data has undefined mean and median; observation IDs survive sorting."
+  ],
+  "catalog": {
+    "icon": "∑",
+    "category": "mathematics",
+    "order": 31
+  }
+}

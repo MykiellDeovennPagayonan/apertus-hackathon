@@ -33,7 +33,17 @@ export class AuthoringTransaction {
   constructor(
     draftIdOrDoc: string | AuthoredDocument = "draft",
     document?: AuthoredDocument,
+    private readonly limits = { operations: 12, receipts: 24 },
   ) {
+    if (
+      !Number.isInteger(limits.operations) ||
+      limits.operations < 1 ||
+      limits.operations > 48 ||
+      !Number.isInteger(limits.receipts) ||
+      limits.receipts < 1 ||
+      limits.receipts > 64
+    )
+      throw new Error("Invalid bounded authoring limits");
     let doc: AuthoredDocument;
     if (typeof draftIdOrDoc === "string") {
       this.draftId = draftIdOrDoc;
@@ -51,7 +61,7 @@ export class AuthoringTransaction {
     this.state = { document: structuredClone(doc), handles };
   }
   fork() {
-    const copy = new AuthoringTransaction(this.draftId);
+    const copy = new AuthoringTransaction(this.draftId, undefined, this.limits);
     copy.state = structuredClone(this.state);
     copy.revision = this.revision;
     copy.operationCount = this.operationCount;
@@ -110,7 +120,7 @@ export class AuthoringTransaction {
       );
     if (
       !/^[a-zA-Z0-9][a-zA-Z0-9/_:.-]{0,99}$/.test(envelope.operationId) ||
-      this.receipts.size >= 24
+      this.receipts.size >= this.limits.receipts
     )
       return reject(
         "identity",
@@ -124,11 +134,11 @@ export class AuthoringTransaction {
     if (
       !requests.length ||
       requests.length > 12 ||
-      this.operationCount + requests.length > 12
+      this.operationCount + requests.length > this.limits.operations
     )
       return reject(
         "budget",
-        "At most twelve authoring operations are allowed",
+        `At most ${this.limits.operations} authoring operations are allowed`,
       );
     let receipt: OperationReceipt;
     try {

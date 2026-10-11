@@ -1,7 +1,13 @@
 import { randomUUID } from "node:crypto";
+import { setTimeout as yieldToBrowser } from "node:timers/promises";
 import { planPrompt } from "../../../lib/planner";
 import { startTrace } from "../../../lib/planner/diagnostics";
 import { PlannerError } from "../../../lib/planner/errors";
+import { generationEventStream } from "../../../lib/planner/eventStream";
+import {
+  type GenerationStage,
+  progressFromTrace,
+} from "../../../lib/planner/progress";
 import {
   type GenerationResult,
   parseGenerationRequest,
@@ -83,6 +89,82 @@ export async function POST(request: Request) {
       );
     }
     trace = startTrace(correlationId, input.prompt);
+    if (request.headers.get("Accept")?.includes("application/x-ndjson")) {
+      const diagnostic = trace;
+      const body = generationEventStream(
+        request.signal,
+        async (writer, signal) => {
+          let previous: GenerationStage | null = null;
+          const report = (event: string, data: unknown) => {
+            diagnostic(event, data);
+            const stage = progressFromTrace(event, data);
+            if (stage && stage !== previous) {
+              previous = stage;
+              writer.progress({
+                type: "progress",
+                requestId: correlationId,
+                stage,
+              });
+            }
+          };
+          try {
+            const result = await planPrompt(
+              input,
+              signal,
+              report,
+              async (update, constructionSignal) => {
+                await writer.send(update, constructionSignal);
+                // Give the browser a frame to display atomic recipe expansion before the terminal event.
+                await yieldToBrowser(32, undefined, {
+                  signal: constructionSignal,
+                });
+              },
+            );
+            report("result", {
+              status: result.status,
+              ...("recipe" in result
+                ? {
+                    nodes: result.recipe.document.nodes.length,
+                    coverage: result.coverage,
+                  }
+                : {}),
+            });
+            await writer.send({
+              type: "result",
+              requestId: correlationId,
+              result,
+            });
+          } catch (error) {
+            if (signal.aborted) return;
+            const status = error instanceof PlannerError ? error.status : 500;
+            const message =
+              error instanceof PlannerError
+                ? error.message
+                : "Unable to process the prompt.";
+            diagnostic("failure", { status, message });
+            await writer.send({
+              type: "result",
+              requestId: correlationId,
+              result: {
+                protocolVersion: 1,
+                status: "failed",
+                requestId: correlationId,
+                message,
+                retryable: [429, 502, 503, 504, 500].includes(status),
+              },
+            });
+          }
+        },
+      );
+      return new Response(body, {
+        headers: {
+          "Content-Type": "application/x-ndjson",
+          "Cache-Control": "no-store, no-transform",
+          "X-Request-ID": correlationId,
+          "X-Accel-Buffering": "no",
+        },
+      });
+    }
     const result = await planPrompt(input, request.signal, trace);
     trace("result", {
       status: result.status,

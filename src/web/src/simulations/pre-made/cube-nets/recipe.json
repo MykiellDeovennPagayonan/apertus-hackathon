@@ -1,0 +1,279 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/cube-nets",
+  "version": 1,
+  "title": "Which shapes fold into a cube?",
+  "description": "Fold arrangements of six lettered squares and see which close into a cube.",
+  "tags": ["mathematics", "cube nets", "3D shapes", "folding"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-geometry/CubeNet",
+        "version": 1,
+        "label": "Six-square net",
+        "scope": "scope/lab",
+        "configuration": {
+          "preset": 0,
+          "cells": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 2,
+              "y": 1
+            },
+            {
+              "x": 3,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 2
+            }
+          ],
+          "folded": false
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-cube-net",
+        "version": 1,
+        "label": "Net and folded cube",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/1",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Fold it",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Fold it",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      },
+      {
+        "id": "control/2",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Try another shape",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Try another shape",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/control/1",
+        "kind": "command",
+        "from": {
+          "node": "control/1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "NET_FOLD"
+        }
+      },
+      {
+        "id": "link/control/2",
+        "kind": "command",
+        "from": {
+          "node": "control/2",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "NET_NEXT"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Which shapes fold into a cube?"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/control/1",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "control/1"
+        },
+        {
+          "id": "layout/control/2",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "control/2"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Which shapes fold into a cube?",
+      "instruction": "Find one shape that closes into a cube and one that leaves a face open.",
+      "explanation": "A net works only when every square lands on a different face. Six joined squares are not enough: some overlap and leave a face open."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 430
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 260
+        },
+        {
+          "id": "board/layout/control/1",
+          "layoutId": "layout/control/1",
+          "rect": {
+            "x": 0,
+            "y": 450,
+            "width": 380,
+            "height": 80
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/layout/control/2",
+          "layoutId": "layout/control/2",
+          "rect": {
+            "x": 400,
+            "y": 450,
+            "width": 380,
+            "height": 80
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 64
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 578
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/scene"],
+        ["board/layout/control/1", "board/layout/control/2"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "preset",
+      "node": "model",
+      "field": "preset",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 7,
+        "unit": ""
+      },
+      "default": 0
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-geometry/CubeNet",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-cube-net",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Six equal squares joined edge to edge, zero thickness, each shared edge folds 90°. A net is valid when the six squares cover six different cube faces.",
+    "Curated shapes plus any connected six-square arrangement on a 6 × 6 grid. Folding-motion collisions, glue tabs and non-cube boxes are unsupported."
+  ],
+  "catalog": {
+    "icon": "⬚",
+    "category": "mathematics",
+    "order": 18
+  }
+}

@@ -94,7 +94,8 @@ const originalPaths = cp
     encoding: "utf8",
   })
   .trim()
-  .split("\n")
+  .split(/\r?\n/)
+  .map((p) => p.replace(/\\/g, "/"))
   .filter(Boolean);
 const componentRoot = path.join(web, "src/simulations/components");
 function inventory(dir) {
@@ -103,7 +104,7 @@ function inventory(dir) {
     .flatMap((e) =>
       e.isDirectory()
         ? inventory(path.join(dir, e.name))
-        : [path.relative(root, path.join(dir, e.name))],
+        : [path.relative(root, path.join(dir, e.name)).replace(/\\/g, "/")],
     );
 }
 const paths = [...new Set([...originalPaths, ...inventory(componentRoot)])]
@@ -125,7 +126,47 @@ const categories = {
   compositions: "recipe",
   behaviors: "behavior",
 };
+const earthKinds = [
+  "earthquake",
+  "tsunami",
+  "atmosphere",
+  "greenhouse",
+  "lightning",
+  "rainbow",
+  "weather",
+];
 const explicitOwners = new Map([
+  [
+    "systems/earth-atmosphere/physics.ts",
+    earthKinds.map((k) => `prefabs/earth-atmosphere/${k}`),
+  ],
+  ...["LessonScene.tsx", "Scene3D.tsx", "Diagrams.tsx"].map((file) => [
+    `views/earth-atmosphere/${file}`,
+    earthKinds.map((k) => `appearance/earth-atmosphere-${k}`),
+  ]),
+  [
+    "views/earth-atmosphere/LessonControls.tsx",
+    earthKinds.flatMap((k) => [
+      `controls/earth-atmosphere-${k}-action`,
+      `displays/earth-atmosphere-${k}-caption`,
+    ]),
+  ],
+  ...["fishing", "crowd", "voting", "selection"].flatMap((kind) => [
+    [`systems/collective/${kind}.ts`, [`prefabs/collective/${kind}`]],
+    [
+      `views/collective/${kind[0].toUpperCase() + kind.slice(1)}Scene.tsx`,
+      [`appearance/collective-${kind}`],
+    ],
+  ]),
+  [
+    "views/collective/Controls.tsx",
+    ["fishing", "crowd", "voting", "selection"].flatMap((kind) => [
+      `controls/collective-${kind}-action`,
+      `displays/collective-${kind}-caption`,
+      ...(kind === "crowd" ? [] : [`controls/collective-${kind}-choice`]),
+    ]),
+  ],
+
   ["visuals/BeamVisual.tsx", ["appearance/Beam"]],
   ["visuals/BridgeSupportVisual.tsx", ["appearance/BridgeSupport"]],
   ["visuals/LoadTruckVisual.tsx", ["appearance/LoadTruck"]],
@@ -174,6 +215,16 @@ const explicitOwners = new Map([
       "prefabs/chemistry/Dilution",
       "prefabs/chemistry/Conservation",
       "prefabs/chemistry/ReactionRate",
+      "prefabs/chemistry/AcidBaseTitration",
+      "prefabs/chemistry/GasEquilibrium",
+    ],
+  ],
+  [
+    "systems/economics/models.ts",
+    [
+      "prefabs/economics/MarketEquilibrium",
+      "prefabs/economics/PriceElasticity",
+      "prefabs/economics/CostAndProfit",
     ],
   ],
   [
@@ -224,6 +275,15 @@ function definitionOwners(source, text, symbol) {
       "appearance/chemistry-dilution",
       "appearance/chemistry-conservation",
       "appearance/chemistry-rate",
+      "appearance/chemistry-titration",
+      "appearance/chemistry-gas-equilibrium",
+    ])
+      ids.add(id);
+  if (relative.startsWith("visuals/economics/"))
+    for (const id of [
+      "appearance/economics-market-equilibrium",
+      "appearance/economics-price-elasticity",
+      "appearance/economics-cost-and-profit",
     ])
       ids.add(id);
   if (relative.startsWith("visuals/physical-systems/"))
@@ -255,6 +315,31 @@ function definitionOwners(source, text, symbol) {
       ["prefabs/chemistry/Conservation"],
     ],
     ["systems/chemistry/models.ts", "rate", ["prefabs/chemistry/ReactionRate"]],
+    [
+      "systems/chemistry/models.ts",
+      "titration",
+      ["prefabs/chemistry/AcidBaseTitration"],
+    ],
+    [
+      "systems/chemistry/models.ts",
+      "gasEquilibrium",
+      ["prefabs/chemistry/GasEquilibrium"],
+    ],
+    [
+      "systems/economics/models.ts",
+      "marketEquilibrium",
+      ["prefabs/economics/MarketEquilibrium"],
+    ],
+    [
+      "systems/economics/models.ts",
+      "priceElasticity",
+      ["prefabs/economics/PriceElasticity"],
+    ],
+    [
+      "systems/economics/models.ts",
+      "costAndProfit",
+      ["prefabs/economics/CostAndProfit"],
+    ],
     [
       "systems/physical-systems/models.ts",
       "pendulum",

@@ -1,0 +1,8 @@
+{
+  "slug": "debate",
+  "visibleItems": 8,
+  "title": "Three-versus-three AI debate",
+  "visualSelector": ".agent-profile",
+  "visualMinWidth": 160,
+  "visualMinHeight": 100
+}

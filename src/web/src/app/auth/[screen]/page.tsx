@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { linkIsValid } from "../../../lib/auth/accounts";
 import { authConfigured, googleConfigured } from "../../../lib/auth/server";
+import { offlineEnabled } from "../../../lib/deployment";
 import AuthScreen, { type Screen } from "../AuthScreen";
 
 const screens: Screen[] = [
@@ -18,6 +19,7 @@ export default async function Page({
   params: Promise<{ screen: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  if (offlineEnabled()) notFound();
   const { screen } = await params;
   const selected = screens.find((value) => value === screen);
   if (!selected) notFound();

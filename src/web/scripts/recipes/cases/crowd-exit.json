@@ -1,0 +1,7 @@
+{
+  "slug": "crowd-exit",
+  "visibleItems": 3,
+  "title": "Crowd flow and obstacles",
+  "visualSelector": ".crowd-pair",
+  "desktopOnly": true
+}

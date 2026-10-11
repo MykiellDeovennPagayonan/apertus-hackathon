@@ -1,3 +1,4 @@
+import { publicDefinitions } from "../../simulations/components/catalog";
 import {
   finalizeRecipe,
   type ToolRequest,
@@ -17,7 +18,6 @@ import {
 import { premadeRecipe } from "../../simulations/runtime/recipes/registry";
 import { toJsonSchema } from "../apertus/structuredSchema";
 import { requestStructured } from "../apertus/transport";
-import { selectCapability } from "../laya/selection";
 import { GenerationBudget, type TraceSink } from "./budget";
 import {
   activeHandles,
@@ -27,7 +27,10 @@ import {
   selectedContract,
 } from "./catalog";
 import { compose } from "./compose";
+import { requiresLayaComposition } from "./compositionPolicy";
 import { verifyExplicitQuantities } from "./constraints";
+import type { ConstructionSink } from "./construction";
+import { ConstructionPublisher } from "./constructionPublisher";
 import { parseStageJson, stageMessages } from "./context";
 import { coverageFor, verifyCoverage } from "./coverage";
 import { PlannerError } from "./errors";
@@ -43,6 +46,7 @@ import {
   parseIntentResponse,
   type TeachingIntent,
 } from "./schema";
+import { selectCapability } from "./selection/selectCapability";
 import {
   creationResponseSchema,
   followupContract,
@@ -82,16 +86,62 @@ async function stage<T>(
   });
   return requestStructured(
     messages,
-    (content) =>
-      parse(
-        parseStageJson(content, schema.type === "array" ? "array" : "object"),
-      ),
+    (content) => {
+      let value = parseStageJson(
+        content,
+        schema.type === "array" ? "array" : "object",
+      );
+      const wrappers: string[] = [];
+      for (let depth = 0; depth < 2; depth++) {
+        if (!value || typeof value !== "object" || Array.isArray(value)) break;
+        const record = value as Record<string, unknown>;
+        const keys = Object.keys(record);
+        const key = keys[0];
+        const argumentStage = task === "runtime_command_arguments";
+        const declared = (schema.properties ?? {}) as Record<string, unknown>;
+        if (
+          keys.length === 1 &&
+          !(key in declared) &&
+          (key === task ||
+            (argumentStage && ["arguments", "command_arguments"].includes(key)))
+        ) {
+          value = record[key];
+          wrappers.push(key);
+        } else if (
+          argumentStage &&
+          (keys.length === 2 || keys.length === 3) &&
+          keys.includes("command") &&
+          keys.includes("arguments") &&
+          keys.every((key) => ["command", "arguments", "node"].includes(key)) &&
+          (!("node" in record) ||
+            record.node ===
+              (contract as { selected?: { node?: string } }).selected?.node) &&
+          !("command" in declared) &&
+          record.command ===
+            (contract as { selected?: { command?: string } }).selected?.command
+        ) {
+          value = record.arguments;
+          wrappers.push("matching selected command");
+        } else break;
+      }
+      const result = parse(value);
+      if (wrappers.length) {
+        budget.trace?.(`${task}.formatNormalized`, {
+          kind: "bounded known stage or argument envelope",
+          stage: task,
+          wrappers,
+        });
+      }
+      return result;
+    },
     `Return only this stage's schema, preserving the original constraints. Do not repeat valid prior operations.${
-      task === "runtime_command_arguments"
-        ? " Return only the selected command's argument object. The application owns the command envelope. Close each nested argument object before the root object."
-        : task === "authoring_arguments"
-          ? " For operations, close the arguments object with }, then the operation object with }, then the operations array with ], and finally the root object with }."
-          : ""
+      task === "teaching_intent"
+        ? " Keep each of concepts, interactions, and observations to at most THREE concise entries. Combine related concepts into one entry. Do not list individual terms as separate concepts. This is a compact intent summary, not a glossary."
+        : task === "runtime_command_arguments"
+          ? " Return only the selected command's argument object. The application owns the command envelope. Close each nested argument object before the root object."
+          : task === "authoring_arguments"
+            ? " For operations, close the arguments object with }, then the operation object with }, then the operations array with ], and finally the root object with }."
+            : ""
     }`,
     budget.signal,
     {
@@ -131,6 +181,7 @@ async function select(
   intent: TeachingIntent,
   budget: GenerationBudget,
 ) {
+  budget.trace?.("selection.start", {});
   let ranked = retrieveCapabilities(request.prompt, intent);
   if (!ranked.length) {
     budget.broaderSearches++;
@@ -146,7 +197,7 @@ async function select(
   );
   if (!ranked.length) return null;
   if (ranked.length === 1 || ranked[0].score >= ranked[1].score + 8) {
-    budget.trace?.("selection.laya", {
+    budget.trace?.("selection.decision", {
       status: "skipped",
       reason: "Unambiguous grounded capability",
     });
@@ -159,12 +210,13 @@ async function select(
       intent,
       cards,
       budget,
+      () => budget.decision,
     );
-    if (selected) return selected;
+    if (selected.status === "selected") return selected.capability;
   } else
-    budget.trace?.("selection.laya", {
+    budget.trace?.("selection.decision", {
       status: "skipped",
-      reason: "Apertus-only mode",
+      reason: "Decision selection disabled",
     });
   const schema = selectionSchema(cards.map((c) => c.recipeSlug));
   const selected = await stage(
@@ -207,7 +259,10 @@ async function followup(
 ): Promise<GenerationResult | null> {
   const current = request.active;
   if (!current) throw new Error("A follow-up requires an active recipe");
-  if (current.sessionId.startsWith("builder-")) {
+  if (
+    request.destination === "builder" ||
+    current.sessionId.startsWith("builder-")
+  ) {
     // Builder sessions are authoring workflows that compose or modify components and composites.
     return null;
   }
@@ -217,18 +272,29 @@ async function followup(
     // fall back to open composition planning.
     return null;
   }
+  const earthFollowup = handles.every((handle) =>
+    handle.definition.startsWith("prefabs/earth-atmosphere/"),
+  );
   let mode = await stage(
     "followup_mode",
     request,
     budget,
     toJsonSchema(followupModeSchema),
     {
-      policy:
-        "Explicit start/initial/default, adding components/observations, layout, or wording means authored. Perform/play/reset/move now means runtime. An ordinary value change without starting/default wording is a learner runtime action. Creating a different lesson means new. Questions, explanations, or queries that do not operate or reconfigure the simulation are unsupported. Never capture a running checkpoint.",
-      targets: handles.map(({ target, label, definition }) => ({
+      policy: earthFollowup
+        ? "Classify the requested operation in the active teaching lesson. Use runtime for a declared condition, variant, speed, playback or stage action; questions revealing a declared mechanism also use runtime. Those teaching actions are supported despite the model's stated approximations. Use authored for explicit initial/default settings, added components, layout or wording edits. Use new for another lesson. Use unsupported only when the requested behavior is absent, such as predicting a real future earthquake or issuing a local hazard/weather forecast. Local or timed claims about whether a real event will happen are forecasts, even when phrased as a casual question. Do not substitute a teaching command for a forecast. Do not reject an ordinary supported action because the model is illustrative. Never capture a running checkpoint."
+        : "Explicit start/initial/default, adding components/observations, layout, or wording means authored. Perform/play/reset/move now means runtime. An ordinary value change without starting/default wording is a learner runtime action. Revealing an existing phenomenon with a declared command is runtime, even when the user says show, make, or asks why. Do not confuse changing a condition with adding a new component. Creating a different lesson means new. A question asking to explore a supported condition or reveal a mechanism uses its relevant declared runtime action. Pure questions with no supported action are unsupported. Never capture a running checkpoint.",
+      targets: handles.map(({ target, label, definition, commands }) => ({
         target,
         label,
         definition,
+        ...(earthFollowup
+          ? { fidelity: publicDefinitions.get(definition)?.assumptions ?? [] }
+          : {}),
+        supportedActions: Object.entries(commands).map(([id, contract]) => ({
+          id,
+          description: contract.description,
+        })),
       })),
     },
     (value) => {
@@ -245,7 +311,14 @@ async function followup(
   ) {
     mode = "authored";
   }
-  if (mode === "new") return null;
+  if (
+    mode === "new" ||
+    (mode === "authored" &&
+      handles.some((handle) =>
+        handle.definition.startsWith("prefabs/earth-atmosphere/"),
+      ))
+  )
+    return null;
   if (mode === "unsupported")
     return {
       protocolVersion: 1,
@@ -257,7 +330,16 @@ async function followup(
   if (mode === "runtime") {
     const options = handles.flatMap((handle) =>
       Object.entries(handle.commands).map(([command, contract], index) => ({
-        id: `${handle.target}:${index + 1}`,
+        id:
+          earthFollowup && handles.length === 1
+            ? command.split("_SET_")[1] === "ozone"
+              ? "ozone_amount"
+              : (command.split("_SET_")[1] ??
+                command.replace(/^EA_[A-Z]+_/, "").toLowerCase())
+            : handle.definition.startsWith("prefabs/earth-atmosphere/") &&
+                handles.filter((h) => command in h.commands).length === 1
+              ? command
+              : `${handle.target}:${index + 1}`,
         node: handle.target,
         label: handle.label,
         definition: handle.definition,
@@ -266,6 +348,12 @@ async function followup(
         arguments: contract.arguments,
       })),
     );
+    if (earthFollowup)
+      options.sort(
+        (a, b) =>
+          Number(!a.command.includes("_SET_")) -
+          Number(!b.command.includes("_SET_")),
+      );
     const selectionShape = object({
       selections: {
         type: "array",
@@ -280,9 +368,15 @@ async function followup(
       budget,
       toJsonSchema(selectionShape),
       {
-        policy:
-          "Select only the declared runtime commands needed to perform the request now. Value changes are runtime actions unless the request says start, initial, or default. Preserve the current operation when only arithmetic numbers change. Do not select RESET unless explicitly requested. For bridge loads, SET_LOAD changes weight/mass/magnitude (tonnes), while MOVE_LOAD changes position (left/right/across).",
-        options,
+        policy: earthFollowup
+          ? "Choose commands matching this learner request in the active model. A requested condition, variant, rate or named setting needs its SET command. Fault style, ocean depth, ozone amount, greenhouse gas amount, cloud vs ground discharge, rainbow type or Sun elevation, weather location and humidity are settings. To locate the ozone layer choose show_ozone; ozone_amount changes its quantity. RUN/ADVANCE only move unchanged conditions to another teaching stage. NEXT_WAVE reveals a later tsunami arrival; SHOW_THUNDER explains later sound. Copy the selected option ids exactly. Do not reset unless asked."
+          : "Select only the declared runtime commands needed to perform the request now. Copy the option id exactly. Changing a condition requires the matching SET command, not RUN or ADVANCE; those reveal stages without changing conditions. Value changes are runtime actions unless the request says start, initial, or default. Preserve the current operation when only arithmetic numbers change. Do not select RESET unless explicitly requested. For bridge loads, SET_LOAD changes weight/mass/magnitude (tonnes), while MOVE_LOAD changes position (left/right/across).",
+        options: earthFollowup
+          ? options.map((option) => ({
+              id: option.id,
+              meaning: option.description,
+            }))
+          : options,
       },
       (value) => {
         validateValue(selectionShape, value);
@@ -327,7 +421,18 @@ async function followup(
         return selections;
       },
       undefined,
-      current.runtimeContext,
+      earthFollowup
+        ? Object.fromEntries(
+            handles.map((handle) => [
+              handle.target,
+              {
+                config: (
+                  current.runtimeContext[handle.target] as { config?: unknown }
+                )?.config,
+              },
+            ]),
+          )
+        : current.runtimeContext,
       128,
     );
     const commands: ScopedCommand[] = [];
@@ -335,6 +440,20 @@ async function followup(
       const selected = options.find((option) => option.id === selectedId);
       if (!selected) throw new Error("Unknown runtime command selection");
       const fullSchema = selected.arguments;
+      if (
+        selected.definition.startsWith("prefabs/earth-atmosphere/") &&
+        fullSchema.type === "object" &&
+        Object.keys(fullSchema.properties).length === 0
+      ) {
+        // The selected typed command declares no arguments. There is no value
+        // to infer; its target and command still come from actual inference.
+        commands.push({
+          node: selected.node,
+          command: selected.command,
+          arguments: {},
+        });
+        continue;
+      }
       const unwrapped =
         fullSchema.type === "object" &&
         Object.keys(fullSchema.properties).length === 1 &&
@@ -348,16 +467,29 @@ async function followup(
         budget,
         toJsonSchema(responseSchema),
         {
-          policy:
-            "Return only the selected command's arguments. Copy every required sibling field from currentState when the request changes only some fields. Preserve the current arithmetic operation when only its numbers change.",
-          selected: {
-            node: selected.node,
-            label: selected.label,
-            definition: selected.definition,
-            command: selected.command,
-            description: selected.description,
-          },
-          currentState: current.runtimeContext[selected.node],
+          policy: earthFollowup
+            ? "Return only the selected setting's {value: ...} argument object. Use the declared meaning to map requested variants to boolean or enum values. Infer the requested new target value; do not copy it unchanged unless the learner explicitly asks to keep it the same. For relative changes compare to currentValue. Speed is a rate multiplier: slower needs a smaller value, for example 0.5 is half-speed."
+            : "Return only the selected command's arguments. Copy every required sibling field from currentState when the request changes only some fields. Preserve the current arithmetic operation when only its numbers change. Current Earth/atmosphere settings are in currentConfiguration. Speed is a rate multiplier: 0.5 is half-speed, 1 is normal, 2 is double-speed. A slower animation needs a smaller rate. Compare relative changes to currentConfiguration; do not confuse a rate with a duration.",
+          ...(earthFollowup
+            ? {
+                setting: selected.command.split("_SET_")[1],
+                meaning: selected.description,
+                currentValue: (
+                  current.runtimeContext[selected.node] as {
+                    config?: Record<string, unknown>;
+                  }
+                )?.config?.[selected.command.split("_SET_")[1]],
+              }
+            : {
+                selected: {
+                  node: selected.node,
+                  label: selected.label,
+                  definition: selected.definition,
+                  command: selected.command,
+                  description: selected.description,
+                },
+                currentState: current.runtimeContext[selected.node],
+              }),
         },
         (value) => {
           let v = value;
@@ -594,10 +726,9 @@ async function followup(
     learnerExplanation: response.message,
   };
 }
-export async function planPrompt(
+async function planPromptInternal(
   input: GenerationRequest,
-  signal?: AbortSignal,
-  trace?: TraceSink,
+  budget: GenerationBudget,
 ): Promise<GenerationResult> {
   const request = parseGenerationRequest(input);
   const mode = process.env.PLANNER_MODE ?? "hybrid";
@@ -606,15 +737,18 @@ export async function planPrompt(
   const limit = Number(process.env.PLANNER_MAX_CONCURRENT_REQUESTS ?? 1);
   if (!Number.isInteger(limit) || limit < 1 || limit > 16)
     throw new PlannerError("Invalid planner concurrency.", 503);
-  const budget = new GenerationBudget(signal, trace);
+  const requiredComposition = requiresLayaComposition();
   budget.check();
   if (activeRequests >= limit)
     throw new PlannerError("Planner is busy. Please try again shortly.", 429);
   activeRequests++;
   try {
-    if (request.active) {
+    if (request.active && !requiredComposition) {
       const result = await followup(request, budget);
-      if (result) return parseGenerationResult(result, request);
+      if (result) {
+        budget.trace?.("validation.start", {});
+        return parseGenerationResult(result, request);
+      }
     }
     const intent = await stage(
       "teaching_intent",
@@ -648,14 +782,54 @@ export async function planPrompt(
       Boolean(request.active?.sessionId?.startsWith("builder-")) &&
       (request.active?.recipe.document.nodes.length ?? 0) > 0;
 
-    const selected = isBuilderModifyingComposite
-      ? null
-      : await select(request, intent, budget);
+    const selected =
+      isBuilderModifyingComposite || requiredComposition
+        ? null
+        : await select(request, intent, budget);
     if (!selected) {
       budget.trace?.("selection.fallback_to_composition", {
         reason: "No single recipe fits request",
       });
-      return await compose(request, intent, budget);
+      let replaceTopic = false;
+      if (
+        requiredComposition &&
+        request.active?.recipe.document.nodes.some((node) =>
+          node.definition.startsWith("prefabs/earth-atmosphere/"),
+        )
+      ) {
+        const scopeSchema = object({
+          scope: choice("same-topic", "new-topic"),
+        });
+        const scope = await stage(
+          "followup_topic_scope",
+          request,
+          budget,
+          toJsonSchema(scopeSchema),
+          {
+            currentLesson: request.active.recipe.title,
+            policy:
+              "Classify the learner's requested subject before topic selection. Use same-topic for changes to conditions, speed, camera, stages, or an explanation within the current lesson. Use new-topic when the learner explicitly requests another scientific subject or corrects which subject they meant. A correction such as 'I meant ozone, not warming' replaces a greenhouse lesson; 'make the sun higher' stays within a rainbow lesson. Return only {scope: 'same-topic' | 'new-topic'}.",
+          },
+          (value) => {
+            validateValue(scopeSchema, value);
+            return value as { scope: "same-topic" | "new-topic" };
+          },
+          undefined,
+          undefined,
+          64,
+        );
+        replaceTopic = scope.scope === "new-topic";
+        budget.trace?.("followup.topicScope", { scope: scope.scope });
+      }
+      return await compose(
+        request,
+        intent,
+        budget,
+        requiredComposition && request.active && !replaceTopic
+          ? () => followup(request, budget)
+          : undefined,
+        replaceTopic,
+      );
     }
     const source = premadeRecipe(selected.recipeSlug);
     const construct = (
@@ -804,7 +978,13 @@ export async function planPrompt(
         construct(parsed, false);
       },
     );
+    budget.trace?.("validation.start", {});
     let { draft, recipe, coverage } = construct(configuration, true);
+    await budget.construction?.publish(
+      draft.document,
+      draft.revision,
+      "arrangement",
+    );
     if (configuration.extend) {
       const applyExtensions = (
         target: AuthoringTransaction,
@@ -865,9 +1045,14 @@ export async function planPrompt(
         },
         intent,
       );
-      if (extension.status === "authored")
+      if (extension.status === "authored") {
         recipe = applyExtensions(draft, extension.operations, true);
-      else {
+        await budget.construction?.publish(
+          draft.document,
+          draft.revision,
+          "arrangement",
+        );
+      } else {
         coverage = {
           level: "partial",
           covered: coverage.covered,
@@ -896,7 +1081,7 @@ export async function planPrompt(
       },
       request,
     );
-    trace?.("finalization", {
+    budget.trace?.("finalization", {
       status: result.status,
       nodes: recipe.document.nodes.length,
       connections: recipe.document.connections.length,
@@ -904,7 +1089,7 @@ export async function planPrompt(
       budget: {
         calls: budget.calls,
         repairs: budget.repairs,
-        layaCalls: budget.layaCalls,
+        decisionCalls: budget.decisionCalls,
       },
     });
     return result;
@@ -920,5 +1105,52 @@ export async function planPrompt(
         );
   } finally {
     activeRequests--;
+  }
+}
+
+/** Shared interpretation/selection; the destination only changes presentation and activation. */
+export async function planPrompt(
+  input: GenerationRequest,
+  signal?: AbortSignal,
+  trace?: TraceSink,
+  sink?: ConstructionSink,
+): Promise<GenerationResult> {
+  const request = parseGenerationRequest(input);
+  const budget = new GenerationBudget(signal, trace);
+  const initial =
+    /\b(?:start over|from scratch|new experiment|clear all|reset all|replace everything)\b/i.test(
+      request.prompt,
+    )
+      ? emptyAuthoredDocument()
+      : (request.active?.recipe.document ?? emptyAuthoredDocument());
+  const publisher =
+    request.destination === "builder" && request.construction === "live" && sink
+      ? new ConstructionPublisher(
+          request.requestId,
+          initial,
+          sink,
+          budget.signal,
+        )
+      : undefined;
+  budget.construction = publisher;
+  try {
+    const result = await planPromptInternal(request, budget);
+    if (
+      publisher &&
+      (result.status === "created" || result.status === "updated")
+    ) {
+      result.recipe.document = publisher.finalize(result.recipe.document);
+      parseGenerationResult(result, request);
+      await publisher.publish(
+        result.recipe.document,
+        publisher.latestRevision,
+        "checking",
+      );
+    }
+    budget.check();
+    return parseGenerationResult(result, request);
+  } catch (error) {
+    budget.check();
+    throw error;
   }
 }

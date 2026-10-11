@@ -94,7 +94,14 @@ export function buildTurnTools(
 
   // 3. connect (from live outputs to live inputs/commands)
   const candidates = suggestConnections(document);
-  for (const c of candidates.slice(0, 16)) {
+  // Prefer explicit named event-command contracts before the bounded shortlist.
+  // Otherwise several empty-payload actions can displace an essential setter.
+  const rankedConnections = [...candidates].sort((a, b) => {
+    const priority = (c: typeof a) =>
+      c.kind === "command" ? (c.from.port === c.to.port ? 0 : 2) : 1;
+    return priority(a) - priority(b);
+  });
+  for (const c of rankedConnections.slice(0, 16)) {
     tools.push({
       tool: "connect",
       schema: object({
@@ -108,7 +115,12 @@ export function buildTurnTools(
   if (nodeIds.length > 0) {
     for (const node of document.nodes) {
       const def = publicDefinitions.get(node.definition);
-      if (!def) continue;
+      if (
+        !def ||
+        (def.configuration.type === "object" &&
+          !Object.keys(def.configuration.properties).length)
+      )
+        continue;
       tools.push({
         tool: "configure",
         schema: object({
@@ -124,7 +136,7 @@ export function buildTurnTools(
       if (!def) continue;
       for (const [command, contract] of Object.entries(def.commands)) {
         const fields = parameterLeaves(contract.arguments).map((l) => l.path);
-        if (!fields.length) continue;
+        if (!fields.length) fields.push("");
         tools.push({
           tool: "add_control",
           schema: object({
@@ -175,8 +187,8 @@ export function buildTurnTools(
   tools.push({
     tool: "set_lesson",
     schema: object({
-      title: { type: "string", maxLength: 120 },
-      instruction: text,
+      title: { type: "string", maxLength: 100 },
+      instruction: { type: "string", maxLength: 500 },
       explanation: { type: "string", minLength: 0, maxLength: 1500 },
     }),
   });
@@ -218,10 +230,10 @@ export function buildTurnTools(
   return tools;
 }
 
-/**
- * Builds the turn schema envelope { action: "tool" | "done", tool?: ToolRequest, note?: string }
- */
-export function buildTurnEnvelopeSchema(tools: AllowedTurnTool[]): JsonSchema {
+export function buildTurnEnvelopeSchema(
+  tools: AllowedTurnTool[],
+  allowDone = true,
+): JsonSchema {
   const toolChoices = tools.map((t) =>
     toJsonSchema(
       object({
@@ -235,13 +247,13 @@ export function buildTurnEnvelopeSchema(tools: AllowedTurnTool[]): JsonSchema {
     type: "object",
     additionalProperties: false,
     properties: {
-      action: { enum: ["tool", "done"] },
+      action: { enum: allowDone ? ["tool", "done"] : ["tool"] },
       tool: {
         type: "object",
         anyOf: toolChoices,
       },
       note: { type: "string", maxLength: 200 },
     },
-    required: ["action"],
+    required: allowDone ? ["action"] : ["action", "tool"],
   };
 }

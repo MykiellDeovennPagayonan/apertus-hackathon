@@ -1,0 +1,659 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/pollination-network",
+  "version": 1,
+  "title": "Pollination network",
+  "description": "How do flower timing and pollinator visits affect compatible pollen transfer?",
+  "tags": [
+    "science",
+    "pollination",
+    "exploration"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/science/PollinationNetwork",
+        "version": 1,
+        "label": "Pollination network",
+        "scope": "scope/lab",
+        "configuration": {
+          "settings": {
+            "overlap": 80,
+            "patch": 1,
+            "pollinators": 3,
+            "resources": 75
+          },
+          "seed": 17
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/science-pollination",
+        "version": 1,
+        "label": "Explore the scene",
+        "scope": "scope/lab",
+        "configuration": {
+          "question": "How do flower timing and pollinator visits affect compatible pollen transfer?"
+        }
+      },
+      {
+        "id": "playback",
+        "definition": "controls/science-pollination",
+        "version": 1,
+        "label": "Next action",
+        "scope": "scope/lab",
+        "configuration": {
+          "panel": "playback"
+        }
+      },
+      {
+        "id": "observations",
+        "definition": "displays/ScienceObservations",
+        "version": 1,
+        "label": "What you can see",
+        "scope": "scope/lab",
+        "configuration": {
+          "panel": "observations"
+        }
+      },
+      {
+        "id": "conditions",
+        "definition": "controls/science-pollination",
+        "version": 1,
+        "label": "Investigate a condition",
+        "scope": "scope/lab",
+        "configuration": {
+          "panel": "conditions"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/playback/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "playback",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/observations/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "observations",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_STEP",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_STEP"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_STEP"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_PLAY",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_PLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_PLAY"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_PAUSE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_PAUSE"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_SET",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_SET"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SET"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_SELECT",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_SELECT"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SELECT"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_SPEED",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_SPEED"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SPEED"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_OVERLAY",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_OVERLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_OVERLAY"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_BASELINE",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_BASELINE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_BASELINE"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_SET_OVERLAP",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_SET_OVERLAP"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SET_OVERLAP"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_SET_PATCH",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_SET_PATCH"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SET_PATCH"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_SET_POLLINATORS",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_SET_POLLINATORS"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SET_POLLINATORS"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_SET_RESOURCES",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_SET_RESOURCES"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SET_RESOURCES"
+        }
+      },
+      {
+        "id": "link/playback/RESET",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "RESET"
+        },
+        "to": {
+          "node": "model",
+          "port": "RESET"
+        }
+      },
+      {
+        "id": "link/playback/SCI_POLLINATION_RESTART",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_POLLINATION_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_RESTART"
+        }
+      },
+      {
+        "id": "link/conditions/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "conditions",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_STEP",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_STEP"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_STEP"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_PLAY",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_PLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_PLAY"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_PAUSE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_PAUSE"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_RESTART",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_RESTART"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_SET",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_SET"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SET"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_SELECT",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_SELECT"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SELECT"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_SPEED",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_SPEED"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SPEED"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_OVERLAY",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_OVERLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_OVERLAY"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_BASELINE",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_BASELINE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_BASELINE"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_SET_OVERLAP",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_SET_OVERLAP"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SET_OVERLAP"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_SET_PATCH",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_SET_PATCH"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SET_PATCH"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_SET_POLLINATORS",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_SET_POLLINATORS"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SET_POLLINATORS"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_POLLINATION_SET_RESOURCES",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_POLLINATION_SET_RESOURCES"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SET_RESOURCES"
+        }
+      },
+      {
+        "id": "link/conditions/RESET",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "RESET"
+        },
+        "to": {
+          "node": "model",
+          "port": "RESET"
+        }
+      },
+      {
+        "id": "link/observations/SELECT",
+        "kind": "command",
+        "from": {
+          "node": "observations",
+          "port": "SELECT"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_POLLINATION_SELECT"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Pollination network"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/observations",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "observations"
+        },
+        {
+          "id": "layout/playback",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "playback"
+        },
+        {
+          "id": "layout/conditions",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "conditions"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Pollination network",
+      "instruction": "Follow the bees and watch what happens to the flowers.",
+      "explanation": "Two fictional plant species and finite carried pollen. Not all plants require animal pollinators. Visits, compatible transfer, fertilization, and fruit development are distinct. Fruit development takes at least two later days and requires resources."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1040,
+            "height": 510
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 340
+        },
+        {
+          "id": "board/observations",
+          "layoutId": "layout/observations",
+          "rect": {
+            "x": 290,
+            "y": 534,
+            "width": 440,
+            "height": 160
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 160
+        },
+        {
+          "id": "board/playback",
+          "layoutId": "layout/playback",
+          "rect": {
+            "x": 760,
+            "y": 534,
+            "width": 280,
+            "height": 160
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        },
+        {
+          "id": "board/conditions",
+          "layoutId": "layout/conditions",
+          "rect": {
+            "x": 0,
+            "y": 534,
+            "width": 260,
+            "height": 160
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 130
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -32,
+        "y": -28,
+        "width": 1104,
+        "height": 758
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "learnerArea": {
+        "x": -32,
+        "y": -28,
+        "width": 1104,
+        "height": 758
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/appearance"
+        ],
+        [
+          "board/conditions"
+        ],
+        [
+          "board/observations"
+        ],
+        [
+          "board/playback"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/science/PollinationNetwork",
+      "version": 1
+    },
+    {
+      "id": "appearance/science-pollination",
+      "version": 1
+    },
+    {
+      "id": "controls/science-pollination",
+      "version": 1
+    },
+    {
+      "id": "displays/ScienceObservations",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Two fictional plant species and finite carried pollen. Not all plants require animal pollinators.",
+    "Visits, compatible transfer, fertilization, and fruit development are distinct. Fruit development takes at least two later days and requires resources."
+  ],
+  "catalog": {
+    "icon": "\u273f",
+    "category": "science",
+    "order": 23
+  }
+}

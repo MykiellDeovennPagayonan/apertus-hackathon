@@ -1,0 +1,142 @@
+[
+  {
+    "id": "MATH-11",
+    "kind": "feasible-choices",
+    "canonical": "I’m buying notebooks and pens with a fixed budget. Show me all the combinations I can afford.",
+    "paraphrases": [
+      "Show every basket of notebooks and pens that fits my budget.",
+      "Help me see which whole notebooks and pens I can afford together."
+    ],
+    "followups": [
+      "Keep item prices fixed and make the budget 80.",
+      "Require at least two notebooks."
+    ],
+    "invalid": "Let me buy negative quantities and still call the basket affordable."
+  },
+  {
+    "id": "MATH-12",
+    "kind": "house-prices",
+    "canonical": "Why does one really expensive house make the average house price look so high?",
+    "paraphrases": [
+      "Show how a luxury home changes average prices compared with the middle price.",
+      "Why is the mean home price affected more than the median by one very costly house?"
+    ],
+    "followups": [
+      "Change the last house to 1000 and keep the other six prices.",
+      "Add an eighth house priced 130 and keep every existing house."
+    ],
+    "invalid": "Remove every house and say the average price is zero."
+  },
+  {
+    "id": "MATH-13",
+    "kind": "score-spread",
+    "canonical": "Can two classes have the same average score but very different results? Show me.",
+    "paraphrases": [
+      "Compare two classes whose average is 70 but whose scores are spread differently.",
+      "Can identical mean scores hide different amounts of variation?"
+    ],
+    "followups": [
+      "Spread the second class symmetrically with spacing 5 points.",
+      "Use sample standard deviation instead of population deviation."
+    ],
+    "invalid": "Report a defined sample standard deviation for one student."
+  },
+  {
+    "id": "MATH-14",
+    "kind": "survey-sampling",
+    "canonical": "Why might a survey of 20 people give a different answer from a survey of 500?",
+    "paraphrases": [
+      "Compare the variability of surveys of 20 and 500 people.",
+      "Why do small random surveys fluctuate more than large ones?"
+    ],
+    "followups": [
+      "Use 500 people per survey and keep the population at 60%.",
+      "Use biased selection at 80% while keeping population truth at 60%."
+    ],
+    "invalid": "Promise every larger sample is closer to the population."
+  },
+  {
+    "id": "MATH-15",
+    "kind": "study-regression",
+    "canonical": "Plot study hours against exam scores and let me see what happens when one student doesn’t follow the trend.",
+    "paraphrases": [
+      "Let me change one student on a study-time versus test-score scatterplot.",
+      "Show how an unusual exam score changes a fitted study-hours trend."
+    ],
+    "followups": [
+      "Change only the last student score to 10.",
+      "Add a student with ID student-6, 10 study hours and a score of 40."
+    ],
+    "invalid": "Make all study hours identical and still give a unique least-squares slope."
+  },
+  {
+    "id": "MATH-16",
+    "kind": "conditional-bags",
+    "canonical": "If I already know the marble is blue, how does that change the chance it came from the first bag?",
+    "paraphrases": [
+      "Seeing a blue marble, how likely was the first bag its source?",
+      "Compare the original bag chance with the chance after learning the marble is blue."
+    ],
+    "followups": [
+      "Set the first bag selection probability to 20% and keep both contents.",
+      "Remove all blue marbles from both bags while keeping their red contents."
+    ],
+    "invalid": "Compute a defined probability given blue when blue is impossible."
+  },
+  {
+    "id": "MATH-17",
+    "kind": "teams-and-podiums",
+    "canonical": "Why is choosing three teammates different from choosing first, second, and third place?",
+    "paraphrases": [
+      "Compare picking a team of three with awarding three ordered places.",
+      "How does counting a three-person team differ from a three-place podium?"
+    ],
+    "followups": [
+      "Switch to podium order and keep five people and three selections.",
+      "Choose two people from the same five."
+    ],
+    "invalid": "Choose six distinct people from five without replacement."
+  },
+  {
+    "id": "MATH-18",
+    "kind": "loan-payments",
+    "canonical": "Show me where each loan payment goes and what changes if I pay a little extra every month.",
+    "paraphrases": [
+      "Compare a normal fixed-rate loan with extra principal payments.",
+      "Show the interest and principal parts of monthly payments and early payoff."
+    ],
+    "followups": [
+      "Add 50 currency units extra per month, preserving principal, rate and term.",
+      "Compare a second independent loan at zero annual interest with the same principal and term."
+    ],
+    "invalid": "Include variable interest rates and missed payments in this fixed-rate model."
+  },
+  {
+    "id": "MATH-19",
+    "kind": "instantaneous-velocity",
+    "canonical": "If this graph shows how far a car has travelled, how do I tell how fast it’s going at one exact moment?",
+    "paraphrases": [
+      "Show how average car velocity approaches the velocity at one instant.",
+      "Shrink the time interval on a position curve and compare secant and tangent slopes."
+    ],
+    "followups": [
+      "Use h=0.1 seconds and keep selected time 3 seconds.",
+      "Use the reversing motion preset while keeping t=3 and h=0.1."
+    ],
+    "invalid": "Calculate the secant by dividing by h=0."
+  },
+  {
+    "id": "MATH-20",
+    "kind": "accumulated-water",
+    "canonical": "If a tap runs faster and slower over time, how can I work out how much water ended up in the tank?",
+    "paraphrases": [
+      "Find the water collected under a changing tap flow-rate curve.",
+      "Show how adding small flow rectangles estimates tank inflow over time."
+    ],
+    "followups": [
+      "Use right-endpoint rectangles while keeping the three-minute interval and flow.",
+      "Add a knot at one minute with rate four litres per minute, retaining the endpoint knots."
+    ],
+    "invalid": "Keep all water in a tank whose capacity is below the computed inflow."
+  }
+]

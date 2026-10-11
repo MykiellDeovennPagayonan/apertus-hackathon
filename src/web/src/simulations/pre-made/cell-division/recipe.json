@@ -1,0 +1,584 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/cell-division",
+  "version": 1,
+  "title": "Cell division",
+  "description": "How does one cell distribute copied chromosomes into two daughter cells?",
+  "tags": [
+    "science",
+    "cell",
+    "exploration"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/science/CellDivision",
+        "version": 1,
+        "label": "Cell division",
+        "scope": "scope/lab",
+        "configuration": {
+          "settings": {
+            "error": 0
+          },
+          "seed": 17
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/science-cell",
+        "version": 1,
+        "label": "Explore the scene",
+        "scope": "scope/lab",
+        "configuration": {
+          "question": "How does one cell distribute copied chromosomes into two daughter cells?"
+        }
+      },
+      {
+        "id": "playback",
+        "definition": "controls/science-cell",
+        "version": 1,
+        "label": "Next action",
+        "scope": "scope/lab",
+        "configuration": {
+          "panel": "playback"
+        }
+      },
+      {
+        "id": "observations",
+        "definition": "displays/ScienceObservations",
+        "version": 1,
+        "label": "What you can see",
+        "scope": "scope/lab",
+        "configuration": {
+          "panel": "observations"
+        }
+      },
+      {
+        "id": "conditions",
+        "definition": "controls/science-cell",
+        "version": 1,
+        "label": "Investigate a condition",
+        "scope": "scope/lab",
+        "configuration": {
+          "panel": "conditions"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/playback/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "playback",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/observations/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "observations",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/playback/SCI_CELL_STEP",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_CELL_STEP"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_STEP"
+        }
+      },
+      {
+        "id": "link/playback/SCI_CELL_PLAY",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_CELL_PLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_PLAY"
+        }
+      },
+      {
+        "id": "link/playback/SCI_CELL_PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_CELL_PAUSE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_PAUSE"
+        }
+      },
+      {
+        "id": "link/playback/SCI_CELL_SET",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_CELL_SET"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_SET"
+        }
+      },
+      {
+        "id": "link/playback/SCI_CELL_SELECT",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_CELL_SELECT"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_SELECT"
+        }
+      },
+      {
+        "id": "link/playback/SCI_CELL_SPEED",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_CELL_SPEED"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_SPEED"
+        }
+      },
+      {
+        "id": "link/playback/SCI_CELL_OVERLAY",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_CELL_OVERLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_OVERLAY"
+        }
+      },
+      {
+        "id": "link/playback/SCI_CELL_BASELINE",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_CELL_BASELINE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_BASELINE"
+        }
+      },
+      {
+        "id": "link/playback/SCI_CELL_SET_ERROR",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_CELL_SET_ERROR"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_SET_ERROR"
+        }
+      },
+      {
+        "id": "link/playback/RESET",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "RESET"
+        },
+        "to": {
+          "node": "model",
+          "port": "RESET"
+        }
+      },
+      {
+        "id": "link/playback/SCI_CELL_RESTART",
+        "kind": "command",
+        "from": {
+          "node": "playback",
+          "port": "SCI_CELL_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_RESTART"
+        }
+      },
+      {
+        "id": "link/conditions/value",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "scene"
+        },
+        "to": {
+          "node": "conditions",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_CELL_STEP",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_CELL_STEP"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_STEP"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_CELL_PLAY",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_CELL_PLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_PLAY"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_CELL_PAUSE",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_CELL_PAUSE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_PAUSE"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_CELL_RESTART",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_CELL_RESTART"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_RESTART"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_CELL_SET",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_CELL_SET"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_SET"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_CELL_SELECT",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_CELL_SELECT"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_SELECT"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_CELL_SPEED",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_CELL_SPEED"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_SPEED"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_CELL_OVERLAY",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_CELL_OVERLAY"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_OVERLAY"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_CELL_BASELINE",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_CELL_BASELINE"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_BASELINE"
+        }
+      },
+      {
+        "id": "link/conditions/SCI_CELL_SET_ERROR",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "SCI_CELL_SET_ERROR"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_SET_ERROR"
+        }
+      },
+      {
+        "id": "link/conditions/RESET",
+        "kind": "command",
+        "from": {
+          "node": "conditions",
+          "port": "RESET"
+        },
+        "to": {
+          "node": "model",
+          "port": "RESET"
+        }
+      },
+      {
+        "id": "link/observations/SELECT",
+        "kind": "command",
+        "from": {
+          "node": "observations",
+          "port": "SELECT"
+        },
+        "to": {
+          "node": "model",
+          "port": "SCI_CELL_SELECT"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Cell division"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/observations",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "observations"
+        },
+        {
+          "id": "layout/playback",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "playback"
+        },
+        {
+          "id": "layout/conditions",
+          "kind": "stack",
+          "label": "",
+          "gap": 8,
+          "columns": 1,
+          "children": [],
+          "node": "conditions"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Cell division",
+      "instruction": "Advance one stage and follow the chromosomes.",
+      "explanation": "Simplified animal cell with four teaching chromosomes, not a complete human genome. Mitosis only; DNA replication precedes mitosis. Chromosomes are counted by centromeres. DNA amount is relative to the original cell. Animation illustrates accepted stages."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1040,
+            "height": 490
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 340
+        },
+        {
+          "id": "board/observations",
+          "layoutId": "layout/observations",
+          "rect": {
+            "x": 290,
+            "y": 514,
+            "width": 440,
+            "height": 160
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 160
+        },
+        {
+          "id": "board/playback",
+          "layoutId": "layout/playback",
+          "rect": {
+            "x": 760,
+            "y": 514,
+            "width": 280,
+            "height": 160
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        },
+        {
+          "id": "board/conditions",
+          "layoutId": "layout/conditions",
+          "rect": {
+            "x": 0,
+            "y": 514,
+            "width": 260,
+            "height": 160
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 130
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -32,
+        "y": -28,
+        "width": 1104,
+        "height": 738
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "learnerArea": {
+        "x": -32,
+        "y": -28,
+        "width": 1104,
+        "height": 738
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/appearance"
+        ],
+        [
+          "board/conditions"
+        ],
+        [
+          "board/observations"
+        ],
+        [
+          "board/playback"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/science/CellDivision",
+      "version": 1
+    },
+    {
+      "id": "appearance/science-cell",
+      "version": 1
+    },
+    {
+      "id": "controls/science-cell",
+      "version": 1
+    },
+    {
+      "id": "displays/ScienceObservations",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Simplified animal cell with four teaching chromosomes, not a complete human genome. Mitosis only; DNA replication precedes mitosis.",
+    "Chromosomes are counted by centromeres. DNA amount is relative to the original cell. Animation illustrates accepted stages."
+  ],
+  "catalog": {
+    "icon": "\u25c9",
+    "category": "science",
+    "order": 20
+  }
+}

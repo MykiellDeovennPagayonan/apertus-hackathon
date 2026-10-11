@@ -1,8 +1,63 @@
+import { mathAnalysisArguments } from "../catalog/mathAnalysis";
+import { thermalOpticsLabels, thermalOpticsScalarCommands } from "../catalog/physicsThermalOptics";
+import { physicsMechanicsLabels, physicsMechanicsScalarCommands } from "../catalog/physicsMechanics";
+import { scienceSpecs } from "../../domains/science/specs";
 import type { FieldPresentation } from "./SchemaForm";
 
 /** Presentation metadata never changes command names, arguments, or validation. */
 export function commandPresentation(command: string, definition: string) {
+  const science = scienceSpecs.find(
+    (s) => definition === `prefabs/science/${s.name}`,
+  );
+  if (science && command.startsWith(`SCI_${science.kind.toUpperCase()}_`)) {
+    const op = command.slice(`SCI_${science.kind.toUpperCase()}_`.length);
+    const setting = science.settings.find(
+      (f) => op === `SET_${f.key.toUpperCase()}`,
+    );
+    const labels: Record<string, string> = {
+      STEP: science.step,
+      EXPOSE: "Introduce / repeat pathogen",
+      INTRODUCE: "Introduce at selected patch",
+      REMOVE: "Remove selected patch",
+      RESTORE: "Restore native cover",
+      BASELINE: "Keep baseline and restart",
+      PLAY: "Play",
+      PAUSE: "Pause",
+      SELECT: "Inspect object",
+      SPEED: "Playback speed",
+      OVERLAY: "Labels and pathways",
+    };
+    const presentation: FieldPresentation = setting
+      ? {
+          value: {
+            label: setting.label,
+            help: setting.help,
+            choices: setting.options
+              ? Object.fromEntries(
+                  setting.options.map((label, i) => [String(i), label]),
+                )
+              : undefined,
+          },
+        }
+      : {};
+    return {
+      legacyLabels: [op.toLowerCase().replaceAll("_", " ")],
+      label: setting?.label ?? labels[op],
+      presentation,
+      actionIntent:
+        op === "STEP" || op === "EXPOSE" || op === "INTRODUCE"
+          ? ("primary" as const)
+          : ("secondary" as const),
+      submitLabel: setting?.restart ? "Apply and restart" : undefined,
+    };
+  }
   const labels: Record<string, string> = {
+    ...physicsMechanicsLabels,
+    ...thermalOpticsLabels,
+    LEVER_SET_PIVOT: "Pivot position",
+    LEVER_SET_LENGTH: "Bar length",
+    LEVER_SET_LOAD_FORCE: "Load force",
+    LEVER_LIFT: "Lift / lower slightly",
     MOVE_LOAD: "Load position",
     SET_LOAD: "Load mass",
     LAUNCH: "Launch projectile",
@@ -17,6 +72,25 @@ export function commandPresentation(command: string, definition: string) {
     CHEM_SET_TEMPERATURE: "Reaction temperature",
     CHEM_RESTART_RATE: "Restart reaction",
     CHEM_STEP_RATE: "Advance reaction by one second",
+    CHEM_ADD_TITRANT: "Dispense titrant",
+    CHEM_SET_TITRANT_VOLUME: "Titrant volume",
+    CHEM_RESET_TITRATION: "Reset titration",
+    CHEM_SET_ACID_CONC: "Acid concentration",
+    CHEM_SET_EQ_TEMP: "Equilibrium temperature",
+    CHEM_SET_EQ_VOLUME: "Chamber volume",
+    CHEM_ADD_GAS: "Inject gas",
+    CHEM_SET_MATERIAL: "Material substance",
+    CHEM_SET_PHASE_TEMP: "Substance temperature",
+    CHEM_SET_PHASE_PRESSURE: "Chamber pressure",
+    ECON_SET_DEMAND: "Demand intercept",
+    ECON_SET_SUPPLY: "Supply intercept",
+    ECON_SET_PRICE_CONTROL: "Price ceiling / floor",
+    ECON_SET_TAX: "Excise tax",
+    ECON_SET_PRICE: "Selling price",
+    ECON_SET_CHOKE_PRICE: "Choke price",
+    ECON_SET_MAX_QUANTITY: "Maximum demand quantity",
+    ECON_SET_MARKET_PRICE: "Market price",
+    ECON_SET_FIXED_COST: "Fixed overhead cost",
     PHYS_PLAY: "Playback",
     PHYS_RESTART: "Restart motion",
     PHYS_STEP: "Advance motion by 0.1 seconds",
@@ -49,7 +123,7 @@ export function commandPresentation(command: string, definition: string) {
     GROW_SET_RATE: "Annual interest rate",
     GROW_SET_YEARS: "Years of growth",
     GROW_SET_SCENARIO: "Choose a growth scenario",
-    TRAFFIC_BRAKE: "Brake the leading car",
+    TRAFFIC_BRAKE: "Brake car 1",
     TRAFFIC_SET_HEADWAY: "Following time gap",
     TRAFFIC_STEP: "Advance traffic by 0.25 seconds",
     TRAFFIC_RESTART: "Restart traffic",
@@ -159,7 +233,50 @@ export function commandPresentation(command: string, definition: string) {
           subtract: "Subtract fractions",
         };
   presentation["value.mode"] = { label: "Activity", choices: modes };
+  if (command === "CIRC_SET_TOPOLOGY")
+    presentation.value = {
+      widget: "segmented",
+      choices: { series: "Series", parallel: "Parallel" },
+      help: "Series: bulbs share one path. Parallel: each bulb has its own path.",
+    };
+  if (command === "CHEM_SET_MATERIAL")
+    presentation.value = {
+      widget: "Select",
+      choices: {
+        water: "Water (H₂O)",
+        "carbon-dioxide": "Carbon Dioxide (CO₂)",
+        nitrogen: "Nitrogen (N₂)",
+      },
+      help: "Select material substance to observe its distinctive phase diagram and critical points.",
+    };
+  if (definition === "models/EclipseGeometry") {
+    const help: Record<string, string> = {
+      "set:moonAngle":
+        "Move the Moon around Earth. 180° gives solar alignment; 0° gives lunar alignment.",
+      "set:moonOffset":
+        "Move the Moon above or below the alignment. Zero keeps it in the same plane.",
+      "set:moonDistance":
+        "Move the Moon nearer to or farther from Earth. Distances are scaled for the diagram.",
+    };
+    presentation.value = { help: help[command] };
+  }
   const consequences: Record<string, string> = {
+    NUTRIENT_SET_NITROGEN: "0–150 relative supply · 100 is sufficient.",
+    NUTRIENT_SET_PHOSPHORUS: "0–150 relative supply · 100 is sufficient.",
+    NUTRIENT_SET_POTASSIUM: "0–150 relative supply · 100 is sufficient.",
+    FIRE_SET_COVERAGE: "Preset replaces your chosen patches.",
+    FIRE_SET_WIND: "0 = mild · 100 = extreme wind.",
+    FIRE_SET_MOISTURE: "0 = dry · 100 = very moist fuel.",
+    WEB_SET_PRESSURE: "0 = removed · 100 = baseline · 150 = stronger pressure.",
+    PRODUCTION_SET_SPECIALIZATION:
+      "0 = broad tasks · 100 = narrow specialization.",
+    PRODUCTION_SET_DELAY: "0 = balanced · 100 = sixfold delay at Join.",
+    PRODUCTION_SET_DISRUPTION: "0 = normal · 100 = four-hour interruption.",
+
+    PEND_SET_LENGTH: "Longer rods swing more slowly.",
+    PEND_SET_AMPLITUDE: "Release angle (0–90°). Larger swings take longer.",
+    TRAFFIC_SET_HEADWAY:
+      "Time each driver leaves to the car ahead. A smaller gap means closer following.",
     CHEM_ADD_WATER:
       "Adds this volume to the current solution. The salt mass stays unchanged.",
     CHEM_SET_COEFFICIENTS:
@@ -184,7 +301,18 @@ export function commandPresentation(command: string, definition: string) {
   };
   if (consequences[command])
     presentation.value = { ...presentation.value, help: consequences[command] };
+  if (/^(NUTRIENT|FIRE|WEB|PRODUCTION)_SET_/.test(command))
+    presentation.value = {
+      ...presentation.value,
+      limits: false,
+      compact: true,
+    };
   const propertyLabels: Record<string, string> = {
+    distance: "Foot distance",
+    height: "Wall contact height",
+    moonAngle: "Moon position",
+    moonOffset: "Alignment offset",
+    moonDistance: "Distance from Earth",
     angle: "Launch angle",
     velocity: "Launch speed",
     gravity: "Gravity",
@@ -208,6 +336,23 @@ export function commandPresentation(command: string, definition: string) {
     closed: "Close the road",
   };
   return {
+    legacyLabels:
+      (
+        {
+          "set:moonAngle": [
+            "Moon Angle (degrees)",
+            "Moon Angle",
+            "Set moonAngle",
+          ],
+          "set:moonOffset": ["Moon Offset", "Set moonOffset"],
+          "set:moonDistance": ["Moon Distance", "Set moonDistance"],
+          CIRC_SET_TOPOLOGY: ["Topology: Series or Parallel"],
+          PEND_SET_LENGTH: ["Length (m)", "Length"],
+          PEND_SET_AMPLITUDE: ["Amplitude (deg)", "Amplitude"],
+          TRAFFIC_SET_HEADWAY: ["Desired Headway (s)", "Desired Headway"],
+          TRAFFIC_BRAKE: ["Brake Lead Vehicle", "Brake lead vehicle"],
+        } as Record<string, string[]>
+      )[command] ?? [],
     label:
       labels[command] ||
       (command.startsWith("set:")
@@ -235,6 +380,19 @@ export function acceptedCommandArguments(
   draft?: Record<string, unknown>,
 ): Record<string, unknown> | undefined {
   if (!state) return;
+  if (command.startsWith("MA_")) return mathAnalysisArguments(command, state);
+  const science = /^SCI_[A-Z]+_SET_(.+)$/.exec(command);
+  if (science) {
+    const settings = state.settings as Record<string, unknown> | undefined;
+    const key = Object.keys(settings ?? {}).find(
+      (key) => key.toUpperCase() === science[1],
+    );
+    if (settings && key) return { value: settings[key] };
+  }
+  if (command.startsWith("WEB_SET_")) {
+    const key = command.slice("WEB_SET_".length).toLowerCase();
+    if (Object.hasOwn(state, key)) return { value: state[key] };
+  }
   const inputs = state.inputs as Record<string, unknown> | undefined;
   if (command.startsWith("set:")) {
     const key = command.slice(4);
@@ -243,10 +401,42 @@ export function acceptedCommandArguments(
     return;
   }
   const scalar: Record<string, string> = {
+    ...physicsMechanicsScalarCommands,
+    ...thermalOpticsScalarCommands,
+    LEVER_SET_PIVOT: "pivotPercent",
+    LEVER_SET_LENGTH: "length",
+    LEVER_SET_LOAD_FORCE: "loadForce",
+    NUTRIENT_SET_NITROGEN: "nitrogen",
+    NUTRIENT_SET_PHOSPHORUS: "phosphorus",
+    NUTRIENT_SET_POTASSIUM: "potassium",
+    FIRE_SET_COVERAGE: "coverage",
+    FIRE_SET_WIND: "wind",
+    FIRE_SET_MOISTURE: "moisture",
+    WEB_SET_PRESSURE: "pressure",
+    PRODUCTION_SET_SPECIALIZATION: "specialization",
+    PRODUCTION_SET_DELAY: "delay",
+    PRODUCTION_SET_DISRUPTION: "disruption",
+
     MOVE_LOAD: "position",
     SET_LOAD: "magnitude",
     CHEM_SET_TEMPERATURE: "temperature",
     CHEM_SET_COEFFICIENTS: "coefficients",
+    CHEM_SET_TITRANT_VOLUME: "titrantVolumeAdded",
+    CHEM_SET_ACID_CONC: "acidConcentration",
+    CHEM_SET_EQ_TEMP: "temperature",
+    CHEM_SET_EQ_VOLUME: "volume",
+    CHEM_SET_MATERIAL: "material",
+    CHEM_SET_PHASE_TEMP: "temperature",
+    CHEM_SET_PHASE_PRESSURE: "pressure",
+    ECON_SET_DEMAND: "demandIntercept",
+    ECON_SET_SUPPLY: "supplyIntercept",
+    ECON_SET_PRICE_CONTROL: "priceControl",
+    ECON_SET_TAX: "tax",
+    ECON_SET_PRICE: "currentPrice",
+    ECON_SET_CHOKE_PRICE: "chokePrice",
+    ECON_SET_MAX_QUANTITY: "maxQuantity",
+    ECON_SET_MARKET_PRICE: "marketPrice",
+    ECON_SET_FIXED_COST: "fixedCost",
     PEND_SET_LENGTH: "length",
     PEND_SET_GRAVITY: "gravity",
     PEND_SET_AMPLITUDE: "amplitude",

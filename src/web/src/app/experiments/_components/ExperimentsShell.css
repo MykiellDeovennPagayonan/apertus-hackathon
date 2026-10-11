@@ -231,18 +231,6 @@
   display: flex;
   flex-direction: column;
 }
-.experiment-workspace--focused .recipe-lesson.is-board-workspace > header h1 {
-  display: none;
-}
-.experiment-workspace--focused .recipe-lesson.is-board-workspace > header {
-  padding-inline: 24px;
-}
-.experiment-workspace--focused .recipe-lesson.is-board-workspace > header p {
-  max-width: 620px;
-  font-size: 14px;
-  line-height: 1.55;
-  color: #687064;
-}
 .experiment-workspace--focused .board-item {
   border-color: #d9d3c5;
   border-radius: 14px;
@@ -286,9 +274,6 @@
 }
 
 @media (max-width: 700px) {
-  .experiment-workspace--focused .recipe-lesson.is-board-workspace > header {
-    padding-inline: 16px;
-  }
   .experiment-workspace--focused .board-item {
     border-radius: 12px;
     box-shadow: 0 4px 18px #30362e0a;
@@ -1315,7 +1300,9 @@
   min-width: 0;
 }
 
-/* The board owns the viewport; navigation and the prompt float above it. */
+/* NEVER override this layout rule: the board fills the entire viewport.
+   Navigation, tools, and the composer float above the canvas and must never
+   reserve rows, add canvas insets, or clip away any canvas space. */
 .experiment-workspace .workspace-stage:has(.is-board-workspace) {
   overflow: clip;
   scrollbar-gutter: auto;
@@ -1342,38 +1329,15 @@
 .experiment-workspace .workspace-composer {
   z-index: 4;
 }
-.experiment-workspace .recipe-lesson.is-board-workspace > header {
-  position: absolute;
-  top: var(--workspace-top, 112px);
-  left: 0;
-  right: 0;
-  z-index: 2;
-  pointer-events: none;
-  display: block;
-  flex: none;
-  padding: 12px 24px 16px;
-  border: 0;
-  background: transparent;
-}
-.experiment-workspace .recipe-lesson.is-board-workspace > header h1 {
-  display: none;
-  font: 600 28px / 1.2 var(--font-sans);
-  margin: 0 0 6px;
-}
 .experiment-workspace .is-workspace .is-floating .board-camera-tools,
 .experiment-workspace .is-workspace .board-selection {
   bottom: calc(var(--composer-height, 64px) + var(--composer-bottom) + 12px);
 }
 .experiment-workspace .is-workspace .is-floating .board-workspace-tools {
-  top: calc(
-    var(--workspace-top, 112px) +
-    var(--lesson-heading-height, 60px) +
-    12px
-  );
+  top: calc(var(--workspace-top, 112px) + 12px);
   bottom: auto;
 }
-/* This host measures its own header and composer. Keep compact board navigation
-   in that reserved space instead of the embedded learner's top row. */
+/* Compact navigation floats independently of the canvas dimensions. */
 .experiment-workspace .recipe-lesson:has(
     :is(.activity-control, .scalar-control--parameter)
   )
@@ -1391,11 +1355,7 @@
   .is-floating
   .board-workspace-tools {
   position: absolute;
-  top: calc(
-    var(--workspace-top, 112px) +
-    var(--lesson-heading-height, 60px) +
-    12px
-  );
+  top: calc(var(--workspace-top, 112px) + 12px);
   right: 12px;
   bottom: auto;
   border: 1px solid var(--border);
@@ -1408,31 +1368,33 @@
   .board-workspace-tools {
   visibility: hidden;
 }
-.experiment-workspace .recipe-lesson.is-board-workspace > header p {
-  font-size: 14px;
-  margin: 0;
-  color: var(--text-dim);
-}
 @media (max-width: 700px) {
-  .experiment-workspace .recipe-lesson.is-board-workspace > header {
-    padding: 8px 16px 12px;
-  }
-  .experiment-workspace .recipe-lesson.is-board-workspace > header h1 {
-    font-size: 22px;
+  .experiment-workspace
+    .recipe-lesson:has(.agent-actions)
+    .spatial-board.is-compact.is-workspace
+    .is-floating
+    .board-workspace-tools {
+    top: auto;
+    bottom: calc(var(--composer-height, 64px) + var(--composer-bottom) + 12px);
   }
 }
-
 /* Preserve actual-scale controls and scenes when vertical space is scarce.
    The authored activity repeats the actionable prompt in its first card. */
 @media (max-height: 650px) {
-  .experiment-workspace .recipe-lesson.is-board-workspace > header {
-    display: none;
-  }
   .experiment-workspace .is-workspace .is-floating .board-workspace-tools {
     display: none;
   }
 }
-
-.experiment-workspace--gas .recipe-lesson.is-board-workspace > header h1 {
-  display: none;
+@media (max-width: 700px) {
+  .experiment-workspace .is-workspace .is-floating .board-workspace-tools,
+  .experiment-workspace
+    .recipe-lesson:has(:is(.activity-control, .scalar-control--parameter))
+    .spatial-board.is-compact
+    .is-floating
+    .board-workspace-tools {
+    top: 76px;
+    bottom: auto;
+    right: 12px;
+  }
 }
+

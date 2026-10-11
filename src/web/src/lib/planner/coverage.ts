@@ -3,6 +3,7 @@ import type {
   AuthoredDocument,
   CompositeRecipe,
 } from "../../simulations/runtime/authoring/types";
+import { premadeRecipe } from "../../simulations/runtime/recipes/registry";
 import type { ComponentCard } from "./bucket";
 import type { CapabilityCard } from "./catalog";
 import { type Coverage, parseCoverage, type TeachingIntent } from "./schema";
@@ -109,15 +110,14 @@ export function verifyCoverage(recipe: CompositeRecipe, card: CapabilityCard) {
     )
       throw new Error("Teaching model has no visible effect");
   }
-  if (
-    !recipe.document.nodes.some(
-      (n) =>
-        n.definition ===
-        (card.recipeSlug === "bridge"
-          ? "models/BridgeResponse"
-          : `models/${card.recipeSlug}`),
-    )
-  )
+  const premade = premadeRecipe(card.recipeSlug);
+  const expectedModelDef =
+    card.recipeSlug === "bridge"
+      ? "models/BridgeResponse"
+      : premade.document.nodes.find(
+          (n) => publicDefinition(n.definition).teaching,
+        )?.definition ?? `models/${card.recipeSlug}`;
+  if (!recipe.document.nodes.some((n) => n.definition === expectedModelDef))
     throw new Error("Selected capability was not constructed");
 }
 
@@ -160,6 +160,7 @@ export function computeOpenCompositionCoverage(
   const simulatesMass =
     presentDefs.has("prefabs/chemistry/Dilution") ||
     presentDefs.has("prefabs/natural-systems/DiffusionField") ||
+    presentDefs.has("models/SpringMass") ||
     presentDefs.has("models/BridgeLoad");
 
   if (requested(/weight|mass/i) && !simulatesMass) {

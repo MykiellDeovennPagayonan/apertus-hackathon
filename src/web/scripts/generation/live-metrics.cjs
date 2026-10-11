@@ -40,7 +40,9 @@ function metrics(trace) {
       !!finalization && stages.some((s) => s.acceptedAfterRepair),
     inference,
     budget: finalization?.data.budget ?? budget ?? null,
-    laya: events.filter((e) => e.event === "selection.laya").map((e) => e.data),
+    decision: events
+      .filter((e) => e.event === "selection.decision")
+      .map((e) => e.data),
     constraintProbes: events
       .filter((e) => e.event.endsWith(".constraintProbe"))
       .map((e) => e.data),
@@ -63,9 +65,13 @@ function assertTrace(trace, record) {
     m.stages.every((s) => s.firstAttemptCorrect || s.acceptedAfterRepair),
   );
   assert.ok(m.budget.calls <= 6 && m.budget.repairs <= 2);
-  assert.equal(m.budget.layaCalls, 0, "Explicit acceptance prompts skip Laya");
+  assert.equal(
+    m.budget.decisionCalls,
+    0,
+    "Explicit acceptance prompts skip decision selection",
+  );
   assert.deepEqual(
-    m.laya.map((e) => e.status),
+    m.decision.map((e) => e.status),
     ["skipped"],
   );
   assert.ok(m.inference.length >= 2, "Actual model usage must be retained");

@@ -8,9 +8,13 @@ export interface DomainModel {
   name: string;
   description: string;
   assumptions: readonly string[];
+  tags?: readonly string[];
   parameters: ParameterSchema;
   defaults: Record<string, unknown>;
-  outputs: Record<string, { unit: string; description: string }>;
+  outputs: Record<
+    string,
+    { unit: string; description: string; schema?: ParameterSchema }
+  >;
   actions: Record<
     string,
     {
@@ -41,6 +45,11 @@ export interface DomainModel {
     value?: unknown,
   ): Record<string, unknown>;
   measure(state: Record<string, unknown>): Record<string, unknown>;
+  /** Optional authored-condition edit; domain owns whether to preserve or restart state. */
+  reconfigure?(
+    state: Record<string, unknown>,
+    parameters: Record<string, unknown>,
+  ): Record<string, unknown>;
   /** Optional dynamics run only on the existing authoritative runtime clock. */
   step?(state: Record<string, unknown>, delta: number): Record<string, unknown>;
 }

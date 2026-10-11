@@ -1,0 +1,383 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/cooling-drinks",
+  "version": 1,
+  "title": "Cooling a hot drink",
+  "description": "Compare a hot drink cooling in warm and cold rooms. The bigger temperature difference makes cooling faster.",
+  "tags": [
+    "physics",
+    "hot drink",
+    "cooling",
+    "warm room",
+    "cold room",
+    "coffee",
+    "tea",
+    "Newton cooling"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model0",
+        "definition": "prefabs/physics/Cooling",
+        "version": 1,
+        "label": "Cold room · 20°C",
+        "scope": "scope/lab",
+        "configuration": {
+          "initial": 80,
+          "ambient": 20,
+          "coefficient": 0.05,
+          "time": 0
+        }
+      },
+      {
+        "id": "appearance0",
+        "definition": "appearance/physics-cooling",
+        "version": 1,
+        "label": "Cold room · 20°C scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "model1",
+        "definition": "prefabs/physics/Cooling",
+        "version": 1,
+        "label": "Warm room · 30°C",
+        "scope": "scope/lab",
+        "configuration": {
+          "initial": 80,
+          "ambient": 30,
+          "coefficient": 0.05,
+          "time": 0
+        }
+      },
+      {
+        "id": "appearance1",
+        "definition": "appearance/physics-cooling",
+        "version": 1,
+        "label": "Warm room · 30°C scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/time",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Minutes elapsed",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Minutes elapsed",
+          "mode": "immediate",
+          "initial": "{\"value\":0}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance0",
+        "kind": "attachment",
+        "from": {
+          "node": "model0",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance0",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/appearance1",
+        "kind": "attachment",
+        "from": {
+          "node": "model1",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance1",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/time0",
+        "kind": "command",
+        "from": {
+          "node": "control/time",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_COOLING_TIME"
+        }
+      },
+      {
+        "id": "link/time1",
+        "kind": "command",
+        "from": {
+          "node": "control/time",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model1",
+          "port": "PT_COOLING_TIME"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Cooling a hot drink"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance0",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance0"
+        },
+        {
+          "id": "layout/appearance1",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance1"
+        },
+        {
+          "id": "layout/control/time",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/time"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Cooling a hot drink",
+      "instruction": "Compare a hot drink cooling in warm and cold rooms. The bigger temperature difference makes cooling faster.",
+      "explanation": "Well-mixed drink, constant ambient temperature and positive effective cooling coefficient. No freezing, boiling, evaporation, changing airflow or separate cup temperature."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance0",
+          "layoutId": "layout/appearance0",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 390
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 390
+        },
+        {
+          "id": "board/layout/appearance1",
+          "layoutId": "layout/appearance1",
+          "rect": {
+            "x": 696,
+            "y": 0,
+            "width": 680,
+            "height": 390
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 390
+        },
+        {
+          "id": "board/layout/control/time",
+          "layoutId": "layout/control/time",
+          "rect": {
+            "x": 0,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 128
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1424,
+        "height": 640
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance0",
+          "board/layout/appearance1"
+        ],
+        [
+          "board/layout/control/time"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1424,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "initial0",
+      "node": "model0",
+      "field": "initial",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "unit": "°C"
+      },
+      "default": 80
+    },
+    {
+      "name": "ambient0",
+      "node": "model0",
+      "field": "ambient",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 50,
+        "unit": "°C"
+      },
+      "default": 20
+    },
+    {
+      "name": "coefficient0",
+      "node": "model0",
+      "field": "coefficient",
+      "schema": {
+        "type": "number",
+        "minimum": 0.001,
+        "maximum": 1,
+        "unit": "min⁻¹"
+      },
+      "default": 0.05
+    },
+    {
+      "name": "time0",
+      "node": "model0",
+      "field": "time",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 240,
+        "unit": "min"
+      },
+      "default": 0
+    },
+    {
+      "name": "initial1",
+      "node": "model1",
+      "field": "initial",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "unit": "°C"
+      },
+      "default": 80
+    },
+    {
+      "name": "ambient1",
+      "node": "model1",
+      "field": "ambient",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 50,
+        "unit": "°C"
+      },
+      "default": 30
+    },
+    {
+      "name": "coefficient1",
+      "node": "model1",
+      "field": "coefficient",
+      "schema": {
+        "type": "number",
+        "minimum": 0.001,
+        "maximum": 1,
+        "unit": "min⁻¹"
+      },
+      "default": 0.05
+    },
+    {
+      "name": "time1",
+      "node": "model1",
+      "field": "time",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 240,
+        "unit": "min"
+      },
+      "default": 0
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Cooling",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-cooling",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Well-mixed drink, constant ambient temperature and positive effective cooling coefficient. No freezing, boiling, evaporation, changing airflow or separate cup temperature."
+  ],
+  "catalog": {
+    "icon": "◉",
+    "category": "physics",
+    "order": 157
+  }
+}

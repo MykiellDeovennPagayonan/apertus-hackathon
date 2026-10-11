@@ -1,0 +1,222 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/fencing-garden",
+  "version": 1,
+  "title": "Most garden from 20 m of fence",
+  "description": "Change the width of a rectangular garden with a fixed 20 m fence and find the most space.",
+  "tags": ["mathematics", "quadratics", "maximum", "area"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-geometry/FencedGarden",
+        "version": 1,
+        "label": "Fenced garden",
+        "scope": "scope/lab",
+        "configuration": {
+          "fenceLength": 20,
+          "gardenWidth": 2,
+          "againstWall": false
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-fencing",
+        "version": 1,
+        "label": "Garden and area curve",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/1",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Garden width (m)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Garden width (m)",
+          "mode": "immediate",
+          "initial": "{\"value\":2}",
+          "parameter": "value",
+          "step": 0.5,
+          "showNumber": true,
+          "min": 0.5,
+          "max": 9.5
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/control/1",
+        "kind": "command",
+        "from": {
+          "node": "control/1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "set:gardenWidth"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Most garden from 20 m of fence"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/control/1",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "control/1"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Most garden from 20 m of fence",
+      "instruction": "Using all 20 m of fence, make the garden with the most space.",
+      "explanation": "A fixed fence links width and depth, so area = width × (10 − width): a parabola whose top is the 5 m × 5 m square."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 430
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 260
+        },
+        {
+          "id": "board/layout/control/1",
+          "layoutId": "layout/control/1",
+          "rect": {
+            "x": 0,
+            "y": 450,
+            "width": 370,
+            "height": 140
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 638
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [["board/layout/scene"], ["board/layout/control/1"]]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "fenceLength",
+      "node": "model",
+      "field": "fenceLength",
+      "schema": {
+        "type": "number",
+        "minimum": 4,
+        "maximum": 200,
+        "unit": "m"
+      },
+      "default": 20
+    },
+    {
+      "name": "gardenWidth",
+      "node": "model",
+      "field": "gardenWidth",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 100,
+        "unit": "m"
+      },
+      "default": 2
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-geometry/FencedGarden",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-fencing",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Rectangle with all four sides fenced (A = x(P/2 − x), best x = y = P/4) or three sides against a straight wall (A = x(P − 2x), best x = P/4, y = P/2). Width between 0 and half the fence.",
+    "Gates, fence thickness, terrain and non-rectangular shapes are ignored."
+  ],
+  "catalog": {
+    "icon": "⌗",
+    "category": "mathematics",
+    "order": 21
+  }
+}

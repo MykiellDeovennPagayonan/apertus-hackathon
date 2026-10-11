@@ -867,6 +867,24 @@
   padding: 8px 12px;
   font-size: 13px;
 }
+.board-item[data-board-scene="true"] figure > .scene-guidance,
+.board-item[data-board-scene="true"] figure > figcaption,
+.board-item[data-board-scene="true"] .scene-caption {
+  position: static;
+  left: auto;
+  bottom: auto;
+  z-index: auto;
+  margin: 8px auto 0;
+  max-width: 100%;
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--text-dim, #64748b);
+}
 .board-item[data-board-scene="true"] .scene-help[open] {
   max-height: calc(100% - 84px);
   overflow: auto;
@@ -1057,4 +1075,67 @@
     bottom: 16px;
     right: 12px;
   }
+}
+
+/* A scene containing only an SVG uses its assigned area, not the global
+   recipe SVG height. Views with legends/readouts retain their own layout. */
+.board-item[data-board-scene="true"]
+.recipe-scene-content:has(> svg[viewBox]:only-child) {
+  height: 100%;
+  min-height: 0;
+  grid-template-rows: minmax(0, 1fr);
+}
+.board-item[data-board-scene="true"]
+  .recipe-scene-content
+  > svg[viewBox]:only-child {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.board-learner-view {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+.board-learner-view p {
+  margin: 6px 0 12px;
+  font-size: 12px;
+}
+.board-view-warning {
+  position: absolute;
+  top: 64px;
+  left: 12px;
+  z-index: 1150;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  width: min(440px, calc(100% - 24px));
+  padding: 12px;
+  border: 1px solid #ad7c28;
+  border-radius: 10px;
+  background: #fff7df;
+  color: #654811;
+  font-size: 13px;
+}
+.board-view-warning output {
+  flex-basis: 100%;
+}
+.board-view-warning button {
+  padding: 6px 10px;
+  border: 1px solid #ad7c28;
+  border-radius: 6px;
+  background: var(--panel);
+  color: inherit;
+  cursor: pointer;
+}
+.board-item.is-outside-view {
+  outline: 2px dashed #ad7c28;
+  outline-offset: 3px;
+}
+.board-item.is-outside-view.is-selected {
+  outline-style: solid;
+  outline-color: var(--accent);
 }
