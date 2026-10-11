@@ -99,6 +99,16 @@ if (process.argv.includes("--capture")) {
   // Implementation 024 admits three cycle models and their independent UI nodes.
   // Their own contracts and real round trips are covered by test:systems/test:recipes.
   const newSlugs = new Set([
+    "feasible-choices",
+    "house-prices",
+    "score-spread",
+    "survey-sampling",
+    "study-regression",
+    "conditional-bags",
+    "teams-and-podiums",
+    "loan-payments",
+    "instantaneous-velocity",
+    "accumulated-water",
     "nutrient-limitation",
     "craft-production",
     "wildfire",
@@ -126,6 +136,38 @@ if (process.argv.includes("--capture")) {
     "lightning-formation",
     "rainbow-formation",
     "weather-formation",
+    "pythagorean",
+    "levers",
+    "pulleys",
+    "bicycle-gears",
+    "tipping",
+    "collisions",
+    "buoyancy",
+    "water-pressure",
+    "hydraulics",
+    "pipe-flow",
+    "parachutes",
+    "bike-turning",
+    "lens-images",
+    "fibre-optics",
+    "doppler-siren",
+    "guitar-string",
+    "heat-conduction",
+    "cooling-drinks",
+    "latent-heat",
+    "magnet-induction",
+    "rc-circuit",
+
+    "decimal-place-value",
+    "tree-height",
+    "scale-floor-plan",
+    "flip-turn-slide",
+    "tile-patterns",
+    "cube-nets",
+    "can-material",
+    "box-packing",
+    "fencing-garden",
+
   ]);
   const newModels = assemblyModels.filter((m) =>
     [
@@ -152,6 +194,26 @@ if (process.argv.includes("--capture")) {
     `appearance/${m.presentation}`,
     `resources/${m.ref.replaceAll("/", "-")}`,
   ]);
+  // Plan 028 adds independently tested lessons; keep historical hashes intact.
+  for (const ref of [
+    "prefabs/math-analysis/feasible-choices",
+    "prefabs/math-analysis/house-prices",
+    "prefabs/math-analysis/score-spread",
+    "prefabs/math-analysis/survey-sampling",
+    "prefabs/math-analysis/study-regression",
+    "prefabs/math-analysis/conditional-bags",
+    "prefabs/math-analysis/teams-and-podiums",
+    "prefabs/math-analysis/loan-payments",
+    "prefabs/math-analysis/instantaneous-velocity",
+    "prefabs/math-analysis/accumulated-water",...assemblyModels.filter((m) => m.ref.startsWith("prefabs/math-geometry/")).map((m) => m.ref), "prefabs/physics/Lever", "prefabs/physics/Pulley", "prefabs/physics/BicycleGears", "prefabs/physics/Tipping", "prefabs/physics/Collision", "prefabs/physics/Buoyancy", "prefabs/physics/WaterPressure", "prefabs/physics/HydraulicLift", "prefabs/physics/PipeFlow", "prefabs/physics/Parachute", "prefabs/physics/Turning", "prefabs/physics/Lens", "prefabs/physics/Fibre", "prefabs/physics/Doppler", "prefabs/physics/String", "prefabs/physics/Conduction", "prefabs/physics/Cooling", "prefabs/physics/LatentHeat", "prefabs/physics/Induction", "prefabs/physics/Capacitor"]) {
+    const model = assemblyModels.find((m) => m.ref === ref);
+    assert.ok(model, ref);
+    newIds.push(
+      ref,
+      `appearance/${model.presentation}`,
+      `resources/${ref.replaceAll("/", "-")}`,
+    );
+  }
   newIds.push(
     "controls/FoodWebPopulation",
     "displays/ScienceObservations",

@@ -1,0 +1,349 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/buoyancy",
+  "version": 1,
+  "title": "Steel hull and block",
+  "description": "Why can the same steel float as a watertight hollow hull?",
+  "tags": [
+    "physics",
+    "buoyancy",
+    "steel hull and block"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/physics/Buoyancy",
+        "version": 1,
+        "label": "Steel hull and block",
+        "scope": "scope/lab",
+        "configuration": {
+          "mass": 10,
+          "cargo": 0,
+          "volume": 0.02,
+          "materialVolume": 0.0012738853503184713,
+          "hullHeight": 0.4,
+          "density": 1000,
+          "flooded": false
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/physics-buoyancy",
+        "version": 1,
+        "label": "Steel hull and block scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/cargo",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Cargo added",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Cargo added",
+          "mode": "immediate",
+          "initial": "{\"value\": 0}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/flooded",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Flood / seal the hull",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Flood / seal the hull",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/cargo",
+        "kind": "command",
+        "from": {
+          "node": "control/cargo",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "BUOYANCY_CARGO"
+        }
+      },
+      {
+        "id": "link/flooded",
+        "kind": "command",
+        "from": {
+          "node": "control/flooded",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "BUOYANCY_FLOODED"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Steel hull and block"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/cargo",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/cargo"
+        },
+        {
+          "id": "layout/flooded",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/flooded"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Steel hull and block",
+      "instruction": "Why can the same steel float as a watertight hollow hull?",
+      "explanation": "Quasi-static still-water equilibrium for a sealed box hull and a solid block made from the same material mass and volume. Flooded interior excludes no water, so only material volume provides buoyancy. At full submersion equality is neutral equilibrium. No waves, surface tension or ship engineering."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 340
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 280
+        },
+        {
+          "id": "board/layout/cargo",
+          "layoutId": "layout/cargo",
+          "rect": {
+            "x": 0,
+            "y": 360,
+            "width": 220,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/flooded",
+          "layoutId": "layout/flooded",
+          "rect": {
+            "x": 234,
+            "y": 360,
+            "width": 220,
+            "height": 80
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/cargo",
+          "board/layout/flooded"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1000,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "mass",
+      "node": "model",
+      "field": "mass",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 50,
+        "unit": "kg"
+      },
+      "default": 10
+    },
+    {
+      "name": "cargo",
+      "node": "model",
+      "field": "cargo",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "unit": "kg"
+      },
+      "default": 0
+    },
+    {
+      "name": "volume",
+      "node": "model",
+      "field": "volume",
+      "schema": {
+        "type": "number",
+        "minimum": 0.002,
+        "maximum": 0.2,
+        "unit": "m\u00b3"
+      },
+      "default": 0.02
+    },
+    {
+      "name": "materialVolume",
+      "node": "model",
+      "field": "materialVolume",
+      "schema": {
+        "type": "number",
+        "minimum": 0.0001,
+        "maximum": 0.01,
+        "unit": "m\u00b3"
+      },
+      "default": 0.0012738853503184713
+    },
+    {
+      "name": "hullHeight",
+      "node": "model",
+      "field": "hullHeight",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 1,
+        "unit": "m"
+      },
+      "default": 0.4
+    },
+    {
+      "name": "density",
+      "node": "model",
+      "field": "density",
+      "schema": {
+        "type": "number",
+        "minimum": 800,
+        "maximum": 1400,
+        "unit": "kg/m\u00b3"
+      },
+      "default": 1000
+    },
+    {
+      "name": "flooded",
+      "node": "model",
+      "field": "flooded",
+      "schema": {
+        "type": "boolean"
+      },
+      "default": false
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Buoyancy",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-buoyancy",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Quasi-static still-water equilibrium for a sealed box hull and a solid block made from the same material mass and volume. Flooded interior excludes no water, so only material volume provides buoyancy. At full submersion equality is neutral equilibrium. No waves, surface tension or ship engineering."
+  ],
+  "catalog": {
+    "icon": "\u2699",
+    "category": "physics",
+    "order": 146
+  }
+}

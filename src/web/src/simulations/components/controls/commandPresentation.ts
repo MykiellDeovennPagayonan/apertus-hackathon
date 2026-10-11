@@ -1,3 +1,6 @@
+import { mathAnalysisArguments } from "../catalog/mathAnalysis";
+import { thermalOpticsLabels, thermalOpticsScalarCommands } from "../catalog/physicsThermalOptics";
+import { physicsMechanicsLabels, physicsMechanicsScalarCommands } from "../catalog/physicsMechanics";
 import { scienceSpecs } from "../../domains/science/specs";
 import type { FieldPresentation } from "./SchemaForm";
 
@@ -49,6 +52,12 @@ export function commandPresentation(command: string, definition: string) {
     };
   }
   const labels: Record<string, string> = {
+    ...physicsMechanicsLabels,
+    ...thermalOpticsLabels,
+    LEVER_SET_PIVOT: "Pivot position",
+    LEVER_SET_LENGTH: "Bar length",
+    LEVER_SET_LOAD_FORCE: "Load force",
+    LEVER_LIFT: "Lift / lower slightly",
     MOVE_LOAD: "Load position",
     SET_LOAD: "Load mass",
     LAUNCH: "Launch projectile",
@@ -270,6 +279,8 @@ export function commandPresentation(command: string, definition: string) {
       compact: true,
     };
   const propertyLabels: Record<string, string> = {
+    distance: "Foot distance",
+    height: "Wall contact height",
     moonAngle: "Moon position",
     moonOffset: "Alignment offset",
     moonDistance: "Distance from Earth",
@@ -340,6 +351,7 @@ export function acceptedCommandArguments(
   draft?: Record<string, unknown>,
 ): Record<string, unknown> | undefined {
   if (!state) return;
+  if (command.startsWith("MA_")) return mathAnalysisArguments(command, state);
   const science = /^SCI_[A-Z]+_SET_(.+)$/.exec(command);
   if (science) {
     const settings = state.settings as Record<string, unknown> | undefined;
@@ -360,6 +372,11 @@ export function acceptedCommandArguments(
     return;
   }
   const scalar: Record<string, string> = {
+    ...physicsMechanicsScalarCommands,
+    ...thermalOpticsScalarCommands,
+    LEVER_SET_PIVOT: "pivotPercent",
+    LEVER_SET_LENGTH: "length",
+    LEVER_SET_LOAD_FORCE: "loadForce",
     NUTRIENT_SET_NITROGEN: "nitrogen",
     NUTRIENT_SET_PHOSPHORUS: "phosphorus",
     NUTRIENT_SET_POTASSIUM: "potassium",

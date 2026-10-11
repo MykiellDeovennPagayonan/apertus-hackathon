@@ -1,0 +1,278 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/accumulated-water",
+  "version": 1,
+  "title": "Water accumulated from changing flow",
+  "description": "Refine rate rectangles and compare their estimated litres with an exact piecewise-linear integral and tank fill.",
+  "tags": [
+    "accumulated-water",
+    "mathematics",
+    "tap",
+    "tank",
+    "water",
+    "flow",
+    "flow rate",
+    "faster",
+    "slower",
+    "accumulate",
+    "accumulation",
+    "integration",
+    "integral",
+    "litres"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-analysis/accumulated-water",
+        "version": 1,
+        "label": "Water accumulated from changing flow",
+        "scope": "scope/lab",
+        "configuration": {
+          "knots": [
+            {
+              "time": 0,
+              "rate": 2
+            },
+            {
+              "time": 3,
+              "rate": 5
+            }
+          ],
+          "start": 0,
+          "end": 3,
+          "partitions": 3,
+          "rule": "left",
+          "initial": 0,
+          "capacity": 20
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-analysis-accumulated-water",
+        "version": 1,
+        "label": "Water accumulated from changing flow",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/0",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Double the rectangles",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Double the rectangles",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      },
+      {
+        "id": "input/1",
+        "definition": "controls/Select",
+        "version": 1,
+        "label": "Rectangle rule",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Rectangle rule",
+          "mode": "immediate",
+          "initial": "{\"value\":\"left\"}",
+          "parameter": "value"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/input/0",
+        "kind": "command",
+        "from": {
+          "node": "input/0",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MA_ACCUMULATED-WATER_REFINE"
+        }
+      },
+      {
+        "id": "link/input/1",
+        "kind": "command",
+        "from": {
+          "node": "input/1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MA_ACCUMULATED-WATER_SET_RULE"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Water accumulated from changing flow"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/input/0",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/0"
+        },
+        {
+          "id": "layout/input/1",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/1"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Water accumulated from changing flow",
+      "instruction": "Refine rate rectangles and compare their estimated litres with an exact piecewise-linear integral and tank fill.",
+      "explanation": "Nonnegative piecewise-linear inflow in L/min; rectangle areas are litres. Sufficient tank capacity is required. No drain or overflow model; exact result uses analytic trapezoids on linear segments."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 450
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/input/0",
+          "layoutId": "layout/input/0",
+          "rect": {
+            "x": 0,
+            "y": 470,
+            "width": 378,
+            "height": 140
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/input/1",
+          "layoutId": "layout/input/1",
+          "rect": {
+            "x": 402,
+            "y": 470,
+            "width": 378,
+            "height": 180
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 708
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/scene"
+        ],
+        [
+          "board/layout/input/0",
+          "board/layout/input/1"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-analysis/accumulated-water",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-analysis-accumulated-water",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    },
+    {
+      "id": "controls/Select",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Nonnegative piecewise-linear inflow in L/min; rectangle areas are litres. Sufficient tank capacity is required. No drain or overflow model; exact result uses analytic trapezoids on linear segments."
+  ],
+  "catalog": {
+    "icon": "∑",
+    "category": "mathematics",
+    "order": 39
+  }
+}

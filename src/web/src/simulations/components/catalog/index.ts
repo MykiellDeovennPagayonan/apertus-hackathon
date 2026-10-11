@@ -1,3 +1,4 @@
+import { mathAnalysisLiveCommands } from "./mathAnalysis";
 import { assemblyModels } from "../../runtime/assembly";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import type { Port, PublicDefinition } from "../../runtime/authoring/types";
@@ -7,9 +8,9 @@ import { componentDefinitions } from "../registry";
 import { agentDefinitions } from "./agents";
 import { authoringDefinitions } from "./authoring";
 import { cycleDefinitions } from "./biogeochemistry";
-import { earthDefinitions } from "./earthAtmosphere";
 import { collectiveDefinitions } from "./collective";
 import { definitionDiscovery } from "./discovery";
+import { earthDefinitions } from "./earthAtmosphere";
 import { ecologyControlDefinitions } from "./ecologyControls";
 import { explorationDefinitions } from "./exploration";
 import { applyExplorationTeaching } from "./explorationTeaching";
@@ -182,7 +183,7 @@ for (const m of assemblyModels) {
       ...Object.fromEntries(
         Object.entries(m.actions).map(([key, command]) => [
           key,
-          liveExplorationCommands.has(key)
+          (liveExplorationCommands.has(key) || mathAnalysisLiveCommands.has(key))
             ? { ...command, submission: "continuous" as const }
             : command,
         ]),
@@ -225,7 +226,8 @@ for (const m of assemblyModels) {
     learnerLayout:
       m.ref.startsWith("prefabs/biogeochemistry/") ||
       m.ref.startsWith("prefabs/collective/") ||
-      m.ref.startsWith("prefabs/earth-atmosphere/")
+      m.ref.startsWith("prefabs/earth-atmosphere/") ||
+      m.ref.startsWith("prefabs/math-geometry/")
         ? "scene-first"
         : undefined,
     description: m.ref.startsWith("prefabs/biogeochemistry/")

@@ -710,14 +710,14 @@ function mockInference(queue, calls, decisionChoice = null) {
   }
   const calls = [];
   mockInference(
-    [{ ...sampleIntent, goal: "Momentum", concepts: ["momentum"] }],
+    [{ ...sampleIntent, goal: "Quantum entanglement", concepts: ["quantum entanglement"] }],
     calls,
   );
   assert.equal(
     (
       await planPrompt({
         ...request,
-        prompt: "Explain weight, friction, and momentum",
+        prompt: "Explain quantum entanglement",
         active: null,
       })
     ).status,

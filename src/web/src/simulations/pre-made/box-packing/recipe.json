@@ -1,0 +1,331 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/box-packing",
+  "version": 1,
+  "title": "How many boxes fit in the bin?",
+  "description": "Turn boxes and mix directions to fit more into a bin than one direction allows.",
+  "tags": ["mathematics", "packing", "volume", "orientation"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-geometry/BoxPacking",
+        "version": 1,
+        "label": "Bin and boxes",
+        "scope": "scope/lab",
+        "configuration": {
+          "binLength": 40,
+          "binWidth": 30,
+          "binHeight": 20,
+          "boxLength": 25,
+          "boxWidth": 15,
+          "boxHeight": 10,
+          "orientation": 0,
+          "mixed": false
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-box-packing",
+        "version": 1,
+        "label": "Bin seen from above and the front",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/1",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Turn the boxes",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Turn the boxes",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      },
+      {
+        "id": "control/2",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Mix two directions",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Mix two directions",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/control/1",
+        "kind": "command",
+        "from": {
+          "node": "control/1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PACK_TURN"
+        }
+      },
+      {
+        "id": "link/control/2",
+        "kind": "command",
+        "from": {
+          "node": "control/2",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PACK_MIX"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "How many boxes fit in the bin?"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/control/1",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "control/1"
+        },
+        {
+          "id": "layout/control/2",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "control/2"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "How many boxes fit in the bin?",
+      "instruction": "Fit more boxes than any single direction allows.",
+      "explanation": "Boxes cannot be cut, so bin volume ÷ box volume is only an upper limit. Turning some boxes can use gaps that one direction leaves empty."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 470
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 260
+        },
+        {
+          "id": "board/layout/control/1",
+          "layoutId": "layout/control/1",
+          "rect": {
+            "x": 0,
+            "y": 490,
+            "width": 380,
+            "height": 80
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 64
+        },
+        {
+          "id": "board/layout/control/2",
+          "layoutId": "layout/control/2",
+          "rect": {
+            "x": 400,
+            "y": 490,
+            "width": 380,
+            "height": 80
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 64
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 618
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/scene"],
+        ["board/layout/control/1", "board/layout/control/2"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "binLength",
+      "node": "model",
+      "field": "binLength",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 300,
+        "unit": "cm"
+      },
+      "default": 40
+    },
+    {
+      "name": "binWidth",
+      "node": "model",
+      "field": "binWidth",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 300,
+        "unit": "cm"
+      },
+      "default": 30
+    },
+    {
+      "name": "binHeight",
+      "node": "model",
+      "field": "binHeight",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 300,
+        "unit": "cm"
+      },
+      "default": 20
+    },
+    {
+      "name": "boxLength",
+      "node": "model",
+      "field": "boxLength",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 300,
+        "unit": "cm"
+      },
+      "default": 25
+    },
+    {
+      "name": "boxWidth",
+      "node": "model",
+      "field": "boxWidth",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 300,
+        "unit": "cm"
+      },
+      "default": 15
+    },
+    {
+      "name": "boxHeight",
+      "node": "model",
+      "field": "boxHeight",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 300,
+        "unit": "cm"
+      },
+      "default": 10
+    },
+    {
+      "name": "orientation",
+      "node": "model",
+      "field": "orientation",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 5,
+        "unit": ""
+      },
+      "default": 0
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-geometry/BoxPacking",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-box-packing",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Identical rigid boxes, axis-aligned, fully inside the bin and not overlapping. Uniform layouts use one of six orientations; mixed layouts search two-zone splits.",
+    "A count is called the best possible only when it equals the volume limit; otherwise it is the best arrangement found. Weight, stacking strength and squashing are unsupported."
+  ],
+  "catalog": {
+    "icon": "▦",
+    "category": "mathematics",
+    "order": 20
+  }
+}

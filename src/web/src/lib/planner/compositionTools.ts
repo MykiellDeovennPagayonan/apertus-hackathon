@@ -76,13 +76,44 @@ export function focusCompositionTools(
     if (!requirement) continue;
     if (
       requirement.appearance &&
-      !document.nodes.some((n) => n.definition === requirement.appearance)
-    )
-      return tools.filter(
-        (t) =>
-          t.tool === "insert_component" &&
-          property(t, "definition") === requirement.appearance,
+      !document.connections.some(
+        (c) =>
+          c.kind === "attachment" &&
+          c.from.node === node.id &&
+          c.to.port === "model" &&
+          document.nodes.find((n) => n.id === c.to.node)?.definition ===
+            requirement.appearance,
+      )
+    ) {
+      const free = document.nodes.find(
+        (n) =>
+          n.definition === requirement.appearance &&
+          n.scope === node.scope &&
+          !document.connections.some(
+            (c) => c.to.node === n.id && c.to.port === "model",
+          ),
       );
+      if (!free)
+        return tools.filter(
+          (t) =>
+            t.tool === "insert_component" &&
+            property(t, "definition") === requirement.appearance,
+        );
+      return tools.filter((t) => {
+        if (t.tool !== "connect" || t.schema.type !== "object") return false;
+        const { from, to } = t.schema.properties;
+        return (
+          from.type === "object" &&
+          from.properties.node.type === "enum" &&
+          from.properties.node.values.includes(node.id) &&
+          to.type === "object" &&
+          to.properties.node.type === "enum" &&
+          to.properties.node.values.includes(free.id) &&
+          to.properties.port.type === "enum" &&
+          to.properties.port.values.includes("model")
+        );
+      });
+    }
   }
   // Required data/appearance ports must be resolved before adding observations.
   const unbound = document.nodes.flatMap((n) =>
@@ -141,11 +172,28 @@ export function focusCompositionTools(
             c.to.port === command,
         )
       ) {
-        const source = document.nodes.find(
-          (candidate) =>
-            publicDefinition(candidate.definition).outputs[command]?.kind ===
-            "event",
-        );
+        const shared = requirement.sharedCommands?.includes(command)
+          ? document.connections.find(
+              (c) =>
+                c.kind === "command" &&
+                c.to.port === command &&
+                document.nodes.find((n) => n.id === c.to.node)?.definition ===
+                  node.definition &&
+                document.nodes.some(
+                  (n) =>
+                    n.id === c.from.node &&
+                    n.scope === node.scope &&
+                    publicDefinition(n.definition).category === "controls",
+                ),
+            )
+          : undefined;
+        const source = shared
+          ? document.nodes.find((n) => n.id === shared.from.node)
+          : document.nodes.find(
+              (candidate) =>
+                publicDefinition(candidate.definition).outputs[command]
+                  ?.kind === "event",
+            );
         if (source) {
           const matches = tools.filter((t) => {
             if (t.tool !== "connect" || t.schema.type !== "object")
@@ -158,7 +206,7 @@ export function focusCompositionTools(
               schema.properties.port.type === "enum" &&
               schema.properties.port.values.includes(port);
             return (
-              endpoint(from, source.id, command) &&
+              endpoint(from, source.id, shared?.from.port ?? command) &&
               endpoint(to, node.id, command)
             );
           });

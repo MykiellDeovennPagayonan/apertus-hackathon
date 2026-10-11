@@ -1,0 +1,518 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/heat-conduction",
+  "version": 1,
+  "title": "Heat through a spoon",
+  "description": "Why does heat reach a metal handle sooner than a wooden one?",
+  "tags": [
+    "physics",
+    "metal spoon",
+    "metal",
+    "wooden",
+    "handles",
+    "heat spreading",
+    "wooden spoon",
+    "hot soup",
+    "heat conduction",
+    "conductivity",
+    "thermal diffusivity"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model0",
+        "definition": "prefabs/physics/Conduction",
+        "version": 1,
+        "label": "Low conductivity · 1 W/(m·K)",
+        "scope": "scope/lab",
+        "configuration": {
+          "conductivity": 1,
+          "density": 8000,
+          "capacity": 500,
+          "length": 0.2,
+          "area": 0.0001,
+          "initial": 20,
+          "bath": 80,
+          "time": 0,
+          "boundary": "bath"
+        }
+      },
+      {
+        "id": "appearance0",
+        "definition": "appearance/physics-conduction",
+        "version": 1,
+        "label": "Low conductivity · 1 W/(m·K) scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "model1",
+        "definition": "prefabs/physics/Conduction",
+        "version": 1,
+        "label": "High conductivity · 100 W/(m·K)",
+        "scope": "scope/lab",
+        "configuration": {
+          "conductivity": 100,
+          "density": 8000,
+          "capacity": 500,
+          "length": 0.2,
+          "area": 0.0001,
+          "initial": 20,
+          "bath": 80,
+          "time": 0,
+          "boundary": "bath"
+        }
+      },
+      {
+        "id": "appearance1",
+        "definition": "appearance/physics-conduction",
+        "version": 1,
+        "label": "High conductivity · 100 W/(m·K) scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/time",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Warming time",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Warming time",
+          "mode": "immediate",
+          "initial": "{\"value\":0}",
+          "parameter": "value",
+          "step": 30,
+          "showNumber": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance0",
+        "kind": "attachment",
+        "from": {
+          "node": "model0",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance0",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/appearance1",
+        "kind": "attachment",
+        "from": {
+          "node": "model1",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance1",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/time0",
+        "kind": "command",
+        "from": {
+          "node": "control/time",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_CONDUCTION_TIME"
+        }
+      },
+      {
+        "id": "link/time1",
+        "kind": "command",
+        "from": {
+          "node": "control/time",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model1",
+          "port": "PT_CONDUCTION_TIME"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Heat through a spoon"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance0",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance0"
+        },
+        {
+          "id": "layout/appearance1",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance1"
+        },
+        {
+          "id": "layout/control/time",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/time"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Heat through a spoon",
+      "instruction": "Why does heat reach a metal handle sooner than a wooden one?",
+      "explanation": "Uniform one-dimensional cell-centred rod: alpha=k/(rho*cp). Bath held constant at one end; far end and sides insulated. Explicit finite-volume fluxes with Fourier number≤.2; reject over200000 steps. Comparison holds rho*cp and geometry equal to isolate conductivity1/100W/m/K; teaching approximations, not actual utensil property presets. No side heat losses."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance0",
+          "layoutId": "layout/appearance0",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 390
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 390
+        },
+        {
+          "id": "board/layout/appearance1",
+          "layoutId": "layout/appearance1",
+          "rect": {
+            "x": 696,
+            "y": 0,
+            "width": 680,
+            "height": 390
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 390
+        },
+        {
+          "id": "board/layout/control/time",
+          "layoutId": "layout/control/time",
+          "rect": {
+            "x": 0,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 128
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1424,
+        "height": 640
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance0",
+          "board/layout/appearance1"
+        ],
+        [
+          "board/layout/control/time"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1424,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "conductivity0",
+      "node": "model0",
+      "field": "conductivity",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 400,
+        "unit": "W/(m·K)"
+      },
+      "default": 1
+    },
+    {
+      "name": "density0",
+      "node": "model0",
+      "field": "density",
+      "schema": {
+        "type": "number",
+        "minimum": 100,
+        "maximum": 10000,
+        "unit": "kg/m³"
+      },
+      "default": 8000
+    },
+    {
+      "name": "capacity0",
+      "node": "model0",
+      "field": "capacity",
+      "schema": {
+        "type": "number",
+        "minimum": 100,
+        "maximum": 5000,
+        "unit": "J/(kg·K)"
+      },
+      "default": 500
+    },
+    {
+      "name": "length0",
+      "node": "model0",
+      "field": "length",
+      "schema": {
+        "type": "number",
+        "minimum": 0.05,
+        "maximum": 0.5,
+        "unit": "m"
+      },
+      "default": 0.2
+    },
+    {
+      "name": "area0",
+      "node": "model0",
+      "field": "area",
+      "schema": {
+        "type": "number",
+        "minimum": 0.00001,
+        "maximum": 0.001,
+        "unit": "m²"
+      },
+      "default": 0.0001
+    },
+    {
+      "name": "initial0",
+      "node": "model0",
+      "field": "initial",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "unit": "°C"
+      },
+      "default": 20
+    },
+    {
+      "name": "bath0",
+      "node": "model0",
+      "field": "bath",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "unit": "°C"
+      },
+      "default": 80
+    },
+    {
+      "name": "time0",
+      "node": "model0",
+      "field": "time",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 7200,
+        "unit": "s"
+      },
+      "default": 0
+    },
+    {
+      "name": "boundary0",
+      "node": "model0",
+      "field": "boundary",
+      "schema": {
+        "type": "enum",
+        "values": [
+          "bath",
+          "insulated"
+        ]
+      },
+      "default": "bath"
+    },
+    {
+      "name": "conductivity1",
+      "node": "model1",
+      "field": "conductivity",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 400,
+        "unit": "W/(m·K)"
+      },
+      "default": 100
+    },
+    {
+      "name": "density1",
+      "node": "model1",
+      "field": "density",
+      "schema": {
+        "type": "number",
+        "minimum": 100,
+        "maximum": 10000,
+        "unit": "kg/m³"
+      },
+      "default": 8000
+    },
+    {
+      "name": "capacity1",
+      "node": "model1",
+      "field": "capacity",
+      "schema": {
+        "type": "number",
+        "minimum": 100,
+        "maximum": 5000,
+        "unit": "J/(kg·K)"
+      },
+      "default": 500
+    },
+    {
+      "name": "length1",
+      "node": "model1",
+      "field": "length",
+      "schema": {
+        "type": "number",
+        "minimum": 0.05,
+        "maximum": 0.5,
+        "unit": "m"
+      },
+      "default": 0.2
+    },
+    {
+      "name": "area1",
+      "node": "model1",
+      "field": "area",
+      "schema": {
+        "type": "number",
+        "minimum": 0.00001,
+        "maximum": 0.001,
+        "unit": "m²"
+      },
+      "default": 0.0001
+    },
+    {
+      "name": "initial1",
+      "node": "model1",
+      "field": "initial",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "unit": "°C"
+      },
+      "default": 20
+    },
+    {
+      "name": "bath1",
+      "node": "model1",
+      "field": "bath",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "unit": "°C"
+      },
+      "default": 80
+    },
+    {
+      "name": "time1",
+      "node": "model1",
+      "field": "time",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 7200,
+        "unit": "s"
+      },
+      "default": 0
+    },
+    {
+      "name": "boundary1",
+      "node": "model1",
+      "field": "boundary",
+      "schema": {
+        "type": "enum",
+        "values": [
+          "bath",
+          "insulated"
+        ]
+      },
+      "default": "bath"
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Conduction",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-conduction",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Uniform one-dimensional cell-centred rod: alpha=k/(rho*cp). Bath held constant at one end; far end and sides insulated. Explicit finite-volume fluxes with Fourier number≤.2; reject over200000 steps. Comparison holds rho*cp and geometry equal to isolate conductivity1/100W/m/K; teaching approximations, not actual utensil property presets. No side heat losses."
+  ],
+  "catalog": {
+    "icon": "◉",
+    "category": "physics",
+    "order": 156
+  }
+}

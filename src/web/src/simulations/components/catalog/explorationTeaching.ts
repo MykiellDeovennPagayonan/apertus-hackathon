@@ -1,3 +1,7 @@
+import { mathAnalysisRequirements } from "./mathAnalysis";
+import { mathGeometryRequirements } from "./mathGeometry";
+import { thermalOpticsRequirements } from "./physicsThermalOptics";
+import { physicsMechanicsRequirements } from "./physicsMechanics";
 import { cycleKinds, cycleModels } from "../../domains/biogeochemistry";
 import {
   collectiveKinds,
@@ -17,6 +21,8 @@ export interface CompositionRequirements {
   /** Distinct neighboring topics give the decision model meaningful alternatives. */
   selectionGroup?: string;
   commands: string[];
+  /** Only declared comparison actions reuse another instance's control. */
+  sharedCommands?: string[];
   observations: string[];
   appearance?: string;
   dependencies?: string[];
@@ -46,7 +52,22 @@ const collectiveEditGuidance: Record<string, string> = {
 };
 export const compositionRequirements: Record<string, CompositionRequirements> =
   {
+    ...mathGeometryRequirements,
+    "prefabs/physics/Lever": {
+      topic:
+        "Crowbar and lever: adjustable fulcrum, torque, mechanical advantage and force/travel tradeoff",
+      selectionKey: "lever",
+      selectionGroup: "physics",
+      guidance:
+        "Build an independent crowbar scene, one pivotPercent slider and one LEVER_LIFT button. The scene already shows required effort and arm lengths; no generic readouts, load/length sliders or playback dashboard unless that is the actual requested investigation. Defaults length=1.2 m, pivotPercent=100/6 %, loadForce=100 N. Preserve unrelated settings and lifted pose. For a longer crowbar at fixed physical load arm, change both length and pivotPercent=100*oldLoadArm/newLength; merely scaling length at fixed percentage preserves mechanical advantage. At most two independent levers may compare geometry. Pivot at either end is invalid; real strength or dynamic motion is unsupported.",
+      commands: ["LEVER_SET_PIVOT", "LEVER_LIFT"],
+      observations: [],
+      appearance: "appearance/physics-lever",
+    },
     ...earthRequirements,
+    ...mathAnalysisRequirements,
+    ...physicsMechanicsRequirements,
+    ...thermalOpticsRequirements,
     ...Object.fromEntries(
       collectiveKinds.map((kind, i) => [
         collectiveModels[i].ref,

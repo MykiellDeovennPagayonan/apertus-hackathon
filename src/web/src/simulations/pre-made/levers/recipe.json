@@ -1,0 +1,314 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/levers",
+  "version": 1,
+  "title": "Crowbar and pivot",
+  "description": "How does moving the pivot trade effort against travel?",
+  "tags": [
+    "physics",
+    "lever",
+    "crowbar",
+    "fulcrum",
+    "torque",
+    "mechanical advantage"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/physics/Lever",
+        "version": 1,
+        "label": "Crowbar",
+        "scope": "scope/lab",
+        "configuration": {
+          "length": 1.2,
+          "pivotPercent": 16.666666666666668,
+          "loadForce": 100,
+          "lifted": false
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/physics-lever",
+        "version": 1,
+        "label": "Crowbar scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "pivot",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Pivot position",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Pivot position from load end",
+          "mode": "immediate",
+          "initial": "{\"value\": 16.666666666666668}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "lift",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Lift / lower slightly",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Lift / lower slightly",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/pivot",
+        "kind": "command",
+        "from": {
+          "node": "pivot",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "LEVER_SET_PIVOT"
+        }
+      },
+      {
+        "id": "link/lift",
+        "kind": "command",
+        "from": {
+          "node": "lift",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "LEVER_LIFT"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Crowbar and pivot"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/pivot",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "pivot"
+        },
+        {
+          "id": "layout/lift",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "lift"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Crowbar and pivot",
+      "instruction": "Move the pivot to lift the same load with less force.",
+      "explanation": "A massless rigid bar and frictionless pivot show ideal balance. Less effort means its end moves farther. Lift slightly compares both end movements at five degrees, without a dynamic motion model."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 330
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 260
+        },
+        {
+          "id": "board/layout/pivot",
+          "layoutId": "layout/pivot",
+          "rect": {
+            "x": 0,
+            "y": 360,
+            "width": 430,
+            "height": 128
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/lift",
+          "layoutId": "layout/lift",
+          "rect": {
+            "x": 454,
+            "y": 360,
+            "width": 226,
+            "height": 80
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 80
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/pivot",
+          "board/layout/lift"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1000,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "length",
+      "node": "model",
+      "field": "length",
+      "schema": {
+        "type": "number",
+        "minimum": 0.4,
+        "maximum": 4,
+        "unit": "m"
+      },
+      "default": 1.2
+    },
+    {
+      "name": "pivotPercent",
+      "node": "model",
+      "field": "pivotPercent",
+      "schema": {
+        "type": "number",
+        "minimum": 5,
+        "maximum": 95,
+        "unit": "%"
+      },
+      "default": 16.666666666666668
+    },
+    {
+      "name": "loadForce",
+      "node": "model",
+      "field": "loadForce",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 1000,
+        "unit": "N"
+      },
+      "default": 100
+    },
+    {
+      "name": "lifted",
+      "node": "model",
+      "field": "lifted",
+      "schema": {
+        "type": "boolean"
+      },
+      "default": false
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Lever",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-lever",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Massless rigid bar; frictionless pivot; vertical forces. Ideal static or quasi-static five-degree lift; no acceleration or strength model.",
+    "Load and effort act at opposite ends. The required effort balances torque. Work and vertical travel derive from accepted geometry."
+  ],
+  "catalog": {
+    "icon": "\u2696",
+    "category": "physics",
+    "order": 140
+  }
+}

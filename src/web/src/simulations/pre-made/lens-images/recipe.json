@@ -1,0 +1,307 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/lens-images",
+  "version": 1,
+  "title": "Magnifying glass images",
+  "description": "When does a converging lens make an upright enlarged image?",
+  "tags": [
+    "physics",
+    "magnifying glass",
+    "magnifying lens",
+    "converging lens",
+    "upright",
+    "inverted",
+    "image",
+    "magnification",
+    "upside down",
+    "lens focusing",
+    "image formation"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model0",
+        "definition": "prefabs/physics/Lens",
+        "version": 1,
+        "label": "Magnifying glass images",
+        "scope": "scope/lab",
+        "configuration": {
+          "focal": 10,
+          "distance": 30,
+          "height": 5
+        }
+      },
+      {
+        "id": "appearance0",
+        "definition": "appearance/physics-lens",
+        "version": 1,
+        "label": "Magnifying glass images scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/distance",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Object distance",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Object distance",
+          "mode": "immediate",
+          "initial": "{\"value\":30}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/focal",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Focal length",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Focal length",
+          "mode": "immediate",
+          "initial": "{\"value\":10}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance0",
+        "kind": "attachment",
+        "from": {
+          "node": "model0",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance0",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/distance0",
+        "kind": "command",
+        "from": {
+          "node": "control/distance",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_LENS_DISTANCE"
+        }
+      },
+      {
+        "id": "link/focal0",
+        "kind": "command",
+        "from": {
+          "node": "control/focal",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_LENS_FOCAL"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Magnifying glass images"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance0",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance0"
+        },
+        {
+          "id": "layout/control/distance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/distance"
+        },
+        {
+          "id": "layout/control/focal",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/focal"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Magnifying glass images",
+      "instruction": "When does a converging lens make an upright enlarged image?",
+      "explanation": "Paraxial converging thin lens; all lengths cm. Negative image distance is virtual, dashed backward ray extensions. At object distance equal to focal length no finite image; no screen there. Excludes angular size, aberrations and lens thickness."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance0",
+          "layoutId": "layout/appearance0",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 390
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 390
+        },
+        {
+          "id": "board/layout/control/distance",
+          "layoutId": "layout/control/distance",
+          "rect": {
+            "x": 0,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 128
+        },
+        {
+          "id": "board/layout/control/focal",
+          "layoutId": "layout/control/focal",
+          "rect": {
+            "x": 344,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 128
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 640
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance0"
+        ],
+        [
+          "board/layout/control/distance",
+          "board/layout/control/focal"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "focal0",
+      "node": "model0",
+      "field": "focal",
+      "schema": {
+        "type": "number",
+        "minimum": 2,
+        "maximum": 30,
+        "unit": "cm"
+      },
+      "default": 10
+    },
+    {
+      "name": "distance0",
+      "node": "model0",
+      "field": "distance",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 100,
+        "unit": "cm"
+      },
+      "default": 30
+    },
+    {
+      "name": "height0",
+      "node": "model0",
+      "field": "height",
+      "schema": {
+        "type": "number",
+        "minimum": 0.5,
+        "maximum": 10,
+        "unit": "cm"
+      },
+      "default": 5
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Lens",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-lens",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Paraxial converging thin lens; all lengths cm. Negative image distance is virtual, dashed backward ray extensions. At object distance equal to focal length no finite image; no screen there. Excludes angular size, aberrations and lens thickness."
+  ],
+  "catalog": {
+    "icon": "◉",
+    "category": "physics",
+    "order": 152
+  }
+}

@@ -1,5 +1,14 @@
+import { mathGeometryLiveCommands } from "../../domains/math-geometry";
+import { thermalOpticsLiveCommands } from "../catalog/physicsThermalOptics";
+import { physicsMechanicsLiveCommands } from "../catalog/physicsMechanics";
 /** Safe, absolute exploration setters. Additive/rebuilding actions stay explicit. */
 export const liveExplorationCommands = new Set([
+  ...physicsMechanicsLiveCommands,
+  ...thermalOpticsLiveCommands,
+  ...mathGeometryLiveCommands,
+  "LEVER_SET_PIVOT",
+  "LEVER_SET_LENGTH",
+  "LEVER_SET_LOAD_FORCE",
   "NUTRIENT_SET_NITROGEN",
   "NUTRIENT_SET_PHOSPHORUS",
   "NUTRIENT_SET_POTASSIUM",

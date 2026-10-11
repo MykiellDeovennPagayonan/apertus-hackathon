@@ -1,0 +1,316 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/latent-heat",
+  "version": 1,
+  "title": "Heating ice and water",
+  "description": "Where does energy go while ice melts at constant temperature?",
+  "tags": [
+    "physics",
+    "ice",
+    "melting",
+    "stop getting warmer",
+    "heating",
+    "boiling",
+    "latent heat"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model0",
+        "definition": "prefabs/physics/LatentHeat",
+        "version": 1,
+        "label": "Heating ice and water",
+        "scope": "scope/lab",
+        "configuration": {
+          "mass": 0.1,
+          "initial": 0,
+          "power": 100,
+          "time": 0
+        }
+      },
+      {
+        "id": "appearance0",
+        "definition": "appearance/physics-latent",
+        "version": 1,
+        "label": "Heating ice and water scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/time",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Heating time",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Heating time",
+          "mode": "immediate",
+          "initial": "{\"value\":0}",
+          "parameter": "value",
+          "step": 10,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/power",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Heater power",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Heater power",
+          "mode": "immediate",
+          "initial": "{\"value\":100}",
+          "parameter": "value",
+          "step": 10,
+          "showNumber": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance0",
+        "kind": "attachment",
+        "from": {
+          "node": "model0",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance0",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/time0",
+        "kind": "command",
+        "from": {
+          "node": "control/time",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_LATENT_TIME"
+        }
+      },
+      {
+        "id": "link/power0",
+        "kind": "command",
+        "from": {
+          "node": "control/power",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_LATENT_POWER"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Heating ice and water"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance0",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance0"
+        },
+        {
+          "id": "layout/control/time",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/time"
+        },
+        {
+          "id": "layout/control/power",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/power"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Heating ice and water",
+      "instruction": "Where does energy go while ice melts at constant temperature?",
+      "explanation": "Pure water at about1atm, constant properties: ice2100J/kg/K, liquid4186, vapour2010, fusion334kJ/kg, vaporization2256kJ/kg. Total enthalpy includes initial sensible heat and all phase transitions. Temperatures limited to200°C; reject heating beyond the constant-property range. Retained mass, externally maintained pressure, no escaping steam/open-container model or heat loss."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance0",
+          "layoutId": "layout/appearance0",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 390
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 390
+        },
+        {
+          "id": "board/layout/control/time",
+          "layoutId": "layout/control/time",
+          "rect": {
+            "x": 0,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 128
+        },
+        {
+          "id": "board/layout/control/power",
+          "layoutId": "layout/control/power",
+          "rect": {
+            "x": 344,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 128
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 640
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance0"
+        ],
+        [
+          "board/layout/control/time",
+          "board/layout/control/power"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "mass0",
+      "node": "model0",
+      "field": "mass",
+      "schema": {
+        "type": "number",
+        "minimum": 0.01,
+        "maximum": 1,
+        "unit": "kg"
+      },
+      "default": 0.1
+    },
+    {
+      "name": "initial0",
+      "node": "model0",
+      "field": "initial",
+      "schema": {
+        "type": "number",
+        "minimum": -40,
+        "maximum": 0,
+        "unit": "°C"
+      },
+      "default": 0
+    },
+    {
+      "name": "power0",
+      "node": "model0",
+      "field": "power",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 1000,
+        "unit": "W"
+      },
+      "default": 100
+    },
+    {
+      "name": "time0",
+      "node": "model0",
+      "field": "time",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 4000,
+        "unit": "s"
+      },
+      "default": 0
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/LatentHeat",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-latent",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Pure water at about1atm, constant properties: ice2100J/kg/K, liquid4186, vapour2010, fusion334kJ/kg, vaporization2256kJ/kg. Total enthalpy includes initial sensible heat and all phase transitions. Temperatures limited to200°C; reject heating beyond the constant-property range. Retained mass, externally maintained pressure, no escaping steam/open-container model or heat loss."
+  ],
+  "catalog": {
+    "icon": "◉",
+    "category": "physics",
+    "order": 158
+  }
+}

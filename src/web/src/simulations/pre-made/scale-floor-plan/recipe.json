@@ -1,0 +1,233 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/scale-floor-plan",
+  "version": 1,
+  "title": "Double the plan, double the area?",
+  "description": "Enlarge a 3 m × 4 m floor plan and compare how its lengths and its area change.",
+  "tags": ["mathematics", "scale drawing", "similar shapes", "area"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-geometry/ScaleDrawing",
+        "version": 1,
+        "label": "Floor plan",
+        "scope": "scope/lab",
+        "configuration": {
+          "roomWidth": 3,
+          "roomLength": 4,
+          "scaleFactor": 1,
+          "roomShape": "rectangle"
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-scale-drawing",
+        "version": 1,
+        "label": "Original and scaled floor plans",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/1",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Scale factor",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Scale factor",
+          "mode": "immediate",
+          "initial": "{\"value\":1}",
+          "parameter": "value",
+          "step": 0.25,
+          "showNumber": true
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/control/1",
+        "kind": "command",
+        "from": {
+          "node": "control/1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "set:scaleFactor"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Double the plan, double the area?"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/control/1",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "control/1"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Double the plan, double the area?",
+      "instruction": "Double the floor plan. How many copies of the original floor fit inside?",
+      "explanation": "Scaling every length by k multiplies the area by k × k. Doubling a 3 m × 4 m room gives 6 m × 8 m: 48 m², four times 12 m²."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 460
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 260
+        },
+        {
+          "id": "board/layout/control/1",
+          "layoutId": "layout/control/1",
+          "rect": {
+            "x": 0,
+            "y": 480,
+            "width": 370,
+            "height": 140
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 668
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [["board/layout/scene"], ["board/layout/control/1"]]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "roomWidth",
+      "node": "model",
+      "field": "roomWidth",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 20,
+        "unit": "m"
+      },
+      "default": 3
+    },
+    {
+      "name": "roomLength",
+      "node": "model",
+      "field": "roomLength",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 20,
+        "unit": "m"
+      },
+      "default": 4
+    },
+    {
+      "name": "scaleFactor",
+      "node": "model",
+      "field": "scaleFactor",
+      "schema": {
+        "type": "number",
+        "minimum": 0.25,
+        "maximum": 4,
+        "unit": ""
+      },
+      "default": 1
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-geometry/ScaleDrawing",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-scale-drawing",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Uniform scaling about the room's bottom-left corner; angles are preserved. Lengths in metres, scale factor 0.25–4.",
+    "Display zoom never changes physical lengths or areas. Different horizontal and vertical factors (a stretch) are unsupported."
+  ],
+  "catalog": {
+    "icon": "⧉",
+    "category": "mathematics",
+    "order": 15
+  }
+}

@@ -1,0 +1,249 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/water-pressure",
+  "version": 1,
+  "title": "Bottle outlet",
+  "description": "Does a faster outlet always send water farther?",
+  "tags": [
+    "physics",
+    "pressure",
+    "bottle outlet"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/physics/WaterPressure",
+        "version": 1,
+        "label": "Bottle outlet",
+        "scope": "scope/lab",
+        "configuration": {
+          "surfaceHeight": 1,
+          "holeHeight": 0.5,
+          "density": 1000
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/physics-pressure",
+        "version": 1,
+        "label": "Bottle outlet scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/holeHeight",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Hole height above floor",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Hole height above floor",
+          "mode": "immediate",
+          "initial": "{\"value\": 0.5}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/holeHeight",
+        "kind": "command",
+        "from": {
+          "node": "control/holeHeight",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PRESSURE_HOLEHEIGHT"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Bottle outlet"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/holeHeight",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/holeHeight"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Bottle outlet",
+      "instruction": "Does a faster outlet always send water farther?",
+      "explanation": "Constant water-surface height maintained externally; ideal small horizontal outlet to air. Depth below water determines pressure/speed; height above floor determines fall time. No draining tank, contraction, viscosity or jet breakup."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 340
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 280
+        },
+        {
+          "id": "board/layout/holeHeight",
+          "layoutId": "layout/holeHeight",
+          "rect": {
+            "x": 0,
+            "y": 360,
+            "width": 220,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/holeHeight"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1000,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "surfaceHeight",
+      "node": "model",
+      "field": "surfaceHeight",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 3,
+        "unit": "m"
+      },
+      "default": 1
+    },
+    {
+      "name": "holeHeight",
+      "node": "model",
+      "field": "holeHeight",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 3,
+        "unit": "m"
+      },
+      "default": 0.5
+    },
+    {
+      "name": "density",
+      "node": "model",
+      "field": "density",
+      "schema": {
+        "type": "number",
+        "minimum": 800,
+        "maximum": 1400,
+        "unit": "kg/m\u00b3"
+      },
+      "default": 1000
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/WaterPressure",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-pressure",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Constant water-surface height maintained externally; ideal small horizontal outlet to air. Depth below water determines pressure/speed; height above floor determines fall time. No draining tank, contraction, viscosity or jet breakup."
+  ],
+  "catalog": {
+    "icon": "\u2699",
+    "category": "physics",
+    "order": 147
+  }
+}

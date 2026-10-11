@@ -4,6 +4,7 @@ import {
   type PointerEvent,
   type ReactNode,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -491,15 +492,17 @@ export function SpatialBoard({
       });
     return () => observer.disconnect();
   }, [hasBoard, document.nodes]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!hasBoard || !viewport.current) return;
+    const element = viewport.current;
+    // Frame imported boards before paint, without waiting for ResizeObserver.
+    setSize({ width: element.clientWidth, height: element.clientHeight });
     const observer = new ResizeObserver(([entry]) =>
       setSize({
         width: entry.contentRect.width,
         height: entry.contentRect.height,
       }),
     );
-    const element = viewport.current;
     observer.observe(element);
     const wheel = (event: WheelEvent) => {
       if (

@@ -1,0 +1,387 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/guitar-string",
+  "version": 1,
+  "title": "Guitar string modes",
+  "description": "How does a shorter vibrating string raise the note?",
+  "tags": [
+    "physics",
+    "guitar",
+    "fret",
+    "string",
+    "standing waves",
+    "harmonic",
+    "note"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model0",
+        "definition": "prefabs/physics/String",
+        "version": 1,
+        "label": "Guitar string modes",
+        "scope": "scope/lab",
+        "configuration": {
+          "length": 0.65,
+          "tension": 65,
+          "density": 0.005,
+          "harmonic": 1,
+          "phase": 0
+        }
+      },
+      {
+        "id": "appearance0",
+        "definition": "appearance/physics-string",
+        "version": 1,
+        "label": "Guitar string modes scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/length",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Vibrating length",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Vibrating length",
+          "mode": "immediate",
+          "initial": "{\"value\":0.65}",
+          "parameter": "value",
+          "step": 0.005,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/phase",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Explore one wave cycle",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Explore one wave cycle",
+          "mode": "immediate",
+          "initial": "{\"value\":0}",
+          "parameter": "value",
+          "step": 0.05,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/harmonic",
+        "definition": "controls/Select",
+        "version": 1,
+        "label": "Harmonic",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Harmonic",
+          "mode": "immediate",
+          "initial": "{\"value\":1}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance0",
+        "kind": "attachment",
+        "from": {
+          "node": "model0",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance0",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/length0",
+        "kind": "command",
+        "from": {
+          "node": "control/length",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_STRING_LENGTH"
+        }
+      },
+      {
+        "id": "link/phase0",
+        "kind": "command",
+        "from": {
+          "node": "control/phase",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_STRING_PHASE"
+        }
+      },
+      {
+        "id": "link/harmonic0",
+        "kind": "command",
+        "from": {
+          "node": "control/harmonic",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_STRING_HARMONIC"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Guitar string modes"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance0",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance0"
+        },
+        {
+          "id": "layout/control/length",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/length"
+        },
+        {
+          "id": "layout/control/phase",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/phase"
+        },
+        {
+          "id": "layout/control/harmonic",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/harmonic"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Guitar string modes",
+      "instruction": "How does a shorter vibrating string raise the note?",
+      "explanation": "Ideal string fixed at both ends with constant tension and linear mass density. Physical frequency n*sqrt(tension/density)/(2length). Phase control shows one slowed wave cycle and is not elapsed physical time. No audio, stiffness, fret-induced tension change or pluck transient."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance0",
+          "layoutId": "layout/appearance0",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 390
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 390
+        },
+        {
+          "id": "board/layout/control/length",
+          "layoutId": "layout/control/length",
+          "rect": {
+            "x": 0,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 128
+        },
+        {
+          "id": "board/layout/control/phase",
+          "layoutId": "layout/control/phase",
+          "rect": {
+            "x": 344,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 128
+        },
+        {
+          "id": "board/layout/control/harmonic",
+          "layoutId": "layout/control/harmonic",
+          "rect": {
+            "x": 688,
+            "y": 410,
+            "width": 328,
+            "height": 160
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1064,
+        "height": 640
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance0"
+        ],
+        [
+          "board/layout/control/length",
+          "board/layout/control/phase"
+        ],
+        [
+          "board/layout/control/harmonic"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1064,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "length0",
+      "node": "model0",
+      "field": "length",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 1,
+        "unit": "m"
+      },
+      "default": 0.65
+    },
+    {
+      "name": "tension0",
+      "node": "model0",
+      "field": "tension",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 200,
+        "unit": "N"
+      },
+      "default": 65
+    },
+    {
+      "name": "density0",
+      "node": "model0",
+      "field": "density",
+      "schema": {
+        "type": "number",
+        "minimum": 0.001,
+        "maximum": 0.02,
+        "unit": "kg/m"
+      },
+      "default": 0.005
+    },
+    {
+      "name": "harmonic0",
+      "node": "model0",
+      "field": "harmonic",
+      "schema": {
+        "type": "enum",
+        "values": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "default": 1
+    },
+    {
+      "name": "phase0",
+      "node": "model0",
+      "field": "phase",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "unit": "cycles"
+      },
+      "default": 0
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/String",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-string",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "controls/Select",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Ideal string fixed at both ends with constant tension and linear mass density. Physical frequency n*sqrt(tension/density)/(2length). Phase control shows one slowed wave cycle and is not elapsed physical time. No audio, stiffness, fret-induced tension change or pluck transient."
+  ],
+  "catalog": {
+    "icon": "◉",
+    "category": "physics",
+    "order": 155
+  }
+}

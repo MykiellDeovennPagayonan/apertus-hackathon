@@ -1,0 +1,321 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/pythagorean",
+  "version": 1,
+  "title": "How long must the ladder be?",
+  "description": "Move the ladder foot while keeping its wall contact fixed. Linked squares explain the Pythagorean theorem.",
+  "tags": ["mathematics", "pythagorean", "ladder", "right triangle"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-geometry/Pythagorean",
+        "version": 1,
+        "label": "Ladder geometry",
+        "scope": "scope/lab",
+        "configuration": {
+          "distance": 3,
+          "height": 4
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-pythagorean",
+        "version": 1,
+        "label": "Ladder and linked squares",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/distance",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Foot distance",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Foot distance",
+          "mode": "immediate",
+          "initial": "{\"value\": 3}",
+          "parameter": "value",
+          "step": 0.1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "input/height",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Wall contact height",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Wall contact height",
+          "mode": "immediate",
+          "initial": "{\"value\": 4}",
+          "parameter": "value",
+          "step": 0.1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "result",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Required ladder length",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Required ladder length",
+          "precision": 2
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/input/distance",
+        "kind": "command",
+        "from": {
+          "node": "input/distance",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "set:distance"
+        }
+      },
+      {
+        "id": "link/input/height",
+        "kind": "command",
+        "from": {
+          "node": "input/height",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "set:height"
+        }
+      },
+      {
+        "id": "link/result",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "ladderLength"
+        },
+        "to": {
+          "node": "result",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Ladder length"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/input/distance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/distance"
+        },
+        {
+          "id": "layout/input/height",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/height"
+        },
+        {
+          "id": "layout/result",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "result"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "How long must the ladder be?",
+      "instruction": "Move the foot farther from the wall. How does the ladder change?",
+      "explanation": "The wall and ground are perpendicular. The two smaller square areas add to the square on the ladder. This geometric model does not determine safe ladder placement."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 420
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 260
+        },
+        {
+          "id": "board/layout/input/distance",
+          "layoutId": "layout/input/distance",
+          "rect": {
+            "x": 0,
+            "y": 440,
+            "width": 370,
+            "height": 140
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/input/height",
+          "layoutId": "layout/input/height",
+          "rect": {
+            "x": 394,
+            "y": 440,
+            "width": 370,
+            "height": 140
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/result",
+          "layoutId": "layout/result",
+          "rect": {
+            "x": 0,
+            "y": 585,
+            "width": 370,
+            "height": 110
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 743
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/scene"],
+        ["board/layout/input/distance", "board/layout/input/height"],
+        ["board/layout/result"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "distance",
+      "node": "model",
+      "field": "distance",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 20,
+        "unit": "m"
+      },
+      "default": 3
+    },
+    {
+      "name": "height",
+      "node": "model",
+      "field": "height",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 20,
+        "unit": "m"
+      },
+      "default": 4
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-geometry/Pythagorean",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-pythagorean",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Euclidean right triangle with perpendicular wall and ground. Finite positive legs from 0.1 to 20 metres.",
+    "Geometry does not establish safe real ladder placement. Inverse-leg solving and dissection animation are unsupported."
+  ],
+  "catalog": {
+    "icon": "\u25b3",
+    "category": "mathematics",
+    "order": 11
+  }
+}

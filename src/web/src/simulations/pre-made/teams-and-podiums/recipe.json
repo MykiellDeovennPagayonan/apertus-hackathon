@@ -1,0 +1,269 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/teams-and-podiums",
+  "version": 1,
+  "title": "Teams versus podiums",
+  "description": "Compare unordered teams with ordered podium positions from the same distinct people.",
+  "tags": [
+    "teams-and-podiums",
+    "mathematics",
+    "teammates",
+    "team",
+    "teams",
+    "podium",
+    "first",
+    "second",
+    "third place",
+    "choosing",
+    "combinations",
+    "permutations",
+    "counting",
+    "order"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-analysis/teams-and-podiums",
+        "version": 1,
+        "label": "Teams versus podiums",
+        "scope": "scope/lab",
+        "configuration": {
+          "people": 5,
+          "selected": 3,
+          "mode": "team"
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-analysis-teams-and-podiums",
+        "version": 1,
+        "label": "Teams versus podiums",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "input/0",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Switch team / podium",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Switch team / podium",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      },
+      {
+        "id": "input/1",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "People selected",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "People selected",
+          "mode": "immediate",
+          "initial": "{\"value\":3}",
+          "parameter": "value",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "showNumber": true
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/input/0",
+        "kind": "command",
+        "from": {
+          "node": "input/0",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MA_TEAMS-AND-PODIUMS_TOGGLE"
+        }
+      },
+      {
+        "id": "link/input/1",
+        "kind": "command",
+        "from": {
+          "node": "input/1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "MA_TEAMS-AND-PODIUMS_SET_SELECTED"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Teams versus podiums"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/input/0",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/0"
+        },
+        {
+          "id": "layout/input/1",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "input/1"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Teams versus podiums",
+      "instruction": "Compare unordered teams with ordered podium positions from the same distinct people.",
+      "explanation": "Distinct people, no repeated selections; exact counts use integer arithmetic. Gallery is capped at 12 examples, never presented as the total. Empty selection has one outcome."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 450
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/input/0",
+          "layoutId": "layout/input/0",
+          "rect": {
+            "x": 0,
+            "y": 470,
+            "width": 378,
+            "height": 140
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/input/1",
+          "layoutId": "layout/input/1",
+          "rect": {
+            "x": 402,
+            "y": 470,
+            "width": 378,
+            "height": 190
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 708
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/scene"
+        ],
+        [
+          "board/layout/input/0",
+          "board/layout/input/1"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-analysis/teams-and-podiums",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-analysis-teams-and-podiums",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Distinct people, no repeated selections; exact counts use integer arithmetic. Gallery is capped at 12 examples, never presented as the total. Empty selection has one outcome."
+  ],
+  "catalog": {
+    "icon": "∑",
+    "category": "mathematics",
+    "order": 36
+  }
+}

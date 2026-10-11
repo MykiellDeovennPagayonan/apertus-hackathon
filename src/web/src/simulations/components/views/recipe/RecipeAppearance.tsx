@@ -39,13 +39,15 @@ import {
   CircuitVisual,
   TrackVisual,
 } from "../../visuals/physical-systems/PhysicalVisuals";
+import { thermalOpticsAppearances } from "../../visuals/physics/ThermalOpticsScenes";
+import { mechanicsAppearances } from "../../visuals/physics/MechanicsScenes";
+import { LeverScene } from "../../visuals/physics/LeverScene";
 import { ScienceScene } from "../../visuals/science/ScienceScene";
 import { ProductionComparisonVisual } from "../../visuals/social-systems/ProductionComparisonVisual";
 import { ArithmeticScene } from "../ArithmeticScene";
 import { BridgeScene } from "../BridgeScene";
 import { CycleScene } from "../biogeochemistry/CycleScene";
 import { CountingScene } from "../CountingScene";
-import { LessonScene } from "../earth-atmosphere/LessonScene";
 import { CrowdScene } from "../collective/CrowdScene";
 import { FishingScene } from "../collective/FishingScene";
 import { SelectionScene } from "../collective/SelectionScene";
@@ -53,8 +55,11 @@ import { VotingScene } from "../collective/VotingScene";
 import { DatasetDisplay } from "../DatasetDisplay";
 import { PropertyInspector } from "../EntityInspectorView";
 import { EqualGroupsScene } from "../EqualGroupsScene";
+import { LessonScene } from "../earth-atmosphere/LessonScene";
 import { FractionBuilderScene } from "../FractionBuilderScene";
 import { FractionNumberLineScene } from "../FractionNumberLineScene";
+import { mathAnalysisAppearances } from "../math-analysis/MathAnalysisScenes";
+import { mathGeometryAppearances } from "../math-geometry";
 import { ProbabilityScene } from "../ProbabilityScene";
 import { ProjectileScene } from "../ProjectileScene";
 import { SVGWorldView } from "../SVGWorldView";
@@ -82,6 +87,11 @@ const appearances: Record<
     question?: string;
   }) => React.ReactNode
 > = {
+  ...mathAnalysisAppearances,
+  ...mathGeometryAppearances,
+  "physics-lever": LeverScene,
+  ...mechanicsAppearances,
+  ...thermalOpticsAppearances,
   "earth-atmosphere-earthquake": LessonScene,
   "earth-atmosphere-tsunami": LessonScene,
   "earth-atmosphere-atmosphere": LessonScene,

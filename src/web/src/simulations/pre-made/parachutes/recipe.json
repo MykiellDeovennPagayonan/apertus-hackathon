@@ -1,0 +1,595 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/parachutes",
+  "version": 1,
+  "title": "Parachute descent",
+  "description": "How does canopy area change falling speed?",
+  "tags": [
+    "physics",
+    "parachute",
+    "parachute descent"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/physics/Parachute",
+        "version": 1,
+        "label": "Parachute descent",
+        "scope": "scope/lab",
+        "configuration": {
+          "mass": 80,
+          "area": 20,
+          "dragCoefficient": 1.5,
+          "density": 1.2,
+          "height": 100,
+          "speed": 0,
+          "distance": 0,
+          "time": 0,
+          "landed": false
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/physics-parachute",
+        "version": 1,
+        "label": "Parachute descent scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "comparison",
+        "definition": "prefabs/physics/Parachute",
+        "version": 1,
+        "label": "Larger canopy",
+        "scope": "scope/lab",
+        "configuration": {
+          "mass": 80,
+          "area": 40,
+          "dragCoefficient": 1.5,
+          "density": 1.2,
+          "height": 100,
+          "speed": 0,
+          "distance": 0,
+          "time": 0,
+          "landed": false
+        }
+      },
+      {
+        "id": "comparison-scene",
+        "definition": "appearance/physics-parachute",
+        "version": 1,
+        "label": "Larger canopy scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/area",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Canopy area",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Canopy area",
+          "mode": "immediate",
+          "initial": "{\"value\": 40}",
+          "parameter": "value",
+          "step": 0.01,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/advance",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Fall one second",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Fall one second",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      },
+      {
+        "id": "control/restart",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Start fall again",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Start fall again",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/comparison-scene",
+        "kind": "attachment",
+        "from": {
+          "node": "comparison",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "comparison-scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/area",
+        "kind": "command",
+        "from": {
+          "node": "control/area",
+          "port": "submit"
+        },
+        "to": {
+          "node": "comparison",
+          "port": "PARACHUTE_AREA"
+        }
+      },
+      {
+        "id": "link/advance",
+        "kind": "command",
+        "from": {
+          "node": "control/advance",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PARACHUTE_ADVANCE"
+        }
+      },
+      {
+        "id": "link/comparison/advance",
+        "kind": "command",
+        "from": {
+          "node": "control/advance",
+          "port": "submit"
+        },
+        "to": {
+          "node": "comparison",
+          "port": "PARACHUTE_ADVANCE"
+        }
+      },
+      {
+        "id": "link/restart",
+        "kind": "command",
+        "from": {
+          "node": "control/restart",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PARACHUTE_RESTART"
+        }
+      },
+      {
+        "id": "link/comparison/restart",
+        "kind": "command",
+        "from": {
+          "node": "control/restart",
+          "port": "submit"
+        },
+        "to": {
+          "node": "comparison",
+          "port": "PARACHUTE_RESTART"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Parachute descent"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/comparison-scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "comparison-scene"
+        },
+        {
+          "id": "layout/controls",
+          "kind": "grid",
+          "font": "inherit",
+          "label": "",
+          "gap": 16,
+          "columns": 3,
+          "mobileColumns": 1,
+          "children": [
+            {
+              "id": "layout/area",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/area"
+            },
+            {
+              "id": "layout/advance",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/advance"
+            },
+            {
+              "id": "layout/restart",
+              "kind": "stack",
+              "label": "",
+              "gap": 12,
+              "columns": 1,
+              "children": [],
+              "node": "control/restart"
+            }
+          ]
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Parachute descent",
+      "instruction": "How does canopy area change falling speed?",
+      "explanation": "Fully deployed fixed-shape canopy, constant atmosphere and quadratic drag opposing signed velocity. RK4 joint speed/position integration with drag-timescale bounded substeps; ground stops motion. Changing canopy area preserves current speed and position; no deployment shock, wind or canopy collapse."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 500,
+            "height": 340
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 280
+        },
+        {
+          "id": "board/layout/comparison-scene",
+          "layoutId": "layout/comparison-scene",
+          "rect": {
+            "x": 524,
+            "y": 0,
+            "width": 500,
+            "height": 340
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 280
+        },
+        {
+          "id": "board/layout/controls",
+          "layoutId": "layout/controls",
+          "rect": {
+            "x": 0,
+            "y": 360,
+            "width": 1024,
+            "height": 160
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 160
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1100,
+        "height": 568
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance",
+          "board/layout/comparison-scene"
+        ],
+        [
+          "board/layout/controls"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 1100,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "mass",
+      "node": "model",
+      "field": "mass",
+      "schema": {
+        "type": "number",
+        "minimum": 20,
+        "maximum": 200,
+        "unit": "kg"
+      },
+      "default": 80
+    },
+    {
+      "name": "area",
+      "node": "model",
+      "field": "area",
+      "schema": {
+        "type": "number",
+        "minimum": 0.5,
+        "maximum": 60,
+        "unit": "m\u00b2"
+      },
+      "default": 20
+    },
+    {
+      "name": "dragCoefficient",
+      "node": "model",
+      "field": "dragCoefficient",
+      "schema": {
+        "type": "number",
+        "minimum": 0.5,
+        "maximum": 2,
+        "unit": "1"
+      },
+      "default": 1.5
+    },
+    {
+      "name": "density",
+      "node": "model",
+      "field": "density",
+      "schema": {
+        "type": "number",
+        "minimum": 0.5,
+        "maximum": 1.5,
+        "unit": "kg/m\u00b3"
+      },
+      "default": 1.2
+    },
+    {
+      "name": "height",
+      "node": "model",
+      "field": "height",
+      "schema": {
+        "type": "number",
+        "minimum": 10,
+        "maximum": 1000,
+        "unit": "m"
+      },
+      "default": 100
+    },
+    {
+      "name": "speed",
+      "node": "model",
+      "field": "speed",
+      "schema": {
+        "type": "number",
+        "minimum": -30,
+        "maximum": 300,
+        "unit": "m/s downward"
+      },
+      "default": 0
+    },
+    {
+      "name": "distance",
+      "node": "model",
+      "field": "distance",
+      "schema": {
+        "type": "number",
+        "minimum": -1000,
+        "maximum": 1000,
+        "unit": "m below release"
+      },
+      "default": 0
+    },
+    {
+      "name": "time",
+      "node": "model",
+      "field": "time",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1000,
+        "unit": "s"
+      },
+      "default": 0
+    },
+    {
+      "name": "landed",
+      "node": "model",
+      "field": "landed",
+      "schema": {
+        "type": "boolean"
+      },
+      "default": false
+    },
+    {
+      "name": "comparison_mass",
+      "node": "comparison",
+      "field": "mass",
+      "schema": {
+        "type": "number",
+        "minimum": 20,
+        "maximum": 200,
+        "unit": "kg"
+      },
+      "default": 80
+    },
+    {
+      "name": "comparison_area",
+      "node": "comparison",
+      "field": "area",
+      "schema": {
+        "type": "number",
+        "minimum": 0.5,
+        "maximum": 60,
+        "unit": "m\u00b2"
+      },
+      "default": 40
+    },
+    {
+      "name": "comparison_dragCoefficient",
+      "node": "comparison",
+      "field": "dragCoefficient",
+      "schema": {
+        "type": "number",
+        "minimum": 0.5,
+        "maximum": 2,
+        "unit": "1"
+      },
+      "default": 1.5
+    },
+    {
+      "name": "comparison_density",
+      "node": "comparison",
+      "field": "density",
+      "schema": {
+        "type": "number",
+        "minimum": 0.5,
+        "maximum": 1.5,
+        "unit": "kg/m\u00b3"
+      },
+      "default": 1.2
+    },
+    {
+      "name": "comparison_height",
+      "node": "comparison",
+      "field": "height",
+      "schema": {
+        "type": "number",
+        "minimum": 10,
+        "maximum": 1000,
+        "unit": "m"
+      },
+      "default": 100
+    },
+    {
+      "name": "comparison_speed",
+      "node": "comparison",
+      "field": "speed",
+      "schema": {
+        "type": "number",
+        "minimum": -30,
+        "maximum": 300,
+        "unit": "m/s downward"
+      },
+      "default": 0
+    },
+    {
+      "name": "comparison_distance",
+      "node": "comparison",
+      "field": "distance",
+      "schema": {
+        "type": "number",
+        "minimum": -1000,
+        "maximum": 1000,
+        "unit": "m below release"
+      },
+      "default": 0
+    },
+    {
+      "name": "comparison_time",
+      "node": "comparison",
+      "field": "time",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1000,
+        "unit": "s"
+      },
+      "default": 0
+    },
+    {
+      "name": "comparison_landed",
+      "node": "comparison",
+      "field": "landed",
+      "schema": {
+        "type": "boolean"
+      },
+      "default": false
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Parachute",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-parachute",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Fully deployed fixed-shape canopy, constant atmosphere and quadratic drag opposing signed velocity. RK4 joint speed/position integration with drag-timescale bounded substeps; ground stops motion. Changing canopy area preserves current speed and position; no deployment shock, wind or canopy collapse."
+  ],
+  "catalog": {
+    "icon": "\u2699",
+    "category": "physics",
+    "order": 150
+  }
+}

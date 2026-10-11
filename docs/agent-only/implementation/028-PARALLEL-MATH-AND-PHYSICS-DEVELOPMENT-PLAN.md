@@ -2,7 +2,7 @@
 
 Date: 2026-10-11  
 Status: Execution plan; implementation, agent launch, and live acceptance have not been performed by this document.  
-Team: one orchestrator, four developers, two testers.  
+Team: exactly four implementation agents (A1–A4), each in its own terminal/session; no orchestrator and no dedicated QA agent.  
 Agent model policy: `gpt-6.1-sol` only, with `low` or `medium` reasoning; Astra is prohibited.  
 Scope: the 20 researched math proposals and 20 researched physics proposals linked below.
 
@@ -10,7 +10,7 @@ Scope: the 20 researched math proposals and 20 researched physics proposals link
 
 Deliver all 40 scenarios as scientifically correct, editable, persistable simulations in the existing application. Each must work through the normal experiment builder and Try lesson experience, and must be constructible and changeable through actual Apertus inference. A premade demonstration alone does not satisfy this goal.
 
-The seven roles divide ownership and review; they do not divide the application into seven independent implementations. Reuse the existing component catalog, typed recipes, domain models, validation, persistence, and learner rendering. Add a shared capability only when an identified scenario requires it and the existing capability cannot serve it.
+The four implementation agents divide ownership and peer review; they do not divide the application into four independent implementations. Reuse the existing component catalog, typed recipes, domain models, validation, persistence, and learner rendering. Add a shared capability only when an identified scenario requires it and the existing capability cannot serve it.
 
 Every role must read these requirements before starting:
 
@@ -26,161 +26,51 @@ Every role must read these requirements before starting:
 
 Remove unnecessary information rather than shrinking text or hiding a dashboard under “More.” Do not impose Observe / Track / Compare panels, permanent technical inspectors, fixed readout slots, or a universal playback toolbar on these scenarios. Preserve meaningful units, keyboard access, motion accommodation, and recovery.
 
-## 2. Seven roles, with explicit boundaries
+## 2. Four implementation agents in separate terminals
 
-### O — Orchestrator: integration and delivery owner
+All four agents implement complete vertical slices and report directly to the user from their own terminal/session. None dispatches, supervises, or launches the others. Peer review is a bounded part of each agent's work, not a fifth role or a dedicated QA terminal.
 
-The orchestrator owns the scenario ledger, task dispatch, dependency order, shared interfaces, integration branch, inference queue, ten-minute reporting timer, and final release decision.
+| Terminal / agent | Exclusive scenario ownership | Scientific obligations | Peer reviewer |
+| --- | --- | --- | --- |
+| 1 / A1 | MATH-01–10: place value, geometry, transformations, tiling, nets, packaging, packing, fencing | Exact decimal semantics where applicable; physical dimensions separate from display scale; valid fold geometry; distinguish packing heuristics from optimality proofs | A2 |
+| 2 / A2 | MATH-11–20: feasible choices, statistics, sampling, regression, probability, counting, loans, calculus | Population/sample and rate conventions; reproducible randomness; honest undefined results; loan rounding/final payment; calculus units | A1 |
+| 3 / A3 | PHYS-01–10: mechanics, buoyancy, pressure, hydraulics, flow, drag | Units and conservation; supporting rope count; static/dynamic assumptions; animation driven by computed state; stable integration | A4 |
+| 4 / A4 | PHYS-11–20: turning, optics, waves, heat, induction, capacitors | Singular/virtual optical results; frequency/sign conventions; thermal accounting; convergence; voltage continuity and time constants | A3 |
 
-Responsibilities:
+### Responsibilities shared by all four
 
-- Inventory current implementations again before assigning work. The proposal gap assessment is a source inventory, not a guarantee that no overlapping work has since landed.
-- Agree the smallest complete scope and acceptance contract for each scenario with its developer and both testers. Freeze IDs, units, model conventions, supported inputs, and observable outcomes before implementation.
-- Assign exclusive file ownership; resolve overlap before edits begin. Approve shared API changes, then implement them or dispatch one named owner with a bounded task.
-- Integrate completed slices sequentially, regenerate generated artifacts with their source generators, and run required checks on the combined application.
-- Reserve Apertus/Laya test slots; record actual providers, models, configuration, candidate fingerprint, evidence, and failures.
-- Start a recurring ten-minute timer at execution launch and write a timestamped report of each interval's activity, including screenshot directories for runs with captures. Keep reporting while work is blocked or tests are still running.
-- Keep blockers actionable: owner, reproduction, affected scenarios, next action. Resolve scientific disputes against the scenario sources and an independent reference calculation.
-- Review both independent tester verdicts. Reject unsupported claims, incomplete evidence, confusing UI, and untested paths. Produce the final delivery report.
+- Inventory current code and in-progress changes before implementing; do not assume a proposal is still missing. Preserve unrelated work, including existing pilot implementations and validation artifacts.
+- Own each assigned scenario's model, bounded input validation, component behavior, catalog contribution, composable recipe, persistence, learner experience, focused checks, and evidence.
+- Read the researched specification and governing guides, reuse existing capabilities, and record the contract before edits. Build one clear learning question with one obvious primary action and only necessary controls.
+- Run meaningful reference, boundary, invariant, transition, builder, save/reopen, and Try lesson checks. Request an early real Apertus/Laya canary through the shared reservation procedure.
+- Own fixes for findings in assigned production files; review the paired agent's frozen candidate without editing that agent's production files.
+- Record progress, blockers, checks, actual inference configuration, run IDs, candidate fingerprints, and exact screenshot directories in their own reports. Report failures honestly; no self-acceptance or mock substitution for live acceptance.
+- Do not change provider, spend on hosted services, download a model, or deploy solely to unblock local acceptance. Existing session authorization and resource constraints still apply.
 
-Boundaries:
+### Peer review without a dedicated QA agent
 
-- Does not silently redesign every scenario or implement all four developers’ domain work.
-- Does not write “passed” on behalf of a tester or waive a mandatory requirement to meet a deadline.
-- Does not let integration status substitute for successful live generation.
-- Does not change provider, spend on a hosted service, download a model, or deploy merely because a local acceptance run is blocked. Follow the session's existing authorization and resource constraints.
+For every scenario, its paired reviewer independently checks correctness/runtime and usability/live experience and records separate Pass / Concern / Fail / Not tested verdicts. Inspect the opening view before reading implementation notes or production formulas; record the learning question, primary action, competing controls, labels, and visual emphasis. Use outcome-only tasks and derive expectations independently from cited sources or a trusted reference calculation.
 
-### Orchestrator's ten-minute timer and reports
+Review units, domains, singularities, conservation, convergence, randomness, connections, persistence, builder/learner parity, keyboard access, focus, reduced motion, supported viewports, and recovery. Exercise canonical prompts, paraphrases, and follow-ups with real Apertus/Laya. Inspect actual accepted recipes and scene geometry; capture and inspect opening and changed states. Use available browser tooling and label fallback capture methods honestly.
 
-At execution launch, O records the start time and starts a recurring timer with a **600-second interval**. Report deadlines are anchored to that start time: +10 minutes, +20 minutes, +30 minutes, and so on. Integration, handoffs, wave changes, and long-running tests must not restart the timer. Keep O available to handle timer events; use nonblocking tools and short waits rather than blocking the orchestrator for ten minutes.
+Preserve failed prompts and evidence. Failed/cancelled generation must preserve the last accepted lesson. Browser automation and reviewer judgment are separate from observed human first-use evidence; do not claim novice comprehension without participants. Return production fixes to the owner and retest the same contract. A reviewer who co-authored the implementation must use another non-author among A1–A4 for that scenario's verdicts and record the swap.
 
-Each tick creates a new Markdown report under `docs/agent-only/implementation/028-validation/progress/`, named with its interval-end UTC timestamp, for example `2026-10-11T08-10-00Z.md`. O links the latest report from the shared status ledger and posts a brief progress update with the report link and any screenshot directories. Reports are append-only records; later corrections are labeled rather than silently rewriting past outcomes.
+### Progress reporting
 
-Report the activity in the preceding scheduled ten-minute window, with explicit start/end timestamps and the actual write time. Use UTC for unambiguous filenames and include Asia/Manila display times in the report. Collect facts from worker updates, the ledger, test outputs, and observed run artifacts. Distinguish completed work, ongoing work, queued work, and unverified claims. If nothing changed, still write the report and explain the current wait or blocker.
+During active execution, each agent writes its own timestamped report every ten minutes under `028-validation/progress/<AGENT>/`, links its own status file, and posts a concise update in its terminal/session. Reports include the interval, actual write time, scenario IDs, changes, checks, peer verdicts, runs, source/configuration fingerprints, blockers, next action, and next deadline. Include real screenshot directories and reviewed image links, or state “No new screenshots,” “No screenshots captured,” or “Not reported” as appropriate.
 
-Every report contains:
-
-- Interval boundaries, actual write time, current wave, and candidate/source fingerprint.
-- Each role's activity and scenario IDs during the interval, including model and reasoning settings for any agent launched or reconfigured.
-- Changes integrated, developer handoffs, tester verdicts, and newly found or resolved defects.
-- Tests and live inference runs started, completed, failed, or still running; run/request IDs, actual results, and Apertus/Laya status where relevant.
-- Screenshot locations for every run that produced new captures during the interval, including failed and ongoing runs. State scenario ID, run ID, exact repository-relative **directory**, representative image links, and whether the images were reviewed. Use an absolute path if captures are outside the repository. Verify that reported directories actually exist; do not substitute the proposed evidence root for a real run location.
-- New screenshots added to earlier runs, and an explicit “No new screenshots in this interval” when applicable. A run without captures is labeled “No screenshots captured”; an unknown location is “Not reported,” not an invented path.
-- Blockers with owners, changed scenario counts, next ten-minute priorities, and the next deadline.
-
-Example report structure:
-
-```text
-# Progress: <interval end, UTC and Asia/Manila>
-Window: <start> to <end>
-Written at: <actual timestamp>; on time / late by <duration>
-Wave / candidate fingerprint:
-
-Role | Scenario | Activity in this window | Current state
-O / D1 / D2 / D3 / D4 / T1 / T2 | ...
-
-Run | Scenario | Result or ongoing state | Evidence report
-...
-
-Run | Screenshot directory | Representative images | Reviewed?
-...
-
-Blockers / owners:
-Scenario counts and changes:
-Next ten-minute priorities:
-Next report due:
-```
-
-Workers send O timestamped milestone, defect, and run updates as they happen, with exact screenshot directories once captures exist. Reports must not depend on interrupting an ongoing test to obtain its status. Missing worker information is explicitly marked unconfirmed.
-
-Before dispatch, O verifies that its execution environment can deliver timer events while it is working. Use an available scheduler or timer facility to wake O; a reminder or heartbeat alone is not the required written report. If scheduling is unavailable, report the limitation and use checked wall-clock deadlines during active execution, without claiming an unattended background timer exists. If a tick is missed, write the missing interval report as soon as possible, label its lateness and evidence gaps, and retain the original cadence. Do not fabricate activity for unobserved time.
-
-The timer runs for the active execution session, including blocked intervals. On an explicit pause or session end, write a final partial-window report and record that reporting stopped. On resume, record a new start time; do not claim reports were produced while the session was inactive.
-
-### D1 — Developer: math 01–10
-
-Owns the first ten math scenarios: place value, geometry, transformations, tiling, nets, packaging, packing, and fence optimization. Implements their model logic, owned component behavior, recipe fixtures, and focused checks. Reuses existing geometry and chart capabilities where suitable.
-
-Special obligations: preserve exact decimal semantics where applicable; separate geometric dimensions from display scale; distinguish a packing heuristic from a proof of optimality; avoid turning six geometry activities into one overloaded control panel.
-
-### D2 — Developer: math 11–20
-
-Owns the last ten math scenarios: feasible choices, statistics, sampling, regression, probability, counting, amortization, differentiation, and accumulation.
-
-Special obligations: state population/sample and rate conventions; make randomness reproducible for tests; handle undefined results honestly; verify loan rounding/final payment and calculus units; keep each opening view focused on its actual question.
-
-### D3 — Developer: physics 01–10
-
-Owns mechanics and fluids: levers, pulleys, gears, tipping, collisions, buoyancy, pressure, hydraulics, pipe flow, and parachutes.
-
-Special obligations: enforce units and conservation laws; state idealizations; count supporting rope strands correctly; distinguish static and dynamic assumptions; ensure animation reflects computed state rather than a decorative predetermined trajectory.
-
-### D4 — Developer: physics 11–20
-
-Owns turning, optics, waves, conduction, cooling, phase change, induction, and capacitor transients.
-
-Special obligations: distinguish singular/virtual optical results; verify frequency/sign conventions, thermal energy accounting, and time constants; provide stable numerical integration where required; do not add unsupported field solvers or circuit topology editors.
-
-### Common developer responsibilities and limits
-
-Each developer delivers complete vertical slices: model, bounded input validation, catalog contribution, composable recipe, scene/control behavior, persistence, learner behavior, focused tests, and a handoff report. The orchestrator handles shared registration edits unless explicitly delegated.
-
-Before handoff, developers must:
-
-1. Read the scenario research and relevant design guides; agree its contract.
-2. Inspect existing components and model contributions before adding equivalents.
-3. Build the smallest lesson answering the selected learning question.
-4. Verify reference values, boundary inputs, invariants, and state transitions with meaningful tests.
-5. Check builder editing, saving, reopening, and Try lesson locally.
-6. Inspect opening and changed views; remove unjustified controls.
-7. Request an early real-inference canary through the orchestrator’s queue.
-8. Submit owned changes and evidence with known limitations and failing checks disclosed.
-
-Developers cannot self-accept a scenario, edit another developer’s owned files without reassignment, patch shared planner/provider behavior to bypass a failure, or weaken validators to force a generated recipe through. They may assist diagnosis, but tester conclusions remain independent. A blocked shared dependency is a task for the orchestrator, not permission for simultaneous shared edits.
-
-### T1 — Tester: scientific correctness and runtime integrity
-
-Owns independent numerical reference checks, model invariants, schema/recipe integrity, and state/persistence regression evidence for **all 40** scenarios.
-
-Responsibilities:
-
-- Derive expectations independently from cited sources, closed-form calculations, or a trusted reference method. Do not merely copy the production formula into a test.
-- Check units, domain limits, singularities, numerical convergence, conservation, randomness, and transitions.
-- Check typed recipe validation, component connections, reconstruction after save/reopen, and builder/learner consistency.
-- Inspect recipes actually produced by Apertus, including changed recipes, for valid configuration and scientific meaning. A valid JSON shape can still encode the wrong lesson.
-- Verify failed or cancelled generation preserves the last accepted lesson and does not display unaccepted results as success.
-- Review failure evidence with T2, own correctness verdicts, and retest fixes against the same contract.
-
-Boundaries: no production model fixes, no catalog ownership, no substituting premades for generation, no claiming usability from numerical tests. Test harness changes stay in assigned tester paths. Model defects go back to the owning developer; shared runtime defects go to O.
-
-### T2 — Tester: usability and real-inference experience
-
-Owns independent browser/task review and live Apertus/Laya evidence for **all 40** scenarios. Coordinates with T1 rather than splitting testing into “math tester” and “physics tester.”
-
-Responsibilities:
-
-- Inspect the opening screen before reading implementation notes or a walkthrough. Identify the learning question, primary action, competing controls, visual emphasis, and readable labels.
-- Perform outcome-only tasks, such as “make the ladder longer while keeping the wall height fixed,” without following a developer-written sequence of clicks.
-- Operate the ordinary builder and Try lesson flows; inspect actual scene geometry, not merely whether an SVG or canvas mounted.
-- Submit the exact learner prompts, paraphrases, and follow-ups through the normal application with actual Apertus and Laya. Inspect accepted output and visible behavior.
-- Test keyboard operation, focus, reduced motion, short desktop height, relevant supported viewports, invalid-input recovery, and follow-up discoverability.
-- Capture and inspect opening and meaningful changed states with Playwright MCP when available. Label browser automation or another capture method as fallback when MCP is unavailable.
-- Report Pass / Concern / Fail / Not tested with severity, reproduction, evidence, and unresolved issues.
-
-Boundaries: no production UI fixes, no rewriting a failing prompt to make it pass without preserving the original failure, no mocking successful provider replies for live acceptance, and no claiming novice comprehension without participant evidence. Automated browser success and reviewer judgment must be reported separately from observed human first-use results.
+Use checked wall-clock deadlines or an available timer; do not claim an unattended scheduler exists. Keep the cadence through blocked periods during active sessions, label late reports, and write a partial-window report on pause/end. No agent collects or writes another agent's progress report.
 
 ### Responsibility matrix
 
-| Activity | Owner | Reviewer / contributor | Acceptance authority |
-| --- | --- | --- | --- |
-| Scenario scope, dispatch, ownership ledger | O | Assigned D, T1, T2 | O, subject to mandatory requirements |
-| Domain model and owned UI/recipe implementation | Assigned D | T1 for model; T2 for experience | Both testers must sign off |
-| Shared catalogs, planner integration, dependencies, generators | O or one explicit delegate | Affected Ds and testers | O after relevant checks |
-| Independent scientific/runtime checks | T1 | D supplies reproduction context | T1 |
-| Usability and live-generation evidence | T2 | T1 inspects accepted recipes; D diagnoses | T2 |
-| Inference scheduling and resource configuration | O | T2 executes; T1 reviews trace meaning | O |
-| Production bug fix | Owning D; O for shared code | Reporting tester retests | Original tester |
-| Final integration and release report | O | T1 and T2 sign-offs | O; no mandatory gate may be waived |
+| Activity | Owner | Required review |
+| --- | --- | --- |
+| Scenario contract, implementation, tests, fixes, status | Assigned A1–A4 | Paired non-author |
+| Shared file change or missing primitive | One explicitly claimed agent per file/task | Affected agents; non-author for acceptance |
+| Scientific/runtime and usability/live verdicts | Paired non-author | Two distinct verdicts per scenario |
+| Inference request | Current reservation holder | Paired reviewer inspects trace and result |
+| Candidate integration | Agent with temporary integration reservation | Relevant checks on combined candidate |
+| Final evidence | Each agent publishes its ten-scenario summary | Paired reviewer signs both tracks; all four confirm release gates |
 
 ## 3. Assignment manifest: exactly 40 scenarios
 
@@ -188,122 +78,97 @@ Use the stable IDs below in contracts, commits, issues, evidence, and status rep
 
 | ID | Developer | Researched specification |
 | --- | --- | --- |
-| MATH-01 | D1 | [Decimal place value](../simulations/math/01-DECIMAL-PLACE-VALUE.md) |
-| MATH-02 | D1 | [Pythagorean theorem and ladder length](../simulations/math/02-PYTHAGOREAN-THEOREM.md) |
-| MATH-03 | D1 | [Trigonometry for measuring heights](../simulations/math/03-TRIGONOMETRY-FOR-MEASURING-HEIGHTS.md) |
-| MATH-04 | D1 | [Scale drawings and similar shapes](../simulations/math/04-SCALE-DRAWINGS-AND-SIMILAR-SHAPES.md) |
-| MATH-05 | D1 | [Reflections, rotations, and translations](../simulations/math/05-REFLECTIONS-ROTATIONS-AND-TRANSLATIONS.md) |
-| MATH-06 | D1 | [Tessellations and tile patterns](../simulations/math/06-TESSELLATIONS-AND-TILE-PATTERNS.md) |
-| MATH-07 | D1 | [Folding nets into boxes](../simulations/math/07-FOLDING-NETS-INTO-BOXES.md) |
-| MATH-08 | D1 | [Packaging with the least material](../simulations/math/08-PACKAGING-WITH-THE-LEAST-MATERIAL.md) |
-| MATH-09 | D1 | [Packing boxes into a container](../simulations/math/09-PACKING-BOXES-INTO-A-CONTAINER.md) |
-| MATH-10 | D1 | [Quadratics through a fencing problem](../simulations/math/10-QUADRATICS-THROUGH-A-FENCING-PROBLEM.md) |
-| MATH-11 | D2 | [Inequalities and feasible choices](../simulations/math/11-INEQUALITIES-AND-FEASIBLE-CHOICES.md) |
-| MATH-12 | D2 | [Mean, median, and outliers](../simulations/math/12-MEAN-MEDIAN-AND-OUTLIERS.md) |
-| MATH-13 | D2 | [Spread and standard deviation](../simulations/math/13-SPREAD-AND-STANDARD-DEVIATION.md) |
-| MATH-14 | D2 | [Sampling and survey uncertainty](../simulations/math/14-SAMPLING-AND-SURVEY-UNCERTAINTY.md) |
-| MATH-15 | D2 | [Regression and the effect of outliers](../simulations/math/15-REGRESSION-AND-THE-EFFECT-OF-OUTLIERS.md) |
-| MATH-16 | D2 | [Conditional probability and hidden origins](../simulations/math/16-CONDITIONAL-PROBABILITY.md) |
-| MATH-17 | D2 | [Combinations versus permutations](../simulations/math/17-COMBINATIONS-VERSUS-PERMUTATIONS.md) |
-| MATH-18 | D2 | [Loan repayment and amortization](../simulations/math/18-LOAN-REPAYMENT-AND-AMORTIZATION.md) |
-| MATH-19 | D2 | [Derivatives as an instantaneous rate](../simulations/math/19-DERIVATIVES-AS-INSTANTANEOUS-RATE.md) |
-| MATH-20 | D2 | [Integration as accumulated quantity](../simulations/math/20-INTEGRATION-AS-ACCUMULATED-QUANTITY.md) |
-| PHYS-01 | D3 | [Levers and mechanical advantage](../simulations/physics/01-LEVERS-AND-MECHANICAL-ADVANTAGE.md) |
-| PHYS-02 | D3 | [Pulley systems and lifting effort](../simulations/physics/02-PULLEY-SYSTEMS.md) |
-| PHYS-03 | D3 | [Gears and bicycle ratios](../simulations/physics/03-GEARS-AND-BICYCLE-RATIOS.md) |
-| PHYS-04 | D3 | [Centre of mass and tipping](../simulations/physics/04-CENTRE-OF-MASS-AND-TIPPING.md) |
-| PHYS-05 | D3 | [Collisions and momentum](../simulations/physics/05-COLLISIONS-AND-MOMENTUM.md) |
-| PHYS-06 | D3 | [Floating, sinking, and buoyancy](../simulations/physics/06-FLOATING-SINKING-AND-BUOYANCY.md) |
-| PHYS-07 | D3 | [Water pressure with depth](../simulations/physics/07-WATER-PRESSURE-WITH-DEPTH.md) |
-| PHYS-08 | D3 | [Hydraulic lifts and piston areas](../simulations/physics/08-HYDRAULIC-LIFTS.md) |
-| PHYS-09 | D3 | [Flow through narrow and wide pipes](../simulations/physics/09-FLOW-THROUGH-NARROW-AND-WIDE-PIPES.md) |
-| PHYS-10 | D3 | [Parachutes and terminal velocity](../simulations/physics/10-PARACHUTES-AND-TERMINAL-VELOCITY.md) |
-| PHYS-11 | D4 | [Turning and circular motion](../simulations/physics/11-TURNING-AND-CIRCULAR-MOTION.md) |
-| PHYS-12 | D4 | [Lens focusing and image formation](../simulations/physics/12-LENS-FOCUSING-AND-IMAGE-FORMATION.md) |
-| PHYS-13 | D4 | [Fibre optics and total internal reflection](../simulations/physics/13-FIBRE-OPTICS-AND-TOTAL-INTERNAL-REFLECTION.md) |
-| PHYS-14 | D4 | [Doppler effect and passing sound sources](../simulations/physics/14-DOPPLER-EFFECT.md) |
-| PHYS-15 | D4 | [Guitar strings and standing waves](../simulations/physics/15-GUITAR-STRINGS-AND-STANDING-WAVES.md) |
-| PHYS-16 | D4 | [Heat conduction through materials](../simulations/physics/16-HEAT-CONDUCTION-THROUGH-MATERIALS.md) |
-| PHYS-17 | D4 | [Cooling a hot drink](../simulations/physics/17-COOLING-A-HOT-DRINK.md) |
-| PHYS-18 | D4 | [Melting, boiling, and latent heat](../simulations/physics/18-MELTING-BOILING-AND-LATENT-HEAT.md) |
-| PHYS-19 | D4 | [Electromagnetic induction](../simulations/physics/19-ELECTROMAGNETIC-INDUCTION.md) |
-| PHYS-20 | D4 | [Capacitor charging and discharging](../simulations/physics/20-CAPACITOR-CHARGING-AND-DISCHARGING.md) |
+| MATH-01 | A1 | [Decimal place value](../simulations/math/01-DECIMAL-PLACE-VALUE.md) |
+| MATH-02 | A1 | [Pythagorean theorem and ladder length](../simulations/math/02-PYTHAGOREAN-THEOREM.md) |
+| MATH-03 | A1 | [Trigonometry for measuring heights](../simulations/math/03-TRIGONOMETRY-FOR-MEASURING-HEIGHTS.md) |
+| MATH-04 | A1 | [Scale drawings and similar shapes](../simulations/math/04-SCALE-DRAWINGS-AND-SIMILAR-SHAPES.md) |
+| MATH-05 | A1 | [Reflections, rotations, and translations](../simulations/math/05-REFLECTIONS-ROTATIONS-AND-TRANSLATIONS.md) |
+| MATH-06 | A1 | [Tessellations and tile patterns](../simulations/math/06-TESSELLATIONS-AND-TILE-PATTERNS.md) |
+| MATH-07 | A1 | [Folding nets into boxes](../simulations/math/07-FOLDING-NETS-INTO-BOXES.md) |
+| MATH-08 | A1 | [Packaging with the least material](../simulations/math/08-PACKAGING-WITH-THE-LEAST-MATERIAL.md) |
+| MATH-09 | A1 | [Packing boxes into a container](../simulations/math/09-PACKING-BOXES-INTO-A-CONTAINER.md) |
+| MATH-10 | A1 | [Quadratics through a fencing problem](../simulations/math/10-QUADRATICS-THROUGH-A-FENCING-PROBLEM.md) |
+| MATH-11 | A2 | [Inequalities and feasible choices](../simulations/math/11-INEQUALITIES-AND-FEASIBLE-CHOICES.md) |
+| MATH-12 | A2 | [Mean, median, and outliers](../simulations/math/12-MEAN-MEDIAN-AND-OUTLIERS.md) |
+| MATH-13 | A2 | [Spread and standard deviation](../simulations/math/13-SPREAD-AND-STANDARD-DEVIATION.md) |
+| MATH-14 | A2 | [Sampling and survey uncertainty](../simulations/math/14-SAMPLING-AND-SURVEY-UNCERTAINTY.md) |
+| MATH-15 | A2 | [Regression and the effect of outliers](../simulations/math/15-REGRESSION-AND-THE-EFFECT-OF-OUTLIERS.md) |
+| MATH-16 | A2 | [Conditional probability and hidden origins](../simulations/math/16-CONDITIONAL-PROBABILITY.md) |
+| MATH-17 | A2 | [Combinations versus permutations](../simulations/math/17-COMBINATIONS-VERSUS-PERMUTATIONS.md) |
+| MATH-18 | A2 | [Loan repayment and amortization](../simulations/math/18-LOAN-REPAYMENT-AND-AMORTIZATION.md) |
+| MATH-19 | A2 | [Derivatives as an instantaneous rate](../simulations/math/19-DERIVATIVES-AS-INSTANTANEOUS-RATE.md) |
+| MATH-20 | A2 | [Integration as accumulated quantity](../simulations/math/20-INTEGRATION-AS-ACCUMULATED-QUANTITY.md) |
+| PHYS-01 | A3 | [Levers and mechanical advantage](../simulations/physics/01-LEVERS-AND-MECHANICAL-ADVANTAGE.md) |
+| PHYS-02 | A3 | [Pulley systems and lifting effort](../simulations/physics/02-PULLEY-SYSTEMS.md) |
+| PHYS-03 | A3 | [Gears and bicycle ratios](../simulations/physics/03-GEARS-AND-BICYCLE-RATIOS.md) |
+| PHYS-04 | A3 | [Centre of mass and tipping](../simulations/physics/04-CENTRE-OF-MASS-AND-TIPPING.md) |
+| PHYS-05 | A3 | [Collisions and momentum](../simulations/physics/05-COLLISIONS-AND-MOMENTUM.md) |
+| PHYS-06 | A3 | [Floating, sinking, and buoyancy](../simulations/physics/06-FLOATING-SINKING-AND-BUOYANCY.md) |
+| PHYS-07 | A3 | [Water pressure with depth](../simulations/physics/07-WATER-PRESSURE-WITH-DEPTH.md) |
+| PHYS-08 | A3 | [Hydraulic lifts and piston areas](../simulations/physics/08-HYDRAULIC-LIFTS.md) |
+| PHYS-09 | A3 | [Flow through narrow and wide pipes](../simulations/physics/09-FLOW-THROUGH-NARROW-AND-WIDE-PIPES.md) |
+| PHYS-10 | A3 | [Parachutes and terminal velocity](../simulations/physics/10-PARACHUTES-AND-TERMINAL-VELOCITY.md) |
+| PHYS-11 | A4 | [Turning and circular motion](../simulations/physics/11-TURNING-AND-CIRCULAR-MOTION.md) |
+| PHYS-12 | A4 | [Lens focusing and image formation](../simulations/physics/12-LENS-FOCUSING-AND-IMAGE-FORMATION.md) |
+| PHYS-13 | A4 | [Fibre optics and total internal reflection](../simulations/physics/13-FIBRE-OPTICS-AND-TOTAL-INTERNAL-REFLECTION.md) |
+| PHYS-14 | A4 | [Doppler effect and passing sound sources](../simulations/physics/14-DOPPLER-EFFECT.md) |
+| PHYS-15 | A4 | [Guitar strings and standing waves](../simulations/physics/15-GUITAR-STRINGS-AND-STANDING-WAVES.md) |
+| PHYS-16 | A4 | [Heat conduction through materials](../simulations/physics/16-HEAT-CONDUCTION-THROUGH-MATERIALS.md) |
+| PHYS-17 | A4 | [Cooling a hot drink](../simulations/physics/17-COOLING-A-HOT-DRINK.md) |
+| PHYS-18 | A4 | [Melting, boiling, and latent heat](../simulations/physics/18-MELTING-BOILING-AND-LATENT-HEAT.md) |
+| PHYS-19 | A4 | [Electromagnetic induction](../simulations/physics/19-ELECTROMAGNETIC-INDUCTION.md) |
+| PHYS-20 | A4 | [Capacitor charging and discharging](../simulations/physics/20-CAPACITOR-CHARGING-AND-DISCHARGING.md) |
 
 ## 4. Parallelism, file isolation, and shared work
 
-### Mandatory agent model and reasoning policy
+### Agent model policy and launch
 
-All seven roles, replacements, and any explicitly authorized helper agents must use **`gpt-6.1-sol` with reasoning effort `low` or `medium` only**. **Astra, including `gpt-6-astra`, is not allowed.** Other models and higher reasoning efforts are also outside this policy. Do not escalate models automatically when a task is difficult or an agent fails.
+Each of the four separate terminals/sessions uses **`gpt-6.1-sol` with `low` or `medium` reasoning only** (default `medium`). Astra, other models, and higher reasoning efforts are prohibited. Each agent records requested and confirmed settings in its own status file; report a mismatch instead of substituting a model. This policy governs coding agents; the application still uses real Apertus inference and Laya decisions.
 
-| Role | Required model | Default reasoning | Permitted reasoning |
-| --- | --- | --- | --- |
-| O | `gpt-6.1-sol` | `medium` | `low` or `medium` |
-| D1–D4 | `gpt-6.1-sol` | `medium` | `low` or `medium` |
-| T1 | `gpt-6.1-sol` | `medium` | `low` or `medium` |
-| T2 | `gpt-6.1-sol` | `low` | `low` or `medium` |
+Launch four independent sessions with the task templates in section 11. No parent/worker hierarchy, orchestrator, nested helpers, or fifth agent. This document edit does not launch sessions or authorize deployment.
 
-O checks its own model before dispatch and explicitly sets the allowed model and effort for every worker launch. When the launch interface requires a bounded or empty context fork to apply overrides, supply that fork and attach the contract, owned paths, and required document links explicitly; do not inherit an unverified parent model. Record the requested and confirmed settings in the ledger and report any mismatch. If the allowed model cannot be selected or verified, stop the affected launch and report the blocker; do not silently substitute Astra or another model. This applies equally to separate sessions and worktrees.
+### Separate worktrees and application instances
 
-This restriction governs the coding and testing agents. The application still uses actual **Apertus** inference and **Laya** decisions for the acceptance runs described in section 8; do not switch the application's inference provider to the agents' coding model.
+Prefer one isolated Git worktree and branch per agent, created from the same recorded baseline. Suggested branch names are `simulations/a1-math-01-10`, `simulations/a2-math-11-20`, `simulations/a3-physics-01-10`, and `simulations/a4-physics-11-20`. These are examples, not existing branches. Inventory the current dirty checkout first; explicitly carry forward needed existing work without discarding or silently omitting it. Review candidates must identify that work in their fingerprints.
 
-### Logical team versus available execution slots
+Give each application instance a distinct recorded port and evidence directory. A reviewer uses a frozen candidate checkout/app instance; its owner must not mutate or restart it during review. Worktrees isolate files, but shared services and persistence remain shared: use separate test users/projects and never clean another agent's data.
 
-The intended deployment has seven logical roles. Seven agents can run simultaneously only if the actual Codex/session configuration provides at least seven execution slots and sufficient machine capacity. The session in which this plan was prepared exposes four slots, including its primary agent; it cannot host this entire team simultaneously.
+If worktrees are unavailable, record exact nonoverlapping file ownership before starting in the shared checkout. No reset, clean, checkout, broad formatting, dependency installation, or lockfile mutation that affects other work. Do not stage or commit another agent's changes. Preserve pre-existing changes.
 
-O must check available capacity before launch. On a seven-slot setup, keep all roles active with bounded work. On a four-slot setup, retain all seven role assignments but time-slice them: O + two developers + one tester during implementation, then O + one developer + both testers during acceptance. Rotate developers fairly. Record inactive roles as queued; do not report seven concurrent workers. Separate sessions/worktrees are an alternative only after confirming access, capacity, and integration ownership.
+### Exact file ownership and shared-file reservations
 
-This plan documents future work. It does not launch agents or authorize deployment by itself.
+Subject ranges alone do not prevent conflicts: A1/A2 may both need a math catalog and A3/A4 may both need a physics catalog. Before edits, each agent records exact owned source, fixture, test, and report paths in `028-validation/ownership/<AGENT>.md`. Other agents check those claims before editing. Reuse the existing domain layout and split contribution modules only when needed for actual concurrent work.
 
-### Isolation model
+Shared surfaces include component/runtime/planner catalogs, assembly and validation entry points, common controls, package scripts, manifests, lockfiles, and generated registry sources. Each shared file has **one named writer at a time**, agreed directly by affected agents and recorded in their ownership files before editing. A shared-file change request states file, intended contract/change, affected scenarios, owner, and checks. The named writer implements the bounded change; other agents consume it or continue independent work. Silence is not agreement. If ownership is unresolved, pause only the conflicting edits.
 
-Prefer an isolated Git worktree and branch per developer when the environment permits creating them. Establish an integration checkout owned by O and separate tester checkouts or a frozen candidate checkout. Use the repository’s actual branch conventions; suggested names such as `simulations/d1-math-geometry` are examples, not existing branches.
+For separate sessions without messaging, use the ownership and per-agent status files in a common coordination directory accessible to all terminals (record its absolute path). Do not assume files in separate worktrees are instantly shared. Only each agent edits its own status/ownership files. Confirm reservations directly between terminals or use an atomic local lock such as `mkdir` in that common directory; an unlocked read-then-write Markdown lease is insufficient to prevent simultaneous acquisition. Record holder, scope, candidate, start, and release. Do not remove a stale lock until its holder has stopped the protected operation.
 
-If worktrees are unavailable, use one checkout with strict, nonoverlapping path ownership. O records the allowed paths before dispatch. No worker performs a reset, clean, checkout, dependency installation, lockfile edit, or broad formatting sweep that can affect another worker. Preserve pre-existing and unrelated changes.
+Integration is a **temporary operation**, not an agent role. Any agent with a ready slice can acquire the single integration reservation, integrate the reviewed commits sequentially into the agreed candidate branch/checkout, run relevant combined checks, record the resulting fingerprint in its own status, and release the reservation. No simultaneous merges, cherry-picks, or generator runs in that checkout. Resolve conflicts with affected owners; never overwrite their changes. Every agent continues owning ten scenarios, and nobody permanently owns integration or dispatch.
 
-Assign scenario-specific paths under the existing domain/component structure, with T1 and T2 owning separate test/report directories. Four developers may share a conceptual domain, so “you own math” is not sufficient isolation: name exact files or separate contribution modules. Shared entry points and generated files remain O-owned.
-
-Examples of shared integration surfaces to inspect, not automatically rewrite:
-
-- `src/web/src/simulations/components/catalog/index.ts` and related component metadata.
-- `src/web/src/simulations/runtime/catalog.ts`, `runtime/mathCatalog.ts`, domain contributions, and recipe compatibility.
-- `src/web/src/lib/planner/catalog.ts` and the existing generation/validation pipeline.
-- `src/web/src/simulations/runtime/recipes/premadeRegistry.generated.ts` and its source generator, `src/web/scripts/recipes/generate-registry.cjs`.
-- Package scripts, shared test utilities, dependency manifests, and lockfiles.
-
-Do not hand-edit generated registry output. Do not equate support in a deterministic generation fast path with support throughout the application: inspect the existing catalog eligibility and composition rules and integrate through their real contracts.
+Do not hand-edit `premadeRegistry.generated.ts`; run its source generator only under the integration reservation after source contributions are present. Inspect catalog eligibility, persistence, rendering, and generation contracts rather than treating deterministic fast-path support as full application support.
 
 ### Minimal shared preparation
 
-O first confirms contribution shape, input/output typing, model state ownership, catalog metadata, recipe persistence, learner rendering, and generation eligibility. Reuse what exists. If a missing common primitive blocks several scenarios, define one bounded task with affected IDs and an acceptance example; finish that dependency before dependent work begins. Do not make a generic simulation engine or universal lesson dashboard a prerequisite.
+Agree contribution shape, types, canonical state, invalid drafts versus accepted state, serialization, catalog metadata, and generation eligibility using existing interfaces. A missing common primitive gets one bounded task and one writer, with affected IDs and an acceptance example. Finish it before dependent work; do not build a generic simulation engine or universal dashboard. Presentation resizing must not change physical quantities or reset state.
 
-The interface agreement must state who owns canonical values, how inputs update them, how invalid drafts differ from accepted state, what is serialized, and how generated recipes select/configure the capability. Presentation resizing must not change physical quantities or reset the model.
+## 5. Delivery order and workload limits
 
-## 5. Delivery waves and workload limits
+Each agent owns ten scenarios and independently pulls its next ready item; there is no dispatch queue. Use the four pilots below to exercise geometry, statistics, mechanics, and time-dependent physics. All four pilots must complete implementation, integration, real-inference canary, learner checks, and peer review before scaling up.
 
-Each developer owns ten scenarios. Start with four pilot slices to expose problems across geometry, statistics, mechanics, and time-dependent physics. Complete the full model → builder → real inference → learner → independent review cycle for these pilots before scaling the queue.
+| Agent | Pilot | Remaining owned scenarios, suggested order |
+| --- | --- | --- |
+| A1 | MATH-02 | 01, 03, 04, 05, 06, 10, 08, 07, 09 |
+| A2 | MATH-12 | 13, 15, 17, 16, 14, 11, 18, 19, 20 |
+| A3 | PHYS-01 | 02, 03, 04, 05, 06, 08, 07, 09, 10 |
+| A4 | PHYS-17 | 20, 12, 13, 14, 15, 11, 18, 19, 16 |
 
-| Wave | D1 | D2 | D3 | D4 |
-| --- | --- | --- | --- | --- |
-| 0 — pilot | MATH-02 | MATH-12 | PHYS-01 | PHYS-17 |
-| 1 | MATH-01 | MATH-13 | PHYS-02 | PHYS-20 |
-| 2 | MATH-03 | MATH-15 | PHYS-03 | PHYS-12 |
-| 3 | MATH-04 | MATH-17 | PHYS-04 | PHYS-13 |
-| 4 | MATH-05 | MATH-16 | PHYS-05 | PHYS-14 |
-| 5 | MATH-06 | MATH-14 | PHYS-06 | PHYS-15 |
-| 6 | MATH-10 | MATH-11 | PHYS-08 | PHYS-11 |
-| 7 | MATH-08 | MATH-18 | PHYS-07 | PHYS-18 |
-| 8 | MATH-07 | MATH-19 | PHYS-09 | PHYS-19 |
-| 9 | MATH-09 | MATH-20 | PHYS-10 | PHYS-16 |
+Reorder within an agent's range for recorded dependencies or measured cost; retain the full 40-item scope. Use pilot development/review/inference timings to estimate remaining work. Four implementers do not reduce the 480-request final live acceptance workload.
 
-These are delivery groups, not an assumption that every scenario costs the same. Packing, folding nets, conduction, and induction may need more investigation than a closed-form statistics lesson. O can reorder after recording a dependency or measured cost; preserve the 40-item scope and ownership ledger.
-
-Limit each developer to one active scenario and, at most, one handed-off scenario awaiting review. Prefer clearing defects over opening another scenario. Testers review integrated slices as they arrive; they do not wait until forty implementations are complete. O pauses new dispatch when the testing queue grows beyond the team’s capacity.
-
-Within a wave, independent model and UI work can proceed in parallel. Shared registry edits, integrations, and inference calls follow their designated queues. If a prerequisite blocks one scenario, its developer can take the next independent assigned item with O’s recorded reassignment.
+Limit each agent to one active implementation and one handed-off scenario awaiting review. Review the paired agent's ready slice before starting another when its queue is full; prioritize blocking fixes. Peer reviews and already-generated lessons can run concurrently; shared-file edits, integration operations, and real inference each require their respective reservation. If blocked, take an independent owned item within these limits and record the change. Never mutate a candidate being reviewed.
 
 ## 6. The per-scenario contract
 
-Before implementation, O and the assigned developer record this contract, with T1/T2 review:
+Before implementation, the assigned agent records this contract and obtains its paired reviewer's review:
 
 ```text
 ID / specification / developer:
@@ -323,7 +188,7 @@ Recipe structure and independent editing expectations:
 Save/reopen and Try lesson equivalence checks:
 Two supported follow-ups, including a structural change when applicable:
 One unsupported or invalid request and safe recovery expectation:
-Evidence needed from T1 and T2:
+Evidence needed from the peer reviewer for each review track:
 Explicit exclusions and unresolved questions:
 ```
 
@@ -335,7 +200,7 @@ The researched proposals are the starting scientific scope. If new research chan
 
 ## 7. Minimum independent correctness cases for all 40
 
-These are starting oracles, not the entire test suite. T1 must specify tolerances and derive expectations independently. Numerical rounding in the scene may be coarser than internal computation, but must not change conclusions.
+These are starting oracles, not the entire test suite. The peer reviewer must specify tolerances and derive expectations independently. Numerical rounding in the scene may be coarser than internal computation, but must not change conclusions.
 
 ### Math
 
@@ -391,7 +256,7 @@ These are starting oracles, not the entire test suite. T1 must specify tolerance
 
 ### What “using Apertus” means
 
-The application's generation and revision requests must use the actual configured Apertus inference service. Coding agents may run on their own Codex models; this plan does not claim that the seven coding/testing roles themselves run on Apertus.
+The application's generation and revision requests must use the actual configured Apertus inference service. Coding agents may run on their own Codex models; this plan does not claim that the four coding/testing roles themselves run on Apertus.
 
 The repository separates LLM inference from decision routing. Verify both the actual Apertus call and actual Laya decision service where the generation pipeline requires decisions. The mandatory guide calls for real Apertus and Laya; a deterministic premade lookup, mocked response, cached recipe, or label saying “Apertus” is not sufficient evidence.
 
@@ -414,13 +279,13 @@ DECISION_PROVIDER=laya
 LAYA_BASE_URL=http://127.0.0.1:43102
 ```
 
-O checks generic overrides such as `LLM_MODEL`, `LLM_MAX_CONCURRENT_REQUESTS`, token limits, and timeouts, which can override Apertus-specific settings. Record the resolved model/provider and observed request metadata. Keep credentials out of prompts, commits, screenshots, and reports. Hosted inference is an optional separately authorized configuration, not an automatic fallback.
+Each agent checks generic overrides such as `LLM_MODEL`, `LLM_MAX_CONCURRENT_REQUESTS`, token limits, and timeouts, which can override Apertus-specific settings. Record the resolved model/provider and observed request metadata. Keep credentials out of prompts, commits, screenshots, and reports. Hosted inference is an optional separately authorized configuration, not an automatic fallback.
 
 ### One shared inference queue
 
-Start with one in-flight acceptance request across the team. The existing transport concurrency limit is process-local: four application processes each configured for one request can still overload one shared model server. O therefore owns a team-wide reservation schedule, including developer canaries, tester runs, and other local users of the same server.
+Start with one in-flight acceptance request across the team. The existing transport concurrency limit is process-local: four application processes each configured for one request can still overload one shared model server. All four terminals use one team-wide inference reservation in the common coordination directory described in section 4, including canaries, peer-review runs, and other local users of the same server. Acquire it atomically before sending a request; separate process-local limits are insufficient.
 
-Use a simple recorded lease or scheduled slot before building a new coordination service. The lease names owner, application instance, candidate fingerprint, scenario, start time, request ID, and timeout. Release it after completion or confirmed cancellation. Testers coordinate over the same accepted recipe and trace; they do not each generate a duplicate lesson merely to obtain their own copy.
+Use a simple recorded lease or scheduled slot before building a new coordination service. The lease names owner, application instance, candidate fingerprint, scenario, start time, request ID, and timeout. Release it after completion or confirmed cancellation. The peer reviewer uses the same accepted recipe and trace for both review tracks; do not generate duplicate lessons merely to separate numerical and usability evidence.
 
 Increase concurrency only after measuring stable latency and failure rates on the actual machine. Browser instances may operate independently on already-generated lessons, but inference calls remain queued. Bound timeouts, retries, and total attempts; record schema probes and repair calls as real inference work. A 429, timeout, malformed reply, or decision-service failure is a recorded result, not a reason for unlimited retries.
 
@@ -429,7 +294,7 @@ Increase concurrency only after measuring stable latency and failure rates on th
 1. Freeze the candidate and acceptance manifest. Confirm actual provider configuration and start the application normally.
 2. Open a fresh lesson/draft. Submit the canonical prompt through the ordinary prompt UI. Observe real generation/decision requests without replacing their responses.
 3. Record request IDs, observed provider/model, stage outcomes, decision results, timing, token usage if supplied, validation result, and accepted recipe/configuration. Distinguish absent metadata from zero usage.
-4. T1 checks that the recipe represents the requested scientific model with sensible parameters and typed connections. T2 inspects the opening learner view.
+4. The peer reviewer inspects the opening learner view before implementation notes, then checks that the recipe represents the requested scientific model with sensible parameters and typed connections. Record both review tracks against the same run.
 5. Perform the outcome-only learning task and compare the visible result with the model's accepted state.
 6. Apply the two contracted follow-ups to the canonical generated lesson. Inspect the actual new accepted recipes and verify that retained constraints remain unchanged.
 7. Submit the invalid or unsupported request. It must clarify or reject appropriately and preserve the last accepted lesson. Test cancel/recovery separately if required by the flow.
@@ -443,140 +308,126 @@ Supported prompts must work as intended; an unsupported request passes through h
 
 This plan requires two complete qualifying rounds over all 40 scenarios on the **same frozen release candidate**, acceptance manifest, and resolved configuration. Run rounds sequentially, using fresh generation for each scenario. Do not tune prompts, code, or provider settings between qualifying rounds.
 
-For each scenario per round, run one canonical creation, two paraphrase creations, two canonical-lesson follow-ups, and one invalid/unsupported request: six product requests. Across 40 scenarios and two rounds that is 480 product requests, excluding canaries, retries, internal planning stages, schema probes, and repair calls. This is a workload estimate, not a claim of 480 model calls or a cost/time guarantee. O must budget using measured pilot throughput and track actual inference usage.
+For each scenario per round, run one canonical creation, two paraphrase creations, two canonical-lesson follow-ups, and one invalid/unsupported request: six product requests. Across 40 scenarios and two rounds that is 480 product requests, excluding canaries, retries, internal planning stages, schema probes, and repair calls. This is a workload estimate, not a claim of 480 model calls or a cost/time guarantee. Each agent must budget its owned runs using measured pilot throughput and track actual inference usage.
 
-Wave-level checks are provisional evidence. Final rounds happen after all 40 are integrated. If a qualifying round fails, keep the evidence, fix the defect, and freeze a new candidate; it needs two complete passing rounds. Earlier wave success cannot prove a later shared change did not break a scenario. If local services or time/capacity make this impossible, report “live acceptance blocked/incomplete,” not “complete with mocks.”
+Slice-level checks are provisional evidence. Final rounds happen after all 40 are integrated. If a qualifying round fails, keep the evidence, fix the defect, and freeze a new candidate; it needs two complete passing rounds. Earlier slice success cannot prove a later shared change did not break a scenario. If local services or time/capacity make this impossible, report “live acceptance blocked/incomplete,” not “complete with mocks.”
 
 ## 9. Verification gates and completion states
 
 ### Gate A — scoped and ready
 
-Contract, owner, exclusive paths, required primitives, scientific assumptions, oracle, prompt/follow-up manifest, and simple opening experience agreed. No unresolved dependency preventing meaningful implementation.
+Assigned agent and paired reviewer agree the contract, exact owned paths, dependencies, assumptions, oracle, prompt manifest, and simple opening experience. No unresolved dependency prevents meaningful implementation.
 
 ### Gate B — developer verified
 
-Focused model and boundary checks pass; source/recipe integration works; builder, save/reopen, and Try lesson have been exercised. Opening/changed views inspected; early inference canary recorded or explicitly blocked. Developer handoff includes known failures and limitations. This is not acceptance.
+Owner's model/boundary checks pass; source/recipe integration works; builder, save/reopen, and Try lesson are exercised. Opening/changed views are inspected and the early inference canary is recorded or explicitly blocked. The handoff discloses failures and limitations. This is not acceptance.
 
-### Gate C — integrated and independently reviewed
+### Gate C — integrated and peer reviewed
 
-O integrates the slice; both testers review the actual combined application. T1 signs correctness/runtime evidence; T2 signs usability/live-experience evidence. Blocking or major findings require fixes. Minor findings need recorded disposition and cannot contradict IMPORTANT.md. Any required Not tested result remains an open gate.
+The slice is integrated under the temporary reservation. A non-author reviews the actual combined candidate and signs separate correctness/runtime and usability/live-experience verdicts. Blocking/major findings require fixes. Minor findings need recorded disposition consistent with IMPORTANT.md. Required Not tested results remain open gates.
 
 ### Gate D — release qualified
 
-All 40 have both tester sign-offs, required combined regression checks pass, and two complete live rounds pass on the frozen candidate. The final report lists evidence, limitations, remaining nonblocking issues, actual providers/models, and candidate/configuration fingerprints. “Implemented” and “release qualified” remain separate ledger states.
+All 40 scenarios have non-author sign-off on both tracks, required combined checks pass, and two complete live rounds pass on the same frozen candidate/configuration/manifest. Each agent executes and documents its ten scenarios per round; paired reviewers inspect the results. Complete round 1 across all four ranges before round 2. No code, prompts, or provider settings change between qualifying rounds. A change requires a new frozen candidate and two complete qualifying rounds as specified in section 8.
 
-Suggested ledger fields:
+Each agent owns `028-validation/status/<AGENT>.md`; there is no single-writer central ledger. Read all four files for total progress. Use:
 
 ```text
-ID | owner | contract version | state | candidate fingerprint |
-developer checks | T1 verdict | T2 verdict | live round 1 | live round 2 |
+ID | owner | reviewer | contract version | state | candidate fingerprint |
+owner checks | peer correctness/runtime | peer usability/live | round 1 | round 2 |
 blocking issue | evidence links | next action
 ```
 
-Suggested states: Proposed → Scoped → Implementing → Developer verified → Integrated → In review → Provisionally accepted → Release qualified. Also use Blocked and Regressed with an explicit owner and next action. Only O changes the shared ledger; testers publish verdicts in their own reports.
+States: Proposed → Scoped → Implementing → Developer verified → Integrated → In review → Provisionally accepted → Release qualified. Blocked and Regressed require an owner and next action. Owners copy peer verdict links into their status, but only reviewers write those verdicts. A clean committed candidate is preferred; dirty candidates need relevant content hashes and an explicit list of outstanding changes. Fingerprint configuration and manifests separately without storing secrets.
 
-A fingerprint must identify the tested source, not merely the latest commit if the checkout is dirty. Prefer a clean committed candidate; otherwise include relevant source-content hashes and describe outstanding changes. Environment configuration and the prompt manifest are separately fingerprinted without storing secrets.
+### Practical checks
 
-### Practical check execution
+Inspect current scripts in `src/web/package.json`. Relevant existing checks include `pnpm lint`, `pnpm test:recipes`, `pnpm test:public-catalog`, `pnpm test:controls`, `pnpm test:generation:contract`, `pnpm test:generation:architecture`, `pnpm test:generation:construction`, `pnpm test:builder:parity`, and `pnpm build`.
 
-From `src/web`, inspect current package scripts before running them. Existing useful checks include:
+Owners run focused checks. The current integration reservation holder runs applicable combined regression checks, including the required full suite, after meaningful changes; all agents reuse the fingerprinted result rather than duplicating broad runs. Record baseline failures honestly. New scenarios need meaningful owned coverage for invariants, invalid inputs, persistence, structural edits, and independently known outcomes.
 
-```sh
-pnpm lint
-pnpm test:recipes
-pnpm test:public-catalog
-pnpm test:controls
-pnpm test:generation:contract
-pnpm test:generation:architecture
-pnpm test:generation:construction
-pnpm test:builder:parity
-pnpm build
-```
-
-Run focused relevant checks during slice development. O runs required broad checks, including the applicable full test suite, on the combined candidate and after meaningful fixes. Record baseline failures separately; do not call a failing required check passed because it predates the work. Do not repeat broad checks without new changes or unresolved concerns.
-
-These existing scripts do not automatically cover the new 40 scenarios. Add meaningful coverage through bounded owned tasks and register it centrally. Test conservation, invalid inputs, persistence, structural edits, and independently known outcomes; avoid tests that only restate implementation expressions or snapshots of incidental markup.
-
-Existing live scripts can inform the harness, including `src/web/scripts/generation/verify-realistic-live.cjs` and `src/web/scripts/domains/earth-atmosphere/live-ui.cjs`. Their existing cases, environment flags, and evidence-root constraints are specific to prior work. Do not assume changing an output variable makes them a 40-scenario harness. O owns a minimal adaptation or a bounded new runner with the new manifest and approved evidence path.
+Existing runners such as `src/web/scripts/generation/verify-realistic-live.cjs` and `src/web/scripts/domains/earth-atmosphere/live-ui.cjs` are references, not automatically a 40-scenario harness. Assign a minimal shared runner adaptation to one explicit writer if needed, with disjoint per-agent manifests and evidence paths. Keep invocation semantics consistent and serialize real requests.
 
 ## 10. Evidence and handoff conventions
 
-Use a dedicated evidence area when execution starts; the paths below are proposed, not files created by this plan:
+Use the existing validation area without overwriting prior evidence. Proposed additional layout:
 
 ```text
 docs/agent-only/implementation/028-validation/
-  assignment-and-status.md                 # O only
-  progress/<INTERVAL-END-UTC>.md           # O: report every ten minutes
-  contracts/<SCENARIO-ID>.md               # O records agreed contract
-  developer/<D>/<SCENARIO-ID>.md           # owning developer
-  tester-model/<SCENARIO-ID>.md            # T1
-  tester-experience/<SCENARIO-ID>.md       # T2
-  round-1/<SCENARIO-ID>/                   # live trace/image evidence
+  ownership/<AGENT>.md                     # this agent only
+  status/<AGENT>.md                        # this agent only
+  progress/<AGENT>/<INTERVAL-END-UTC>.md    # this agent only
+  contracts/<SCENARIO-ID>.md               # scenario owner
+  developer/<AGENT>/<SCENARIO-ID>.md       # scenario owner
+  peer-model/<SCENARIO-ID>.md              # assigned non-author reviewer
+  peer-experience/<SCENARIO-ID>.md         # assigned non-author reviewer
+  round-1/<SCENARIO-ID>/                   # scenario owner captures; peer reviews
   round-2/<SCENARIO-ID>/
-  release-report.md                       # O; tester verdicts linked
+  release/<AGENT>.md                       # ten-scenario summary, peer sign-offs linked
 ```
 
-O agrees which sanitized reports belong in version control and where large captures/raw traces are retained or ignored. Preserve enough trace detail, source identity, image identity, and reproduction information for an independent review. Keep failed-run evidence; avoid flooding the repository with unbounded binaries or deleting evidence just because a later attempt passed.
+The common coordination directory holds temporary integration/inference locks and accessible copies of per-agent status/ownership; record its location in all four sessions. Confirm existing artifacts' authors and candidate identity before reuse; preserve historical reports rather than rewriting them to imply a different team performed the runs.
 
-Developer handoff:
+Agree sanitized version-controlled evidence and retention of large captures/raw traces. Keep failed-run evidence, trace/source/image identity, and reproduction details; no credentials or unbounded binary commits.
+
+Owner handoff:
 
 ```text
-Scenario / contract / source fingerprint:
-Owned changes and required shared integration:
-Learning question / opening action / default control count:
+Scenario / contract / source fingerprint / peer reviewer:
+Owned changes and shared integration required:
+Learning question / opening action / control count:
 Scientific model / units / idealizations:
-Tests run and actual results:
-Builder, persistence, and learner checks:
-Early inference request and evidence:
-Known limitations, failures, and next action:
+Checks and actual results, including builder/persistence/learner:
+Early inference request and actual evidence locations:
+Known limitations / failures / next action:
 ```
 
-Tester finding:
+Peer finding:
 
 ```text
-Scenario / candidate / provider configuration:
-Task and exact input:
-Expected outcome and source/oracle:
-Observed outcome:
-Evidence type: visual review / interaction / numerical / participant:
-Verdict: Pass / Concern / Fail / Not tested:
-Severity: blocking / major / minor:
-Reproduction and evidence links:
+Scenario / candidate / provider configuration / reviewer:
+Outcome-only task and exact input:
+Expected outcome and independent source/oracle:
+Observed outcome and evidence type:
+Correctness/runtime or usability/live verdict: Pass / Concern / Fail / Not tested:
+Severity / reproduction / evidence links:
 Fix owner and required retest:
 ```
 
-An infrastructure failure and a model/UX defect are different findings, but both can block their respective gates. Retrying an unchanged transient failure may be appropriate within the bounded attempt policy; changing code, prompts, or configuration creates a new candidate or test condition and must be recorded.
+Infrastructure failures and scientific/UX defects are distinct findings but can both block gates. Bound retries; changed code, prompts, or configuration require recording a new candidate/test condition.
 
-## 11. Dispatch instructions for the seven roles
+## 11. Four standalone terminal task templates
 
-These are bounded task templates for a future launch; attach the current ledger, contract, owned paths, repository instructions, and required reading.
+Start one independent terminal/session per template. Every agent must verify `model: gpt-6.1-sol`, `reasoning_effort: low` or `medium`; Astra and all other models are prohibited. Attach current repository instructions, baseline fingerprint, owned paths, common coordination directory, service configuration, and required reading. No agent launches or supervises another.
 
-Every dispatch must specify `model: gpt-6.1-sol` and `reasoning_effort: low` or `medium` according to section 4. Include: “Astra and all other models are prohibited; report a configuration mismatch rather than substituting a model.” Workers must send timestamped milestone and run updates to O, including actual screenshot directories, for the ten-minute reports.
+**Terminal 1 — A1**
 
-**Orchestrator**
+> Implement MATH-01–10 from plan 028, starting with MATH-02. Own complete vertical slices and their focused checks/evidence. Peer-review A2's MATH-11–20; A2 reviews your work. Follow the common instructions below.
 
-> Coordinate implementation of the 40 scenario specifications in plan 028. Use only gpt-6.1-sol with low or medium reasoning for yourself and every worker; Astra is prohibited. Own the shared ledger, contracts, shared integration surfaces, dependency order, inference queue, and release report. Start a recurring 600-second timer and write a report of each preceding ten-minute interval, linking actual screenshot directories for runs with captures; continue reporting during blocked or ongoing work. Check available agent capacity before dispatch. Give each developer exclusive files and one active slice; give both testers independent review ownership across all scenarios. Apply IMPORTANT.md as mandatory precedence. Require real Apertus/Laya evidence and both tester sign-offs; never represent a premade, mock, blocked check, or developer self-test as release acceptance. Preserve unrelated changes and record every candidate used for qualifying rounds.
+**Terminal 2 — A2**
 
-**Developer D1 / D2 / D3 / D4**
+> Implement MATH-11–20 from plan 028, starting with MATH-12. Own complete vertical slices and their focused checks/evidence. Peer-review A1's MATH-01–10; A1 reviews your work. Follow the common instructions below.
 
-> Implement only your assigned scenario and owned paths from plan 028. Read its researched specification, agreed contract, IMPORTANT.md, all four design guides, and applicable repository instructions. Reuse existing model/component/recipe infrastructure. Deliver a focused visual lesson with one learning question, one obvious primary action, and justified essential controls. Implement scientifically correct typed behavior, independent recipe editing, persistence, and Try lesson support. Run relevant checks and request a serialized real-inference canary. Report shared dependencies and failures; do not modify shared entry points without explicit reassignment. Handoff to both testers; do not self-accept.
+**Terminal 3 — A3**
 
-**Tester T1**
+> Implement PHYS-01–10 from plan 028, starting with PHYS-01. Own complete vertical slices and their focused checks/evidence. Peer-review A4's PHYS-11–20; A4 reviews your work. Follow the common instructions below.
 
-> Independently verify every assigned integrated scenario’s scientific model, units, boundaries, invariants, convergence where relevant, recipe validation, connections, persistence, and builder/learner parity. Derive expected results independently. Inspect actual Apertus-generated and revised recipes. Own your test/report paths; return production defects to the assigned developer or orchestrator. Record evidence and Pass/Concern/Fail/Not tested truthfully. Your sign-off covers correctness and runtime integrity, not learner usability.
+**Terminal 4 — A4**
 
-**Tester T2**
+> Implement PHYS-11–20 from plan 028, starting with PHYS-17. Own complete vertical slices and their focused checks/evidence. Peer-review A3's PHYS-01–10; A3 reviews your work. Follow the common instructions below.
 
-> Independently review every assigned integrated scenario through the normal application. Read IMPORTANT.md and the four design guides, then inspect the opening experience before implementation notes. Use outcome-only tasks, count competing controls, and check keyboard, motion, viewport, recovery, saving/reopening, and Try lesson. Execute the exact creation prompts, paraphrases, and follow-ups with real Apertus/Laya under the orchestrator’s inference reservation. Inspect accepted recipes and meaningful visual changes; capture and review opening/changed states. Label fallback tooling and distinguish reviewer/browser evidence from participant evidence. Report defects without production edits; do not rewrite failed prompts away.
+**Common instructions for all four terminals**
+
+> Read IMPORTANT.md, the four design guides, your researched specifications, and applicable repository instructions. Inventory existing work and preserve unrelated changes. Verify your allowed model/reasoning settings; report mismatches. Work in your separate worktree/branch and app port. Record exact ownership and obtain agreement before shared-file edits; use the common coordination directory and atomic reservations for shared integration and real inference. Reuse existing model/component/recipe infrastructure. Deliver scientifically correct typed behavior, independently editable recipes, persistence, and Try lesson with one clear learning question and essential controls. Record contracts, meaningful checks, actual real Apertus/Laya canaries, fingerprints, failures, and screenshot directories. Review paired candidates independently before reading implementation formulas; return production fixes to owners and record separate correctness/runtime and usability/live verdicts. Keep one active slice and one awaiting review; prioritize peer reviews and defects. Write your own ten-minute progress and user updates. Do not self-accept, weaken validators, substitute mocks/premades for inference, edit other agents' owned files, spawn helpers, or deploy. Publish your ten-scenario release summary only with required peer sign-offs and both qualifying rounds.
 
 ## 12. Start order and final delivery
 
-1. O checks repository state, agent capacity, its own and every worker's allowed model/reasoning configuration, service configuration, baseline checks, and overlapping implementations; reads the governing requirements. Record execution start, verify the timer facility, and start ten-minute reporting before dispatch.
-2. Agree file ownership, scientific contracts, prompt manifests, shared contribution conventions, inference reservations, and evidence retention.
-3. Prepare only proven missing shared prerequisites.
-4. Dispatch wave 0. Make all four pilot slices pass the full handoff/review path and use their measured results to schedule remaining work.
-5. Run waves 1–9 with bounded developer and tester queues, sequential shared integration, and prompt defect correction.
-6. Freeze the complete candidate; finish combined checks and both full real-inference rounds with independent sign-offs.
-7. Publish the release report mapping every ID to implementation, tests, live evidence, usability verdict, and limitations.
+1. Open four independent terminals/sessions; verify each model/reasoning setting, repository instructions, existing work, service configuration, and common baseline. Record per-agent execution starts and reporting cadence.
+2. Agree exact file ownership, worktrees/branches, app ports, common coordination directory, atomic reservations, contracts, shared contribution interfaces, and evidence retention. Preserve current dirty work explicitly.
+3. Assign only proven missing shared prerequisites to one writer each; other agents continue independent tasks.
+4. Implement all four pilots concurrently, serialize shared integration/inference, and exchange paired reviews. Complete pilot gates before scaling.
+5. Each agent pulls remaining owned scenarios, keeping review queues bounded and fixing defects promptly. Integrate slices sequentially under temporary reservations.
+6. Freeze the complete combined candidate and configuration/manifest. Finish combined checks and two complete real-inference rounds with non-author sign-offs on both tracks.
+7. Each agent publishes its ten-scenario release summary. All four link the same frozen candidate and combined check evidence, confirm all 40 IDs are accounted for across the four summaries, and report directly to the user. No central release writer or orchestrator is required.
 
-The final report must state exactly what exists and what was verified. If 39 scenarios pass and one is blocked, delivery is 39 provisionally accepted plus one blocked; the 40-scenario goal remains incomplete. If screenshots look polished but opening tasks remain confusing, simplify and retest. If the user raises a usability objection, treat it as a required review iteration rather than overriding it with automated passes.
+State exactly what exists and what was verified. If 39 scenarios pass and one is blocked, the 40-scenario goal remains incomplete. “Implemented,” “provisionally accepted,” and “release qualified” are distinct. Polished screenshots cannot override confusing opening tasks; simplify and retest. Treat user usability objections as required review iterations.

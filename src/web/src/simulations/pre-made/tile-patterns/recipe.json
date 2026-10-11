@@ -1,0 +1,206 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/tile-patterns",
+  "version": 1,
+  "title": "Why do hexagons tile but pentagons don't?",
+  "description": "Fit regular tiles around one corner and see whether their angles make a full 360°.",
+  "tags": ["mathematics", "tessellation", "polygons", "angles"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-geometry/RegularTiling",
+        "version": 1,
+        "label": "Regular tiles",
+        "scope": "scope/lab",
+        "configuration": {
+          "tileSides": 6
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-tiling",
+        "version": 1,
+        "label": "Tiles around one corner",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/1",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Sides on each tile",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Sides on each tile",
+          "mode": "immediate",
+          "initial": "{\"value\":6}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": true
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/control/1",
+        "kind": "command",
+        "from": {
+          "node": "control/1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "set:tileSides"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Why do hexagons tile but pentagons don't?"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/control/1",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "control/1"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Why do hexagons tile but pentagons don't?",
+      "instruction": "Change hexagons to pentagons. What happens at the corner?",
+      "explanation": "Same regular tiles meet with no gap only when their corner angles add to exactly 360°: triangles, squares and hexagons. Some irregular pentagons can still tile."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 470
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 260
+        },
+        {
+          "id": "board/layout/control/1",
+          "layoutId": "layout/control/1",
+          "rect": {
+            "x": 0,
+            "y": 490,
+            "width": 370,
+            "height": 140
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 678
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [["board/layout/scene"], ["board/layout/control/1"]]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "tileSides",
+      "node": "model",
+      "field": "tileSides",
+      "schema": {
+        "type": "integer",
+        "minimum": 3,
+        "maximum": 12,
+        "unit": "sides"
+      },
+      "default": 6
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-geometry/RegularTiling",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-tiling",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "One kind of regular polygon, placed edge to edge. Interior angle = (n − 2) × 180° / n. Only triangles, squares and hexagons meet exactly at a corner.",
+    "A corner that fits is necessary but not a full proof of a tiling. Some irregular pentagons do tile; mixed-polygon tilings are unsupported."
+  ],
+  "catalog": {
+    "icon": "⬡",
+    "category": "mathematics",
+    "order": 17
+  }
+}

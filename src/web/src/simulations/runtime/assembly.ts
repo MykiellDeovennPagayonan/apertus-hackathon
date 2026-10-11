@@ -1,3 +1,6 @@
+import { thermalOptics, thermalOpticsPresentations } from "../domains/physics/thermalOptics";
+import { mathAnalysis } from "../domains/math-analysis/models";
+import { mechanicsPresentations } from "../domains/physics/mechanics";
 import { biogeochemistry } from "../domains/biogeochemistry";
 import { chemistry } from "../domains/chemistry";
 import { collective } from "../domains/collective";
@@ -5,8 +8,13 @@ import { dynamicSystems } from "../domains/dynamic-systems";
 import { earthAtmosphere } from "../domains/earth-atmosphere";
 import { ecology } from "../domains/ecology";
 import { mathFoundations } from "../domains/math-foundations";
+import {
+  mathGeometry,
+  mathGeometryPresentations,
+} from "../domains/math-geometry";
 import { naturalSystems } from "../domains/natural-systems";
 import { physicalSystems } from "../domains/physical-systems";
+import { physics } from "../domains/physics";
 import { science } from "../domains/science";
 import { socialSystems } from "../domains/social-systems";
 import type {
@@ -30,8 +38,12 @@ import {
 /** Explicit integration list. Contributions must never mutate this registry on import. */
 export const domainContributions: readonly DomainContribution[] = immutable([
   mathFoundations,
+  mathAnalysis,
+  mathGeometry,
   chemistry,
   physicalSystems,
+  physics,
+  thermalOptics,
   naturalSystems,
   dynamicSystems,
   ecology,
@@ -45,6 +57,11 @@ export const assemblyModels: readonly DomainModel[] =
   domainContributions.flatMap((d) => d.models);
 /** Matches concrete adapters in the assembly client view. Integration adds adapters serially. */
 export const assemblyPresentationContracts = {
+  ...Object.fromEntries(mathAnalysis.models.map((model) => [model.presentation, true])),
+  ...mechanicsPresentations,
+  ...thermalOpticsPresentations,
+  ...mathGeometryPresentations,
+  "physics-lever": true,
   "earth-atmosphere-earthquake": true,
   "earth-atmosphere-tsunami": true,
   "earth-atmosphere-atmosphere": true,

@@ -1,0 +1,297 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/tree-height",
+  "version": 1,
+  "title": "How tall is the tree?",
+  "description": "Use your distance from a tree and the angle up to its top to work out its height with tangent.",
+  "tags": ["mathematics", "trigonometry", "tangent", "measuring heights"],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/math-geometry/TreeHeight",
+        "version": 1,
+        "label": "Tree measurement",
+        "scope": "scope/lab",
+        "configuration": {
+          "observerDistance": 10,
+          "sightAngle": 30,
+          "eyeHeight": 1.5,
+          "treeHeight": 11.5
+        }
+      },
+      {
+        "id": "scene",
+        "definition": "appearance/math-tree-height",
+        "version": 1,
+        "label": "Observer, sight line and tree",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/1",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Aim: sight angle (°)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Aim: sight angle (°)",
+          "mode": "immediate",
+          "initial": "{\"value\":30}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": true
+        }
+      },
+      {
+        "id": "control/2",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Distance from the tree (m)",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Distance from the tree (m)",
+          "mode": "immediate",
+          "initial": "{\"value\":10}",
+          "parameter": "value",
+          "step": 0.5,
+          "showNumber": true
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/scene",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "scene",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/control/1",
+        "kind": "command",
+        "from": {
+          "node": "control/1",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "set:sightAngle"
+        }
+      },
+      {
+        "id": "link/control/2",
+        "kind": "command",
+        "from": {
+          "node": "control/2",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "set:observerDistance"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "How tall is the tree?"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/scene",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "scene"
+        },
+        {
+          "id": "layout/control/1",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "control/1"
+        },
+        {
+          "id": "layout/control/2",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 1,
+          "children": [],
+          "node": "control/2"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "How tall is the tree?",
+      "instruction": "Aim your sight line at the top of the tree. How tall is it? Then step back and aim again.",
+      "explanation": "Where the sight line meets the tree is eye height + distance × tan(angle); aimed at the top, that is the tree's height. The angle is limited to 80° because a vertical sight line has no triangle."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/scene",
+          "layoutId": "layout/scene",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 780,
+            "height": 450
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 260
+        },
+        {
+          "id": "board/layout/control/1",
+          "layoutId": "layout/control/1",
+          "rect": {
+            "x": 0,
+            "y": 470,
+            "width": 380,
+            "height": 140
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/control/2",
+          "layoutId": "layout/control/2",
+          "rect": {
+            "x": 400,
+            "y": 470,
+            "width": 380,
+            "height": 140
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 828,
+        "height": 658
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        ["board/layout/scene"],
+        ["board/layout/control/1", "board/layout/control/2"]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "observerDistance",
+      "node": "model",
+      "field": "observerDistance",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 100,
+        "unit": "m"
+      },
+      "default": 10
+    },
+    {
+      "name": "sightAngle",
+      "node": "model",
+      "field": "sightAngle",
+      "schema": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 80,
+        "unit": "°"
+      },
+      "default": 30
+    },
+    {
+      "name": "eyeHeight",
+      "node": "model",
+      "field": "eyeHeight",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 2.5,
+        "unit": "m"
+      },
+      "default": 1.5
+    },
+    {
+      "name": "treeHeight",
+      "node": "model",
+      "field": "treeHeight",
+      "schema": {
+        "type": "number",
+        "minimum": 2,
+        "maximum": 60,
+        "unit": "m"
+      },
+      "default": 11.5
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/math-geometry/TreeHeight",
+      "version": 1
+    },
+    {
+      "id": "appearance/math-tree-height",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Level ground, a vertical tree of fixed height and a horizontal distance from the observer's feet. Angles from 1° to 80°; a vertical sight line has no finite triangle.",
+    "Moving the observer never changes the tree: the angle to its top changes instead. A mathematical estimate, not a surveying instrument; sloped ground is unsupported."
+  ],
+  "catalog": {
+    "icon": "∠",
+    "category": "mathematics",
+    "order": 14
+  }
+}

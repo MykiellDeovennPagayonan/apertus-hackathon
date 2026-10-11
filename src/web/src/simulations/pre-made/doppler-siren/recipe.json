@@ -1,0 +1,328 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/doppler-siren",
+  "version": 1,
+  "title": "Passing ambulance siren",
+  "description": "Why does a passing siren change pitch?",
+  "tags": [
+    "physics",
+    "ambulance",
+    "siren",
+    "pitch",
+    "Doppler effect",
+    "passing sound"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model0",
+        "definition": "prefabs/physics/Doppler",
+        "version": 1,
+        "label": "Passing ambulance siren",
+        "scope": "scope/lab",
+        "configuration": {
+          "frequency": 700,
+          "speed": 20,
+          "soundSpeed": 343,
+          "offset": 10,
+          "time": -5
+        }
+      },
+      {
+        "id": "appearance0",
+        "definition": "appearance/physics-doppler",
+        "version": 1,
+        "label": "Passing ambulance siren scene",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/time",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Seconds relative to closest pass",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Seconds relative to closest pass",
+          "mode": "immediate",
+          "initial": "{\"value\":-5}",
+          "parameter": "value",
+          "step": 0.1,
+          "showNumber": false
+        }
+      },
+      {
+        "id": "control/speed",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Ambulance speed",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Ambulance speed",
+          "mode": "immediate",
+          "initial": "{\"value\":20}",
+          "parameter": "value",
+          "step": 1,
+          "showNumber": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance0",
+        "kind": "attachment",
+        "from": {
+          "node": "model0",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance0",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/time0",
+        "kind": "command",
+        "from": {
+          "node": "control/time",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_DOPPLER_TIME"
+        }
+      },
+      {
+        "id": "link/speed0",
+        "kind": "command",
+        "from": {
+          "node": "control/speed",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model0",
+          "port": "PT_DOPPLER_SPEED"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Passing ambulance siren"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/root",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 1,
+      "children": [
+        {
+          "id": "layout/appearance0",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "appearance0"
+        },
+        {
+          "id": "layout/control/time",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/time"
+        },
+        {
+          "id": "layout/control/speed",
+          "kind": "stack",
+          "label": "",
+          "gap": 12,
+          "columns": 1,
+          "children": [],
+          "node": "control/speed"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Passing ambulance siren",
+      "instruction": "Why does a passing siren change pitch?",
+      "explanation": "Subsonic straight moving source in still uniform medium, stationary roadside listener. Received frequency computed at retarded emission time, not source position at reception. Collinear coincidence undefined. Representative sparse wavefronts are illustrative, not one circle per audio cycle. No actual audio or shock waves."
+    },
+    "editor": {
+      "positions": {},
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance0",
+          "layoutId": "layout/appearance0",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 680,
+            "height": 390
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 390
+        },
+        {
+          "id": "board/layout/control/time",
+          "layoutId": "layout/control/time",
+          "rect": {
+            "x": 0,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 128
+        },
+        {
+          "id": "board/layout/control/speed",
+          "layoutId": "layout/control/speed",
+          "rect": {
+            "x": 344,
+            "y": 410,
+            "width": 328,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 128
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 640
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance0"
+        ],
+        [
+          "board/layout/control/time",
+          "board/layout/control/speed"
+        ]
+      ],
+      "responsiveGap": 16,
+      "learnerArea": {
+        "x": -24,
+        "y": -24,
+        "width": 728,
+        "height": 720
+      }
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "frequency0",
+      "node": "model0",
+      "field": "frequency",
+      "schema": {
+        "type": "number",
+        "minimum": 100,
+        "maximum": 2000,
+        "unit": "Hz"
+      },
+      "default": 700
+    },
+    {
+      "name": "speed0",
+      "node": "model0",
+      "field": "speed",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "unit": "m/s"
+      },
+      "default": 20
+    },
+    {
+      "name": "soundSpeed0",
+      "node": "model0",
+      "field": "soundSpeed",
+      "schema": {
+        "type": "number",
+        "minimum": 200,
+        "maximum": 400,
+        "unit": "m/s"
+      },
+      "default": 343
+    },
+    {
+      "name": "offset0",
+      "node": "model0",
+      "field": "offset",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "unit": "m"
+      },
+      "default": 10
+    },
+    {
+      "name": "time0",
+      "node": "model0",
+      "field": "time",
+      "schema": {
+        "type": "number",
+        "minimum": -10,
+        "maximum": 10,
+        "unit": "s"
+      },
+      "default": -5
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physics/Doppler",
+      "version": 1
+    },
+    {
+      "id": "appearance/physics-doppler",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Subsonic straight moving source in still uniform medium, stationary roadside listener. Received frequency computed at retarded emission time, not source position at reception. Collinear coincidence undefined. Representative sparse wavefronts are illustrative, not one circle per audio cycle. No actual audio or shock waves."
+  ],
+  "catalog": {
+    "icon": "◉",
+    "category": "physics",
+    "order": 154
+  }
+}
