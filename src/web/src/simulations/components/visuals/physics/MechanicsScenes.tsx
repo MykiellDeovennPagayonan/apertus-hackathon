@@ -83,89 +83,112 @@ function Arrow({
 export function PulleyScene({ instance }: { instance: ModelInstance }) {
   const s = pulleyState(instance.state),
     o = pulleyMeasure(s);
-  const y = 235 - o.rise * 60,
-    handle = 100 + s.pull * 60;
+  const y = 190 - o.rise * 70,
+    handle = 80 + s.pull * 55;
+  const freeEnd = s.strands === 1 ? 250 : s.strands === 2 ? 290 : 350;
+  const loadX = s.strands === 1 ? 170 : 210;
   const path =
     s.strands === 1
-      ? `M130 ${y}V65Q150 25 170 65V${handle}`
+      ? `M210 ${y}V55Q230 15 250 55V${handle}`
       : s.strands === 2
-        ? `M130 40V${y}Q150 ${y + 40} 170 ${y}V65Q190 25 210 65V${handle}`
-        : `M110 40V${y}Q130 ${y + 40} 150 ${y}V65Q170 25 190 65V${y}Q210 ${y + 40} 230 ${y}V65Q250 25 270 65V${handle}`;
+        ? `M210 30V${y}Q230 ${y + 40} 250 ${y}V55Q270 15 290 55V${handle}`
+        : `M190 30V${y}Q210 ${y + 40} 230 ${y}V55Q250 15 270 55V${y}Q290 ${y + 40} 310 ${y}V55Q330 15 350 55V${handle}`;
   return (
-    <Scene
-      title={`${s.strands} supporting strands; pull ${fmt(o.tension)} N to lift ${fmt(o.rise)} m`}
-      caption={`${s.strands} strands support the load. Pull ${fmt(s.pull)} m of rope: the load rises ${fmt(o.rise)} m. Ideal work stays equal.`}
-    >
-      <line
-        x1="85"
-        x2="300"
-        y1="40"
-        y2="40"
-        stroke="currentColor"
-        strokeWidth="6"
-      />
-      {(s.strands === 4 ? [170, 250] : [s.strands === 1 ? 150 : 190]).map(
-        (x) => (
-          <circle
-            key={x}
-            cx={x}
-            cy="65"
-            r="20"
-            fill="var(--panel)"
-            stroke="currentColor"
-            strokeWidth="3"
-          />
-        ),
-      )}
-      {s.strands > 1 &&
-        (s.strands === 4 ? [130, 210] : [150]).map((x) => (
-          <circle
-            key={x}
-            cx={x}
-            cy={y}
-            r="20"
-            fill="var(--panel)"
-            stroke="currentColor"
-            strokeWidth="3"
-          />
-        ))}
-      <path d={path} fill="none" stroke="var(--accent)" strokeWidth="5" />
-      <path
-        d={
-          s.strands === 1
-            ? `M130 ${y}V${y + 35}`
-            : s.strands === 2
-              ? `M150 ${y}V${y + 35}`
-              : `M130 ${y}V${y + 35}H210V${y}`
-        }
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3"
-      />
-      <rect
-        x={s.strands === 1 ? 100 : 130}
-        y={y + 35}
-        width="90"
-        height="45"
-        rx="5"
-        fill="#b78242"
-      />
-      <text x="85" y="325">
-        Load {fmt(s.loadForce)} N
-      </text>
-      <Arrow
-        x={s.strands === 4 ? 270 : s.strands === 2 ? 210 : 170}
-        y={handle}
-        dy={35}
-        label={`${fmt(o.tension)} N pull`}
-      />
-      <text x="365" y="75">
-        {s.strands} supporting strands
-      </text>
-      <text x="365" y="285">
-        Load rise {fmt(o.rise)} m
-      </text>
-    </Scene>
+    <figure className="pulley-scene" data-responsive-height="content">
+      <p className="pulley-question">Less force, more rope?</p>
+      <svg
+        viewBox="130 0 420 320"
+        role="img"
+        aria-label={`${s.strands} supporting strands; ${fmt(o.tension)} N pulling force; the load rises ${fmt(o.rise)} m when you pull ${fmt(s.pull)} m of rope.`}
+      >
+        <title>Pulling the rope lifts the load</title>
+        <line
+          x1="165"
+          x2="375"
+          y1="30"
+          y2="30"
+          stroke="currentColor"
+          strokeWidth="5"
+        />
+        {(s.strands === 4 ? [250, 330] : [s.strands === 1 ? 230 : 270]).map(
+          (x) => (
+            <circle
+              key={x}
+              cx={x}
+              cy="55"
+              r="20"
+              fill="var(--panel)"
+              stroke="currentColor"
+              strokeWidth="3"
+            />
+          ),
+        )}
+        {s.strands > 1 &&
+          (s.strands === 4 ? [210, 290] : [230]).map((x) => (
+            <circle
+              key={x}
+              cx={x}
+              cy={y}
+              r="20"
+              fill="var(--panel)"
+              stroke="currentColor"
+              strokeWidth="3"
+            />
+          ))}
+        <rect
+          x={loadX}
+          y="225"
+          width="80"
+          height="40"
+          rx="5"
+          className="pulley-start-position"
+        />
+        <path d={path} fill="none" stroke="var(--accent)" strokeWidth="5" />
+        <path
+          d={
+            s.strands === 1
+              ? `M210 ${y}V${y + 35}`
+              : s.strands === 2
+                ? `M230 ${y}V${y + 35}`
+                : `M210 ${y}V${y + 35}H290V${y}`
+          }
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+        <rect
+          x={loadX}
+          y={y + 35}
+          width="80"
+          height="40"
+          rx="5"
+          fill="#b78242"
+        />
+        <text
+          x={loadX + 40}
+          y="305"
+          textAnchor="middle"
+          className="pulley-load-label"
+        >
+          {fmt(s.loadForce)} N load
+        </text>
+        <Arrow x={freeEnd} y={handle} dy={30} label="" />
+        <text x={freeEnd + 20} y={handle + 20} className="pulley-force-label">
+          {fmt(o.tension)} N pull
+        </text>
+        <path
+          d={`M510 ${y + 35}h12M516 ${y + 35}V225M510 225h12`}
+          className="pulley-rise-marker"
+        />
+        <text x="522" y="255" textAnchor="end" className="pulley-rise-label">
+          {fmt(o.rise)} m rise
+        </text>
+      </svg>
+      <figcaption>
+        More supporting strands mean less pulling force, but more rope to lift
+        the same height.
+      </figcaption>
+    </figure>
   );
 }
 export function GearsScene({ instance }: { instance: ModelInstance }) {

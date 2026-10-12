@@ -44,6 +44,9 @@ export type FieldPresentation = Record<
     exactLabel?: boolean;
     limits?: boolean;
     compact?: boolean;
+    hideUnit?: boolean;
+    rangeLabels?: [string, string];
+    rangeLabel?: string;
   }
 >;
 
@@ -228,7 +231,7 @@ function Field({
             ? `Exact ${label.toLowerCase()}`
             : label
         }
-        rangeLabel={label}
+        rangeLabel={presentation[path]?.rangeLabel ?? label}
         value={Number(value ?? schema.minimum)}
         min={schema.minimum}
         max={schema.maximum}
@@ -238,7 +241,8 @@ function Field({
         }
         presentation={widget === "Slider" ? "slider" : "field"}
         showNumber={presentation[path]?.showNumber !== false}
-        unit={unit}
+        unit={presentation[path]?.hideUnit ? undefined : unit}
+        rangeLabels={presentation[path]?.rangeLabels}
         limits={widget === "Slider" && presentation[path]?.limits !== false}
         onValidityChange={(valid) => onValidityChange?.(id, valid)}
         onChange={(next) => {

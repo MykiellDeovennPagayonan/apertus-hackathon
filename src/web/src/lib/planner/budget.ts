@@ -38,7 +38,7 @@ export class GenerationBudget {
   }
   broaderSearches = 0;
   maxCalls = 6;
-  maxRepairs = 2;
+  maxRepairs = 3;
   maxTurns = 10;
   readonly signal: AbortSignal;
   private readonly deadline: AbortSignal;

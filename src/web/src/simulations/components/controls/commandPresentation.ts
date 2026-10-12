@@ -1,8 +1,20 @@
-import { mathAnalysisArguments } from "../catalog/mathAnalysis";
-import { thermalOpticsLabels, thermalOpticsScalarCommands } from "../catalog/physicsThermalOptics";
-import { physicsMechanicsLabels, physicsMechanicsScalarCommands } from "../catalog/physicsMechanics";
 import { scienceSpecs } from "../../domains/science/specs";
+import { mathAnalysisArguments } from "../catalog/mathAnalysis";
+import {
+  physicsMechanicsLabels,
+  physicsMechanicsScalarCommands,
+} from "../catalog/physicsMechanics";
+import {
+  thermalOpticsLabels,
+  thermalOpticsScalarCommands,
+} from "../catalog/physicsThermalOptics";
 import type { FieldPresentation } from "./SchemaForm";
+import {
+  componentDefinitions,
+  componentDefinition,
+  propertyValue,
+} from "../registry";
+import type { ObjectKind, SceneObject } from "../traits/SceneObjects";
 
 /** Presentation metadata never changes command names, arguments, or validation. */
 export function commandPresentation(command: string, definition: string) {
@@ -57,7 +69,7 @@ export function commandPresentation(command: string, definition: string) {
     LEVER_SET_PIVOT: "Pivot position",
     LEVER_SET_LENGTH: "Bar length",
     LEVER_SET_LOAD_FORCE: "Load force",
-    LEVER_LIFT: "Lift / lower slightly",
+    LEVER_LIFT: "Lift the load",
     MOVE_LOAD: "Load position",
     SET_LOAD: "Load mass",
     LAUNCH: "Launch projectile",
@@ -204,6 +216,12 @@ export function commandPresentation(command: string, definition: string) {
   };
   if (definition === "prefabs/AuthoredGasContainer" && command === "set:volume")
     presentation.value = { step: 0.05 };
+  if (definition === "prefabs/physics/Lever" && command === "LEVER_SET_PIVOT")
+    presentation.value = {
+      hideUnit: true,
+      rangeLabel: "Pivot position, percentage of the bar from the object end",
+      rangeLabels: ["← Toward the object", "Toward your push →"],
+    };
   if (definition.includes("fraction")) {
     if (command === "SET_FRACTION_COMPARISON")
       presentation.value = {
@@ -233,6 +251,8 @@ export function commandPresentation(command: string, definition: string) {
           subtract: "Subtract fractions",
         };
   presentation["value.mode"] = { label: "Activity", choices: modes };
+  if (command === "PULLEY_STRANDS")
+    presentation.value = { widget: "segmented" };
   if (command === "CIRC_SET_TOPOLOGY")
     presentation.value = {
       widget: "segmented",
@@ -398,6 +418,15 @@ export function acceptedCommandArguments(
     const key = command.slice(4);
     if (inputs && Object.hasOwn(inputs, key)) return { value: inputs[key] };
     if (Object.hasOwn(state, key)) return { value: state[key] };
+    if (
+      typeof state.kind === "string" &&
+      Object.hasOwn(componentDefinitions, state.kind) &&
+      Object.hasOwn(
+        componentDefinition(state.kind as ObjectKind).properties,
+        key,
+      )
+    )
+      return { value: propertyValue(state as unknown as SceneObject, key) };
     return;
   }
   const scalar: Record<string, string> = {

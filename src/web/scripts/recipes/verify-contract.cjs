@@ -66,6 +66,37 @@ for (const { slug, visibleItems } of cases) {
   assert.throws(() => loadRecipe(invalid));
   assert.deepEqual(premadeRecipe(slug), source);
 }
+// The pulley investigation starts at rest and keeps force/distance/work in sync.
+const pulley = loadRecipe(premadeRecipe("pulleys")).runtime;
+assert.equal(pulley.getSnapshot().outputs.model.rise, 0);
+for (const strands of [1, 2, 4]) {
+  assert.ok(pulley.submit("control/strands", { value: strands }).accepted);
+  assert.ok(pulley.submit("control/pull", { value: 1 }).accepted);
+  assert.deepEqual(pulley.getSnapshot().outputs.model, {
+    configuration: { loadForce: 200, strands, pull: 1 },
+    tension: 200 / strands,
+    rise: 1 / strands,
+    inputWork: 200 / strands,
+    outputWork: 200 / strands,
+  });
+}
+const pulleyBefore = structuredClone(pulley.getSnapshot());
+assert.equal(pulley.submit("control/strands", { value: 3 }).accepted, false);
+assert.equal(pulley.submit("control/pull", { value: -1 }).accepted, false);
+assert.deepEqual(pulley.getSnapshot(), pulleyBefore);
+assert.ok(pulley.submit("control/pull", { value: 2 }).accepted);
+assert.equal(pulley.getSnapshot().outputs.model.rise, 0.5);
+assert.ok(pulley.reset().accepted);
+assert.equal(pulley.getSnapshot().outputs.model.tension, 200);
+assert.equal(pulley.getSnapshot().outputs.model.rise, 0);
+const { commandPresentation } = load(
+  "src/simulations/components/controls/commandPresentation.ts",
+);
+assert.equal(
+  commandPresentation("PULLEY_STRANDS", "prefabs/physics/Pulley").presentation
+    .value.widget,
+  "segmented",
+);
 const counting = loadRecipe(premadeRecipe("counting")).runtime;
 let board = counting.getSnapshot().outputs.model.board;
 for (const token of board.tokens)
@@ -219,3 +250,5 @@ session.disposeSession();
 for(const demo of ["equal-groups","fraction-builder","ratio","coordinates"])
  assert.match(renderToStaticMarkup(React.createElement(ExperimentView,{demo})),/aria-busy="true"/);
 console.log("Disposed-session rendering waits for activation without constructing a mismatched legacy model.");
+require("./verify-gas-equilibrium.cjs");
+require("./verify-lever.cjs");

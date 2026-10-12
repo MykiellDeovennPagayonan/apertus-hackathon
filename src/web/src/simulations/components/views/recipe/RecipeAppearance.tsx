@@ -504,46 +504,60 @@ export function Appearance({
 }
 function CircleAppearance({ instance }: { instance: ModelInstance }) {
   const [unrolled, setUnrolled] = useState(false);
+  const radius = Number(instance.outputs.diameter) / 2;
+  const circumference = Number(instance.outputs.circumference);
+  const extent = Math.max(2, radius * 1.3);
+  const width = unrolled
+    ? Math.max(extent * 2, circumference + extent)
+    : extent * 2;
   return (
-    <figure>
+    <figure className="circle-appearance">
       <svg
-        viewBox="0 0 500 260"
+        viewBox={`${-extent} ${-extent} ${width} ${extent * 2}`}
         role="img"
-        aria-label="Circle circumference and diameter"
+        aria-label={`Circle with radius ${radius} units and circumference ${circumference} units. Dashed reference circle has radius one unit.`}
       >
         <circle
-          cx="130"
-          cy="120"
-          r="80"
+          cx="0"
+          cy="0"
+          r="1"
+          fill="none"
+          stroke="#777"
+          strokeDasharray="4 4"
+          strokeWidth="1"
+          vectorEffect="non-scaling-stroke"
+        />
+        <circle
+          cx="0"
+          cy="0"
+          r={radius}
           fill="none"
           stroke="#245bcb"
           strokeWidth="3"
+          vectorEffect="non-scaling-stroke"
         />
         <line
-          x1="50"
-          x2="210"
-          y1="120"
-          y2="120"
+          x1={-radius}
+          x2={radius}
+          y1="0"
+          y2="0"
           stroke="#cc543d"
           strokeWidth="3"
+          vectorEffect="non-scaling-stroke"
         />
         {unrolled && (
           <line
-            x1="15"
-            x2="485"
-            y1="235"
-            y2="235"
+            x1={-radius}
+            x2={-radius + circumference}
+            y1={radius * 1.15}
+            y2={radius * 1.15}
             stroke="#245bcb"
             strokeWidth="3"
+            vectorEffect="non-scaling-stroke"
           />
         )}
-        <text x="235" y="100">
-          Diameter {display(instance.outputs.diameter)}
-        </text>
-        <text x="235" y="130">
-          Around {display(instance.outputs.circumference)}
-        </text>
       </svg>
+      <figcaption>Dashed circle: radius 1 unit.</figcaption>
       <button
         type="button"
         aria-pressed={unrolled}

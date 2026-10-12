@@ -129,6 +129,7 @@ export function boardItemMinimum(
     return { width: 280, height: 330 };
   if (definition === "controls/AgentActions") return { width: 280, height: 96 };
   if (definition === "controls/Toggle") return { width: 160, height: 80 };
+  if (definition === "controls/Select") return { width: 160, height: 96 };
   if (
     definition === "displays/Readout" ||
     definition === "displays/StatusMessage"

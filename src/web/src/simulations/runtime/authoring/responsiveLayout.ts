@@ -1,4 +1,31 @@
-import { type BoardPresentation, extent } from "./board";
+import { type BoardPresentation, boardLayouts, extent } from "./board";
+import type { AuthoredDocument } from "./types";
+
+/** Keep scene/control pairs together on desktop, and readable on phones. */
+export function responsiveBoardRows(
+  document: AuthoredDocument,
+  source: BoardPresentation,
+  width: number,
+) {
+  const rows = source.responsiveRows ?? source.items.map((item) => [item.id]);
+  const layouts = boardLayouts(document);
+  return rows.flatMap((row) =>
+    width < 700 &&
+    row.some((id) => {
+      const item = source.items.find((item) => item.id === id);
+      const layout = layouts.find(
+        (layout) => item && "layoutId" in item && layout.id === item.layoutId,
+      );
+      const node = document.nodes.find((node) => node.id === layout?.node);
+      return (
+        node?.definition.startsWith("appearance/") ||
+        node?.definition.startsWith("canvases/")
+      );
+    })
+      ? row.map((id) => [id])
+      : [row],
+  );
+}
 
 /** Reflow growing forms in the learner view without changing authored positions. */
 export function expandResponsiveContent(
@@ -10,15 +37,21 @@ export function expandResponsiveContent(
   for (const item of [...source.items].sort((a, b) => a.rect.y - b.rect.y)) {
     const rect = { ...item.rect };
     if (!item.locked) {
+      const row = source.items.filter(
+        (peer) => !peer.locked && peer.rect.y === item.rect.y,
+      );
       const natural = heights[item.id];
       if (Number.isFinite(natural))
         rect.height = Math.max(rect.height, natural);
       for (const previous of positioned) {
         const original = source.items.find((p) => p.id === previous.id);
         if (!original) continue;
-        const overlapsX =
-          original.rect.x < item.rect.x + item.rect.width &&
-          original.rect.x + original.rect.width > item.rect.x;
+        // Aligned cards share clearance from every column above their row.
+        const overlapsX = row.some(
+          (peer) =>
+            original.rect.x < peer.rect.x + peer.rect.width &&
+            original.rect.x + original.rect.width > peer.rect.x,
+        );
         const gap = item.rect.y - original.rect.y - original.rect.height;
         if (overlapsX && gap >= 0)
           rect.y = Math.max(

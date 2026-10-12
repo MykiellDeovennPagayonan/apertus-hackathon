@@ -7,6 +7,7 @@ import {
 } from "../../simulations/runtime/authoring/validate";
 import {
   num,
+  choice,
   object,
   type ParameterSchema,
   validateValue,
@@ -38,20 +39,29 @@ export type TeachingIntent = {
   observations: string[];
   explicitConstraints: { meaning: string; sourceText: string }[];
   suggestedStructure: "single" | "comparison";
+  instanceCount?: number;
+  comparisonConditions?: "same" | "different" | "unspecified";
+  question?: string;
 };
-export const intentSchema = object({
-  goal: text(),
-  concepts: strings(8),
-  interactions: strings(8),
-  observations: strings(8),
-  explicitConstraints: {
-    type: "array",
-    minItems: 0,
-    maxItems: 12,
-    items: object({ meaning: text(), sourceText: text() }),
+export const intentSchema = object(
+  {
+    goal: text(),
+    concepts: strings(8),
+    interactions: strings(8),
+    observations: strings(8),
+    explicitConstraints: {
+      type: "array",
+      minItems: 0,
+      maxItems: 12,
+      items: object({ meaning: text(), sourceText: text() }),
+    },
+    suggestedStructure: { type: "enum", values: ["single", "comparison"] },
+    instanceCount: num(1, 3, "", true),
+    comparisonConditions: choice("same", "different", "unspecified"),
+    question: text(180),
   },
-  suggestedStructure: { type: "enum", values: ["single", "comparison"] },
-});
+  ["instanceCount", "comparisonConditions", "question"],
+);
 export const coverageSchema = object({
   level: { type: "enum", values: ["full", "partial"] },
   covered: strings(),
@@ -327,14 +337,6 @@ export function parseIntent(value: unknown, prompt: string): TeachingIntent {
       throw new Error(
         "Constraint source text must occur in the original request",
       );
-  const comparisonKeywords =
-    /\b(?:compare|comparison|versus|\bvs\b|difference|differ|between two|side by side|both|two (?:bridges?|models?|rectangles?|tracks?))\b/i;
-  if (
-    !comparisonKeywords.test(prompt) &&
-    intent.suggestedStructure === "comparison"
-  ) {
-    intent.suggestedStructure = "single";
-  }
   return structuredClone(intent);
 }
 export function parseCoverage(value: unknown): Coverage {

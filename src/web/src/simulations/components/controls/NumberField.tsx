@@ -18,6 +18,7 @@ export function NumberField({
   disabled = false,
   unit,
   limits = false,
+  rangeLabels,
   inputLabel = label,
   rangeLabel = `Adjust ${label.toLowerCase()}`,
   commitOnBlur = false,
@@ -36,6 +37,7 @@ export function NumberField({
   disabled?: boolean;
   unit?: string;
   limits?: boolean;
+  rangeLabels?: [string, string];
   inputLabel?: string;
   rangeLabel?: string;
   commitOnBlur?: boolean;
@@ -96,7 +98,13 @@ export function NumberField({
             type="text"
             inputMode={integer ? "numeric" : "decimal"}
             disabled={disabled}
-            value={draft?.text ?? value}
+            value={
+              draft?.text ??
+              (integer || presentation !== "slider"
+                ? value
+                : Number(value.toPrecision(4)))
+            }
+            title={String(value)}
             aria-invalid={!!error}
             aria-describedby={error ? id : undefined}
             onChange={(e) => {
@@ -115,7 +123,8 @@ export function NumberField({
               }
             }}
             onBlur={(e) => {
-              if (commit(e.target.value).accepted) setDraft(null);
+              // A rounded display must never overwrite an untouched model value.
+              if (draft && commit(e.target.value).accepted) setDraft(null);
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
@@ -157,8 +166,8 @@ export function NumberField({
       )}
       {limits && presentation === "slider" && (
         <div className="catalog-slider-limits" aria-hidden="true">
-          <span>{min}</span>
-          <span>{sliderMax}</span>
+          <span>{rangeLabels?.[0] ?? min}</span>
+          <span>{rangeLabels?.[1] ?? sliderMax}</span>
         </div>
       )}
       {error && (

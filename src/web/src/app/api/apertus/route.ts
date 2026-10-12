@@ -141,7 +141,11 @@ export async function POST(request: Request) {
               error instanceof PlannerError
                 ? error.message
                 : "Unable to process the prompt.";
-            diagnostic("failure", { status, message });
+            diagnostic("failure", {
+              status,
+              message,
+              cause: error instanceof Error ? error.message : undefined,
+            });
             await writer.send({
               type: "result",
               requestId: correlationId,

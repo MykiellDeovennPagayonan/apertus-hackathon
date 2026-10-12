@@ -21,6 +21,7 @@
 /docs/agent-only/implementation/027-validation/live-*.json
 /docs/agent-only/implementation/027-validation/checks/
 /docs/agent-only/implementation/028-validation/
+/docs/agent-only/implementation/029-validation/
 
 # Pi model downloads, local deployment configuration, and measured runs
 /deploy/raspberry-pi/models/

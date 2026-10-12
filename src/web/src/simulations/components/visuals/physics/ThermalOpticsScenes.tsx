@@ -5,7 +5,11 @@ import {
   capacitorState,
 } from "../../systems/physics/capacitor";
 import { conductionState } from "../../systems/physics/conduction";
-import { coolingMeasure, coolingState } from "../../systems/physics/cooling";
+import {
+  COOLING_DURATION,
+  coolingMeasure,
+  coolingState,
+} from "../../systems/physics/cooling";
 import { dopplerMeasure, dopplerState } from "../../systems/physics/doppler";
 import { fibreMeasure, fibreState } from "../../systems/physics/fibre";
 import {
@@ -25,7 +29,7 @@ const fmt = (v: number) => Number(v.toPrecision(3)).toString();
 export function CoolingScene({ instance }: { instance: ModelInstance }) {
   const s = coolingState(instance.state),
     o = coolingMeasure(s);
-  const horizon = Math.max(60, s.time);
+  const horizon = COOLING_DURATION;
   const path = Array.from({ length: 61 }, (_, i) => {
     const t = coolingMeasure({ ...s, time: (i * horizon) / 60 }).temperature;
     return `${i ? "L" : "M"}${275 + i * 5} ${270 - t * 2}`;
@@ -84,13 +88,6 @@ export function CoolingScene({ instance }: { instance: ModelInstance }) {
           After {fmt(s.time)} min
         </text>
       </svg>
-      <figcaption>
-        {o.rate < 0
-          ? "Cooling slows as the drink approaches room temperature."
-          : o.rate > 0
-            ? "The cooler drink warms toward room temperature."
-            : "The drink and room are at the same temperature."}
-      </figcaption>
     </figure>
   );
 }

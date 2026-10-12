@@ -3,7 +3,7 @@
   "id": "prebuilt/levers",
   "version": 1,
   "title": "Crowbar and pivot",
-  "description": "How does moving the pivot trade effort against travel?",
+  "description": "Where should you put the pivot to lift the load more easily?",
   "tags": [
     "physics",
     "lever",
@@ -43,7 +43,7 @@
         "label": "Pivot position",
         "scope": "scope/lab",
         "configuration": {
-          "label": "Pivot position from load end",
+          "label": "Move the pivot",
           "mode": "immediate",
           "initial": "{\"value\": 16.666666666666668}",
           "parameter": "value",
@@ -55,10 +55,10 @@
         "id": "lift",
         "definition": "controls/Button",
         "version": 1,
-        "label": "Lift / lower slightly",
+        "label": "Lift the load",
         "scope": "scope/lab",
         "configuration": {
-          "label": "Lift / lower slightly",
+          "label": "Lift the load",
           "mode": "submit",
           "initial": "{}"
         }
@@ -148,7 +148,7 @@
     },
     "lesson": {
       "title": "Crowbar and pivot",
-      "instruction": "Move the pivot to lift the same load with less force.",
+      "instruction": "Where should you put the pivot to lift the load more easily?",
       "explanation": "A massless rigid bar and frictionless pivot show ideal balance. Less effort means its end moves farther. Lift slightly compares both end movements at five degrees, without a dynamic motion model."
     },
     "editor": {
@@ -165,20 +165,20 @@
           "rect": {
             "x": 0,
             "y": 0,
-            "width": 680,
-            "height": 330
+            "width": 820,
+            "height": 370
           },
           "zIndex": 0,
           "locked": false,
-          "responsiveMinHeight": 260
+          "responsiveMinHeight": 300
         },
         {
           "id": "board/layout/pivot",
           "layoutId": "layout/pivot",
           "rect": {
             "x": 0,
-            "y": 360,
-            "width": 430,
+            "y": 394,
+            "width": 520,
             "height": 128
           },
           "zIndex": 1,
@@ -189,9 +189,9 @@
           "id": "board/layout/lift",
           "layoutId": "layout/lift",
           "rect": {
-            "x": 454,
-            "y": 360,
-            "width": 226,
+            "x": 544,
+            "y": 394,
+            "width": 276,
             "height": 80
           },
           "zIndex": 2,
@@ -203,8 +203,8 @@
       "startView": {
         "x": -24,
         "y": -24,
-        "width": 728,
-        "height": 568
+        "width": 868,
+        "height": 570
       },
       "navigation": {
         "mode": "bounded",
@@ -218,20 +218,15 @@
       },
       "responsive": true,
       "responsiveRows": [
-        [
-          "board/layout/appearance"
-        ],
-        [
-          "board/layout/pivot",
-          "board/layout/lift"
-        ]
+        ["board/layout/appearance"],
+        ["board/layout/pivot", "board/layout/lift"]
       ],
       "responsiveGap": 16,
       "learnerArea": {
         "x": -24,
         "y": -24,
-        "width": 1000,
-        "height": 720
+        "width": 868,
+        "height": 570
       }
     }
   },

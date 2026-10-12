@@ -69,28 +69,31 @@ export function PendulumScene({ instance }: { instance: ModelInstance }) {
         <span>
           Dashed arc: starting swing. Same metre scale as you change length.
         </span>
-        <fieldset className="pendulum-view-controls">
-          <legend>Drawing scale</legend>
-          <button
-            type="button"
-            disabled={zoom <= 1}
-            onClick={() => setZoom(Math.max(1, zoom / 2))}
-          >
-            Zoom out
-          </button>
-          <button
-            type="button"
-            disabled={zoom >= 16}
-            onClick={() => setZoom(Math.min(16, zoom * 2))}
-          >
-            Zoom in
-          </button>
-          {zoom > 1 && (
-            <button type="button" onClick={() => setZoom(1)}>
-              Show full range
+        <details>
+          <summary>Drawing scale</summary>
+          <fieldset className="pendulum-view-controls">
+            <legend className="sr-only">Drawing scale</legend>
+            <button
+              type="button"
+              disabled={zoom <= 1}
+              onClick={() => setZoom(Math.max(1, zoom / 2))}
+            >
+              Zoom out
             </button>
-          )}
-        </fieldset>
+            <button
+              type="button"
+              disabled={zoom >= 16}
+              onClick={() => setZoom(Math.min(16, zoom * 2))}
+            >
+              Zoom in
+            </button>
+            {zoom > 1 && (
+              <button type="button" onClick={() => setZoom(1)}>
+                Show full range
+              </button>
+            )}
+          </fieldset>
+        </details>
       </figcaption>
     </figure>
   );

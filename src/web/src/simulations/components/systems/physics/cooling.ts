@@ -1,10 +1,12 @@
 import { num, object, validateValue } from "../../../runtime/parameterSchema";
 
+export const COOLING_DURATION = 240;
+
 export const coolingParameters = object({
   initial: num(0, 100, "°C"),
   ambient: num(0, 50, "°C"),
   coefficient: num(0.001, 1, "min⁻¹"),
-  time: num(0, 240, "min"),
+  time: num(0, COOLING_DURATION, "min"),
 });
 export const coolingDefaults = {
   initial: 80,

@@ -7,6 +7,7 @@ import { object } from "../../../runtime/parameterSchema";
 import { publicDefinition } from "../../catalog";
 import { schemaDefault } from "../../composites/catalog";
 import { ActivityControl, TrialControl } from "../../controls/ActivityControl";
+import { CoolingTimeline } from "../../controls/CoolingTimeline";
 import {
   acceptedCommandArguments,
   commandPresentation,
@@ -150,6 +151,16 @@ export function ControlPresentation({
       </div>
     );
   const commandKey = connection?.to.port ?? "";
+  if (commandKey === "PT_COOLING_TIME" && node.definition === "controls/Slider")
+    return (
+      <CoolingTimeline
+        key={`${node.id}/${connection?.to.node}`}
+        label={String(config.label || node.label)}
+        time={Number(snapshot.state[target?.id ?? ""]?.time ?? 0)}
+        animated={animated}
+        onChange={(value) => runtime.submit(node.id, { value })}
+      />
+    );
   const metadata = commandPresentation(commandKey, target?.definition ?? "");
   const defaultLabel =
     target?.definition === "models/SinusoidalSignal"
@@ -309,7 +320,14 @@ export function ControlPresentation({
           ? (draft) => acceptedCommandArguments(commandKey, state, draft)
           : undefined
       }
-      label={label}
+      label={
+        commandKey === "LEVER_LIFT" &&
+        target?.definition === "prefabs/physics/Lever"
+          ? state?.lifted
+            ? "Lower the load"
+            : "Lift the load"
+          : label
+      }
       presentation={{
         ...metadata.presentation,
         ...Object.fromEntries(

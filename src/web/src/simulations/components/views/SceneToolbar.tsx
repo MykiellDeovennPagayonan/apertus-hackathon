@@ -142,7 +142,7 @@ export function SceneToolbar({
   useEffect(() => {
     const element = toolbar.current;
     const parent = element?.closest(
-      ".composition-display-scene, .composition-plane, .composition-town",
+      ".composition-display-scene, .composition-plane, .composition-town, .spatial-board",
     );
     if (!element || !parent) return;
     const observer = new ResizeObserver(() => {
@@ -178,7 +178,7 @@ export function SceneToolbar({
   const reposition = (x: number, y: number) => {
     const element = toolbar.current;
     const parent = element?.closest(
-      ".composition-display-scene, .composition-plane, .composition-town",
+      ".composition-display-scene, .composition-plane, .composition-town, .spatial-board",
     );
     if (!element || !parent) return;
     const bounds = parent.getBoundingClientRect();

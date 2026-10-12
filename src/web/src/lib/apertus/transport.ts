@@ -240,7 +240,7 @@ export async function requestStructured<T>(
     let issueRepairs = 0;
     let feedback: Record<string, unknown> | undefined;
     let rejectedContent = "";
-    const maxRepairs = options.maxRepairsPerIssue ?? 1;
+    const maxRepairs = options.maxRepairsPerIssue ?? 3;
     for (let attempt = 0; ; attempt++) {
       let content = "";
       let phase = "schema";
@@ -284,7 +284,7 @@ export async function requestStructured<T>(
           error instanceof Error ? error.message : "Invalid JSON response";
         const repair = options.repairFeedback?.(error);
         const nextKey = repair?.key ?? issue;
-        // Legacy stages keep one total repair; edits reset only on a different issue.
+        // Default stages share a repair limit; edits reset on a different issue.
         issueRepairs =
           options.maxRepairsPerIssue !== undefined && nextKey !== issueKey
             ? 0

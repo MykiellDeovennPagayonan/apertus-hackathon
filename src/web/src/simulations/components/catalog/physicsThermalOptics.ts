@@ -40,7 +40,7 @@ export const thermalOpticsRequirements: Record<
     appearance: "appearance/physics-cooling",
     minimumInstances: 2,
     guidance:
-      "Compare two independent drinks initially80°C, ambient20/30°C, coefficient0.05 per minute. Attach one cooling scene per drink and ONE shared Minutes elapsed slider connected to BOTH PT_COOLING_TIME ports. No extra readouts or playback toolbar. Defaults time0. Preserve the other cup and unrelated values on revisions. Changing ambient recomputes the experiment from its initial temperature at elapsed time; it is not a mid-run room switch. Builder can independently edit initial/ambient/coefficient. Reject freezing, boiling, evaporation or detailed cup geometry as unsupported.",
+      "Compare two independent drinks initially80°C, ambient20/30°C, coefficient0.05 per minute. Attach one cooling scene per drink and ONE shared Minutes elapsed slider connected to BOTH PT_COOLING_TIME ports. This slider includes Play/Pause, Restart, elapsed time and a short cooling explanation; allow enough space for it. No extra readouts or separate playback toolbar. Defaults time0. Preserve the other cup and unrelated values on revisions. Changing ambient recomputes the experiment from its initial temperature at elapsed time; it is not a mid-run room switch. Builder can independently edit initial/ambient/coefficient. Reject freezing, boiling, evaporation or detailed cup geometry as unsupported.",
   },
 };
 export const thermalOpticsScalarCommands = {

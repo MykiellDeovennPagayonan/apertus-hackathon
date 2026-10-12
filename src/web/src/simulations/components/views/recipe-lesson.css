@@ -1446,8 +1446,36 @@ fieldset.math-stepper {
 .catalog-form .number-field-heading > label {
   flex: 1;
 }
+.recipe-lesson
+  .catalog-form
+  .number-field--slider:not(.number-field--compact)
+  .number-field-heading
+  > input[type="text"] {
+  width: 112px;
+  flex-shrink: 0;
+}
 .scalar-control {
   min-width: 0;
+}
+
+.recipe-lesson:has([data-component-definition="appearance/chemistry-gas-equilibrium"])
+  .board-content:has(.scalar-control) {
+  padding: 20px;
+}
+.recipe-lesson:has([data-component-definition="appearance/chemistry-gas-equilibrium"])
+  .recipe-stack:has(.scalar-control) {
+  display: flex;
+  flex-direction: column;
+}
+.recipe-lesson:has([data-component-definition="appearance/chemistry-gas-equilibrium"])
+  .recipe-measurement-value {
+  display: block;
+  font-size: 40px;
+  white-space: nowrap;
+}
+.recipe-lesson:has([data-component-definition="appearance/chemistry-gas-equilibrium"])
+  .recipe-measurement-value > small {
+  display: block;
 }
 
 :is(.activity-control, .scalar-control--parameter) .number-field-heading {

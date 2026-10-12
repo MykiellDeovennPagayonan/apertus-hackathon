@@ -24,6 +24,7 @@ import {
 } from "./catalog";
 import { compose } from "./compose";
 import { requiresLayaComposition } from "./compositionPolicy";
+import { createFromAssemblies } from "./assemblyCreation";
 import { verifyExplicitQuantities } from "./constraints";
 import type { ConstructionSink } from "./construction";
 import { ConstructionPublisher } from "./constructionPublisher";
@@ -262,7 +263,7 @@ async function planPromptInternal(
       toJsonSchema(intentResponseSchema(request.prompt)),
       {
         policy:
-          "Describe the goal, concepts, actions and observations concisely. Use 1–3 short entries per concepts/interactions/observations list; do not invent extra interactions or feedback. explicitConstraints is ALWAYS an array of {meaning, sourceId} objects. Select sourceId from constraintSources for each explicit quantity, unit, negation or starting constraint. The application attaches the exact original text; do not return sourceText. Multiple constraints may refer to the same source. Do not claim supported capabilities. suggestedStructure is 'comparison' ONLY when the learner explicitly requests comparing two models or differences (e.g. compare, versus, difference, two). Otherwise default to 'single'.",
+          "Describe the goal, concepts, actions and observations concisely. Use 1–3 short entries per concepts/interactions/observations list; do not invent extra interactions or feedback. question is ONE short learning question, in familiar language, about the visible relationship the user wants to explore. Mention all explicitly requested adjustments in that question. Never describe an adjustable quantity as constant or fixed unless the user requested that constraint. Never begin it with Design, Create, Build or Implement. explicitConstraints is ALWAYS an array of {meaning, sourceId} objects. Select sourceId from constraintSources for each explicit quantity, unit, negation or starting constraint. The application attaches the exact original text; do not return sourceText. Multiple constraints may refer to the same source. Do not claim supported capabilities. suggestedStructure is 'comparison' when the learner requests multiple independent model instances or comparing conditions. Otherwise use 'single'. instanceCount is the requested number of independent instances (1–3): default 1 for a single experiment, 2 for a comparison without an explicit count. Counts of particles, measurements or settings are not model instances. comparisonConditions is 'different' for requested distinct starting conditions, 'same' for explicitly equal starting conditions, otherwise 'unspecified'.",
         constraintSources: intentSources(request.prompt),
       },
       (value) => parseIntentResponse(value, request.prompt),
@@ -279,6 +280,9 @@ async function planPromptInternal(
             { meaning: "Initial value", sourceId: "source-1" },
           ],
           suggestedStructure: "single",
+          instanceCount: 1,
+          comparisonConditions: "unspecified",
+          question: "How does changing the value change the result?",
         },
       },
       768,
@@ -286,6 +290,9 @@ async function planPromptInternal(
     const isBuilderModifyingComposite =
       Boolean(request.active?.sessionId?.startsWith("builder-")) &&
       (request.active?.recipe.document.nodes.length ?? 0) > 0;
+
+    if (!request.active || request.purpose === "create")
+      return await createFromAssemblies(request, intent, budget);
 
     const selected =
       isBuilderModifyingComposite || requiredComposition

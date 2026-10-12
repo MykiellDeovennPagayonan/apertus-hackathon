@@ -247,7 +247,7 @@ export function AcidBaseTitrationVisual({
   return (
     <figure style={{ margin: 0, textAlign: "center" }}>
       <svg
-        viewBox="0 0 420 282"
+        viewBox="0 0 420 300"
         role="img"
         aria-label={`Acid-Base Titration: ${acidType} acid, pH ${ph.toFixed(2)}, Titrant added ${vb.toFixed(1)} mL, Equivalence ${veq.toFixed(1)} mL`}
         style={{ width: "100%", maxWidth: 500, height: "auto" }}
@@ -292,7 +292,7 @@ export function AcidBaseTitrationVisual({
         <rect x="63" y="165" width="20" height="18" fill="none" stroke="#334155" strokeWidth="2" />
         {/* Flask liquid fill */}
         <path
-          d={`M ${73 - flaskLevel * 0.9} 240 L ${73 + flaskLevel * 0.9} 240 L ${73 + flaskLevel * 0.55} ${240 - flaskLevel} L ${73 - flaskLevel * 0.55} ${240 - flaskLevel} Z`}
+          d={`M 40 240 L 106 240 L ${106 - (flaskLevel * 25) / 57} ${240 - flaskLevel} L ${40 + (flaskLevel * 25) / 57} ${240 - flaskLevel} Z`}
           fill={liquidColor}
           fillOpacity={liquidOpacity}
         />
@@ -303,7 +303,7 @@ export function AcidBaseTitrationVisual({
           stroke="#334155"
           strokeWidth="2"
         />
-        <text x="73" y="258" fontSize="10" textAnchor="middle" fill="currentColor">
+        <text x="73" y="270" fontSize="10" textAnchor="middle" fill="currentColor">
           Flask: {totalVol.toFixed(1)} mL
         </text>
 
@@ -416,7 +416,10 @@ export function AcidBaseTitrationVisual({
             stroke="#334155"
           />
           <text x="18" y="10" fontSize="11" fill="currentColor">
-            Indicator: <tspan fontWeight="bold">{color}</tspan> {ph >= 7 ? "(Basic)" : "(Acidic)"} · <tspan fontSize="9.5" fill="#64748b">{acidType === "weak" ? "Weak acid" : "Strong acid"}</tspan>
+            Indicator: <tspan fontWeight="bold">{color}</tspan> {ph >= 7 ? "(Basic)" : "(Acidic)"}
+          </text>
+          <text x="18" y="26" fontSize="9.5" fill="#64748b">
+            {acidType === "weak" ? "Weak acid" : "Strong acid"}
           </text>
         </g>
       </svg>
@@ -598,7 +601,11 @@ export function GasEquilibriumVisual({
             [NO₂] = <tspan fontWeight="bold">{concNO2.toFixed(3)} M</tspan> (brown) · [N₂O₄] = <tspan fontWeight="bold">{concN2O4.toFixed(3)} M</tspan> (colorless)
           </text>
           <text x="0" y="20" fontSize="11" fill="#2563eb" fontWeight="bold">
-            Le Chatelier State: {shift === "equilibrated" ? "Dynamic Equilibrium (Qc ≈ Kc)" : shift}
+            {shift === "equilibrated"
+              ? "At equilibrium (Qc ≈ Kc)"
+              : shift === "shifted-to-products"
+                ? "Equilibrium favors NO₂ (products)"
+                : "Equilibrium favors N₂O₄ (reactants)"}
           </text>
         </g>
       </svg>
@@ -2048,5 +2055,3 @@ export function GalvanicCellVisual({ instance }: { instance: ModelInstance }) {
     </figure>
   );
 }
-
-

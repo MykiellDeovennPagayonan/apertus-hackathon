@@ -212,7 +212,7 @@ export function modelRecipe(definition: string): CompositeRecipe {
     const widget =
       valueSchema?.type === "boolean"
         ? "controls/Toggle"
-        : key.startsWith("set:") &&
+        : Object.keys(args).length === 1 &&
             (valueSchema?.type === "number" || valueSchema?.type === "integer")
           ? "controls/Slider"
           : Object.keys(args).length

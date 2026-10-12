@@ -361,6 +361,11 @@
     serif;
   margin: 4px 0 0;
 }
+.workspace-lesson-note {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--text-dim);
+}
 .workspace-toolbar {
   position: static;
   flex: none;

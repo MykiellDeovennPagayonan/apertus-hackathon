@@ -35,12 +35,13 @@ import { isDrawingItem } from "../../../runtime/authoring/drawings";
 import {
   expandResponsiveContent,
   reflowLearnerArea,
+  responsiveBoardRows,
 } from "../../../runtime/authoring/responsiveLayout";
 import type {
   AuthoredDocument,
   Layout,
 } from "../../../runtime/authoring/types";
-import { SceneIcon, SceneIconButton } from "../SceneToolbar";
+import { SceneIcon, SceneIconButton, SceneToolbar } from "../SceneToolbar";
 import { DrawingEditor, type DrawingTool } from "./DrawingEditor";
 import "./board.css";
 const BOARD_CHROME =
@@ -98,6 +99,11 @@ export function SpatialBoard({
           // Authored responsive boards retain every item and each component's intended size.
           // Narrow screens reflow, rather than shrinking the entire investigation into view.
           if (!requestedAutoLayout) {
+            if (size.width >= 700)
+              return expandResponsiveContent(
+                sourcePresentation,
+                naturalHeights,
+              );
             const width = Math.max(
               240,
               size.width >= 700
@@ -109,8 +115,7 @@ export function SpatialBoard({
               (size.width >= 700 ? 96 : size.width <= 340 ? 16 : 80);
             let top = 0;
             let openingHeight = 0;
-            const rows =
-              next.responsiveRows ?? next.items.map((item) => [item.id]);
+            const rows = responsiveBoardRows(document, next, size.width);
             for (const [rowIndex, row] of rows.entries()) {
               const items = row
                 .map((id) => next.items.find((item) => item.id === id))
@@ -608,11 +613,13 @@ export function SpatialBoard({
   if (authoring) initial.zoom = Math.min(1, initial.zoom);
   // Reflowed learner content stays at readable scale even in the full workspace.
   // Frame its opening row below floating headings without shrinking the canvas.
-  if (freeCanvas && autoLayout && !authoring) {
-    initial.zoom = 1;
+  if (freeCanvas && !authoring && (autoLayout || p.responsive)) {
+    initial.zoom = autoLayout ? 1 : Math.min(1, initial.zoom * 1.2);
     initial.centerX = p.startView.x + p.startView.width / 2;
     initial.centerY =
-      Math.min(...p.items.map((item) => item.rect.y)) - 96 + size.height / 2;
+      Math.min(...p.items.map((item) => item.rect.y)) -
+      96 / initial.zoom +
+      size.height / (2 * initial.zoom);
   }
   const base = camera ?? initial;
   const fixed = !authoring && p.navigation.mode === "fixed";
@@ -1046,66 +1053,66 @@ export function SpatialBoard({
           </>
         ) : (
           <>
-            <div
-              className="board-camera-tools"
-              role="toolbar"
-              aria-label="Board navigation"
-            >
-              <SceneIconButton
-                icon="pan"
-                label="Pan"
-                disabled={fixed}
-                pressed={pan}
-                onClick={() => {
-                  setDrawingTool(pan ? "select" : "hand");
-                  setPan(!pan);
-                }}
-              />
-              <SceneIconButton
-                icon="zoom-out"
-                label="Zoom out"
-                disabled={fixed}
-                onClick={() => zoomFromToolbar(1 / 1.2)}
-              />
-              <output aria-label="Board zoom">
-                {Math.round(c.zoom * 100)}%
-              </output>
-              <SceneIconButton
-                icon="zoom-in"
-                label="Zoom in"
-                disabled={fixed}
-                onClick={() => zoomFromToolbar(1.2)}
-              />
-              <SceneIconButton
-                icon="fit"
-                label="Fit content"
-                disabled={fixed}
-                onClick={fitContent}
-              />
-              <details className="board-navigation-help">
-                <summary aria-label="Board navigation help">?</summary>
-                <div>
-                  <button type="button" onClick={() => setCamera(null)}>
-                    Starting view
-                  </button>
-                  <p>
-                    {authoring
-                      ? "In Select mode, drag empty space to select multiple items. Hold right-click or Space and drag to pan."
-                      : "Drag empty space to pan."}{" "}
-                    Use Alt + wheel or pinch to zoom. Interact with content
-                    directly.
-                  </p>
-                  {authoring && (
+              <SceneToolbar
+                label="Board navigation"
+                actions={[]}
+                className="board-camera-tools"
+              >
+                <SceneIconButton
+                  icon="pan"
+                  label="Pan"
+                  disabled={fixed}
+                  pressed={pan}
+                  onClick={() => {
+                    setDrawingTool(pan ? "select" : "hand");
+                    setPan(!pan);
+                  }}
+                />
+                <SceneIconButton
+                  icon="zoom-out"
+                  label="Zoom out"
+                  disabled={fixed}
+                  onClick={() => zoomFromToolbar(1 / 1.2)}
+                />
+                <output aria-label="Board zoom">
+                  {Math.round(c.zoom * 100)}%
+                </output>
+                <SceneIconButton
+                  icon="zoom-in"
+                  label="Zoom in"
+                  disabled={fixed}
+                  onClick={() => zoomFromToolbar(1.2)}
+                />
+                <SceneIconButton
+                  icon="fit"
+                  label="Fit content"
+                  disabled={fixed}
+                  onClick={fitContent}
+                />
+                <details className="board-navigation-help">
+                  <summary aria-label="Board navigation help">?</summary>
+                  <div>
+                    <button type="button" onClick={() => setCamera(null)}>
+                      Starting view
+                    </button>
                     <p>
-                      Drag a component heading to move it. Shift + click
-                      headings to select several. Use arrow keys on a heading to
-                      position it.
+                      {authoring
+                        ? "In Select mode, drag empty space to select multiple items. Hold right-click or Space and drag to pan."
+                        : "Drag empty space to pan."}{" "}
+                      Use Alt + wheel or pinch to zoom. Interact with content
+                      directly.
                     </p>
-                  )}
-                  {actions}
-                </div>
-              </details>
-            </div>
+                    {authoring && (
+                      <p>
+                        Drag a component heading to move it. Shift + click
+                        headings to select several. Use arrow keys on a heading
+                        to position it.
+                      </p>
+                    )}
+                    {actions}
+                  </div>
+                </details>
+              </SceneToolbar>
             <div className="board-workspace-tools">
               <details className="board-navigator">
                 <summary>Find content</summary>
