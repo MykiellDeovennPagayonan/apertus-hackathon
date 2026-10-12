@@ -51,63 +51,23 @@ export async function saveEntry(
     return [saved];
   }
   const write = () => {
-    let entries = readLibrary();
+    const entries = readLibrary();
     const normalizedName = nameFields(
       snapshot.document.lesson.title,
     ).normalizedName;
-    if (snapshot.id.startsWith("generated/")) {
-      entries = entries.filter((item) => {
+    if (
+      entries.some((item) => {
         if (!item || item.id === snapshot.id) return false;
-        if (item.id.startsWith("generated/")) {
-          try {
-            return (
-              nameFields(item.document.lesson.title).normalizedName !==
-              normalizedName
-            );
-          } catch {
-            return true;
-          }
+        try {
+          return nameFields(item.document.lesson.title).normalizedName === normalizedName;
+        } catch {
+          return false;
         }
-        return true;
-      });
-      let candidateTitle = snapshot.document.lesson.title;
-      let counter = 2;
-      while (
-        entries.some((item) => {
-          if (!item || item.id === snapshot.id) return false;
-          try {
-            return (
-              nameFields(item.document.lesson.title).normalizedName ===
-              nameFields(candidateTitle).normalizedName
-            );
-          } catch {
-            return false;
-          }
-        })
-      ) {
-        candidateTitle = `${snapshot.document.lesson.title} (${counter++})`;
-      }
-      snapshot.document.lesson.title = candidateTitle;
-    } else {
-      if (
-        entries.some((item) => {
-          if (!item || item.id === snapshot.id) return false;
-          if (item.id.startsWith("generated/")) return false;
-          try {
-            return (
-              nameFields(item.document.lesson.title).normalizedName ===
-              normalizedName
-            );
-          } catch {
-            return false;
-          }
-        })
-      ) {
-        throw new Error(
-          "That name already exists on this device. Choose a different name.",
-        );
-      }
-    }
+      })
+    )
+      throw new Error(
+        "That name already exists on this device. Choose a different name.",
+      );
     const current = entries.find((item) => item?.id === snapshot.id);
     if (current && JSON.stringify(current) !== JSON.stringify(expected)) {
       throw new Error(

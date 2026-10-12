@@ -60,6 +60,9 @@ function formatSingleDetail(line: string): string {
     return "The request could not be resolved. Try a more specific change.";
 
   // 2. Authoring / simulation binding errors translated to sensible user-facing language
+  if (/^Choose actual editable fields on the selected component$/i.test(cleaned)) {
+    return "The AI couldn't match your request to a valid change in this simulation. No changes were applied. Try again, or name the display or control you want to change.";
+  }
   if (
     /^A numeric readout cannot display a structured or unavailable output$/i.test(
       cleaned,

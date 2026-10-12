@@ -259,8 +259,8 @@ export default function ExperimentsShell({
         revision === session.authoredRevision
       )
         setStatus({
-          kind: "error",
-          text: "Your lesson is ready, but it couldn't be saved. Use Save recipe to download it.",
+          kind: "info",
+          text: "Your experiment is working, but autosave failed. Download a copy with Save recipe to keep your changes.",
           details:
             error instanceof Error
               ? formatUserFacingDetails(error.message)

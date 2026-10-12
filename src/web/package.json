@@ -73,6 +73,7 @@
     "test:projects:database": "node scripts/database/verify-projects.cjs",
     "test:projects:browser": "node scripts/database/verify-community-browser.cjs",
     "test:projects": "node scripts/projects/verify-contract.cjs",
+    "test:projects:autosave:browser": "node scripts/projects/verify-autosave-browser.cjs",
     "db:migrate-projects": "node scripts/database/migrate-projects.cjs",
     "db:moderate-community": "node scripts/database/moderate-community.cjs",
     "test:generation:providers": "node scripts/generation/verify-providers.cjs",

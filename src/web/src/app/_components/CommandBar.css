@@ -97,10 +97,20 @@
 }
 .command-bar__status {
   display: flex;
+  flex-wrap: wrap;
   flex: 1;
   min-width: 0;
   gap: 8px;
   align-items: center;
+}
+.command-bar__status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.command-bar__status-actions:empty {
+  display: none;
 }
 .command-bar__status output {
   display: flex;

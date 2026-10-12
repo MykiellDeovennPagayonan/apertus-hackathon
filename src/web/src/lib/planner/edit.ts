@@ -1,4 +1,5 @@
 import { publicDefinition } from "../../simulations/components/catalog";
+import { readoutLabel } from "../../simulations/components/views/recipe/observations";
 import {
   finalizeRecipe,
   patchSchema,
@@ -21,7 +22,6 @@ import { requestStructured } from "../apertus/transport";
 import { parseArgumentJson } from "./argumentJson";
 import type { GenerationBudget } from "./budget";
 import { configurationPatch, editableFields, fieldValue } from "./editFields";
-import { PlannerError } from "./errors";
 import type { GenerationRequest, GenerationResult } from "./schema";
 import { buildTurnTools } from "./turnSchema";
 import { parseRecipe } from "../../simulations/runtime/recipes/schema";
@@ -42,6 +42,16 @@ type EditPlan = {
   }[];
   message: string;
 };
+
+class EditValidationError extends Error {
+  constructor(
+    readonly code: string,
+    message: string,
+    readonly details: Record<string, unknown>,
+  ) {
+    super(message);
+  }
+}
 
 /** Interpret follow-ups against the active document; only explicit replacement enters creation. */
 export async function planEdit(
@@ -70,7 +80,7 @@ export async function planEdit(
           : [];
       }),
       ...buildTurnTools(document, []).filter(
-        (tool) => tool.tool !== "configure",
+        (tool) => tool.tool !== "configure" && tool.tool !== "remove",
       ),
     ].map((tool, index) => ({
       id:
@@ -83,6 +93,22 @@ export async function planEdit(
       tool: tool.tool,
       schema: tool.schema,
       node: "",
+      command: "",
+      description: "",
+    })),
+    ...document.nodes.map((node) => ({
+      id: `remove:${node.id}`,
+      kind: "edit",
+      tool: "remove",
+      schema: object({
+        targets: {
+          type: "array",
+          minItems: 1,
+          maxItems: 1,
+          items: choice(node.id),
+        },
+      }),
+      node: node.id,
       command: "",
       description: "",
     })),
@@ -104,6 +130,12 @@ export async function planEdit(
   ];
   const properties = (schema?: ParameterSchema) =>
     schema?.type === "object" ? schema.properties : {};
+  const candidateFields = (candidate: (typeof candidates)[number]) =>
+    candidate.tool === "configure"
+      ? editableFields(properties(candidate.schema).changes)
+      : candidate.tool === "set_lesson"
+        ? properties(candidate.schema)
+        : {};
   const currentConfiguration = (id: string) => {
     const node = instances.find((node) => node.id === id)!;
     const state = active.runtimeContext[id];
@@ -121,6 +153,49 @@ export async function planEdit(
           : value,
       ]),
     );
+  };
+  const adjustedValue = (
+    candidate: (typeof candidates)[number],
+    adjustment: NonNullable<EditPlan["selections"][number]["adjustments"]>[number],
+  ) => {
+    const target = properties(candidate.schema).target;
+    const node = instances.find(
+      (node) => target?.type === "enum" && node.id === target.values[0],
+    )!;
+    const current = fieldValue(currentConfiguration(node.id), adjustment.field);
+    const schema = candidateFields(candidate)[adjustment.field];
+    const details = {
+      node_id: node.id,
+      field: adjustment.field,
+      current_value: current,
+      adjustment,
+      expected: schema,
+    };
+    if (
+      adjustment.operation !== "set" &&
+      (typeof current !== "number" || !Number.isFinite(current))
+    )
+      throw new EditValidationError(
+        `unavailable_value:${node.id}:${adjustment.field}`,
+        "The current value is unavailable; use an absolute value or clarify",
+        details,
+      );
+    const value =
+      adjustment.operation === "set"
+        ? adjustment.operand
+        : adjustment.operation === "scale"
+          ? (current as number) * adjustment.operand
+          : (current as number) + adjustment.operand;
+    try {
+      validateValue(schema, value);
+    } catch (error) {
+      throw new EditValidationError(
+        `invalid_value:${node.id}:${adjustment.field}`,
+        error instanceof Error ? error.message : "Invalid value",
+        { ...details, received: value },
+      );
+    }
+    return value;
   };
   const intentSchema = object({
     mode: choice("edit", "runtime", "new", "unsupported", "clarify"),
@@ -160,9 +235,23 @@ export async function planEdit(
     clarification: request.clarification,
     currentLesson: document.lesson,
     destination: request.destination ?? "lesson",
-    nodes: instances.map((node) => ({
+    connections: document.connections,
+    nodes: instances.map((node) => {
+      const binding = document.connections.find(
+        (connection) => connection.kind === "value" && connection.to.node === node.id,
+      );
+      const source = instances.find((instance) => instance.id === binding?.from.node);
+      const label = typeof node.configuration.label === "string" && node.configuration.label
+        ? node.configuration.label
+        : node.label;
+      return {
       id: node.id,
       label: node.label,
+      visibleName:
+        node.definition === "displays/Readout"
+          ? readoutLabel(label, source?.definition, binding?.from.port,
+              source && binding ? publicDefinition(source).outputs[binding.from.port]?.unit : "")
+          : label,
       definition: node.definition,
       title: publicDefinition(node).title,
       currentConfiguration: currentConfiguration(node.id),
@@ -178,13 +267,126 @@ export async function planEdit(
       ),
       runtime: active.runtimeContext[node.id],
       assumptions: publicDefinition(node).assumptions,
-    })),
+      };
+    }),
   };
+  const componentChoices = context.nodes.map((node) => ({
+    node_id: node.id,
+    visible_name: node.visibleName,
+    definition: node.definition,
+  }));
+  const candidateChoices = candidates.map((candidate) => ({
+    id: candidate.id,
+    mode: candidate.kind,
+    operation: candidate.tool,
+    allowedFields: Object.keys(candidateFields(candidate)),
+    ...(candidate.node ? { node: candidate.node } : {}),
+    ...(candidate.kind === "runtime"
+      ? { command: candidate.command, description: candidate.description }
+      : {}),
+    fixedArguments:
+      candidate.tool === "remove"
+        ? { targets: [candidate.node] }
+        : Object.fromEntries(
+            Object.entries(properties(candidate.schema))
+              .filter(([, schema]) => schema.type === "enum")
+              .map(([key, schema]) => [
+                key,
+                schema.type === "enum" ? schema.values : [],
+              ]),
+          ),
+  }));
+  const repairFeedback = (error: unknown) => {
+    if (error instanceof EditValidationError)
+      return { key: error.code, details: { code: error.code, ...error.details } };
+    const message = error instanceof Error ? error.message : "Invalid JSON";
+    const invalidJson =
+      error instanceof SyntaxError || /JSON|Unexpected token|Unterminated/i.test(message);
+    const path = invalidJson ? "$" : message.split(":")[0];
+    const code = invalidJson
+      ? "invalid_json"
+      : /\.candidate$/.test(path)
+        ? "unknown_operation"
+        : /\.targets(?:\[\d+\])?$/.test(path)
+          ? "unknown_target"
+          : /expected (?:number|integer|boolean|one of)|invalid string/.test(message)
+            ? "invalid_value"
+            : /unknown field/.test(message)
+              ? "unknown_field"
+              : "invalid_schema";
+    let expected: ParameterSchema | undefined = intentSchema;
+    for (const part of path.replace(/\[(\d+)\]/g, ".$1").split(".").slice(1)) {
+      expected = expected?.type === "array"
+        ? expected.items
+        : expected?.type === "object"
+          ? expected.properties[part]
+          : undefined;
+    }
+    return {
+      key: `${code}:${path}`,
+      details: {
+        code,
+        path,
+        response_keys: Object.keys(properties(intentSchema)),
+        expected_contract: expected ? toJsonSchema(expected) : undefined,
+        repair: code === "unknown_field" ? {
+          action: "remove_unknown_key",
+          key: /unknown field (\S+)/.exec(message)?.[1],
+          allowed_keys: Object.keys(properties(expected)),
+          message_location: "response_root",
+        } : undefined,
+        allowed_components: ["unknown_operation", "unknown_target"].includes(code)
+          ? componentChoices : undefined,
+        allowed_operations: code === "unknown_operation" ? candidateChoices : undefined,
+      },
+    };
+  };
+  const apply = (operations: ToolRequest[]) => {
+    const target = new AuthoringTransaction(request.requestId, document);
+    const receipt = target.execute({
+      draftId: target.draftId,
+      expectedRevision: target.revision,
+      operationId: "edit",
+      request: operations,
+    });
+    if (receipt.status !== "applied") {
+      const issue = receipt.issues[0];
+      throw new EditValidationError(
+        `invalid_result:${issue?.path ?? issue?.message.split(":")[0] ?? "document"}`,
+        receipt.issues.map((issue) => issue.message).join("; ") || receipt.summary,
+        {
+          issues: receipt.issues,
+          allowed_components: componentChoices,
+          connections: document.connections,
+        },
+      );
+    }
+    try {
+      const recipe = parseRecipe(serializeRecipe(active.recipe, target.document));
+      finalizeRecipe(recipe.document, recipe);
+      return recipe;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Invalid recipe";
+      throw new EditValidationError(
+        `invalid_recipe:${message.split(":")[0]}`,
+        message,
+        {
+          allowed_components: componentChoices,
+          connections: target.document.connections,
+        },
+      );
+    }
+  };
+  const previousLimits = { calls: budget.maxCalls, repairs: budget.maxRepairs };
+  budget.maxCalls = Math.max(budget.maxCalls, 12);
+  budget.maxRepairs = Math.max(budget.maxRepairs, 10);
   const plan = await requestStructured<EditPlan>(
     [
       {
         role: "system",
         content:
+          "Selection objects contain ONLY candidate, scope, fields and optional adjustments. message belongs at the response root, NEVER inside selections. A removal uses scope selected and fields [].\n" +
+          "Use visibleName and connections to identify which model output a visible display shows. Removing a display or control means selecting its remove:<node-id> candidate with fields [] and scope selected. Select one removal candidate per requested component; fixedArguments already identifies the target, so never put node IDs or measurement names in fields. Removing a swing-time display removes the readout connected to period, while preserving the pendulum. Each candidate supplies allowedFields: select fields only from that candidate's list. Measurement outputs are not editable configuration fields.\n" +
           "Interpret this natural-language follow-up against the supplied ACTIVE experiment and its real configuration. This is editing, not topic selection or lesson creation. Select ONLY requested changes. Physical conditions belong to model configuration; do not change controls, angles, wording or layout unless asked. Use exact candidate IDs and editableSettings. fields lists only the requested settings. An unqualified shared condition uses scope all_matching with one representative; a named instance uses selected. The application expands shared changes and preserves everything else.\nReturn only mode, selections, message. Each selection contains candidate, scope, fields and optional adjustments. For every requested numeric value supply adjustments: set with the numeric value (resolve scientific references using supplied units), scale with a multiplier for relative changes, offset for an addition. The app computes scale/offset from the actual CURRENT value; never use startup defaults. Half means scale 0.5; double means scale 2. A relative numeric edit MUST retain its adjustment, including when repairing output. Example for halving an existing spring stiffness: {\"mode\":\"edit\",\"selections\":[{\"candidate\":\"configure:spring-id\",\"scope\":\"all_matching\",\"fields\":[\"stiffness\"],\"adjustments\":[{\"field\":\"stiffness\",\"operation\":\"scale\",\"operand\":0.5}]}],\"message\":\"Halve stiffness\"}. For setting a mass to 3 kg use fields [\"mass\"] and adjustments [{\"field\":\"mass\",\"operation\":\"set\",\"operand\":3}]. Omit adjustments only for non-numeric or genuinely unresolved values.\nUse runtime only for explicit actions now (launch, play, pause, reset) and declared commands; fields is []. Other structural edit operations use fields [] except set_lesson, which names requested lesson fields. Use new only for an explicit replacement experiment. A scientific reference does not request a new topic. Unsupported means capability absent or fidelity violated. Clarify asks one specific question only if the current context cannot resolve the target or behavior. New/unsupported/clarify have selections []. If clarification is supplied, interpret the latest request as its answer in the original prompt context. Return valid JSON with concrete numbers, never arithmetic expressions, tool arguments or capability descriptions.",
       },
       {
@@ -192,25 +394,16 @@ export async function planEdit(
         content: JSON.stringify({
           task: "edit_intent",
           ...context,
-          candidates: candidates.map((candidate) => ({
-            id: candidate.id,
-            mode: candidate.kind,
-            operation: candidate.tool,
-            ...(candidate.kind === "runtime"
-              ? {
-                  node: candidate.node,
-                  command: candidate.command,
-                  description: candidate.description,
-                }
-              : {}),
-            fixedArguments: Object.fromEntries(
-              Object.entries(properties(candidate.schema))
-                .filter(([, schema]) => schema.type === "enum")
-                .map(([key, schema]) => [
-                  key,
-                  schema.type === "enum" ? schema.values : [],
-                ]),
-            ),
+          candidates: candidateChoices,
+          removalExamples: context.nodes.filter((node) =>
+            publicDefinition(node.definition).category === "displays",
+          ).slice(0, 2).map((node) => ({
+            request: `remove the ${node.visibleName} display`,
+            response: {
+              mode: "edit",
+              selections: [{ candidate: `remove:${node.id}`, scope: "selected", fields: [] }],
+              message: `Remove ${node.visibleName}`,
+            },
           })),
         }),
       },
@@ -222,8 +415,14 @@ export async function planEdit(
       plan.message ??= "";
       const actionable = plan.mode === "edit" || plan.mode === "runtime";
       if (actionable !== Boolean(plan.selections.length))
-        throw new Error(
+        throw new EditValidationError(
+          "missing_selection",
           "Edits need selections; new, unsupported and clarify must have none",
+          {
+            mode: plan.mode,
+            allowed_components: componentChoices,
+            allowed_operations: candidateChoices,
+          },
         );
       const seen = new Set<string>();
       for (const selected of plan.selections) {
@@ -231,26 +430,45 @@ export async function planEdit(
           (candidate) => candidate.id === selected.candidate,
         )!;
         if (candidate.kind !== plan.mode || seen.has(candidate.id))
-          throw new Error(
+          throw new EditValidationError(
+            "invalid_selection",
             "Choose distinct candidates from the selected edit mode",
+            {
+              mode: plan.mode,
+              received: selected.candidate,
+              allowed_operations: candidateChoices,
+            },
           );
         seen.add(candidate.id);
-        const fields =
-          candidate.tool === "configure"
-            ? editableFields(properties(candidate.schema).changes)
-            : candidate.tool === "set_lesson"
-              ? properties(candidate.schema)
-              : {};
+        const fields = candidateFields(candidate);
+        const fieldHelp = {
+          candidate: candidate.id,
+          operation: candidate.tool,
+          component: componentChoices.find((node) => {
+            const target = properties(candidate.schema).target;
+            return (
+              node.node_id === candidate.node ||
+              (target?.type === "enum" && node.node_id === target.values[0])
+            );
+          }),
+          received_fields: selected.fields,
+          allowed_fields: Object.keys(fields),
+          field_contracts: fields,
+        };
         if (Object.keys(fields).length && !selected.fields.length)
-          throw new Error(
+          throw new EditValidationError(
+            `missing_fields:${candidate.id}`,
             "Specify the requested fields for configuration or lesson edits",
+            fieldHelp,
           );
         if (
           new Set(selected.fields).size !== selected.fields.length ||
           selected.fields.some((field) => !Object.hasOwn(fields, field))
         )
-          throw new Error(
+          throw new EditValidationError(
+            `invalid_fields:${candidate.id}`,
             "Choose actual editable fields on the selected component",
+            fieldHelp,
           );
         if (
           selected.fields.some((field) =>
@@ -259,7 +477,11 @@ export async function planEdit(
             ),
           )
         )
-          throw new Error("Choose a field or its nested children, not both");
+          throw new EditValidationError(
+            `overlapping_fields:${candidate.id}`,
+            "Choose a field or its nested children, not both",
+            fieldHelp,
+          );
         const adjustments = selected.adjustments ?? [];
         if (
           new Set(adjustments.map((adjustment) => adjustment.field)).size !==
@@ -271,8 +493,14 @@ export async function planEdit(
               !["number", "integer"].includes(fields[adjustment.field]?.type),
           )
         )
-          throw new Error(
+          throw new EditValidationError(
+            `invalid_adjustment:${candidate.id}`,
             "Relative arithmetic requires distinct selected numeric configuration fields",
+            {
+              ...fieldHelp,
+              allowed_adjustment_operations: ["set", "scale", "offset"],
+              received_adjustments: adjustments,
+            },
           );
       }
       if (!actionable && plan.mode !== "new" && !plan.message.trim())
@@ -286,8 +514,10 @@ export async function planEdit(
           selection.scope === "all_matching" &&
           candidate.tool !== "configure"
         )
-          throw new Error(
+          throw new EditValidationError(
+            `invalid_scope:${candidate.id}`,
             "all_matching is only for a shared configuration setting",
+            { candidate: candidate.id, allowed_scope: ["selected"] },
           );
         const target = properties(candidate.schema).target;
         const source =
@@ -322,6 +552,22 @@ export async function planEdit(
         throw new Error(
           "An edit can affect at most eight components; select a smaller group",
         );
+      const expandedCandidates = expanded.map((selection) => {
+        const candidate = candidates.find((candidate) => candidate.id === selection.candidate)!;
+        for (const adjustment of selection.adjustments ?? [])
+          adjustedValue(candidate, adjustment);
+        return candidate;
+      });
+      if (
+        expandedCandidates.length &&
+        expandedCandidates.every((candidate) => candidate.tool === "remove")
+      )
+        apply(
+          expandedCandidates.map((candidate) => ({
+            tool: "remove",
+            arguments: { targets: [candidate.node] },
+          })),
+        );
       return { ...plan, selections: expanded };
     },
     "Resolve ONLY the original requested change against supplied IDs and fields. For numeric changes retain adjustments with set, scale or offset and a numeric operand; half is scale 0.5. Do not add another change or select a topic. Return the exact edit intent JSON shape from the original instructions.",
@@ -331,10 +577,16 @@ export async function planEdit(
       schema: toJsonSchema(intentSchema),
       maxTokens: 512,
       stage: "edit_intent",
+      maxRepairsPerIssue: 3,
+      repairFeedback,
       onEvent: (event, data) => budget.trace?.(`edit_intent.${event}`, data),
     },
   );
-  if (plan.mode === "new") return null;
+  if (plan.mode === "new") {
+    budget.maxCalls = previousLimits.calls;
+    budget.maxRepairs = previousLimits.repairs;
+    return null;
+  }
   if (plan.mode === "clarify" || plan.mode === "unsupported")
     return {
       protocolVersion: 1,
@@ -372,35 +624,16 @@ export async function planEdit(
         : undefined;
     const adjustments = selection.adjustments ?? [];
     const computed: Record<string, unknown> = {};
-    for (const adjustment of adjustments) {
-      const value = fieldValue(
-        currentConfiguration(node!.id),
-        adjustment.field,
-      );
-      if (
-        adjustment.operation !== "set" &&
-        (typeof value !== "number" || !Number.isFinite(value))
-      )
-        throw new PlannerError(
-          "The current value for this relative edit is unavailable. Specify an absolute value.",
-          422,
-        );
-      computed[adjustment.field] =
-        adjustment.operation === "set"
-          ? adjustment.operand
-          : adjustment.operation === "scale"
-            ? (value as number) * adjustment.operand
-            : (value as number) + adjustment.operand;
-    }
+    for (const adjustment of adjustments)
+      computed[adjustment.field] = adjustedValue(candidate, adjustment);
     const derived =
-      node &&
-      adjustments.length === selection.fields.length &&
-      adjustments.length > 0
-        ? { target: node.id, changes: computed }
-        : schema.type === "object" &&
-            Object.keys(schema.properties).length === 0
-          ? {}
-          : null;
+      candidate.tool === "remove"
+        ? { targets: [candidate.node] }
+        : node && adjustments.length === selection.fields.length && adjustments.length > 0
+          ? { target: node.id, changes: computed }
+          : schema.type === "object" && Object.keys(schema.properties).length === 0
+            ? {}
+            : null;
     return {
       ...candidate,
       schema,
@@ -434,24 +667,6 @@ export async function planEdit(
         },
       },
     },
-  };
-  const draft = new AuthoringTransaction(request.requestId, document);
-  const apply = (operations: ToolRequest[]) => {
-    const target = draft.fork();
-    const receipt = target.execute({
-      draftId: target.draftId,
-      expectedRevision: target.revision,
-      operationId: "edit",
-      request: operations,
-    });
-    if (receipt.status !== "applied")
-      throw new Error(
-        receipt.issues.map((issue) => issue.message).join("; ") ||
-          receipt.summary,
-      );
-    const recipe = parseRecipe(serializeRecipe(active.recipe, target.document));
-    finalizeRecipe(recipe.document, recipe);
-    return recipe;
   };
   const verifyRuntime = (commands: ScopedCommand[]) => {
     const runtime = new DocumentRuntime(document);
@@ -582,6 +797,23 @@ export async function planEdit(
           schema: argumentsSchema,
           maxTokens: 1024,
           stage: "edit_arguments",
+          maxRepairsPerIssue: 3,
+          repairFeedback: (error) => {
+            const feedback = repairFeedback(error);
+            return {
+              ...feedback,
+              details: {
+                ...feedback.details,
+                response_keys: ["operations"],
+                expected_contract: argumentsSchema,
+                accepted_plan: plan,
+                allowed_arguments: inference.map((candidate) => ({
+                  candidate: candidate.id,
+                  schema: toJsonSchema(candidate.schema),
+                })),
+              },
+            };
+          },
           verify: (operations) => {
             if (plan.mode === "runtime")
               verifyRuntime(operations as ScopedCommand[]);
