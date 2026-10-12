@@ -4,16 +4,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { ComposerStatus } from "../../../app/_components/CommandBar";
 import { requestGeneration } from "../../../lib/planner/browser";
 import type { ConstructionUpdate } from "../../../lib/planner/construction";
-import {
-  formatUserFacingDetails,
-  formatUserFacingStatus,
-} from "../../../lib/planner/errorFormatting";
 import { generationStages } from "../../../lib/planner/progress";
 import type { GenerationRequest } from "../../../lib/planner/schema";
 import { publicDefinition } from "../../components/catalog";
 import { reconcileBoard } from "../../runtime/authoring/board";
 import { finalizeRecipe } from "../../runtime/authoring/operations";
 import type { ExperimentDocument } from "../document/types";
+import { builderFailureStatus } from "./builderFeedback";
 import {
   completedExperiment,
   contentFingerprint,
@@ -289,22 +286,15 @@ export function useBuilderAi({
             "Your experiment changed during generation. Submit the request again to preserve your edits.",
           );
 
-        if (result.status === "failed") {
-          setStatus({
-            kind: "error",
-            text: formatUserFacingStatus(result.message),
-            details: formatUserFacingDetails(result.message),
-            retry: result.retryable,
-          });
-          return;
-        }
-
-        if (result.status === "unsupported") {
-          setStatus({
-            kind: "info",
-            text: "That request isn't supported yet.",
-            details: formatUserFacingDetails(result.message),
-          });
+        if (result.status === "failed" || result.status === "unsupported") {
+          setStatus(
+            builderFailureStatus(
+              result.message,
+              text,
+              latest.current.doc,
+              result.status === "failed" && result.retryable,
+            ),
+          );
           return;
         }
 
@@ -356,15 +346,17 @@ export function useBuilderAi({
         }
       } catch (error) {
         if (pending.current === owner && !controller.signal.aborted) {
-          setStatus({
-            kind: "error",
-            text: "Couldn't complete your request.",
-            details:
+          setStatus(
+            builderFailureStatus(
               error instanceof Error
-                ? formatUserFacingDetails(error.message)
-                : "Please try again.",
-            retry: true,
-          });
+                ? error.message
+                : "Couldn't complete your request.",
+              text,
+              latest.current.doc,
+              true,
+              false,
+            ),
+          );
         }
       } finally {
         if (pending.current === owner) {

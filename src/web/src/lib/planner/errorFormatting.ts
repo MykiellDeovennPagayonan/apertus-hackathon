@@ -50,6 +50,15 @@ function formatSingleDetail(line: string): string {
     .replace(/^(?:Error|PlannerError):\s*/i, "")
     .trim();
 
+  if (
+    /laya .*select.*composition.*confidently|request needs more detail/i.test(
+      cleaned,
+    )
+  )
+    return "Specify the component or value you want to change, and what should happen.";
+  if (/\blaya\b/i.test(cleaned))
+    return "The request could not be resolved. Try a more specific change.";
+
   // 2. Authoring / simulation binding errors translated to sensible user-facing language
   if (
     /^A numeric readout cannot display a structured or unavailable output$/i.test(
@@ -279,6 +288,14 @@ function formatSingleDetail(line: string): string {
 export function formatUserFacingStatus(raw: string): string {
   if (!raw || typeof raw !== "string") return "";
   const trimmed = raw.trim();
+
+  if (
+    /laya .*select.*composition.*confidently|request needs more detail/i.test(
+      trimmed,
+    )
+  )
+    return "Please add a little more detail.";
+  if (/\blaya\b/i.test(trimmed)) return "Couldn't resolve that change.";
 
   // Preserve test fixtures & standard user-friendly responses
   if (

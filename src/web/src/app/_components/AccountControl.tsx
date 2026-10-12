@@ -3,21 +3,11 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useOffline } from "./DeploymentProvider";
 
-export default function AccountControl({
-  navigation = true,
-}: {
-  navigation?: boolean;
-}) {
+export default function AccountControl() {
   const { data } = useSession();
   const offline = useOffline();
   return (
     <>
-      {navigation && (
-        <>
-          {!offline && <Link href="/community">Community</Link>}{" "}
-          <Link href="/projects">My projects</Link>{" "}
-        </>
-      )}
       {offline ? (
         <span>Saved on this device</span>
       ) : data?.user.id ? (

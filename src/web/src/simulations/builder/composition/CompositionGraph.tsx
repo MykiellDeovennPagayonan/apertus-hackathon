@@ -60,7 +60,7 @@ export function CompositionGraph({
   onSelect: (id: string) => void;
   onAdd: (category: string, target?: string) => void;
   edit: Edit;
-  onZoom: (zoom: number) => void;
+  onZoom: (zoom: number, pan?: { x: number; y: number }) => void;
   active: boolean;
   reveal?: {
     id: string;
@@ -683,6 +683,7 @@ export function CompositionGraph({
           )}
           active={active}
           zoom={doc.editor.zoom}
+          initialPan={doc.editor.pan}
           onZoom={onZoom}
           selectedId={selected}
           fitRequest={fit}

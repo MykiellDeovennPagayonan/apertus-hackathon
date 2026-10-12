@@ -88,7 +88,7 @@ const base = process.env.UX_TEST_URL || "http://127.0.0.1:43115";
         await dialog
           .getByLabel("Label", { exact: true })
           .fill("Current explanation · edited");
-        await dialog.getByRole("button", { name: "Done", exact: true }).click();
+        await dialog.getByRole("button", { name: "Close settings", exact: true }).click();
         await button("Undo").click();
         await button("Edit " + caption.label).waitFor();
         await button("Redo").click();
@@ -121,7 +121,7 @@ const base = process.env.UX_TEST_URL || "http://127.0.0.1:43115";
           .getByRole("button", { name: "Apply changes", exact: true })
           .click();
         await modelDialog
-          .getByRole("button", { name: "Done", exact: true })
+          .getByRole("button", { name: "Close settings", exact: true })
           .click();
         await button("Build").click();
         const draft = () =>
@@ -158,7 +158,7 @@ const base = process.env.UX_TEST_URL || "http://127.0.0.1:43115";
         await e.capture(page, run, "05b-presentation-edit");
         await button("Save experiment").click();
         await page
-          .getByText("Saved on this device.", { exact: true })
+          .getByText("Saved on device", { exact: true })
           .first()
           .waitFor();
         await button("Try lesson ↗").click();

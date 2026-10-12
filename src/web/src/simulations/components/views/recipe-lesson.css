@@ -1839,6 +1839,46 @@ fieldset.math-stepper {
   }
 }
 
+.recipe-lesson:has([data-component-definition="appearance/coordinates"])
+  .board-content:has(.scalar-control--parameter) {
+  padding: 24px;
+}
+.recipe-lesson:has([data-component-definition="appearance/coordinates"])
+  .recipe-stack:has(
+    > .recipe-stack > .recipe-component-item > .scalar-control--parameter
+  ) {
+  display: flex;
+  flex-direction: column;
+}
+.recipe-lesson:has([data-component-definition="appearance/coordinates"])
+  .scalar-control--parameter {
+  padding: 0;
+}
+.recipe-lesson:has([data-component-definition="appearance/coordinates"])
+  .scalar-control--parameter
+  .number-field-heading {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+.recipe-lesson:has([data-component-definition="appearance/coordinates"])
+  .scalar-control--parameter
+  .number-field-heading
+  > label {
+  min-height: 0;
+}
+.recipe-lesson:has([data-component-definition="appearance/coordinates"])
+  .scalar-control--parameter
+  .number-field-heading
+  > input[type="text"] {
+  width: 88px;
+}
+.recipe-lesson:has([data-component-definition="appearance/coordinates"])
+  .number-field-heading
+  > span {
+  display: none;
+}
+
 .recipe-explanation {
   pointer-events: auto;
   font-size: 14px;

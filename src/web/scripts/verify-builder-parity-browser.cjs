@@ -29,7 +29,7 @@ fs.mkdirSync(output, { recursive: true });
               .document,
         );
       const done = () =>
-        settings.getByRole("button", { name: "Done", exact: true }).click();
+        settings.getByRole("button", { name: "Close settings", exact: true }).click();
       const select = async (id) => {
         await button("Fit to content").click();
         await node(id).locator(".connection-node-heading").dblclick();
@@ -80,7 +80,7 @@ fs.mkdirSync(output, { recursive: true });
       assert.equal(doc.scene.objects.length, 0);
       assert.equal(doc.scene.controls[0].target, "");
       await button("Save draft").click();
-      await page.getByText("Saved on this device.", { exact: true }).waitFor();
+      await page.getByText("Saved on device", { exact: true }).waitFor();
       await page.reload();
       await button("Continue draft").click();
       assert.equal((await draft()).scene.controls[0].id, controlId);
@@ -387,7 +387,7 @@ fs.mkdirSync(output, { recursive: true });
         fullPage: true,
       });
       await button("Save experiment").click();
-      await page.getByText("Saved on this device.", { exact: true }).waitFor();
+      await page.getByText("Saved on device", { exact: true }).waitFor();
       await button("Try lesson ↗").click();
       assert.equal(
         await page

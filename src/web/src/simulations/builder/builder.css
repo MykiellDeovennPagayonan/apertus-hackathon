@@ -16,7 +16,8 @@
 .manual-builder button,
 .builder-start button,
 .manual-builder select,
-.manual-builder input:not([type="range"]):not([type="checkbox"]),
+.manual-builder
+  input:where(:not([type="range"]):not([type="checkbox"]):not([type="radio"])),
 .manual-builder textarea {
   font: inherit;
   color: inherit;
@@ -60,22 +61,22 @@
   resize: vertical;
   width: 100%;
 }
-.manual-builder h1,
-.manual-builder h2,
-.manual-builder h3 {
+.manual-builder h1:not(.recipe-lesson *),
+.manual-builder h2:not(.recipe-lesson *),
+.manual-builder h3:not(.recipe-lesson *) {
   line-height: 1.25;
 }
-.manual-builder h1 {
+.manual-builder h1:not(.recipe-lesson *) {
   font-size: 20px;
   margin: 0;
   min-width: 0;
   overflow-wrap: anywhere;
 }
-.manual-builder h2 {
+.manual-builder h2:not(.recipe-lesson *) {
   font-size: 20px;
   margin: 0 0 20px;
 }
-.manual-builder h3 {
+.manual-builder h3:not(.recipe-lesson *) {
   font-size: 16px;
   margin: 24px 0 12px;
 }

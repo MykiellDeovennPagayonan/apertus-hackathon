@@ -418,6 +418,15 @@ export function validateEditorMetadata(
     Array.isArray(editor.positions)
   )
     throw new Error("editor: invalid metadata");
+  if (
+    editor.pan !== undefined &&
+    (!editor.pan ||
+      typeof editor.pan !== "object" ||
+      Array.isArray(editor.pan) ||
+      !Number.isFinite(editor.pan.x) ||
+      !Number.isFinite(editor.pan.y))
+  )
+    throw new Error("editor: invalid viewport position");
   for (const [id, p] of Object.entries(editor.positions))
     if (
       !identities.has(id) ||

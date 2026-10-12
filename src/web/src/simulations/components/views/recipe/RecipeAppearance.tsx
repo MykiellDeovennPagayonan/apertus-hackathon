@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useContext, useState } from "react";
+import LoadingState from "../../../../app/_components/LoadingState";
 import { requireValue } from "../../../runtime/authoring/requireValue";
 import type { DocumentRuntime } from "../../../runtime/authoring/runtime";
 import type { ComponentInstance } from "../../../runtime/authoring/types";
@@ -20,13 +21,6 @@ import {
   ReactionCurveVisual,
 } from "../../visuals/chemistry/ChemistryVisuals";
 import {
-  CostAndProfitVisual,
-  MarketEquilibriumVisual,
-  MonopolyPricingVisual,
-  PriceElasticityVisual,
-  TradeAndTariffsVisual,
-} from "../../visuals/economics/EconomicsVisuals";
-import {
   GrowthVisual,
   QueueVisual,
   TrafficVisual,
@@ -39,6 +33,13 @@ import {
 import { FoodWebVisual } from "../../visuals/ecology/FoodWebVisual";
 import { NutrientLimitationVisual } from "../../visuals/ecology/NutrientLimitationVisual";
 import { WildfireComparisonVisual } from "../../visuals/ecology/WildfireComparisonVisual";
+import {
+  CostAndProfitVisual,
+  MarketEquilibriumVisual,
+  MonopolyPricingVisual,
+  PriceElasticityVisual,
+  TradeAndTariffsVisual,
+} from "../../visuals/economics/EconomicsVisuals";
 import { EclipseVisual } from "../../visuals/exploration/EclipseVisual";
 import { SpringVisual } from "../../visuals/exploration/SpringVisual";
 import {
@@ -51,9 +52,9 @@ import {
   CircuitVisual,
   TrackVisual,
 } from "../../visuals/physical-systems/PhysicalVisuals";
-import { thermalOpticsAppearances } from "../../visuals/physics/ThermalOpticsScenes";
-import { mechanicsAppearances } from "../../visuals/physics/MechanicsScenes";
 import { LeverScene } from "../../visuals/physics/LeverScene";
+import { mechanicsAppearances } from "../../visuals/physics/MechanicsScenes";
+import { thermalOpticsAppearances } from "../../visuals/physics/ThermalOpticsScenes";
 import { ScienceScene } from "../../visuals/science/ScienceScene";
 import { ProductionComparisonVisual } from "../../visuals/social-systems/ProductionComparisonVisual";
 import { ArithmeticScene } from "../ArithmeticScene";
@@ -87,7 +88,13 @@ import {
 
 const ScopedWorld = dynamic(() => import("../ScopedWorldView"), {
   ssr: false,
-  loading: () => <output>Loading world…</output>,
+  loading: () => (
+    <LoadingState
+      variant="inline"
+      title="Preparing the world…"
+      description="Loading the interactive view."
+    />
+  ),
 });
 
 const appearances: Record<
@@ -436,8 +443,11 @@ export function Appearance({
           strokeDasharray="5 4"
           strokeWidth={2}
         />
-        <text x={40} y={430} fontSize={18} fill="#285e56">
-          Point ({x}, {y}) · x first, then y
+        <text x={220} y={428} textAnchor="middle" fontSize={16}>
+          <tspan fill="#626c60">Point P </tspan>
+          <tspan fill="#285e56" fontWeight={600}>
+            ({String(x).replace("-", "−")}, {String(y).replace("-", "−")})
+          </tspan>
         </text>
         <circle cx={220 + x * 18} cy={220 - y * 18} r={6} fill="#245bcb" />
         <DragHandleControl

@@ -11,6 +11,7 @@
   box-shadow: 0 5px 18px #30362e12;
 }
 .scene-toolbar--overlay {
+  max-width: calc(100% - 20px);
   position: absolute;
   z-index: 5;
   top: 10px;

@@ -344,7 +344,7 @@ async function main() {
         .getByRole("button", { name: /^Save (draft|experiment)$/ })
         .click();
       await page
-        .getByText("Saved to your account.", { exact: true })
+        .getByText("Saved to account", { exact: true })
         .first()
         .waitFor();
       const entries = (await (await request("/api/library/simulations")).json())
@@ -365,7 +365,9 @@ async function main() {
       await otherDevice
         .getByLabel("More document actions", { exact: true })
         .click();
-      await otherDevice.getByText("Experiment", { exact: true }).click();
+      await otherDevice
+        .getByRole("button", { name: "Open saved experiment…", exact: true })
+        .click();
       await otherDevice
         .getByRole("button", {
           name: "Open Browser account experiment",
@@ -455,9 +457,11 @@ async function main() {
       await otherDevice
         .getByLabel("More document actions", { exact: true })
         .click();
-      await otherDevice.getByText("Experiment", { exact: true }).click();
       await otherDevice
-        .getByRole("heading", { name: "Your saved experiments", exact: true })
+        .getByRole("button", { name: "Open saved experiment…", exact: true })
+        .click();
+      await otherDevice
+        .getByRole("dialog", { name: "Open saved experiment", exact: true })
         .waitFor();
       assert.equal(
         await otherDevice
@@ -468,6 +472,9 @@ async function main() {
           .count(),
         0,
       );
+      await otherDevice
+        .getByRole("button", { name: "Close library", exact: true })
+        .click();
       assert.notEqual(
         await otherDevice
           .getByRole("textbox", { name: "Experiment title", exact: true })
@@ -485,7 +492,7 @@ async function main() {
         .getByRole("button", { name: /^Save (draft|experiment)$/ })
         .click();
       await guestPage
-        .getByText("Saved on this device.", { exact: true })
+        .getByText("Saved on device", { exact: true })
         .first()
         .waitFor();
       assert.ok(

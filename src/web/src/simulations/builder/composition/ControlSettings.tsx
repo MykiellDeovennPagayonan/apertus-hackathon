@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { publicDefinition } from "../../components/catalog";
 import { schemaDefault } from "../../components/composites/catalog";
 import { acceptedCommandArguments } from "../../components/controls/commandPresentation";
@@ -13,6 +13,7 @@ import { SchemaForm } from "../../components/controls/SchemaForm";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import type { ComponentInstance } from "../../runtime/authoring/types";
 import type { ActionResult } from "../../runtime/commands";
+import { BuilderIcon } from "../BuilderIcon";
 import type { ComponentCatalog } from "./useComponentCatalog";
 
 export function ControlSettings({
@@ -91,6 +92,10 @@ export function ControlSettings({
     }[],
   );
   const [error, setError] = useState("");
+  const errorNotice = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (error) errorNotice.current?.focus();
+  }, [error]);
   const option = options.find((candidate) => candidate.value === selected);
   const schema =
     option &&
@@ -183,116 +188,157 @@ export function ControlSettings({
               : "A group of fields submitted together to the selected action."}
         </p>
       )}
-      <label>
-        Label
-        <input
-          value={label}
-          onChange={(event) => setLabel(event.target.value)}
-        />
-      </label>
-      <label>
-        {scalar ? "Target parameter" : "Target action"}
-        <select
-          value={selected}
-          onChange={(event) => {
-            setSelected(event.target.value);
-            setMinimum("");
-            setMaximum("");
-            setStep("");
-          }}
-        >
-          <option value="">
-            Choose {scalar ? "a compatible parameter" : "an action"}
-          </option>
-          {options.map((candidate) => (
-            <option key={candidate.value} value={candidate.value}>
-              {candidate.label}
-            </option>
-          ))}
-        </select>
-      </label>
-      {!options.length && (
-        <p>
-          Add {activity ? activity.model : "a model with a compatible command"}{" "}
-          in this canvas group first.
-        </p>
-      )}
-      {isNumericControl && (
-        <>
-          {numeric && (
+      <form
+        id={`control-settings-${node.id}`}
+        onSubmit={(event) => {
+          event.preventDefault();
+          apply();
+        }}
+      >
+        <label>
+          Label
+          <input
+            value={label}
+            onChange={(event) => setLabel(event.target.value)}
+          />
+        </label>
+        <fieldset className="settings-section">
+          <legend>
+            <BuilderIcon name="composites" /> Connection
+          </legend>
+          <label>
+            {scalar ? "Target parameter" : "Target action"}
+            <select
+              value={selected}
+              onChange={(event) => {
+                setSelected(event.target.value);
+                setMinimum("");
+                setMaximum("");
+                setStep("");
+              }}
+            >
+              <option value="">
+                Choose {scalar ? "a compatible parameter" : "an action"}
+              </option>
+              {options.map((candidate) => (
+                <option key={candidate.value} value={candidate.value}>
+                  {candidate.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          {!options.length && (
             <p>
-              Model range: {schema.minimum} to {schema.maximum}. Starting value:{" "}
-              {String(readParameter(currentArgs, option?.parameter ?? ""))}. Set
-              initial state in the model settings.
+              Add{" "}
+              {activity ? activity.model : "a model with a compatible command"}{" "}
+              in this canvas group first.
             </p>
           )}
+        </fieldset>
+        {isNumericControl && (
+          <fieldset className="settings-section">
+            <legend>
+              <BuilderIcon name="controls" /> Range and display
+            </legend>
+            {numeric && (
+              <p>
+                Model range: {schema.minimum} to {schema.maximum}. Starting
+                value:{" "}
+                {String(readParameter(currentArgs, option?.parameter ?? ""))}.
+                Set initial state in the model settings.
+              </p>
+            )}
+            <div className="settings-range-grid">
+              <label>
+                Minimum
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  placeholder={numeric ? String(schema.minimum) : "From model"}
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={
+                    error ? `control-settings-error-${node.id}` : undefined
+                  }
+                  value={minimum}
+                  onChange={(event) => setMinimum(event.target.value)}
+                />
+              </label>
+              <label>
+                Maximum
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  placeholder={numeric ? String(schema.maximum) : "From model"}
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={
+                    error ? `control-settings-error-${node.id}` : undefined
+                  }
+                  value={maximum}
+                  onChange={(event) => setMaximum(event.target.value)}
+                />
+              </label>
+              <label>
+                Step
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  placeholder={schema?.type === "integer" ? "1" : "Any decimal"}
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={
+                    error ? `control-settings-error-${node.id}` : undefined
+                  }
+                  value={step}
+                  onChange={(event) => setStep(event.target.value)}
+                />
+              </label>
+            </div>
+            {node.definition === "controls/Slider" && (
+              <label>
+                <input
+                  type="checkbox"
+                  checked={showNumber}
+                  onChange={(event) => setShowNumber(event.target.checked)}
+                />{" "}
+                Show exact number input
+              </label>
+            )}
+          </fieldset>
+        )}
+        {!activity && node.definition !== "controls/Button" && (
           <label>
-            Minimum
-            <input
-              type="text"
-              inputMode="decimal"
-              placeholder={numeric ? String(schema.minimum) : "From model"}
-              value={minimum}
-              onChange={(event) => setMinimum(event.target.value)}
-            />
+            Apply changes
+            <select
+              value={
+                option?.command.submission === "continuous" ? mode : "submit"
+              }
+              disabled={!option || option.command.submission !== "continuous"}
+              onChange={(event) => setMode(event.target.value)}
+            >
+              <option value="immediate">
+                As the learner changes the value
+              </option>
+              <option value="submit">When the learner presses Apply</option>
+            </select>
           </label>
-          <label>
-            Maximum
-            <input
-              type="text"
-              inputMode="decimal"
-              placeholder={numeric ? String(schema.maximum) : "From model"}
-              value={maximum}
-              onChange={(event) => setMaximum(event.target.value)}
-            />
-          </label>
-          <label>
-            Step
-            <input
-              type="text"
-              inputMode="decimal"
-              placeholder={schema?.type === "integer" ? "1" : "Any decimal"}
-              value={step}
-              onChange={(event) => setStep(event.target.value)}
-            />
-          </label>
-          {node.definition === "controls/Slider" && (
-            <label>
-              <input
-                type="checkbox"
-                checked={showNumber}
-                onChange={(event) => setShowNumber(event.target.checked)}
-              />{" "}
-              Show exact number input
-            </label>
-          )}
-        </>
-      )}
-      {!activity && node.definition !== "controls/Button" && (
-        <label>
-          Apply changes
-          <select
-            value={
-              option?.command.submission === "continuous" ? mode : "submit"
-            }
-            disabled={!option || option.command.submission !== "continuous"}
-            onChange={(event) => setMode(event.target.value)}
+        )}
+        {links.length > 1 && (
+          <p>
+            This control also updates {links.length - 1} other connected
+            action(s). Choosing a different target replaces those connections.
+          </p>
+        )}
+        {error && (
+          <p
+            ref={errorNotice}
+            id={`control-settings-error-${node.id}`}
+            className="settings-form-error"
+            role="alert"
+            tabIndex={-1}
           >
-            <option value="immediate">As the learner changes the value</option>
-            <option value="submit">When the learner presses Apply</option>
-          </select>
-        </label>
-      )}
-      {links.length > 1 && (
-        <p>
-          This control also updates {links.length - 1} other connected
-          action(s). Choosing a different target replaces those connections.
-        </p>
-      )}
-      <button type="button" onClick={apply}>
-        Apply control settings
-      </button>
-      {error && <p role="alert">{error}</p>}
+            {error}
+          </p>
+        )}
+      </form>
       {option &&
         selected === existing?.value &&
         (activity ? (

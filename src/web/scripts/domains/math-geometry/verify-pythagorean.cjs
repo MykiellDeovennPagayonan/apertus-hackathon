@@ -63,41 +63,37 @@ function drawing(state) {
 }
 const markup = drawing(start);
 assert.match(markup, /90°/);
-assert.match(markup, /9 \+ 16 = 25 m²/);
-const areas = [
-  ...markup.matchAll(/<polygon points="([^"]+)" class="pythagorean-square /g),
-].map(([, points]) => {
-  const vertices = points
-    .split(" ")
-    .map((point) => point.split(",").map(Number));
-  return (
-    Math.abs(
-      vertices.reduce((sum, [x, y], i) => {
-        const [nextX, nextY] = vertices[(i + 1) % vertices.length];
-        return sum + x * nextY - nextX * y;
-      }, 0),
-    ) / 2
-  );
-});
-assert.equal(areas.length, 3);
-close(areas[0] / areas[2], 9 / 25);
-close(areas[1] / areas[2], 16 / 25);
-assert.match(markup, /x1="153\.75" y1="300" x2="60" y2="175"/);
-assert.match(drawing(changed), /x1="247\.5" y1="300" x2="60" y2="175"/);
+assert.match(markup, /Pythagorean theorem/);
+assert.match(markup, /a<sup>2<\/sup> \+ b<sup>2<\/sup> = c<sup>2<\/sup>/);
+assert.match(markup, /Take the square root of both sides/);
+assert.match(
+  markup,
+  /aria-label="c equals the square root of 3 squared plus 4 squared, equals 5 metres"/,
+);
+assert.match(
+  drawing(changed),
+  /aria-label="c equals the square root of 6 squared plus 4 squared, approximately 7.21 metres"/,
+);
+assert.doesNotMatch(markup, /<polygon|pythagorean-square/);
+assert.match(markup, /x1="180" y1="300" x2="60" y2="140"/);
+assert.match(drawing(changed), /x1="300" y1="300" x2="60" y2="140"/);
 for (const state of [
   { distance: 0.1, height: 20 },
   { distance: 20, height: 0.1 },
 ])
   assert.doesNotMatch(drawing(state), /NaN|Infinity/);
-assert.equal(recipe.document.nodes.length, 5);
-assert.equal(recipe.document.presentation.items.length, 4);
+assert.equal(recipe.document.nodes.length, 4);
+assert.equal(recipe.document.presentation.items.length, 3);
+assert.ok(
+  recipe.document.nodes.every((node) => node.definition !== "displays/Readout"),
+);
 assert.equal(
   recipe.document.nodes.filter((node) => node.definition === "controls/Slider")
     .length,
   2,
 );
 console.log(
-  "MATH-02 model, rejection, independent square geometry and configuration checks passed",
+  "MATH-02 model, rejection, ladder diagram and worked calculation and configuration checks passed",
 );
 
 const { loadRecipe } = load("src/simulations/runtime/recipes/loadRecipe.ts");

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { publicDefinition } from "../../components/catalog";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import type { ComponentInstance } from "../../runtime/authoring/types";
+import { BuilderIcon } from "../BuilderIcon";
 import {
   changeControlType,
   controlTypeCompatibility,
@@ -29,8 +30,10 @@ export function ControlTypeSettings({
   const needsParameter =
     changed && selected.parameters.length > 1 && !node.configuration.parameter;
   return (
-    <fieldset className="control-type-settings">
-      <legend>Component type</legend>
+    <fieldset className="control-type-settings settings-section">
+      <legend>
+        <BuilderIcon name="settings" /> Component type
+      </legend>
       <label>
         Control type
         <select

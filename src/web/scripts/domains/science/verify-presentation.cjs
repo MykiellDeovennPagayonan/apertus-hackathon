@@ -14,7 +14,7 @@ const { Appearance } = load(
 const { SnapshotContext } = load(
   "src/simulations/components/views/recipe/contexts.tsx",
 );
-const { ScienceObservations } = load(
+const { ScienceObservations, ScienceControls } = load(
   "src/simulations/components/views/SciencePanels.tsx",
 );
 const { retrieveComponentBucket } = load("src/lib/planner/bucket.ts");
@@ -82,6 +82,28 @@ for (const spec of scienceSpecs) {
     !markup.includes("science-explanation"),
     "Inspection is distinct from caption mode",
   );
+  if (spec.kind === "cell") {
+    const playback = runtime.document.nodes.find((n) => n.id === "playback");
+    const conditions = runtime.document.nodes.find(
+      (n) => n.id === "conditions",
+    );
+    assert.match(
+      render(runtime, ScienceControls, playback),
+      /disabled=""[^>]*>Back/,
+    );
+    assert.match(render(runtime, ScienceControls, conditions), /role="switch"/);
+    assert.ok(
+      !render(runtime, ScienceControls, conditions).includes("<dialog"),
+    );
+    const markup = renderToStaticMarkup(
+      React.createElement(ScienceScene, sceneProps),
+    );
+    assert.equal(
+      (markup.match(/data-chromosome=/g) || []).length,
+      8,
+      "Chromosome copies keep stable elements across stages",
+    );
+  }
   const step = (command) =>
     assert.ok(
       runtime.dispatch([

@@ -359,13 +359,15 @@
 .command-bar__quick-chips::-webkit-scrollbar {
   display: none;
 }
-.command-bar__quick-chip {
+.command-bar--compact .command-bar__quick-chip {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   font-size: 11.5px;
   font-weight: 500;
-  padding: 3px 10px;
+  min-height: 36px;
+  flex-shrink: 0;
+  padding: 6px 10px;
   border-radius: 12px;
   background: rgba(255, 252, 245, 0.92);
   border: 1px solid
@@ -426,5 +428,16 @@
 @media (prefers-reduced-motion: reduce) {
   .command-bar__status--working .command-bar__activity {
     animation: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .command-bar--compact .command-bar__send {
+    min-height: 44px;
+    height: auto;
+    padding-inline: 10px;
+  }
+  .command-bar--compact .command-bar__quick-chip {
+    min-height: 44px;
   }
 }

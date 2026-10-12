@@ -7,7 +7,11 @@ import { validateDocument } from "../document/validateDocument";
 export function contentFingerprint(document: ExperimentDocument) {
   const copy = structuredClone(document);
   copy.editor.zoom = 1;
-  if (copy.authored) copy.authored.editor.zoom = 1;
+  delete copy.editor.pan;
+  if (copy.authored) {
+    copy.authored.editor.zoom = 1;
+    delete copy.authored.editor.pan;
+  }
   return JSON.stringify(copy);
 }
 
@@ -19,7 +23,11 @@ export function constructionPreview(
     ...base,
     authored: update.document,
     lesson: update.document.lesson,
-    editor: { ...update.document.editor, zoom: base.editor.zoom },
+    editor: {
+      ...update.document.editor,
+      zoom: base.editor.zoom,
+      ...(base.editor.pan ? { pan: base.editor.pan } : {}),
+    },
   };
 }
 
@@ -32,7 +40,11 @@ export function completedExperiment(
   next.authored = structuredClone(document);
   next.lesson = structuredClone(document.lesson);
   next.recipeMetadata = structuredClone(metadata);
-  next.editor = { ...structuredClone(document.editor), zoom: base.editor.zoom };
+  next.editor = {
+    ...structuredClone(document.editor),
+    zoom: base.editor.zoom,
+    ...(base.editor.pan ? { pan: base.editor.pan } : {}),
+  };
   next.authored.editor = structuredClone(next.editor);
   validateDocument(next);
   return next;

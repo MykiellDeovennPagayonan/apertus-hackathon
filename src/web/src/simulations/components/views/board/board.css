@@ -8,7 +8,6 @@
 }
 .board-toolbar button,
 .board-item-tools button,
-.board-settings button,
 .board-selection button,
 .board-resize,
 .board-expand,
@@ -233,29 +232,6 @@
 .board-selection details {
   flex-basis: 100%;
 }
-.board-settings {
-  padding: 16px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: end;
-  max-height: 320px;
-  overflow: auto;
-  background: var(--panel);
-  border-bottom: 1px solid var(--border);
-}
-.board-settings label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-}
-.board-settings details {
-  flex-basis: 100%;
-}
-.board-settings details label {
-  margin-top: 8px;
-}
 .board-geometry {
   display: flex;
   align-items: end;
@@ -279,8 +255,6 @@
 .board-geometry select {
   width: 150px;
 }
-.board-settings input,
-.board-settings select,
 .board-toolbar input,
 .board-toolbar select,
 .board-geometry input {
@@ -399,9 +373,6 @@
     right: 8px;
     width: auto;
     max-height: 60%;
-  }
-  .board-settings {
-    max-height: 240px;
   }
   .board-geometry input {
     width: 70px;
@@ -598,7 +569,7 @@
   box-shadow: 0 6px 24px #30362e12;
 }
 .is-workspace .is-floating .board-camera-tools {
-  bottom: 16px;
+  bottom: calc(var(--builder-composer-height, 0px) + 24px);
   left: 12px;
 }
 .is-workspace .is-floating .board-workspace-tools {
@@ -629,7 +600,7 @@
   display: none;
 }
 .is-workspace .board-selection {
-  bottom: 16px;
+  bottom: calc(var(--builder-composer-height, 0px) + 24px);
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
@@ -679,17 +650,6 @@
   right: 0;
   width: min(340px, calc(100vw - 24px));
 }
-.is-workspace .board-settings {
-  position: absolute;
-  top: 62px;
-  right: 12px;
-  width: min(360px, calc(100% - 24px));
-  max-height: calc(100% - 140px);
-  z-index: 1200;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: 0 8px 32px #30362e20;
-}
 .is-workspace .board-area-banner {
   position: absolute;
   top: 12px;
@@ -699,12 +659,6 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: 0 6px 24px #30362e1a;
-}
-.board-settings-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
 }
 .is-workspace .board-item-tools button {
   min-height: 34px;
@@ -743,11 +697,6 @@
 .is-workspace .board-resize {
   min-height: 30px;
   width: 30px;
-}
-@media (max-width: 1100px) {
-  .is-workspace .board-selection {
-    bottom: 72px;
-  }
 }
 @media (max-width: 700px) {
   .is-workspace .board-area-banner {
@@ -1069,13 +1018,6 @@
   border-radius: 18px;
   background: #fffcf4;
 }
-@media (max-width: 700px) {
-  .is-responsive-layout.is-workspace .is-floating .board-workspace-tools {
-    top: auto;
-    bottom: 16px;
-    right: 12px;
-  }
-}
 
 /* A scene containing only an SVG uses its assigned area, not the global
    recipe SVG height. Views with legends/readouts retain their own layout. */
@@ -1094,15 +1036,6 @@
   max-height: 100%;
 }
 
-.board-learner-view {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px;
-}
-.board-learner-view p {
-  margin: 6px 0 12px;
-  font-size: 12px;
-}
 .board-view-warning {
   position: absolute;
   top: 64px;
@@ -1138,4 +1071,232 @@
 .board-item.is-outside-view.is-selected {
   outline-style: solid;
   outline-color: var(--accent);
+}
+
+/* Board settings share the builder dialog, rather than competing with board tools. */
+.component-dialog.component-dialog.board-settings-dialog {
+  width: 680px;
+}
+.component-dialog.board-settings-dialog .component-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.board-settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--surface-line);
+  border-radius: 16px;
+  padding: 20px;
+  background: #fffefb;
+}
+.component-dialog.board-settings-dialog .board-settings-section-heading {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+}
+.component-dialog.board-settings-dialog
+  .board-settings-section-heading
+  > .builder-icon {
+  color: #285e56;
+  margin-top: 3px;
+}
+.component-dialog.board-settings-dialog .board-settings-section-heading h3 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.component-dialog.board-settings-dialog p,
+.component-dialog.board-settings-dialog small {
+  color: var(--surface-muted);
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 0;
+}
+.component-dialog.board-settings-dialog label {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+}
+.component-dialog.board-settings-dialog
+  input:not([type="radio"]):not([type="checkbox"]),
+.component-dialog.board-settings-dialog select {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid var(--surface-line);
+  border-radius: 10px;
+  color: #303b32;
+  background: white;
+  font: inherit;
+  font-weight: 400;
+}
+.component-dialog.board-settings-dialog input[type="checkbox"],
+.component-dialog.board-settings-dialog input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  flex: 0 0 18px;
+  margin: 2px 0 0;
+  accent-color: #285e56;
+}
+.component-dialog.board-settings-dialog label:has(> input[type="checkbox"]),
+.component-dialog.board-settings-dialog .board-learner-view > label {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+}
+.component-dialog.board-settings-dialog label span {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.component-dialog.board-settings-dialog label small {
+  font-weight: 400;
+}
+.component-dialog.board-settings-dialog .board-learner-view {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.component-dialog.board-settings-dialog .board-learner-view > label {
+  border: 1px solid var(--surface-line);
+  border-radius: 12px;
+  padding: 14px;
+  cursor: pointer;
+  background: white;
+}
+.component-dialog.board-settings-dialog
+  .board-learner-view
+  > label:has(input:checked) {
+  background: #eef4e9;
+  border-color: #85a291;
+  box-shadow: inset 0 0 0 1px #85a291;
+}
+.component-dialog.board-settings-dialog .board-learner-view > label:hover {
+  border-color: #85a291;
+}
+.board-boundary-settings {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.board-settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.component-dialog.board-settings-dialog .board-settings-details {
+  border-top: 1px solid var(--surface-line);
+  padding-top: 12px;
+}
+.component-dialog.board-settings-dialog .board-settings-details summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 0;
+  color: #285e56;
+}
+.component-dialog.board-settings-dialog .board-settings-details[open] > p,
+.component-dialog.board-settings-dialog .board-settings-details[open] > label {
+  margin-top: 12px;
+}
+.component-dialog.board-settings-dialog .board-geometry {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 0;
+}
+.component-dialog.board-settings-dialog .board-geometry > strong {
+  display: none;
+}
+.component-dialog.board-settings-dialog .board-geometry > button {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+.board-start-view {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  background: #f1f5ec;
+  padding: 16px;
+  border-radius: 12px;
+}
+.board-start-view strong {
+  font-size: 13px;
+}
+.board-start-view-saved {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.board-start-view-saved .builder-icon {
+  width: 15px;
+  height: 15px;
+}
+.component-dialog.board-settings-dialog .board-flow-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  border-top: 1px solid var(--surface-line);
+  padding-top: 16px;
+}
+.board-settings-feedback {
+  font-size: 12px;
+  color: #285e56;
+}
+.board-settings-feedback:empty {
+  display: none;
+}
+.board-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .board-settings-section {
+    padding: 14px;
+  }
+  .component-dialog.board-settings-dialog .board-learner-view {
+    grid-template-columns: 1fr;
+  }
+  .component-dialog.board-settings-dialog .component-dialog-body {
+    padding: 14px;
+  }
+  .component-dialog.board-settings-dialog .board-settings-actions > button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .is-workspace:has(> .board-selection) .is-floating .board-camera-tools {
+    bottom: calc(var(--builder-composer-height, 0px) + 88px);
+  }
+}
+.is-workspace .board-navigation-help > div {
+  max-height: max(
+    100px,
+    calc(100dvh - var(--builder-composer-height, 0px) - 260px)
+  );
+  overflow: auto;
 }

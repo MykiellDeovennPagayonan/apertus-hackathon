@@ -6,6 +6,7 @@ const clamp = (value: number, min: number, max: number) =>
 /** Camera owns navigation only. Node positions and bindings remain document data. */
 export function ConnectionViewport({
   zoom,
+  initialPan,
   onZoom,
   onNavigate,
   children,
@@ -19,7 +20,8 @@ export function ConnectionViewport({
   worldHeight = 4400,
 }: {
   zoom: number;
-  onZoom: (zoom: number) => void;
+  initialPan?: { x: number; y: number };
+  onZoom: (zoom: number, pan?: { x: number; y: number }) => void;
   onNavigate?: () => void;
   children: ReactNode;
   active?: boolean;
@@ -33,7 +35,7 @@ export function ConnectionViewport({
 }) {
   const viewport = useRef<HTMLElement>(null);
   const world = useRef<HTMLDivElement>(null);
-  const [pan, setPan] = useState({ x: 24, y: 24 });
+  const [pan, setPan] = useState(initialPan ?? { x: 24, y: 24 });
   const drag = useRef<{
     pointer: number;
     x: number;
@@ -136,7 +138,12 @@ export function ConnectionViewport({
     onNavigate,
   });
   navigation.current = { pan, zoom, zoomAt, bounded, fit, onZoom, onNavigate };
-  const initiallyFitted = useRef(false);
+  const initiallyFitted = useRef(Boolean(initialPan));
+  const publishView = useRef(onZoom);
+  publishView.current = onZoom;
+  useEffect(() => {
+    if (active) publishView.current(zoom, pan);
+  }, [active, zoom, pan]);
   useEffect(() => {
     if (!active || initiallyFitted.current) return;
     const frame = requestAnimationFrame(() => {

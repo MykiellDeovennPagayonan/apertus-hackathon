@@ -92,7 +92,7 @@ fs.mkdirSync(captures, { recursive: true });
     await dialog
       .getByRole("button", { name: "Apply control settings", exact: true })
       .click();
-    await dialog.getByRole("button", { name: "Done", exact: true }).click();
+    await dialog.getByRole("button", { name: "Close settings", exact: true }).click();
     assert.equal(await page.locator(".control-unconfigured").count(), 0);
     const input = page.getByRole("textbox", {
       name: "Horizontal input",
@@ -151,7 +151,7 @@ fs.mkdirSync(captures, { recursive: true });
     await dialog
       .getByRole("button", { name: "Apply control settings", exact: true })
       .click();
-    await dialog.getByRole("button", { name: "Done", exact: true }).click();
+    await dialog.getByRole("button", { name: "Close settings", exact: true }).click();
     assert.equal(
       await page
         .getByRole("textbox", { name: "Horizontal input", exact: true })
@@ -220,7 +220,7 @@ fs.mkdirSync(captures, { recursive: true });
         .count(),
       0,
     );
-    await dialog.getByRole("button", { name: "Done", exact: true }).click();
+    await dialog.getByRole("button", { name: "Close settings", exact: true }).click();
     assert.equal(
       await page
         .getByRole("slider", { name: "Horizontal input", exact: true })
@@ -263,7 +263,7 @@ fs.mkdirSync(captures, { recursive: true });
       "controls/NumberInput",
     );
     await page.screenshot({ path: captures + "/control-type-settings.png" });
-    await dialog.getByRole("button", { name: "Done", exact: true }).click();
+    await dialog.getByRole("button", { name: "Close settings", exact: true }).click();
     await page.getByRole("button", { name: "Undo", exact: true }).click();
     await connectionCard
       .getByText("Control · Slider", { exact: true })
@@ -349,7 +349,7 @@ fs.mkdirSync(captures, { recursive: true });
       .getByRole("button", { name: "Apply control settings", exact: true })
       .click();
     await groupDialog
-      .getByRole("button", { name: "Done", exact: true })
+      .getByRole("button", { name: "Close settings", exact: true })
       .click();
     assert.equal(
       await form

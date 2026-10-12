@@ -224,7 +224,7 @@ const snapshot = (page) =>
         await dialog
           .getByRole("button", { name: "Apply changes", exact: true })
           .click();
-        await dialog.getByRole("button", { name: "Done", exact: true }).click();
+        await dialog.getByRole("button", { name: "Close settings", exact: true }).click();
         model.configuration[edit[0]] = edit[1];
         await capture("builder-edited");
         await button("Save experiment").click();

@@ -41,6 +41,13 @@ exports.open = async (page) => {
   return dialog;
 };
 exports.set = async (page, spec, key, value) => {
+  if (spec.kind === "cell") {
+    await page
+      .getByRole("switch", { name: "Separation error" })
+      .setChecked(!!value);
+    assert.equal((await exports.state(page)).settings[key], value);
+    return;
+  }
   const d = await exports.open(page);
   const f = spec.settings.find((f) => f.key === key);
   if (spec.settings.length > 1)

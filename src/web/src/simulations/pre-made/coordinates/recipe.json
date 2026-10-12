@@ -35,10 +35,10 @@
         "id": "input/x",
         "definition": "controls/Slider",
         "version": 1,
-        "label": "X coordinate",
+        "label": "X \u00b7 horizontal",
         "scope": "scope/lab",
         "configuration": {
-          "label": "X coordinate",
+          "label": "X \u00b7 horizontal",
           "mode": "immediate",
           "initial": "{\"value\": {\"x\": 2, \"y\": 3}}",
           "parameter": "value.x",
@@ -50,37 +50,15 @@
         "id": "input/y",
         "definition": "controls/Slider",
         "version": 1,
-        "label": "Y coordinate",
+        "label": "Y \u00b7 vertical",
         "scope": "scope/lab",
         "configuration": {
-          "label": "Y coordinate",
+          "label": "Y \u00b7 vertical",
           "mode": "immediate",
           "initial": "{\"value\": {\"x\": 2, \"y\": 3}}",
           "parameter": "value.y",
           "step": 0.1,
           "showNumber": true
-        }
-      },
-      {
-        "id": "result/x",
-        "definition": "displays/Readout",
-        "version": 1,
-        "label": "x \u00b7 horizontal",
-        "scope": "scope/lab",
-        "configuration": {
-          "label": "x \u00b7 horizontal",
-          "precision": 2
-        }
-      },
-      {
-        "id": "result/y",
-        "definition": "displays/Readout",
-        "version": 1,
-        "label": "y \u00b7 vertical",
-        "scope": "scope/lab",
-        "configuration": {
-          "label": "y \u00b7 vertical",
-          "precision": 2
         }
       }
     ],
@@ -95,30 +73,6 @@
         "to": {
           "node": "appearance",
           "port": "model"
-        }
-      },
-      {
-        "id": "link/result/x",
-        "kind": "value",
-        "from": {
-          "node": "model",
-          "port": "x"
-        },
-        "to": {
-          "node": "result/x",
-          "port": "value"
-        }
-      },
-      {
-        "id": "link/result/y",
-        "kind": "value",
-        "from": {
-          "node": "model",
-          "port": "y"
-        },
-        "to": {
-          "node": "result/y",
-          "port": "value"
         }
       },
       {
@@ -171,28 +125,10 @@
           "node": "appearance"
         },
         {
-          "id": "layout/result/x",
-          "kind": "stack",
-          "label": "",
-          "gap": 16,
-          "columns": 1,
-          "children": [],
-          "node": "result/x"
-        },
-        {
-          "id": "layout/result/y",
-          "kind": "stack",
-          "label": "",
-          "gap": 16,
-          "columns": 1,
-          "children": [],
-          "node": "result/y"
-        },
-        {
           "id": "layout/task",
           "kind": "stack",
           "label": "Point position",
-          "gap": 16,
+          "gap": 24,
           "columns": 1,
           "children": [
             {
@@ -244,43 +180,17 @@
           "responsiveMinHeight": 300
         },
         {
-          "id": "board/layout/result/x",
-          "layoutId": "layout/result/x",
-          "rect": {
-            "x": 644,
-            "y": 0,
-            "width": 162,
-            "height": 150
-          },
-          "zIndex": 1,
-          "locked": false,
-          "responsiveMinHeight": 100
-        },
-        {
-          "id": "board/layout/result/y",
-          "layoutId": "layout/result/y",
-          "rect": {
-            "x": 822,
-            "y": 0,
-            "width": 162,
-            "height": 150
-          },
-          "zIndex": 2,
-          "locked": false,
-          "responsiveMinHeight": 100
-        },
-        {
           "id": "board/layout/task",
           "layoutId": "layout/task",
           "rect": {
             "x": 644,
-            "y": 180,
+            "y": 0,
             "width": 340,
             "height": 320
           },
-          "zIndex": 3,
+          "zIndex": 1,
           "locked": false,
-          "responsiveMinHeight": 160
+          "responsiveMinHeight": 320
         }
       ],
       "groups": [],
@@ -288,7 +198,7 @@
         "x": -24,
         "y": -24,
         "width": 1032,
-        "height": 568
+        "height": 478
       },
       "navigation": {
         "mode": "bounded",
@@ -307,10 +217,6 @@
         ],
         [
           "board/layout/task"
-        ],
-        [
-          "board/layout/result/x",
-          "board/layout/result/y"
         ]
       ]
     }
@@ -329,10 +235,6 @@
     },
     {
       "id": "controls/Slider",
-      "version": 1
-    },
-    {
-      "id": "displays/Readout",
       "version": 1
     }
   ],

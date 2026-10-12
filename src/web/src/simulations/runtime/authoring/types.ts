@@ -173,7 +173,11 @@ export type AuthoredDocument = {
   scopes: { id: string; label: string }[];
   groups: Group[];
   lesson: { title: string; instruction: string; explanation: string };
-  editor: { positions: Record<string, { x: number; y: number }>; zoom: number };
+  editor: {
+    positions: Record<string, { x: number; y: number }>;
+    zoom: number;
+    pan?: { x: number; y: number };
+  };
 };
 export type CompositeRecipe = {
   recipeVersion: 1 | 2;

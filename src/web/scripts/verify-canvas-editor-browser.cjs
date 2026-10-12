@@ -121,7 +121,7 @@ const { fixture } = require("./builder/verify-canvas-editor.cjs");
       "Delete inside a text field must not remove components",
     );
     await input.fill("Line 1");
-    await dialog.getByRole("button", { name: "Done", exact: true }).click();
+    await dialog.getByRole("button", { name: "Close settings", exact: true }).click();
     await page
       .getByRole("button", { name: "Fit to content", exact: true })
       .click();

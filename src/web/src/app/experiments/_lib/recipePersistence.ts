@@ -35,6 +35,11 @@ export function persistRecipe(session: RecipeSession, ownerId?: string) {
   queues.set(key, promise);
   return promise;
 }
+export function hasAcceptedRecipe(ownerId?: string) {
+  return Boolean(
+    sessionStorage.getItem(ownerId ? `${LAST_RECIPE}:${ownerId}` : LAST_RECIPE),
+  );
+}
 export async function reopenAcceptedRecipe(ownerId?: string) {
   const id = sessionStorage.getItem(
     ownerId ? `${LAST_RECIPE}:${ownerId}` : LAST_RECIPE,

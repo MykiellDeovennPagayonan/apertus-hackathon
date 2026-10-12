@@ -4,6 +4,7 @@ import { SchemaForm } from "../../components/controls/SchemaForm";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import { DocumentRuntime } from "../../runtime/authoring/runtime";
 import type { Endpoint } from "../../runtime/authoring/types";
+import { BuilderIcon } from "../BuilderIcon";
 import { ComponentDialog } from "../ComponentDialog";
 import type { ExperimentDocument } from "../document";
 import { addCatalogComponent } from "../editor/compositeCommands";
@@ -235,42 +236,57 @@ export function InputEditor({
       {incoming.length > 0 && mode !== "manual" && (
         <section className="input-editor-section">
           <h3>Connected components</h3>
-          {incoming.map((c) => (
-            <div className="input-editor-connection" key={c.id}>
-              <span>
-                {
-                  [
-                    ...requireValue(doc.authored).nodes,
-                    ...requireValue(doc.authored).resources,
-                  ].find((n) => n.id === c.from.node)?.label
-                }{" "}
-                · {portLabel(c.from.port)}
-              </span>
-              <button
-                type="button"
-                onClick={() =>
-                  apply("Disconnect input", (d) => {
-                    requireValue(d.authored).connections = requireValue(
-                      d.authored,
-                    ).connections.filter((v) => v.id !== c.id);
-                  })
-                }
-              >
-                Disconnect
-              </button>
-            </div>
-          ))}
+          {incoming.map((c, index) => {
+            const source = [
+              ...requireValue(doc.authored).nodes,
+              ...requireValue(doc.authored).resources,
+            ].find((node) => node.id === c.from.node);
+            const scope = requireValue(doc.authored).scopes.find(
+              (item) => item.id === source?.scope,
+            );
+            return (
+              <div className="input-editor-connection" key={c.id}>
+                <span>
+                  {
+                    [
+                      ...requireValue(doc.authored).nodes,
+                      ...requireValue(doc.authored).resources,
+                    ].find((n) => n.id === c.from.node)?.label
+                  }{" "}
+                  · {portLabel(c.from.port)}
+                  <small>
+                    {scope?.label ?? "Connected component"} · Source {index + 1}
+                  </small>
+                </span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    apply("Disconnect input", (d) => {
+                      requireValue(d.authored).connections = requireValue(
+                        d.authored,
+                      ).connections.filter((v) => v.id !== c.id);
+                    })
+                  }
+                >
+                  Disconnect
+                </button>
+              </div>
+            );
+          })}
         </section>
       )}
       {mode !== "manual" && (
         <label className="input-editor-search">
           Find a component
-          <input
-            type="search"
-            placeholder="Search compatible components…"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
+          <span className="input-editor-search-field">
+            <BuilderIcon name="search" />
+            <input
+              type="search"
+              placeholder="Search compatible components…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </span>
         </label>
       )}
       <div className="input-editor-options">

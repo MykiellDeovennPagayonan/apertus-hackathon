@@ -2,10 +2,11 @@
 
 import { SessionContext, SessionProvider, useSession } from "next-auth/react";
 import { Fragment, type ReactNode } from "react";
+import LoadingState from "./LoadingState";
 
 function AccountBoundary({ children }: { children: ReactNode }) {
   const { data, status } = useSession();
-  if (status === "loading") return <output>Opening your lab…</output>;
+  if (status === "loading") return <LoadingState />;
   // Account changes dispose the old workspace and its in-memory save revisions.
   return <Fragment key={data?.user.id ?? "guest"}>{children}</Fragment>;
 }

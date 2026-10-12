@@ -22,9 +22,9 @@ export const mathGeometryRequirements: Record<string, CompositionRequirements> =
       selectionKey: "pythagorean",
       selectionGroup: "math-geometry",
       guidance:
-        "Show a ladder against a perpendicular wall and linked square areas. Use an independent attached scene, foot-distance slider, wall-contact-height slider and ladderLength readout. Omitted conditions keep defaults distance=3 m and height=4 m. Preserve height when only the foot moves. At most two independently configured ladders may compare distances. No playback, inverse-leg solver, dissection animation or extra dashboard.",
+        "Show a ladder against a perpendicular wall with a worked Pythagorean calculation. Use an independent attached scene, foot-distance slider and wall-contact-height slider. The scene shows ladder length, the Pythagorean theorem and its square-root calculation; omit a duplicate ladderLength readout. Omitted conditions keep defaults distance=3 m and height=4 m. Preserve height when only the foot moves. At most two independently configured ladders may compare distances. No playback, inverse-leg solver, dissection animation or extra dashboard.",
       commands: ["set:distance", "set:height"],
-      observations: ["ladderLength"],
+      observations: [],
       appearance: "appearance/math-pythagorean",
     },
     "prefabs/math-geometry/TreeHeight": {

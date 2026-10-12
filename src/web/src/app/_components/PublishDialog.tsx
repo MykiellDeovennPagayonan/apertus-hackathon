@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { listCommunity, publishProject } from "../../lib/projects/client";
 import type { Project, Publication } from "../../lib/projects/types";
 import { publicPayload } from "../../lib/projects/validation";
+import { ComponentDialog } from "../../simulations/builder/ComponentDialog";
 import NameAvailability from "./NameAvailability";
 export default function PublishDialog({
   project,
@@ -16,7 +17,6 @@ export default function PublishDialog({
   onClose: () => void;
   onPublished: (p: Publication) => void;
 }) {
-  const dialog = useRef<HTMLDialogElement>(null);
   const [name, setName] = useState(project.name),
     [description, setDescription] = useState(project.description),
     [tags, setTags] = useState(project.tags.join(", "));
@@ -41,10 +41,6 @@ export default function PublishDialog({
     }
   }, [project.projectType, project.payload]);
   const key = useRef(crypto.randomUUID());
-  useEffect(() => {
-    dialog.current?.showModal();
-    return () => dialog.current?.close();
-  }, []);
   useEffect(() => {
     let disposed = false;
     if (project.lastPublishedVersionNumber) {
@@ -98,20 +94,38 @@ export default function PublishDialog({
     }
   };
   return (
-    <dialog
-      ref={dialog}
-      className="project-dialog"
-      aria-labelledby="publish-title"
-      onCancel={(event) => {
-        event.preventDefault();
-        if (!busy) onClose();
-      }}
-    >
-      <h2 id="publish-title">
-        {published
+    <ComponentDialog
+      open
+      title={
+        published
           ? "Published to the community"
-          : "Review community publication"}
-      </h2>
+          : "Review community publication"
+      }
+      subtitle={project.name}
+      icon="share"
+      className="project-dialog publication-dialog"
+      onClose={onClose}
+      dismissDisabled={busy}
+      footerLabel={published ? "Done" : "Cancel"}
+      footerActions={
+        !published && (
+          <button
+            type="button"
+            className="builder-primary"
+            disabled={
+              busy ||
+              !license ||
+              !name.trim() ||
+              !project.sharingAllowed ||
+              !candidate.payload
+            }
+            onClick={() => void submit()}
+          >
+            {busy ? "Publishing…" : "Publish snapshot"}
+          </button>
+        )
+      }
+    >
       {published ? (
         <>
           <p>
@@ -121,9 +135,6 @@ export default function PublishDialog({
           <Link href={`/community/${published.publicationId}`}>
             View {published.name}
           </Link>
-          <button onClick={onClose} type="button">
-            Done
-          </button>
         </>
       ) : (
         <>
@@ -198,38 +209,22 @@ export default function PublishDialog({
                 setLicense(e.target.checked);
               }}
             />
-            I have permission to share all included content under{" "}
-            <a
-              href="https://creativecommons.org/licenses/by/4.0/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              CC BY 4.0
-            </a>
-            , including attribution when others reuse it.
+            <span>
+              I have permission to share all included content under{" "}
+              <a
+                href="https://creativecommons.org/licenses/by/4.0/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                CC BY 4.0
+              </a>
+              , including attribution when others reuse it.
+            </span>
           </label>
           {candidate.error && <p role="alert">{candidate.error}</p>}
           {error && <p role="alert">{error}</p>}
-          <div className="project-actions">
-            <button type="button" disabled={busy} onClick={onClose}>
-              Cancel
-            </button>
-            <button
-              type="button"
-              disabled={
-                busy ||
-                !license ||
-                !name.trim() ||
-                !project.sharingAllowed ||
-                !candidate.payload
-              }
-              onClick={() => void submit()}
-            >
-              {busy ? "Publishing…" : "Publish snapshot"}
-            </button>
-          </div>
         </>
       )}
-    </dialog>
+    </ComponentDialog>
   );
 }

@@ -39,7 +39,7 @@ export function LauncherVisual({
         fill="var(--text-dim)"
         fontSize={11}
       >
-        {angle.toFixed(3)}°
+        {Number(angle.toFixed(2))}°
       </text>
     </>
   );

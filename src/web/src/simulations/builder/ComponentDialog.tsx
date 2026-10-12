@@ -1,4 +1,6 @@
 import { type ReactNode, useEffect, useRef } from "react";
+import { BuilderIcon, type BuilderIconName } from "./BuilderIcon";
+import "./surfaces.css";
 
 /** One focused settings surface, with native focus trapping and Escape dismissal. */
 export function ComponentDialog({
@@ -8,9 +10,13 @@ export function ComponentDialog({
   onClose,
   children,
   wide = false,
-  footerLabel = "Done",
-  footerPrimary = true,
+  footerLabel = "Close",
+  footerPrimary = false,
   className = "",
+  icon = "settings",
+  footerNote,
+  footerActions,
+  dismissDisabled = false,
 }: {
   open: boolean;
   title: string;
@@ -21,6 +27,10 @@ export function ComponentDialog({
   footerLabel?: string;
   footerPrimary?: boolean;
   className?: string;
+  icon?: BuilderIconName;
+  footerNote?: string;
+  footerActions?: ReactNode;
+  dismissDisabled?: boolean;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const opener = useRef<HTMLElement | null>(null);
@@ -44,32 +54,47 @@ export function ComponentDialog({
           (e.target as Element).closest("dialog") === e.currentTarget
         ) {
           e.preventDefault();
-          onClose();
+          if (!dismissDisabled) onClose();
         }
       }}
       onCancel={(e) => {
         if (e.target !== e.currentTarget) return;
         e.preventDefault();
-        onClose();
+        if (!dismissDisabled) onClose();
       }}
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget && !dismissDisabled) onClose();
       }}
     >
       <header>
+        <span className="component-dialog-icon">
+          <BuilderIcon name={icon} />
+        </span>
         <div>
           <h2>{title}</h2>
           {subtitle && <p className="component-dialog-type">{subtitle}</p>}
         </div>
-        <button type="button" aria-label={`Close ${title}`} onClick={onClose}>
-          ×
+        <button
+          type="button"
+          aria-label={`Close ${title}`}
+          disabled={dismissDisabled}
+          onClick={onClose}
+        >
+          <BuilderIcon name="close" />
         </button>
       </header>
       <div className="component-dialog-body">{children}</div>
       <footer>
+        {footerNote && <p className="component-dialog-note">{footerNote}</p>}
+        {footerActions}
         <button
           type="button"
-          className={footerPrimary ? "builder-primary" : undefined}
+          className={
+            footerPrimary
+              ? "builder-primary component-dialog-close"
+              : "component-dialog-close"
+          }
+          disabled={dismissDisabled}
           onClick={onClose}
         >
           {footerLabel}

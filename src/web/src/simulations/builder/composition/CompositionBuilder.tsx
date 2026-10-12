@@ -4,6 +4,8 @@ import Link from "next/link";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import CommandBar from "../../../app/_components/CommandBar";
 import { publicDefinition } from "../../components/catalog";
+import { definitionDiscovery } from "../../components/catalog/discovery";
+import { hasControlSettings } from "../../components/controls/controlContract";
 import { SchemaForm } from "../../components/controls/SchemaForm";
 import { RecipeLesson } from "../../components/views/RecipeLesson";
 import {
@@ -13,6 +15,7 @@ import {
 import { regenerateTruss } from "../../runtime/authoring/regenerateTruss";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import { object } from "../../runtime/parameterSchema";
+import { BuilderIcon } from "../BuilderIcon";
 import { ComponentDialog } from "../ComponentDialog";
 import {
   type ExperimentDocument,
@@ -55,20 +58,22 @@ export default function CompositionBuilder({
   redo,
   canUndo,
   canRedo,
-  history,
   onSave,
   saving,
   saveState,
   error,
   notice,
+  onNoticeDismiss,
   fileMenu,
   expanded,
   onExpanded,
   onZoom,
-  lifecycle,
+  onExit,
+  onHome,
   storageNotice,
 }: {
-  lifecycle?: ReactNode;
+  onExit: () => void;
+  onHome: () => void;
   storageNotice?: ReactNode;
   doc: ExperimentDocument;
   valid: ExperimentDocument;
@@ -78,37 +83,27 @@ export default function CompositionBuilder({
   redo: () => void;
   canUndo: boolean;
   canRedo: boolean;
-  history: ReactNode;
   onSave: () => void;
   saving: boolean;
   saveState: string;
   error: string;
   notice: string;
+  onNoticeDismiss: () => void;
   fileMenu: ReactNode;
   expanded: boolean;
   onExpanded: (v: boolean) => void;
-  onZoom: (v: number) => void;
+  onZoom: (v: number, pan?: { x: number; y: number }) => void;
 }) {
   const boardClipboard = useRef<BoardClipboard | null>(null);
-  const documentMenu = useRef<HTMLDetailsElement>(null);
-  useEffect(() => {
-    const close = (event: PointerEvent | KeyboardEvent) => {
-      const menu = documentMenu.current;
-      if (!menu?.open) return;
-      if (event instanceof KeyboardEvent) {
-        if (event.key !== "Escape") return;
-        menu.open = false;
-        menu.querySelector("summary")?.focus();
-      } else if (!menu.contains(event.target as Node)) menu.open = false;
-    };
-    window.addEventListener("pointerdown", close);
-    window.addEventListener("keydown", close);
-    return () => {
-      window.removeEventListener("pointerdown", close);
-      window.removeEventListener("keydown", close);
-    };
-  }, []);
   const composer = useRef<HTMLDivElement>(null);
+  const tryLesson = useRef<HTMLButtonElement>(null);
+  const returnToBuilder = useRef<HTMLButtonElement>(null);
+  const wasExpanded = useRef(expanded);
+  useEffect(() => {
+    if (expanded) returnToBuilder.current?.focus();
+    else if (wasExpanded.current) tryLesson.current?.focus();
+    wasExpanded.current = expanded;
+  }, [expanded]);
   const mutationLock = useRef(false);
   const edit: Edit = (...args) => !mutationLock.current && commit(...args);
   const catalog = useComponentCatalog(doc, edit);
@@ -166,9 +161,22 @@ export default function CompositionBuilder({
       root.style.removeProperty("--builder-composer-height");
     };
   }, [expanded, appearancePreview]);
-  const noticeFailure = /Couldn't |could not|unsupported or invalid/i.test(
-    notice,
-  );
+  const documentNotice =
+    /^(Saved on this device\.|Saved to your account\.)$/.test(notice)
+      ? ""
+      : notice;
+  const noticeFailure =
+    /Couldn't |could not|unsupported or invalid|failed|unsaved/i.test(
+      documentNotice,
+    );
+  const documentFeedback = documentNotice
+    ? makeFeedback(
+        documentNotice,
+        noticeFailure ? "error" : "info",
+        noticeFailure ? "Update experiment" : "Experiment updated",
+        "document.action",
+      )
+    : null;
   const saveLabel = saving
     ? "Saving…"
     : isRunnableDocument(doc)
@@ -205,7 +213,40 @@ export default function CompositionBuilder({
         {doc.lesson.title || "Untitled experiment"}
       </h1>
       <header className="builder-toolbar composition-toolbar">
-        <Link href="/experiments">← Experiments</Link>
+        <Link
+          href="/"
+          onNavigate={(event) => {
+            event.preventDefault();
+            onHome();
+          }}
+        >
+          Home
+        </Link>
+        {expanded ? (
+          <button
+            type="button"
+            className="composition-return"
+            ref={returnToBuilder}
+            aria-label="Return to builder"
+            onClick={() => {
+              setSelected("");
+              setAppearancePreview(false);
+              onExpanded(false);
+            }}
+          >
+            <BuilderIcon name="back" /> Return to builder
+          </button>
+        ) : (
+          <Link
+            href="/experiments"
+            onClick={(event) => {
+              event.preventDefault();
+              onExit();
+            }}
+          >
+            <BuilderIcon name="back" /> Experiments
+          </Link>
+        )}
         <label className="composition-document-title">
           <span className="builder-sr-only">Experiment title</span>
           <input
@@ -226,9 +267,24 @@ export default function CompositionBuilder({
             }
           />
         </label>
-        <output className="composition-save-state">
-          {saving ? "Saving…" : saveState}
-        </output>
+        {!expanded && (
+          <details
+            data-workspace-menu
+            name="builder-toolbar-menu"
+            className="composition-storage composition-view-menu"
+            inert={ai.busy}
+          >
+            <summary
+              aria-label={`Storage details: ${saving ? "Saving…" : saveState}`}
+            >
+              <span className="composition-save-state" aria-live="polite">
+                {saving ? "Saving…" : saveState}
+              </span>
+              <BuilderIcon name="info" />
+            </summary>
+            <div>{storageNotice}</div>
+          </details>
+        )}
         {!expanded && (
           <>
             <button type="button" disabled={!canUndo || ai.busy} onClick={undo}>
@@ -249,26 +305,16 @@ export default function CompositionBuilder({
                 {saving ? "Saving…" : "Save"}
               </span>
             </button>
-            <details
-              ref={documentMenu}
-              inert={ai.busy}
-              className="composition-document-menu composition-view-menu"
-            >
-              <summary aria-label="More document actions">More</summary>
-              <div>
-                {history}
-                {fileMenu}
-              </div>
-            </details>
           </>
         )}
-        <button
-          type="button"
-          disabled={ai.busy}
-          className="builder-primary"
-          aria-label={expanded ? "Return to builder" : "Try lesson ↗"}
-          onClick={() => {
-            if (!expanded) {
+        {!expanded && (
+          <button
+            type="button"
+            disabled={ai.busy}
+            className="builder-primary"
+            ref={tryLesson}
+            aria-label="Try lesson ↗"
+            onClick={() => {
               try {
                 validateRunnableDocument(doc, false);
                 catalog.report("");
@@ -280,46 +326,55 @@ export default function CompositionBuilder({
                   setSelected("lesson");
                 return;
               }
-            }
-            setSelected("");
-            setAppearancePreview(false);
-            onExpanded(!expanded);
-          }}
-        >
-          <span className="toolbar-full-label">
-            {expanded ? "Return to builder" : "Try lesson ↗"}
-          </span>
-          <span className="toolbar-short-label">
-            {expanded ? "Edit" : "Try ↗"}
-          </span>
-        </button>
-      </header>
-      {!expanded && (
-        <div className="builder-project-toolbar" inert={ai.busy}>
-          {lifecycle}
-        </div>
-      )}
-      {!expanded && <div inert={ai.busy}>{storageNotice}</div>}
-      {error && (
-        <section className="builder-feedback is-error" role="alert">
-          <strong>Preview is using the last valid draft</strong>
-          <p>{error}</p>
-          <button type="button" onClick={() => setTab("Connections")}>
-            Review connections
+              setSelected("");
+              setAppearancePreview(false);
+              onExpanded(true);
+            }}
+          >
+            <span className="toolbar-full-label">
+              Try lesson <BuilderIcon name="external" />
+            </span>
+            <span className="toolbar-short-label">
+              Try <BuilderIcon name="external" />
+            </span>
           </button>
-        </section>
-      )}
-      {!error && notice && (
-        <FeedbackView
-          message={makeFeedback(
-            notice,
-            noticeFailure ? "error" : "info",
-            "Update document",
-            "document.action",
+        )}
+      </header>
+      {!selected && !libraryOpen && !saveOpen && (
+        <>
+          {error ? (
+            <FeedbackView
+              floating
+              message={{
+                ...makeFeedback(
+                  error,
+                  "error",
+                  "apply experiment changes",
+                  "document.validation",
+                ),
+                title: "Preview uses the last valid draft",
+              }}
+            >
+              <button type="button" onClick={() => setTab("Connections")}>
+                Review connections
+              </button>
+            </FeedbackView>
+          ) : (
+            <FeedbackView
+              floating
+              message={documentFeedback}
+              onDismiss={onNoticeDismiss}
+            />
           )}
-        />
+          {!documentFeedback && !error && (
+            <FeedbackView
+              floating
+              message={catalog.message}
+              onDismiss={() => catalog.report("")}
+            />
+          )}
+        </>
       )}
-      {!libraryOpen && <FeedbackView message={catalog.message} />}
       {!expanded && (
         <nav
           className="builder-tabs composition-tabs"
@@ -348,42 +403,64 @@ export default function CompositionBuilder({
             type="button"
             disabled={ai.busy}
             data-composition-add
+            aria-label="+ Add component"
             onClick={() => openLibrary()}
           >
-            + Add component
+            <span className="toolbar-full-label">+ Add component</span>
+            <span className="toolbar-short-label" aria-hidden="true">
+              + Add
+            </span>
           </button>
-          {tab === "Build" && !ai.busy && (
-            <button
-              type="button"
-              className="composition-appearance-toggle"
-              aria-label={
-                appearancePreview
-                  ? "Show builder controls"
-                  : "Preview experiment appearance"
+          {/* biome-ignore lint/a11y/useKeyWithClickEvents: Child controls emit click on keyboard activation. */}
+          <details
+            data-workspace-menu
+            name="builder-toolbar-menu"
+            className="composition-view-menu composition-settings-menu"
+            inert={ai.busy}
+            onClick={(event) => {
+              if ((event.target as HTMLElement).closest("button")) {
+                event.currentTarget.open = false;
+                event.currentTarget.querySelector("summary")?.focus();
               }
-              aria-pressed={appearancePreview}
-              title={
-                appearancePreview
-                  ? "Show builder controls"
-                  : "Hide builder controls and preview the experiment appearance"
-              }
-              onClick={() => {
-                setAppearancePreview((value) => !value);
-                setSelected("");
-              }}
-            >
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
-                <circle cx="12" cy="12" r="2.75" />
-              </svg>
-              <span>{appearancePreview ? "Editing view" : "Preview"}</span>
-            </button>
-          )}
-          <details className="composition-view-menu" inert={ai.busy}>
-            <summary>Lesson settings</summary>
+            }}
+          >
+            <summary aria-label="Lesson settings">
+              <span className="toolbar-full-label">Lesson settings</span>
+              <span className="toolbar-short-label" aria-hidden="true">
+                <BuilderIcon name="settings" />
+              </span>
+            </summary>
             <div>
+              {tab === "Build" && !ai.busy && (
+                <button
+                  type="button"
+                  className="composition-appearance-toggle"
+                  aria-label={
+                    appearancePreview
+                      ? "Show builder controls"
+                      : "Preview experiment appearance"
+                  }
+                  aria-pressed={appearancePreview}
+                  title={
+                    appearancePreview
+                      ? "Show builder controls"
+                      : "Hide builder controls and preview the experiment appearance"
+                  }
+                  onClick={() => {
+                    setAppearancePreview((value) => !value);
+                    setSelected("");
+                  }}
+                >
+                  <BuilderIcon name="eye" />
+                  <span>
+                    {appearancePreview
+                      ? "Show editing controls"
+                      : "Preview appearance"}
+                  </span>
+                </button>
+              )}
               <button type="button" onClick={() => setSelected("lesson")}>
-                Title and layout
+                <BuilderIcon name="layout" /> Title and layout
               </button>
               <button
                 type="button"
@@ -392,10 +469,14 @@ export default function CompositionBuilder({
                   setTab("Build");
                 }}
               >
+                <BuilderIcon name="canvases" />{" "}
                 {mobile ? "Desktop preview" : "Mobile preview"}
               </button>
             </div>
           </details>
+          <div className="composition-actions" inert={ai.busy}>
+            {fileMenu}
+          </div>
         </nav>
       )}
 
@@ -545,30 +626,47 @@ export default function CompositionBuilder({
           "Lesson settings"
         }
         onClose={() => setSelected("")}
-        footerLabel={
-          /^displays\/(DataTable|Chart|Histogram|Heatmap)$/.test(
-            current?.definition ?? "",
-          )
-            ? "Close settings"
-            : "Done"
+        icon={
+          current
+            ? definitionDiscovery(publicDefinition(current.definition)).group
+            : "settings"
         }
-        footerPrimary={
-          !/^displays\/(DataTable|Chart|Histogram|Heatmap)$/.test(
-            current?.definition ?? "",
-          )
+        footerActions={
+          current && hasControlSettings(current.definition) ? (
+            <button
+              type="submit"
+              form={`control-settings-${current.id}`}
+              aria-label="Apply control settings"
+              className="builder-primary"
+            >
+              Apply changes
+            </button>
+          ) : undefined
+        }
+        footerLabel="Close settings"
+        footerPrimary={false}
+        footerNote={
+          current
+            ? hasControlSettings(current.definition)
+              ? "Apply to update this control."
+              : "Apply buttons commit form changes; other settings update immediately."
+            : "Lesson text and layout changes save as you edit."
         }
         wide={selected === "lesson" || !!manualDefinition(current)}
       >
-        <FeedbackView message={catalog.message} />
-        {notice && (
-          <FeedbackView
-            message={makeFeedback(
-              notice,
-              noticeFailure ? "error" : "info",
-              "Update document",
-              "document.action",
-            )}
-          />
+        {selected && (
+          <>
+            <FeedbackView
+              message={catalog.message}
+              floating={catalog.message?.severity !== "error"}
+              onDismiss={() => catalog.report("")}
+            />
+            <FeedbackView
+              floating
+              message={documentFeedback}
+              onDismiss={onNoticeDismiss}
+            />
+          </>
         )}
         {regeneration && (
           <dialog
@@ -748,6 +846,7 @@ export default function CompositionBuilder({
         )}
         {current && !manualDefinition(current) && (
           <button
+            className="settings-delete"
             type="button"
             onClick={() => {
               if (
@@ -760,7 +859,7 @@ export default function CompositionBuilder({
                 setSelected("");
             }}
           >
-            Delete component
+            <BuilderIcon name="trash" /> Delete component
           </button>
         )}
       </ComponentDialog>
@@ -768,11 +867,8 @@ export default function CompositionBuilder({
         catalog={catalog}
         open={libraryOpen && !ai.busy}
         onClose={() => setLibraryOpen(false)}
-        onAiBuild={(prompt) => {
-          ai.onPrompt(prompt);
-          setLibraryOpen(false);
-        }}
-        aiBusy={ai.busy}
+        documentFeedback={documentFeedback}
+        onNoticeDismiss={onNoticeDismiss}
       />
       <SaveCompositeDialog
         catalog={catalog}
@@ -814,12 +910,12 @@ export default function CompositionBuilder({
                   ? [
                       "What happens if the spring is stronger?",
                       "Make it stop bouncing so much",
-                      "Add another control I can change",
+                      "Add a chart",
                     ]
                   : [
-                      "Make it easier to explore",
-                      "Show me another example",
-                      "Add another control I can change",
+                      "Add a slider I can change",
+                      "Add an example to compare",
+                      "Add a chart",
                     ]
                 : [
                     "Show me how springs work",
@@ -837,6 +933,11 @@ export default function CompositionBuilder({
             lastRequest={ai.lastRequest}
             onSubmit={ai.onPrompt}
             onStop={ai.cancel}
+            onOpenLibrary={() =>
+              openLibrary(
+                /\b(chart|graph|plot)\b/i.test(ai.draft) ? "displays" : "all",
+              )
+            }
             submitLabel={
               doc.authored?.nodes?.length
                 ? "Update experiment"

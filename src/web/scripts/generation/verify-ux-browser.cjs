@@ -165,7 +165,7 @@ async function exerciseRemix(page, c, source, dir) {
   });
   await field.fill(authoring.value);
   await dialog.getByRole("button", { name: "Apply changes" }).click();
-  await dialog.getByRole("button", { name: "Done", exact: true }).click();
+  await dialog.getByRole("button", { name: "Close settings", exact: true }).click();
   await page
     .getByRole("button", { name: "Save experiment", exact: true })
     .click();
@@ -188,7 +188,7 @@ async function exerciseRemix(page, c, source, dir) {
     authoring.value,
     "Authored starting value did not survive builder reload",
   );
-  await reopened.getByRole("button", { name: "Done", exact: true }).click();
+  await reopened.getByRole("button", { name: "Close settings", exact: true }).click();
   await h.capture(page, dir, "remix-reloaded");
   await page.getByRole("button", { name: "Try lesson ↗", exact: true }).click();
   await page.locator(".board-item").first().waitFor();

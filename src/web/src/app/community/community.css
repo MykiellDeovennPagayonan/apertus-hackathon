@@ -3,22 +3,6 @@
   margin: auto;
   padding: 24px clamp(18px, 4vw, 48px) 80px;
 }
-.community-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  padding: 12px 0 28px;
-  border-bottom: 1px solid var(--border);
-}
-.community-header > a {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--accent);
-  text-decoration: none;
-}
-.community-header nav,
 .project-actions,
 .project-filters,
 .community-tabs {
@@ -71,8 +55,7 @@
   color: var(--accent);
 }
 .community-page button,
-.project-dialog button,
-.builder-lifecycle button {
+.project-dialog button {
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 9px 13px;
@@ -90,10 +73,10 @@
   gap: 7px;
   margin: 12px 0;
 }
-.community-page input,
+.community-page input:where(:not([type="checkbox"]):not([type="radio"])),
 .community-page textarea,
 .community-page select,
-.project-dialog input,
+.project-dialog input:where(:not([type="checkbox"]):not([type="radio"])),
 .project-dialog textarea {
   padding: 10px;
   border: 1px solid var(--border);
@@ -155,12 +138,6 @@
   min-height: 360px;
   position: relative;
 }
-.builder-lifecycle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
 .builder-local-notice {
   padding: 8px 16px;
   border-bottom: 1px solid var(--border);
@@ -171,24 +148,98 @@
   color: var(--accent);
 }
 @media (max-width: 640px) {
-  .community-header nav {
-    gap: 9px;
-    font-size: 14px;
-  }
   .project-dialog {
     padding: 20px;
-  }
-  .builder-lifecycle button {
-    padding: 6px 8px;
-    font-size: 12px;
   }
   .project-filters label {
     width: 100%;
   }
 }
 
-.builder-project-toolbar {
-  padding: 8px 16px;
-  border-bottom: 1px solid var(--border);
-  background: var(--panel);
+/* Text controls reserve breathing room; native selection controls stay compact. */
+.community-page button,
+.project-dialog button {
+  min-height: 44px;
+  font: inherit;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.community-page label,
+.project-dialog label {
+  min-width: 0;
+}
+.project-filters label {
+  flex: 1 1 180px;
+}
+.community-page :is(input, textarea, select),
+.project-dialog :is(input, textarea, select) {
+  min-width: 0;
+}
+.project-check input[type="checkbox"] {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin: 3px 0 0;
+  accent-color: var(--accent);
+}
+.project-check > span {
+  min-width: 0;
+  line-height: 1.6;
+}
+.project-dialog > h2 {
+  margin: 0 0 16px;
+  font-size: 22px;
+  line-height: 1.3;
+}
+.project-dialog > p {
+  line-height: 1.6;
+}
+.project-dialog > details {
+  margin: 20px 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.project-dialog > details > summary {
+  cursor: pointer;
+  line-height: 1.5;
+}
+.project-dialog > .project-actions {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  justify-content: flex-end;
+}
+.project-dialog .project-check {
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #f2f5ed;
+}
+.project-grid article {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.project-grid article > h2 {
+  margin: 12px 0 8px;
+}
+.project-grid article > p {
+  line-height: 1.6;
+  margin: 8px 0;
+}
+@media (max-width: 640px) {
+  .project-dialog > .project-actions > button {
+    flex: 1 1 120px;
+  }
+  .project-editor {
+    padding: 18px;
+  }
+}
+
+.community-page input:where(:not([type="checkbox"]):not([type="radio"])),
+.community-page select,
+.project-dialog input:where(:not([type="checkbox"]):not([type="radio"])) {
+  min-height: 44px;
 }

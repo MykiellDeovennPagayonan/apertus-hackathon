@@ -86,6 +86,24 @@ export function ScienceInvestigation({
       : field
         ? s.settings[field.key]
         : 0;
+  if (s.kind === "cell")
+    return (
+      <div>
+        {settings.some((f) => f.key === "error") && (
+          <label className="science-error-toggle">
+            <input
+              type="checkbox"
+              role="switch"
+              aria-checked={!!s.settings.error}
+              checked={!!s.settings.error}
+              onChange={(e) => send("SET_ERROR", Number(e.target.checked))}
+            />
+            Separation error
+          </label>
+        )}
+        {error && <p role="alert">{error}</p>}
+      </div>
+    );
   return (
     <>
       <button

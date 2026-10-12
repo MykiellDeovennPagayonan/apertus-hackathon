@@ -7,6 +7,9 @@ const {
   scienceCommand,
   scienceObservation,
 } = load("src/simulations/domains/science/index.ts");
+const { learnerCaption } = load(
+  "src/simulations/components/views/science/learnerPresentation.ts",
+);
 const { waterTotal } = load(
   "src/simulations/components/systems/science/environment.ts",
 );
@@ -89,8 +92,10 @@ for (const [i, m] of scienceModels.entries()) {
       scienceObservation(s).metrics[0].includes("Matching"),
       "Normal daughter sets match",
     );
+    const stage = s.time;
     run("SET", { key: "error", value: 1 });
-    for (let j = 0; j < 7; j++) s = scienceAdvance(s);
+    assert.equal(s.time, stage, "Error toggle keeps the current stage");
+    assert.match(learnerCaption({ ...s, time: 4 }), /same end/);
     ok(
       scienceObservation(s).metrics[0].includes("Unequal"),
       "Error daughter allocation distinguished",

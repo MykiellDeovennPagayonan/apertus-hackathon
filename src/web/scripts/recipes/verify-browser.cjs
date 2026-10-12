@@ -234,8 +234,20 @@ fs.mkdirSync(captures, { recursive: true });
               .getByRole("textbox", { name: "Width · m", exact: true })
               .fill("100");
           else if (recipeCase.slug === "coordinates") {
+            assert.equal(
+              await page
+                .locator('[data-component-definition="displays/Readout"]')
+                .count(),
+              0,
+            );
+            assert.equal(
+              await page
+                .locator(".board-content:has(.scalar-control)")
+                .evaluate((element) => getComputedStyle(element).padding),
+              "24px",
+            );
             await page
-              .getByRole("textbox", { name: "X coordinate", exact: true })
+              .getByRole("textbox", { name: "X · horizontal", exact: true })
               .fill("-10");
             await page
               .getByRole("button", {
@@ -244,9 +256,7 @@ fs.mkdirSync(captures, { recursive: true });
               })
               .focus();
             await page.keyboard.press("ArrowRight");
-            await page
-              .getByText("Point (-9, 3) · x first, then y", { exact: true })
-              .waitFor();
+            await page.getByText("Point P (−9, 3)", { exact: true }).waitFor();
           } else {
             await clickLessonButton("Six-sided die");
             await page
@@ -302,8 +312,8 @@ fs.mkdirSync(captures, { recursive: true });
               ["Height · m", "0"],
             ],
             coordinates: [
-              ["X coordinate", "11"],
-              ["Y coordinate", "-11"],
+              ["X · horizontal", "11"],
+              ["Y · vertical", "-11"],
             ],
             probability: [["Number of trials", "10001"]],
           };
@@ -425,12 +435,13 @@ fs.mkdirSync(captures, { recursive: true });
       .filter({ hasText: /32/ })
       .waitFor();
     await open("coordinates");
-    await page
-      .getByRole("textbox", { name: "X coordinate", exact: true })
-      .fill("-4");
-    await page
-      .getByText("Point (-4, 3) · x first, then y", { exact: true })
-      .waitFor();
+    const coordinateX = page.getByRole("textbox", {
+      name: "X · horizontal",
+      exact: true,
+    });
+    await coordinateX.fill("-4");
+    await coordinateX.blur();
+    await page.getByText("Point P (−4, 3)", { exact: true }).waitFor();
     await open("probability");
     await clickLessonButton("Six-sided die");
     await page

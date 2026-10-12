@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { validateRecipe } from "../../runtime/authoring/recipes";
 import type { CompositeRecipe } from "../../runtime/authoring/types";
+import { BuilderIcon } from "../BuilderIcon";
 import { FeedbackView } from "./FeedbackView";
 import { type Feedback, makeFeedback } from "./feedback";
 import type { ComponentCatalog } from "./useComponentCatalog";
@@ -97,8 +98,8 @@ export function RecipeImport({
     recipe && catalog.allRecipes.some((r) => r.id === recipe.id);
   return (
     <section className="catalog-import-flow" aria-label="Import assembly">
-      <button type="button" onClick={onBack}>
-        ← Back to results
+      <button className="catalog-back" type="button" onClick={onBack}>
+        <BuilderIcon name="back" /> Back to results
       </button>
       <h3 tabIndex={-1} ref={heading}>
         Import a saved assembly

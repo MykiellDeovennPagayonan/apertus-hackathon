@@ -213,7 +213,7 @@ async function main() {
       .getByRole("button", { name: /^Save (draft|experiment)$/ })
       .click();
     await page
-      .getByText("Saved to your account.", { exact: true })
+      .getByText("Saved to account", { exact: true })
       .first()
       .waitFor();
     assert.equal(
@@ -249,9 +249,9 @@ async function main() {
       .first()
       .click();
     await page
-      .getByRole("heading", { name: "Keep your changes first?" })
+      .getByRole("heading", { name: "Save changes before leaving?" })
       .waitFor();
-    await page.getByRole("button", { name: "Cancel", exact: true }).click();
+    await page.getByRole("button", { name: "Keep editing", exact: true }).click();
     assert.equal(await title.inputValue(), "Unsaved edit");
     await page
       .getByRole("button", { name: "Clear canvas", exact: true })
@@ -332,7 +332,7 @@ async function main() {
       .getByRole("button", { name: /^Save (draft|experiment)$/ })
       .click();
     await guestPage
-      .getByText("Saved on this device.", { exact: true })
+      .getByText("Saved on device", { exact: true })
       .first()
       .waitFor();
     await guestPage.goto(

@@ -18,6 +18,7 @@
   margin-bottom: 12px;
 }
 .composition-workspace {
+  isolation: isolate;
   display: grid;
   grid-template-columns: 190px minmax(0, 1fr);
   align-items: start;
@@ -1031,14 +1032,14 @@ never beside the workspace. */
 }
 .composition-builder .composition-toolbar {
   display: grid;
-  grid-template-columns: auto minmax(140px, 1fr) auto repeat(5, auto);
+  grid-template-columns: auto minmax(100px, 1fr) auto repeat(4, auto);
   gap: 8px;
-  padding: 14px 24px;
+  padding: 6px 16px;
 }
 .composition-toolbar > a {
   font-size: 13px;
   text-decoration: none;
-  margin-right: 12px;
+  margin-right: 4px;
   white-space: nowrap;
 }
 .manual-builder .composition-document-title {
@@ -1060,9 +1061,8 @@ never beside the workspace. */
   font-size: 11px;
   color: var(--muted);
   white-space: nowrap;
-  margin: 0 10px;
 }
-.composition-toolbar > button {
+.manual-builder .composition-toolbar > button {
   white-space: nowrap;
   font-size: 13px;
 }
@@ -1076,18 +1076,17 @@ never beside the workspace. */
 .composition-document-menu > div > details {
   margin-bottom: 8px;
 }
-.composition-document-menu .builder-action-history > div,
-.composition-document-menu .builder-file-menu > div {
+.composition-document-menu .builder-action-history > div {
   position: static;
   width: 100%;
   box-shadow: none;
   max-height: 240px;
 }
 .composition-builder .composition-tabs {
-  padding: 12px 24px;
+  padding: 4px 16px;
   display: flex;
   flex-wrap: nowrap;
-  gap: 12px;
+  gap: 8px;
   align-items: center;
 }
 .composition-mode-switch {
@@ -1105,7 +1104,7 @@ never beside the workspace. */
   border: 0;
   background: transparent;
   font-size: 13px;
-  min-height: 38px;
+  min-height: 36px;
 }
 .manual-builder .composition-mode-switch button[aria-pressed="true"] {
   background: var(--panel);
@@ -1119,7 +1118,7 @@ never beside the workspace. */
   background: transparent;
   font-size: 13px;
 }
-.manual-builder .composition-tabs > .composition-appearance-toggle {
+.manual-builder .composition-appearance-toggle {
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -1133,9 +1132,7 @@ never beside the workspace. */
   stroke: currentColor;
   stroke-width: 1.8;
 }
-.manual-builder
-  .composition-tabs
-  > .composition-appearance-toggle[aria-pressed="true"] {
+.manual-builder .composition-appearance-toggle[aria-pressed="true"] {
   color: #fff;
   border-color: var(--accent);
   background: var(--accent);
@@ -1146,18 +1143,8 @@ never beside the workspace. */
 .toolbar-short-label {
   display: none;
 }
-@media (min-width: 701px) and (max-width: 1050px) {
-  .composition-builder .composition-toolbar {
-    grid-template-columns: auto minmax(120px, 1fr) repeat(5, auto);
-  }
-  .composition-save-state {
-    grid-row: 2;
-    grid-column: 2;
-    margin: -4px 8px 0;
-  }
-}
 @media (max-width: 700px) {
-  .composition-toolbar > button {
+  .manual-builder .composition-toolbar > button {
     font-size: 12px;
     padding: 8px;
   }
@@ -1178,15 +1165,10 @@ never beside the workspace. */
     padding: 8px;
   }
 
-  .composition-save-state {
-    grid-row: 3;
-    grid-column: 1 / -1;
-    margin: 0;
-  }
   .composition-builder .composition-toolbar {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 6px;
-    padding: 10px 12px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 4px;
+    padding: 6px 12px;
   }
   .composition-toolbar > a {
     grid-column: 1 / 3;
@@ -1197,35 +1179,33 @@ never beside the workspace. */
   .manual-builder .composition-document-title input {
     font-size: 15px;
   }
+  .composition-toolbar > .composition-storage {
+    grid-row: 2;
+    grid-column: 1 / 3;
+  }
+  .composition-storage > div {
+    right: auto;
+    left: 0;
+  }
   .composition-toolbar > .builder-primary {
     grid-row: 2;
-    grid-column: 5;
+    grid-column: 6;
   }
   .composition-toolbar > .composition-save-action {
     grid-row: 2;
-    grid-column: 4;
+    grid-column: 5;
   }
-  .composition-toolbar .toolbar-full-label {
+  .composition-toolbar .toolbar-full-label,
+  .composition-tabs .toolbar-full-label {
     display: none;
   }
-  .composition-toolbar .toolbar-short-label {
+  .composition-toolbar .toolbar-short-label,
+  .composition-tabs .toolbar-short-label {
     display: inline;
   }
-  .composition-toolbar > .composition-document-menu {
-    grid-row: 2;
-    grid-column: 3;
-  }
   .composition-builder .composition-tabs {
-    padding: 10px 12px;
-    gap: 6px;
-  }
-  .composition-tabs > details > summary {
-    font-size: 0;
-    padding: 8px;
-  }
-  .composition-tabs > details > summary::after {
-    content: "⚙";
-    font-size: 18px;
+    padding: 4px 12px;
+    gap: 4px;
   }
   .catalog-controls {
     padding: 12px;
@@ -1982,16 +1962,113 @@ never beside the workspace. */
     bottom: 78px;
   }
 }
-/* Keep the mode switch intact at compact widths: actions wrap instead of overlapping it. */
-.composition-builder .composition-mode-switch {
+/* Keep authoring modes together while the secondary actions shrink. */
+.composition-builder .composition-mode-switch,
+.composition-actions {
   flex-shrink: 0;
 }
-@media (max-width: 480px) {
-  .composition-builder .composition-tabs {
-    flex-wrap: wrap;
+.composition-builder.is-expanded .composition-toolbar {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+.manual-builder .composition-return {
+  color: var(--accent);
+  background: transparent;
+  border-color: transparent;
+  padding-inline: 4px;
+}
+.composition-builder.is-expanded .composition-document-title {
+  grid-column: auto;
+}
+.manual-builder .composition-storage > summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 4px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.manual-builder .composition-storage > summary::before {
+  display: none;
+}
+.composition-settings-menu > div {
+  z-index: 60;
+  box-shadow: 0 8px 24px #30362e20;
+}
+.composition-storage > div {
+  width: min(320px, calc(100vw - 24px));
+  line-height: 1.6;
+  z-index: 60;
+  box-shadow: 0 8px 24px #30362e20;
+}
+.composition-storage .builder-local-notice {
+  padding: 0;
+  border: 0;
+}
+.composition-actions > details > summary {
+  min-height: 44px;
+  padding: 8px;
+}
+.composition-actions .composition-document-menu > div {
+  position: absolute;
+  z-index: 60;
+  right: 0;
+  left: auto;
+  transform: none;
+  width: min(300px, calc(100vw - 24px));
+  max-height: min(560px, calc(100dvh - 170px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-shadow: 0 8px 24px #30362e20;
+}
+.composition-document-menu > div > a {
+  display: block;
+  padding: 10px 14px;
+  min-height: 44px;
+  color: var(--accent);
+  text-decoration: none;
+  border-radius: 8px;
+}
+.composition-document-menu > div > button {
+  text-align: left;
+}
+.composition-document-menu > div > a:hover {
+  background: var(--bg);
+}
+.manual-builder .composition-document-menu .composition-clear-action {
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  margin-top: 12px;
+  padding-top: 14px;
+  color: var(--danger, #a43b32);
+}
+@media (min-width: 701px) and (max-width: 1050px) {
+  .composition-toolbar .toolbar-full-label {
+    display: none;
   }
-  .composition-builder .composition-tabs > details {
-    margin-left: 0;
+  .composition-toolbar .toolbar-short-label {
+    display: inline;
+  }
+}
+@media (max-width: 480px) {
+  .manual-builder .composition-storage > summary {
+    gap: 3px;
+  }
+  .composition-save-state {
+    white-space: normal;
+    line-height: 1.3;
+  }
+  .manual-builder .composition-settings-menu > summary,
+  .manual-builder .composition-document-menu > summary {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px;
+    justify-content: center;
+  }
+  .manual-builder .composition-settings-menu > summary::before,
+  .manual-builder .composition-document-menu > summary::before {
+    display: none;
   }
 }
 
@@ -2019,7 +2096,6 @@ never beside the workspace. */
   min-height: 24px !important;
   padding: 2px 0 !important;
 }
-.builder-composer .command-bar__ideas,
 .builder-composer .command-bar__send {
   box-sizing: border-box;
 }
@@ -2030,50 +2106,6 @@ never beside the workspace. */
   }
 }
 
-.catalog-ai-builder {
-  margin-bottom: 12px;
-  padding: 10px 14px;
-  background: color-mix(
-    in srgb,
-    var(--accent, #3b82f6) 8%,
-    var(--panel, #ffffff)
-  );
-  border: 1px solid
-    color-mix(in srgb, var(--accent, #3b82f6) 24%, var(--border, #cccccc));
-  border-radius: 8px;
-}
-.catalog-ai-label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink);
-}
-.catalog-ai-input-row {
-  display: flex;
-  gap: 8px;
-}
-.catalog-ai-input-row input {
-  flex: 1;
-  padding: 8px 12px;
-  border: 1px solid var(--border, #ccc);
-  border-radius: 6px;
-  font-size: 13px;
-  background: var(--panel, #fff);
-  color: var(--ink);
-}
-.catalog-ai-input-row button {
-  padding: 8px 14px;
-  background: var(--ink, #30362e);
-  color: var(--paper, #fff);
-  border: none;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-}
 .catalog-ai-input-row button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
