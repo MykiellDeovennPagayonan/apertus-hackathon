@@ -28,11 +28,10 @@ export const scienceSpecs: readonly ScienceSpec[] = [
         "error",
         "Separation scenario",
         0,
-        "Apply and restart to explore an unequal chromosome allocation.",
+        "Send both copies of chromosome A to one daughter cell.",
         {
           max: 1,
           options: ["Normal division", "Separation error"],
-          restart: true,
           advanced: true,
         },
       ),

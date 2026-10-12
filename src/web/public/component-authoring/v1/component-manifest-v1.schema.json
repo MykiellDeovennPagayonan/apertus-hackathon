@@ -1,0 +1,440 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "formatVersion": {
+      "const": 1
+    },
+    "apiVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 160,
+      "pattern": "^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "settings": {
+      "type": "object",
+      "maxProperties": 64,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z][a-zA-Z0-9_-]{0,63}$",
+        "not": {
+          "enum": [
+            "__proto__",
+            "prototype",
+            "constructor",
+            "reset",
+            "RESET",
+            "source",
+            "settings",
+            "inputs"
+          ]
+        }
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "schema": {
+            "$ref": "#/$defs/valueSchema"
+          },
+          "unit": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "default": {}
+        },
+        "required": [
+          "description",
+          "schema",
+          "unit",
+          "default"
+        ]
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "maxProperties": 64,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z][a-zA-Z0-9_-]{0,63}$",
+        "not": {
+          "enum": [
+            "__proto__",
+            "prototype",
+            "constructor",
+            "reset",
+            "RESET",
+            "source",
+            "settings",
+            "inputs"
+          ]
+        }
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "schema": {
+            "$ref": "#/$defs/valueSchema"
+          },
+          "unit": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "default": {}
+        },
+        "required": [
+          "description",
+          "schema",
+          "unit",
+          "required"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "required": {
+                  "const": false
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "default"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "maxProperties": 64,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z][a-zA-Z0-9_-]{0,63}$",
+        "not": {
+          "enum": [
+            "__proto__",
+            "prototype",
+            "constructor",
+            "reset",
+            "RESET",
+            "source",
+            "settings",
+            "inputs"
+          ]
+        }
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "schema": {
+            "$ref": "#/$defs/valueSchema"
+          },
+          "unit": {
+            "type": "string",
+            "maxLength": 80
+          }
+        },
+        "required": [
+          "description",
+          "schema",
+          "unit"
+        ]
+      }
+    },
+    "actions": {
+      "type": "object",
+      "maxProperties": 64,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z][a-zA-Z0-9_-]{0,63}$",
+        "not": {
+          "enum": [
+            "__proto__",
+            "prototype",
+            "constructor",
+            "reset",
+            "RESET",
+            "source",
+            "settings",
+            "inputs"
+          ]
+        }
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "arguments": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/valueSchema"
+              },
+              {
+                "properties": {
+                  "type": {
+                    "const": "object"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "description",
+          "arguments"
+        ]
+      }
+    },
+    "clock": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "formatVersion",
+    "apiVersion",
+    "id",
+    "version",
+    "name",
+    "description",
+    "settings",
+    "inputs",
+    "outputs",
+    "actions",
+    "clock"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://apertus.local/component-authoring/v1/component-manifest-v1.schema.json",
+  "$defs": {
+    "valueSchema": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "number"
+            },
+            "minimum": {
+              "type": "number"
+            },
+            "maximum": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "maxLength": 80
+            }
+          },
+          "required": [
+            "type",
+            "minimum",
+            "maximum"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "integer"
+            },
+            "minimum": {
+              "type": "integer"
+            },
+            "maximum": {
+              "type": "integer"
+            },
+            "unit": {
+              "type": "string",
+              "maxLength": 80
+            }
+          },
+          "required": [
+            "type",
+            "minimum",
+            "maximum"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "boolean"
+            },
+            "description": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "string"
+            },
+            "minLength": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "maxLength": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "enum": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 64,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "minLength",
+            "maxLength"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "enum"
+            },
+            "values": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 64,
+              "items": {
+                "type": [
+                  "number",
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "required": [
+            "type",
+            "values"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "array"
+            },
+            "items": {
+              "$ref": "#/$defs/valueSchema"
+            },
+            "minItems": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "maxItems": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            }
+          },
+          "required": [
+            "type",
+            "items",
+            "minItems",
+            "maxItems"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "object"
+            },
+            "properties": {
+              "type": "object",
+              "maxProperties": 64,
+              "propertyNames": {
+                "not": {
+                  "enum": [
+                    "__proto__",
+                    "prototype",
+                    "constructor"
+                  ]
+                }
+              },
+              "additionalProperties": {
+                "$ref": "#/$defs/valueSchema"
+              }
+            },
+            "optional": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "properties"
+          ]
+        }
+      ]
+    }
+  },
+  "$comment": "The host additionally checks bound ordering, schema depth, defaults against value schemas, and optional-field membership."
+}

@@ -61,7 +61,7 @@ export function migrateControls(document: AuthoredDocument): AuthoredDocument {
       const command =
         target &&
         link &&
-        publicDefinition(target.definition, target.version).commands[
+        publicDefinition(target).commands[
           link.to.port
         ];
       const leaves = command ? parameterLeaves(command.arguments) : [];
@@ -96,7 +96,7 @@ export function migrateControls(document: AuthoredDocument): AuthoredDocument {
       : undefined;
     if (replacement) {
       validateValue(
-        publicDefinition(node.definition, node.version).configuration,
+        publicDefinition(node).configuration,
         node.configuration,
       );
       node.definition = `controls/${replacement}`;
@@ -112,7 +112,7 @@ export function migrateControls(document: AuthoredDocument): AuthoredDocument {
       node.configuration = { label };
     } else if (node.definition === "controls/ExplorationTask") {
       validateValue(
-        publicDefinition(node.definition, node.version).configuration,
+        publicDefinition(node).configuration,
         node.configuration,
       );
       const connection = upgraded.connections.find(

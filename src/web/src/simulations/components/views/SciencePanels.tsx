@@ -12,8 +12,8 @@ import type { ScienceState } from "../systems/science/contracts";
 import { cellStages } from "../systems/science/life";
 import { MotionContext, SnapshotContext } from "./recipe/contexts";
 import { learnerCaption } from "./science/learnerPresentation";
-import { ScienceInvestigation } from "./science/ScienceInvestigation";
 import { ScienceComparison } from "./science/ScienceComparison";
+import { ScienceInvestigation } from "./science/ScienceInvestigation";
 
 interface Props {
   node: ComponentInstance;
@@ -150,9 +150,26 @@ export function ScienceControls(props: Props) {
     );
     hint = "Follow the pollen between flowers";
   } else if (s.kind === "cell") {
-    actions = button(
-      s.time >= spec.limit ? "Watch division again" : "Next stage",
-      s.time >= spec.limit ? "RESET" : "STEP",
+    actions = (
+      <>
+        <button
+          type="button"
+          className="science-secondary"
+          disabled={!s.time}
+          onClick={() => {
+            if (!send("RESTART").accepted) return;
+            for (let i = 0; i < s.time - 1; i++)
+              if (!send("STEP").accepted) return;
+            send("SELECT", s.selected);
+          }}
+        >
+          Back
+        </button>
+        {button(
+          s.time >= spec.limit ? "Watch division again" : "Next stage",
+          s.time >= spec.limit ? "RESTART" : "STEP",
+        )}
+      </>
     );
   } else if (s.kind === "volcano") {
     actions = button(

@@ -13,11 +13,14 @@
 .builder-start * {
   box-sizing: border-box;
 }
-.manual-builder button,
+.manual-builder button:where(:not(.command-bar *)),
 .builder-start button,
-.manual-builder select,
-.manual-builder input:not([type="range"]):not([type="checkbox"]),
-.manual-builder textarea {
+.manual-builder select:where(:not(.command-bar *)),
+.manual-builder
+  input:where(
+    :not([type="range"]):not([type="checkbox"]):not([type="radio"])
+  ):where(:not(.command-bar *)),
+.manual-builder textarea:where(:not(.command-bar *)) {
   font: inherit;
   color: inherit;
   border: 1px solid var(--builder-border);
@@ -31,11 +34,11 @@
 .builder-start button {
   cursor: pointer;
 }
-.manual-builder button:disabled {
+.manual-builder button:disabled:where(:not(.command-bar *)) {
   opacity: 0.5;
   cursor: default;
 }
-.manual-builder :focus-visible,
+.manual-builder :focus-visible:where(:not(.command-bar *)),
 .builder-start :focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 3px;
@@ -52,30 +55,30 @@
 }
 .manual-builder input,
 .manual-builder select,
-.manual-builder textarea {
+.manual-builder textarea:where(:not(.command-bar *)) {
   min-width: 0;
 }
-.manual-builder textarea {
+.manual-builder textarea:where(:not(.command-bar *)) {
   min-height: 100px;
   resize: vertical;
   width: 100%;
 }
-.manual-builder h1,
-.manual-builder h2,
-.manual-builder h3 {
+.manual-builder h1:not(.recipe-lesson *),
+.manual-builder h2:not(.recipe-lesson *),
+.manual-builder h3:not(.recipe-lesson *) {
   line-height: 1.25;
 }
-.manual-builder h1 {
+.manual-builder h1:not(.recipe-lesson *) {
   font-size: 20px;
   margin: 0;
   min-width: 0;
   overflow-wrap: anywhere;
 }
-.manual-builder h2 {
+.manual-builder h2:not(.recipe-lesson *) {
   font-size: 20px;
   margin: 0 0 20px;
 }
-.manual-builder h3 {
+.manual-builder h3:not(.recipe-lesson *) {
   font-size: 16px;
   margin: 24px 0 12px;
 }

@@ -113,6 +113,57 @@ async function main() {
     1,
     "reopened revision updates existing local lesson",
   );
+  const projectile = premadeRecipe("projectile");
+  const original = { id: "saved-projectile", document: parseDocument(JSON.stringify(projectile)) };
+  storage.set("apertus-builder-library-v1", JSON.stringify([original]));
+  const session = { recipe: projectile, serialize: () => JSON.stringify(projectile) };
+  await persistRecipe(session);
+  let library = JSON.parse(storage.get("apertus-builder-library-v1"));
+  assert.equal(library.length, 2);
+  assert.deepEqual(library[0], original, "Autosave never overwrites a namesake");
+  assert.equal(library[1].document.lesson.title, `${projectile.title} (1)`);
+  assert.equal(library[1].document.authored.lesson.title, `${projectile.title} (1)`);
+  const savedId = library[1].id;
+  assert.equal(library[1].document.recipeMetadata.id, savedId);
+  await persistRecipe(session);
+  library = JSON.parse(storage.get("apertus-builder-library-v1"));
+  assert.equal(library.length, 2, "Later edits update the same saved copy");
+  assert.equal(library[1].id, savedId);
+  await persistRecipe({ recipe: projectile, serialize: () => JSON.stringify(projectile) });
+  library = JSON.parse(storage.get("apertus-builder-library-v1"));
+  assert.equal(library.length, 3);
+  assert.equal(library[2].document.lesson.title, `${projectile.title} (2)`);
+  const reopened = JSON.parse(await reopenAcceptedRecipe());
+  assert.equal(reopened.id, library[2].id);
+  await persistRecipe({ recipe: reopened, serialize: () => JSON.stringify(reopened) });
+  assert.equal(JSON.parse(storage.get("apertus-builder-library-v1")).length, 3);
+  library = JSON.parse(storage.get("apertus-builder-library-v1"));
+  const conflictSession = { recipe: reopened, serialize: () => JSON.stringify(reopened) };
+  library[2].document.lesson.instruction = "Changed in another tab";
+  library[2].document.authored.lesson.instruction = "Changed in another tab";
+  storage.set("apertus-builder-library-v1", JSON.stringify(library));
+  await assert.rejects(persistRecipe(conflictSession), /another tab/);
+  const legacy = { id: "legacy-unknown", document: { documentVersion: 999 } };
+  storage.set("apertus-builder-library-v1", JSON.stringify([legacy, null]));
+  await persistRecipe({ recipe: projectile, serialize: () => JSON.stringify(projectile) });
+  library = JSON.parse(storage.get("apertus-builder-library-v1"));
+  assert.deepEqual(library[0], legacy, "Unknown legacy records remain untouched");
+  assert.equal(library[1], null);
+  assert.equal(library.length, 3, "Legacy records cannot block new autosaves");
+  const generated = structuredClone(projectile);
+  generated.id = "generated/previous-session";
+  const generatedEntry = { id: generated.id, document: parseDocument(JSON.stringify(generated)) };
+  const namesake = structuredClone(generatedEntry);
+  namesake.id = "generated/other-session";
+  namesake.document.recipeMetadata.id = namesake.id;
+  storage.set("apertus-builder-library-v1", JSON.stringify([generatedEntry, namesake]));
+  storage.set("apertus-accepted-recipe-id", generated.id);
+  const generatedReopened = JSON.parse(await reopenAcceptedRecipe());
+  await persistRecipe({ recipe: generatedReopened, serialize: () => JSON.stringify(generatedReopened) });
+  assert.equal(JSON.parse(storage.get("apertus-builder-library-v1")).length, 2,
+    "Existing generated experiments update without deleting their save baseline");
+  assert.deepEqual(JSON.parse(storage.get("apertus-builder-library-v1")).find(x => x.id === namesake.id), namesake,
+    "Updating a generated experiment cannot delete another experiment with the same name");
   const created = {
     status: "created",
     recipe,

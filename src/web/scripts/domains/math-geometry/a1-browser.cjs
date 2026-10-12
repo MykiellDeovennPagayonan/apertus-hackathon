@@ -197,7 +197,7 @@ async function run(browser, slug, dir) {
       .fill(`A1 ${slug} ${Date.now()}`);
     await button("Save experiment").click();
     await page
-      .getByText("Saved on this device.", { exact: true })
+      .getByText("Saved on device", { exact: true })
       .first()
       .waitFor();
     await button("Try lesson ↗").click();

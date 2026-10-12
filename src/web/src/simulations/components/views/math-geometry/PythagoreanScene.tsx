@@ -6,14 +6,9 @@ export function PythagoreanScene({ instance }: { instance: ModelInstance }) {
     b = Number(instance.outputs.height);
   const c = Number(instance.outputs.ladderLength);
   const number = (value: number) => Number(value.toFixed(2)).toString();
-  const scale = 250 / Math.max(8, a, b);
+  const scale = 240 / Math.max(6, a, b);
   const footX = 60 + a * scale,
     contactY = 300 - b * scale;
-  const squareScale = Math.min(290 / (a + 2 * b), 290 / (2 * a + b));
-  const x = (value: number) => 450 + (value + b) * squareScale;
-  const y = (value: number) => 345 - (value + a) * squareScale;
-  const points = (vertices: number[][]) =>
-    vertices.map(([px, py]) => `${x(px)},${y(py)}`).join(" ");
   return (
     <section
       className="pythagorean-scene"
@@ -21,11 +16,11 @@ export function PythagoreanScene({ instance }: { instance: ModelInstance }) {
       data-responsive-height="content"
     >
       <svg
-        viewBox="0 0 780 395"
+        viewBox="-90 0 510 355"
         role="img"
-        aria-label={`A perpendicular wall and ground need a ${number(c)} metre ladder for ${number(a)} metres distance and ${number(b)} metres height. Squares on the legs add to the square on the ladder.`}
+        aria-label={`A perpendicular wall and ground need a ${number(c)} metre ladder for ${number(a)} metres distance and ${number(b)} metres height.`}
       >
-        <path d="M 60 35 V 300 H 360" className="pythagorean-wall" />
+        <path d="M 60 55 V 300 H 360" className="pythagorean-wall" />
         <path d="M 60 286 H 74 V 300" className="pythagorean-angle" />
         <line
           x1={footX}
@@ -36,76 +31,69 @@ export function PythagoreanScene({ instance }: { instance: ModelInstance }) {
           data-distance={a}
           data-height={b}
         />
+        <text x={48} y={(300 + contactY) / 2 + 22} textAnchor="end">
+          wall height
+        </text>
+        <text x={82} y={282}>
+          90°
+        </text>
         <circle cx={footX} cy={300} r={5} className="pythagorean-foot" />
         <text x={(60 + footX) / 2} y={330} textAnchor="middle">
-          {number(a)} m
+          a · {number(a)} m distance
         </text>
         <text x={48} y={(300 + contactY) / 2} textAnchor="end">
-          {number(b)} m
+          b · {number(b)} m
         </text>
         <text
           x={Math.max(95, (60 + footX) / 2 + 18)}
           y={(300 + contactY) / 2 - 15}
         >
-          {number(c)} m ladder
-        </text>
-        <text x={190} y={375} textAnchor="middle">
-          Wall and ground meet at 90°
-        </text>
-        <polygon
-          points={points([
-            [0, 0],
-            [a, 0],
-            [a, -a],
-            [0, -a],
-          ])}
-          className="pythagorean-square pythagorean-square--distance"
-        />
-        <polygon
-          points={points([
-            [0, 0],
-            [0, b],
-            [-b, b],
-            [-b, 0],
-          ])}
-          className="pythagorean-square pythagorean-square--height"
-        />
-        <polygon
-          points={points([
-            [a, 0],
-            [0, b],
-            [b, a + b],
-            [a + b, a],
-          ])}
-          className="pythagorean-square pythagorean-square--ladder"
-        />
-        <polygon
-          points={points([
-            [0, 0],
-            [a, 0],
-            [0, b],
-          ])}
-          className="pythagorean-triangle"
-        />
-        {a * squareScale >= 65 && (
-          <text x={x(a / 2)} y={y(-a / 2)} textAnchor="middle">
-            {number(Number(instance.outputs.distanceSquare))} m²
-          </text>
-        )}
-        {b * squareScale >= 65 && (
-          <text x={x(-b / 2)} y={y(b / 2)} textAnchor="middle">
-            {number(Number(instance.outputs.heightSquare))} m²
-          </text>
-        )}
-        <text x={x((a + b) / 2)} y={y((a + b) / 2)} textAnchor="middle">
-          {number(Number(instance.outputs.ladderSquare))} m²
-        </text>
-        <text x={595} y={375} textAnchor="middle">
-          {number(Number(instance.outputs.distanceSquare))} +{" "}
-          {number(Number(instance.outputs.heightSquare))} ={" "}
-          {number(Number(instance.outputs.ladderSquare))} m²
+          c · {number(c)} m ladder
         </text>
       </svg>
+      <div className="pythagorean-calculation">
+        <div>
+          <h3>Pythagorean theorem</h3>
+          <p className="pythagorean-equation">
+            a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup>
+          </p>
+        </div>
+        <div>
+          <p>Take the square root of both sides</p>
+          <p
+            className="pythagorean-equation"
+            role="math"
+            aria-label="c equals the square root of a squared plus b squared"
+          >
+            c ={" "}
+            <span className="pythagorean-root">
+              <span>√</span>
+              <span className="pythagorean-radicand">
+                a<sup>2</sup> + b<sup>2</sup>
+              </span>
+            </span>
+          </p>
+        </div>
+        <div className="pythagorean-worked">
+          <h3>Your ladder length</h3>
+          <p
+            className="pythagorean-equation"
+            role="math"
+            aria-label={`c equals the square root of ${number(a)} squared plus ${number(b)} squared, ${c === Number(number(c)) ? "equals" : "approximately"} ${number(c)} metres`}
+          >
+            c ={" "}
+            <span className="pythagorean-root">
+              <span>√</span>
+              <span className="pythagorean-radicand">
+                {number(a)}
+                <sup>2</sup> + {number(b)}
+                <sup>2</sup>
+              </span>
+            </span>{" "}
+            {c === Number(number(c)) ? "=" : "≈"} <strong>{number(c)} m</strong>
+          </p>
+        </div>
+      </div>
     </section>
   );
 }

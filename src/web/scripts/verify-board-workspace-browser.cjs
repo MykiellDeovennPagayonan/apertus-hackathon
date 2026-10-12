@@ -56,9 +56,11 @@ const document = canonicalDocument(authored);
     await page.goto(
       `${process.env.UX_TEST_URL || "http://127.0.0.1:43002"}/experiments/builder`,
     );
-    await page
-      .getByRole("button", { name: "Continue draft", exact: true })
-      .click();
+    const continueDraft = page.getByRole("button", {
+      name: "Continue draft",
+      exact: true,
+    });
+    if (await continueDraft.isVisible()) await continueDraft.click();
     await page.getByRole("button", { name: "Build", exact: true }).click();
     const viewport = page.locator(".board-viewport");
     const item = page.locator(".board-item").first();
@@ -80,6 +82,7 @@ const document = canonicalDocument(authored);
     await page
       .getByRole("button", { name: "Fit content", exact: true })
       .click();
+    await item.click({ position: { x: 30, y: 30 } });
     await handle.focus();
     await page.keyboard.press("Enter");
     const beforeSettings = await item.boundingBox();
@@ -92,6 +95,9 @@ const document = canonicalDocument(authored);
       "Opening settings does not resize or move content",
     );
     await page.keyboard.press("Escape");
+    await page.waitForFunction(
+      () => document.activeElement?.textContent?.trim() === "Board settings",
+    );
     assert.equal(
       await page
         .getByRole("button", { name: "Board settings", exact: true })
@@ -128,6 +134,7 @@ const document = canonicalDocument(authored);
     await page.getByLabel("Position and size", { exact: true }).press("Escape");
     await page.getByRole("button", { name: "Undo", exact: true }).click();
     const beforeNavigation = await draft();
+    await page.getByRole("button", { name: "Pan", exact: true }).click();
     await viewport.focus();
     for (let n = 0; n < 40; n++) await page.keyboard.press("ArrowRight");
     assert.ok(
@@ -171,6 +178,10 @@ const document = canonicalDocument(authored);
       await page
         .getByRole("button", { name: "Fit content", exact: true })
         .click();
+      const panToggle = page.getByRole("button", { name: "Pan", exact: true });
+      if ((await panToggle.getAttribute("aria-pressed")) === "true")
+        await panToggle.click();
+      await item.click({ position: { x: 30, y: 30 } });
       await handle.focus();
       await page.keyboard.press("Enter");
       await page.waitForTimeout(100);
@@ -234,7 +245,9 @@ const document = canonicalDocument(authored);
       await page
         .getByRole("button", { name: "Board settings", exact: true })
         .click();
-      const settings = await page.locator(".board-settings").boundingBox();
+      const settings = await page
+        .getByRole("dialog", { name: "Board settings", exact: true })
+        .boundingBox();
       assert.ok(
         settings.x >= 0 &&
           settings.x + settings.width <= width &&

@@ -1,3 +1,5 @@
+import { IMPORTED_HTML } from "../imported/contract";
+import { importedProvider } from "../imported/provider";
 import { publicDefinition } from "../../components/catalog";
 import {
   componentDefinitions,
@@ -216,7 +218,8 @@ for (const id of [
     measure: () => ({}),
   });
 export function runtimeProvider(node: ComponentInstance) {
-  const id = publicDefinition(node.definition).runtimeProvider;
+  if (node.definition === IMPORTED_HTML) return importedProvider;
+  const id = publicDefinition(node).runtimeProvider;
   if (!id) return undefined;
   const provider = runtimeProviders.get(id);
   if (!provider) throw new Error(`${node.id}: missing runtime provider ${id}`);

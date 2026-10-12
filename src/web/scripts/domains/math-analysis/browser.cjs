@@ -150,14 +150,14 @@ const configuration = (s) =>
         await dialog
           .getByRole("button", { name: "Apply changes", exact: true })
           .click();
-        await dialog.getByRole("button", { name: "Done", exact: true }).click();
+        await dialog.getByRole("button", { name: "Close settings", exact: true }).click();
         await capture("04b-builder-edited");
         await page
           .getByRole("textbox", { name: "Experiment title", exact: true })
           .fill(`A2 ${c.id} ${Date.now()}`);
         await button("Save experiment").click();
         await page
-          .getByText("Saved on this device.", { exact: true })
+          .getByText("Saved on device", { exact: true })
           .first()
           .waitFor();
         await button("Try lesson ↗").click();

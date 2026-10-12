@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import { SceneIconButton } from "../components/views/SceneToolbar";
 
 const clamp = (value: number, min: number, max: number) =>
   Math.max(min, Math.min(max, value));
@@ -6,6 +7,7 @@ const clamp = (value: number, min: number, max: number) =>
 /** Camera owns navigation only. Node positions and bindings remain document data. */
 export function ConnectionViewport({
   zoom,
+  initialPan,
   onZoom,
   onNavigate,
   children,
@@ -19,7 +21,8 @@ export function ConnectionViewport({
   worldHeight = 4400,
 }: {
   zoom: number;
-  onZoom: (zoom: number) => void;
+  initialPan?: { x: number; y: number };
+  onZoom: (zoom: number, pan?: { x: number; y: number }) => void;
   onNavigate?: () => void;
   children: ReactNode;
   active?: boolean;
@@ -33,7 +36,7 @@ export function ConnectionViewport({
 }) {
   const viewport = useRef<HTMLElement>(null);
   const world = useRef<HTMLDivElement>(null);
-  const [pan, setPan] = useState({ x: 24, y: 24 });
+  const [pan, setPan] = useState(initialPan ?? { x: 24, y: 24 });
   const drag = useRef<{
     pointer: number;
     x: number;
@@ -136,7 +139,12 @@ export function ConnectionViewport({
     onNavigate,
   });
   navigation.current = { pan, zoom, zoomAt, bounded, fit, onZoom, onNavigate };
-  const initiallyFitted = useRef(false);
+  const initiallyFitted = useRef(Boolean(initialPan));
+  const publishView = useRef(onZoom);
+  publishView.current = onZoom;
+  useEffect(() => {
+    if (active) publishView.current(zoom, pan);
+  }, [active, zoom, pan]);
   useEffect(() => {
     if (!active || initiallyFitted.current) return;
     const frame = requestAnimationFrame(() => {
@@ -260,9 +268,9 @@ export function ConnectionViewport({
         role="toolbar"
         aria-label="Connection navigation"
       >
-        <button
-          type="button"
-          aria-label="Zoom out"
+        <SceneIconButton
+          icon="zoom-out"
+          label="Zoom out"
           disabled={zoom <= 0.2}
           onClick={() =>
             zoomAt(
@@ -271,13 +279,11 @@ export function ConnectionViewport({
               (viewport.current?.clientHeight ?? 0) / 2,
             )
           }
-        >
-          −
-        </button>
+        />
         <output aria-label="Workspace zoom">{Math.round(zoom * 100)}%</output>
-        <button
-          type="button"
-          aria-label="Zoom in"
+        <SceneIconButton
+          icon="zoom-in"
+          label="Zoom in"
           disabled={zoom >= 2}
           onClick={() =>
             zoomAt(
@@ -286,18 +292,15 @@ export function ConnectionViewport({
               (viewport.current?.clientHeight ?? 0) / 2,
             )
           }
-        >
-          +
-        </button>
-        <button
-          type="button"
+        />
+        <SceneIconButton
+          icon="fit"
+          label="Fit to content"
           onClick={() => {
             onNavigate?.();
             fit();
           }}
-        >
-          Fit to content
-        </button>
+        />
         <details className="connection-help">
           <summary aria-label="Canvas help">?</summary>
           <div id="connection-navigation-help">

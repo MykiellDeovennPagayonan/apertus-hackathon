@@ -91,7 +91,7 @@ const document = canonicalDocument(authored);
     await page.getByRole("radio", { name: "Custom boundary" }).click();
     await page.getByRole("button", { name: "Capture starting view" }).click();
     await page
-      .getByRole("button", { name: "Board settings", exact: true })
+      .getByRole("button", { name: "Close Board settings", exact: true })
       .click();
     const draft = () =>
       page.evaluate(
@@ -170,7 +170,7 @@ const document = canonicalDocument(authored);
       .getByRole("radio", { name: "Fit all content", exact: true })
       .check();
     assert.equal((await draft()).presentation.learnerArea, undefined);
-    await page.getByRole("button", { name: "Close board settings" }).click();
+    await page.getByRole("button", { name: "Close Board settings" }).click();
     await handle.focus();
     for (let step = 0; step < 12; step++)
       await page.keyboard.press("Shift+ArrowRight");
@@ -206,9 +206,7 @@ const document = canonicalDocument(authored);
     }
     await page.setViewportSize({ width: 1024, height: 844 });
     const beforeLearner = await draft();
-    await page
-      .getByRole("button", { name: "Try lesson ↗", exact: true })
-      .click();
+    await page.getByRole("button", { name: "Try lesson", exact: true }).click();
     await page.getByRole("button", { name: "Pan", exact: true }).click();
     const viewport = page.locator(".board-viewport");
     const bounds = await viewport.boundingBox();
@@ -238,16 +236,20 @@ const document = canonicalDocument(authored);
     await page
       .getByRole("combobox", { name: "Learner navigation", exact: true })
       .selectOption("fixed");
-    await page.setViewportSize({ width: 390, height: 844 });
     await page
-      .getByRole("button", { name: "Try lesson ↗", exact: true })
+      .getByRole("button", { name: "Close Board settings", exact: true })
       .click();
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.getByRole("button", { name: "Try lesson", exact: true }).click();
     await page.locator(".board-readability").waitFor();
     assert.ok(
       await page.getByRole("button", { name: "Pan", exact: true }).isDisabled(),
     );
     await page
       .getByRole("button", { name: "Return to builder", exact: true })
+      .click();
+    await page
+      .getByRole("button", { name: "Board settings", exact: true })
       .click();
     await page
       .getByRole("combobox", { name: "Learner navigation", exact: true })

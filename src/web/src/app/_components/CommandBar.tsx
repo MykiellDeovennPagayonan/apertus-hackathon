@@ -7,12 +7,17 @@ import {
   type GenerationStage,
   generationStages,
 } from "../../lib/planner/progress";
+import { BuilderIcon } from "../../simulations/builder/BuilderIcon";
 import "./CommandBar.css";
 export type ComposerStatus = {
   kind: "working" | "success" | "error" | "info";
   text: string;
   details?: string;
   retry?: boolean;
+  help?: string;
+  suggestions?: string[];
+  libraryFallback?: boolean;
+  diagnostics?: string;
   progress?: {
     startedAt: number;
     stage: GenerationStage;
@@ -28,6 +33,7 @@ interface Props {
   onChange: (value: string) => void;
   onSubmit: (prompt: string) => void;
   onStop: () => void;
+  onOpenLibrary?: () => void;
   submitLabel?: string;
   landing?: boolean;
   compact?: boolean;
@@ -42,6 +48,7 @@ export default function CommandBar({
   onChange,
   onSubmit,
   onStop,
+  onOpenLibrary,
   submitLabel = "Apply",
   landing = false,
   compact = false,
@@ -144,37 +151,78 @@ export default function CommandBar({
       <div className="command-bar__meta">
         {status && (
           <div
-            className={`command-bar__status command-bar__status--${status.kind}`}
+            className={`command-bar__status command-bar__status--${status.kind}${status.help ? " command-bar__status-card" : ""}`}
+            role={status.kind === "error" ? "alert" : "status"}
           >
-            <output>
-              <span className="command-bar__activity" aria-hidden="true" />
-              {formatUserFacingStatus(status.text)}
-            </output>
+            <div className="command-bar__status-copy">
+              <output>
+                <span className="command-bar__activity" aria-hidden="true" />
+                {status.help && (
+                  <BuilderIcon
+                    name={status.kind === "error" ? "warning" : "info"}
+                  />
+                )}
+                {status.kind === "error" ? formatUserFacingStatus(status.text) : status.text}
+              </output>
+              {status.help && <p>{status.help}</p>}
+            </div>
             {status.kind === "working" && status.progress && (
               <span className="command-bar__elapsed">{elapsed}s elapsed</span>
             )}
-            {status.retry && (
-              <button
-                type="button"
-                disabled={disabled || !value.trim()}
-                onClick={submit}
+            {status.suggestions && status.suggestions.length > 0 && (
+              <fieldset
+                className="command-bar__clarifications"
+                aria-label="Suggested data sources"
               >
-                Retry
-              </button>
+                {status.suggestions.map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    type="button"
+                    disabled={disabled}
+                    onClick={() => choose(suggestion)}
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </fieldset>
             )}
-            {status.details && (
-              <button
-                type="button"
-                aria-expanded={popover === "details"}
-                aria-controls={panelId}
-                onClick={() => {
-                  setDetailText(formatUserFacingDetails(status.details ?? ""));
-                  setPopover(popover === "details" ? null : "details");
-                }}
-              >
-                Details
-              </button>
-            )}
+            <div className="command-bar__status-actions">
+              {status.retry && (
+                <button
+                  type="button"
+                  disabled={disabled || !value.trim()}
+                  onClick={submit}
+                >
+                  Try again
+                </button>
+              )}
+              {status.libraryFallback && onOpenLibrary && (
+                <button
+                  type="button"
+                  disabled={disabled}
+                  onClick={onOpenLibrary}
+                >
+                  <BuilderIcon name="composites" /> Add from library
+                </button>
+              )}
+              {(status.diagnostics || status.details) && (
+                <button
+                  type="button"
+                  className="command-bar__details-action"
+                  aria-expanded={popover === "details"}
+                  aria-controls={panelId}
+                  onClick={() => {
+                    setDetailText(
+                      status.diagnostics ??
+                        formatUserFacingDetails(status.details ?? ""),
+                    );
+                    setPopover(popover === "details" ? null : "details");
+                  }}
+                >
+                  {status.diagnostics ? "Technical details" : "Details"}
+                </button>
+              )}
+            </div>
           </div>
         )}
         {!disabled && lastRequest && (
@@ -197,7 +245,9 @@ export default function CommandBar({
                 ? "Try asking…"
                 : popover === "last"
                   ? "Last request"
-                  : "Details"}
+                  : status?.diagnostics
+                    ? "Technical details"
+                    : "Details"}
             </strong>
             <button
               type="button"
@@ -207,7 +257,7 @@ export default function CommandBar({
                 input.current?.focus();
               }}
             >
-              ×
+              <BuilderIcon name="close" />
             </button>
           </div>
           {popover === "ideas" ? (
@@ -227,7 +277,9 @@ export default function CommandBar({
               <p>
                 {popover === "last"
                   ? lastRequest?.prompt
-                  : formatUserFacingDetails(detailText)}
+                  : status?.diagnostics
+                    ? detailText
+                    : formatUserFacingDetails(detailText)}
               </p>
               {popover === "last" && (
                 <>
@@ -258,15 +310,14 @@ export default function CommandBar({
             className="command-bar__quick-chips"
             aria-label="Quick suggestions"
           >
-            {chips.slice(0, 3).map((c) => (
+            {chips.map((c) => (
               <button
                 key={c}
                 className="command-bar__quick-chip"
                 type="button"
                 onClick={() => choose(c)}
               >
-                <span aria-hidden="true">✨</span>{" "}
-                {c.length > 34 ? `${c.slice(0, 31)}…` : c}
+                <span aria-hidden="true">✨</span> {c}
               </button>
             ))}
           </section>
@@ -299,7 +350,7 @@ export default function CommandBar({
           }}
         />
         <div className="command-bar__actions">
-          {!landing && chips.length > 0 && (
+          {!landing && !compact && chips.length > 0 && (
             <button
               className="command-bar__ideas"
               type="button"
@@ -323,7 +374,8 @@ export default function CommandBar({
                 onStop();
               }}
             >
-              Stop <span aria-hidden="true">■</span>
+              Stop{" "}
+              <span className="command-bar__stop-icon" aria-hidden="true" />
             </button>
           ) : (
             <button

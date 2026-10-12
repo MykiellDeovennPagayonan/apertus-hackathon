@@ -1,16 +1,72 @@
 .pythagorean-scene {
   width: 100%;
   color: var(--text);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
 }
 .pythagorean-scene svg {
   display: block;
   width: 100%;
-  height: 100%;
-  min-height: 260px;
+  height: auto;
 }
 .pythagorean-scene text {
   fill: currentColor;
   font: 16px var(--font-sans, sans-serif);
+}
+.pythagorean-calculation {
+  display: grid;
+  gap: 20px;
+  padding: 16px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.pythagorean-calculation h3,
+.pythagorean-calculation p {
+  margin: 0;
+}
+.pythagorean-calculation h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+.pythagorean-calculation .pythagorean-equation {
+  margin-top: 8px;
+  font-family: Georgia, serif;
+  font-size: 24px;
+}
+.pythagorean-root {
+  display: inline-flex;
+  align-items: baseline;
+}
+.pythagorean-root > span:first-child {
+  font-size: 1.25em;
+}
+.pythagorean-radicand {
+  border-top: 1px solid currentColor;
+  padding: 0 4px;
+}
+.pythagorean-worked {
+  color: var(--accent);
+}
+.pythagorean-worked .pythagorean-equation {
+  font-size: 28px;
+}
+@media (min-width: 700px) {
+  .is-workspace:has(.pythagorean-scene) .is-floating .board-camera-tools {
+    top: 80px;
+    bottom: auto;
+    height: max-content;
+  }
+}
+@media (max-width: 600px) {
+  .pythagorean-scene {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .pythagorean-scene svg {
+    max-height: 260px;
+  }
 }
 .pythagorean-wall,
 .pythagorean-angle {
@@ -28,22 +84,4 @@
 }
 .pythagorean-foot {
   fill: var(--accent);
-}
-.pythagorean-square {
-  stroke: var(--text);
-  stroke-width: 1.5;
-}
-.pythagorean-square--distance {
-  fill: #d9e9de;
-}
-.pythagorean-square--height {
-  fill: #f0d8ba;
-}
-.pythagorean-square--ladder {
-  fill: #c7dddd;
-}
-.pythagorean-triangle {
-  fill: var(--panel);
-  stroke: var(--accent);
-  stroke-width: 2;
 }

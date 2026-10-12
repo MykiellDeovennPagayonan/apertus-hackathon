@@ -92,7 +92,7 @@ fs.mkdirSync(output, { recursive: true });
       await settings.waitFor();
     };
     const done = () =>
-      settings.getByRole("button", { name: "Done", exact: true }).click();
+      settings.getByRole("button", { name: "Close settings", exact: true }).click();
     const noOverflow = async () =>
       assert.ok(
         await page.evaluate(
@@ -252,7 +252,7 @@ fs.mkdirSync(output, { recursive: true });
     assert.notDeepEqual((await draft()).scene.objects[0].a, savedSlope.a);
     await button("Undo").click();
     await button("Save experiment").click();
-    await page.getByText("Saved on this device.", { exact: true }).waitFor();
+    await page.getByText("Saved on device", { exact: true }).waitFor();
     const savedId = await page.evaluate(
       () => JSON.parse(localStorage.getItem("apertus-builder-draft-v1")).saveId,
     );
@@ -391,7 +391,7 @@ fs.mkdirSync(output, { recursive: true });
     assert.equal((await draft()).scene.workspace.canvases.length, 2);
     assert.equal((await draft()).scene.workspace.placements[square], b);
     // Town objects and trips use the same graph, with deterministic departure playback.
-    await page.locator(".builder-file-menu > summary").click();
+    await page.getByLabel("More document actions", { exact: true }).click();
     await button("New experiment").click();
     await create(true);
     doc = await add("3D scene");

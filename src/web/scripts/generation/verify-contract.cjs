@@ -553,7 +553,11 @@ function mockInference(queue, calls, decisionChoice = null) {
       );
     }
     calls.push(body);
-    const queued = queue.shift();
+    const next = queue.shift();
+    const queued =
+      typeof next === "function"
+        ? next(JSON.parse(body.messages.find((m) => m.role === "user").content))
+        : next;
     const stageMessage = body.messages.find((m) => m.role === "user")?.content;
     const task = stageMessage?.startsWith("{")
       ? JSON.parse(stageMessage).task
@@ -710,7 +714,13 @@ function mockInference(queue, calls, decisionChoice = null) {
   }
   const calls = [];
   mockInference(
-    [{ ...sampleIntent, goal: "Quantum entanglement", concepts: ["quantum entanglement"] }],
+    [
+      {
+        ...sampleIntent,
+        goal: "Quantum entanglement",
+        concepts: ["quantum entanglement"],
+      },
+    ],
     calls,
   );
   assert.equal(
@@ -835,16 +845,24 @@ function mockInference(queue, calls, decisionChoice = null) {
   const followupCalls = [];
   mockInference(
     [
-      { mode: "authored" },
       {
-        status: "authored",
+        mode: "edit",
+        selections: [
+          {
+            candidate: "configure:A/model",
+            scope: "selected",
+            fields: ["width"],
+          },
+        ],
+        message: "Changed starting width",
+      },
+      {
         operations: [
           {
-            tool: "configure",
+            candidate: "configure:A/model",
             arguments: { target: "A/model", changes: { width: 9 } },
           },
         ],
-        message: "Changed start",
       },
     ],
     followupCalls,
@@ -860,65 +878,88 @@ function mockInference(queue, calls, decisionChoice = null) {
       .width,
     9,
   );
-  const actionCalls = [];
-  mockInference(
-    [
-      { mode: "runtime" },
-      { selections: ["A/model:1"] },
-      { width: 7, height: 4 },
+  const runtimeIntent = (input) => ({
+    mode: "runtime",
+    selections: [
+      {
+        candidate: input.candidates.find(
+          (c) => c.mode === "runtime" && c.node === "A/model",
+        ).id,
+        scope: "selected",
+        fields: [],
+      },
     ],
-    actionCalls,
-  );
+    message: "Change width now",
+  });
+  const runtimeArguments = (width) => (input) => ({
+    operations: [
+      {
+        candidate: input.operations[0].candidate,
+        arguments: input.operations[0].argumentSchema.properties.value
+          ? { value: { width, height: 4 } }
+          : { width, height: 4 },
+      },
+    ],
+  });
+  const actionCalls = [];
+  mockInference([runtimeIntent, runtimeArguments(7)], actionCalls);
   const action = await planPrompt({
     ...request,
     prompt: "Set A width to 7 now",
     active: { ...session.requestContext(), recipe: rectangle.recipe },
   });
   assert.equal(action.status, "runtime_action");
-  const wrappedCalls = [],
-    wrappedEvents = [];
+  const editRepairCalls = [],
+    editRepairEvents = [];
   mockInference(
-    [
-      { mode: "runtime" },
-      { selections: ["A/model:1"] },
-      { runtime_command_arguments: { width: "invalid", height: 4 } },
-      { runtime_command_arguments: { width: 7, height: 4 } },
-    ],
-    wrappedCalls,
+    [runtimeIntent, runtimeArguments("invalid"), runtimeArguments(7)],
+    editRepairCalls,
   );
-  const wrappedAction = await planPrompt(
+  const repairedRuntimeAction = await planPrompt(
     {
       ...request,
       prompt: "Set A width to 7 now",
       active: { ...session.requestContext(), recipe: rectangle.recipe },
     },
     undefined,
-    (event, data) => wrappedEvents.push({ event, data }),
+    (event, data) => editRepairEvents.push({ event, data }),
   );
-  assert.equal(wrappedAction.status, "runtime_action");
-  assert.deepEqual(wrappedAction.commands, action.commands);
+  assert.equal(repairedRuntimeAction.status, "runtime_action");
+  assert.deepEqual(repairedRuntimeAction.commands, action.commands);
   assert.equal(
-    wrappedCalls.length,
-    4,
-    "Invalid wrapped values still require bounded provider repair",
+    editRepairCalls.length,
+    3,
+    "Invalid arguments still get one bounded repair",
   );
   assert.ok(
-    wrappedEvents.some(
-      (e) => e.event === "runtime_command_arguments.schemaFailure",
-    ),
-  );
-  assert.ok(
-    wrappedEvents.some(
-      (e) => e.event === "runtime_command_arguments.formatNormalized",
-    ),
+    editRepairEvents.some((e) => e.event === "edit_arguments.schemaFailure"),
   );
   const arithmeticFollowupSession = activateRecipeSession(authored[0].recipe);
   const arithmeticFollowupCalls = [];
   mockInference(
     [
-      { mode: "runtime" },
-      { selections: ["A/model:6"] },
-      { operation: "add", a: 7, b: 8 },
+      (input) => ({
+        mode: "runtime",
+        selections: [
+          {
+            candidate: input.candidates.find(
+              (c) =>
+                c.node === "A/model" && c.command === "SET_ARITHMETIC_TASK",
+            ).id,
+            scope: "selected",
+            fields: [],
+          },
+        ],
+        message: "Try 7 and 8",
+      }),
+      (input) => ({
+        operations: [
+          {
+            candidate: input.operations[0].candidate,
+            arguments: { value: { operation: "add", a: 7, b: 8 } },
+          },
+        ],
+      }),
     ],
     arithmeticFollowupCalls,
   );
@@ -940,7 +981,7 @@ function mockInference(queue, calls, decisionChoice = null) {
     arithmeticFollowupCalls.map(
       (call) => JSON.parse(call.messages[1].content).task,
     ),
-    ["followup_mode", "runtime_command_selection", "runtime_command_arguments"],
+    ["edit_intent", "edit_arguments"],
   );
   disposeRecipeSession(arithmeticFollowupSession);
   const semanticCalls = [];

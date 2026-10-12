@@ -1,5 +1,6 @@
 "use client";
-import { useId } from "react";
+import { motion } from "framer-motion";
+import { useContext, useId } from "react";
 import {
   scienceCommand,
   scienceObservation,
@@ -14,6 +15,8 @@ import {
   inspectedGenome,
 } from "../../systems/science/life";
 
+import { MotionContext } from "../../views/recipe/contexts";
+
 const colors = ["#2d6f75", "#925c29", "#6d588b", "#506f3a"];
 interface Props {
   instance: ModelInstance;
@@ -25,6 +28,11 @@ export function ScienceScene({ instance, question, onCommand }: Props) {
     spec = scienceSpec(s.kind),
     obs = scienceObservation(s),
     uid = useId().replaceAll(":", "");
+  const animated = useContext(MotionContext);
+  const transition = {
+    duration: animated ? 0.9 : 0,
+    ease: "easeInOut" as const,
+  };
   const select = (i: number) =>
     onCommand?.(scienceCommand(s.kind, "SELECT"), i);
   const interactive = Boolean(onCommand);
@@ -46,28 +54,6 @@ export function ScienceScene({ instance, question, onCommand }: Props) {
       : {};
   const focus = (i: number) =>
     interactive && s.selected === i ? "#285e56" : "transparent";
-  const chromosome = (
-    x: number,
-    y: number,
-    i: number,
-    copied: boolean,
-    scale = 1,
-  ) => (
-    <g transform={`translate(${x} ${y}) scale(${scale})`} {...pick(i)}>
-      <circle r={35} fill="transparent" stroke={focus(i)} strokeWidth={2} />
-      <path
-        d={copied ? "M-9 -15L9 15M9 -15L-9 15" : "M0 -16L0 16"}
-        stroke={colors[i]}
-        strokeWidth={8}
-        strokeLinecap="round"
-      />
-      {s.overlay && (
-        <text x={0} y={38} textAnchor="middle" fontSize={14} fontWeight={600}>
-          {String.fromCharCode(65 + i)}
-        </text>
-      )}
-    </g>
-  );
   const organism = (
     x: number,
     y: number,
@@ -175,120 +161,179 @@ export function ScienceScene({ instance, question, onCommand }: Props) {
           </pattern>
         </defs>
         {s.kind === "cell" && (
-          <>
-            {s.time < 6 ? (
-              <>
-                <ellipse
-                  cx={400}
-                  cy={218}
-                  rx={s.time === 5 ? 225 : 185}
-                  ry={145}
+          <g>
+            <motion.path
+              initial={false}
+              animate={{
+                d:
+                  s.time >= 5
+                    ? "M400 115C500 30 625 90 625 218C625 346 500 406 400 321C300 406 175 346 175 218C175 90 300 30 400 115Z"
+                    : "M400 73C502 73 585 138 585 218C585 298 502 363 400 363C298 363 215 298 215 218C215 138 298 73 400 73Z",
+                opacity: s.time < 6 ? 1 : 0,
+              }}
+              transition={transition}
+              fill="#edf0dc"
+              stroke="#789879"
+              strokeWidth={3}
+            />
+            {[0, 1].map((side) => (
+              <g key={side}>
+                <motion.ellipse
+                  initial={false}
+                  animate={{
+                    cx:
+                      s.time >= 6
+                        ? (s.time === 7 ? 240 : 250) +
+                          side * (s.time === 7 ? 320 : 300)
+                        : 400,
+                    rx: s.time >= 6 ? 128 : 185,
+                    opacity: s.time >= 6 ? 1 : 0,
+                  }}
+                  transition={transition}
+                  cy={215}
+                  ry={128}
                   fill="#edf0dc"
                   stroke="#789879"
                   strokeWidth={3}
                 />
-                {s.time < 3 && (
-                  <ellipse
-                    cx={400}
-                    cy={218}
-                    rx={106}
-                    ry={83}
-                    fill="#e1e9df"
-                    stroke="#a6b7a1"
-                    strokeDasharray={s.time === 2 ? "5 6" : undefined}
-                  />
-                )}
-                {s.time === 5 &&
-                  [320, 480].map((x) => (
-                    <ellipse
-                      key={x}
-                      cx={x}
-                      cy={218}
-                      rx={70}
-                      ry={118}
-                      fill="#e1e9df"
-                      stroke="#a6b7a1"
-                      strokeDasharray="5 6"
+                <motion.ellipse
+                  initial={false}
+                  animate={{
+                    cx:
+                      s.time >= 6
+                        ? (s.time === 7 ? 240 : 250) +
+                          side * (s.time === 7 ? 320 : 300)
+                        : s.time === 5
+                          ? 320 + side * 160
+                          : 400,
+                    rx: s.time >= 5 ? 86 : 106,
+                    ry: s.time >= 5 ? 100 : 83,
+                    opacity: s.time >= 5 || (side === 0 && s.time < 3) ? 1 : 0,
+                  }}
+                  transition={transition}
+                  cy={218}
+                  fill="#e1e9df"
+                  stroke="#a6b7a1"
+                />
+                <motion.text
+                  initial={false}
+                  animate={{ opacity: s.time >= 6 ? 1 : 0 }}
+                  transition={transition}
+                  x={
+                    (s.time === 7 ? 240 : 250) +
+                    side * (s.time === 7 ? 320 : 300)
+                  }
+                  y={378}
+                  textAnchor="middle"
+                  fontSize={16}
+                >
+                  Daughter {side + 1}
+                </motion.text>
+              </g>
+            ))}
+            <motion.g
+              initial={false}
+              animate={{
+                opacity: s.overlay && s.time >= 2 && s.time < 6 ? 1 : 0,
+              }}
+              transition={transition}
+            >
+              {[0, 1, 2, 3].map((i) => (
+                <motion.path
+                  key={i}
+                  initial={false}
+                  animate={{
+                    d: `M230 218L${s.time >= 4 ? 320 : 400} ${126 + i * 57}M570 218L${s.time >= 4 ? 480 : 400} ${126 + i * 57}`,
+                  }}
+                  transition={transition}
+                  fill="none"
+                  stroke="#aac1b2"
+                  strokeWidth={1.5}
+                />
+              ))}
+              <circle cx={230} cy={218} r={8} fill="#c7a36a" />
+              <circle cx={570} cy={218} r={8} fill="#c7a36a" />
+            </motion.g>
+            {[0, 1, 2, 3].flatMap((i) =>
+              [0, 1].map((copy) => {
+                const separated = s.time >= 4;
+                const failed = !!s.settings.error && i === 0 && copy === 1;
+                const side = failed ? 0 : copy;
+                const x =
+                  s.time >= 6
+                    ? failed
+                      ? s.time === 7
+                        ? 315
+                        : 325
+                      : (s.time === 7 ? 202 : 212) +
+                        side * (s.time === 7 ? 320 : 300) +
+                        (i % 2) * 76
+                    : separated
+                      ? 320 + side * 160 + (failed ? 30 : 0)
+                      : s.time === 3
+                        ? 400
+                        : 354 + (i % 2) * 92;
+                const y =
+                  s.time >= 6
+                    ? failed
+                      ? 210
+                      : 180 + Math.floor(i / 2) * 75
+                    : s.time >= 3
+                      ? 126 + i * 57
+                      : 177 + Math.floor(i / 2) * 85;
+                const copied = s.time >= 1 && !separated;
+                return (
+                  <motion.g
+                    key={`${i}-${copy}`}
+                    data-chromosome={`${String.fromCharCode(65 + i)}-${copy}`}
+                    initial={false}
+                    animate={{
+                      x,
+                      y,
+                      scale: s.time >= 2 ? 0.85 : 1,
+                      opacity: copy === 0 || s.time >= 1 ? 1 : 0,
+                    }}
+                    transition={transition}
+                    style={{
+                      pointerEvents: copy === 1 && s.time < 4 ? "none" : "auto",
+                    }}
+                    {...(copy === 0 || separated ? pick(i) : {})}
+                  >
+                    <circle
+                      r={35}
+                      fill="transparent"
+                      stroke={focus(i)}
+                      strokeWidth={2}
                     />
-                  ))}
-                {s.overlay &&
-                  s.time >= 2 &&
-                  [0, 1, 2, 3].map((i) => (
-                    <g key={i} stroke="#aac1b2" strokeWidth={1.5}>
-                      <path
-                        d={`M230 218L${s.time === 4 ? 315 : 400} ${135 + i * 55}M570 218L${s.time === 4 ? 485 : 400} ${135 + i * 55}`}
-                      />
-                    </g>
-                  ))}
-                {[0, 1, 2, 3].map((i) => (
-                  <g key={i}>
-                    {s.time < 3 ? (
-                      chromosome(
-                        354 + (i % 2) * 92,
-                        177 + Math.floor(i / 2) * 85,
-                        i,
-                        s.time >= 1,
-                      )
-                    ) : s.time === 3 ? (
-                      chromosome(400, 126 + i * 57, i, true, 0.85)
-                    ) : (
-                      <>
-                        {chromosome(320, 126 + i * 57, i, false, 0.85)}
-                        {chromosome(480, 126 + i * 57, i, false, 0.85)}
-                      </>
+                    <motion.line
+                      initial={false}
+                      animate={{
+                        x1: copied ? (copy === 0 ? -9 : 9) : 0,
+                        x2: copied ? (copy === 0 ? 9 : -9) : 0,
+                      }}
+                      transition={transition}
+                      y1={-16}
+                      y2={16}
+                      stroke={colors[i]}
+                      strokeWidth={8}
+                      strokeLinecap="round"
+                    />
+                    {s.overlay && (copy === 0 || separated) && (
+                      <text
+                        x={0}
+                        y={38}
+                        textAnchor="middle"
+                        fontSize={14}
+                        fontWeight={600}
+                      >
+                        {String.fromCharCode(65 + i)}
+                      </text>
                     )}
-                  </g>
-                ))}
-                {s.time >= 2 && (
-                  <>
-                    <circle cx={230} cy={218} r={8} fill="#c7a36a" />
-                    <circle cx={570} cy={218} r={8} fill="#c7a36a" />
-                  </>
-                )}
-              </>
-            ) : (
-              <>
-                {[250, 550].map((x, j) => (
-                  <g key={x}>
-                    <circle
-                      cx={x}
-                      cy={215}
-                      r={128}
-                      fill="#edf0dc"
-                      stroke="#789879"
-                      strokeWidth={3}
-                    />
-                    <circle
-                      cx={x}
-                      cy={215}
-                      r={86}
-                      fill="#e1e9df"
-                      stroke="#a6b7a1"
-                    />
-                    {[0, 1, 2, 3]
-                      .filter((i) => !(j === 1 && s.settings.error && i === 0))
-                      .map((i) => (
-                        <g key={i}>
-                          {chromosome(
-                            x - 38 + (i % 2) * 76,
-                            180 + Math.floor(i / 2) * 75,
-                            i,
-                            false,
-                            0.8,
-                          )}
-                        </g>
-                      ))}
-                    {j === 0 &&
-                      !!s.settings.error &&
-                      chromosome(x + 75, 210, 0, false, 0.65)}
-                    <text x={x} y={378} textAnchor="middle" fontSize={16}>
-                      Daughter {j === 0 ? "1" : "2"}
-                    </text>
-                  </g>
-                ))}
-              </>
+                  </motion.g>
+                );
+              }),
             )}
-          </>
+          </g>
         )}
         {s.kind === "immune" && (
           <>

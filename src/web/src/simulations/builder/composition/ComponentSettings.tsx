@@ -1,3 +1,6 @@
+"use client";
+import { ImportedValueForm } from "../../components/controls/ImportedValueForm";
+import { IMPORTED_HTML } from "../../runtime/imported/contract";
 import { publicDefinition } from "../../components/catalog";
 import { hasControlSettings } from "../../components/controls/controlContract";
 import { SchemaForm } from "../../components/controls/SchemaForm";
@@ -47,7 +50,18 @@ export function ComponentSettings({
               />
             </label>
           )}
-          {hasControlSettings(current.definition) ? (
+          {current.definition === IMPORTED_HTML ? (
+            <ImportedValueForm
+              key={`${current.id}/${JSON.stringify(current.configuration)}`}
+              schema={{ type: "object", properties: { settings: (publicDefinition(current).configuration as Extract<import("../../runtime/parameterSchema").ParameterSchema, { type: "object" }>).properties.settings, inputs: (publicDefinition(current).configuration as Extract<import("../../runtime/parameterSchema").ParameterSchema, { type: "object" }>).properties.inputs } }}
+              initial={{ settings: current.configuration.settings, inputs: current.configuration.inputs }}
+              label="Component settings and manual inputs"
+              onSubmit={value => change("Edit imported component", d => {
+                const target = requireValue(d.nodes.find(n => n.id === current.id));
+                target.configuration = { ...target.configuration, ...value as object };
+              }) ? { accepted: true } : { accepted: false, error: "Configuration was rejected." }}
+            />
+          ) : hasControlSettings(current.definition) ? (
             <ControlSettings
               key={`${current.id}/${JSON.stringify(current.configuration)}/${JSON.stringify(document.connections.filter((c) => c.from.node === current.id))}`}
               node={current}
@@ -88,7 +102,7 @@ export function ComponentSettings({
           ) : (
             <SchemaForm
               key={`${current.id}/${JSON.stringify(current.configuration)}`}
-              schema={publicDefinition(current.definition).configuration}
+              schema={publicDefinition(current).configuration}
               initial={current.configuration}
               label="Starting configuration"
               onSubmit={(configuration) => {
@@ -174,7 +188,7 @@ export function ComponentSettings({
                       document.nodes.some(
                         (n) =>
                           n.id === l.node &&
-                          publicDefinition(n.definition).category === "layout",
+                          publicDefinition(n).category === "layout",
                       ),
                   )
                   .map((l) => (
@@ -198,7 +212,7 @@ export function ComponentSettings({
               document.nodes.some(
                 (n) =>
                   n.id === l.node &&
-                  publicDefinition(n.definition).category === "layout",
+                  publicDefinition(n).category === "layout",
               ),
           )
           .map((l) => (
@@ -388,7 +402,7 @@ export function ComponentSettings({
                       <option value="">No binding</option>
                       {components.flatMap((node) =>
                         Object.entries(
-                          publicDefinition(node.definition).outputs,
+                          publicDefinition(node).outputs,
                         )
                           .filter(([, port]) =>
                             binding === "theme"

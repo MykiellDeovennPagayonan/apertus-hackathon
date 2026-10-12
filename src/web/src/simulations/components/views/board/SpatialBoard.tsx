@@ -8,6 +8,8 @@ import {
   useRef,
   useState,
 } from "react";
+import { BuilderIcon } from "../../../builder/BuilderIcon";
+import { ComponentDialog } from "../../../builder/ComponentDialog";
 import {
   type BoardItem,
   type BoardPresentation,
@@ -303,7 +305,9 @@ export function SpatialBoard({
       if (
         event.key !== "Escape" ||
         (event.target instanceof Element &&
-          event.target.closest(".component-dialog"))
+          event.target.closest(
+            ".component-dialog, .board-toolbar details[open], .board-selection details[open]",
+          ))
       )
         return;
       setActiveItem(null);
@@ -321,14 +325,10 @@ export function SpatialBoard({
   const [editArea, setEditArea] = useState(false);
   const [settings, setSettings] = useState(false),
     [search, setSearch] = useState("");
-  const settingsPanel = useRef<HTMLElement>(null);
   const settingsButton = useRef<HTMLButtonElement>(null);
-  useEffect(() => {
-    if (settings) settingsPanel.current?.focus();
-  }, [settings]);
   const closeSettings = () => {
     setSettings(false);
-    settingsButton.current?.focus();
+    requestAnimationFrame(() => settingsButton.current?.focus());
   };
   const [compactContent, setCompactContent] = useState("");
   const [expandControls, setExpandControls] = useState(false);
@@ -573,13 +573,14 @@ export function SpatialBoard({
       ? (sourcePresentation.learnerArea ??
         extent(sourcePresentation.items.map((item) => item.rect)))
       : area;
-  const initial = freeCanvas && !autoLayout
-    ? fit(openingArea, size.width, size.height)
-    : fit(
-        p.startView,
-        Math.max(1, size.width - 48),
-        Math.max(1, size.height - topClearance - bottomClearance),
-      );
+  const initial =
+    freeCanvas && !autoLayout
+      ? fit(openingArea, size.width, size.height)
+      : fit(
+          p.startView,
+          Math.max(1, size.width - 48),
+          Math.max(1, size.height - topClearance - bottomClearance),
+        );
   if (freeCanvas && !autoLayout && p.navigation.mode !== "fixed")
     initial.zoom = clamp(
       initial.zoom / 1.2,
@@ -588,7 +589,7 @@ export function SpatialBoard({
     );
   if (
     autoLayout ||
-    (!freeCanvas && (workspace && !authoring && p.navigation.mode !== "fixed"))
+    (!freeCanvas && workspace && !authoring && p.navigation.mode !== "fixed")
   ) {
     initial.zoom =
       (autoLayout && !requestedAutoLayout) || p.responsive
@@ -609,7 +610,7 @@ export function SpatialBoard({
   // Frame its opening row below floating headings without shrinking the canvas.
   if (freeCanvas && autoLayout && !authoring) {
     initial.zoom = 1;
-    initial.centerX = p.startView.x + size.width / 2;
+    initial.centerX = p.startView.x + p.startView.width / 2;
     initial.centerY =
       Math.min(...p.items.map((item) => item.rect.y)) - 96 + size.height / 2;
   }
@@ -1150,9 +1151,13 @@ export function SpatialBoard({
                   ref={settingsButton}
                   type="button"
                   aria-expanded={settings}
-                  onClick={() =>
-                    settings ? closeSettings() : setSettings(true)
-                  }
+                  onClick={() => {
+                    if (settings) closeSettings();
+                    else {
+                      announce("");
+                      setSettings(true);
+                    }
+                  }}
                 >
                   Board settings
                 </button>
@@ -1195,339 +1200,415 @@ export function SpatialBoard({
         </div>
       )}
       {authoring && settings && (
-        <section
-          className="board-settings"
-          ref={settingsPanel}
-          aria-label="Board settings"
-          tabIndex={-1}
+        <ComponentDialog
+          open
+          title="Board settings"
+          subtitle="Shape the experience learners see and explore."
+          className="board-settings-dialog"
+          onClose={closeSettings}
+          footerLabel="Done"
+          footerPrimary
+          footerNote="Presentation changes apply immediately."
         >
-          <div className="board-settings-heading">
-            <strong>Board settings</strong>
-            <button
-              type="button"
-              aria-label="Close board settings"
-              onClick={closeSettings}
-            >
-              ×
-            </button>
-          </div>
-          <label>
-            <input
-              type="checkbox"
-              checked={snap}
-              onChange={(e) => setSnap(e.target.checked)}
-            />{" "}
-            Snap to grid
-          </label>
-          <button
-            type="button"
-            onClick={() =>
-              update((n) => {
-                n.startView = {
-                  x: c.centerX - size.width / c.zoom / 2,
-                  y: c.centerY - size.height / c.zoom / 2,
-                  width: size.width / c.zoom,
-                  height: size.height / c.zoom,
-                };
-              })
-            }
-          >
-            Capture starting view
-          </button>
-          <fieldset className="board-learner-view">
-            <legend>Learner view</legend>
-            <p>Choose the area learners can explore.</p>
-            <label>
-              <input
-                type="radio"
-                name="learner-view"
-                checked={!p.learnerArea}
-                onChange={() => {
-                  setEditArea(false);
-                  update((next) => {
-                    delete next.learnerArea;
-                  }, "Learner view now fits all content automatically");
-                }}
-              />
-              Fit all content
-            </label>
-            <p>
-              Automatically follows components as you add, move, or resize them.
-            </p>
-            <label>
-              <input
-                type="radio"
-                name="learner-view"
-                checked={!!p.learnerArea}
-                onChange={() => {
-                  expandLearnerView();
-                  setEditArea(true);
-                }}
-              />
-              Custom boundary
-            </label>
-            {p.learnerArea && (
-              <>
-                <button type="button" onClick={expandLearnerView}>
-                  Expand to fit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditArea(true);
-                    setSelection([]);
-                    setSettings(false);
-                    setCamera(fit(area, size.width - 48, size.height - 48));
+          <output className="board-settings-feedback">{announcement}</output>
+          <section className="board-settings-section">
+            <div className="board-settings-section-heading">
+              <BuilderIcon name="layout" />
+              <div>
+                <h3>Learner view</h3>
+                <p>Choose how much of the board learners can explore.</p>
+              </div>
+            </div>
+            <fieldset className="board-learner-view">
+              <legend className="board-sr-only">Explorable area</legend>
+              <label>
+                <input
+                  type="radio"
+                  name="learner-view"
+                  aria-label="Fit all content"
+                  checked={!p.learnerArea}
+                  onChange={() => {
+                    setEditArea(false);
+                    update((next) => {
+                      delete next.learnerArea;
+                    }, "Learner view now fits all content automatically");
                   }}
-                >
-                  Edit boundary on board
-                </button>
-                <Geometry
-                  label="Learner view"
-                  maxSize={1000000}
-                  rect={p.learnerArea}
-                  onApply={(rect) =>
-                    update((next) => {
-                      next.learnerArea = rect;
-                    })
-                  }
                 />
-              </>
+                <span>
+                  <strong>Fit all content</strong>
+                  <small>
+                    Automatically follows components as you add, move, or resize
+                    them.
+                  </small>
+                </span>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="learner-view"
+                  aria-label="Custom boundary"
+                  checked={!!p.learnerArea}
+                  onChange={() => {
+                    expandLearnerView();
+                    setEditArea(true);
+                  }}
+                />
+                <span>
+                  <strong>Custom boundary</strong>
+                  <small>
+                    Define a specific area and keep learners focused inside it.
+                  </small>
+                </span>
+              </label>
+              {p.learnerArea && (
+                <div className="board-boundary-settings">
+                  <div className="board-settings-actions">
+                    <button type="button" onClick={expandLearnerView}>
+                      Expand to fit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditArea(true);
+                        setSelection([]);
+                        setSettings(false);
+                        setCamera(fit(area, size.width - 48, size.height - 48));
+                        requestAnimationFrame(() => viewport.current?.focus());
+                      }}
+                    >
+                      Edit boundary on board
+                    </button>
+                  </div>
+                  <details className="board-settings-details">
+                    <summary>Exact boundary dimensions</summary>
+                    <p>
+                      Board coordinates in pixels. Apply to update the boundary.
+                    </p>
+                    <Geometry
+                      label="Boundary dimensions"
+                      applyLabel="Apply boundary"
+                      maxSize={1000000}
+                      rect={p.learnerArea}
+                      onApply={(rect) =>
+                        update((next) => {
+                          next.learnerArea = rect;
+                        })
+                      }
+                    />
+                  </details>
+                </div>
+              )}
+            </fieldset>
+            {p.navigation.mode === "fixed" && (
+              <p>
+                Fixed views keep controls at their original readable size.
+                Preview at your smallest target screen size and capture a
+                smaller starting frame if needed.
+              </p>
             )}
-          </fieldset>
-          {p.navigation.mode === "fixed" && (
-            <p>
-              Fixed views keep controls at their original readable size. Preview
-              at your smallest target screen size and capture a smaller starting
-              frame if needed.
-            </p>
-          )}
-          {p.responsive && (
             <label>
-              Space between narrow-screen rows (px)
-              <input
-                type="number"
-                aria-label="Space between narrow-screen rows"
-                min="8"
-                max="128"
-                value={p.responsiveGap ?? 80}
-                onChange={(event) => {
-                  const gap = Number(event.target.value);
-                  if (Number.isFinite(gap) && gap >= 8 && gap <= 128)
-                    update((next) => {
-                      next.responsiveGap = gap;
-                    });
-                }}
-              />
-            </label>
-          )}
-          <label>
-            Learner navigation
-            <select
-              aria-label="Learner navigation"
-              value={p.navigation.mode}
-              onChange={(e) =>
-                update((n) => {
-                  n.navigation.mode = e.target.value as "fixed" | "bounded";
-                })
-              }
-            >
-              <option value="bounded">Pan and zoom within area</option>
-              <option value="fixed">Fixed starting view</option>
-            </select>
-          </label>
-          <details>
-            <summary>Zoom limits</summary>
-            <form
-              className="board-geometry"
-              key={`${p.navigation.minZoom}/${p.navigation.maxZoom}`}
-              onSubmit={(e) => {
-                e.preventDefault();
-                const data = new FormData(e.currentTarget);
-                const minZoom = Number(data.get("minZoom")),
-                  maxZoom = Number(data.get("maxZoom"));
-                if (minZoom > maxZoom) {
-                  announce("Minimum zoom must not exceed maximum zoom.");
-                  return;
+              Learner navigation
+              <select
+                aria-label="Learner navigation"
+                value={p.navigation.mode}
+                onChange={(e) =>
+                  update((n) => {
+                    n.navigation.mode = e.target.value as "fixed" | "bounded";
+                  })
                 }
-                update((n) => {
-                  n.navigation.minZoom = minZoom;
-                  n.navigation.maxZoom = maxZoom;
-                });
-              }}
-            >
-              <label>
-                Minimum zoom
-                <input
-                  type="number"
-                  required
-                  name="minZoom"
-                  min="0.1"
-                  max="4"
-                  step="0.05"
-                  defaultValue={p.navigation.minZoom}
-                />
-              </label>
-              <label>
-                Maximum zoom
-                <input
-                  type="number"
-                  required
-                  name="maxZoom"
-                  min="0.1"
-                  max="4"
-                  step="0.05"
-                  defaultValue={p.navigation.maxZoom}
-                />
-              </label>
-              <button type="submit">Apply zoom limits</button>
-            </form>
-          </details>
-          <label>
-            Start presentation
-            <select
-              aria-label="Start presentation"
-              value={
-                p.immersive.startup === "scene" ? p.immersive.sceneItemId : ""
-              }
-              onChange={(e) =>
-                update((n) => {
-                  n.immersive.startup = e.target.value ? "scene" : "board";
-                  if (e.target.value) n.immersive.sceneItemId = e.target.value;
-                  else delete n.immersive.sceneItemId;
-                })
-              }
-            >
-              <option value="">Board</option>
-              {p.items
-                .filter((i) => supportsScene(document, i.layoutId))
-                .map((i) => (
-                  <option key={i.id} value={i.id}>
-                    {title(i.id)} — immersive
-                  </option>
-                ))}
-            </select>
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={p.immersive.allowReturnToBoard}
-              onChange={(e) =>
-                update((n) => {
-                  n.immersive.allowReturnToBoard = e.target.checked;
-                })
-              }
-            />{" "}
-            Allow learner return to board
-          </label>
-          {p.items
-            .filter((i) => supportsScene(document, i.layoutId))
-            .map((scene) => (
-              <details key={scene.id}>
-                <summary>{title(scene.id)} overlays</summary>
+              >
+                <option value="bounded">Pan and zoom within area</option>
+                <option value="fixed">Fixed starting view</option>
+              </select>
+            </label>
+            <details className="board-settings-details">
+              <summary>Zoom limits</summary>
+              <p>Set the smallest and largest zoom learners can use.</p>
+              <form
+                className="board-geometry"
+                key={`${p.navigation.minZoom}/${p.navigation.maxZoom}`}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const data = new FormData(e.currentTarget);
+                  const minZoom = Number(data.get("minZoom")),
+                    maxZoom = Number(data.get("maxZoom"));
+                  if (minZoom > maxZoom) {
+                    announce("Minimum zoom must not exceed maximum zoom.");
+                    return;
+                  }
+                  update((n) => {
+                    n.navigation.minZoom = minZoom;
+                    n.navigation.maxZoom = maxZoom;
+                  });
+                }}
+              >
                 <label>
+                  Minimum zoom
                   <input
-                    type="checkbox"
-                    checked={
-                      p.immersive.overlays.find(
-                        (o) => o.sceneItemId === scene.id,
-                      )?.collapsedByDefault ?? false
-                    }
-                    onChange={(e) =>
-                      update((n) => {
-                        let o = n.immersive.overlays.find(
-                          (o) => o.sceneItemId === scene.id,
-                        );
-                        if (!o) {
-                          o = {
-                            id: `overlay/${scene.id}`,
-                            sceneItemId: scene.id,
-                            contentItemIds: [],
-                            anchor: "right",
-                            collapsedByDefault: false,
-                          };
-                          n.immersive.overlays.push(o);
-                        }
-                        o.collapsedByDefault = e.target.checked;
-                      })
-                    }
+                    type="number"
+                    required
+                    name="minZoom"
+                    min="0.1"
+                    max="4"
+                    step="0.05"
+                    defaultValue={p.navigation.minZoom}
                   />
-                  Start with controls collapsed
                 </label>
                 <label>
-                  Position
-                  <select
-                    value={
-                      p.immersive.overlays.find(
-                        (o) => o.sceneItemId === scene.id,
-                      )?.anchor ?? "right"
-                    }
-                    onChange={(e) =>
-                      update((n) => {
-                        const o = n.immersive.overlays.find(
+                  Maximum zoom
+                  <input
+                    type="number"
+                    required
+                    name="maxZoom"
+                    min="0.1"
+                    max="4"
+                    step="0.05"
+                    defaultValue={p.navigation.maxZoom}
+                  />
+                </label>
+                <button type="submit">Apply zoom limits</button>
+              </form>
+            </details>
+          </section>
+          <section className="board-settings-section">
+            <div className="board-settings-section-heading">
+              <BuilderIcon name="eye" />
+              <div>
+                <h3>Starting experience</h3>
+                <p>Decide what learners see when they open the lesson.</p>
+              </div>
+            </div>
+            <div className="board-start-view">
+              <div>
+                <strong>Starting view</strong>
+                <p>
+                  Use the current board position and zoom as the opening frame.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() =>
+                  update((n) => {
+                    n.startView = {
+                      x: c.centerX - size.width / c.zoom / 2,
+                      y: c.centerY - size.height / c.zoom / 2,
+                      width: size.width / c.zoom,
+                      height: size.height / c.zoom,
+                    };
+                  }, "Starting view captured")
+                }
+              >
+                Capture starting view
+              </button>
+              {p.startView && (
+                <small className="board-start-view-saved">
+                  <BuilderIcon name="check" /> Saved frame:{" "}
+                  {Math.round(p.startView.width)} ×{" "}
+                  {Math.round(p.startView.height)}
+                </small>
+              )}
+            </div>
+            <label>
+              Start presentation
+              <select
+                aria-label="Start presentation"
+                value={
+                  p.immersive.startup === "scene" ? p.immersive.sceneItemId : ""
+                }
+                onChange={(e) =>
+                  update((n) => {
+                    n.immersive.startup = e.target.value ? "scene" : "board";
+                    if (e.target.value)
+                      n.immersive.sceneItemId = e.target.value;
+                    else delete n.immersive.sceneItemId;
+                  })
+                }
+              >
+                <option value="">Board</option>
+                {p.items
+                  .filter((i) => supportsScene(document, i.layoutId))
+                  .map((i) => (
+                    <option key={i.id} value={i.id}>
+                      {title(i.id)} — immersive
+                    </option>
+                  ))}
+              </select>
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={p.immersive.allowReturnToBoard}
+                onChange={(e) =>
+                  update((n) => {
+                    n.immersive.allowReturnToBoard = e.target.checked;
+                  })
+                }
+              />{" "}
+              Allow learner return to board
+            </label>
+            {p.items
+              .filter((i) => supportsScene(document, i.layoutId))
+              .map((scene) => (
+                <details className="board-settings-details" key={scene.id}>
+                  <summary>{title(scene.id)} overlays</summary>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={
+                        p.immersive.overlays.find(
                           (o) => o.sceneItemId === scene.id,
-                        );
-                        if (o)
+                        )?.collapsedByDefault ?? false
+                      }
+                      onChange={(e) =>
+                        update((n) => {
+                          let o = n.immersive.overlays.find(
+                            (o) => o.sceneItemId === scene.id,
+                          );
+                          if (!o) {
+                            o = {
+                              id: `overlay/${scene.id}`,
+                              sceneItemId: scene.id,
+                              contentItemIds: [],
+                              anchor: "right",
+                              collapsedByDefault: false,
+                            };
+                            n.immersive.overlays.push(o);
+                          }
+                          o.collapsedByDefault = e.target.checked;
+                        })
+                      }
+                    />
+                    Start with controls collapsed
+                  </label>
+                  <label>
+                    Position
+                    <select
+                      value={
+                        p.immersive.overlays.find(
+                          (o) => o.sceneItemId === scene.id,
+                        )?.anchor ?? "right"
+                      }
+                      onChange={(e) =>
+                        update((n) => {
+                          let o = n.immersive.overlays.find(
+                            (o) => o.sceneItemId === scene.id,
+                          );
+                          if (!o) {
+                            o = {
+                              id: `overlay/${scene.id}`,
+                              sceneItemId: scene.id,
+                              contentItemIds: [],
+                              anchor: "right",
+                              collapsedByDefault: false,
+                            };
+                            n.immersive.overlays.push(o);
+                          }
                           o.anchor = e.target.value as
                             | "left"
                             | "right"
                             | "bottom";
-                      })
-                    }
-                  >
-                    <option>left</option>
-                    <option>right</option>
-                    <option>bottom</option>
-                  </select>
-                </label>
-                {p.items
-                  .filter((i) => supportsOverlay(document, i.layoutId))
-                  .map((i) => (
-                    <label key={i.id}>
-                      <input
-                        type="checkbox"
-                        checked={p.immersive.overlays.some(
-                          (o) =>
-                            o.sceneItemId === scene.id &&
-                            o.contentItemIds.includes(i.id),
-                        )}
-                        onChange={(e) =>
-                          update((n) => {
-                            let o = n.immersive.overlays.find(
-                              (o) => o.sceneItemId === scene.id,
-                            );
-                            if (!o) {
-                              o = {
-                                id: `overlay/${scene.id}`,
-                                sceneItemId: scene.id,
-                                contentItemIds: [],
-                                anchor: "right",
-                                collapsedByDefault: false,
-                              };
-                              n.immersive.overlays.push(o);
-                            }
-                            o.contentItemIds = e.target.checked
-                              ? [...o.contentItemIds, i.id]
-                              : o.contentItemIds.filter((id) => id !== i.id);
-                          })
-                        }
-                      />
-                      {title(i.id)}
-                    </label>
-                  ))}
-              </details>
-            ))}
-          <button
-            type="button"
-            onClick={() => {
-              setSettings(false);
-              setEditArea(false);
-              onChange?.({ mode: "flow" });
-            }}
-          >
-            Return to flow layout (original order)
-          </button>
-        </section>
+                        })
+                      }
+                    >
+                      <option>left</option>
+                      <option>right</option>
+                      <option>bottom</option>
+                    </select>
+                  </label>
+                  {p.items
+                    .filter((i) => supportsOverlay(document, i.layoutId))
+                    .map((i) => (
+                      <label key={i.id}>
+                        <input
+                          type="checkbox"
+                          checked={p.immersive.overlays.some(
+                            (o) =>
+                              o.sceneItemId === scene.id &&
+                              o.contentItemIds.includes(i.id),
+                          )}
+                          onChange={(e) =>
+                            update((n) => {
+                              let o = n.immersive.overlays.find(
+                                (o) => o.sceneItemId === scene.id,
+                              );
+                              if (!o) {
+                                o = {
+                                  id: `overlay/${scene.id}`,
+                                  sceneItemId: scene.id,
+                                  contentItemIds: [],
+                                  anchor: "right",
+                                  collapsedByDefault: false,
+                                };
+                                n.immersive.overlays.push(o);
+                              }
+                              o.contentItemIds = e.target.checked
+                                ? [...o.contentItemIds, i.id]
+                                : o.contentItemIds.filter((id) => id !== i.id);
+                            })
+                          }
+                        />
+                        {title(i.id)}
+                      </label>
+                    ))}
+                </details>
+              ))}
+          </section>
+          <section className="board-settings-section">
+            <div className="board-settings-section-heading">
+              <BuilderIcon name="settings" />
+              <div>
+                <h3>Editing &amp; layout</h3>
+                <p>Arrange your board and adapt it to smaller screens.</p>
+              </div>
+            </div>
+            <label className="board-settings-toggle">
+              <input
+                type="checkbox"
+                checked={snap}
+                onChange={(e) => setSnap(e.target.checked)}
+              />
+              <span>
+                <strong>Snap to grid</strong>
+                <small>Align components while moving and resizing them.</small>
+              </span>
+            </label>
+            {p.responsive && (
+              <label>
+                Space between narrow-screen rows (px)
+                <input
+                  type="number"
+                  aria-label="Space between narrow-screen rows"
+                  min="8"
+                  max="128"
+                  value={p.responsiveGap ?? 80}
+                  onChange={(event) => {
+                    const gap = Number(event.target.value);
+                    if (Number.isFinite(gap) && gap >= 8 && gap <= 128)
+                      update((next) => {
+                        next.responsiveGap = gap;
+                      });
+                  }}
+                />
+              </label>
+            )}
+            <div className="board-flow-option">
+              <p>
+                Prefer a stacked lesson? Flow layout uses your components’
+                original order.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSettings(false);
+                  setEditArea(false);
+                  onChange?.({ mode: "flow" });
+                }}
+              >
+                Return to flow layout (original order)
+              </button>
+            </div>
+          </section>
+        </ComponentDialog>
       )}
       <div
         ref={viewport}
@@ -2298,6 +2379,7 @@ export function SpatialBoard({
 function Geometry({
   maxSize = 10000,
   label,
+  applyLabel = "Apply placement",
   rect,
   aspectRatio,
   allowAspectRatio = false,
@@ -2307,6 +2389,7 @@ function Geometry({
 }: {
   maxSize?: number;
   label: string;
+  applyLabel?: string;
   rect: Rect;
   aspectRatio?: number;
   allowAspectRatio?: boolean;
@@ -2404,7 +2487,7 @@ function Geometry({
         </label>
       )}
       <button type="submit" disabled={disabled}>
-        Apply placement
+        {applyLabel}
       </button>
     </form>
   );

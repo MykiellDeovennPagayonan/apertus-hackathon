@@ -1,3 +1,4 @@
+import { IMPORTED_HTML } from "../imported/contract";
 import { publicDefinition, publicDefinitions } from "../../components/catalog";
 import { connectAuthored } from "./connections";
 import { DocumentRuntime } from "./runtime";
@@ -34,13 +35,13 @@ export function suggestConnections(
   }
 
   for (const source of nodes) {
-    const srcDef = publicDefinitions.get(source.definition);
+    const srcDef = publicDefinition(source);
     if (!srcDef) continue;
 
     for (const [outPortName, outPort] of Object.entries(srcDef.outputs)) {
       for (const target of document.nodes) {
         if (target.id === source.id) continue;
-        const tgtDef = publicDefinitions.get(target.definition);
+        const tgtDef = publicDefinition(target);
         if (!tgtDef) continue;
 
         // 1. Check value and attachment connections
@@ -157,7 +158,7 @@ export function autoConnectUnambiguous(document: AuthoredDocument): {
         const c = matches[0];
         const targetNode = doc.nodes.find((n) => n.id === c.to.node);
         if (!targetNode) continue;
-        const tgtDef = publicDefinitions.get(targetNode.definition);
+        const tgtDef = publicDefinition(targetNode);
         const inPort = tgtDef?.inputs[c.to.port];
 
         // Connect if it's required (optional !== true) or attachment
@@ -200,7 +201,7 @@ export function checkRunnable(document: AuthoredDocument): {
     document.connections.map((c) => `${c.to.node}:${c.to.port}`),
   );
   for (const node of document.nodes) {
-    const def = publicDefinitions.get(node.definition);
+    const def = publicDefinition(node);
     if (!def) {
       issues.push(`Node '${node.id}' uses unknown definition '${node.definition}'`);
       continue;
@@ -216,8 +217,8 @@ export function checkRunnable(document: AuthoredDocument): {
 
   // 3. At least one model node exists
   const hasModel = document.nodes.some((n) => {
-    const def = publicDefinitions.get(n.definition);
-    return def?.category === "models";
+    const def = publicDefinition(n);
+    return def?.category === "models" || n.definition === IMPORTED_HTML;
   });
   if (!hasModel) {
     issues.push("Simulation contains no simulation model nodes");

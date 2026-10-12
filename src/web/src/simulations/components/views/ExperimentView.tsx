@@ -1,5 +1,6 @@
 "use client";
 import { useSyncExternalStore } from "react";
+import LoadingState from "../../../app/_components/LoadingState";
 import { isElementaryDemo } from "../../runtime/elementarySession";
 import { isMathDemo } from "../../runtime/mathModel";
 import {
@@ -34,9 +35,15 @@ export function ExperimentView({ demo }: { demo: DemoType }) {
       />
     );
   // Session teardown can publish a store update before the next activation.
-  // Keep that transition empty instead of assembling a legacy model from a
-  // different session's starting values.
-  if (!getActiveDefinition()) return <output>Loading experiment…</output>;
+  // Show loading instead of assembling a model from another session’s values.
+  if (!getActiveDefinition())
+    return (
+      <LoadingState
+        variant="inline"
+        title="Preparing your experiment…"
+        description="Getting the interactive view ready."
+      />
+    );
   if (demo === "assembly") return <AssemblyView />;
   if (demo === "gas" || isMathDemo(demo) || isElementaryDemo(demo))
     return <LegacyRecipeView demo={demo} />;

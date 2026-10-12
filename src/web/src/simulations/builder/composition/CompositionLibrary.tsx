@@ -11,8 +11,11 @@ import type {
   PublicDefinition,
 } from "../../runtime/authoring/types";
 import { object } from "../../runtime/parameterSchema";
+import { BuilderIcon } from "../BuilderIcon";
 import { ComponentDialog } from "../ComponentDialog";
+import { portLabel } from "../graph/authoredGraph";
 import { FeedbackView } from "./FeedbackView";
+import type { Feedback } from "./feedback";
 import { RecipeImport } from "./RecipeImport";
 import { type ComponentCatalog, download } from "./useComponentCatalog";
 
@@ -47,16 +50,15 @@ export function CompositionLibrary({
   catalog,
   open,
   onClose,
-  onAiBuild,
-  aiBusy = false,
+  documentFeedback,
+  onNoticeDismiss,
 }: {
   catalog: ComponentCatalog;
   open: boolean;
   onClose: () => void;
-  onAiBuild?: (prompt: string) => void;
-  aiBusy?: boolean;
+  documentFeedback?: Feedback | null;
+  onNoticeDismiss?: () => void;
 }) {
-  const [aiPrompt, setAiPrompt] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeSection, setSection] = useState("all");
   const [importing, setImporting] = useState(false);
@@ -79,8 +81,7 @@ export function CompositionLibrary({
       setDetail(null);
       setImporting(false);
       setSection("all");
-      setAiPrompt("");
-    }
+    } else searchInput.current?.focus();
   }, [open]);
   const entries: Entry[] = open
     ? [
@@ -141,52 +142,49 @@ export function CompositionLibrary({
     <ComponentDialog
       open={open}
       title="Add a component"
+      subtitle="Find the pieces for your experiment"
+      icon="composites"
       wide
       onClose={onClose}
       footerLabel="Close library"
       footerPrimary={false}
       className="component-library-dialog"
     >
+      {open && (
+        <FeedbackView
+          floating
+          message={documentFeedback ?? null}
+          onDismiss={onNoticeDismiss}
+        />
+      )}
       <div className="composition-catalog">
         <div className="catalog-controls" hidden={importing || !!detail}>
-          {onAiBuild && (
-            <form
-              className="catalog-ai-builder"
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (aiPrompt.trim()) {
-                  onAiBuild(aiPrompt.trim());
-                  setAiPrompt("");
-                }
-              }}
-            >
-              <label className="catalog-ai-label">
-                <span>✨ Build with AI</span>
-                <div className="catalog-ai-input-row">
-                  <input
-                    type="text"
-                    placeholder="Describe a component or behavior to generate…"
-                    value={aiPrompt}
-                    onChange={(e) => setAiPrompt(e.target.value)}
-                    disabled={aiBusy}
-                  />
-                  <button type="submit" disabled={!aiPrompt.trim() || aiBusy}>
-                    {aiBusy ? "Building…" : "Build with AI"}
-                  </button>
-                </div>
-              </label>
-            </form>
-          )}
-          <label className="catalog-search">
-            <span className="builder-sr-only">Search components</span>
-            <input
-              ref={searchInput}
-              type="search"
-              placeholder="Try line, slider, or chart…"
-              value={catalog.query}
-              onChange={(e) => catalog.search(e.target.value)}
-            />
-          </label>
+          <div className="catalog-search-field">
+            <BuilderIcon name="search" />
+            <label className="catalog-search">
+              <span className="builder-sr-only">Search components</span>
+              <input
+                ref={searchInput}
+                type="search"
+                placeholder="Search components…"
+                value={catalog.query}
+                onChange={(e) => catalog.search(e.target.value)}
+              />
+            </label>
+            {catalog.query && (
+              <button
+                type="button"
+                className="catalog-search-clear"
+                aria-label="Clear component search"
+                onClick={() => {
+                  catalog.search("");
+                  searchInput.current?.focus();
+                }}
+              >
+                <BuilderIcon name="close" />
+              </button>
+            )}
+          </div>
           <button
             type="button"
             className="catalog-filter-toggle"
@@ -232,7 +230,7 @@ export function CompositionLibrary({
                 {catalog.document.nodes
                   .filter(
                     (n) =>
-                      publicDefinition(n.definition).category === "canvases",
+                      publicDefinition(n).category === "canvases",
                   )
                   .map((n) => (
                     <option key={n.id} value={n.id}>
@@ -288,7 +286,13 @@ export function CompositionLibrary({
               </button>
             </div>
           )}
-          <FeedbackView message={catalog.message} />
+          {!detail && !importing && (
+            <FeedbackView
+              message={catalog.message}
+              floating={catalog.message?.severity !== "error"}
+              onDismiss={() => catalog.report("")}
+            />
+          )}
           <button
             type="button"
             className="catalog-import-button"
@@ -313,7 +317,7 @@ export function CompositionLibrary({
                 results.current?.scrollTo(0, 0);
               }}
             >
-              <span aria-hidden="true">⊞</span>
+              <BuilderIcon name="grid" />
               <span>All components</span>
               <small>{entries.length}</small>
             </button>
@@ -332,7 +336,7 @@ export function CompositionLibrary({
                     results.current?.scrollTo(0, 0);
                   }}
                 >
-                  <span aria-hidden="true">{section.icon}</span>
+                  <BuilderIcon name={section.id} />
                   <span>{section.title}</span>
                   <small>{count}</small>
                 </button>
@@ -416,7 +420,7 @@ export function CompositionLibrary({
                               className="catalog-card-icon"
                               aria-hidden="true"
                             >
-                              {section.icon}
+                              <BuilderIcon name={section.id} />
                             </span>
                             <div>
                               <strong>{title(entry)}</strong>
@@ -441,7 +445,7 @@ export function CompositionLibrary({
                               {entry.recipe
                                 ? metadata(entry).kind === "experiment"
                                   ? "Add experiment"
-                                  : "Add composite"
+                                  : metadata(entry).kind === "component" ? "Add component" : "Add composite"
                                 : entry.definition.application
                                   ? "Apply preset"
                                   : "Add component"}
@@ -453,7 +457,7 @@ export function CompositionLibrary({
                               }
                               aria-label={`Details for ${title(entry)}`}
                             >
-                              Details <span aria-hidden="true">→</span>
+                              Details <BuilderIcon name="forward" />
                             </button>
                           </div>
                         </article>
@@ -491,204 +495,245 @@ export function CompositionLibrary({
             className="catalog-detail"
             aria-label={`Details for ${title(detail)}`}
           >
-            <FeedbackView message={catalog.message} />
-            <button type="button" onClick={() => setDetail(null)}>
-              ← Back to results
-            </button>
-            <h3 ref={detailHeading} tabIndex={-1}>
-              {title(detail)}
-            </h3>
-            <span className="catalog-kind">{badge(detail)}</span>
-            <p>{metadata(detail).summary}</p>
-            <figure
-              className="catalog-schematic"
-              aria-label={`Contents overview for ${title(detail)}`}
+            <FeedbackView
+              message={catalog.message}
+              floating={catalog.message?.severity !== "error"}
+              onDismiss={() => catalog.report("")}
+            />
+            <button
+              className="catalog-back"
+              type="button"
+              onClick={() => setDetail(null)}
             >
+              <BuilderIcon name="back" /> Back to results
+            </button>
+            <div className="catalog-detail-heading">
+              <span className="catalog-detail-icon">
+                <BuilderIcon name={metadata(detail).group} />
+              </span>
               <div>
-                {(detail.recipe
-                  ? [
-                      "canvases",
-                      "models",
-                      "controls",
-                      "displays",
-                      "resources",
-                      "layout",
-                      "appearance",
-                      "behaviors",
-                    ]
-                      .map((category) => ({
-                        category,
-                        count: [
-                          ...detail.recipe.document.nodes,
-                          ...detail.recipe.document.resources,
-                        ].filter(
-                          (n) =>
-                            publicDefinition(n.definition).category ===
-                            category,
-                        ).length,
-                      }))
-                      .filter((group) => group.count)
-                  : [{ category: detail.definition.category, count: 1 }]
-                ).map((group) => (
-                  <span key={group.category}>
-                    <strong>{group.count}</strong> {group.category}
-                  </span>
-                ))}
+                <span className="catalog-kind">{badge(detail)}</span>
+                <h3 ref={detailHeading} tabIndex={-1}>
+                  {title(detail)}
+                </h3>
+                <p>{metadata(detail).summary}</p>
               </div>
-              <figcaption>
-                Contents overview · previewing does not change your experiment
-              </figcaption>
-            </figure>
-            <div className="catalog-detail-add">
-              <label>
-                Destination canvas
-                <select
-                  value={catalog.destination}
-                  onChange={(event) =>
-                    catalog.setDestination(event.target.value)
-                  }
-                >
-                  <option value="">Automatic / independent lab</option>
-                  {catalog.destinationMissing && (
-                    <option value={catalog.destination}>
-                      Selected canvas removed — choose another
-                    </option>
-                  )}
-                  {catalog.document.nodes
-                    .filter(
-                      (node) =>
-                        publicDefinition(node.definition).category ===
-                        "canvases",
-                    )
-                    .map((node) => (
-                      <option key={node.id} value={node.id}>
-                        {node.label}
-                      </option>
-                    ))}
-                </select>
-              </label>
-              <p>{insertionSummary(detail)}</p>
-              <button
-                type="button"
-                className="builder-primary"
-                disabled={!compatibility(detail).compatible}
-                onClick={() => add(detail)}
-              >
-                {detail.recipe
-                  ? metadata(detail).kind === "experiment"
-                    ? "Add experiment"
-                    : "Add composite"
-                  : detail.definition.application
-                    ? "Apply preset"
-                    : "Add component"}
-              </button>
-              {!compatibility(detail).compatible && (
-                <p>{compatibility(detail).reason}</p>
-              )}
             </div>
-            {detail.recipe ? (
-              <>
-                <h4>
-                  Included components (
-                  {detail.recipe.document.nodes.length +
-                    detail.recipe.document.resources.length}
-                  )
-                </h4>
-                <ul>
-                  {[
-                    ...detail.recipe.document.nodes,
-                    ...detail.recipe.document.resources,
-                  ].map((n) => (
-                    <li key={n.id}>
-                      {n.label}{" "}
-                      <small>{publicDefinition(n.definition).title}</small>
-                    </li>
-                  ))}
-                </ul>
-                <h4>Exposed connections</h4>
-                <ul>
-                  {detail.recipe.externalPorts.map((p) => (
-                    <li key={p.name}>
-                      {p.name} · {p.direction} · {p.port.kind} {p.port.unit} ·{" "}
-                      {p.required === false
-                        ? "connect later"
-                        : "required on insertion"}
-                    </li>
-                  ))}
-                </ul>
-                {!detail.recipe.externalPorts.length && (
-                  <p>
-                    No declared ports. Expand the group or expose connections in
-                    its settings.
-                  </p>
+            <div className="catalog-detail-layout">
+              <div className="catalog-detail-content">
+                {detail.recipe && (
+                  <figure
+                    className="catalog-schematic"
+                    aria-label={`Contents overview for ${title(detail)}`}
+                  >
+                    <div>
+                      {[
+                        "canvases",
+                        "models",
+                        "controls",
+                        "displays",
+                        "resources",
+                        "layout",
+                        "appearance",
+                        "behaviors",
+                      ]
+                        .map((category) => ({
+                          category,
+                          count: [
+                            ...detail.recipe.document.nodes,
+                            ...detail.recipe.document.resources,
+                          ].filter(
+                            (n) =>
+                              publicDefinition(n).category ===
+                              category,
+                          ).length,
+                        }))
+                        .filter((group) => group.count)
+                        .map((group) => (
+                          <span key={group.category}>
+                            <strong>{group.count}</strong> {group.category}
+                          </span>
+                        ))}
+                    </div>
+                    <figcaption>
+                      Contents overview · previewing does not change your
+                      experiment
+                    </figcaption>
+                  </figure>
                 )}
-                {detail.recipe.parameters.length > 0 && (
-                  <details>
-                    <summary>Customize exposed parameters</summary>
-                    <SchemaForm
-                      schema={object(
-                        Object.fromEntries(
-                          detail.recipe.parameters.map((p) => [
-                            p.name,
-                            p.schema,
-                          ]),
-                        ),
-                      )}
-                      initial={Object.fromEntries(
-                        detail.recipe.parameters.map((p) => [
-                          p.name,
-                          p.default,
-                        ]),
-                      )}
-                      label={`Configure and insert ${detail.recipe.title}`}
-                      onSubmit={(values) =>
-                        add(detail, values)
-                          ? { accepted: true }
-                          : {
-                              accepted: false,
-                              error:
-                                "Insertion was rejected. Check the destination and try again.",
-                            }
-                      }
-                    />
-                  </details>
-                )}
-                {detail.recipe.assumptions.length > 0 && (
+                {detail.recipe ? (
                   <>
-                    <h4>Assumptions</h4>
-                    <p>{detail.recipe.assumptions.join(" ")}</p>
+                    <h4>
+                      Included components (
+                      {detail.recipe.document.nodes.length +
+                        detail.recipe.document.resources.length}
+                      )
+                    </h4>
+                    <ul>
+                      {[
+                        ...detail.recipe.document.nodes,
+                        ...detail.recipe.document.resources,
+                      ].map((n) => (
+                        <li key={n.id}>
+                          {n.label}{" "}
+                          <small>{publicDefinition(n).title}</small>
+                        </li>
+                      ))}
+                    </ul>
+                    <h4>Exposed connections</h4>
+                    <ul>
+                      {detail.recipe.externalPorts.map((p) => (
+                        <li key={p.name}>
+                          {p.name} · {p.direction} · {p.port.kind} {p.port.unit}{" "}
+                          ·{" "}
+                          {p.required === false
+                            ? "connect later"
+                            : "required on insertion"}
+                        </li>
+                      ))}
+                    </ul>
+                    {!detail.recipe.externalPorts.length && (
+                      <p>
+                        No declared ports. Expand the group or expose
+                        connections in its settings.
+                      </p>
+                    )}
+                    {detail.recipe.parameters.length > 0 && (
+                      <details>
+                        <summary>Customize exposed parameters</summary>
+                        <SchemaForm
+                          schema={object(
+                            Object.fromEntries(
+                              detail.recipe.parameters.map((p) => [
+                                p.name,
+                                p.schema,
+                              ]),
+                            ),
+                          )}
+                          initial={Object.fromEntries(
+                            detail.recipe.parameters.map((p) => [
+                              p.name,
+                              p.default,
+                            ]),
+                          )}
+                          label={`Configure and insert ${detail.recipe.title}`}
+                          onSubmit={(values) =>
+                            add(detail, values)
+                              ? { accepted: true }
+                              : {
+                                  accepted: false,
+                                  error:
+                                    "Insertion was rejected. Check the destination and try again.",
+                                }
+                          }
+                        />
+                      </details>
+                    )}
+                    {detail.recipe.assumptions.length > 0 && (
+                      <>
+                        <h4>Assumptions</h4>
+                        <p>{detail.recipe.assumptions.join(" ")}</p>
+                      </>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => download(detail.recipe, "composite.json")}
+                    >
+                      Export assembly
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <h4>Connections</h4>
+                    <p className="catalog-section-help">
+                      Connect these ports to other pieces in your experiment.
+                    </p>
+                    <div className="catalog-port-groups">
+                      {(
+                        [
+                          ["Inputs", detail.definition.inputs],
+                          ["Outputs", detail.definition.outputs],
+                          ["Actions", detail.definition.commands],
+                        ] as const
+                      ).map(([heading, ports]) => (
+                        <section key={heading} className="catalog-port-group">
+                          <h5>
+                            {heading}
+                            <span>{Object.keys(ports).length}</span>
+                          </h5>
+                          {Object.keys(ports).length ? (
+                            <ul>
+                              {Object.entries(ports).map(([name]) => (
+                                <li key={name}>
+                                  <span>{portLabel(name)}</span>
+                                  <code>{name}</code>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p>No {heading.toLowerCase()}</p>
+                          )}
+                        </section>
+                      ))}
+                    </div>
+                    {detail.definition.assumptions.length > 0 && (
+                      <>
+                        <h4>Assumptions</h4>
+                        <p>{detail.definition.assumptions.join(" ")}</p>
+                      </>
+                    )}
                   </>
                 )}
+              </div>
+              <aside className="catalog-detail-add">
+                <h4>Add to your experiment</h4>
+                <label>
+                  Destination canvas
+                  <select
+                    value={catalog.destination}
+                    onChange={(event) =>
+                      catalog.setDestination(event.target.value)
+                    }
+                  >
+                    <option value="">Automatic / independent lab</option>
+                    {catalog.destinationMissing && (
+                      <option value={catalog.destination}>
+                        Selected canvas removed — choose another
+                      </option>
+                    )}
+                    {catalog.document.nodes
+                      .filter(
+                        (node) =>
+                          publicDefinition(node).category ===
+                          "canvases",
+                      )
+                      .map((node) => (
+                        <option key={node.id} value={node.id}>
+                          {node.label}
+                        </option>
+                      ))}
+                  </select>
+                </label>
+                <p>{insertionSummary(detail)}</p>
                 <button
                   type="button"
-                  onClick={() => download(detail.recipe, "composite.json")}
+                  className="builder-primary"
+                  disabled={!compatibility(detail).compatible}
+                  onClick={() => add(detail)}
                 >
-                  Export assembly
+                  {detail.recipe
+                    ? metadata(detail).kind === "experiment"
+                      ? "Add experiment"
+                      : metadata(detail).kind === "component" ? "Add component" : "Add composite"
+                    : detail.definition.application
+                      ? "Apply preset"
+                      : "Add component"}
                 </button>
-              </>
-            ) : (
-              <>
-                <h4>Connections</h4>
-                <p>
-                  Inputs:{" "}
-                  {Object.keys(detail.definition.inputs).join(", ") || "none"}
-                </p>
-                <p>
-                  Outputs:{" "}
-                  {Object.keys(detail.definition.outputs).join(", ") || "none"}
-                </p>
-                <p>
-                  Actions:{" "}
-                  {Object.keys(detail.definition.commands).join(", ") || "none"}
-                </p>
-                {detail.definition.assumptions.length > 0 && (
-                  <>
-                    <h4>Assumptions</h4>
-                    <p>{detail.definition.assumptions.join(" ")}</p>
-                  </>
+                {!compatibility(detail).compatible && (
+                  <p>{compatibility(detail).reason}</p>
                 )}
-              </>
-            )}
+              </aside>
+            </div>
           </section>
         )}
       </div>

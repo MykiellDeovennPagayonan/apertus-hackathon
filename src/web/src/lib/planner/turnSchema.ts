@@ -113,7 +113,7 @@ export function buildTurnTools(
 
   // 4. configure live nodes
   if (nodeIds.length > 0) {
-    for (const node of document.nodes) {
+    for (const node of [...document.nodes, ...document.resources]) {
       const def = publicDefinitions.get(node.definition);
       if (
         !def ||

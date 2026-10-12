@@ -42,7 +42,7 @@ export function addBoundControl(
   const next = structuredClone(document);
   const target = next.nodes.find((n) => n.id === request.target);
   if (!target) throw new Error("Unknown control target");
-  const command = publicDefinition(target.definition).commands[request.command];
+  const command = publicDefinition(target).commands[request.command];
   if (!command) throw new Error("Unsupported command");
   const definition = `controls/${widgets[request.widget]}`;
   const leaf = parameterLeaves(command.arguments).find(
@@ -116,7 +116,7 @@ export function addBoundObservation(
   const next = structuredClone(document);
   const source = next.nodes.find((n) => n.id === request.source);
   if (!source) throw new Error("Unknown observation source");
-  const port = publicDefinition(source.definition).outputs[request.output];
+  const port = publicDefinition(source).outputs[request.output];
   if (!port || port.kind !== "value")
     throw new Error("Observation requires a declared value output");
   const output = new DocumentRuntime(document).getSnapshot().outputs[

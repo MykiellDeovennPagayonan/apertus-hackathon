@@ -9,7 +9,9 @@ export function learnerCaption(s: ScienceState): string {
         "Each chromosome makes a copy. Both copies carry the same genetic information.",
         "The chromosomes condense, and the nucleus opens so they can move.",
         "The copied chromosomes line up in the middle of the cell.",
-        "The copies separate. One of each color moves toward each end.",
+        s.settings.error
+          ? "Both copies of chromosome A move to the same end. The other colors separate normally."
+          : "The copies separate. One of each color moves toward each end.",
         "A new nucleus forms around each set as the cell starts to split.",
         s.settings.error
           ? "A separation error leaves one daughter with an extra copy and the other missing it."

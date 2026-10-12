@@ -15,7 +15,7 @@ import { MemberInspector } from "../MemberInspector";
 
 import { AuthorContext, SnapshotContext } from "./contexts";
 import { display } from "./formatObservation";
-import { boundObservation } from "./observations";
+import { boundObservation, readoutLabel } from "./observations";
 import { mathBoard } from "./snapshotAdapters";
 
 function BridgeSelectionHint() {
@@ -36,7 +36,7 @@ export function DisplayPresentation({
 }) {
   const author = useContext(AuthorContext);
   const snapshot = useContext(SnapshotContext);
-  const def = publicDefinition(node.definition),
+  const def = publicDefinition(node),
     config = node.configuration;
   if (node.definition === "displays/Box")
     return <div className="recipe-box-content" aria-hidden="true" />;
@@ -238,18 +238,9 @@ export function DisplayPresentation({
         typeof value === "number" &&
         value !== 0 &&
         Math.abs(value) < 1e-12;
-      const configuredLabel = String(config.label);
-      const label =
-        source?.definition === "prefabs/physical-systems/Pendulum" &&
-        binding?.from.port === "period"
-          ? "Time for one full swing"
-          : source?.definition ===
-                "prefabs/physical-systems/ResistiveCircuit" &&
-              binding?.from.port === "bulbPower"
-            ? "Power per bulb · brightness proxy"
-            : unit && configuredLabel.endsWith(` ${unit}`)
-              ? configuredLabel.slice(0, -unit.length - 1)
-              : configuredLabel;
+      const label = readoutLabel(
+        String(config.label), source?.definition, binding?.from.port, unit,
+      );
       if (value && typeof value === "object")
         return (
           <PropertyInspector

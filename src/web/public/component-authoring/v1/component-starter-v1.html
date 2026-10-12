@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Component starter</title>
+  <style>
+    body { margin: 0; padding: 24px; font: 18px system-ui; color: #243b34; background: #faf8f0; }
+    output { display: block; font-size: 32px; }
+  </style>
+  <script type="application/json" id="apertus-component">
+  {
+    "formatVersion": 1,
+    "apiVersion": 1,
+    "id": "contributor/component",
+    "version": 1,
+    "name": "Component starter",
+    "description": "Replace this scaffolding with your component's visualization.",
+    "settings": {},
+    "inputs": {
+      "value": {
+        "description": "The value to display",
+        "schema": { "type": "number", "minimum": 0, "maximum": 100 },
+        "unit": "",
+        "required": false,
+        "default": 1
+      }
+    },
+    "outputs": {
+      "value": {
+        "description": "The displayed value",
+        "schema": { "type": "number", "minimum": 0, "maximum": 100 },
+        "unit": ""
+      }
+    },
+    "actions": {},
+    "clock": false
+  }
+  </script>
+</head>
+<body>
+  <p>Component content</p>
+  <output id="result" aria-label="Current value"></output>
+  <script>
+    let inputs = {};
+    function render() {
+      document.getElementById('result').textContent = String(inputs.value);
+      apertus.emit('value', inputs.value);
+    }
+    apertus.register({
+      initialize(context) { inputs = context.inputs; render(); },
+      updateInputs(next) { inputs = next; render(); },
+      resize(viewport) { /* Use viewport dimensions when drawing a canvas. */ },
+      reset(context) { inputs = context.inputs; render(); },
+      dispose() { /* Remove timers and event listeners created by this component. */ }
+    });
+  </script>
+</body>
+</html>

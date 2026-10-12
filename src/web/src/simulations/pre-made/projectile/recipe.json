@@ -92,7 +92,7 @@
         "scope": "scope/projectile-comparison",
         "configuration": {
           "label": "Ball 1 distance",
-          "precision": 3
+          "precision": 2
         }
       },
       {
@@ -103,7 +103,7 @@
         "scope": "scope/projectile-comparison",
         "configuration": {
           "label": "Ball 1 height",
-          "precision": 3
+          "precision": 2
         }
       },
       {
@@ -142,7 +142,7 @@
         "scope": "scope/projectile-comparison",
         "configuration": {
           "label": "Ball 2 distance",
-          "precision": 3
+          "precision": 2
         }
       },
       {
@@ -153,7 +153,7 @@
         "scope": "scope/projectile-comparison",
         "configuration": {
           "label": "Ball 2 height",
-          "precision": 3
+          "precision": 2
         }
       },
       {

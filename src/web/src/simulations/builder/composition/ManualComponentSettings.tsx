@@ -113,8 +113,8 @@ export function ManualComponentSettings({
             {d.nodes
               .filter(
                 (n) =>
-                  publicDefinition(n.definition).category === "canvases" &&
-                  publicDefinition(n.definition).inputs.objects?.unit ===
+                  publicDefinition(n).category === "canvases" &&
+                  publicDefinition(n).inputs.objects?.unit ===
                     definition.space,
               )
               .map((n) => (

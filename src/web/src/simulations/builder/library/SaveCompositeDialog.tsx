@@ -1,5 +1,6 @@
 import { publicDefinition } from "../../components/catalog";
 import { ComponentDialog } from "../ComponentDialog";
+import { FeedbackView } from "../composition/FeedbackView";
 import {
   type ComponentCatalog,
   download,
@@ -34,7 +35,13 @@ export function SaveCompositeDialog({
       title="Save selection as composite"
       onClose={onClose}
     >
-      <output>{catalog.feedback}</output>
+      {open && (
+        <FeedbackView
+          message={catalog.message}
+          floating={catalog.message?.severity !== "error"}
+          onDismiss={() => report("")}
+        />
+      )}
       <fieldset>
         <legend>Save selection as prebuilt</legend>
         <label>
@@ -44,7 +51,7 @@ export function SaveCompositeDialog({
         <fieldset>
           <legend>Exposed parameters</legend>
           {selectedComponents.flatMap((node) => {
-            const schema = publicDefinition(node.definition).configuration;
+            const schema = publicDefinition(node).configuration;
             return schema.type === "object"
               ? Object.keys(schema.properties).map((field) => {
                   const key = `${node.id}\u0000${field}`;

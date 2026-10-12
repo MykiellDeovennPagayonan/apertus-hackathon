@@ -33,11 +33,15 @@ import {
   saveRecipe,
 } from "../../../simulations/runtime/session";
 import type { DemoType } from "../../../simulations/runtime/types";
-import AccountControl from "../../_components/AccountControl";
 import CommandBar, { type ComposerStatus } from "../../_components/CommandBar";
 import LandingPage from "../../_components/LandingPage";
+import SiteHeader from "../../_components/SiteHeader";
 import { premadeExperiments } from "../_lib/premadeExperiments";
-import { persistRecipe, reopenAcceptedRecipe } from "../_lib/recipePersistence";
+import {
+  hasAcceptedRecipe,
+  persistRecipe,
+  reopenAcceptedRecipe,
+} from "../_lib/recipePersistence";
 import ExperimentCatalog from "./ExperimentCatalog";
 import "../../_components/LandingPage.css";
 import "./ExperimentsShell.css";
@@ -57,6 +61,7 @@ export default function ExperimentsShell({
   const [demo, setDemo] = useState<DemoType | null>(null);
   const [lesson, setLesson] = useState<RecipeSession | null>(null);
   const [ready, setReady] = useState(false);
+  const [canResume, setCanResume] = useState(false);
   const [status, setStatus] = useState<ComposerStatus | null>(null);
   const [busy, setBusy] = useState(false);
   const [, refresh] = useState(0);
@@ -70,12 +75,15 @@ export default function ExperimentsShell({
   const options = useRef<HTMLDetailsElement>(null);
   const workspace = useRef<HTMLDivElement>(null);
   const composerElement = useRef<HTMLDivElement>(null);
+  const clarification = useRef<{ sessionId: string; prompt: string; question: string } | null>(null);
   const pending = useRef<{
     controller: AbortController;
     request: GenerationRequest;
   } | null>(null);
   const startupRevision = useRef(0);
-  const selectedExperiment = useSearchParams().get("experiment");
+  const searchParams = useSearchParams();
+  const selectedExperiment = landing ? null : searchParams.get("experiment");
+  const resume = !landing && searchParams.get("resume") === "1";
   const router = useRouter();
   const focused = !!lesson || demo === "gas";
   const syncSession = useCallback(() => {
@@ -158,7 +166,15 @@ export default function ExperimentsShell({
       setReady(false);
       setStatus(null);
       if (!selectedExperiment) {
-        if (landing)
+        if (landing) {
+          try {
+            setCanResume(hasAcceptedRecipe(ownerId));
+          } catch {
+            setCanResume(false);
+          }
+          return;
+        }
+        if (resume)
           try {
             const saved = await reopenAcceptedRecipe(ownerId);
             if (revision !== startupRevision.current) return;
@@ -166,6 +182,11 @@ export default function ExperimentsShell({
               activateRecipeSession(JSON.parse(saved));
               syncSession();
               setReady(true);
+            } else {
+              setStatus({
+                kind: "info",
+                text: "No saved experiment is available to resume. Choose an experiment below.",
+              });
             }
           } catch (error) {
             setStatus({
@@ -225,7 +246,7 @@ export default function ExperimentsShell({
       pending.current = null;
       disposeSession();
     };
-  }, [selectedExperiment, landing, syncSession, ownerId]);
+  }, [selectedExperiment, resume, landing, syncSession, ownerId]);
 
   const persist = async (session: RecipeSession) => {
     const revision = session.authoredRevision;
@@ -238,8 +259,8 @@ export default function ExperimentsShell({
         revision === session.authoredRevision
       )
         setStatus({
-          kind: "error",
-          text: "Your lesson is ready, but it couldn't be saved. Use Save recipe to download it.",
+          kind: "info",
+          text: "Your experiment is working, but autosave failed. Download a copy with Save recipe to keep your changes.",
           details:
             error instanceof Error
               ? formatUserFacingDetails(error.message)
@@ -255,9 +276,13 @@ export default function ExperimentsShell({
       protocolVersion: 1,
       requestId: crypto.randomUUID(),
       prompt: text,
+      purpose: ready && getRecipeSession() ? "edit" : "create",
       viewport: { width: window.innerWidth, height: window.innerHeight },
-      active: getRecipeSession()?.requestContext() ?? null,
+      active: ready ? getRecipeSession()?.requestContext() ?? null : null,
     };
+    if (clarification.current && clarification.current.sessionId === request.active?.sessionId)
+      request.clarification = { prompt: clarification.current.prompt, question: clarification.current.question };
+    else clarification.current = null;
     const owner = { controller, request };
     pending.current = owner;
     setDraft(text);
@@ -308,6 +333,12 @@ export default function ExperimentsShell({
         });
         return;
       }
+      if (result.status === "clarification") {
+        if (request.active) clarification.current = { sessionId: request.active.sessionId, prompt: request.clarification?.prompt ?? request.prompt, question: result.message };
+        setStatus({ kind: "info", text: result.message });
+        return;
+      }
+      clarification.current = null;
       if (result.status === "unsupported") {
         setStatus({
           kind: "info",
@@ -316,7 +347,7 @@ export default function ExperimentsShell({
         });
         return;
       }
-      updateProgress("opening");
+      updateProgress(result.status === "created" ? "opening" : "committing_changes");
       const session = acceptGenerationResult(result, request, disposeSession);
       syncSession();
       setDemo(null);
@@ -328,8 +359,7 @@ export default function ExperimentsShell({
           ? result.message
           : [
               result.learnerExplanation,
-              result.coverage.explanation ||
-                session.document.lesson.instruction,
+              result.coverage?.explanation,
             ]
               .filter(Boolean)
               .join("\n\n");
@@ -337,18 +367,27 @@ export default function ExperimentsShell({
       setStatus({
         kind:
           result.status !== "runtime_action" &&
-          result.coverage.level === "partial"
+          result.coverage?.level === "partial"
             ? "info"
             : "success",
         text:
           result.status === "created"
             ? "Ready — explore your lesson."
             : result.status === "updated"
-              ? "Starting lesson updated. Unchanged activities keep their progress."
+              ? (result.learnerExplanation || "Your changes were applied.")
               : "Action applied.",
         details,
       });
-      if (result.status !== "runtime_action") void persist(session);
+      if (result.status !== "runtime_action") {
+        const saved = await persist(session);
+        if (
+          saved &&
+          landing &&
+          pending.current === owner &&
+          !controller.signal.aborted
+        )
+          router.push("/experiments?resume=1");
+      }
     } catch (error) {
       if (pending.current === owner && !controller.signal.aborted)
         setStatus({
@@ -372,17 +411,6 @@ export default function ExperimentsShell({
     pending.current = null;
     setBusy(false);
     setStatus({ kind: "info", text: "Stopped — your prompt is still here." });
-  };
-  const goHome = () => {
-    pending.current?.controller.abort();
-    pending.current = null;
-    setBusy(false);
-    disposeSession();
-    setLesson(null);
-    setDemo(null);
-    setReady(false);
-    setStatus(null);
-    if (selectedExperiment) router.replace("/experiments");
   };
   const downloadRecipe = () => {
     let url: string | null = null;
@@ -444,8 +472,12 @@ export default function ExperimentsShell({
       setReady(true);
       setStatus({ kind: "success", text: "Recipe opened." });
       const saved = await persist(session);
-      if (saved && selectedExperiment && getRecipeSession() === session)
-        router.replace("/");
+      if (
+        saved &&
+        (selectedExperiment || landing) &&
+        getRecipeSession() === session
+      )
+        router.replace("/experiments?resume=1");
     } catch (error) {
       setStatus({
         kind: "error",
@@ -489,6 +521,13 @@ export default function ExperimentsShell({
       return (
         <LandingPage>
           {composer}
+          {canResume && (
+            <div className="manual-create-entry">
+              <Link href="/experiments?resume=1">
+                Resume your last experiment →
+              </Link>
+            </div>
+          )}
           <div className="manual-create-entry">
             <Link href="/experiments/builder">Create manually →</Link>
             <span>Choose a canvas and build it yourself.</span>
@@ -496,16 +535,12 @@ export default function ExperimentsShell({
         </LandingPage>
       );
     return (
-      <div className="pg-shell pg-shell--center">
-        <header className="pg-prompt-nav">
-          <Link href="/" className="brand">
-            ✳ apertus<span className="brand__suffix">/ experiments</span>
-          </Link>
-          <Link href="/">← Back to the lab</Link>
-          <AccountControl />
-        </header>
-        <ExperimentCatalog error={status?.text} />
-      </div>
+      <>
+        <SiteHeader active="experiments" />
+        <div className="pg-shell pg-shell--center">
+          <ExperimentCatalog error={status?.text} />
+        </div>
+      </>
     );
   }
   return (
@@ -516,9 +551,7 @@ export default function ExperimentsShell({
       >
         <div className="workspace-header">
           <header className="workspace-identity">
-            <button type="button" onClick={goHome}>
-              ← {landing ? "Back to the lab" : "Experiments"}
-            </button>
+            <Link href="/experiments">← Experiments</Link>
             <h1>
               {lesson?.document.lesson.title ??
                 (demo && demo !== "assembly"

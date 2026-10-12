@@ -1,0 +1,1388 @@
+.builder-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  vertical-align: middle;
+}
+/* One hierarchy for every builder dialog: identity, grouped content, quiet closing action. */
+.component-dialog.component-dialog {
+  --surface: #fffdf8;
+  --surface-soft: #f2f4ed;
+  --surface-line: #dce2d5;
+  --surface-muted: #647066;
+  font: 14px / 1.5 var(--font-sans, sans-serif);
+  width: 580px;
+  max-width: calc(100vw - 24px);
+  padding: 0;
+  overflow: hidden;
+  color: var(--text, #30362e);
+  background: var(--surface);
+  border: 1px solid #e0e3d8;
+  border-radius: 22px;
+  box-shadow:
+    0 24px 90px #172e2940,
+    0 4px 16px #172e2914;
+  max-height: calc(100dvh - 40px);
+}
+.component-dialog.component-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+.component-dialog.component-dialog > :is(header, footer) {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.component-dialog.component-dialog > header > div {
+  flex: 1;
+  min-width: 0;
+}
+.component-dialog.component-dialog > footer {
+  justify-content: flex-end;
+}
+.component-dialog.component-dialog > .component-dialog-body {
+  overflow-y: auto;
+  min-height: 0;
+}
+.component-dialog.component-dialog.is-wide {
+  width: 1040px;
+}
+.component-dialog.component-dialog::backdrop {
+  background: #253b355c;
+  backdrop-filter: blur(3px);
+}
+.component-dialog.component-dialog > header {
+  padding: 22px 24px;
+  gap: 14px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--surface-line);
+}
+.component-dialog.component-dialog > header h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+.component-dialog.component-dialog .component-dialog-type {
+  font-size: 12px;
+  color: var(--surface-muted);
+  margin: 5px 0 0;
+}
+.component-dialog-icon,
+.catalog-detail-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  color: var(--accent, #285e56);
+  background: #e8efe4;
+}
+.component-dialog.component-dialog > header > .component-dialog-icon {
+  flex: 0 0 44px;
+}
+.component-dialog-icon .builder-icon {
+  width: 22px;
+  height: 22px;
+}
+.component-dialog.component-dialog > header > button {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--surface-line);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--surface-muted);
+}
+.component-dialog.component-dialog > .component-dialog-body {
+  padding: 24px;
+  scrollbar-width: thin;
+  scrollbar-color: #bbc7b8 transparent;
+  overscroll-behavior: contain;
+}
+.component-dialog.component-dialog > footer {
+  padding: 16px 24px;
+  gap: 16px;
+  background: #f8faf4;
+  border-top: 1px solid var(--surface-line);
+}
+.component-dialog.component-dialog > footer > button {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.component-dialog-note {
+  margin: 0;
+  color: var(--surface-muted);
+  font-size: 12px;
+  max-width: 38ch;
+}
+.component-dialog.component-dialog button {
+  font: 500 13px / 1.4 var(--font-sans, sans-serif);
+  min-height: 44px;
+  border: 1px solid var(--surface-line);
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--ink, #30362e);
+  cursor: pointer;
+}
+.component-dialog.component-dialog button:hover:not(:disabled) {
+  background: #eef3e9;
+  border-color: #aabbab;
+}
+.component-dialog.component-dialog button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.component-dialog.component-dialog button.builder-primary {
+  color: #fff;
+  background: var(--accent, #285e56);
+  border-color: var(--accent, #285e56);
+  box-shadow: 0 2px 5px #285e561c;
+}
+.component-dialog.component-dialog button.builder-primary:hover:not(:disabled) {
+  background: #204c45;
+}
+.component-dialog.component-dialog
+  input:where(
+    :not([type="checkbox"]):not([type="radio"]):not([type="range"]):not(
+        [type="file"]
+      )
+  ),
+.component-dialog.component-dialog select,
+.component-dialog.component-dialog textarea {
+  font: 400 14px / 1.5 var(--font-sans, sans-serif);
+  color: var(--ink, #30362e);
+  background-color: #fff;
+  border: 1px solid #cdd7c9;
+  border-radius: 10px;
+  min-height: 44px;
+  padding: 10px 12px;
+  width: 100%;
+  box-shadow: 0 1px 2px #1c302a05;
+}
+.component-dialog.component-dialog :is(input, textarea)::placeholder {
+  color: #778277;
+}
+.component-dialog.component-dialog label {
+  display: grid;
+  gap: 7px;
+  margin: 10px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #465448;
+}
+.component-dialog.component-dialog label:has(input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.component-dialog.component-dialog label:has(input[type="checkbox"]) input {
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+}
+.component-dialog.component-dialog :focus-visible {
+  outline: 3px solid var(--accent, #285e56);
+  outline-offset: 3px;
+}
+.component-dialog.component-dialog .composition-settings-fields {
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+.component-dialog.component-dialog
+  :is(.settings-section, .catalog-field-group) {
+  min-width: 0;
+  border: 1px solid var(--surface-line);
+  border-radius: 14px;
+  background: #f7f9f3;
+  padding: 8px 18px 16px;
+  margin: 0 0 18px;
+}
+.component-dialog.component-dialog
+  :is(.settings-section, .catalog-field-group)
+  > legend {
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 650;
+  color: #315b48;
+}
+.component-dialog.component-dialog .settings-section p {
+  margin: 10px 0;
+  font-size: 12px;
+  color: var(--surface-muted);
+}
+.component-dialog.component-dialog .settings-section details {
+  margin-top: 14px;
+  border-top: 1px solid var(--surface-line);
+  padding-top: 12px;
+}
+.component-dialog.component-dialog .settings-section details > summary {
+  font-size: 12px;
+  color: var(--surface-muted);
+}
+.settings-range-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.component-dialog.component-dialog .settings-delete {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  color: #a34035;
+  border-color: #e2cfc7;
+  background: #fff8f4;
+}
+.component-dialog.component-dialog .catalog-form {
+  margin-top: 20px;
+}
+.component-dialog.component-dialog .composition-settings-fields > details {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--surface-line);
+}
+.component-dialog.component-dialog
+  .composition-settings-fields
+  > details
+  > summary {
+  font-size: 13px;
+  color: #465448;
+}
+/* Search gets a recognizable affordance, distinct from an editable title. */
+.component-library-dialog.component-dialog > .component-dialog-body {
+  padding: 0;
+}
+.component-library-dialog .catalog-controls {
+  background: #f8faf4;
+  border-bottom: 1px solid var(--surface-line);
+}
+.catalog-search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  grid-column: 1;
+  grid-row: 1;
+}
+.catalog-search-field > .builder-icon {
+  position: absolute;
+  left: 14px;
+  color: #5f7562;
+  pointer-events: none;
+}
+.component-library-dialog.component-dialog .catalog-search {
+  margin: 0;
+  width: 100%;
+}
+.component-library-dialog.component-dialog
+  .catalog-search-field
+  .catalog-search
+  input[type="search"] {
+  padding: 11px 46px 11px 44px;
+  border-color: #b9c9b7;
+  background: #fff;
+  box-shadow: 0 2px 5px #253b3506;
+}
+.component-library-dialog.component-dialog .catalog-search-clear {
+  position: absolute;
+  right: 3px;
+  padding: 0;
+  width: 40px;
+  min-height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+}
+.component-library-dialog .catalog-sections {
+  background: #f4f7ef;
+}
+.component-library-dialog.component-dialog .catalog-sections button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-color: transparent;
+  background: transparent;
+  text-align: left;
+}
+.component-library-dialog.component-dialog
+  .catalog-sections
+  button[aria-pressed="true"] {
+  background: #e4eddc;
+  color: #285e56;
+  border-color: #d2dfca;
+}
+.component-library-dialog .catalog-results {
+  background: var(--surface);
+}
+.component-library-dialog.component-dialog .catalog-card-grid article {
+  background: #fff;
+  border: 1px solid var(--surface-line);
+  border-radius: 16px;
+  box-shadow: 0 2px 6px #253b3505;
+  padding: 18px;
+}
+.component-library-dialog .catalog-card-heading strong {
+  font-size: 15px;
+}
+.component-library-dialog .catalog-card-icon {
+  border-radius: 11px;
+  color: #315b48;
+  background: #eef3e9;
+}
+.component-library-dialog .catalog-card-grid article p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.component-library-dialog.component-dialog
+  .catalog-card-actions
+  > button:not(.builder-primary) {
+  border-color: transparent;
+  background: transparent;
+  color: #285e56;
+}
+.component-library-dialog .catalog-kind {
+  font-size: 11px;
+  color: #647066;
+}
+.component-library-dialog .catalog-detail {
+  padding: 24px;
+  background: var(--surface);
+}
+.component-library-dialog.component-dialog .catalog-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 8px;
+  border: 0;
+  color: #285e56;
+  background: transparent;
+  margin: -8px 0 18px -8px;
+}
+.catalog-detail-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+.catalog-detail-heading > div {
+  min-width: 0;
+}
+.catalog-detail-icon {
+  width: 56px;
+  height: 56px;
+  flex-basis: 56px;
+  border-radius: 16px;
+}
+.catalog-detail-icon .builder-icon {
+  width: 28px;
+  height: 28px;
+}
+.component-library-dialog .catalog-detail-heading h3 {
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  margin: 5px 0 10px;
+}
+.component-library-dialog .catalog-detail-heading p {
+  margin: 0;
+  max-width: 65ch;
+  color: #5a685d;
+}
+.catalog-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: start;
+  gap: 28px;
+}
+.catalog-detail-content {
+  min-width: 0;
+}
+.catalog-detail-content > h4 {
+  font-size: 14px;
+  margin: 22px 0 10px;
+}
+.catalog-detail-content > h4:first-child {
+  margin-top: 0;
+}
+.catalog-detail-content > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.catalog-detail-content > ul > li {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--surface-line);
+}
+.catalog-detail-content > ul small {
+  color: var(--surface-muted);
+  font-size: 11px;
+}
+.component-library-dialog .catalog-detail-add {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+  padding: 20px;
+  margin: 0;
+  border-radius: 16px;
+  background: #edf4e7;
+  border: 1px solid #d4e2cc;
+  position: sticky;
+  top: 0;
+}
+.component-library-dialog .catalog-detail-add h4 {
+  margin: 0;
+  font-size: 14px;
+  color: #315b48;
+}
+.component-library-dialog.component-dialog .catalog-detail-add label {
+  margin: 0;
+}
+.component-library-dialog .catalog-detail-add p {
+  margin: 0;
+  font-size: 12px;
+  color: #596a5b;
+}
+.component-library-dialog.component-dialog .catalog-detail-add button {
+  width: 100%;
+}
+.component-library-dialog .catalog-schematic {
+  margin: 0 0 24px;
+  padding: 18px;
+  background: #f1f5ed;
+  border: 1px solid var(--surface-line);
+  border-radius: 14px;
+}
+.component-library-dialog .catalog-schematic figcaption {
+  font-size: 11px;
+  color: #647066;
+  margin-top: 10px;
+}
+.catalog-section-help {
+  font-size: 12px;
+  color: var(--surface-muted);
+}
+.catalog-port-groups {
+  display: grid;
+  gap: 12px;
+}
+.catalog-port-group {
+  padding: 16px;
+  background: #f8faf5;
+  border: 1px solid var(--surface-line);
+  border-radius: 12px;
+}
+.catalog-port-group h5 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: #315b48;
+}
+.catalog-port-group h5 > span {
+  background: #e4ecdd;
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-size: 10px;
+}
+.catalog-port-group ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.catalog-port-group li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 7px 0;
+  border-top: 1px solid #e7ece1;
+}
+.catalog-port-group li > span {
+  font-size: 12px;
+}
+.catalog-port-group code {
+  font:
+    10px / 1.5 ui-monospace,
+    monospace;
+  color: #6e7b6d;
+  background: #edf1e8;
+  padding: 2px 6px;
+  border-radius: 5px;
+  overflow-wrap: anywhere;
+}
+.catalog-port-group p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--surface-muted);
+}
+/* Menus are compact action lists, rather than outlined form buttons. */
+.manual-builder .composition-document-menu > div {
+  padding: 8px;
+  width: min(290px, calc(100vw - 24px));
+  border-radius: 16px;
+  background: #fffdf8;
+}
+.builder-menu-group {
+  padding: 6px 0;
+  border-bottom: 1px solid #e0e5d9;
+}
+.builder-menu-group:last-of-type {
+  border: 0;
+}
+.builder-menu-group > p {
+  margin: 4px 12px 6px;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #7b8777;
+}
+.manual-builder .composition-document-menu .builder-menu-group :is(button, a),
+.manual-builder .composition-settings-menu > div > button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 12px;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  text-decoration: none;
+  font: 500 13px / 1.4 var(--font-sans, sans-serif);
+  color: #39483e;
+  text-align: left;
+}
+.manual-builder
+  .composition-document-menu
+  .builder-menu-group
+  :is(button, a):hover:not(:disabled),
+.manual-builder .composition-settings-menu > div > button:hover {
+  background: #edf3e6;
+}
+.builder-menu-group .builder-icon,
+.composition-settings-menu .builder-icon {
+  color: #6a8069;
+}
+.builder-menu-group button small {
+  display: block;
+  color: #758072;
+  font-size: 10px;
+  margin-top: 3px;
+}
+.manual-builder .composition-settings-menu > div {
+  width: min(270px, calc(100vw - 24px));
+  padding: 8px;
+  border-radius: 14px;
+  background: #fffdf8;
+}
+.manual-builder .composition-settings-menu button[aria-pressed="true"] {
+  background: #e7efdf;
+  color: #285e56;
+}
+.manual-builder .composition-document-menu .composition-clear-action {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 13px;
+  min-height: 44px;
+  margin: 4px 0 0;
+  padding: 10px 12px;
+  border: 0;
+  color: #a34035;
+  border-radius: 9px;
+  background: transparent;
+}
+.manual-builder
+  .composition-document-menu
+  .composition-clear-action:hover:not(:disabled) {
+  background: #fff1e9;
+}
+.manual-builder .composition-return,
+.composition-toolbar > a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.manual-builder .composition-storage .builder-icon {
+  width: 14px;
+  height: 14px;
+  flex-basis: 14px;
+}
+.component-dialog.component-dialog .input-editor-modes {
+  padding: 4px;
+  border: 1px solid var(--surface-line);
+  background: #eff3e9;
+  border-radius: 12px;
+}
+.component-dialog.component-dialog .input-editor-modes button {
+  border: 0;
+  background: transparent;
+  border-radius: 9px;
+  font-weight: 500;
+}
+.component-dialog.component-dialog
+  .input-editor-modes
+  button[aria-pressed="true"] {
+  background: #fff;
+  color: #285e56;
+  box-shadow: 0 2px 6px #203a2510;
+  font-weight: 650;
+}
+.component-dialog.component-dialog .input-editor-connection {
+  background: #f0f5eb;
+  border: 1px solid #dce5d5;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.input-editor-connection > span > small {
+  display: block;
+  margin-top: 4px;
+  color: #72816e;
+  font-size: 11px;
+}
+.component-dialog.component-dialog .input-editor-connection > button {
+  min-height: 36px;
+  padding: 7px 10px;
+  color: #667260;
+  font-size: 11px;
+}
+.input-editor-search-field {
+  display: block;
+  position: relative;
+}
+.input-editor-search-field > .builder-icon {
+  position: absolute;
+  left: 13px;
+  top: 13px;
+  color: #75876e;
+  pointer-events: none;
+}
+.component-dialog.component-dialog
+  .input-editor-search
+  .input-editor-search-field
+  input[type="search"] {
+  padding-left: 40px;
+}
+.component-dialog.component-dialog .input-editor-section {
+  background: transparent;
+  padding: 0;
+  border: 0;
+}
+.component-dialog.component-dialog .input-editor-section > h3 {
+  font-size: 12px;
+  color: #647066;
+  margin-bottom: 12px;
+}
+.component-dialog.component-dialog .input-editor-option {
+  border-radius: 10px;
+}
+.component-dialog.component-dialog .builder-library {
+  margin: 0;
+}
+.component-dialog.component-dialog .builder-library h2 {
+  color: #6c7967;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0 0 16px;
+}
+.component-dialog.component-dialog .builder-library > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-top: 10px;
+  border: 1px solid var(--surface-line);
+  border-radius: 12px;
+  background: #f7faf3;
+}
+.component-dialog.component-dialog .builder-library > div > button {
+  flex: 1;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 8px;
+}
+.builder-library a {
+  font-size: 12px;
+  color: #285e56;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.saved-experiments-empty {
+  text-align: center;
+  padding: 30px 10px;
+  color: #647066;
+}
+.saved-experiments-empty > .builder-icon {
+  width: 32px;
+  height: 32px;
+}
+/* Only contextual validation takes form space; workspace feedback never changes canvas height. */
+.builder-feedback.builder-feedback {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 10px;
+  border: 1px solid #d3dfcb;
+  border-radius: 12px;
+  background: #f1f7ed;
+  padding: 13px 14px;
+  margin: 0 0 18px;
+  font: 13px / 1.5 var(--font-sans, sans-serif);
+}
+.builder-feedback > .builder-icon {
+  margin-top: 2px;
+  color: #53744b;
+}
+.builder-feedback .builder-feedback-content strong {
+  display: block;
+  font-size: 12px;
+  color: #3f5840;
+}
+.builder-feedback .builder-feedback-content p {
+  margin: 3px 0 0;
+  color: #60735c;
+  font-size: 12px;
+}
+.builder-feedback.builder-feedback.is-error {
+  background: #fff5ee;
+  border-color: #e7d0bf;
+}
+.builder-feedback.is-error > .builder-icon,
+.builder-feedback.is-error .builder-feedback-content strong {
+  color: #9d4837;
+}
+.builder-feedback.is-error .builder-feedback-content p {
+  color: #7e5e4f;
+}
+.builder-feedback.builder-feedback--floating {
+  position: fixed;
+  z-index: 90;
+  bottom: calc(var(--builder-composer-height, 100px) + 32px);
+  left: 20px;
+  width: min(360px, calc(100vw - 40px));
+  max-height: 40dvh;
+  overflow: auto;
+  margin: 0;
+  box-shadow: 0 8px 36px #243b3226;
+}
+.component-dialog.component-dialog .builder-feedback--floating {
+  position: absolute;
+  left: auto;
+  right: 20px;
+  bottom: 104px;
+}
+.builder-feedback.builder-feedback > .builder-feedback-dismiss {
+  width: 28px;
+  height: 28px;
+  min-height: 28px;
+  padding: 5px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  border-radius: 7px;
+  color: #65755e;
+}
+.builder-feedback > details {
+  grid-column: 2 / -1;
+  font-size: 11px;
+}
+.builder-feedback > details > pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 160px;
+  overflow: auto;
+}
+.builder-feedback-content > button {
+  margin-top: 10px;
+  font-size: 12px;
+  padding: 7px 10px;
+  border-radius: 8px;
+}
+@media (max-width: 760px) {
+  .catalog-detail-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .component-library-dialog .catalog-detail-add {
+    position: static;
+    grid-row: 1;
+  }
+  .component-library-dialog .catalog-detail {
+    padding: 20px;
+  }
+}
+@media (max-width: 600px) {
+  .component-dialog.component-dialog {
+    max-width: calc(100vw - 16px);
+    max-height: calc(100dvh - 24px);
+    border-radius: 18px;
+  }
+  .component-dialog.component-dialog > header {
+    padding: 16px;
+    gap: 10px;
+  }
+  .component-dialog.component-dialog > header h2 {
+    font-size: 17px;
+  }
+  .component-dialog.component-dialog > .component-dialog-body {
+    padding: 18px;
+  }
+  .component-library-dialog.component-dialog > .component-dialog-body {
+    padding: 0;
+  }
+  .component-dialog.component-dialog > footer {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  .component-dialog-note {
+    font-size: 11px;
+  }
+  .component-dialog.component-dialog
+    :is(.settings-section, .catalog-field-group) {
+    padding: 8px 12px 12px;
+  }
+  .settings-range-grid {
+    gap: 8px;
+  }
+  .component-dialog.component-dialog .settings-range-grid input {
+    padding-inline: 8px;
+  }
+  .component-library-dialog .catalog-detail-heading h3 {
+    font-size: 22px;
+  }
+  .catalog-detail-heading {
+    gap: 12px;
+  }
+  .catalog-detail-icon {
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+  }
+  .component-dialog.component-dialog .input-editor-connection > button {
+    min-height: 44px;
+  }
+  .builder-feedback.builder-feedback--floating {
+    bottom: calc(var(--builder-composer-height, 100px) + 32px);
+    left: 16px;
+    width: calc(100vw - 32px);
+  }
+  .component-dialog.component-dialog .builder-feedback--floating {
+    left: 16px;
+    right: 16px;
+    bottom: 150px;
+  }
+  .component-dialog.component-dialog .builder-library > div {
+    flex-wrap: wrap;
+  }
+}
+
+.component-dialog.component-dialog select {
+  padding-right: 34px;
+}
+.component-dialog.component-dialog > footer > .component-dialog-close {
+  margin-left: auto;
+}
+.component-dialog.component-dialog
+  > footer
+  > .builder-primary
+  + .component-dialog-close {
+  margin-left: 0;
+}
+.component-dialog.component-dialog
+  > footer:has(.builder-primary)
+  .component-dialog-note {
+  margin-right: auto;
+}
+.component-dialog.component-dialog > footer .builder-primary {
+  flex-shrink: 0;
+}
+.component-library-dialog .catalog-detail-add {
+  text-align: left;
+}
+.component-library-dialog.component-dialog .catalog-detail-add select {
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .component-dialog.component-dialog > footer:has(.builder-primary) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+  .component-dialog.component-dialog
+    > footer:has(.builder-primary)
+    .component-dialog-note {
+    grid-column: 1 / -1;
+    max-width: none;
+  }
+  .component-dialog.component-dialog > footer:has(.builder-primary) > button {
+    margin: 0;
+  }
+}
+@media (max-width: 1350px) {
+  .manual-builder .composition-graph .connection-camera-tools {
+    bottom: calc(var(--builder-composer-height, 100px) + 28px);
+  }
+}
+@media (min-width: 601px) {
+  .builder-feedback.builder-feedback--floating {
+    left: auto;
+    right: 20px;
+  }
+}
+@media (max-width: 600px) {
+  .builder-feedback.builder-feedback--floating {
+    bottom: calc(var(--builder-composer-height, 100px) + 108px);
+  }
+  .component-dialog.component-dialog .builder-feedback--floating {
+    bottom: 150px;
+  }
+}
+.component-dialog.component-dialog .settings-form-error {
+  padding: 12px 14px;
+  background: #fff3eb;
+  color: #8c4334;
+  border: 1px solid #e7cdbb;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.component-dialog.component-dialog label:has(input[type="checkbox"]) {
+  flex-direction: row;
+}
+.manual-builder .composition-document-menu .builder-menu-group button:disabled {
+  opacity: 1;
+  color: #859080;
+}
+.manual-builder
+  .composition-document-menu
+  .builder-menu-group
+  button:disabled
+  small {
+  color: #65715f;
+  font-size: 11px;
+}
+/* Canvas height follows its actual toolbar instead of a fixed pixel allowance. */
+.manual-builder.composition-builder {
+  height: 100dvh;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.manual-builder.composition-builder > .composition-toolbar,
+.manual-builder.composition-builder > .composition-tabs {
+  flex-shrink: 0;
+}
+.manual-builder.composition-builder > .composition-workspace {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+.manual-builder.composition-builder .composition-graph {
+  height: 100%;
+  min-height: 0;
+}
+.manual-builder.composition-builder .composition-graph .connection-workspace {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.manual-builder.composition-builder .composition-graph .connection-navigation {
+  flex: 1;
+  min-height: 0;
+}
+.manual-builder.composition-builder
+  .composition-graph
+  .connection-navigation
+  .builder-canvas-scroll {
+  height: 100%;
+  min-height: 0;
+}
+.manual-builder.composition-builder .composition-preview {
+  height: 100%;
+  overflow: auto;
+  margin-top: 0;
+}
+.unsaved-dialog.component-dialog {
+  width: 560px;
+}
+.unsaved-intro {
+  font-size: 15px;
+  margin: 0 0 12px;
+  color: #3d4a3f;
+}
+.unsaved-intro strong {
+  overflow-wrap: anywhere;
+}
+.unsaved-destination {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  font-size: 12px;
+  color: #65715f;
+}
+.unsaved-copy {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  padding: 18px;
+  margin: 24px 0 16px;
+  background: #f1f5eb;
+  border: 1px solid #dce5d4;
+  border-radius: 14px;
+}
+.unsaved-copy > .builder-icon {
+  color: #62805c;
+  margin-top: 2px;
+}
+.unsaved-copy h3 {
+  font-size: 13px;
+  margin: 0 0 5px;
+  color: #39543c;
+}
+.unsaved-copy p {
+  font-size: 12px;
+  color: #667561;
+  margin: 0;
+  line-height: 1.6;
+}
+.unsaved-copy > button {
+  grid-column: 2;
+  justify-self: start;
+}
+.unsaved-alternatives {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 10px;
+}
+.unsaved-alternatives > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.component-dialog.unsaved-dialog
+  .unsaved-alternatives
+  > button.unsaved-discard {
+  color: #9a4436;
+  border-color: transparent;
+  background: transparent;
+  padding: 14px 22px;
+  gap: 12px;
+  min-height: 48px;
+}
+.component-dialog.unsaved-dialog
+  .unsaved-alternatives
+  > button.unsaved-discard:hover:not(:disabled) {
+  color: #852b22;
+  background: #fff1e9;
+  border-color: #ead2c7;
+}
+.unsaved-error {
+  display: flex;
+  gap: 10px;
+  padding: 13px;
+  margin-top: 18px;
+  border: 1px solid #e7cdbb;
+  background: #fff3eb;
+  border-radius: 10px;
+  color: #8c4334;
+  font-size: 12px;
+}
+.unsaved-error p {
+  margin: 4px 0 0;
+}
+.command-bar__stop-icon {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.builder-composer .command-bar__meta {
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 0 8px;
+}
+.builder-composer .command-bar__status {
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.builder-composer .command-bar__status-copy {
+  min-width: 0;
+  flex: 1;
+}
+.builder-composer .command-bar__status-copy output {
+  font-size: 12px;
+}
+.builder-composer .command-bar__status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.builder-composer .command-bar__status-actions:empty {
+  display: none;
+}
+.builder-composer .command-bar__status-card {
+  display: block;
+  padding: 14px 16px;
+  border: 1px solid #d4e1cb;
+  background: #f2f7ed;
+  border-radius: 16px;
+  box-shadow: 0 3px 16px #273a2210;
+}
+.builder-composer .command-bar__status-card.command-bar__status--error {
+  background: #fff6f0;
+  border-color: #e7cfc0;
+}
+.builder-composer .command-bar__status-card .command-bar__status-copy output {
+  display: flex;
+  gap: 8px;
+  font-weight: 650;
+  font-size: 13px;
+  color: #355839;
+}
+.builder-composer
+  .command-bar__status-card.command-bar__status--error
+  .command-bar__status-copy
+  output {
+  color: #934a38;
+}
+.builder-composer .command-bar__status-copy p {
+  margin: 7px 0 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #63725b;
+}
+.builder-composer .command-bar__status--error .command-bar__status-copy p {
+  color: #7d6556;
+}
+.manual-builder .builder-composer .command-bar__status-actions > button {
+  min-height: 36px;
+  padding: 7px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 500 12px / 1.4 var(--font-sans, sans-serif);
+  color: #355c43;
+  border: 1px solid #d3dfcb;
+  border-radius: 9px;
+  text-decoration: none;
+  background: #fffdf8;
+}
+.manual-builder
+  .builder-composer
+  .command-bar__status-actions
+  > button:hover:not(:disabled) {
+  background: #eaf2e3;
+  color: #285e56;
+  border-color: #b6c9ad;
+}
+.manual-builder
+  .builder-composer
+  .command-bar__status-actions
+  > .command-bar__details-action {
+  border-color: transparent;
+  background: transparent;
+  color: #75816d;
+  font-size: 11px;
+  margin-left: auto;
+}
+.command-bar__clarifications {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.manual-builder .builder-composer .command-bar__clarifications > button {
+  padding: 8px 10px;
+  min-height: 40px;
+  border: 1px solid #d6e2cc;
+  border-radius: 9px;
+  font: 500 12px / 1.5 var(--font-sans, sans-serif);
+  text-align: left;
+  color: #395d41;
+  background: #fffdf8;
+}
+.manual-builder
+  .builder-composer
+  .command-bar__clarifications
+  > button:hover:not(:disabled) {
+  background: #e6f0dd;
+  border-color: #b5cba8;
+}
+.builder-composer .command-bar__popover {
+  border-radius: 16px;
+  background: #fffdf8;
+  border-color: #dce2d5;
+}
+.builder-composer .command-bar__popover-heading {
+  font-size: 13px;
+}
+.manual-builder .builder-composer .command-bar__popover-heading > button {
+  display: grid;
+  place-items: center;
+  min-height: 36px;
+  width: 36px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #65765d;
+}
+.builder-composer .command-bar__popover p {
+  font-size: 12px;
+}
+@media (max-width: 600px) {
+  .unsaved-dialog.component-dialog > footer:has(.builder-primary) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .builder-composer .command-bar__status-card {
+    padding: 12px;
+  }
+  .manual-builder .builder-composer .command-bar__status-actions > button,
+  .manual-builder .builder-composer .command-bar__clarifications > button {
+    min-height: 44px;
+  }
+}
+.command-bar__clarifications {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+.builder-composer .command-bar__status-card {
+  max-height: min(320px, 42dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.builder-composer .command-bar__popover {
+  max-height: min(
+    320px,
+    max(100px, calc(100dvh - var(--builder-composer-height, 150px) - 190px))
+  );
+}
+.manual-builder .builder-composer .command-bar__clarifications > button {
+  text-decoration: none;
+}
+
+/* Compact help controls do not use the menu disclosure arrow. */
+.manual-builder :is(.board-navigation-help, .connection-help)
+  > summary::before {
+  content: none;
+}
+.manual-builder :is(.board-navigation-help, .connection-help) > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 40px;
+  width: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.manual-builder :is(.board-navigation-help, .connection-help) {
+  flex: 0 0 auto;
+}
+
+/* Form fields and text actions must fit their containing dialog at every width. */
+.component-dialog.component-dialog :is(label, input, select, textarea) {
+  min-width: 0;
+}
+.component-dialog.component-dialog button {
+  overflow-wrap: anywhere;
+}
+.component-dialog.component-dialog button:has(> .builder-icon) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.manual-builder .connection-camera-tools {
+  max-width: calc(100% - 24px);
+}
+.manual-builder .connection-help > div {
+  left: auto;
+  right: -6px;
+  width: min(280px, calc(100vw - 32px));
+  max-height: max(
+    100px,
+    calc(100dvh - var(--builder-composer-height, 100px) - 210px)
+  );
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.manual-builder .connection-options > summary::before {
+  content: none;
+}
+.manual-builder .connection-options > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+.manual-builder
+  :is(.composition-document-menu, .composition-settings-menu)
+  > div {
+  max-width: calc(100vw - 24px);
+  max-height: max(160px, calc(100dvh - 180px));
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.component-dialog.component-dialog.publication-dialog {
+  width: 650px;
+  padding: 0;
+  overflow: hidden;
+}
+.component-dialog.publication-dialog .project-check {
+  gap: 12px;
+  padding: 14px;
+  margin: 20px 0;
+  border: 1px solid var(--surface-line);
+  border-radius: 12px;
+  background: var(--surface-soft);
+}
+.component-dialog.publication-dialog .project-check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  margin-top: 3px;
+}
+.component-dialog.publication-dialog .component-dialog-body > details {
+  margin: 20px 0;
+  padding: 14px;
+  border: 1px solid var(--surface-line);
+  border-radius: 12px;
+}
+.component-dialog.publication-dialog
+  .component-dialog-body
+  > details
+  > summary {
+  cursor: pointer;
+  line-height: 1.5;
+}

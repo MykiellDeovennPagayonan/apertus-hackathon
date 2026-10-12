@@ -76,7 +76,7 @@ async function main() {
       .fill("Authored line");
     await page
       .getByRole("dialog", { name: "Authored line", exact: true })
-      .getByRole("button", { name: "Done", exact: true })
+      .getByRole("button", { name: "Close settings", exact: true })
       .click();
     await page.getByRole("button", { name: "Undo", exact: true }).click(); // rename
     await page.getByRole("button", { name: "Undo", exact: true }).click(); // line + placement
@@ -112,7 +112,7 @@ async function main() {
       exact: true,
     });
     await group.getByRole("button", { name: "Expand", exact: true }).click();
-    await group.getByRole("button", { name: "Done", exact: true }).click();
+    await group.getByRole("button", { name: "Close settings", exact: true }).click();
     assert.ok((await page.locator(".connection-node").count()) > 8);
     await page.getByRole("button", { name: "Build", exact: true }).click();
     await page.locator(".recipe-lesson").waitFor();
@@ -182,7 +182,7 @@ async function main() {
       .getByRole("status")
       .filter({ hasText: "Saved My dilution" })
       .waitFor();
-    await save.getByRole("button", { name: "Done", exact: true }).click();
+    await save.getByRole("button", { name: "Close", exact: true }).click();
     await page.reload();
     await page
       .getByRole("button", { name: "Continue draft", exact: true })
@@ -206,7 +206,7 @@ async function main() {
     await savedDetails.getByText("Customize exposed parameters").click();
     assert.equal(await savedDetails.locator("form").count(), 1);
     await savedDetails
-      .getByRole("button", { name: "← Back to results" })
+      .getByRole("button", { name: "Back to results" })
       .click();
     await library
       .getByRole("button", { name: "Import assembly", exact: true })

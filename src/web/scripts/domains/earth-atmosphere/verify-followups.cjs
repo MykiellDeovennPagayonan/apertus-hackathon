@@ -65,20 +65,25 @@ const originalFetch = global.fetch,
       APERTUS_STRUCTURED_OUTPUT: "strict-json",
     });
     session = activateRecipeSession(premadeRecipe("earthquake-formation"));
-    const queue = [
-      {
-        goal: "Slow the current lesson",
-        concepts: ["playback rate"],
-        interactions: ["slower animation"],
-        observations: ["fault movement"],
-        explicitConstraints: [],
-        suggestedStructure: "single",
-      },
-      { scope: "same-topic" },
-      { mode: "runtime" },
-      { selections: ["speed"] },
-      { command_arguments: { value: 0.5 } },
-    ];
+    const speedIntent = (input) => ({
+      mode: "runtime",
+      selections: [
+        {
+          candidate: input.candidates.find(
+            (candidate) => candidate.command === "EA_EARTHQUAKE_SET_speed",
+          ).id,
+          scope: "selected",
+          fields: [],
+        },
+      ],
+      message: "Slow the current lesson",
+    });
+    const speedArguments = (input) => ({
+      operations: [
+        { candidate: input.operations[0].candidate, arguments: { value: 0.5 } },
+      ],
+    });
+    const queue = [speedIntent, speedArguments];
     const providerCalls = [],
       decisions = [];
     global.fetch = async (url, options) => {
@@ -112,7 +117,22 @@ const originalFetch = global.fetch,
         choices: [
           {
             finish_reason: "stop",
-            message: { content: JSON.stringify(queue.shift()) },
+            message: {
+              content: JSON.stringify(
+                (() => {
+                  const next = queue.shift();
+                  return typeof next === "function"
+                    ? next(
+                        JSON.parse(
+                          body.messages.find(
+                            (message) => message.role === "user",
+                          ).content,
+                        ),
+                      )
+                    : next;
+                })(),
+              ),
+            },
           },
         ],
         usage: { prompt_tokens: 10, completion_tokens: 10, total_tokens: 20 },
@@ -128,28 +148,25 @@ const originalFetch = global.fetch,
     assert.equal(result.status, "runtime_action", JSON.stringify(result));
     assert.equal(result.commands[0].command, "EA_EARTHQUAKE_SET_speed");
     assert.equal(result.commands[0].arguments.value, 0.5);
-    assert.equal(decisions.length, 1);
-    assert.equal(providerCalls.length, 5);
+    assert.equal(
+      decisions.length,
+      0,
+      "Editing does not select a creation topic",
+    );
+    assert.equal(providerCalls.length, 2);
     assert.equal(queue.length, 0);
     queue.push(
-      {
-        goal: "Slow the current lesson",
-        concepts: ["playback rate"],
-        interactions: ["slower animation"],
-        observations: ["fault movement"],
-        explicitConstraints: [],
-        suggestedStructure: "single",
-      },
-      { scope: "same-topic" },
-      { mode: "runtime" },
-      { selections: ["speed"] },
-      {
-        runtime_command_arguments: {
-          command: "EA_EARTHQUAKE_SET_locking",
-          arguments: { value: 0.5 },
-        },
-      },
-      { arguments: { value: 0.5 } },
+      speedIntent,
+      (input) => ({
+        operations: [
+          {
+            candidate: input.operations[0].candidate,
+            arguments: { value: 0.5 },
+            command: "EA_EARTHQUAKE_SET_locking",
+          },
+        ],
+      }),
+      speedArguments,
     );
     const checkedEcho = await planPrompt({
       protocolVersion: 1,
@@ -163,16 +180,20 @@ const originalFetch = global.fetch,
     assert.equal(checkedEcho.commands[0].arguments.value, 0.5);
     assert.equal(
       providerCalls.length,
-      11,
+      5,
       "A mismatched echoed command must require provider repair",
     );
-    assert.equal(decisions.length, 2, "One decision call per request");
+    assert.equal(decisions.length, 0, "No creation decision calls for edits");
     assert.equal(queue.length, 0);
     const argumentsCall = providerCalls.at(-1);
-    assert.match(JSON.stringify(argumentsCall.messages), /currentValue/);
-    assert.match(
-      JSON.stringify(argumentsCall.messages),
-      /\\"currentValue\\":1/,
+    const context = JSON.parse(
+      argumentsCall.messages.find((message) => message.role === "user").content,
+    );
+    assert.equal(
+      context.nodes.find(
+        (node) => node.definition === "prefabs/earth-atmosphere/earthquake",
+      ).currentConfiguration.speed,
+      1,
     );
     console.log(
       "Seven bounded active model contexts, actual explored settings, preserved authored startup and current-setting inference contract passed (deterministic fixtures).",

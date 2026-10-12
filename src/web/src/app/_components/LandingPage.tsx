@@ -1,8 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import AccountControl from "./AccountControl";
 import ApertusBadge from "./ApertusBadge";
 import ExperimentArt from "./ExperimentArt";
+import SiteHeader from "./SiteHeader";
 import "./LandingPage.css";
 
 export default function LandingPage({ children }: { children?: ReactNode }) {
@@ -31,21 +31,7 @@ export default function LandingPage({ children }: { children?: ReactNode }) {
   ] as const;
   return (
     <div className="landing">
-      <header className="landing__nav">
-        <Link href="/" className="brand">
-          <span className="brand__mark" aria-hidden="true">
-            ✳
-          </span>{" "}
-          apertus<span className="brand__suffix">/ local lab</span>
-        </Link>
-        <nav aria-label="Main navigation">
-          <Link href="/experiments">Explore experiments ↗</Link>
-          <AccountControl />
-        </nav>
-        <span className="local-status">
-          <i /> Interactive experiments
-        </span>
-      </header>
+      <SiteHeader active="home" />
       <main className="landing__main">
         <section className="landing__hero">
           <div className="eyebrow">

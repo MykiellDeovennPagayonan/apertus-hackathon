@@ -1,0 +1,258 @@
+/* Keep the editor's established controls while giving the canvas a quieter frame. */
+.composition-builder.manual-builder {
+  --paper: #f0f1e9;
+  --muted: #647066;
+  background: var(--paper);
+}
+.composition-builder.manual-builder .composition-toolbar {
+  padding-block: 10px;
+  background: #fffdf7;
+  border-bottom: 1px solid #dce1d4;
+}
+.composition-builder.manual-builder .composition-tabs {
+  padding-block: 10px;
+  background: #fffdf7;
+  border-bottom: 1px solid #dce1d4;
+  gap: 12px;
+}
+.composition-builder .composition-mode-switch {
+  border-color: #dce1d4;
+  background: #eff1e8;
+}
+.composition-builder.manual-builder
+  .composition-mode-switch
+  button[aria-pressed="true"] {
+  background: #fffdf7;
+  color: var(--accent);
+  font-weight: 600;
+}
+.composition-builder.manual-builder
+  .composition-tabs
+  > button[data-composition-add] {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #bccdbb;
+  border-radius: 9px;
+  background: #eaf0e3;
+  color: var(--accent);
+  font-weight: 600;
+  padding-inline: 14px;
+}
+.composition-builder.manual-builder .composition-document-title input {
+  font-size: 17px;
+  letter-spacing: -0.025em;
+  border-radius: 8px;
+}
+.composition-builder.manual-builder .composition-document-title input:focus {
+  background: #f3f5ed;
+}
+.composition-builder .connection-workspace-header {
+  background: #f8f9f3;
+  border-bottom-color: #dce1d4;
+}
+.composition-builder .connection-workspace-title strong {
+  font-size: 13px;
+}
+.composition-builder .connection-workspace-title > span {
+  font-size: 12px;
+}
+.composition-graph:has(.builder-welcome)
+  :is(
+    .connection-workspace-header,
+    .connection-camera-tools,
+    .connection-legend
+  ) {
+  display: none;
+}
+.composition-builder .builder-welcome {
+  top: 40%;
+  width: min(590px, calc(100% - 40px));
+  padding: 30px 32px 24px;
+  border: 1px solid #dce1d4;
+  border-radius: 22px;
+  background: #fffdf7;
+  box-shadow: 0 16px 50px #30362e0a;
+}
+.builder-welcome-diagram {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 22px;
+  color: var(--accent);
+}
+.builder-welcome-diagram > span {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  background: #e9efdf;
+  border: 1px solid #d6dfca;
+  border-radius: 14px;
+}
+.builder-welcome-diagram > span:nth-of-type(2) {
+  background: var(--accent);
+  color: #fffdf7;
+  width: 58px;
+  height: 58px;
+}
+.builder-welcome-diagram .builder-icon {
+  width: 23px;
+  height: 23px;
+}
+.builder-welcome-diagram i {
+  width: 36px;
+  height: 1px;
+  background: #b6c6af;
+}
+.builder-welcome-eyebrow {
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+.composition-builder.manual-builder .builder-welcome h2 {
+  margin: 10px 0 12px;
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+.builder-welcome > p {
+  max-width: 420px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.builder-welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 22px 0 26px;
+}
+.composition-builder.manual-builder .builder-welcome-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+.composition-builder .builder-welcome-actions .builder-primary {
+  background: var(--accent);
+  color: #fffdf7;
+  border-color: var(--accent);
+}
+.builder-welcome-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 20px 0 0;
+  margin: 0;
+  border-top: 1px solid #e1e5d9;
+  list-style: none;
+  gap: 14px;
+  text-align: left;
+}
+.builder-welcome-steps li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.builder-welcome-steps li > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: var(--accent);
+  background: #edf1e5;
+  font-size: 10px;
+  font-weight: 600;
+}
+.builder-welcome-steps strong {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.builder-welcome-steps small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-top: 4px;
+}
+.builder-assistant-label {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 11px;
+  padding: 8px 12px;
+}
+.builder-assistant-label .builder-icon {
+  width: 13px;
+  height: 13px;
+  flex-basis: 13px;
+}
+.builder-assistant-label > span {
+  border-left: 1px solid #bdc6b6;
+  padding-left: 8px;
+  margin-left: 2px;
+}
+@media (max-width: 640px) {
+  .composition-builder .builder-welcome {
+    top: 16px;
+    transform: translateX(-50%);
+    padding: 22px 18px;
+    width: calc(100% - 24px);
+    border-radius: 16px;
+    max-height: calc(100dvh - var(--builder-composer-height, 120px) - 210px);
+    overflow-y: auto;
+  }
+  .composition-builder.manual-builder .builder-welcome h2 {
+    font-size: 25px;
+  }
+  .builder-welcome-diagram {
+    display: none;
+  }
+  .builder-welcome > p {
+    font-size: 13px;
+  }
+  .builder-welcome-actions {
+    margin: 16px 0 18px;
+  }
+  .builder-welcome-actions button {
+    width: 100%;
+  }
+  .builder-welcome-steps {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding-top: 16px;
+  }
+  .builder-welcome-steps small {
+    margin-top: 0;
+  }
+  .builder-assistant-label > span {
+    display: none;
+  }
+}
+@media (min-width: 641px) and (max-height: 750px) {
+  .builder-welcome-diagram {
+    display: none;
+  }
+  .composition-builder .builder-welcome {
+    padding-block: 20px;
+    top: 35%;
+  }
+  .builder-welcome-steps {
+    padding-top: 12px;
+  }
+  .builder-welcome-actions {
+    margin-block: 16px;
+  }
+}

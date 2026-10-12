@@ -107,7 +107,7 @@ export function bridgeRecipe(spanScale = 1, dense = false): CompositeRecipe {
   d.nodes.push(load);
   link(d, "load", "data", response.id, "load");
   for (const [key, contract] of Object.entries(
-    publicDefinition(load.definition).commands,
+    publicDefinition(load).commands,
   )) {
     if (key === "RESET") continue;
     const id = `control/${key}`,
@@ -191,7 +191,7 @@ export function townRecipe(): CompositeRecipe {
     d.nodes.find((n) => n.definition === "models/Market"),
   );
   for (const [key, c] of Object.entries(
-    publicDefinition(market.definition).commands,
+    publicDefinition(market).commands,
   )) {
     if (key === "RESET") continue;
     const id = `control/${key}`,

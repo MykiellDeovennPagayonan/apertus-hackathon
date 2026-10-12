@@ -42,7 +42,7 @@ fs.mkdirSync(out, { recursive: true });
           .getByRole("button", { name: "Save experiment", exact: true })
           .click();
         await page
-          .getByText("Saved on this device.", { exact: true })
+          .getByText("Saved on device", { exact: true })
           .first()
           .waitFor();
         await page

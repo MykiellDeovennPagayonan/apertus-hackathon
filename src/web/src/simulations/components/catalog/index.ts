@@ -1,3 +1,5 @@
+import { IMPORTED_HTML, importedDefinition } from "../../runtime/imported/contract";
+import type { ComponentInstance } from "../../runtime/authoring/types";
 import { mathAnalysisLiveCommands } from "./mathAnalysis";
 import { assemblyModels } from "../../runtime/assembly";
 import { requireValue } from "../../runtime/authoring/requireValue";
@@ -302,7 +304,13 @@ for (const m of assemblyModels) {
     cardinality: "many",
   };
 }
-export function publicDefinition(id: string, version = 1): PublicDefinition {
+export function publicDefinition(identity: string | ComponentInstance, version = 1): PublicDefinition {
+  const id = typeof identity === "string" ? identity : identity.definition;
+  if (typeof identity !== "string") version = identity.version;
+  if (id === IMPORTED_HTML) {
+    if (version !== 1) throw new Error("Unsupported imported component version");
+    return importedDefinition(typeof identity === "string" ? undefined : identity);
+  }
   const d = publicDefinitions.get(id);
   if (!d) throw new Error(`${id}: unknown public component`);
   if (d.version !== version)

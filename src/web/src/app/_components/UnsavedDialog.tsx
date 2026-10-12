@@ -1,8 +1,12 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useState } from "react";
+import { BuilderIcon } from "../../simulations/builder/BuilderIcon";
+import { ComponentDialog } from "../../simulations/builder/ComponentDialog";
 export default function UnsavedDialog({
   account,
   busy,
+  experimentName,
+  error,
   onSave,
   onDiscard,
   onCancel,
@@ -11,58 +15,88 @@ export default function UnsavedDialog({
 }: {
   account: boolean;
   busy: boolean;
+  experimentName?: string;
+  error?: string;
   onSave: () => void;
   onDiscard: () => void;
   onCancel: () => void;
   onDownload: () => void;
   onPublish?: () => void;
 }) {
-  const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    ref.current?.showModal();
-    return () => ref.current?.close();
-  }, []);
+  const [attempted, setAttempted] = useState(false);
   return (
-    <dialog
-      ref={ref}
-      className="project-dialog"
-      aria-labelledby="unsaved-title"
-      onCancel={(e) => {
-        e.preventDefault();
-        if (!busy) onCancel();
-      }}
+    <ComponentDialog
+      open
+      title="Save changes before leaving?"
+      subtitle="Unsaved changes"
+      icon="warning"
+      className="unsaved-dialog"
+      dismissDisabled={busy}
+      onClose={onCancel}
+      footerLabel="Keep editing"
+      footerActions={
+        <button
+          type="button"
+          className="builder-primary"
+          disabled={busy}
+          onClick={() => {
+            setAttempted(true);
+            onSave();
+          }}
+        >
+          {busy ? "Saving…" : "Save & continue"}
+        </button>
+      }
     >
-      <h2 id="unsaved-title">Keep your changes first?</h2>
-      <p>
-        Your canvas has unsaved changes. Save them before continuing, or discard
-        them. Existing community publications stay unchanged.
+      <p className="unsaved-intro">
+        Your changes to{" "}
+        <strong>{experimentName || "Untitled experiment"}</strong> haven’t been
+        saved.
       </p>
-      <div className="project-actions">
-        <button type="button" disabled={busy} onClick={onSave}>
-          {busy
-            ? "Saving…"
-            : account
-              ? "Save to account & continue"
-              : "Save on device & continue"}
-        </button>
+      <p className="unsaved-destination">
+        <BuilderIcon name="folder" />{" "}
+        {account
+          ? "Save a private copy to your account before continuing."
+          : "Save a copy on this device before continuing."}
+      </p>
+      {attempted && !busy && error && (
+        <div className="unsaved-error" role="alert">
+          <BuilderIcon name="warning" />
+          <div>
+            <strong>Your changes still need saving</strong>
+            <p>{error}</p>
+          </div>
+        </div>
+      )}
+      <div className="unsaved-copy">
+        <BuilderIcon name="download" />
+        <div>
+          <h3>Keep a portable copy</h3>
+          <p>
+            Download a recipe to reopen your experiment later. This dialog stays
+            open.
+          </p>
+        </div>
         <button type="button" disabled={busy} onClick={onDownload}>
-          Download recipe
-        </button>
-        {onPublish && (
-          <button type="button" disabled={busy} onClick={onPublish}>
-            Publish & continue
-          </button>
-        )}
-        <button type="button" disabled={busy} onClick={onDiscard}>
-          Discard changes
-        </button>
-        <button type="button" disabled={busy} onClick={onCancel}>
-          Cancel
+          Download a copy
         </button>
       </div>
-      <p>
-        Downloading keeps this dialog open so you can decide when to continue.
-      </p>
-    </dialog>
+      <div className="unsaved-alternatives">
+        {onPublish && (
+          <button type="button" disabled={busy} onClick={onPublish}>
+            <BuilderIcon name="share" /> Publish & continue
+          </button>
+        )}
+        <button
+          type="button"
+          className="unsaved-discard"
+          style={{ padding: "14px 22px", gap: 12 }}
+          disabled={busy}
+          onClick={onDiscard}
+        >
+          <BuilderIcon name="trash" /> <span>Discard changes</span>
+        </button>
+      </div>
+    </ComponentDialog>
   );
 }

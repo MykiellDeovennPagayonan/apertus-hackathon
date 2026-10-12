@@ -120,7 +120,7 @@ async function main() {
       .getByRole("heading", { name: "Included components (7)" })
       .waitFor();
     await screenshot("activity-details");
-    await details.getByRole("button", { name: "← Back to results" }).click();
+    await details.getByRole("button", { name: "Back to results" }).click();
     assert.equal(
       await activityCard
         .getByRole("button", { name: "Details for Line exploration" })
@@ -228,18 +228,18 @@ async function main() {
     await line.locator(".connection-node-heading").dblclick();
     await page
       .getByRole("dialog", { name: "Line", exact: true })
-      .getByRole("button", { name: "Done", exact: true })
+      .getByRole("button", { name: "Close settings", exact: true })
       .click();
     await pencil.tap();
     await page
       .getByRole("dialog", { name: "Line", exact: true })
-      .getByRole("button", { name: "Done", exact: true })
+      .getByRole("button", { name: "Close settings", exact: true })
       .tap();
     await pencil.focus();
     await page.keyboard.press("Enter");
     await page
       .getByRole("dialog", { name: "Line", exact: true })
-      .getByRole("button", { name: "Done", exact: true })
+      .getByRole("button", { name: "Close settings", exact: true })
       .click();
     await page.getByRole("button", { name: "Undo", exact: true }).click();
     await openLibrary();
@@ -314,7 +314,7 @@ async function main() {
     });
     await intercept.uncheck();
     await settings.getByRole("button", { name: "Expand", exact: true }).click();
-    await settings.getByRole("button", { name: "Done", exact: true }).click();
+    await settings.getByRole("button", { name: "Close settings", exact: true }).click();
     assert.equal(await groupNode.count(), 0);
     const expandedEdit = page.getByRole("button", {
       name: "Edit Line exploration",
@@ -324,7 +324,7 @@ async function main() {
     await settings
       .getByRole("button", { name: "Collapse", exact: true })
       .click();
-    await settings.getByRole("button", { name: "Done", exact: true }).click();
+    await settings.getByRole("button", { name: "Close settings", exact: true }).click();
     assert.equal(
       await groupNode.locator('[data-port-side="output"]').count(),
       2,
@@ -360,7 +360,7 @@ async function main() {
       .click();
     await page
       .locator("dialog[open]")
-      .getByRole("button", { name: "Done", exact: true })
+      .getByRole("button", { name: "Close settings", exact: true })
       .click();
     assert.equal((await draft()).editor.positions[groupId], undefined);
     const current = await draft();

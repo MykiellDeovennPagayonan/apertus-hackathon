@@ -50,7 +50,19 @@ function formatSingleDetail(line: string): string {
     .replace(/^(?:Error|PlannerError):\s*/i, "")
     .trim();
 
+  if (
+    /laya .*select.*composition.*confidently|request needs more detail/i.test(
+      cleaned,
+    )
+  )
+    return "The planner couldn't identify the experiment or setting to edit. Your current experiment is unchanged. Try naming the experiment and setting together.";
+  if (/\blaya\b/i.test(cleaned))
+    return "The request could not be resolved. Try a more specific change.";
+
   // 2. Authoring / simulation binding errors translated to sensible user-facing language
+  if (/^Choose actual editable fields on the selected component$/i.test(cleaned)) {
+    return "The AI couldn't match your request to a valid change in this simulation. No changes were applied. Try again, or name the display or control you want to change.";
+  }
   if (
     /^A numeric readout cannot display a structured or unavailable output$/i.test(
       cleaned,
@@ -279,6 +291,14 @@ function formatSingleDetail(line: string): string {
 export function formatUserFacingStatus(raw: string): string {
   if (!raw || typeof raw !== "string") return "";
   const trimmed = raw.trim();
+
+  if (
+    /laya .*select.*composition.*confidently|request needs more detail/i.test(
+      trimmed,
+    )
+  )
+    return "Couldn't identify that simulation change.";
+  if (/\blaya\b/i.test(trimmed)) return "Couldn't resolve that change.";
 
   // Preserve test fixtures & standard user-friendly responses
   if (

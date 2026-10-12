@@ -35,7 +35,7 @@ export function addCatalogComponent(
   let canvas = d.nodes.find(
     (n) =>
       n.id === destination &&
-      publicDefinition(n.definition).category === "canvases",
+      publicDefinition(n).category === "canvases",
   );
   if (destination && !canvas)
     throw new Error(
@@ -45,13 +45,13 @@ export function addCatalogComponent(
   if (!destination && appearance)
     canvas = d.nodes.find(
       (n) =>
-        publicDefinition(n.definition).category === "canvases" &&
-        publicDefinition(n.definition).inputs.objects?.unit === appearance.unit,
+        publicDefinition(n).category === "canvases" &&
+        publicDefinition(n).inputs.objects?.unit === appearance.unit,
     );
   if (
     canvas &&
     appearance &&
-    publicDefinition(canvas.definition).inputs.objects?.unit !== appearance.unit
+    publicDefinition(canvas).inputs.objects?.unit !== appearance.unit
   )
     throw new Error(
       `Choose a compatible ${appearance.unit} canvas, or choose a new compatible canvas.`,
@@ -138,13 +138,13 @@ export function insertComposite(
     : undefined;
   if (
     destination &&
-    (!target || publicDefinition(target.definition).category !== "canvases")
+    (!target || publicDefinition(target).category !== "canvases")
   )
     throw new Error(
       "The selected canvas was removed. Choose another canvas or use automatic placement.",
     );
   const canvases = added.filter(
-    (n) => publicDefinition(n.definition).category === "canvases",
+    (n) => publicDefinition(n).category === "canvases",
   );
   if (target && canvases.length) {
     if (canvases.length !== 1 || canvases[0].definition !== target.definition)
@@ -154,7 +154,7 @@ export function insertComposite(
     const source = canvases[0];
     // Do not silently replace an already bound singleton canvas input.
     for (const c of next.connections.filter((c) => c.to.node === source.id)) {
-      const p = publicDefinition(target.definition).inputs[c.to.port];
+      const p = publicDefinition(target).inputs[c.to.port];
       if (
         p?.cardinality !== "many" &&
         document.connections.some(

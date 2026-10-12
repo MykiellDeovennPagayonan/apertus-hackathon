@@ -21,7 +21,7 @@ export function connectAuthored(
   const target = next.nodes.find((node) => node.id === to.node);
   if (!source || !target)
     throw new Error("Choose existing connection endpoints");
-  const output = publicDefinition(source.definition).outputs[from.port];
+  const output = publicDefinition(source).outputs[from.port];
   const kind: Connection["kind"] =
     output?.kind === "event"
       ? "command"
@@ -40,10 +40,10 @@ export function connectAuthored(
     return next;
   if (
     kind === "command" &&
-    publicDefinition(source.definition).category === "controls" &&
+    publicDefinition(source).category === "controls" &&
     source.configuration.initial === "{}"
   ) {
-    const contract = publicDefinition(target.definition).commands[to.port];
+    const contract = publicDefinition(target).commands[to.port];
     if (contract) {
       const snapshot = new DocumentRuntime(document).getSnapshot();
       source.configuration.initial = JSON.stringify(
@@ -56,8 +56,8 @@ export function connectAuthored(
     joinCanvasScope &&
     kind === "attachment" &&
     to.port === "objects" &&
-    publicDefinition(target.definition).category === "canvases" &&
-    publicDefinition(target.definition).inputs.objects?.unit === output?.unit &&
+    publicDefinition(target).category === "canvases" &&
+    publicDefinition(target).inputs.objects?.unit === output?.unit &&
     source.scope !== target.scope
   ) {
     const old = source.scope;

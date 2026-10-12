@@ -45,6 +45,7 @@ export interface ExperimentDocument {
   editor: {
     positions: Record<string, { x: number; y: number }>;
     zoom: number;
+    pan?: { x: number; y: number };
     groups?: { id: string; label: string; members: string[] }[];
   };
 }

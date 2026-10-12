@@ -1,3 +1,4 @@
+import { IMPORTED_HTML, manifestFor } from "../imported/contract";
 import { publicDefinition } from "../../components/catalog";
 import { schemaDefault } from "../../components/composites/catalog";
 import { acceptedCommandArguments } from "../../components/controls/commandPresentation";
@@ -86,7 +87,7 @@ export class DocumentRuntime {
         ...this.document.nodes,
         ...this.document.resources,
       ].find((old) => old.id === n.id);
-      const def = publicDefinition(n.definition);
+      const def = publicDefinition(n);
       const authored = (config: Record<string, unknown>) =>
         Object.fromEntries(
           Object.entries(config).filter(
@@ -118,6 +119,19 @@ export class DocumentRuntime {
       throw error;
     }
   }
+  acceptImported(node: string, generation: string, outputs: Record<string, unknown>, error = "", completedAction?: string) {
+    const instance = this.document.nodes.find(n => n.id === node);
+    if (!instance || instance.definition !== IMPORTED_HTML || this.snapshot.state[node]?.generation !== generation) return;
+    const manifest = manifestFor(String(instance.configuration.source));
+    for (const [name, value] of Object.entries(outputs)) {
+      if (!Object.hasOwn(manifest.outputs, name)) throw new Error(`Unknown imported output ${name}`);
+      validateValue(manifest.outputs[name].schema, value, `outputs.${name}`);
+    }
+    const staged = structuredClone(this.snapshot);
+    Object.assign(staged.state[node], { outputs, error });
+    if (completedAction) staged.state[node].commands = (staged.state[node].commands as { id: string }[]).filter(c => c.id !== completedAction);
+    this.commit(staged);
+  }
   getSnapshot = () => this.snapshot;
   subscribe = (listener: () => void) => {
     this.listeners.add(listener);
@@ -143,6 +157,7 @@ export class DocumentRuntime {
     const evaluate = (n: import("./types").ComponentInstance) => {
       if (visited.has(n.id)) return;
       const inputs: Record<string, unknown[]> = {};
+      let unavailable = false;
       for (const c of this.document.connections.filter(
         (c) => c.kind === "value" && c.to.node === n.id,
       )) {
@@ -151,13 +166,14 @@ export class DocumentRuntime {
           ...this.document.resources,
         ].find((node) => node.id === c.from.node);
         if (source) evaluate(source);
-        const def = publicDefinition(n.definition),
+        const def = publicDefinition(n),
           input = def.inputs[c.to.port],
           provider = runtimeProvider(n);
         const value = staged.outputs[c.from.node]?.[c.from.port];
+        if (value === undefined || (value && typeof value === "object" && (value as { status?: string }).status === "unavailable")) unavailable = true;
         inputs[c.to.port] ??= [];
         inputs[c.to.port].push(value);
-        if (provider && !provider.synchronize && def.category === "models") {
+        if (value !== undefined && provider && !provider.synchronize && def.category === "models") {
           if (input.schema) validateValue(input.schema, value, `${c.id}.value`);
           staged.state[n.id] = provider.apply(
             staged.state[n.id],
@@ -168,6 +184,7 @@ export class DocumentRuntime {
         }
       }
       const provider = runtimeProvider(n);
+      if (unavailable && n.definition !== IMPORTED_HTML) { staged.outputs[n.id] = {}; visited.add(n.id); return; }
       if (provider?.synchronize)
         staged.state[n.id] = provider.synchronize(
           staged.state[n.id],
@@ -247,7 +264,7 @@ export class DocumentRuntime {
       for (const c of commands) {
         const n = this.document.nodes.find((n) => n.id === c.node);
         if (!n) throw new Error(`${c.node}: missing command target`);
-        const d = publicDefinition(n.definition),
+        const d = publicDefinition(n),
           provider = runtimeProvider(n);
         if (!provider) throw new Error(`${n.label}: not a model`);
         const contract = d.commands[c.command];
@@ -285,7 +302,7 @@ export class DocumentRuntime {
           if (control && !c.arguments) {
             const target = this.document.nodes.find((n) => n.id === c.to.node);
             if (!target) throw new Error("Missing control target");
-            const schema = publicDefinition(target.definition).commands[
+            const schema = publicDefinition(target).commands[
               c.to.port
             ].arguments;
             if (scalarControls.has(control.definition)) {
@@ -355,7 +372,8 @@ export class DocumentRuntime {
     const staged = structuredClone(this.snapshot);
     for (const n of [...this.document.nodes, ...this.document.resources]) {
       const p = runtimeProvider(n);
-      if (p?.step) staged.state[n.id] = p.step(staged.state[n.id], delta);
+      const blocked = this.document.connections.some(c => c.kind === "value" && c.to.node === n.id && staged.outputs[c.from.node]?.[c.from.port] === undefined);
+      if (p?.step && !blocked && !(n.definition === IMPORTED_HTML && (staged.state[n.id].error || staged.state[n.id].missing)) && (n.definition !== IMPORTED_HTML || manifestFor(String(n.configuration.source)).clock)) staged.state[n.id] = p.step(staged.state[n.id], delta);
     }
     this.commit(staged);
   }
@@ -366,13 +384,13 @@ export class DocumentRuntime {
           (n) =>
             (!scope || n.scope === scope) &&
             runtimeProvider(n) &&
-            (publicDefinition(n.definition).commands.RESET ||
-              publicDefinition(n.definition).commands.reset),
+            (publicDefinition(n).commands.RESET ||
+              publicDefinition(n).commands.reset),
         )
         .map((n) => ({
           node: n.id,
           command: Object.hasOwn(
-            publicDefinition(n.definition).commands,
+            publicDefinition(n).commands,
             "RESET",
           )
             ? "RESET"

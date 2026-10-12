@@ -6,6 +6,7 @@ import {
 } from "react";
 import type { ConstructionUpdate } from "../../../lib/planner/construction";
 import { requireRecord } from "../../runtime/records";
+import { BuilderIcon } from "../BuilderIcon";
 import { ConnectionNode } from "../ConnectionNode";
 import { ConnectionViewport } from "../ConnectionViewport";
 import { type ExperimentDocument, validateDocument } from "../document";
@@ -60,7 +61,7 @@ export function CompositionGraph({
   onSelect: (id: string) => void;
   onAdd: (category: string, target?: string) => void;
   edit: Edit;
-  onZoom: (zoom: number) => void;
+  onZoom: (zoom: number, pan?: { x: number; y: number }) => void;
   active: boolean;
   reveal?: {
     id: string;
@@ -683,6 +684,7 @@ export function CompositionGraph({
           )}
           active={active}
           zoom={doc.editor.zoom}
+          initialPan={doc.editor.pan}
           onZoom={onZoom}
           selectedId={selected}
           fitRequest={fit}
@@ -783,15 +785,65 @@ export function CompositionGraph({
                 </span>
               </aside>
               {!blocks.length && (
-                <div className="connection-empty">
-                  <strong>Build from small pieces</strong>
+                <div className="connection-empty builder-welcome">
+                  <div className="builder-welcome-diagram" aria-hidden="true">
+                    <span>
+                      <BuilderIcon name="canvases" />
+                    </span>
+                    <i />
+                    <span>
+                      <BuilderIcon name="controls" />
+                    </span>
+                    <i />
+                    <span>
+                      <BuilderIcon name="displays" />
+                    </span>
+                  </div>
+                  <span className="builder-welcome-eyebrow">
+                    BUILD FROM SMALL PIECES
+                  </span>
+                  <h2>Your next idea starts here.</h2>
                   <p>
-                    Add a canvas first, then objects, controls and results. Drag
-                    between ports to connect them.
+                    Make something you can change, test, and explore. Start with
+                    a blank canvas or borrow a working experiment.
                   </p>
-                  <button type="button" onClick={() => onAdd("canvases")}>
-                    + Add canvas
-                  </button>
+                  <div className="builder-welcome-actions">
+                    <button
+                      type="button"
+                      className="builder-primary"
+                      aria-label="+ Add canvas"
+                      onClick={() => onAdd("canvases")}
+                    >
+                      <BuilderIcon name="plus" /> Add canvas
+                    </button>
+                    <button type="button" onClick={() => onAdd("experiments")}>
+                      <BuilderIcon name="experiments" /> Browse starter
+                      experiments
+                    </button>
+                  </div>
+                  <ol className="builder-welcome-steps">
+                    <li>
+                      <span>1</span>
+                      <div>
+                        <strong>Add your pieces</strong>
+                        <small>A canvas, an object, and a control.</small>
+                      </div>
+                    </li>
+                    <li>
+                      <span>2</span>
+                      <div>
+                        <strong>Connect what changes</strong>
+                        <small>Drag between ports to link pieces.</small>
+                      </div>
+                    </li>
+                    <li>
+                      <span>3</span>
+                      <div>
+                        <strong>Arrange, then try it</strong>
+                        <small>Use Build for layout, Try lesson to run.</small>
+                      </div>
+                    </li>
+                  </ol>
                 </div>
               )}
               {(source || feedback || wireSelection) && (

@@ -91,7 +91,7 @@ export function arrangeDocument(
         : matches(item, request.results)
           ? "displays"
           : node
-            ? publicDefinition(node.definition).category
+            ? publicDefinition(node).category
             : "layout";
   };
   // Data-connected models share presentation space while runtime scopes stay
@@ -108,8 +108,8 @@ export function arrangeDocument(
     if (
       source &&
       target &&
-      publicDefinition(source.definition).category === "models" &&
-      publicDefinition(target.definition).category === "models"
+      publicDefinition(source).category === "models" &&
+      publicDefinition(target).category === "models"
     )
       clusters.set(cluster(source.scope), cluster(target.scope));
   }
@@ -144,7 +144,7 @@ export function arrangeDocument(
     const sceneNode = scenes.length === 1 ? nodeFor(scenes[0]) : undefined;
     const sceneFirst =
       sceneNode &&
-      publicDefinition(sceneNode.definition).learnerLayout === "scene-first";
+      publicDefinition(sceneNode).learnerLayout === "scene-first";
     if (sceneFirst) {
       board.responsiveGap = 16;
       const place = (
@@ -412,7 +412,7 @@ export function arrangeDocument(
 export function arrangeGraph(document: AuthoredDocument) {
   const columns = new Map<string, number>();
   for (const node of [...document.nodes, ...document.resources]) {
-    const def = publicDefinition(node.definition);
+    const def = publicDefinition(node);
     const column =
       def.category === "controls"
         ? 0

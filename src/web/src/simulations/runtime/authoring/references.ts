@@ -10,7 +10,7 @@ export function visitConfigurationReferences(
   ) => void,
 ) {
   for (const [path, definition] of Object.entries(
-    publicDefinition(node.definition).configurationReferences ?? {},
+    publicDefinition(node).configurationReferences ?? {},
   )) {
     const walk = (value: unknown, parts: string[]) => {
       if (!value || typeof value !== "object") return;

@@ -90,28 +90,39 @@ fs.mkdirSync(out, { recursive: true });
           await capture(`opening-${viewport.width}x${viewport.height}`);
         }
         await page.setViewportSize({ width: 1440, height: 900 });
-        const dialog = await learner.open(page);
-        assert.ok(
-          await dialog
-            .getByRole("button", { name: "Done", exact: true })
-            .isVisible(),
-        );
-        await page.keyboard.press("Escape");
-        assert.equal(
-          await page.locator(".science-investigation[open]").count(),
-          0,
-        );
-        assert.equal(
-          (await learner.state(page)).time,
-          0,
-          "Opening conditions never advances the model",
-        );
-        assert.ok(
+        if (spec.kind === "cell") {
           await page
-            .locator(".science-investigation-trigger")
-            .evaluate((e) => e === document.activeElement),
-          "Dialog returns keyboard focus",
-        );
+            .getByRole("switch", { name: "Separation error" })
+            .waitFor();
+          assert.ok(
+            await page
+              .getByRole("button", { name: "Back", exact: true })
+              .isDisabled(),
+          );
+        } else {
+          const dialog = await learner.open(page);
+          assert.ok(
+            await dialog
+              .getByRole("button", { name: "Done", exact: true })
+              .isVisible(),
+          );
+          await page.keyboard.press("Escape");
+          assert.equal(
+            await page.locator(".science-investigation[open]").count(),
+            0,
+          );
+          assert.equal(
+            (await learner.state(page)).time,
+            0,
+            "Opening conditions never advances the model",
+          );
+          assert.ok(
+            await page
+              .locator(".science-investigation-trigger")
+              .evaluate((e) => e === document.activeElement),
+            "Dialog returns keyboard focus",
+          );
+        }
         if (spec.kind === "earth") {
           await page
             .getByRole("button", { name: "Inspect Mantle", exact: true })
@@ -150,8 +161,10 @@ fs.mkdirSync(out, { recursive: true });
           await page.locator(".science-scene").getAttribute("data-time"),
           "0",
         );
-        await learner.open(page);
-        await learner.close(page);
+        if (spec.kind !== "cell") {
+          await learner.open(page);
+          await learner.close(page);
+        }
         if (spec.kind !== "earth") {
           await learner.begin(page, spec.kind);
           await learner.steps(page, spec.kind, 1);

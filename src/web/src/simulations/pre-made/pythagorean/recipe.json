@@ -3,7 +3,7 @@
   "id": "prebuilt/pythagorean",
   "version": 1,
   "title": "How long must the ladder be?",
-  "description": "Move the ladder foot while keeping its wall contact fixed. Linked squares explain the Pythagorean theorem.",
+  "description": "Change the ground distance or wall height and calculate the ladder length using the Pythagorean theorem.",
   "tags": ["mathematics", "pythagorean", "ladder", "right triangle"],
   "document": {
     "formatVersion": 3,
@@ -23,7 +23,7 @@
         "id": "scene",
         "definition": "appearance/math-pythagorean",
         "version": 1,
-        "label": "Ladder and linked squares",
+        "label": "Ladder and worked calculation",
         "scope": "scope/lab",
         "configuration": {}
       },
@@ -55,17 +55,6 @@
           "parameter": "value",
           "step": 0.1,
           "showNumber": true
-        }
-      },
-      {
-        "id": "result",
-        "definition": "displays/Readout",
-        "version": 1,
-        "label": "Required ladder length",
-        "scope": "scope/lab",
-        "configuration": {
-          "label": "Required ladder length",
-          "precision": 2
         }
       }
     ],
@@ -104,18 +93,6 @@
         "to": {
           "node": "model",
           "port": "set:height"
-        }
-      },
-      {
-        "id": "link/result",
-        "kind": "value",
-        "from": {
-          "node": "model",
-          "port": "ladderLength"
-        },
-        "to": {
-          "node": "result",
-          "port": "value"
         }
       }
     ],
@@ -160,22 +137,13 @@
           "columns": 1,
           "children": [],
           "node": "input/height"
-        },
-        {
-          "id": "layout/result",
-          "kind": "stack",
-          "label": "",
-          "gap": 16,
-          "columns": 1,
-          "children": [],
-          "node": "result"
         }
       ]
     },
     "lesson": {
       "title": "How long must the ladder be?",
       "instruction": "Move the foot farther from the wall. How does the ladder change?",
-      "explanation": "The wall and ground are perpendicular. The two smaller square areas add to the square on the ladder. This geometric model does not determine safe ladder placement."
+      "explanation": "The wall and ground form a right angle. The Pythagorean theorem gives a\u00b2 + b\u00b2 = c\u00b2; take the square root to find the ladder length. This geometric model does not determine safe ladder placement."
     },
     "editor": {
       "positions": {},
@@ -191,8 +159,8 @@
           "rect": {
             "x": 0,
             "y": 0,
-            "width": 780,
-            "height": 420
+            "width": 980,
+            "height": 330
           },
           "zIndex": 0,
           "locked": false,
@@ -203,9 +171,9 @@
           "layoutId": "layout/input/distance",
           "rect": {
             "x": 0,
-            "y": 440,
-            "width": 370,
-            "height": 140
+            "y": 354,
+            "width": 478,
+            "height": 128
           },
           "zIndex": 1,
           "locked": false,
@@ -215,25 +183,12 @@
           "id": "board/layout/input/height",
           "layoutId": "layout/input/height",
           "rect": {
-            "x": 394,
-            "y": 440,
-            "width": 370,
-            "height": 140
+            "x": 502,
+            "y": 354,
+            "width": 478,
+            "height": 128
           },
           "zIndex": 2,
-          "locked": false,
-          "responsiveMinHeight": 100
-        },
-        {
-          "id": "board/layout/result",
-          "layoutId": "layout/result",
-          "rect": {
-            "x": 0,
-            "y": 585,
-            "width": 370,
-            "height": 110
-          },
-          "zIndex": 3,
           "locked": false,
           "responsiveMinHeight": 100
         }
@@ -242,8 +197,8 @@
       "startView": {
         "x": -24,
         "y": -24,
-        "width": 828,
-        "height": 743
+        "width": 1028,
+        "height": 530
       },
       "navigation": {
         "mode": "bounded",
@@ -258,9 +213,9 @@
       "responsive": true,
       "responsiveRows": [
         ["board/layout/scene"],
-        ["board/layout/input/distance", "board/layout/input/height"],
-        ["board/layout/result"]
-      ]
+        ["board/layout/input/distance", "board/layout/input/height"]
+      ],
+      "responsiveGap": 16
     }
   },
   "nested": [],
@@ -302,10 +257,6 @@
     },
     {
       "id": "controls/Slider",
-      "version": 1
-    },
-    {
-      "id": "displays/Readout",
       "version": 1
     }
   ],

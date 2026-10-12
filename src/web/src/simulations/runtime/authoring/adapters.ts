@@ -101,7 +101,7 @@ export function assemblyDocument(assembly: Assembly): AuthoredDocument {
       (node) =>
         node.id !== target.id &&
         node.definition === target.definition &&
-        publicDefinition(node.definition).commands.PHYS_RESTART,
+        publicDefinition(node).commands.PHYS_RESTART,
     ))
       d.connections.push({
         id: `${link.id}/restart/${peer.id}`,

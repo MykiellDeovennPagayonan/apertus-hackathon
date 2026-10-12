@@ -2,6 +2,21 @@ import type { Snapshot } from "../../../runtime/authoring/runtime";
 import type { AuthoredDocument } from "../../../runtime/authoring/types";
 import { publicDefinition } from "../../catalog";
 
+export function readoutLabel(
+  configuredLabel: string,
+  sourceDefinition?: string,
+  output?: string,
+  unit = "",
+) {
+  return sourceDefinition === "prefabs/physical-systems/Pendulum" && output === "period"
+    ? "Time for one full swing"
+    : sourceDefinition === "prefabs/physical-systems/ResistiveCircuit" && output === "bulbPower"
+      ? "Power per bulb · brightness proxy"
+      : unit && configuredLabel.endsWith(` ${unit}`)
+        ? configuredLabel.slice(0, -unit.length - 1)
+        : configuredLabel;
+}
+
 /** Resolve a display's first validated value binding consistently across renderers. */
 export function boundObservation(
   document: AuthoredDocument,
@@ -18,7 +33,7 @@ export function boundObservation(
     : undefined;
   const rawUnit =
     source && binding
-      ? publicDefinition(source.definition).outputs[binding.from.port]?.unit
+      ? publicDefinition(source).outputs[binding.from.port]?.unit
       : undefined;
   return {
     binding,

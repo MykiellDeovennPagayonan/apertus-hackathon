@@ -21,7 +21,7 @@ export function CompositeInterfaceEditor({
   const candidates = [...document.nodes, ...document.resources]
     .filter((n) => group.members.includes(n.id))
     .flatMap((node) => {
-      const def = publicDefinition(node.definition);
+      const def = publicDefinition(node);
       return [
         ...Object.entries(def.inputs).map(([port, contract]) => ({
           port,

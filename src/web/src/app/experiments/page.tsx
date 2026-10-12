@@ -1,9 +1,15 @@
 import { Suspense } from "react";
+import LoadingState from "../_components/LoadingState";
 import ExperimentsShell from "./_components/ExperimentsShell";
 export default function Experiments() {
   return (
     <Suspense
-      fallback={<div aria-live="polite">Preparing the experiments…</div>}
+      fallback={
+        <LoadingState
+          title="Preparing your experiments…"
+          description="Getting your experiments and tools ready."
+        />
+      }
     >
       <ExperimentsShell />
     </Suspense>

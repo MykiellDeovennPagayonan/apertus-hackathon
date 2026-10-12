@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useOffline } from "../../app/_components/DeploymentProvider";
+import LoadingState from "../../app/_components/LoadingState";
 import PublishDialog from "../../app/_components/PublishDialog";
 import UnsavedDialog from "../../app/_components/UnsavedDialog";
 import {
@@ -21,7 +22,10 @@ import type {
 import { builtInRecipe } from "../components/composites/catalog";
 import type { CompositeRecipe } from "../runtime/authoring/types";
 import { parseRecipe } from "../runtime/recipes/schema";
+import { BuilderIcon } from "./BuilderIcon";
+import { ComponentDialog } from "./ComponentDialog";
 import CompositionBuilder from "./composition/CompositionBuilder";
+import { contentFingerprint } from "./composition/constructionPreview";
 import {
   type ExperimentDocument,
   isRunnableDocument,
@@ -81,15 +85,40 @@ export default function Builder() {
   const [selected, setSelected] = useState("");
   const [expanded, setExpanded] = useState(false);
   const fileMenu = useRef<HTMLDetailsElement>(null);
+  const importInput = useRef<HTMLInputElement>(null);
+  const [savedLibraryOpen, setSavedLibraryOpen] = useState(false);
   const saveAction = useRef<() => void>(() => {});
+  const storageBusy = useRef(false);
   useEffect(() => {
     const closeOutside = (e: PointerEvent) => {
-      if (e.target instanceof Node && !fileMenu.current?.contains(e.target))
+      if (
+        e.target instanceof Node &&
+        !fileMenu.current?.contains(e.target) &&
+        !storageBusy.current
+      )
         workspaceGeneration.current++;
-      fileMenu.current?.removeAttribute("open");
+      fileMenu.current
+        ?.closest("main")
+        ?.querySelectorAll<HTMLDetailsElement>(
+          "details[data-workspace-menu][open]",
+        )
+        .forEach((menu) => {
+          if (e.target instanceof Node && !menu.contains(e.target))
+            menu.open = false;
+        });
     };
     const closeEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") fileMenu.current?.removeAttribute("open");
+      if (e.key === "Escape") {
+        fileMenu.current
+          ?.closest("main")
+          ?.querySelectorAll<HTMLDetailsElement>(
+            "details[data-workspace-menu][open]",
+          )
+          .forEach((menu) => {
+            menu.open = false;
+            menu.querySelector("summary")?.focus();
+          });
+      }
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
         e.preventDefault();
         saveAction.current();
@@ -115,7 +144,6 @@ export default function Builder() {
   const [saveRevision, setSaveRevision] = useState<number | undefined>();
   const [saving, setSaving] = useState(false);
   const [draftState, setDraftState] = useState("Saved locally");
-  const storageBusy = useRef(false);
   const [recovery, setRecovery] = useState("");
   const [constructionBusy, setConstructionBusy] = useState(false);
   const constructionLock = useRef(false);
@@ -138,6 +166,7 @@ export default function Builder() {
       revision?: number,
     ) => {
       fileMenu.current?.removeAttribute("open");
+      setSavedLibraryOpen(false);
       const convertedTown =
         next.template === "town" && Boolean(next.recipe) && !next.scene;
       resetHistory();
@@ -152,7 +181,7 @@ export default function Builder() {
       setError("");
       setSaveId(id);
       setSaveRevision(revision);
-      baseline.current = id ? JSON.stringify(next) : "";
+      baseline.current = id ? contentFingerprint(next) : "";
       savedSnapshot.current = null;
       createId.current = null;
       localExpected.current = undefined;
@@ -219,7 +248,7 @@ export default function Builder() {
         if (query.has("new")) {
           const fresh = createFreshDocument();
           open(fresh);
-          baseline.current = JSON.stringify(fresh);
+          baseline.current = contentFingerprint(fresh);
         } else if (requestedProject) {
           if (!ownerId)
             throw new Error("Sign in to open this account project.");
@@ -239,7 +268,10 @@ export default function Builder() {
             hasDraft ? (draft.recovery ?? "") : "",
             hasDraft ? draft.revision : project.saveRevision,
           );
-          if (hasDraft) baseline.current = JSON.stringify(project.payload);
+          if (hasDraft)
+            baseline.current = contentFingerprint(
+              parseDocument(JSON.stringify(project.payload)),
+            );
           setProjectType(kind);
           setSharingAllowed(project.sharingAllowed);
           savedSnapshot.current = project;
@@ -324,7 +356,7 @@ export default function Builder() {
         } else {
           const fresh = createFreshDocument();
           open(fresh);
-          baseline.current = JSON.stringify(fresh);
+          baseline.current = contentFingerprint(fresh);
         }
       } catch (e) {
         if (disposed) return;
@@ -412,8 +444,8 @@ export default function Builder() {
     sharingAllowed,
   ]);
   const dirty =
-    Boolean(doc) &&
-    (JSON.stringify(doc) !== baseline.current ||
+    doc !== null &&
+    (contentFingerprint(doc) !== baseline.current ||
       sharingAllowed !== (savedSnapshot.current?.sharingAllowed ?? false));
   useEffect(() => {
     if (!dirty) return;
@@ -552,9 +584,10 @@ export default function Builder() {
         );
       }
       setSaveId(id);
-      baseline.current = JSON.stringify(snapshot);
+      baseline.current = contentFingerprint(snapshot);
       const currentSaved =
-        JSON.stringify(latestDoc.current) === JSON.stringify(snapshot);
+        latestDoc.current !== null &&
+        contentFingerprint(latestDoc.current) === contentFingerprint(snapshot);
       setNotice(
         currentSaved
           ? ownerId
@@ -637,9 +670,14 @@ export default function Builder() {
     }
   };
   const importField = (
-    <label className="builder-import">
-      Import experiment or recipe
+    <>
+      <button type="button" onClick={() => importInput.current?.click()}>
+        <BuilderIcon name="upload" /> Import recipe…
+      </button>
       <input
+        ref={importInput}
+        hidden
+        aria-label="Import experiment or recipe"
         type="file"
         accept="application/json,.json"
         onChange={async (e) => {
@@ -654,7 +692,7 @@ export default function Builder() {
           e.target.value = "";
         }}
       />
-    </label>
+    </>
   );
   const library = (saved.length > 0 || remoteList.length > 0) && (
     <section className="builder-library">
@@ -689,7 +727,7 @@ export default function Builder() {
             <a
               href={`/experiments/builder?lesson=${encodeURIComponent(entry.projectId)}`}
             >
-              Try lesson ↗
+              Try lesson <BuilderIcon name="external" />
             </a>
           </div>
         ))}
@@ -730,7 +768,7 @@ export default function Builder() {
             </button>{" "}
             {isRunnableDocument(entry.document) && (
               <a href={`/experiments/builder?lesson=${entry.id}`}>
-                Try lesson ↗
+                Try lesson <BuilderIcon name="external" />
               </a>
             )}
           </div>
@@ -747,27 +785,49 @@ export default function Builder() {
         <Link href="/projects">My projects</Link>
       </div>
     ) : (
-      <p>Opening builder…</p>
+      <LoadingState
+        title="Opening builder…"
+        description="Restoring your canvas and components."
+      />
     );
-  if (!doc || !valid) return <p>Opening builder…</p>;
-  const setWorkspaceZoom = (zoom: number) => {
-    if (!Number.isFinite(zoom) || zoom < 0.2 || zoom > 2) return;
+  if (!doc || !valid)
+    return (
+      <LoadingState
+        title="Opening builder…"
+        description="Restoring your canvas and components."
+      />
+    );
+  const setWorkspaceZoom = (zoom: number, pan?: { x: number; y: number }) => {
+    if (
+      !Number.isFinite(zoom) ||
+      zoom < 0.2 ||
+      zoom > 2 ||
+      (pan && (!Number.isFinite(pan.x) || !Number.isFinite(pan.y)))
+    )
+      return;
     // Camera navigation is editor metadata, not a lesson edit or an undo step.
     const update = (current: ExperimentDocument | null) => {
       if (
         !current ||
         (current.editor.zoom === zoom &&
+          (!pan ||
+            (current.editor.pan?.x === pan.x &&
+              current.editor.pan?.y === pan.y)) &&
           (!current.authored || current.authored.editor.zoom === zoom))
       )
         return current;
       return {
         ...current,
-        editor: { ...current.editor, zoom },
+        editor: { ...current.editor, zoom, ...(pan ? { pan } : {}) },
         ...(current.authored
           ? {
               authored: {
                 ...current.authored,
-                editor: { ...current.authored.editor, zoom },
+                editor: {
+                  ...current.authored.editor,
+                  zoom,
+                  ...(pan ? { pan } : {}),
+                },
               },
             }
           : {}),
@@ -782,6 +842,8 @@ export default function Builder() {
         {transition && (
           <UnsavedDialog
             account={Boolean(ownerId)}
+            experimentName={doc.lesson.title}
+            error={notice}
             busy={saving}
             onCancel={() => setTransition(null)}
             onDiscard={() => {
@@ -842,85 +904,10 @@ export default function Builder() {
           redo={redo}
           canUndo={past.length > 0}
           canRedo={future.length > 0}
-          history={history}
           onSave={() => {
             void save();
           }}
-          lifecycle={
-            <div className="builder-lifecycle">
-              <button
-                type="button"
-                disabled={saving}
-                onClick={() =>
-                  requestTransition(() => {
-                    const fresh = createFreshDocument();
-                    open(fresh);
-                    baseline.current = JSON.stringify(fresh);
-                  })
-                }
-              >
-                New experiment
-              </button>
-              <button
-                type="button"
-                disabled={saving}
-                onClick={() =>
-                  requestTransition(() => {
-                    const next = createFreshDocument();
-                    next.lesson.title = doc.lesson.title;
-                    if (next.authored)
-                      next.authored.lesson.title = doc.lesson.title;
-                    const metadata = savedSnapshot.current;
-                    open(next, saveId, "", saveRevision);
-                    setProjectType(projectType);
-                    setSharingAllowed(sharingAllowed);
-                    savedSnapshot.current = metadata;
-                    baseline.current = "";
-                  })
-                }
-              >
-                Clear canvas
-              </button>
-              <button
-                type="button"
-                onClick={download}
-                disabled={Boolean(error)}
-              >
-                Download recipe
-              </button>
-              {!offline && (
-                <button
-                  type="button"
-                  disabled={!ownerId || saving || !sharingAllowed}
-                  onClick={() => {
-                    void reviewPublication();
-                  }}
-                >
-                  Publish
-                </button>
-              )}
-              <Link
-                href="/projects"
-                onClick={(event) => {
-                  event.preventDefault();
-                  requestTransition(() => router.push("/projects"));
-                }}
-              >
-                My projects
-              </Link>
-              {!offline && (
-                <Link
-                  href="/community"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    requestTransition(() => router.push("/community"));
-                  }}
-                >
-                  Community
-                </Link>
-              )}
-            </div>
-          }
+          onExit={() => requestTransition(() => router.push("/experiments"))}
           storageNotice={
             <div className="builder-local-notice">
               {ownerId ? (
@@ -955,7 +942,14 @@ export default function Builder() {
             </div>
           }
           saving={saving}
-          saveState={draftState}
+          onNoticeDismiss={() => setNotice("")}
+          saveState={
+            draftState === "Local save failed" || dirty || !saveId
+              ? draftState
+              : ownerId
+                ? "Saved to account"
+                : "Saved on device"
+          }
           error={error}
           notice={notice}
           onZoom={setWorkspaceZoom}
@@ -968,30 +962,126 @@ export default function Builder() {
             }
           }}
           fileMenu={
-            <details className="builder-file-menu" ref={fileMenu}>
-              <summary>Experiment</summary>
+            // biome-ignore lint/a11y/useKeyWithClickEvents: Native buttons and links emit click on keyboard activation.
+            <details
+              data-workspace-menu
+              name="builder-toolbar-menu"
+              className="builder-file-menu composition-document-menu composition-view-menu"
+              ref={fileMenu}
+              onClick={(event) => {
+                if ((event.target as HTMLElement).closest("button, a")) {
+                  fileMenu.current?.removeAttribute("open");
+                  fileMenu.current?.querySelector("summary")?.focus();
+                }
+              }}
+            >
+              <summary aria-label="More document actions">
+                <span className="toolbar-full-label">More</span>
+                <span className="toolbar-short-label" aria-hidden="true">
+                  <BuilderIcon name="more" />
+                </span>
+              </summary>
               <div>
+                <div className="builder-menu-group">
+                  <p>Experiment</p>
+                  <button
+                    type="button"
+                    disabled={saving}
+                    onClick={() =>
+                      requestTransition(() => {
+                        const fresh = createFreshDocument();
+                        open(fresh);
+                        baseline.current = contentFingerprint(fresh);
+                      })
+                    }
+                  >
+                    <BuilderIcon name="plus" /> New experiment
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSavedLibraryOpen(true)}
+                  >
+                    <BuilderIcon name="folder" /> Open saved experiment…
+                  </button>
+                </div>
+                <div className="builder-menu-group">
+                  <p>Import and export</p>
+                  {importField}
+                  <button
+                    type="button"
+                    onClick={download}
+                    disabled={Boolean(error)}
+                  >
+                    <BuilderIcon name="download" /> Download recipe
+                  </button>
+                </div>
+                <div className="builder-menu-group">
+                  <p>Sharing and navigation</p>
+                  {!offline && (
+                    <button
+                      aria-label="Publish"
+                      type="button"
+                      disabled={!ownerId || saving || !sharingAllowed}
+                      onClick={() => {
+                        void reviewPublication();
+                      }}
+                    >
+                      <BuilderIcon name="share" />
+                      <span>
+                        Publish
+                        {(!ownerId || !sharingAllowed) && (
+                          <small>
+                            {!ownerId
+                              ? "Sign in to publish"
+                              : "Enable sharing in storage settings"}
+                          </small>
+                        )}
+                      </span>
+                    </button>
+                  )}
+                  <Link
+                    href="/projects"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      requestTransition(() => router.push("/projects"));
+                    }}
+                  >
+                    <BuilderIcon name="folder" /> My projects
+                  </Link>
+                  {!offline && (
+                    <Link
+                      href="/community"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        requestTransition(() => router.push("/community"));
+                      }}
+                    >
+                      <BuilderIcon name="share" /> Community
+                    </Link>
+                  )}
+                </div>
+                <div className="builder-menu-group">{history}</div>
                 <button
+                  className="composition-clear-action"
                   type="button"
-                  onClick={async () => {
+                  disabled={saving}
+                  onClick={() =>
                     requestTransition(() => {
-                      const fresh = createFreshDocument();
-                      open(fresh);
-                      baseline.current = JSON.stringify(fresh);
-                    });
-                  }}
+                      const next = createFreshDocument();
+                      next.lesson.title = doc.lesson.title;
+                      if (next.authored)
+                        next.authored.lesson.title = doc.lesson.title;
+                      const metadata = savedSnapshot.current;
+                      open(next, saveId, "", saveRevision);
+                      setProjectType(projectType);
+                      setSharingAllowed(sharingAllowed);
+                      savedSnapshot.current = metadata;
+                      baseline.current = "";
+                    })
+                  }
                 >
-                  New experiment
+                  <BuilderIcon name="trash" /> Clear canvas
                 </button>
-                <button
-                  type="button"
-                  onClick={download}
-                  disabled={Boolean(error)}
-                >
-                  Export JSON
-                </button>
-                {importField}
-                {library}
                 {recovery && (
                   <>
                     <textarea
@@ -1008,6 +1098,28 @@ export default function Builder() {
             </details>
           }
         />
+        <ComponentDialog
+          open={savedLibraryOpen}
+          title="Open saved experiment"
+          subtitle={
+            ownerId
+              ? "Private experiments saved to your account"
+              : "Experiments saved on this device"
+          }
+          icon="folder"
+          onClose={() => setSavedLibraryOpen(false)}
+          footerLabel="Close library"
+          footerPrimary={false}
+          className="saved-experiments-dialog"
+        >
+          {library || (
+            <div className="saved-experiments-empty">
+              <BuilderIcon name="folder" />
+              <h3>No saved experiments yet</h3>
+              <p>Save your current experiment to find it here.</p>
+            </div>
+          )}
+        </ComponentDialog>
       </>
     );
   return (

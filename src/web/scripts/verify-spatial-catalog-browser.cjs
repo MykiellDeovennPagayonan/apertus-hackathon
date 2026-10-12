@@ -75,7 +75,7 @@ async function main() {
         exact: true,
       });
       await group.getByRole("button", { name: "Expand", exact: true }).click();
-      await group.getByRole("button", { name: "Done", exact: true }).click();
+      await group.getByRole("button", { name: "Close settings", exact: true }).click();
     }
     const count = await page.locator(".connection-node").count();
     assert.ok(count > 60);
@@ -103,7 +103,7 @@ async function main() {
       .filter({
         has: page.getByRole("button", { name: "Dense truss", exact: true }),
       })
-      .getByRole("button", { name: "Done", exact: true })
+      .getByRole("button", { name: "Close settings", exact: true })
       .click();
     await page.getByRole("button", { name: "Undo", exact: true }).click();
     assert.equal(await page.locator(".connection-node").count(), count);

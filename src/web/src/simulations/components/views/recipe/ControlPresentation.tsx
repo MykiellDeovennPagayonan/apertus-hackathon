@@ -48,7 +48,7 @@ function EntityPickerControl({
   const displayLabel = (candidate: ComponentInstance, index: number) => {
     const internalName = candidate.id.split("/").at(-1) ?? candidate.id;
     return candidate.label === candidate.id || candidate.label === internalName
-      ? `${publicDefinition(candidate.definition).title} ${index + 1}`
+      ? `${publicDefinition(candidate).title} ${index + 1}`
       : candidate.label;
   };
   const selectedIndex = candidates.findIndex(
@@ -127,7 +127,7 @@ export function ControlPresentation({
   );
   const command =
     target && connection
-      ? publicDefinition(target.definition).commands[connection.to.port]
+      ? publicDefinition(target).commands[connection.to.port]
       : undefined;
   if (!command && scalarControls.has(node.definition))
     return (

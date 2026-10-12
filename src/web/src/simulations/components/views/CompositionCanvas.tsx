@@ -1,5 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
+import LoadingState from "../../../app/_components/LoadingState";
 import type { ActionResult } from "../../runtime/commands";
 import type { CompositionScene } from "../../runtime/composition/types";
 import type { PersonSnapshot } from "../systems/ScheduledTripSystem";
@@ -9,7 +10,13 @@ import { DisplayView } from "./DisplayView";
 
 const AuthoredTownView = dynamic(() => import("./AuthoredTownView"), {
   ssr: false,
-  loading: () => <p>Loading 3D scene…</p>,
+  loading: () => (
+    <LoadingState
+      variant="inline"
+      title="Preparing the 3D scene…"
+      description="Loading the interactive view."
+    />
+  ),
 });
 export type CompositionCanvasProps = {
   scene: CompositionScene;

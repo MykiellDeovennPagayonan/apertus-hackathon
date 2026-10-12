@@ -523,7 +523,7 @@ export function getExperimentContext(): ExperimentContext | null {
     const instances = runtime.document.nodes
       .filter(
         (node) =>
-          publicDefinition(node.definition).category === "models" &&
+          publicDefinition(node).category === "models" &&
           !["models/TrussJoint", "models/TrussMember"].includes(
             node.definition,
           ),

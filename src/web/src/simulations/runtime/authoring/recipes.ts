@@ -126,7 +126,7 @@ export function validateRecipe(r: CompositeRecipe) {
       throw new Error(`${p.name}: invalid exposed parameter`);
     params.add(p.name);
     validateValue(p.schema, p.default, p.name);
-    const def = publicDefinition(n.definition);
+    const def = publicDefinition(n);
     if (
       def.configuration.type !== "object" ||
       !def.configuration.properties[p.field] ||
@@ -152,7 +152,7 @@ export function validateRecipe(r: CompositeRecipe) {
     )
       throw new Error(`${p.name}: invalid external port`);
     external.add(p.name);
-    const def = publicDefinition(n.definition);
+    const def = publicDefinition(n);
     const port =
       p.direction === "input"
         ? (def.inputs[p.endpoint.port] ??
@@ -379,10 +379,10 @@ export function insertRecipe(
       const input =
         external.direction === "input"
           ? external.port
-          : publicDefinition(externalNode.definition).inputs[bound.port];
+          : publicDefinition(externalNode).inputs[bound.port];
       const output =
         external.direction === "input"
-          ? publicDefinition(externalNode.definition).outputs[bound.port]
+          ? publicDefinition(externalNode).outputs[bound.port]
           : external.port;
       if (input?.crossScope && output?.crossScope) continue;
     }
@@ -478,7 +478,7 @@ export function selectionRecipe(
       const def = publicDefinition(
         requireValue(
           [...d.nodes, ...d.resources].find((n) => n.id === endpoint.node),
-        ).definition,
+        ),
       );
       const port =
         direction === "input"

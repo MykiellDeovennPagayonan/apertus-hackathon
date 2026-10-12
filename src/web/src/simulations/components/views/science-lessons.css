@@ -350,3 +350,49 @@
     width: calc(100vw - 24px);
   }
 }
+
+.science-error-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 550;
+}
+.science-error-toggle input {
+  appearance: none;
+  width: 44px;
+  height: 26px;
+  margin: 0;
+  border: 1px solid #789879;
+  border-radius: 20px;
+  background: #d8dece;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.science-error-toggle input::before {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: 3px;
+  border-radius: 50%;
+  background: #fffbef;
+}
+.science-error-toggle input:checked {
+  background: #285e56;
+}
+.science-error-toggle input:checked::before {
+  transform: translateX(18px);
+}
+.science-error-toggle input:focus-visible {
+  outline: 3px solid #285e56;
+  outline-offset: 4px;
+}
+.science-cell-actions .science-action-line {
+  flex-wrap: nowrap;
+}
+.science-cell-actions button {
+  padding-inline: 16px;
+}

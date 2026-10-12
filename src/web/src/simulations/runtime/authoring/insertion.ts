@@ -29,7 +29,7 @@ function resolveExternalBindings(
     if (external.required === false) continue;
     const candidates: Endpoint[] = [];
     for (const node of selected) {
-      const definition = publicDefinition(node.definition);
+      const definition = publicDefinition(node);
       if (external.direction === "input") {
         for (const [port, contract] of Object.entries(definition.outputs))
           if (compatible(contract, external.port))
@@ -67,7 +67,7 @@ export function planInsertion(
   const canvas = document.nodes.find(
     (n) =>
       n.id === destination &&
-      publicDefinition(n.definition).category === "canvases",
+      publicDefinition(n).category === "canvases",
   );
   if (destination && !canvas)
     throw new Error(
@@ -105,7 +105,7 @@ export function planInsertion(
     (n) => !document.nodes.some((old) => old.id === n.id),
   );
   const addedCanvas = added.find(
-    (n) => publicDefinition(n.definition).category === "canvases",
+    (n) => publicDefinition(n).category === "canvases",
   );
   let summary: string;
   if ("definition" in request) {

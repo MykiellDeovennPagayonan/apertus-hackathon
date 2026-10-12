@@ -22,6 +22,11 @@ export interface StructuredOptions {
   schema?: JsonSchema;
   maxTokens?: number;
   stage?: string;
+  maxRepairsPerIssue?: number;
+  repairFeedback?: (error: unknown) => {
+    key: string;
+    details: Record<string, unknown>;
+  };
 }
 let active = 0;
 const capabilities = new Map<string, boolean>();
@@ -231,75 +236,74 @@ export async function requestStructured<T>(
         ? options.schema
         : undefined;
     let issue: string | undefined;
-    for (let attempt = 0; attempt < 2; attempt++) {
+    let issueKey: string | undefined;
+    let issueRepairs = 0;
+    let feedback: Record<string, unknown> | undefined;
+    let rejectedContent = "";
+    const maxRepairs = options.maxRepairsPerIssue ?? 1;
+    for (let attempt = 0; ; attempt++) {
+      let content = "";
+      let phase = "schema";
       try {
         const current = issue
-          ? original.map((message) =>
-              message.role === "system"
-                ? {
-                    ...message,
-                    content: `${message.content}\nRepair the SAME stage. No operation was executed. Exact validation issue: ${issue?.slice(0, 600)}. ${repairInstructions}`,
-                  }
-                : message,
-            )
+          ? [
+              ...original,
+              { role: "assistant", content: rejectedContent || "{}" },
+              {
+                role: "user",
+                content: JSON.stringify({
+                  task: "repair_stage",
+                  stage: options.stage,
+                  committed: false,
+                  issue: { key: issueKey, message: issue.slice(0, 600) },
+                  rejected_response: rejectedContent,
+                  feedback,
+                  instructions: repairInstructions,
+                  preserve_original_request: true,
+                }),
+              },
+            ]
           : original;
-        const content = await call(current, schema, maxTokens, attempt > 0);
-        try {
-          const result = parse(content);
-          options.onEvent?.("schemaValidated", {
-            stage: options.stage,
-            attempt,
-          });
-          try {
-            options.verify?.(result);
-          } catch (error) {
-            issue =
-              error instanceof Error ? error.message : "Semantic mismatch";
-            options.onEvent?.("semanticFailure", {
-              stage: options.stage,
-              attempt,
-              reason: issue,
-              content: content.slice(0, 2000),
-            });
-            if (
-              attempt === 1 ||
-              (options.budget &&
-                options.budget.repairs >= options.budget.maxRepairs)
-            )
-              throw new PlannerError(
-                `${config.label} returned invalid stage arguments: ${issue}`,
-                502,
-              );
-            continue;
-          }
-          options.onEvent?.("response", {
-            stage: options.stage,
-            attempt,
-            result,
-          });
-          return result;
-        } catch (error) {
-          if (error instanceof PlannerError) throw error;
-          issue = error instanceof Error ? error.message : "Schema mismatch";
-          options.onEvent?.("schemaFailure", {
-            stage: options.stage,
-            attempt,
-            reason: issue,
-            content: content.slice(0, 2000),
-          });
-        }
+        content = await call(current, schema, maxTokens, attempt > 0);
+        const result = parse(content);
+        options.onEvent?.("schemaValidated", {
+          stage: options.stage,
+          attempt,
+        });
+        phase = "semantic";
+        options.verify?.(result);
+        options.onEvent?.("response", {
+          stage: options.stage,
+          attempt,
+          result,
+        });
+        return result;
       } catch (error) {
         if (error instanceof PlannerError || combined.aborted) throw error;
         issue =
           error instanceof Error ? error.message : "Invalid JSON response";
-        options.onEvent?.("schemaFailure", {
+        const repair = options.repairFeedback?.(error);
+        const nextKey = repair?.key ?? issue;
+        // Legacy stages keep one total repair; edits reset only on a different issue.
+        issueRepairs =
+          options.maxRepairsPerIssue !== undefined && nextKey !== issueKey
+            ? 0
+            : issueRepairs + 1;
+        if (attempt === 0) issueRepairs = 0;
+        issueKey = nextKey;
+        feedback = repair?.details;
+        rejectedContent = content.slice(0, 2000);
+        options.onEvent?.(`${phase}Failure`, {
           stage: options.stage,
           attempt,
           reason: issue,
+          issueKey,
+          issueRepairs,
+          content: rejectedContent,
         });
       }
       if (
-        attempt === 1 ||
+        issueRepairs >= maxRepairs ||
         (options.budget && options.budget.repairs >= options.budget.maxRepairs)
       )
         throw new PlannerError(
@@ -307,7 +311,6 @@ export async function requestStructured<T>(
           502,
         );
     }
-    throw new PlannerError(`No valid ${config.label} result.`, 502);
   } catch (error) {
     if (signal?.aborted) {
       options.budget?.check();

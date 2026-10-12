@@ -125,7 +125,7 @@ export async function selectCompositionStrategy(
     });
     if (!accepted)
       throw new PlannerError(
-        "Laya could not select a supported composition confidently. Please clarify the experiment.",
+        "The request needs more detail. Specify which component or value to change.",
         422,
       );
     const candidate = choices.find((c) => c.key === accepted.choice)?.card;

@@ -188,14 +188,14 @@ async function exercise(page, c, run) {
   await dialog
     .getByLabel("Label", { exact: true })
     .fill(model.label + " reviewed");
-  await dialog.getByRole("button", { name: "Done", exact: true }).click();
+  await dialog.getByRole("button", { name: "Close settings", exact: true }).click();
   await button("Undo").click();
   await button("Edit " + model.label).waitFor();
   await button("Redo").click();
   await button("Edit " + model.label + " reviewed").waitFor();
   await button("Save experiment").click();
   await page
-    .getByText("Saved on this device.", { exact: true })
+    .getByText("Saved on device", { exact: true })
     .first()
     .waitFor();
   await button("Try lesson ↗").click();
