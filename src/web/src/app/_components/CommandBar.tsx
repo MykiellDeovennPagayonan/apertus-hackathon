@@ -399,7 +399,7 @@ export default function CommandBar({
               disabled={disabled}
               onClick={() => choose(c)}
             >
-              {["Addition", "Area & perimeter", "Truss bridge"][index] ?? c}
+              {["Pendulum", "Projectiles", "Line"][index] ?? c}
             </button>
           ))}
         </div>

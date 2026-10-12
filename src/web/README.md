@@ -1,4 +1,4 @@
-# Apertus Local Lab web app
+# pAperSim web app
 
 Next.js frontend and backend for shared, interactive simulation recipes.
 

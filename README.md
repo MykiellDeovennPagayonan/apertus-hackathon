@@ -1,6 +1,6 @@
-# Apertus Playground — repository development guide
+# pAperSim — repository development guide
 
-Apertus Playground is a browser application for creating, running, inspecting, remixing, saving, and sharing interactive teaching simulations. Users can open a prepared lesson, build one from components, or describe an experiment in natural language and let an AI model assemble supported components.
+pAperSim is a browser application for creating, running, inspecting, remixing, saving, and sharing interactive teaching simulations. Users can open a prepared lesson, build one from components, or describe an experiment in natural language and let an AI model assemble supported components.
 
 The central design rule is: **AI interprets intent and configures components; application code validates the composition and runs its mechanics.** A language model does not calculate every animation frame or generate unrestricted JavaScript for the browser to execute.
 

@@ -434,7 +434,7 @@ export default function ExperimentsShell({
       );
       const anchor = document.createElement("a");
       anchor.href = url;
-      anchor.download = "apertus-experiment.json";
+      anchor.download = "pAperSim-experiment.json";
       anchor.click();
       setStatus({ kind: "success", text: "Recipe download started." });
     } catch (error) {
@@ -514,9 +514,9 @@ export default function ExperimentsShell({
               "Add another observation",
             ]
           : [
-              "Help me learn addition with circles",
-              "Compare two rectangles and their areas",
-              "Help me learn how a truss bridge carries a load",
+              "Make a pendulum swing where I can adjust its starting angle and length",
+              "Show me 2 projectiles distance comparison based on angles",
+              "Make me a line where I can adjust its slope and y axis",
             ]
       }
       disabled={busy}
@@ -544,7 +544,7 @@ export default function ExperimentsShell({
           )}
           <div className="manual-create-entry">
             <Link href="/experiments/builder">Create manually →</Link>
-            <span>Choose a canvas and build it yourself.</span>
+            <span>Create your own simulations</span>
           </div>
         </LandingPage>
       );

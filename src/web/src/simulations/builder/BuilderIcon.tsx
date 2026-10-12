@@ -1,4 +1,5 @@
 const paths = {
+  edit: "m16 3 5 5-12 12-6 1 1-6L16 3Zm-3 3 5 5",
   more: "M5 12h.01M12 12h.01M19 12h.01",
   external: "M14 3h7v7m0-7L10 14M10 3H3v18h18v-7",
   back: "M19 12H5m6-6-6 6 6 6",

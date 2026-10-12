@@ -1,4 +1,4 @@
-# Apertus Playground: Component Architecture
+# pAperSim: Component Architecture
 
 **Status:** Agreed design direction, 2026-10-02. This describes the target architecture; the current demos do not yet implement every boundary below.
 

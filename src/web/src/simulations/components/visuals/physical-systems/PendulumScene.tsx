@@ -20,7 +20,7 @@ export function PendulumScene({ instance }: { instance: ModelInstance }) {
       <svg
         viewBox="0 0 800 480"
         role="img"
-        aria-label={`Pendulum: ${length} metres, ${angle.toFixed(1)} degrees from vertical`}
+        aria-label={`Pendulum: ${length.toFixed(2)} metres, ${angle.toFixed(1)} degrees from vertical`}
       >
         <title>Pendulum on a fixed metre scale</title>
         <line
@@ -62,7 +62,7 @@ export function PendulumScene({ instance }: { instance: ModelInstance }) {
           ))}
         </g>
         <text className="pendulum-length" x="400" y="465" textAnchor="middle">
-          {length} m · {Math.abs(angle).toFixed(1)}° from vertical
+          {length.toFixed(2)} m · {Math.abs(angle).toFixed(1)}° from vertical
         </text>
       </svg>
       <figcaption>

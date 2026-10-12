@@ -10,22 +10,22 @@ export default function LandingPage({ children }: { children?: ReactNode }) {
     {
       type: "projectile",
       tag: "PHYSICS",
-      title: "A little leap of curiosity.",
-      description: "Launch, adjust, and discover what makes things fly.",
+      title: "Projectile motion",
+      description: "Adjust launch speed and angle to compare trajectories.",
       name: "Projectile motion",
     },
     {
       type: "bridge",
       tag: "STRUCTURES",
-      title: "Ideas that hold together.",
-      description: "Build a bridge. Add a little weight. See what changes.",
+      title: "Truss bridge",
+      description: "Change the bridge structure and load to compare forces.",
       name: "Truss bridge",
     },
     {
       type: "town",
       tag: "SIMULATION",
-      title: "A world of small wonders.",
-      description: "Watch a little town come alive, one decision at a time.",
+      title: "Town simulation",
+      description: "Set routes and schedules, then track movement through town.",
       name: "Living town",
     },
   ] as const;
@@ -35,21 +35,20 @@ export default function LandingPage({ children }: { children?: ReactNode }) {
       <main className="landing__main">
         <section className="landing__hero">
           <div className="eyebrow">
-            <span /> A SMALL LAB FOR BIG WHAT-IFS <span />
+            <span /> INTERACTIVE SIMULATIONS <span />
           </div>
           <h1>
-            Curiosity, <em>made interactive.</em>
+            Create an <em>experiment.</em>
           </h1>
           <p>
-            Describe a concept or choose an experiment. Change something and see
-            what happens.
+            Describe what you want to simulate, or open an existing experiment.
           </p>
           {children}
         </section>
         <section id="experiments" className="experiment-section">
           <div className="section-heading">
-            <h2>A few places to begin</h2>
-            <span>THREE EXPERIMENTS. ENDLESS WHAT-IFS.</span>
+            <h2>Example experiments</h2>
+            <span>THREE EXPERIMENTS TO TRY</span>
           </div>
           <div className="experiment-grid">
             {experiments.map((experiment, index) => (
@@ -80,11 +79,11 @@ export default function LandingPage({ children }: { children?: ReactNode }) {
         </section>
       </main>
       <footer className="landing__footer">
-        <span>Built with curiosity. Powered by Apertus.</span>
+        <span>pAperSim</span>
         <span>
-          <i /> Local-first, always.
+          <i /> Local-first simulations
         </span>
-        <span>THE INTERACTIVE LAB · 2026</span>
+        <span>2026</span>
       </footer>
     </div>
   );

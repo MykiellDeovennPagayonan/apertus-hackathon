@@ -1,8 +1,8 @@
-# Apertus HTML component authoring — API v1
+# pAperSim HTML component authoring — API v1
 
 Create **one complete UTF-8 HTML file** containing your component's markup, inline CSS, inline JavaScript, and manifest. There is no build step. Return the whole file, not snippets. Use only the API below; do not invent methods or install dependencies.
 
-The component owns its own rectangular panel. It may render HTML, SVG, or an HTML canvas within that panel. Inputs and outputs connect it to other Apertus components. It does not draw objects directly into another component's canvas.
+The component owns its own rectangular panel. It may render HTML, SVG, or an HTML canvas within that panel. Inputs and outputs connect it to other pAperSim components. It does not draw objects directly into another component's canvas.
 
 ## Required manifest
 
@@ -27,7 +27,7 @@ Names in these maps start with a letter and contain letters, numbers, hyphens, o
 
 ## Value schemas
 
-These are Apertus value schemas, not arbitrary JSON Schema. The downloadable manifest JSON Schema formally describes this vocabulary.
+These are pAperSim value schemas, not arbitrary JSON Schema. The downloadable manifest JSON Schema formally describes this vocabulary.
 
 | Type | Schema fields |
 | --- | --- |

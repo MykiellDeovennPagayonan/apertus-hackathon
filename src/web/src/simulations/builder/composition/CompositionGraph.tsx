@@ -911,7 +911,7 @@ export function CompositionGraph({
             const members = blocks.filter((b) => group.members.includes(b.id));
             if (members.length < 2) return null;
             const left = Math.min(...members.map((b) => b.x)) - 20;
-            const top = Math.min(...members.map((b) => b.y)) - 42;
+            const top = Math.min(...members.map((b) => b.y)) - 64;
             const right = Math.max(...members.map((b) => b.x + 278)) + 20;
             const bottom =
               Math.max(...members.map((b) => b.y + height(b.id))) + 20;
@@ -922,32 +922,39 @@ export function CompositionGraph({
                 className={`connection-group ${members.some((b) => selectedIds.includes(b.id)) ? "is-selected" : ""}`}
                 style={{ left, top, width: right - left, height: bottom - top }}
               >
-                <button
-                  type="button"
-                  disabled={constructing}
-                  onClick={() => {
-                    if (nodeClickSuppressed.current) {
-                      nodeClickSuppressed.current = false;
-                      return;
-                    }
-                    select(members[0].id);
-                  }}
-                  onPointerDown={(e) => startMove(e, members[0].id)}
-                  onPointerMove={move}
-                  onPointerUp={endMove}
-                  onPointerCancel={cancelMove}
-                >
-                  {group.label}
-                </button>
-                {doc.authored && (
+                <div className="connection-group-header">
                   <button
                     type="button"
-                    onClick={() => onSelect(group.id)}
-                    aria-label={`Edit ${group.label}`}
+                    className="connection-group-label"
+                    title={group.label}
+                    disabled={constructing}
+                    onClick={() => {
+                      if (nodeClickSuppressed.current) {
+                        nodeClickSuppressed.current = false;
+                        return;
+                      }
+                      select(members[0].id);
+                    }}
+                    onPointerDown={(e) => startMove(e, members[0].id)}
+                    onPointerMove={move}
+                    onPointerUp={endMove}
+                    onPointerCancel={cancelMove}
                   >
-                    Edit group
+                    {group.label}
                   </button>
-                )}
+                  {doc.authored && (
+                    <button
+                      type="button"
+                      className="connection-group-edit"
+                      disabled={constructing}
+                      onClick={() => onSelect(group.id)}
+                      aria-label={`Edit ${group.label}`}
+                      title={`Edit ${group.label}`}
+                    >
+                      <BuilderIcon name="edit" />
+                    </button>
+                  )}
+                </div>
               </div>
             );
           })}

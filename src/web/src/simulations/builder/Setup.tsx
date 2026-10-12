@@ -37,7 +37,7 @@ export default function Setup({
   return (
     <main className="builder-start">
       <header className="builder-start-nav">
-        <Link href="/">← Apertus</Link>
+        <Link href="/">← pAperSim</Link>
         {onCancel && (
           <button type="button" onClick={onCancel}>
             Return to editing
