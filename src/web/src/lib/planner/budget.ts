@@ -19,6 +19,7 @@ export class GenerationBudget {
   repairs = 0;
   turns = 0;
   decisionCalls = 0;
+  maxDecisionCalls = 1;
   private decisionDependencies?: DecisionSelectionDependencies;
   get decision(): DecisionSelectionDependencies {
     if (!this.decisionDependencies) {
@@ -32,7 +33,7 @@ export class GenerationBudget {
   }
   consumeDecisionCall() {
     this.check();
-    if (this.decisionCalls >= 1)
+    if (this.decisionCalls >= this.maxDecisionCalls)
       throw new PlannerError("Decision selection budget exhausted", 502);
     this.decisionCalls++;
   }

@@ -1,5 +1,7 @@
 import { publicDefinitions } from "../../simulations/components/catalog";
 import { parameterLeaves } from "../../simulations/components/controls/controlContract";
+import { hasBoundControl } from "../../simulations/runtime/authoring/bindings";
+import { boardItemMinimum } from "../../simulations/runtime/authoring/board";
 import {
   patchSchema,
   recipeOverrideSchema,
@@ -9,6 +11,7 @@ import { suggestConnections } from "../../simulations/runtime/authoring/runnable
 import type { AuthoredDocument } from "../../simulations/runtime/authoring/types";
 import {
   choice,
+  num,
   object,
   type ParameterSchema,
 } from "../../simulations/runtime/parameterSchema";
@@ -135,8 +138,11 @@ export function buildTurnTools(
       const def = publicDefinitions.get(node.definition);
       if (!def) continue;
       for (const [command, contract] of Object.entries(def.commands)) {
-        const fields = parameterLeaves(contract.arguments).map((l) => l.path);
-        if (!fields.length) fields.push("");
+        const leaves = parameterLeaves(contract.arguments).map((l) => l.path);
+        const fields = (leaves.length ? leaves : [""]).filter(
+          (field) => !hasBoundControl(document, node.id, command, field),
+        );
+        if (!fields.length) continue;
         tools.push({
           tool: "add_control",
           schema: object({
@@ -227,6 +233,19 @@ export function buildTurnTools(
     }),
   });
 
+  if (document.presentation?.mode === "board")
+    for (const item of document.presentation.items) {
+      if (!item.layoutId || item.locked) continue;
+      const minimum = boardItemMinimum(document, item.layoutId);
+      tools.push({
+        tool: "resize",
+        schema: object({
+          target: choice(item.id),
+          width: num(minimum.width, 10000, "px"),
+          height: num(minimum.height, 10000, "px"),
+        }),
+      });
+    }
   return tools;
 }
 

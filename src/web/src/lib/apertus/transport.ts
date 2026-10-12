@@ -239,7 +239,7 @@ export async function requestStructured<T>(
     let issueKey: string | undefined;
     let issueRepairs = 0;
     let feedback: Record<string, unknown> | undefined;
-    let rejectedContent = "";
+    const rejectedResponses = new Set<string>();
     const maxRepairs = options.maxRepairsPerIssue ?? 3;
     for (let attempt = 0; ; attempt++) {
       let content = "";
@@ -248,7 +248,6 @@ export async function requestStructured<T>(
         const current = issue
           ? [
               ...original,
-              { role: "assistant", content: rejectedContent || "{}" },
               {
                 role: "user",
                 content: JSON.stringify({
@@ -256,7 +255,6 @@ export async function requestStructured<T>(
                   stage: options.stage,
                   committed: false,
                   issue: { key: issueKey, message: issue.slice(0, 600) },
-                  rejected_response: rejectedContent,
                   feedback,
                   instructions: repairInstructions,
                   preserve_original_request: true,
@@ -284,6 +282,9 @@ export async function requestStructured<T>(
           error instanceof Error ? error.message : "Invalid JSON response";
         const repair = options.repairFeedback?.(error);
         const nextKey = repair?.key ?? issue;
+        const rejected = JSON.stringify([nextKey, content.trim()]);
+        const repeated = rejectedResponses.has(rejected);
+        rejectedResponses.add(rejected);
         // Default stages share a repair limit; edits reset on a different issue.
         issueRepairs =
           options.maxRepairsPerIssue !== undefined && nextKey !== issueKey
@@ -292,15 +293,19 @@ export async function requestStructured<T>(
         if (attempt === 0) issueRepairs = 0;
         issueKey = nextKey;
         feedback = repair?.details;
-        rejectedContent = content.slice(0, 2000);
         options.onEvent?.(`${phase}Failure`, {
           stage: options.stage,
           attempt,
           reason: issue,
           issueKey,
           issueRepairs,
-          content: rejectedContent,
+          content: content.slice(0, 2000),
         });
+        if (repeated)
+          throw new PlannerError(
+            `${config.label} repeated the same invalid stage arguments: ${issue}`,
+            502,
+          );
       }
       if (
         issueRepairs >= maxRepairs ||

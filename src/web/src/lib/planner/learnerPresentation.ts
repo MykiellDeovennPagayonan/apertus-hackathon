@@ -7,76 +7,13 @@ import {
 } from "../../simulations/runtime/authoring/board";
 import { removeNodes } from "../../simulations/runtime/authoring/recipes";
 import {
-  emptyLayout,
   type AuthoredDocument,
+  emptyLayout,
   type Layout,
 } from "../../simulations/runtime/authoring/types";
-import type { TeachingIntent } from "./schema";
-
-const words = (value: string) =>
-  new Set(
-    value
-      .toLowerCase()
-      .split(/[^a-z0-9]+/)
-      .filter(Boolean),
-  );
-
-/** Keep the requested investigation, not every view shipped with its source activity. */
-export function learnerPresentation(
-  source: AuthoredDocument,
-  intent: TeachingIntent,
-  prompt: string,
-) {
+/** Lay out the selected investigation without making another semantic selection. */
+export function learnerPresentation(source: AuthoredDocument) {
   let document = structuredClone(source);
-  const observationWords = words(`${prompt} ${intent.question ?? intent.goal}`);
-  const interactionWords = words(intent.interactions.join(" "));
-  const remove = document.nodes
-    .filter((node) => {
-      const definition = publicDefinition(node);
-      if (definition.category === "controls") {
-        const commands = document.connections.filter(
-          (wire) => wire.kind === "command" && wire.from.node === node.id,
-        );
-        return (
-          commands.length > 0 &&
-          commands.every(
-            (wire) =>
-              /reset|restart/i.test(wire.to.port) &&
-              !interactionWords.has("reset") &&
-              !interactionWords.has("restart"),
-          )
-        );
-      }
-      if (definition.category !== "displays") return false;
-      if (
-        !/^displays\/(Readout|Inspector|DataTable|Chart|Histogram|Heatmap|Text)$/.test(
-          node.definition,
-        )
-      )
-        return false;
-      const bindings = document.connections.filter(
-        (wire) => wire.kind === "value" && wire.to.node === node.id,
-      );
-      return !bindings.some((wire) => {
-        if (wire.from.port === "feedback") return true;
-        if (
-          document.connections.some(
-            (control) =>
-              control.kind === "command" &&
-              control.to.node === wire.from.node &&
-              control.to.port
-                .toLowerCase()
-                .endsWith(wire.from.port.toLowerCase()),
-          )
-        )
-          return false;
-        return [...words(wire.from.port)].some((word) =>
-          observationWords.has(word),
-        );
-      });
-    })
-    .map((node) => node.id);
-  document = removeNodes(document, remove);
 
   // Compatible object canvases share axes; model IDs and independent controls remain distinct.
   const canvases = document.nodes.filter(
@@ -184,7 +121,8 @@ export function learnerPresentation(
           .lifecycle.clock,
     );
     sceneItem.rect = { x: 0, y: top, width: 640, height: moving ? 430 : 480 };
-    sceneItem.responsiveMinHeight = moving ? 300 : 320;
+    if (sceneItem.layoutId !== undefined)
+      sceneItem.responsiveMinHeight = moving ? 300 : 320;
     let side = top;
     if (moving)
       companions.sort((a, b) => {
@@ -201,7 +139,6 @@ export function learnerPresentation(
         };
         return priority(a) - priority(b);
       });
-    let pairTop: number | null = null;
     for (const item of companions) {
       const layout = content.find((layout) => layout.id === item.layoutId)!;
       const node = document.nodes.find((node) => node.id === layout.node)!;
@@ -222,29 +159,7 @@ export function learnerPresentation(
         width: 320,
         height,
       };
-      item.responsiveMinHeight = height;
-      const next = companions[companions.indexOf(item) + 1];
-      if (moving && next && node.definition.startsWith("displays/")) {
-        const nextNode = document.nodes.find(
-          (node) =>
-            node.id ===
-            content.find((layout) => layout.id === next.layoutId)?.node,
-        )!;
-        const nextCommand = document.connections.find(
-          (wire) => wire.from.node === nextNode.id && wire.kind === "command",
-        )?.to.port;
-        if (nextCommand && isPlaybackCommand(nextCommand)) {
-          pairTop = side;
-          item.rect.width = 160;
-        }
-      } else if (pairTop !== null) {
-        item.rect.x = 840;
-        item.rect.y = pairTop;
-        item.rect.width = 160;
-        side = Math.max(side, pairTop + height + 16);
-        pairTop = null;
-        continue;
-      }
+      if (item.layoutId !== undefined) item.responsiveMinHeight = height;
       side += height + 16;
     }
     presentation.responsiveRows.push([sceneItem.id]);
@@ -264,7 +179,7 @@ export function learnerPresentation(
       boardItemMinimum(document, item.layoutId).height,
     );
     item.rect = { x: 0, y: top, width: 640, height };
-    item.responsiveMinHeight = height;
+    if (item.layoutId !== undefined) item.responsiveMinHeight = height;
     presentation.responsiveRows.push([item.id]);
     top += height + 16;
   }

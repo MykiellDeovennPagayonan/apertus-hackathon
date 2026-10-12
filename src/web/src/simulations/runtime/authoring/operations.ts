@@ -1,6 +1,7 @@
 import { publicDefinition } from "../../components/catalog";
 import { acceptedCommandArguments } from "../../components/controls/commandPresentation";
 import {
+  num,
   object,
   type ParameterSchema,
   validateValue,
@@ -16,7 +17,12 @@ import {
   type ControlRequest,
   type ObservationRequest,
 } from "./bindings";
-import { reconcileBoard } from "./board";
+import {
+  boardItemMinimum,
+  extent,
+  reconcileBoard,
+  resizeBoardRect,
+} from "./board";
 import { addCatalogComponent } from "./composites";
 import { connectAuthored } from "./connections";
 import { insertRecipe, removeNodes } from "./recipes";
@@ -57,6 +63,10 @@ export type ToolRequest =
     }
   | { tool: "remove"; arguments: { targets: string[] } }
   | { tool: "arrange"; arguments: ArrangementRequest }
+  | {
+      tool: "resize";
+      arguments: { target: string; width: number; height: number };
+    }
   | { tool: "set_lesson"; arguments: AuthoredDocument["lesson"] };
 
 /** Patches are top-level subsets. Nested objects (such as task) are complete records. */
@@ -78,6 +88,7 @@ export type OperationState = {
 const toolFields: Record<ToolRequest["tool"], readonly string[]> = {
   insert_recipe: ["recipe", "version", "alias", "overrides"],
   configure: ["target", "changes"],
+  resize: ["target", "width", "height"],
   add_control: ["target", "command", "field", "widget", "label"],
   add_observation: ["source", "output", "widget", "label"],
   insert_component: ["definition", "version", "alias", "configuration"],
@@ -265,6 +276,63 @@ export function applyAuthoringOperation(
         results: map(request.arguments.results),
         narrowOrder: map(request.arguments.narrowOrder),
       });
+      break;
+    }
+    case "resize": {
+      const args = request.arguments;
+      validateValue(
+        object({
+          target: { type: "string", minLength: 1, maxLength: 500 },
+          width: num(1, 10000),
+          height: num(1, 10000),
+        }),
+        args,
+      );
+      const board = document.presentation;
+      if (board?.mode !== "board")
+        throw new Error("Resize requires a board presentation");
+      const item = board.items.find((item) => item.id === args.target);
+      if (!item?.layoutId || item.locked)
+        throw new Error("Resize requires an unlocked component");
+      const before = item.rect;
+      const minimum = boardItemMinimum(document, item.layoutId);
+      if (args.width < minimum.width || args.height < minimum.height)
+        throw new Error("Requested size is below the component minimum");
+      item.rect = resizeBoardRect(
+        before,
+        args.width - before.width,
+        args.height - before.height,
+        item.aspectRatio,
+        0,
+        minimum,
+      );
+      const dx = item.rect.width - before.width;
+      const dy = item.rect.height - before.height;
+      if (dx === 0 && dy === 0)
+        throw new Error(
+          "Resize must change the current presentation dimensions",
+        );
+      // Keep adjacent content reachable without changing its size or the model.
+      for (const peer of board.items.filter((peer) => peer !== item)) {
+        const rect = peer.rect;
+        const beside =
+          rect.x >= before.x + before.width &&
+          rect.y < before.y + Math.max(before.height, item.rect.height) &&
+          rect.y + rect.height > before.y;
+        const below =
+          rect.y >= before.y + before.height &&
+          rect.x < before.x + Math.max(before.width, item.rect.width) &&
+          rect.x + rect.width > before.x;
+        if ((beside && dx !== 0) || (below && dy !== 0)) {
+          if (peer.locked) throw new Error("Resize would move locked content");
+          peer.rect = {
+            ...rect,
+            x: rect.x + (beside ? dx : 0),
+            y: rect.y + (below ? dy : 0),
+          };
+        }
+      }
+      board.startView = extent(board.items.map((item) => item.rect));
       break;
     }
     case "set_lesson":

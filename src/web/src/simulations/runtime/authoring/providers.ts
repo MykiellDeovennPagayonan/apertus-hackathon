@@ -1,6 +1,5 @@
-import { IMPORTED_HTML } from "../imported/contract";
-import { importedProvider } from "../imported/provider";
 import { publicDefinition } from "../../components/catalog";
+import { learningConfiguration } from "../../components/composites/catalog";
 import {
   componentDefinitions,
   propertyValue,
@@ -21,6 +20,8 @@ import type { MathBoard } from "../../components/traits/MathBoards";
 import type { SceneObject } from "../../components/traits/SceneObjects";
 import { agentProviders } from "../agents/providers";
 import { assemblyModels, measureModel } from "../assembly";
+import { IMPORTED_HTML } from "../imported/contract";
+import { importedProvider } from "../imported/provider";
 import {
   mathDemos,
   stageMathBoard,
@@ -159,6 +160,7 @@ for (const demo of mathDemos)
         string,
         unknown
       >,
+    capture: (s) => learningConfiguration(s as unknown as MathBoard),
   });
 for (const demo of ["ratio", "area-perimeter", "coordinates", "probability"])
   runtimeProviders.set(`models/${demo}`, {

@@ -190,6 +190,7 @@ const CANONICAL_TOOL_MAP: Record<string, ToolRequest["tool"]> = {
   destroy: "remove",
 
   arrange: "arrange",
+  resize: "resize",
   layout: "arrange",
   set_layout: "arrange",
   setlayout: "arrange",
@@ -435,7 +436,10 @@ export function normalizeReferences(
           if (
             id.toLowerCase() === defStr.toLowerCase() ||
             id.toLowerCase().endsWith(`/${defStr.toLowerCase()}`) ||
-            id.toLowerCase().replace(/[-_]/g, "").endsWith(defStr.toLowerCase().replace(/[-_]/g, ""))
+            id
+              .toLowerCase()
+              .replace(/[-_]/g, "")
+              .endsWith(defStr.toLowerCase().replace(/[-_]/g, ""))
           ) {
             fixes.push(`resolved_definition_${defStr}_to_${id}`);
             rawArgs.definition = id;
@@ -578,8 +582,15 @@ export function normalizeReferences(
       Array.isArray(rawArgs.changes)
     ) {
       const altChanges =
-        rawArgs.parameters || rawArgs.config || rawArgs.settings || rawArgs.patch;
-      if (altChanges && typeof altChanges === "object" && !Array.isArray(altChanges)) {
+        rawArgs.parameters ||
+        rawArgs.config ||
+        rawArgs.settings ||
+        rawArgs.patch;
+      if (
+        altChanges &&
+        typeof altChanges === "object" &&
+        !Array.isArray(altChanges)
+      ) {
         rawArgs.changes = altChanges;
         fixes.push("normalized_parameters_to_changes");
       } else {
@@ -614,8 +625,13 @@ export function normalizeReferences(
         document.nodes.find((n) => n.id === rawArgs.target) ||
         document.nodes.find(
           (n) =>
-            n.id.toLowerCase().endsWith(`/${String(rawArgs.target).toLowerCase().trim()}`) ||
-            String(rawArgs.target).toLowerCase().trim().endsWith(`/${n.id.toLowerCase()}`),
+            n.id
+              .toLowerCase()
+              .endsWith(`/${String(rawArgs.target).toLowerCase().trim()}`) ||
+            String(rawArgs.target)
+              .toLowerCase()
+              .trim()
+              .endsWith(`/${n.id.toLowerCase()}`),
         );
       if (targetNode) {
         rawArgs.target = targetNode.id;
@@ -694,7 +710,8 @@ export function normalizeReferences(
                 fixes.push(`clamped_config_${propName}_max`);
                 changes[propName] = propSchema.maximum;
               } else {
-                changes[propName] = propSchema.type === "integer" ? Math.round(val) : val;
+                changes[propName] =
+                  propSchema.type === "integer" ? Math.round(val) : val;
               }
             }
           }
@@ -730,10 +747,18 @@ export function normalizeReferences(
       "stepper",
       "schema",
     ];
-    const widgetCandidate = (rawArgs.widget || rawArgs.type || rawArgs.control_type) as string;
-    if (typeof widgetCandidate === "string" && validWidgets.includes(widgetCandidate.toLowerCase())) {
+    const widgetCandidate = (rawArgs.widget ||
+      rawArgs.type ||
+      rawArgs.control_type) as string;
+    if (
+      typeof widgetCandidate === "string" &&
+      validWidgets.includes(widgetCandidate.toLowerCase())
+    ) {
       rawArgs.widget = widgetCandidate.toLowerCase();
-    } else if (!rawArgs.widget || !validWidgets.includes(rawArgs.widget as string)) {
+    } else if (
+      !rawArgs.widget ||
+      !validWidgets.includes(rawArgs.widget as string)
+    ) {
       rawArgs.widget = "slider";
       fixes.push("defaulted_control_widget_slider");
     }
@@ -772,11 +797,15 @@ export function normalizeReferences(
             const leafMatch = availableCommands.find((c) => {
               const leaves = parameterLeaves(def.commands[c].arguments);
               return leaves.some((l) =>
-                l.path.toLowerCase().replace(/[^a-z0-9]/g, "").includes(targetConcept),
+                l.path
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]/g, "")
+                  .includes(targetConcept),
               );
             });
 
-            const resolvedCmdName = nameMatch || leafMatch || availableCommands[0];
+            const resolvedCmdName =
+              nameMatch || leafMatch || availableCommands[0];
             if (resolvedCmdName) {
               fixes.push(
                 `normalized_control_command_${rawArgs.command}_to_${resolvedCmdName}`,
@@ -800,7 +829,9 @@ export function normalizeReferences(
               const match = leaves.find(
                 (l) =>
                   rawArgs.field &&
-                  l.path.toLowerCase().includes(String(rawArgs.field).toLowerCase()),
+                  l.path
+                    .toLowerCase()
+                    .includes(String(rawArgs.field).toLowerCase()),
               );
               if (match) {
                 fixes.push(
@@ -842,7 +873,9 @@ export function normalizeReferences(
     }
 
     if (typeof rawArgs.label !== "string" || !rawArgs.label.trim()) {
-      rawArgs.label = humanize(String(rawArgs.field || rawArgs.command || "Control"));
+      rawArgs.label = humanize(
+        String(rawArgs.field || rawArgs.command || "Control"),
+      );
       fixes.push("defaulted_control_label");
     }
 
@@ -883,7 +916,10 @@ export function normalizeReferences(
           const validOutputs = Object.entries(def.outputs)
             .filter(([_, port]) => port.kind === "value")
             .map(([k]) => k);
-          if (rawArgs.output && !validOutputs.includes(rawArgs.output as string)) {
+          if (
+            rawArgs.output &&
+            !validOutputs.includes(rawArgs.output as string)
+          ) {
             const cleanOutput = String(rawArgs.output)
               .toLowerCase()
               .replace(/[^a-z0-9]/g, "");
@@ -915,10 +951,7 @@ export function normalizeReferences(
                 runtime.getSnapshot().outputs[sourceNode.id]?.[
                   rawArgs.output as string
                 ];
-              if (
-                typeof outputVal !== "number" &&
-                rawArgs.output !== "board"
-              ) {
+              if (typeof outputVal !== "number" && rawArgs.output !== "board") {
                 fixes.push(
                   "normalized_observation_widget_readout_to_inspector",
                 );
@@ -945,7 +978,9 @@ export function normalizeReferences(
       "histogram",
       "heatmap",
     ];
-    const obsCandidate = (rawArgs.widget || rawArgs.type || rawArgs.observation_type) as string;
+    const obsCandidate = (rawArgs.widget ||
+      rawArgs.type ||
+      rawArgs.observation_type) as string;
     if (
       typeof obsCandidate === "string" &&
       validObsWidgets.includes(obsCandidate.toLowerCase())
@@ -1043,8 +1078,7 @@ export function normalizeReferences(
         if (!validOutputs.includes(fromObj.port)) {
           const match = validOutputs.find(
             (o) =>
-              o.toLowerCase() ===
-              fromObj.port.toLowerCase().replace(/_/g, ""),
+              o.toLowerCase() === fromObj.port.toLowerCase().replace(/_/g, ""),
           );
           if (match) {
             fixes.push(
@@ -1059,13 +1093,10 @@ export function normalizeReferences(
         if (!validInputs.includes(toObj.port)) {
           const match = validInputs.find(
             (i) =>
-              i.toLowerCase() ===
-              toObj.port.toLowerCase().replace(/_/g, ""),
+              i.toLowerCase() === toObj.port.toLowerCase().replace(/_/g, ""),
           );
           if (match) {
-            fixes.push(
-              `normalized_connect_to_port_${toObj.port}_to_${match}`,
-            );
+            fixes.push(`normalized_connect_to_port_${toObj.port}_to_${match}`);
             toObj.port = match;
           }
         }
@@ -1171,7 +1202,10 @@ export function normalizeReferences(
       rawArgs.title = "Simulation Experiment";
       fixes.push("defaulted_lesson_title");
     }
-    if (typeof rawArgs.instruction !== "string" || !rawArgs.instruction.trim()) {
+    if (
+      typeof rawArgs.instruction !== "string" ||
+      !rawArgs.instruction.trim()
+    ) {
       rawArgs.instruction = "Explore the experiment.";
       fixes.push("defaulted_lesson_instruction");
     }

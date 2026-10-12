@@ -74,7 +74,9 @@
     ".next-ai-apertus/types/**/*.ts",
     ".next-ai-apertus/dev/types/**/*.ts",
     ".next-ai-laya/types/**/*.ts",
-    ".next-ai-laya/dev/types/**/*.ts"
+    ".next-ai-laya/dev/types/**/*.ts",
+    ".next-030/types/**/*.ts",
+    ".next-030/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

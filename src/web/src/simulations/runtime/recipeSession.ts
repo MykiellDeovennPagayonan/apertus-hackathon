@@ -10,7 +10,7 @@ import { loadRecipe } from "./recipes/loadRecipe";
 import { parseRecipe } from "./recipes/schema";
 import { serializeRecipe } from "./recipes/serializeRecipe";
 
-/** One learner runtime and one clock. Authored state never captures incidental exploration. */
+/** One learner clock; follow-ups capture settings without animation checkpoints. */
 export class RecipeSession {
   readonly sessionId: string;
   authoredRevision = 0;
@@ -67,9 +67,7 @@ export class RecipeSession {
     if (
       typeof requestAnimationFrame === "undefined" ||
       this.frame ||
-      !this.document.nodes.some(
-        (n) => publicDefinition(n).lifecycle.clock,
-      )
+      !this.document.nodes.some((n) => publicDefinition(n).lifecycle.clock)
     )
       return;
     let previous: number | undefined;
@@ -199,12 +197,7 @@ export class RecipeSession {
           Object.entries(value)
             .filter(
               ([key]) =>
-                ![
-                  "tokens",
-                  "joints",
-                  "members",
-                  "responses",
-                ].includes(key),
+                !["tokens", "joints", "members", "responses"].includes(key),
             )
             .map(([key, v]) => [key, compact(v, depth + 1)])
             .filter(([, v]) => v !== undefined),
@@ -212,17 +205,16 @@ export class RecipeSession {
       return undefined;
     };
     const runtimeContext = Object.fromEntries(
-      [...this.document.nodes, ...this.document.resources]
-        .map((n) => [
-          n.id,
-          compact(snapshot.state[n.id]) ?? {},
-        ]),
+      [...this.document.nodes, ...this.document.resources].map((n) => [
+        n.id,
+        compact(snapshot.state[n.id]) ?? {},
+      ]),
     );
     return {
       sessionId: this.sessionId,
       authoredRevision: this.authoredRevision,
       interactionRevision: this.interactionRevision,
-      recipe: parseRecipe(this.serialize()),
+      recipe: parseRecipe(serializeRecipe(this.recipe, this.runtime.capture())),
       runtimeContext,
     };
   }

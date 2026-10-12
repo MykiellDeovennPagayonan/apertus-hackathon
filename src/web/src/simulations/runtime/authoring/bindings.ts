@@ -33,6 +33,44 @@ const widgets = {
   button: "Button",
 };
 
+/** Offer the same control decisions that authoring can actually accept. */
+export function hasBoundControl(
+  document: AuthoredDocument,
+  targetId: string,
+  command: string,
+  field: string,
+) {
+  const target = document.nodes.find((node) => node.id === targetId);
+  if (!target) return false;
+  return document.connections.some((connection) => {
+    if (connection.kind !== "command" || connection.to.node !== targetId)
+      return false;
+    const control = document.nodes.find(
+      (node) => node.id === connection.from.node,
+    );
+    if (!control) return false;
+    const activity = activityContract(control.definition);
+    const parameter =
+      control.configuration.parameter ??
+      publicDefinition(control).defaults.parameter;
+    const leaves = parameterLeaves(
+      publicDefinition(target).commands[connection.to.port].arguments,
+    ).filter((leaf) => acceptsScalar(control.definition, leaf.schema));
+    const boundField =
+      parameter ||
+      (leaves.length === 1
+        ? leaves[0].path
+        : control.definition === "controls/Button"
+          ? ""
+          : undefined);
+    return (
+      (connection.to.port === command ||
+        activity?.model === target.definition) &&
+      (!!activity || boundField === field)
+    );
+  });
+}
+
 /** Uses accepted target arguments, including siblings, rather than definition creation defaults. */
 export function addBoundControl(
   document: AuthoredDocument,
@@ -60,22 +98,7 @@ export function addBoundControl(
         Object.keys(command.arguments.properties).length))
   )
     throw new Error("An action with arguments needs a bound field control");
-  if (
-    next.connections.some(
-      (c) =>
-        c.kind === "command" &&
-        c.to.node === target.id &&
-        (c.to.port === request.command ||
-          activityContract(
-            next.nodes.find((n) => n.id === c.from.node)?.definition ?? "",
-          )?.model === target.definition) &&
-        (activityContract(
-          next.nodes.find((n) => n.id === c.from.node)?.definition ?? "",
-        ) ||
-          next.nodes.find((n) => n.id === c.from.node)?.configuration
-            .parameter === request.field),
-    )
-  )
+  if (hasBoundControl(next, target.id, request.command, request.field))
     throw new Error("This decision already has a learner control");
   const state = new DocumentRuntime(document).getSnapshot().state[target.id];
   const initial =

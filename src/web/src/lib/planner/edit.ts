@@ -1,5 +1,6 @@
 import { publicDefinition } from "../../simulations/components/catalog";
 import { readoutLabel } from "../../simulations/components/views/recipe/observations";
+import { boardLayouts } from "../../simulations/runtime/authoring/board";
 import {
   finalizeRecipe,
   patchSchema,
@@ -12,11 +13,13 @@ import {
 import { AuthoringTransaction } from "../../simulations/runtime/authoring/transaction";
 import {
   choice,
-  object,
   num,
+  object,
   type ParameterSchema,
   validateValue,
 } from "../../simulations/runtime/parameterSchema";
+import { parseRecipe } from "../../simulations/runtime/recipes/schema";
+import { serializeRecipe } from "../../simulations/runtime/recipes/serializeRecipe";
 import { toJsonSchema } from "../apertus/structuredSchema";
 import { requestStructured } from "../apertus/transport";
 import { parseArgumentJson } from "./argumentJson";
@@ -24,8 +27,6 @@ import type { GenerationBudget } from "./budget";
 import { configurationPatch, editableFields, fieldValue } from "./editFields";
 import type { GenerationRequest, GenerationResult } from "./schema";
 import { buildTurnTools } from "./turnSchema";
-import { parseRecipe } from "../../simulations/runtime/recipes/schema";
-import { serializeRecipe } from "../../simulations/runtime/recipes/serializeRecipe";
 
 type EditPlan = {
   mode: "edit" | "runtime" | "new" | "unsupported" | "clarify";
@@ -41,6 +42,15 @@ type EditPlan = {
     mirror?: string;
   }[];
   message: string;
+};
+type EditIntent = Omit<EditPlan, "selections"> & {
+  selections: Record<
+    string,
+    Omit<EditPlan["selections"][number], "candidate" | "adjustments" | "mirror">
+  >;
+  adjustments?: (NonNullable<
+    EditPlan["selections"][number]["adjustments"]
+  >[number] & { candidate: string })[];
 };
 
 class EditValidationError extends Error {
@@ -84,10 +94,10 @@ export async function planEdit(
       ),
     ].map((tool, index) => ({
       id:
-        tool.tool === "configure" &&
+        (tool.tool === "configure" || tool.tool === "resize") &&
         tool.schema.type === "object" &&
         tool.schema.properties.target.type === "enum"
-          ? `configure:${tool.schema.properties.target.values[0]}`
+          ? `${tool.tool}:${tool.schema.properties.target.values[0]}`
           : `edit${index + 1}`,
       kind: "edit",
       tool: tool.tool,
@@ -133,9 +143,23 @@ export async function planEdit(
   const candidateFields = (candidate: (typeof candidates)[number]) =>
     candidate.tool === "configure"
       ? editableFields(properties(candidate.schema).changes)
-      : candidate.tool === "set_lesson"
-        ? properties(candidate.schema)
-        : {};
+      : candidate.tool === "resize"
+        ? Object.fromEntries(
+            Object.entries(properties(candidate.schema)).filter(
+              ([field]) => field !== "target",
+            ),
+          )
+        : candidate.tool === "set_lesson"
+          ? properties(candidate.schema)
+          : {};
+  const presentationItem = (candidate: (typeof candidates)[number]) => {
+    const target = properties(candidate.schema).target;
+    return document.presentation?.mode === "board"
+      ? document.presentation.items.find(
+          (item) => target?.type === "enum" && item.id === target.values[0],
+        )
+      : undefined;
+  };
   const currentConfiguration = (id: string) => {
     const node = instances.find((node) => node.id === id)!;
     const state = active.runtimeContext[id];
@@ -156,16 +180,21 @@ export async function planEdit(
   };
   const adjustedValue = (
     candidate: (typeof candidates)[number],
-    adjustment: NonNullable<EditPlan["selections"][number]["adjustments"]>[number],
+    adjustment: NonNullable<
+      EditPlan["selections"][number]["adjustments"]
+    >[number],
   ) => {
     const target = properties(candidate.schema).target;
     const node = instances.find(
       (node) => target?.type === "enum" && node.id === target.values[0],
-    )!;
-    const current = fieldValue(currentConfiguration(node.id), adjustment.field);
+    );
+    const current =
+      candidate.tool === "resize"
+        ? fieldValue(presentationItem(candidate)?.rect ?? {}, adjustment.field)
+        : fieldValue(currentConfiguration(node!.id), adjustment.field);
     const schema = candidateFields(candidate)[adjustment.field];
     const details = {
-      node_id: node.id,
+      node_id: node?.id ?? candidate.id,
       field: adjustment.field,
       current_value: current,
       adjustment,
@@ -176,7 +205,7 @@ export async function planEdit(
       (typeof current !== "number" || !Number.isFinite(current))
     )
       throw new EditValidationError(
-        `unavailable_value:${node.id}:${adjustment.field}`,
+        `unavailable_value:${candidate.id}:${adjustment.field}`,
         "The current value is unavailable; use an absolute value or clarify",
         details,
       );
@@ -190,45 +219,32 @@ export async function planEdit(
       validateValue(schema, value);
     } catch (error) {
       throw new EditValidationError(
-        `invalid_value:${node.id}:${adjustment.field}`,
+        `invalid_value:${candidate.id}:${adjustment.field}`,
         error instanceof Error ? error.message : "Invalid value",
         { ...details, received: value },
       );
     }
     return value;
   };
-  const intentSchema = object({
-    mode: choice("edit", "runtime", "new", "unsupported", "clarify"),
-    selections: {
-      type: "array",
-      minItems: 0,
-      maxItems: 8,
-      items: object(
-        {
+  const intentSchema = object(
+    {
+      mode: choice("edit", "runtime", "new", "unsupported", "clarify"),
+      selections: object({}),
+      adjustments: {
+        type: "array",
+        minItems: 0,
+        maxItems: 96,
+        items: object({
           candidate: choice(...candidates.map((candidate) => candidate.id)),
-          scope: choice("selected", "all_matching"),
-          fields: {
-            type: "array",
-            minItems: 0,
-            maxItems: 12,
-            items: { type: "string", maxLength: 100 },
-          },
-          adjustments: {
-            type: "array",
-            minItems: 0,
-            maxItems: 12,
-            items: object({
-              field: { type: "string", maxLength: 100 },
-              operation: choice("set", "scale", "offset"),
-              operand: num(-Number.MAX_VALUE, Number.MAX_VALUE),
-            }),
-          },
-        },
-        ["adjustments"],
-      ),
+          field: { type: "string", maxLength: 100 },
+          operation: choice("set", "scale", "offset"),
+          operand: num(-Number.MAX_VALUE, Number.MAX_VALUE),
+        }),
+      },
+      message: { type: "string", minLength: 0, maxLength: 400 },
     },
-    message: { type: "string", minLength: 0, maxLength: 400 },
-  }, ["message"]);
+    ["adjustments", "message"],
+  );
   budget.trace?.("stage", { task: "edit_intent" });
   const context = {
     request: request.prompt,
@@ -236,37 +252,49 @@ export async function planEdit(
     currentLesson: document.lesson,
     destination: request.destination ?? "lesson",
     connections: document.connections,
+    presentation:
+      document.presentation?.mode === "board"
+        ? document.presentation.items.map((item) => ({
+            id: item.id,
+            node: boardLayouts(document).find(
+              (layout) => layout.id === item.layoutId,
+            )?.node,
+            bounds: item.rect,
+            locked: item.locked,
+          }))
+        : [],
     nodes: instances.map((node) => {
       const binding = document.connections.find(
-        (connection) => connection.kind === "value" && connection.to.node === node.id,
+        (connection) =>
+          connection.kind === "value" && connection.to.node === node.id,
       );
-      const source = instances.find((instance) => instance.id === binding?.from.node);
-      const label = typeof node.configuration.label === "string" && node.configuration.label
-        ? node.configuration.label
-        : node.label;
+      const source = instances.find(
+        (instance) => instance.id === binding?.from.node,
+      );
+      const label =
+        typeof node.configuration.label === "string" && node.configuration.label
+          ? node.configuration.label
+          : node.label;
       return {
-      id: node.id,
-      label: node.label,
-      visibleName:
-        node.definition === "displays/Readout"
-          ? readoutLabel(label, source?.definition, binding?.from.port,
-              source && binding ? publicDefinition(source).outputs[binding.from.port]?.unit : "")
-          : label,
-      definition: node.definition,
-      title: publicDefinition(node).title,
-      currentConfiguration: currentConfiguration(node.id),
-      editableSettings: Object.keys(
-        editableFields(publicDefinition(node).configuration),
-      ),
-      units: Object.fromEntries(
-        Object.entries(
-          editableFields(publicDefinition(node).configuration),
-        ).flatMap(([path, schema]) =>
-          "unit" in schema && schema.unit ? [[path, schema.unit]] : [],
-        ),
-      ),
-      runtime: active.runtimeContext[node.id],
-      assumptions: publicDefinition(node).assumptions,
+        id: node.id,
+        label: node.label,
+        visibleName:
+          node.definition === "displays/Readout"
+            ? readoutLabel(
+                label,
+                source?.definition,
+                binding?.from.port,
+                source && binding
+                  ? publicDefinition(source).outputs[binding.from.port]?.unit
+                  : "",
+              )
+            : label,
+        definition: node.definition,
+        category: publicDefinition(node).category,
+        title: publicDefinition(node).title,
+        currentConfiguration: currentConfiguration(node.id),
+        runtime: active.runtimeContext[node.id],
+        assumptions: publicDefinition(node).assumptions,
       };
     }),
   };
@@ -275,52 +303,99 @@ export async function planEdit(
     visible_name: node.visibleName,
     definition: node.definition,
   }));
-  const candidateChoices = candidates.map((candidate) => ({
-    id: candidate.id,
-    mode: candidate.kind,
-    operation: candidate.tool,
-    allowedFields: Object.keys(candidateFields(candidate)),
-    ...(candidate.node ? { node: candidate.node } : {}),
-    ...(candidate.kind === "runtime"
-      ? { command: candidate.command, description: candidate.description }
-      : {}),
-    fixedArguments:
-      candidate.tool === "remove"
-        ? { targets: [candidate.node] }
-        : Object.fromEntries(
-            Object.entries(properties(candidate.schema))
-              .filter(([, schema]) => schema.type === "enum")
-              .map(([key, schema]) => [
-                key,
-                schema.type === "enum" ? schema.values : [],
-              ]),
-          ),
-  }));
+  const candidateChoices = candidates.map((candidate) => {
+    const target =
+      properties(candidate.schema).target ??
+      properties(candidate.schema).source;
+    const nodeId =
+      candidate.tool === "resize"
+        ? boardLayouts(document).find(
+            (layout) => layout.id === presentationItem(candidate)?.layoutId,
+          )?.node
+        : target?.type === "enum"
+          ? target.values[0]
+          : candidate.node;
+    const node = context.nodes.find((node) => node.id === nodeId);
+    return {
+      id: candidate.id,
+      mode: candidate.kind,
+      operation: candidate.tool,
+      fieldContracts: candidateFields(candidate),
+      ...(node
+        ? {
+            component: {
+              visibleName: node.visibleName,
+              category: node.category,
+              definition: node.definition,
+            },
+            ...(candidate.tool === "configure"
+              ? { currentConfiguration: node.currentConfiguration }
+              : {}),
+          }
+        : {}),
+      ...(candidate.tool === "resize"
+        ? {
+            presentation: context.presentation.find(
+              (item) => target?.type === "enum" && item.id === target.values[0],
+            ),
+          }
+        : {}),
+      ...(node ? { node: node.id } : {}),
+      ...(candidate.kind === "runtime"
+        ? {
+            command: candidate.command,
+            description: candidate.description,
+            currentState: active.runtimeContext[candidate.node],
+          }
+        : {}),
+      fixedArguments:
+        candidate.tool === "remove"
+          ? { targets: [candidate.node] }
+          : Object.fromEntries(
+              Object.entries(properties(candidate.schema))
+                .filter(([, schema]) => schema.type === "enum")
+                .map(([key, schema]) => [
+                  key,
+                  schema.type === "enum" ? schema.values : [],
+                ]),
+            ),
+    };
+  });
   const repairFeedback = (error: unknown) => {
     if (error instanceof EditValidationError)
-      return { key: error.code, details: { code: error.code, ...error.details } };
+      return {
+        key: error.code,
+        details: { code: error.code, ...error.details },
+      };
     const message = error instanceof Error ? error.message : "Invalid JSON";
     const invalidJson =
-      error instanceof SyntaxError || /JSON|Unexpected token|Unterminated/i.test(message);
-    const path = invalidJson ? "$" : message.split(":")[0];
+      error instanceof SyntaxError ||
+      /JSON|Unexpected token|Unterminated/i.test(message);
+    const path = invalidJson ? "$" : message.split(": ")[0];
     const code = invalidJson
       ? "invalid_json"
       : /\.candidate$/.test(path)
         ? "unknown_operation"
         : /\.targets(?:\[\d+\])?$/.test(path)
           ? "unknown_target"
-          : /expected (?:number|integer|boolean|one of)|invalid string/.test(message)
+          : /expected (?:number|integer|boolean|one of)|invalid string/.test(
+                message,
+              )
             ? "invalid_value"
             : /unknown field/.test(message)
               ? "unknown_field"
               : "invalid_schema";
     let expected: ParameterSchema | undefined = intentSchema;
-    for (const part of path.replace(/\[(\d+)\]/g, ".$1").split(".").slice(1)) {
-      expected = expected?.type === "array"
-        ? expected.items
-        : expected?.type === "object"
-          ? expected.properties[part]
-          : undefined;
+    for (const part of path
+      .replace(/\[(\d+)\]/g, ".$1")
+      .split(".")
+      .slice(1)) {
+      expected =
+        expected?.type === "array"
+          ? expected.items
+          : expected?.type === "object"
+            ? expected.properties[part]
+            : undefined;
     }
     return {
       key: `${code}:${path}`,
@@ -329,15 +404,22 @@ export async function planEdit(
         path,
         response_keys: Object.keys(properties(intentSchema)),
         expected_contract: expected ? toJsonSchema(expected) : undefined,
-        repair: code === "unknown_field" ? {
-          action: "remove_unknown_key",
-          key: /unknown field (\S+)/.exec(message)?.[1],
-          allowed_keys: Object.keys(properties(expected)),
-          message_location: "response_root",
-        } : undefined,
-        allowed_components: ["unknown_operation", "unknown_target"].includes(code)
-          ? componentChoices : undefined,
-        allowed_operations: code === "unknown_operation" ? candidateChoices : undefined,
+        repair:
+          code === "unknown_field"
+            ? {
+                action: "remove_unknown_key",
+                key: /unknown field (\S+)/.exec(message)?.[1],
+                allowed_keys: Object.keys(properties(expected)),
+                message_location: "response_root",
+              }
+            : undefined,
+        allowed_components: ["unknown_operation", "unknown_target"].includes(
+          code,
+        )
+          ? componentChoices
+          : undefined,
+        allowed_operations:
+          code === "unknown_operation" ? candidateChoices : undefined,
       },
     };
   };
@@ -353,7 +435,8 @@ export async function planEdit(
       const issue = receipt.issues[0];
       throw new EditValidationError(
         `invalid_result:${issue?.path ?? issue?.message.split(":")[0] ?? "document"}`,
-        receipt.issues.map((issue) => issue.message).join("; ") || receipt.summary,
+        receipt.issues.map((issue) => issue.message).join("; ") ||
+          receipt.summary,
         {
           issues: receipt.issues,
           allowed_components: componentChoices,
@@ -362,7 +445,9 @@ export async function planEdit(
       );
     }
     try {
-      const recipe = parseRecipe(serializeRecipe(active.recipe, target.document));
+      const recipe = parseRecipe(
+        serializeRecipe(active.recipe, target.document),
+      );
       finalizeRecipe(recipe.document, recipe);
       return recipe;
     } catch (error) {
@@ -378,40 +463,267 @@ export async function planEdit(
     }
   };
   const previousLimits = { calls: budget.maxCalls, repairs: budget.maxRepairs };
+  const selectionCatalog = {
+    components: context.nodes.map((node) => ({
+      id: node.id,
+      visibleName: node.visibleName,
+      category: node.category,
+      definition: node.definition,
+      currentConfiguration: node.currentConfiguration,
+      runtime: node.runtime,
+      candidates: candidateChoices
+        .filter((candidate) => candidate.node === node.id)
+        .map((candidate) => ({
+          ...candidate,
+          component: undefined,
+          currentConfiguration: undefined,
+          currentState: undefined,
+          node: undefined,
+          fieldContracts: Object.keys(candidate.fieldContracts).length
+            ? candidate.fieldContracts
+            : undefined,
+          fixedArguments: ["configure", "remove", "resize", "command"].includes(
+            candidate.operation,
+          )
+            ? undefined
+            : candidate.fixedArguments,
+        })),
+    })),
+    candidates: candidateChoices.filter((candidate) => !candidate.node),
+  };
+  budget.trace?.("edit_context", {
+    contextCharacters: JSON.stringify(context).length,
+    candidateCharacters: JSON.stringify(candidateChoices).length,
+    schemaCharacters: JSON.stringify(toJsonSchema(intentSchema)).length,
+    catalogCharacters: JSON.stringify(selectionCatalog).length,
+    candidates: candidateChoices.map((candidate) => ({
+      id: candidate.id,
+      operation: candidate.operation,
+      characters: JSON.stringify(candidate).length,
+      fieldCharacters: JSON.stringify(candidate.fieldContracts).length,
+      fixedCharacters: JSON.stringify(candidate.fixedArguments).length,
+    })),
+  });
   budget.maxCalls = Math.max(budget.maxCalls, 12);
   budget.maxRepairs = Math.max(budget.maxRepairs, 10);
-  const plan = await requestStructured<EditPlan>(
+  const targetSchema = object(
+    {
+      mode: choice("edit", "runtime", "new", "unsupported", "clarify"),
+      candidates: {
+        type: "array",
+        minItems: 0,
+        maxItems: 8,
+        items: choice(...candidates.map((candidate) => candidate.id)),
+      },
+      message: { type: "string", minLength: 0, maxLength: 400 },
+    },
+    ["message"],
+  );
+  const target = await requestStructured<{
+    mode: EditPlan["mode"];
+    candidates: string[];
+    message?: string;
+  }>(
     [
       {
         role: "system",
         content:
-          "Selection objects contain ONLY candidate, scope, fields and optional adjustments. message belongs at the response root, NEVER inside selections. A removal uses scope selected and fields [].\n" +
-          "Use visibleName and connections to identify which model output a visible display shows. Removing a display or control means selecting its remove:<node-id> candidate with fields [] and scope selected. Select one removal candidate per requested component; fixedArguments already identifies the target, so never put node IDs or measurement names in fields. Removing a swing-time display removes the readout connected to period, while preserving the pendulum. Each candidate supplies allowedFields: select fields only from that candidate's list. Measurement outputs are not editable configuration fields.\n" +
-          "Interpret this natural-language follow-up against the supplied ACTIVE experiment and its real configuration. This is editing, not topic selection or lesson creation. Select ONLY requested changes. Physical conditions belong to model configuration; do not change controls, angles, wording or layout unless asked. Use exact candidate IDs and editableSettings. fields lists only the requested settings. An unqualified shared condition uses scope all_matching with one representative; a named instance uses selected. The application expands shared changes and preserves everything else.\nReturn only mode, selections, message. Each selection contains candidate, scope, fields and optional adjustments. For every requested numeric value supply adjustments: set with the numeric value (resolve scientific references using supplied units), scale with a multiplier for relative changes, offset for an addition. The app computes scale/offset from the actual CURRENT value; never use startup defaults. Half means scale 0.5; double means scale 2. A relative numeric edit MUST retain its adjustment, including when repairing output. Example for halving an existing spring stiffness: {\"mode\":\"edit\",\"selections\":[{\"candidate\":\"configure:spring-id\",\"scope\":\"all_matching\",\"fields\":[\"stiffness\"],\"adjustments\":[{\"field\":\"stiffness\",\"operation\":\"scale\",\"operand\":0.5}]}],\"message\":\"Halve stiffness\"}. For setting a mass to 3 kg use fields [\"mass\"] and adjustments [{\"field\":\"mass\",\"operation\":\"set\",\"operand\":3}]. Omit adjustments only for non-numeric or genuinely unresolved values.\nUse runtime only for explicit actions now (launch, play, pause, reset) and declared commands; fields is []. Other structural edit operations use fields [] except set_lesson, which names requested lesson fields. Use new only for an explicit replacement experiment. A scientific reference does not request a new topic. Unsupported means capability absent or fidelity violated. Clarify asks one specific question only if the current context cannot resolve the target or behavior. New/unsupported/clarify have selections []. If clarification is supplied, interpret the latest request as its answer in the original prompt context. Return valid JSON with concrete numbers, never arithmetic expressions, tool arguments or capability descriptions.",
+          "Choose ONLY the target operations for the follow-up against the active experiment. Return JSON with mode, candidates (an array of exact candidate ID strings), and message when clarification or a limitation is needed. Do not supply fields, values, adjustments or operation arguments. Use edit for persistent changes, runtime only for an immediate action, new only for an explicit replacement. Never mix edit and runtime candidates. For new/unsupported/clarify use candidates []. Resolve targets from their visible names and categories. Resizing a visual does not resize its neighboring controls or change model quantities. If a quantity names both a control and a display without distinguishing them, ask which one. Select only requested operations, not related capabilities.",
       },
       {
         role: "user",
         content: JSON.stringify({
-          task: "edit_intent",
-          ...context,
-          candidates: candidateChoices,
-          removalExamples: context.nodes.filter((node) =>
-            publicDefinition(node.definition).category === "displays",
-          ).slice(0, 2).map((node) => ({
-            request: `remove the ${node.visibleName} display`,
-            response: {
-              mode: "edit",
-              selections: [{ candidate: `remove:${node.id}`, scope: "selected", fields: [] }],
-              message: `Remove ${node.visibleName}`,
-            },
+          request: request.prompt,
+          clarification: request.clarification,
+          currentLesson: document.lesson,
+          responseSchema: toJsonSchema(targetSchema),
+          components: selectionCatalog.components.map((component) => ({
+            ...component,
+            runtime: undefined,
+            candidates: component.candidates.map((candidate) => ({
+              id: candidate.id,
+              mode: candidate.mode,
+              operation: candidate.operation,
+              description: candidate.description,
+              fields: Object.keys(candidate.fieldContracts ?? {}),
+              fixedArguments: candidate.fixedArguments,
+            })),
+          })),
+          candidates: selectionCatalog.candidates.map((candidate) => ({
+            id: candidate.id,
+            mode: candidate.mode,
+            operation: candidate.operation,
+            fixedArguments: candidate.fixedArguments,
           })),
         }),
       },
     ],
     (content) => {
       const { value } = parseArgumentJson(content);
+      validateValue(targetSchema, value);
+      const target = value as {
+        mode: EditPlan["mode"];
+        candidates: string[];
+        message?: string;
+      };
+      const actionable = target.mode === "edit" || target.mode === "runtime";
+      if (
+        actionable !== Boolean(target.candidates.length) ||
+        new Set(target.candidates).size !== target.candidates.length ||
+        target.candidates.some(
+          (id) =>
+            candidates.find((candidate) => candidate.id === id)!.kind !==
+            target.mode,
+        )
+      )
+        throw new Error(
+          "Select distinct candidates from the selected mode; new/unsupported/clarify have no candidates",
+        );
+      if (!actionable && target.mode !== "new" && !target.message?.trim())
+        throw new Error(
+          "Ask a specific clarification question or explain the unsupported request",
+        );
+      return target;
+    },
+    "Return only mode, candidates and message. Candidates are exact ID strings, not objects. Select only the requested targets and operations; do not calculate values.",
+    budget.signal,
+    {
+      budget,
+      stage: "edit_target",
+      schema: toJsonSchema(targetSchema),
+      maxTokens: 256,
+      onEvent: (event, data) => budget.trace?.(`edit_target.${event}`, data),
+    },
+  );
+  if (target.mode === "new") {
+    budget.maxCalls = previousLimits.calls;
+    budget.maxRepairs = previousLimits.repairs;
+    return null;
+  }
+  if (target.mode === "clarify" || target.mode === "unsupported")
+    return {
+      protocolVersion: 1,
+      status: target.mode === "clarify" ? "clarification" : "unsupported",
+      requestId: request.requestId,
+      message: target.message!,
+    };
+  const targetIds = new Set(target.candidates);
+  properties(intentSchema).mode = choice(target.mode, "clarify", "unsupported");
+  properties(intentSchema).selections = object(
+    Object.fromEntries(
+      target.candidates.map((id) => {
+        const fields = Object.keys(
+          candidateFields(candidates.find((candidate) => candidate.id === id)!),
+        );
+        return [
+          id,
+          object({
+            scope: choice("selected", "all_matching"),
+            fields: {
+              type: "array",
+              minItems: 0,
+              maxItems: fields.length ? 12 : 0,
+              items: fields.length
+                ? choice(...fields)
+                : { type: "string", maxLength: 100 },
+            },
+          }),
+        ];
+      }),
+    ),
+    target.candidates,
+  );
+  const adjustmentSchema = properties(intentSchema).adjustments;
+  if (
+    adjustmentSchema.type === "array" &&
+    adjustmentSchema.items.type === "object"
+  )
+    adjustmentSchema.items.properties.candidate = choice(...target.candidates);
+  const plan = await requestStructured<EditPlan>(
+    [
+      {
+        role: "system",
+        content:
+          "Interpret the follow-up against the ACTIVE experiment. The exact root JSON keys are mode, selections, adjustments, message. The last two keys may be omitted when unused. selections is an OBJECT keyed by supplied candidate IDs, never an array. Each value contains ONLY scope and fields. fields is an array of the supplied field-name STRINGS, never objects. Numeric adjustments belong in the separate ROOT adjustments array; each contains candidate, field, operation and numeric operand. Never nest adjustments inside selections or fields. Do not copy candidate descriptions into the response.\n" +
+          "Use edit for persistent configuration or structural changes; runtime is only an explicitly requested immediate action. Never mix edit and runtime candidates. Unsupported/clarify have selections {}. Clarify asks one specific question when the supplied context cannot resolve the request. If clarification exists, interpret the latest prompt as its answer.\n" +
+          "For configure, select ONLY requested leaf fields from fieldContracts; preserve every other setting. scope all_matching applies a shared condition to instances of the same definition; selected changes only the named instance. Numeric fields may use adjustments with field, operation set/scale/offset, and a JSON-number operand. Relative edits use scale or offset against CURRENT values. Enum/string/boolean/array/object fields have NO numeric adjustments; their values are supplied in the argument stage. Do not select both configuration and a runtime setter for one change.\n" +
+          "For remove, fields is [] and scope is selected. Use visibleName, category and connections to identify the component. Preserve its model and accepted values when removing a display or control. If a quantity names both a control and a display without distinguishing them, clarify which one.\n" +
+          "Choose operations by their component identity and fieldContracts. Model quantities use configure; displayed size uses resize ONLY when size is requested. For resize, select width and/or height on ONLY the requested visual component; neighboring controls are separate components. Numeric adjustments may express explicit size changes; otherwise the argument stage supplies dimensions from current bounds. Preserve proportions unless one dimension is requested. Other structural operations use fields [], except set_lesson names requested lesson fields. Preserve all unrequested settings, components and text.",
+      },
+      {
+        role: "user",
+        content: JSON.stringify({
+          responseSchema: toJsonSchema(intentSchema),
+          request: context.request,
+          clarification: context.clarification,
+          currentLesson: context.currentLesson,
+          destination: context.destination,
+          connections: context.connections,
+          shortlistedTargets: {
+            mode: target.mode,
+            candidates: target.candidates,
+          },
+          components: selectionCatalog.components
+            .filter((component) =>
+              component.candidates.some((candidate) =>
+                targetIds.has(candidate.id),
+              ),
+            )
+            .map((component) => ({
+              ...component,
+              candidates: component.candidates.filter((candidate) =>
+                targetIds.has(candidate.id),
+              ),
+            })),
+          candidates: selectionCatalog.candidates.filter((candidate) =>
+            targetIds.has(candidate.id),
+          ),
+          removalExamples: context.nodes
+            .filter(
+              (node) =>
+                publicDefinition(node.definition).category === "displays",
+            )
+            .slice(0, 2)
+            .map((node) => ({
+              request: `remove the ${node.visibleName} display`,
+              response: {
+                mode: "edit",
+                selections: {
+                  [`remove:${node.id}`]: { scope: "selected", fields: [] },
+                },
+                message: `Remove ${node.visibleName}`,
+              },
+            })),
+        }),
+      },
+    ],
+    (content) => {
+      const { value } = parseArgumentJson(content);
       validateValue(intentSchema, value);
-      const plan = value as EditPlan;
+      const { adjustments = [], ...intent } = value as EditIntent;
+      if (
+        adjustments.some(
+          (adjustment) =>
+            !Object.hasOwn(intent.selections, adjustment.candidate),
+        )
+      )
+        throw new EditValidationError(
+          "unselected_adjustment",
+          "Adjustments must refer to selected candidates",
+          {},
+        );
+      const plan: EditPlan = {
+        ...intent,
+        selections: Object.entries(intent.selections).map(
+          ([candidate, selection]) => ({
+            ...selection,
+            candidate,
+            adjustments: adjustments
+              .filter((adjustment) => adjustment.candidate === candidate)
+              .map(({ candidate: _candidate, ...adjustment }) => adjustment),
+          }),
+        ),
+      };
       plan.message ??= "";
       const actionable = plan.mode === "edit" || plan.mode === "runtime";
       if (actionable !== Boolean(plan.selections.length))
@@ -488,7 +800,7 @@ export async function planEdit(
             adjustments.length ||
           adjustments.some(
             (adjustment) =>
-              candidate.tool !== "configure" ||
+              !["configure", "resize"].includes(candidate.tool) ||
               !selected.fields.includes(adjustment.field) ||
               !["number", "integer"].includes(fields[adjustment.field]?.type),
           )
@@ -553,7 +865,9 @@ export async function planEdit(
           "An edit can affect at most eight components; select a smaller group",
         );
       const expandedCandidates = expanded.map((selection) => {
-        const candidate = candidates.find((candidate) => candidate.id === selection.candidate)!;
+        const candidate = candidates.find(
+          (candidate) => candidate.id === selection.candidate,
+        )!;
         for (const adjustment of selection.adjustments ?? [])
           adjustedValue(candidate, adjustment);
         return candidate;
@@ -570,7 +884,7 @@ export async function planEdit(
         );
       return { ...plan, selections: expanded };
     },
-    "Resolve ONLY the original requested change against supplied IDs and fields. For numeric changes retain adjustments with set, scale or offset and a numeric operand; half is scale 0.5. Do not add another change or select a topic. Return the exact edit intent JSON shape from the original instructions.",
+    "Resolve ONLY the original requested change. selections is an OBJECT keyed by candidate IDs; each value contains scope and fields. fields contains only allowed field-name strings, never objects. Numeric adjustments go in a separate ROOT array. Use a numeric operand implementing the original request. Preserve all unrequested settings. Close a fields array before its selection object, then the selections object, then the root object.",
     budget.signal,
     {
       budget,
@@ -617,6 +931,13 @@ export async function planEdit(
           selection.fields.map((field) => [field, properties(schema)[field]]),
         ),
       );
+    if (candidate.tool === "resize")
+      schema = object({
+        target: properties(schema).target,
+        ...Object.fromEntries(
+          selection.fields.map((field) => [field, properties(schema)[field]]),
+        ),
+      });
     const target = properties(schema).target;
     const node =
       target?.type === "enum"
@@ -626,14 +947,24 @@ export async function planEdit(
     const computed: Record<string, unknown> = {};
     for (const adjustment of adjustments)
       computed[adjustment.field] = adjustedValue(candidate, adjustment);
+    const size = presentationItem(candidate);
+    const complete =
+      adjustments.length === selection.fields.length && adjustments.length > 0;
     const derived =
       candidate.tool === "remove"
         ? { targets: [candidate.node] }
-        : node && adjustments.length === selection.fields.length && adjustments.length > 0
-          ? { target: node.id, changes: computed }
-          : schema.type === "object" && Object.keys(schema.properties).length === 0
-            ? {}
-            : null;
+        : candidate.tool === "resize" && size && complete
+          ? {
+              target: size.id,
+              width: computed.width ?? size.rect.width,
+              height: computed.height ?? size.rect.height,
+            }
+          : node && complete
+            ? { target: node.id, changes: computed }
+            : schema.type === "object" &&
+                Object.keys(schema.properties).length === 0
+              ? {}
+              : null;
     return {
       ...candidate,
       schema,
@@ -646,28 +977,12 @@ export async function planEdit(
   const inference = selected.filter(
     (candidate) => !candidate.derived && !candidate.mirror,
   );
-  const argumentsSchema = {
-    type: "object",
-    additionalProperties: false,
-    required: ["operations"],
-    properties: {
-      operations: {
-        type: "array",
-        minItems: inference.length,
-        maxItems: inference.length,
-        items: {
-          anyOf: inference.map((candidate) =>
-            toJsonSchema(
-              object({
-                candidate: choice(candidate.id),
-                arguments: candidate.schema,
-              }),
-            ),
-          ),
-        },
-      },
-    },
-  };
+  const argumentsContract = object(
+    Object.fromEntries(
+      inference.map((candidate) => [candidate.id, candidate.schema]),
+    ),
+  );
+  const argumentsSchema = toJsonSchema(argumentsContract);
   const verifyRuntime = (commands: ScopedCommand[]) => {
     const runtime = new DocumentRuntime(document);
     const snapshot = runtime.getSnapshot();
@@ -710,6 +1025,21 @@ export async function planEdit(
           }),
         },
       };
+    if (candidate.tool === "resize") {
+      const size = presentationItem(candidate)!;
+      return {
+        tool: "resize",
+        arguments: {
+          target: size.id,
+          width: (candidate.computed.width ??
+            arguments_.width ??
+            size.rect.width) as number,
+          height: (candidate.computed.height ??
+            arguments_.height ??
+            size.rect.height) as number,
+        },
+      };
+    }
     return {
       tool: candidate.tool,
       arguments:
@@ -736,7 +1066,8 @@ export async function planEdit(
           {
             role: "system",
             content:
-              'Supply ONLY concrete arguments for the accepted edit plan. Return {"operations":[{"candidate":"selected-id","arguments":{}}]}. Include every selected candidate exactly once. Compute relative edits once from each supplied CURRENT value: half means value / 2, double means value * 2. Preserve every field outside the accepted plan. Resolve equivalent natural-language descriptions to meaningful values within the schema. For runtime commands requiring sibling values, copy unchanged siblings from the current runtime state. Do not introduce topics, targets, fields, tools, components, layout changes or lesson text outside the plan. Return evaluated JSON numbers, never expressions such as 9.81 / 2. Use the supplied current configuration, not original defaults. Return values, not schemas.',
+              "For a resize operation, use current presentation bounds as the starting point and apply the requested size change. A larger view needs increased dimensions; copying its current dimensions is not an edit. Preserve proportions unless the request changes only one dimension, and never change physical model values.\n" +
+              "Supply ONLY concrete arguments for the accepted edit plan. Return one OBJECT keyed by candidate ID, with each value being its argument object. Do not return an operations array or candidate/arguments envelopes. Include every supplied candidate exactly once. Compute relative edits once from supplied CURRENT values. Preserve every field outside the accepted plan. For runtime commands requiring siblings, copy unchanged siblings from current runtime state. Do not introduce targets, fields, tools, components, layout changes or lesson text outside the plan. Return evaluated JSON numbers, not expressions. Use current configuration, not original defaults. Return values, not schemas.",
           },
           {
             role: "user",
@@ -757,38 +1088,12 @@ export async function planEdit(
         ],
         (content) => {
           const { value } = parseArgumentJson(content);
-          if (
-            !value ||
-            typeof value !== "object" ||
-            Array.isArray(value) ||
-            Object.keys(value).length !== 1 ||
-            !("operations" in value) ||
-            !Array.isArray(value.operations) ||
-            value.operations.length !== inference.length
-          )
-            throw new Error(
-              "Return one operations array matching the accepted plan",
-            );
-          const seen = new Set<string>();
-          const responses = value.operations;
-          const argumentsById = new Map<string, Record<string, unknown>>();
-          for (const operation of responses) {
-            const candidate = inference.find(
-              (candidate) => candidate.id === operation?.candidate,
-            );
-            if (!candidate || seen.has(candidate.id))
-              throw new Error("Use every accepted candidate exactly once");
-            validateValue(
-              object({
-                candidate: choice(candidate.id),
-                arguments: candidate.schema,
-              }),
-              operation,
-            );
-            seen.add(candidate.id);
-            argumentsById.set(candidate.id, operation.arguments);
-          }
-          return materialize(argumentsById);
+          validateValue(argumentsContract, value);
+          return materialize(
+            new Map(
+              Object.entries(value as Record<string, Record<string, unknown>>),
+            ),
+          );
         },
         "Return only the accepted operation arguments. Use exact target IDs and valid values; no change has been applied.",
         budget.signal,

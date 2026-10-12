@@ -9,7 +9,9 @@ export function editableFields(
   return Object.fromEntries(
     Object.entries(schema.properties).flatMap(([key, field]) => {
       const path = prefix ? `${prefix}.${key}` : key;
-      return [[path, field], ...Object.entries(editableFields(field, path))];
+      return field.type === "object" && Object.keys(field.properties).length
+        ? Object.entries(editableFields(field, path))
+        : [[path, field]];
     }),
   );
 }
@@ -36,15 +38,30 @@ export function configurationPatch(
     const keys = path.split(".");
     const root = keys[0];
     if (keys.length === 1) {
-      Object.defineProperty(patch, root, { value, enumerable: true, writable: true, configurable: true });
+      Object.defineProperty(patch, root, {
+        value,
+        enumerable: true,
+        writable: true,
+        configurable: true,
+      });
       continue;
     }
     if (!Object.hasOwn(patch, root))
-      Object.defineProperty(patch, root, { value: structuredClone(configuration[root]), enumerable: true, writable: true, configurable: true });
+      Object.defineProperty(patch, root, {
+        value: structuredClone(configuration[root]),
+        enumerable: true,
+        writable: true,
+        configurable: true,
+      });
     let target = patch[root] as Record<string, unknown>;
     for (const key of keys.slice(1, -1))
       target = target[key] as Record<string, unknown>;
-    Object.defineProperty(target, keys.at(-1)!, { value, enumerable: true, writable: true, configurable: true });
+    Object.defineProperty(target, keys.at(-1)!, {
+      value,
+      enumerable: true,
+      writable: true,
+      configurable: true,
+    });
   }
   return patch;
 }

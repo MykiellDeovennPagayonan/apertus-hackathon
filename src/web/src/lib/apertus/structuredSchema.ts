@@ -23,8 +23,19 @@ export function toJsonSchema(schema: ParameterSchema): JsonSchema {
         maxLength: schema.maxLength ?? 100,
         ...(schema.enum ? { enum: [...schema.enum] } : {}),
       };
-    case "enum":
-      return { enum: [...schema.values] };
+    case "enum": {
+      const types = [
+        ...new Set(
+          schema.values.map((value) =>
+            value === null ? "null" : typeof value,
+          ),
+        ),
+      ];
+      return {
+        type: types.length === 1 ? types[0] : types,
+        enum: [...schema.values],
+      };
+    }
     case "array":
       return {
         type: "array",
