@@ -62,6 +62,8 @@ export type GenerationRequest = {
   protocolVersion: 1;
   requestId: string;
   prompt: string;
+  purpose?: "create" | "edit";
+  clarification?: { prompt: string; question: string };
   destination?: "lesson" | "builder";
   construction?: "live";
   viewport: { width: number; height: number };
@@ -87,6 +89,17 @@ export type GenerationResult =
     }
   | {
       protocolVersion: 1;
+      status: "updated";
+      requestId: string;
+      expectedSessionId: string;
+      expectedAuthoredRevision: number;
+      expectedInteractionRevision?: number;
+      recipe: CompositeRecipe;
+      coverage?: Coverage;
+      learnerExplanation?: string;
+    }
+  | {
+      protocolVersion: 1;
       status: "runtime_action";
       requestId: string;
       expectedSessionId: string;
@@ -97,6 +110,12 @@ export type GenerationResult =
   | {
       protocolVersion: 1;
       status: "unsupported";
+      requestId: string;
+      message: string;
+    }
+  | {
+      protocolVersion: 1;
+      status: "clarification";
       requestId: string;
       message: string;
     }
@@ -170,6 +189,8 @@ export function parseGenerationRequest(value: unknown): GenerationRequest {
     "protocolVersion",
     "requestId",
     "prompt",
+    "purpose",
+    "clarification",
     "destination",
     "construction",
     "viewport",
@@ -178,6 +199,16 @@ export function parseGenerationRequest(value: unknown): GenerationRequest {
   if (value.protocolVersion !== 1)
     throw new Error("Unsupported generation protocol");
   identity(value.requestId);
+  if (
+    value.purpose !== undefined &&
+    !["create", "edit"].includes(String(value.purpose))
+  )
+    throw new Error("Invalid request purpose");
+  if (value.clarification !== undefined)
+    validateValue(
+      object({ prompt: text(4000), question: text(400) }),
+      value.clarification,
+    );
   if (
     value.destination !== undefined &&
     value.destination !== "lesson" &&
@@ -224,6 +255,9 @@ export function parseGenerationRequest(value: unknown): GenerationRequest {
     REQUEST_BYTE_LIMIT
   )
     throw new Error("Request too large");
+  record(value);
+  if (value.purpose === "edit" && value.active === null)
+    throw new Error("Editing requires an active experiment");
   return structuredClone(value) as GenerationRequest;
 }
 export function parseIntentShape(value: unknown): TeachingIntent {
@@ -374,9 +408,12 @@ export function parseGenerationResult(
       !recipe.document.lesson.instruction.trim()
     )
       throw new Error("Result has no learner content");
-    const coverage = parseCoverage(value.coverage);
+    const coverage =
+      value.status === "updated" && value.coverage === undefined
+        ? undefined
+        : parseCoverage(value.coverage);
     if (
-      coverage.level === "partial" &&
+      coverage?.level === "partial" &&
       !recipe.document.lesson.explanation.includes(coverage.explanation)
     )
       throw new Error("Coverage limitations must persist in lesson content");
@@ -384,10 +421,17 @@ export function parseGenerationResult(
       request &&
       value.status === "updated" &&
       (value.expectedSessionId !== request.active?.sessionId ||
-        value.expectedAuthoredRevision !== request.active?.authoredRevision)
+        value.expectedAuthoredRevision !== request.active?.authoredRevision ||
+        (value.expectedInteractionRevision !== undefined &&
+          value.expectedInteractionRevision !==
+            request.active?.interactionRevision))
     )
       throw new Error("Result does not match authoring dependencies");
-    return { ...value, recipe, coverage } as GenerationResult;
+    return {
+      ...value,
+      recipe,
+      ...(coverage ? { coverage } : {}),
+    } as GenerationResult;
   }
   if (value.status === "runtime_action") {
     exactKeys(value, [
@@ -433,7 +477,11 @@ export function parseGenerationResult(
     validateValue(text(1500), value.message);
     return structuredClone(value) as GenerationResult;
   }
-  if (value.status === "unsupported" || value.status === "failed") {
+  if (
+    value.status === "unsupported" ||
+    value.status === "clarification" ||
+    value.status === "failed"
+  ) {
     exactKeys(value, [
       ...base,
       "message",

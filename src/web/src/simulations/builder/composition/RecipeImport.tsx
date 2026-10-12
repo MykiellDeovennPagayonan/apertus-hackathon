@@ -1,4 +1,6 @@
 "use client";
+import { inspectSource, componentLimits } from "../../runtime/imported/contract";
+import { HTMLComponentImport } from "./HTMLComponentImport";
 import { useEffect, useRef, useState } from "react";
 import { validateRecipe } from "../../runtime/authoring/recipes";
 import type { CompositeRecipe } from "../../runtime/authoring/types";
@@ -15,6 +17,7 @@ export function RecipeImport({
   onReveal: (recipe: CompositeRecipe) => void;
   onBack: () => void;
 }) {
+  const [html, setHtml] = useState("");
   const [filename, setFilename] = useState("");
   const [recipe, setRecipe] = useState<CompositeRecipe | null>(null);
   const [message, setMessage] = useState<Feedback | null>(null);
@@ -23,7 +26,13 @@ export function RecipeImport({
   const heading = useRef<HTMLHeadingElement>(null);
   const readSequence = useRef(0);
   useEffect(() => heading.current?.focus(), []);
-  const inspect = (text: string) => {
+  const inspect = (text: string, asHtml = false) => {
+    setHtml("");
+    if (asHtml) {
+      try { inspectSource(text); catalog.retain(text); setRecipe(null); setMessage(null); setHtml(text); }
+      catch (e) { catalog.retain(text); setMessage(makeFeedback(e instanceof Error ? e.message : "Invalid component", "error", "inspect component", "import.html")); }
+      return;
+    }
     catalog.retain(text);
     setRecipe(null);
     setMessage(null);
@@ -76,15 +85,17 @@ export function RecipeImport({
     setFilename(file.name);
     setBusy(true);
     setRecipe(null);
+    setHtml("");
     setMessage(null);
     try {
-      const text = await file.text();
-      if (sequence === readSequence.current) inspect(text);
+      if (file.size > componentLimits.source && /\.html?$/i.test(file.name)) throw new Error("HTML exceeds the 256 KiB limit.");
+      const text = new TextDecoder("utf-8", { fatal: true }).decode(await file.arrayBuffer());
+      if (sequence === readSequence.current) inspect(text, /\.html?$/i.test(file.name));
     } catch {
       if (sequence === readSequence.current)
         setMessage(
           makeFeedback(
-            "The file couldn't be read. Choose it again to retry.",
+            "The file could not be read. Use valid UTF-8; HTML components must be at most 256 KiB.",
             "error",
             "read file",
             "import.read",
@@ -102,11 +113,11 @@ export function RecipeImport({
         <BuilderIcon name="back" /> Back to results
       </button>
       <h3 tabIndex={-1} ref={heading}>
-        Import a saved assembly
+        Import a component or assembly
       </h3>
       <p>
-        Choose an exported JSON assembly. Review its contents before saving it
-        to your library.
+        Choose a self-contained HTML component or an exported JSON assembly.
+        Preview HTML components before saving.
       </p>
       <fieldset
         className="catalog-file-drop"
@@ -118,14 +129,14 @@ export function RecipeImport({
         }}
       >
         <legend className="builder-sr-only">
-          Choose or drop an assembly JSON file
+          Choose or drop a component HTML or assembly JSON file
         </legend>
         <input
           ref={fileInput}
           type="file"
-          accept=".json,application/json"
+          accept=".json,.html,.htm,application/json,text/html"
           className="builder-sr-only"
-          aria-label="Assembly JSON file"
+          aria-label="Component HTML or assembly JSON file"
           disabled={busy}
           onChange={(e) => {
             const file = e.currentTarget.files?.[0];
@@ -142,9 +153,9 @@ export function RecipeImport({
             ? "Reading file…"
             : filename
               ? "Choose another file"
-              : "Choose JSON file"}
+              : "Choose file"}
         </button>
-        <p>or drop a JSON file here</p>
+        <p>or drop an HTML or JSON file here</p>
         {filename && (
           <output aria-live="polite">
             {filename} ·{" "}
@@ -152,7 +163,16 @@ export function RecipeImport({
           </output>
         )}
       </fieldset>
+      <p><a href="/component-authoring/v1/component-authoring-v1.md" download>Download component instructions</a>{" · "}<a href="/component-authoring/v1/component-starter-v1.html" download>Download starter HTML</a></p>
+      <button type="button" onClick={async () => {
+        try {
+          const [guide, starter] = await Promise.all([fetch("/component-authoring/v1/component-authoring-v1.md").then(r => { if (!r.ok) throw new Error("Could not load guide"); return r.text(); }), fetch("/component-authoring/v1/component-starter-v1.html").then(r => { if (!r.ok) throw new Error("Could not load starter"); return r.text(); })]);
+          await navigator.clipboard.writeText(`${guide}\n\nStarter HTML:\n${starter}`);
+          setMessage(makeFeedback("Copied component instructions and starter HTML.", "success", "copy instructions", "import.instructions"));
+        } catch { setMessage(makeFeedback("Could not copy instructions. Download them using the link above.", "error", "copy instructions", "import.instructions")); }
+      }}>Copy component instructions</button>
       <FeedbackView message={message} />
+      {html && <HTMLComponentImport key={html} source={html} catalog={catalog} onReveal={onReveal} />}
       {recipe && (
         <div className="catalog-import-review">
           <h4>{recipe.title}</h4>
@@ -202,12 +222,13 @@ export function RecipeImport({
             onChange={(e) => {
               catalog.retain(e.target.value);
               setRecipe(null);
+              setHtml("");
             }}
           />
           <button
             type="button"
             disabled={busy}
-            onClick={() => inspect(catalog.recovery)}
+            onClick={() => inspect(catalog.recovery, /\.html?$/i.test(filename))}
           >
             Validate again
           </button>

@@ -52,7 +52,7 @@ export function controlTypeCompatibility(
   const commands = connections.map((connection) => {
     const target = document.nodes.find((n) => n.id === connection.to.node);
     return (
-      target && publicDefinition(target.definition).commands[connection.to.port]
+      target && publicDefinition(target).commands[connection.to.port]
     );
   });
   if (commands.some((command) => !command))
@@ -136,7 +136,7 @@ export function changeControlType(
   const command =
     target &&
     connection &&
-    publicDefinition(target.definition).commands[connection.to.port];
+    publicDefinition(target).commands[connection.to.port];
   configuration.initial = typeof old.initial === "string" ? old.initial : "{}";
   if (target && connection && command) {
     let initial: Record<string, unknown> = {};

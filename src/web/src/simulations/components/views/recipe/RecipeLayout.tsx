@@ -181,14 +181,15 @@ function LayoutView({
       <NodeView node={node} runtime={runtime} />
     ));
   const disconnected = node
-    ? publicDefinition(node.definition).category === "controls"
+    ? publicDefinition(node).category === "controls"
       ? !runtime.document.connections.some(
           (connection) =>
             connection.kind === "command" && connection.from.node === node.id,
         )
-      : publicDefinition(node.definition).category === "displays" &&
+      : publicDefinition(node).category === "displays" &&
           ![
             "displays/Text",
+            "displays/ImportedHTML",
             "displays/Box",
             "displays/Formula",
             "displays/Legend",

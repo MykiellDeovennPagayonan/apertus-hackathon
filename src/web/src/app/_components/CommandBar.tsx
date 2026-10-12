@@ -162,7 +162,7 @@ export default function CommandBar({
                     name={status.kind === "error" ? "warning" : "info"}
                   />
                 )}
-                {formatUserFacingStatus(status.text)}
+                {status.kind === "error" ? formatUserFacingStatus(status.text) : status.text}
               </output>
               {status.help && <p>{status.help}</p>}
             </div>

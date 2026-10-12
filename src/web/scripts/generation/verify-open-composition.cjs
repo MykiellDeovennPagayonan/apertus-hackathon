@@ -423,6 +423,9 @@ async function testOpenCompositionGate() {
 }
 
 function testErrorFormattingAndCoverageCapping() {
+  const rejectedTopic = "The request needs more detail. Specify which component or value to change.";
+  assert.equal(formatUserFacingStatus(rejectedTopic), "Couldn't identify that simulation change.");
+  assert.match(formatUserFacingDetails(rejectedTopic), /planner couldn't identify/);
   // Test 1: User-facing formatting for array range
   const msg1 = formatUserFacingDetails("coverage.covered: expected 0–12 items");
   assert.equal(

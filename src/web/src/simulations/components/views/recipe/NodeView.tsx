@@ -1,4 +1,6 @@
 "use client";
+import { IMPORTED_HTML } from "../../../runtime/imported/contract";
+import { ImportedHTMLView } from "./ImportedHTMLView";
 
 import { useContext } from "react";
 import type { DocumentRuntime } from "../../../runtime/authoring/runtime";
@@ -31,7 +33,8 @@ export function NodeView({
   runtime: DocumentRuntime;
 }) {
   const snapshot = useContext(SnapshotContext);
-  const def = publicDefinition(node.definition);
+  const def = publicDefinition(node);
+  if (node.definition === IMPORTED_HTML) return <ImportedHTMLView node={node} runtime={runtime} />;
   if (/^(controls|displays)\/earth-atmosphere-/.test(node.definition))
     return <LessonControls node={node} runtime={runtime} />;
   if (node.definition === "displays/AgentProfile")

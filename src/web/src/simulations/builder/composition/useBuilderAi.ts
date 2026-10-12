@@ -50,7 +50,7 @@ export function activeFromBuilderDocument(
       const targetNode = authored.nodes.find((n) => n.id === p.node);
       if (targetNode) {
         try {
-          const def = publicDefinition(targetNode.definition);
+          const def = publicDefinition(targetNode);
           const config = def.configuration;
           const propSchema =
             config.type === "object" && config.properties
@@ -78,7 +78,7 @@ export function activeFromBuilderDocument(
       const targetNode = authored.nodes.find((n) => n.id === ep.endpoint.node);
       if (targetNode) {
         try {
-          const def = publicDefinition(targetNode.definition);
+          const def = publicDefinition(targetNode);
           const portDef =
             ep.direction === "input"
               ? def.inputs[ep.endpoint.port]
@@ -196,6 +196,7 @@ export function useBuilderAi({
   const [status, setStatus] = useState<ComposerStatus | null>(null);
   const [busy, setBusy] = useState(false);
   const [preview, setPreview] = useState<ConstructionUpdate | null>(null);
+  const clarification = useRef<{ sessionId: string; prompt: string; question: string } | null>(null);
   const pending = useRef<{
     controller: AbortController;
     request: GenerationRequest;
@@ -236,6 +237,7 @@ export function useBuilderAi({
         protocolVersion: 1,
         requestId: crypto.randomUUID(),
         prompt: text.trim(),
+        purpose: active?.recipe.document.nodes.length ? "edit" : "create",
         destination: "builder",
         construction: "live",
         viewport: {
@@ -244,6 +246,9 @@ export function useBuilderAi({
         },
         active,
       };
+      if (clarification.current && clarification.current.sessionId === active?.sessionId)
+        request.clarification = { prompt: clarification.current.prompt, question: clarification.current.question };
+      else clarification.current = null;
       const owner = { controller, request };
       pending.current = owner;
       setDraft(text);
@@ -286,6 +291,12 @@ export function useBuilderAi({
             "Your experiment changed during generation. Submit the request again to preserve your edits.",
           );
 
+        if (result.status === "clarification") {
+          if (active) clarification.current = { sessionId: active.sessionId, prompt: request.clarification?.prompt ?? request.prompt, question: result.message };
+          setStatus({ kind: "info", text: result.message });
+          return;
+        }
+        if (result.status !== "failed") clarification.current = null;
         if (result.status === "failed" || result.status === "unsupported") {
           setStatus(
             builderFailureStatus(
@@ -318,15 +329,14 @@ export function useBuilderAi({
           setDraft("");
           const details = [
             result.learnerExplanation,
-            result.coverage.explanation ||
-              result.recipe.document.lesson.instruction,
+            result.coverage?.explanation,
           ]
             .filter(Boolean)
             .join("\n\n");
 
           setLastRequest({ prompt: text, details });
           setStatus({
-            kind: result.coverage.level === "partial" ? "info" : "success",
+            kind: result.coverage?.level === "partial" ? "info" : "success",
             text:
               result.status === "created"
                 ? "Ready — your experiment is built."

@@ -75,6 +75,7 @@ export default function ExperimentsShell({
   const options = useRef<HTMLDetailsElement>(null);
   const workspace = useRef<HTMLDivElement>(null);
   const composerElement = useRef<HTMLDivElement>(null);
+  const clarification = useRef<{ sessionId: string; prompt: string; question: string } | null>(null);
   const pending = useRef<{
     controller: AbortController;
     request: GenerationRequest;
@@ -275,9 +276,13 @@ export default function ExperimentsShell({
       protocolVersion: 1,
       requestId: crypto.randomUUID(),
       prompt: text,
+      purpose: ready && getRecipeSession() ? "edit" : "create",
       viewport: { width: window.innerWidth, height: window.innerHeight },
-      active: getRecipeSession()?.requestContext() ?? null,
+      active: ready ? getRecipeSession()?.requestContext() ?? null : null,
     };
+    if (clarification.current && clarification.current.sessionId === request.active?.sessionId)
+      request.clarification = { prompt: clarification.current.prompt, question: clarification.current.question };
+    else clarification.current = null;
     const owner = { controller, request };
     pending.current = owner;
     setDraft(text);
@@ -328,6 +333,12 @@ export default function ExperimentsShell({
         });
         return;
       }
+      if (result.status === "clarification") {
+        if (request.active) clarification.current = { sessionId: request.active.sessionId, prompt: request.clarification?.prompt ?? request.prompt, question: result.message };
+        setStatus({ kind: "info", text: result.message });
+        return;
+      }
+      clarification.current = null;
       if (result.status === "unsupported") {
         setStatus({
           kind: "info",
@@ -336,7 +347,7 @@ export default function ExperimentsShell({
         });
         return;
       }
-      updateProgress("opening");
+      updateProgress(result.status === "created" ? "opening" : "committing_changes");
       const session = acceptGenerationResult(result, request, disposeSession);
       syncSession();
       setDemo(null);
@@ -348,8 +359,7 @@ export default function ExperimentsShell({
           ? result.message
           : [
               result.learnerExplanation,
-              result.coverage.explanation ||
-                session.document.lesson.instruction,
+              result.coverage?.explanation,
             ]
               .filter(Boolean)
               .join("\n\n");
@@ -357,14 +367,14 @@ export default function ExperimentsShell({
       setStatus({
         kind:
           result.status !== "runtime_action" &&
-          result.coverage.level === "partial"
+          result.coverage?.level === "partial"
             ? "info"
             : "success",
         text:
           result.status === "created"
             ? "Ready — explore your lesson."
             : result.status === "updated"
-              ? "Starting lesson updated. Unchanged activities keep their progress."
+              ? (result.learnerExplanation || "Your changes were applied.")
               : "Action applied.",
         details,
       });
@@ -401,21 +411,6 @@ export default function ExperimentsShell({
     pending.current = null;
     setBusy(false);
     setStatus({ kind: "info", text: "Stopped — your prompt is still here." });
-  };
-  const returnHome = () => {
-    pending.current?.controller.abort();
-    pending.current = null;
-    setBusy(false);
-    disposeSession();
-    setLesson(null);
-    setDemo(null);
-    setReady(false);
-    setStatus(null);
-    try {
-      setCanResume(hasAcceptedRecipe(ownerId));
-    } catch {
-      setCanResume(false);
-    }
   };
   const downloadRecipe = () => {
     let url: string | null = null;
@@ -556,19 +551,6 @@ export default function ExperimentsShell({
       >
         <div className="workspace-header">
           <header className="workspace-identity">
-            <Link
-              href="/"
-              onNavigate={
-                landing
-                  ? (event) => {
-                      event.preventDefault();
-                      returnHome();
-                    }
-                  : undefined
-              }
-            >
-              Home
-            </Link>
             <Link href="/experiments">← Experiments</Link>
             <h1>
               {lesson?.document.lesson.title ??

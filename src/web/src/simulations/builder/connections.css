@@ -109,20 +109,15 @@
   z-index: 4;
   left: 20px;
   bottom: 20px;
-  padding: 6px;
-  gap: 2px;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  gap: 4px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--panel);
-  box-shadow: 0 3px 16px #30362e12;
+  box-shadow: 0 6px 24px #30362e12;
   flex-wrap: nowrap;
-}
-.manual-builder .connection-camera-tools > button {
-  min-height: 40px;
-  border: 0;
-  background: transparent;
-  font-size: 14px;
-  padding: 8px 12px;
 }
 .connection-camera-tools output {
   min-width: 48px;

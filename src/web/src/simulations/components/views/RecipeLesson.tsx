@@ -123,7 +123,7 @@ export function RecipeLesson({
       if (
         previous &&
         document.nodes.some(
-          (n) => publicDefinition(n.definition).lifecycle.clock,
+          (n) => publicDefinition(n).lifecycle.clock,
         )
       )
         runtime.step(Math.min(0.1, (now - previous) / 1000));
@@ -152,7 +152,7 @@ export function RecipeLesson({
       {reducedMotion &&
         (!supplied || onAdvanceTime) &&
         document.nodes.some(
-          (node) => publicDefinition(node.definition).lifecycle.clock,
+          (node) => publicDefinition(node).lifecycle.clock,
         ) && (
           <div className="recipe-motion-policy">
             <p>

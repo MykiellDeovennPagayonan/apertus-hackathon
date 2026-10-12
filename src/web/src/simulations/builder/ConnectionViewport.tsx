@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import { SceneIconButton } from "../components/views/SceneToolbar";
 
 const clamp = (value: number, min: number, max: number) =>
   Math.max(min, Math.min(max, value));
@@ -267,9 +268,9 @@ export function ConnectionViewport({
         role="toolbar"
         aria-label="Connection navigation"
       >
-        <button
-          type="button"
-          aria-label="Zoom out"
+        <SceneIconButton
+          icon="zoom-out"
+          label="Zoom out"
           disabled={zoom <= 0.2}
           onClick={() =>
             zoomAt(
@@ -278,13 +279,11 @@ export function ConnectionViewport({
               (viewport.current?.clientHeight ?? 0) / 2,
             )
           }
-        >
-          −
-        </button>
+        />
         <output aria-label="Workspace zoom">{Math.round(zoom * 100)}%</output>
-        <button
-          type="button"
-          aria-label="Zoom in"
+        <SceneIconButton
+          icon="zoom-in"
+          label="Zoom in"
           disabled={zoom >= 2}
           onClick={() =>
             zoomAt(
@@ -293,18 +292,15 @@ export function ConnectionViewport({
               (viewport.current?.clientHeight ?? 0) / 2,
             )
           }
-        >
-          +
-        </button>
-        <button
-          type="button"
+        />
+        <SceneIconButton
+          icon="fit"
+          label="Fit to content"
           onClick={() => {
             onNavigate?.();
             fit();
           }}
-        >
-          Fit to content
-        </button>
+        />
         <details className="connection-help">
           <summary aria-label="Canvas help">?</summary>
           <div id="connection-navigation-help">

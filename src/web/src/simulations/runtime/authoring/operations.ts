@@ -169,7 +169,7 @@ export function applyAuthoringOperation(
       for (const [id, next] of Object.entries(mapping))
         handles[`${args.alias}/${id}`] = next;
       const primary = recipe.document.nodes.find(
-        (n) => publicDefinition(n.definition).category === "models",
+        (n) => publicDefinition(n).category === "models",
       );
       if (primary) handles[args.alias] = mapping[primary.id];
       const scopes = new Set(recipe.document.scopes.map((s) => mapping[s.id]));
@@ -189,7 +189,7 @@ export function applyAuthoringOperation(
         (n) => n.id === id,
       );
       if (!node) throw new Error("Unknown configuration target");
-      const schema = publicDefinition(node.definition).configuration;
+      const schema = publicDefinition(node).configuration;
       validateValue(patchSchema(schema), request.arguments.changes, "changes");
       node.configuration = {
         ...node.configuration,

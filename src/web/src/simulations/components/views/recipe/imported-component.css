@@ -1,0 +1,38 @@
+.html-component-import {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+.html-component-import .catalog-form .number-field-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.html-component-import .catalog-form .number-field-heading > label {
+  margin: 0;
+}
+.html-component-import .catalog-inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.html-component-import textarea {
+  box-sizing: border-box;
+  width: 100%;
+}
+.html-component-import pre {
+  overflow: auto;
+  max-height: 240px;
+}
+.imported-component-view {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 360px;
+}
+.board-item .imported-component-view {
+  height: 100%;
+}
+.imported-component-view .imported-component-frame {
+  flex: 1;
+  min-height: 0;
+}

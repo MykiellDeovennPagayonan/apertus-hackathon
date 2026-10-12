@@ -79,7 +79,7 @@ export function useComponentCatalog(
     !document.nodes.some(
       (n) =>
         n.id === destination &&
-        publicDefinition(n.definition).category === "canvases",
+        publicDefinition(n).category === "canvases",
     );
   const chooseDestination = (value: string) => {
     setDestination(value);
@@ -225,7 +225,7 @@ export function useComponentCatalog(
             (n) => n.id === nodeId,
           ),
         ),
-        definition = publicDefinition(node.definition),
+        definition = publicDefinition(node),
         schema =
           definition.configuration.type === "object"
             ? requireValue(definition.configuration.properties[field])

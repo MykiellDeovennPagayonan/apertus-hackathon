@@ -143,7 +143,7 @@ export function boardItemMinimum(
     const source = d.nodes.find((node) => node.id === binding?.from.node);
     const schema =
       source && binding
-        ? publicDefinition(source.definition).outputs[binding.from.port]?.schema
+        ? publicDefinition(source).outputs[binding.from.port]?.schema
         : undefined;
     if (schema?.type === "string") return { width: 128, height: 96 };
   }

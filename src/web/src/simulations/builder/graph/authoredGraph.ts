@@ -65,7 +65,7 @@ export function authoredGraph(
   const blocks: GraphNode[] = [...d.nodes, ...d.resources]
     .filter((n) => !owner(n.id) && n.definition !== "displays/Box")
     .map((n) => {
-      const def = publicDefinition(n.definition);
+      const def = publicDefinition(n);
       return {
         id: n.id,
         label: n.label,
@@ -104,7 +104,7 @@ export function authoredGraph(
       const n = requireValue(
         [...d.nodes, ...d.resources].find((n) => n.id === e.node),
       );
-      const def = publicDefinition(n.definition);
+      const def = publicDefinition(n);
       const p = (insideTo ? def.inputs : def.outputs)[e.port] ?? {
         kind: "command",
         unit: "",

@@ -1,3 +1,4 @@
+import { IMPORTED_HTML, stableSchema } from "../imported/contract";
 import { publicDefinition } from "../../components/catalog";
 import { validateControlConnection } from "../../components/controls/controlContract";
 import type { Joint, Member } from "../../components/traits/MemberEndpoints";
@@ -96,7 +97,7 @@ export function validateAuthoredDocument(
   const scopes = new Set(d.scopes.map((s) => s.id));
   for (const n of [...d.nodes, ...d.resources]) {
     claim(n.id, "node");
-    const def = publicDefinition(n.definition, n.version);
+    const def = publicDefinition(n);
     if (typeof n.label !== "string" || !scopes.has(n.scope))
       throw new Error(`${n.id}: missing label or scope`);
     validateValue(def.configuration, n.configuration, `${n.id}.configuration`);
@@ -119,7 +120,7 @@ export function validateAuthoredDocument(
   for (const c of d.connections) {
     claim(c.id, "connection");
     validateConnection(d, c);
-    const to = publicDefinition(requireValue(nodes.get(c.to.node)).definition);
+    const to = publicDefinition(requireValue(nodes.get(c.to.node)));
     const port = to.inputs[c.to.port];
     if (c.kind !== "command" && port?.cardinality !== "many") {
       const key = `${c.to.node}:${c.to.port}`;
@@ -215,7 +216,7 @@ export function validateAuthoredDocument(
       if (!endpoint) continue;
       const node = nodes.get(endpoint.node),
         output =
-          node && publicDefinition(node.definition).outputs[endpoint.port];
+          node && publicDefinition(node).outputs[endpoint.port];
       if (!node || !output)
         throw new Error(`${l.id}.${name}: missing binding endpoint`);
       if (name === "theme" && output.unit !== "theme")
@@ -261,7 +262,7 @@ export function validateAuthoredDocument(
     const endpoints = new Set<string>();
     for (const p of g.exposedPorts ?? []) {
       const node = nodes.get(p.endpoint?.node);
-      const def = node && publicDefinition(node.definition, node.version);
+      const def = node && publicDefinition(node);
       const contract =
         p.direction === "input"
           ? (def?.inputs[p.endpoint.port] ??
@@ -311,7 +312,7 @@ export function validateAuthoredDocument(
   );
   if (runnable)
     for (const n of d.nodes) {
-      const def = publicDefinition(n.definition);
+      const def = publicDefinition(n);
       for (const [name, p] of Object.entries(def.inputs))
         if (
           !p.optional &&
@@ -330,8 +331,8 @@ export function validateConnection(d: AuthoredDocument, c: Connection) {
   const from = nodes.find((n) => n.id === c.from?.node),
     to = nodes.find((n) => n.id === c.to?.node);
   if (!from || !to) throw new Error(`${c.id}: missing connection endpoint`);
-  const a = publicDefinition(from.definition),
-    b = publicDefinition(to.definition);
+  const a = publicDefinition(from),
+    b = publicDefinition(to);
   const output = a.outputs[c.from.port];
   if (!output) throw new Error(`${c.id}: missing output ${c.from.port}`);
   if (c.kind === "command") {
@@ -348,7 +349,7 @@ export function validateConnection(d: AuthoredDocument, c: Connection) {
       if (
         !source ||
         source.scope !== to.scope ||
-        !publicDefinition(source.definition).outputs[binding.from.port]
+        !publicDefinition(source).outputs[binding.from.port]
       )
         throw new Error(`${c.id}.${key}: invalid scoped argument source`);
       if (
@@ -399,6 +400,8 @@ export function validateConnection(d: AuthoredDocument, c: Connection) {
     throw new Error(
       `${c.id}: incompatible quantities/units ${output.unit} → ${input.unit}`,
     );
+  if ((from.definition === IMPORTED_HTML || to.definition === IMPORTED_HTML) && output.schema && input.schema && stableSchema(output.schema) !== stableSchema(input.schema))
+    throw new Error(`${c.id}: imported connection schemas must match, including bounds`);
   if (from.scope !== to.scope && (!input.crossScope || !output.crossScope))
     throw new Error(`${c.id}: incompatible runtime scopes`);
 }

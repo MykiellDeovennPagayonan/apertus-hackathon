@@ -1,6 +1,7 @@
+import { IMPORTED_HTML } from "../../runtime/imported/contract";
 import { useMemo, useState } from "react";
 import { publicDefinition, publicDefinitions } from "../../components/catalog";
-import { SchemaForm } from "../../components/controls/SchemaForm";
+import { ImportedValueForm } from "../../components/controls/ImportedValueForm";
 import { requireValue } from "../../runtime/authoring/requireValue";
 import { DocumentRuntime } from "../../runtime/authoring/runtime";
 import type { Endpoint } from "../../runtime/authoring/types";
@@ -39,9 +40,10 @@ export function InputEditor({
       (n) => n.id === endpoint.node,
     ),
   );
-  const definition = publicDefinition(component.definition);
+  const definition = publicDefinition(component);
   const field = endpoint.port.replace(/^set:/, "");
-  const configurationSchema =
+  const imported = component.definition === IMPORTED_HTML;
+  const configurationSchema = imported ? definition.inputs[field]?.schema :
     definition.configuration.type === "object"
       ? definition.configuration.properties[field]
       : undefined;
@@ -54,7 +56,7 @@ export function InputEditor({
   const initial = useMemo(
     () =>
       configurationSchema
-        ? component.configuration[field]
+        ? imported ? (component.configuration.inputs as Record<string, unknown>)[field] : component.configuration[field]
         : new DocumentRuntime(requireValue(doc.authored)).getSnapshot().outputs[
             component.id
           ]?.[field],
@@ -88,7 +90,7 @@ export function InputEditor({
       ...requireValue(base.authored).nodes,
       ...requireValue(base.authored).resources,
     ].flatMap((n) =>
-      Object.keys(publicDefinition(n.definition).outputs).flatMap((port) => {
+      Object.keys(publicDefinition(n).outputs).flatMap((port) => {
         const from = { node: n.id, port };
         return n.id !== endpoint.node &&
           !documentConnectionError(base, from, endpoint)
@@ -191,7 +193,7 @@ export function InputEditor({
           {incoming.length > 0 && (
             <p>Applying a value will replace this input’s connection.</p>
           )}
-          <SchemaForm
+          <ImportedValueForm
             submitLabel="Apply value"
             schema={schema}
             initial={initial}
@@ -211,7 +213,10 @@ export function InputEditor({
                     ...requireValue(d.authored).resources,
                   ].find((n) => n.id === endpoint.node),
                 );
-                if (configurationSchema) n.configuration[field] = value;
+                if (configurationSchema) {
+                  if (imported) (n.configuration.inputs as Record<string, unknown>)[field] = value;
+                  else n.configuration[field] = value;
+                }
                 else {
                   const runtime = new DocumentRuntime(requireValue(d.authored));
                   const result = runtime.dispatch([

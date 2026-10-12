@@ -64,7 +64,6 @@ export async function compose(
   request: GenerationRequest,
   intent: TeachingIntent,
   budget: GenerationBudget,
-  activeFollowup?: () => Promise<GenerationResult | null>,
   replaceTopic = false,
 ): Promise<GenerationResult> {
   budget.enableCompositionMode();
@@ -138,22 +137,6 @@ export async function compose(
     ? await selectCompositionStrategy(decisionPrompt, intent, bucket, budget)
     : null;
   if (strategy) intent = { ...intent, suggestedStructure: strategy.structure };
-  // Strict selection still validates the topic; supported active lessons then use
-  // the canonical runtime/authoring follow-up path instead of rebuilding a lesson.
-  if (
-    activeFollowup &&
-    strategy &&
-    !shouldStartFresh &&
-    request.active?.recipe.document.nodes.some(
-      (node) =>
-        node.definition === strategy.definition &&
-        node.definition.startsWith("prefabs/earth-atmosphere/"),
-    )
-  ) {
-    const result = await activeFollowup();
-    if (result) return result;
-  }
-
   // 2. Initialize authoring transaction
   const initialDoc = structuredClone(
     (!shouldStartFresh && request.active?.recipe.document) ||

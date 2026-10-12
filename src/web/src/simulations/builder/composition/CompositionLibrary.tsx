@@ -230,7 +230,7 @@ export function CompositionLibrary({
                 {catalog.document.nodes
                   .filter(
                     (n) =>
-                      publicDefinition(n.definition).category === "canvases",
+                      publicDefinition(n).category === "canvases",
                   )
                   .map((n) => (
                     <option key={n.id} value={n.id}>
@@ -445,7 +445,7 @@ export function CompositionLibrary({
                               {entry.recipe
                                 ? metadata(entry).kind === "experiment"
                                   ? "Add experiment"
-                                  : "Add composite"
+                                  : metadata(entry).kind === "component" ? "Add component" : "Add composite"
                                 : entry.definition.application
                                   ? "Apply preset"
                                   : "Add component"}
@@ -544,7 +544,7 @@ export function CompositionLibrary({
                             ...detail.recipe.document.resources,
                           ].filter(
                             (n) =>
-                              publicDefinition(n.definition).category ===
+                              publicDefinition(n).category ===
                               category,
                           ).length,
                         }))
@@ -576,7 +576,7 @@ export function CompositionLibrary({
                       ].map((n) => (
                         <li key={n.id}>
                           {n.label}{" "}
-                          <small>{publicDefinition(n.definition).title}</small>
+                          <small>{publicDefinition(n).title}</small>
                         </li>
                       ))}
                     </ul>
@@ -704,7 +704,7 @@ export function CompositionLibrary({
                     {catalog.document.nodes
                       .filter(
                         (node) =>
-                          publicDefinition(node.definition).category ===
+                          publicDefinition(node).category ===
                           "canvases",
                       )
                       .map((node) => (
@@ -724,7 +724,7 @@ export function CompositionLibrary({
                   {detail.recipe
                     ? metadata(detail).kind === "experiment"
                       ? "Add experiment"
-                      : "Add composite"
+                      : metadata(detail).kind === "component" ? "Add component" : "Add composite"
                     : detail.definition.application
                       ? "Apply preset"
                       : "Add component"}

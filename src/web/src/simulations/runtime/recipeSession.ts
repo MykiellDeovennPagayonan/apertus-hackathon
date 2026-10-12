@@ -68,7 +68,7 @@ export class RecipeSession {
       typeof requestAnimationFrame === "undefined" ||
       this.frame ||
       !this.document.nodes.some(
-        (n) => publicDefinition(n.definition).lifecycle.clock,
+        (n) => publicDefinition(n).lifecycle.clock,
       )
     )
       return;
@@ -111,12 +111,17 @@ export class RecipeSession {
         "This lesson changed while the request was running. Submit the change again.",
       );
     const candidate = loadRecipe(result.recipe); // Prepare before altering the active runtime.
+    if (JSON.stringify(candidate.document) === JSON.stringify(this.document)) {
+      this.requestId = result.requestId;
+      this.publish();
+      return;
+    }
     this.runtime.updateDocument(candidate.document);
     this.history.push(this.checkpoint());
     if (this.history.length > 20) this.history.shift();
     this.redoHistory = [];
     this.recipe = candidate.recipe;
-    this.coverage = structuredClone(result.coverage);
+    if (result.coverage) this.coverage = structuredClone(result.coverage);
     this.requestId = result.requestId;
     this.authoredRevision++;
     this.publish();
@@ -199,7 +204,6 @@ export class RecipeSession {
                   "joints",
                   "members",
                   "responses",
-                  "elapsed",
                 ].includes(key),
             )
             .map(([key, v]) => [key, compact(v, depth + 1)])
@@ -208,23 +212,10 @@ export class RecipeSession {
       return undefined;
     };
     const runtimeContext = Object.fromEntries(
-      this.document.nodes
-        .filter(
-          (n) =>
-            [
-              "models/arithmetic",
-              "models/area-perimeter",
-              "models/BridgeLoad",
-              "models/BridgeResponse",
-            ].includes(n.definition) ||
-            n.definition.startsWith("prefabs/earth-atmosphere/"),
-        )
-        .slice(0, 12)
+      [...this.document.nodes, ...this.document.resources]
         .map((n) => [
           n.id,
-          n.definition.startsWith("prefabs/earth-atmosphere/")
-            ? structuredClone(snapshot.state[n.id])
-            : (compact(snapshot.state[n.id]) ?? {}),
+          compact(snapshot.state[n.id]) ?? {},
         ]),
     );
     return {

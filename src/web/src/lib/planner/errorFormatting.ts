@@ -55,7 +55,7 @@ function formatSingleDetail(line: string): string {
       cleaned,
     )
   )
-    return "Specify the component or value you want to change, and what should happen.";
+    return "The planner couldn't identify the experiment or setting to edit. Your current experiment is unchanged. Try naming the experiment and setting together.";
   if (/\blaya\b/i.test(cleaned))
     return "The request could not be resolved. Try a more specific change.";
 
@@ -294,7 +294,7 @@ export function formatUserFacingStatus(raw: string): string {
       trimmed,
     )
   )
-    return "Please add a little more detail.";
+    return "Couldn't identify that simulation change.";
   if (/\blaya\b/i.test(trimmed)) return "Couldn't resolve that change.";
 
   // Preserve test fixtures & standard user-friendly responses

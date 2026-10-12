@@ -54,14 +54,17 @@ fs.mkdirSync(output, { recursive: true });
     });
     const composer = page.locator(".builder-composer");
     const input = composer.locator("textarea");
-    const chips = composer.locator(".command-bar__quick-chip");
+    const ideas = composer.locator(".command-bar__ideas");
+    const chips = composer.locator(".command-bar__suggestion");
     await composer.waitFor();
-    assert.equal(await composer.locator(".command-bar__ideas").count(), 0);
+    assert.equal(await composer.locator(".command-bar--compact").count(), 0);
+    assert.equal(await composer.locator(".command-bar__quick-chip").count(), 0);
+    await ideas.click();
     assert.equal(await chips.count(), 3);
     assert.ok(await composer.locator('button[type="submit"]').isDisabled());
-    const firstPrompt = (await chips.first().innerText())
-      .replace("✨", "")
-      .trim();
+    const firstPrompt = await chips
+      .first()
+      .evaluate((el) => el.firstChild.textContent.trim());
     await chips.first().click();
     assert.equal(await input.inputValue(), firstPrompt);
     assert.equal(await chips.count(), 0);
@@ -215,12 +218,16 @@ fs.mkdirSync(output, { recursive: true });
     });
     await page.getByRole("link", { name: "Experiments", exact: true }).click();
     await guard.waitFor();
-    await guard.getByRole("button", { name: "Keep editing", exact: true }).click();
+    await guard
+      .getByRole("button", { name: "Keep editing", exact: true })
+      .click();
     assert.equal(await title.inputValue(), "Projectile toolbar check");
     await more.click();
     await button("Clear canvas").click();
     await guard.waitFor();
-    await guard.getByRole("button", { name: "Keep editing", exact: true }).click();
+    await guard
+      .getByRole("button", { name: "Keep editing", exact: true })
+      .click();
     await more.click();
     const download = page.waitForEvent("download");
     await button("Download recipe").click();

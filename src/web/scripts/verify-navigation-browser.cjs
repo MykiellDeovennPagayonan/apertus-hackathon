@@ -75,6 +75,14 @@ const { launch, fixtureResult, base } = require("./generation/helpers.cjs");
       throw error;
     });
     await page.locator(".experiment-workspace").waitFor();
+    assert.equal(
+      await page.getByRole("link", { name: "Home", exact: true }).count(),
+      0,
+    );
+    await page
+      .getByRole("link", { name: "← Experiments", exact: true })
+      .click();
+    await page.getByRole("heading", { name: "Pick an experiment." }).waitFor();
     await page.getByRole("link", { name: "Home", exact: true }).click();
     await page.locator(".landing").waitFor();
     await page.reload();
@@ -105,7 +113,7 @@ const { launch, fixtureResult, base } = require("./generation/helpers.cjs");
     await page
       .getByRole("textbox", { name: "Experiment title", exact: true })
       .fill("Unsaved navigation check");
-    await page.getByRole("link", { name: "Home", exact: true }).click();
+    await page.getByRole("link", { name: "Experiments", exact: true }).click();
     await page
       .getByRole("heading", { name: "Save changes before leaving?" })
       .waitFor();
@@ -119,11 +127,11 @@ const { launch, fixtureResult, base } = require("./generation/helpers.cjs");
         .inputValue(),
       "Unsaved navigation check",
     );
-    await page.getByRole("link", { name: "Home", exact: true }).click();
+    await page.getByRole("link", { name: "Experiments", exact: true }).click();
     await page
       .getByRole("button", { name: "Discard changes", exact: true })
       .click();
-    await page.locator(".landing").waitFor();
+    await page.getByRole("heading", { name: "Pick an experiment." }).waitFor();
     console.log(
       "Navigation: shared headers, active sections, mobile layout, explicit resume, workspace exits, and unsaved builder guard passed.",
     );

@@ -182,7 +182,7 @@ export function pasteComponents(
           (n) => n.id === endpoint.node,
         );
         const input =
-          target && publicDefinition(target.definition).inputs[endpoint.port];
+          target && publicDefinition(target).inputs[endpoint.port];
         if (
           input &&
           input.cardinality !== "many" &&

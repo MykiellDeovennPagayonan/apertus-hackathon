@@ -37,7 +37,7 @@ export function ControlSettings({
   const options = document.nodes
     .filter((target) => target.scope === node.scope && target.id !== node.id)
     .flatMap((target) => {
-      const definition = publicDefinition(target.definition);
+      const definition = publicDefinition(target);
       return Object.entries(definition.commands).flatMap(([key, command]) => {
         if (
           activity &&
@@ -344,7 +344,7 @@ export function ControlSettings({
         (activity ? (
           <SchemaForm
             key={JSON.stringify(option.target.configuration)}
-            schema={publicDefinition(option.target.definition).configuration}
+            schema={publicDefinition(option.target).configuration}
             initial={option.target.configuration}
             label="Activity starting values"
             onSubmit={(configuration) =>

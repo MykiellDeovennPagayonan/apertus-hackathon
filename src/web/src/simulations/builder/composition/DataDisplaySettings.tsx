@@ -108,7 +108,7 @@ export function DataDisplaySettings({
               "Choose at least one existing numeric series, or choose series automatically.",
             );
           validateValue(
-            publicDefinition(node.definition).configuration,
+            publicDefinition(node).configuration,
             configuration,
           );
           if (

@@ -9,7 +9,7 @@ export function ConstructionBoardPreview({
 }) {
   const nodes =
     update?.document.nodes.filter(
-      (n) => publicDefinition(n.definition).category !== "models",
+      (n) => publicDefinition(n).category !== "models",
     ) ?? [];
   return (
     <section
@@ -22,13 +22,13 @@ export function ConstructionBoardPreview({
         {nodes.map((node) => (
           <article
             key={node.id}
-            className={`construction-board-item is-${publicDefinition(node.definition).category}`}
+            className={`construction-board-item is-${publicDefinition(node).category}`}
           >
             <strong>
-              {node.label || publicDefinition(node.definition).title}
+              {node.label || publicDefinition(node).title}
             </strong>
             <span>
-              {publicDefinition(node.definition).category === "appearance"
+              {publicDefinition(node).category === "appearance"
                 ? "Visual preview will be ready when connections are checked."
                 : "Being assembled"}
             </span>

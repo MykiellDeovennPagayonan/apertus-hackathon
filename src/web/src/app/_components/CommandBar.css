@@ -28,6 +28,8 @@
   min-height: 42px;
   max-height: 160px;
   resize: none;
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
   border: 0;
   border-radius: 10px;
   padding: 10px 8px;
@@ -255,8 +257,7 @@
   }
 }
 .command-bar__input:placeholder-shown {
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  white-space: pre-wrap;
 }
 
 /* Compact mode for workspace toolbars */

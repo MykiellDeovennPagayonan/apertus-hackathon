@@ -168,7 +168,7 @@ export function migrateManualDocument(
     d.nodes.push(node);
     d.layout.children.push({ ...emptyLayout(`layout/${c.id}`), node: c.id });
     const command = c.binding === "action" ? c.property : `set:${c.property}`;
-    if (target && publicDefinition(target.definition).commands[command])
+    if (target && publicDefinition(target).commands[command])
       d.connections.push({
         id: `binding/${c.id}`,
         kind: "command",
@@ -219,7 +219,7 @@ export function migrateManualDocument(
       });
     } else if (
       target &&
-      publicDefinition(target.definition).outputs[result.output]
+      publicDefinition(target).outputs[result.output]
     )
       d.connections.push({
         id: `binding/${result.id}`,

@@ -36,7 +36,7 @@ export function DisplayPresentation({
 }) {
   const author = useContext(AuthorContext);
   const snapshot = useContext(SnapshotContext);
-  const def = publicDefinition(node.definition),
+  const def = publicDefinition(node),
     config = node.configuration;
   if (node.definition === "displays/Box")
     return <div className="recipe-box-content" aria-hidden="true" />;

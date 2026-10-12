@@ -679,10 +679,10 @@ export const builtInRecipes = legacyBuiltInRecipes.map(
       const primary =
         recipe.document.nodes.find((n) => n.id === "model") ??
         recipe.document.nodes.find(
-          (n) => publicDefinition(n.definition).category === "models",
+          (n) => publicDefinition(n).category === "models",
         );
       if (primary) {
-        const def = publicDefinition(primary.definition);
+        const def = publicDefinition(primary);
         const result = Object.entries(def.outputs).find(
           ([name, port]) =>
             ["value", "dataset", "grid"].includes(port.kind) &&

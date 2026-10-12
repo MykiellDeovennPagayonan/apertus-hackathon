@@ -908,7 +908,6 @@ export default function Builder() {
             void save();
           }}
           onExit={() => requestTransition(() => router.push("/experiments"))}
-          onHome={() => requestTransition(() => router.push("/"))}
           storageNotice={
             <div className="builder-local-notice">
               {ownerId ? (

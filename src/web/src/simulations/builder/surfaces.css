@@ -1081,7 +1081,9 @@
   align-items: center;
   gap: 7px;
 }
-.component-dialog.unsaved-dialog .unsaved-alternatives > button.unsaved-discard {
+.component-dialog.unsaved-dialog
+  .unsaved-alternatives
+  > button.unsaved-discard {
   color: #9a4436;
   border-color: transparent;
   background: transparent;
@@ -1089,7 +1091,9 @@
   gap: 12px;
   min-height: 48px;
 }
-.component-dialog.unsaved-dialog .unsaved-alternatives > button.unsaved-discard:hover:not(:disabled) {
+.component-dialog.unsaved-dialog
+  .unsaved-alternatives
+  > button.unsaved-discard:hover:not(:disabled) {
   color: #852b22;
   background: #fff1e9;
   border-color: #ead2c7;
@@ -1108,52 +1112,12 @@
 .unsaved-error p {
   margin: 4px 0 0;
 }
-/* Composer colors are explicit across normal, hover, focus, and disabled states. */
-.manual-builder .builder-composer .command-bar__send {
-  color: #fff;
-  background: #285e56;
-  border: 1px solid #285e56;
-  font: 600 13px / 1.4 var(--font-sans, sans-serif);
-  box-shadow: none;
-}
-.manual-builder .builder-composer .command-bar__send:hover:not(:disabled) {
-  color: #fff;
-  background: #204c45;
-  border-color: #204c45;
-  transform: none;
-  box-shadow: none;
-}
-.manual-builder .builder-composer .command-bar__stop {
-  color: #fff;
-  background: #34473f;
-  border-color: #34473f;
-}
-.manual-builder .builder-composer .command-bar__stop:hover:not(:disabled) {
-  color: #fff;
-  background: #263830;
-  border-color: #263830;
-}
-.manual-builder .builder-composer .command-bar__send:disabled {
-  color: #788172;
-  background: #ecefe7;
-  border-color: #e1e6db;
-  opacity: 1;
-}
 .command-bar__stop-icon {
   display: inline-block;
   width: 9px;
   height: 9px;
   border-radius: 2px;
   background: currentColor;
-}
-.manual-builder
-  .builder-composer
-  .command-bar__quick-chip:hover:not(:disabled) {
-  color: #285e56;
-  background: #eef5e9;
-  border-color: #b4c9ac;
-  transform: none;
-  box-shadow: none;
 }
 .builder-composer .command-bar__meta {
   flex-wrap: wrap;

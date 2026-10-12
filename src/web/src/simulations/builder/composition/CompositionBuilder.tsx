@@ -44,6 +44,7 @@ import {
 import { useBuilderAi } from "./useBuilderAi";
 import { download, useComponentCatalog } from "./useComponentCatalog";
 import "./composition.css";
+import "./workspace-polish.css";
 type Edit = (
   change: (d: ExperimentDocument) => void,
   group?: string | null,
@@ -69,11 +70,9 @@ export default function CompositionBuilder({
   onExpanded,
   onZoom,
   onExit,
-  onHome,
   storageNotice,
 }: {
   onExit: () => void;
-  onHome: () => void;
   storageNotice?: ReactNode;
   doc: ExperimentDocument;
   valid: ExperimentDocument;
@@ -213,15 +212,6 @@ export default function CompositionBuilder({
         {doc.lesson.title || "Untitled experiment"}
       </h1>
       <header className="builder-toolbar composition-toolbar">
-        <Link
-          href="/"
-          onNavigate={(event) => {
-            event.preventDefault();
-            onHome();
-          }}
-        >
-          Home
-        </Link>
         {expanded ? (
           <button
             type="button"
@@ -388,6 +378,11 @@ export default function CompositionBuilder({
               <button
                 key={name}
                 type="button"
+                title={
+                  name === "Connections"
+                    ? "Connect components and control how your experiment works"
+                    : "Arrange how your experiment looks"
+                }
                 aria-pressed={tab === name}
                 onClick={() => {
                   setTab(name);
@@ -617,7 +612,7 @@ export default function CompositionBuilder({
         open={!expanded && !!selected}
         subtitle={
           current
-            ? `${publicDefinition(current.definition).category === "controls" ? "Control" : publicDefinition(current.definition).category} · ${publicDefinition(current.definition).title}`
+            ? `${publicDefinition(current).category === "controls" ? "Control" : publicDefinition(current).category} · ${publicDefinition(current).title}`
             : undefined
         }
         title={
@@ -628,7 +623,7 @@ export default function CompositionBuilder({
         onClose={() => setSelected("")}
         icon={
           current
-            ? definitionDiscovery(publicDefinition(current.definition)).group
+            ? definitionDiscovery(publicDefinition(current)).group
             : "settings"
         }
         footerActions={
@@ -652,7 +647,7 @@ export default function CompositionBuilder({
               : "Apply buttons commit form changes; other settings update immediately."
             : "Lesson text and layout changes save as you edit."
         }
-        wide={selected === "lesson" || !!manualDefinition(current)}
+        wide={!!manualDefinition(current)}
       >
         {selected && (
           <>
@@ -896,11 +891,15 @@ export default function CompositionBuilder({
       )}
       {!expanded && !appearancePreview && (
         <div ref={composer} className="builder-composer">
+          <span className="builder-assistant-label">
+            <BuilderIcon name="experiments" /> AI assistant{" "}
+            <span>Describe an idea or ask for a change</span>
+          </span>
           <CommandBar
             placeholder={
               doc.authored?.nodes?.length
-                ? "What would you like to change or explore?…"
-                : "What would you like to explore? Try: Show me how springs work…"
+                ? "Describe a change…"
+                : "Describe an experiment…"
             }
             chips={
               doc.authored?.nodes?.length
@@ -929,7 +928,6 @@ export default function CompositionBuilder({
             value={ai.draft}
             onChange={ai.setDraft}
             landing={false}
-            compact={true}
             lastRequest={ai.lastRequest}
             onSubmit={ai.onPrompt}
             onStop={ai.cancel}

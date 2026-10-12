@@ -18,7 +18,7 @@ export function boundObservation(
     : undefined;
   const rawUnit =
     source && binding
-      ? publicDefinition(source.definition).outputs[binding.from.port]?.unit
+      ? publicDefinition(source).outputs[binding.from.port]?.unit
       : undefined;
   return {
     binding,

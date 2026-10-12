@@ -51,7 +51,7 @@ export function SaveCompositeDialog({
         <fieldset>
           <legend>Exposed parameters</legend>
           {selectedComponents.flatMap((node) => {
-            const schema = publicDefinition(node.definition).configuration;
+            const schema = publicDefinition(node).configuration;
             return schema.type === "object"
               ? Object.keys(schema.properties).map((field) => {
                   const key = `${node.id}\u0000${field}`;

@@ -10,7 +10,7 @@ export function DecorationSettings({
   catalog: ComponentCatalog;
 }) {
   const config = {
-    ...publicDefinition(node.definition).defaults,
+    ...publicDefinition(node).defaults,
     ...node.configuration,
   };
   const patch = (key: string, value: unknown) =>

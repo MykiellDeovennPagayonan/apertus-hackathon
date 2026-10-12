@@ -23,7 +23,7 @@ export function builderFailureStatus(
       ? [
           ...new Set(
             (doc.authored?.nodes ?? []).flatMap((node) =>
-              Object.entries(publicDefinition(node.definition).outputs)
+              Object.entries(publicDefinition(node).outputs)
                 .filter(([, port]) => port.kind === "dataset")
                 .map(
                   ([name]) =>

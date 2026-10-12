@@ -2087,18 +2087,6 @@ never beside the workspace. */
 .builder-composer .command-bar {
   width: 100%;
 }
-.builder-composer textarea {
-  border: 0 !important;
-  outline: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  resize: none !important;
-  min-height: 24px !important;
-  padding: 2px 0 !important;
-}
-.builder-composer .command-bar__send {
-  box-sizing: border-box;
-}
 @media (max-width: 768px) {
   .builder-composer {
     width: calc(100% - 24px);

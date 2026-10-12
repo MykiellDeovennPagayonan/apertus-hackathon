@@ -9,7 +9,7 @@ export function recipeCommands(
   commands: UIAction[],
 ): ScopedCommand[] {
   const nodes = runtime.document.nodes.filter(
-    (node) => publicDefinition(node.definition).category === "models",
+    (node) => publicDefinition(node).category === "models",
   );
   return commands.flatMap((action) => {
     const candidates =
@@ -45,7 +45,7 @@ export function recipeCommands(
           command = "set:angle";
         }
       }
-      const definition = publicDefinition(node.definition);
+      const definition = publicDefinition(node);
       if (!definition.commands[command]) {
         if (!action.target || action.target === "session") return [];
         throw new Error(`${node.label}: ${action.type} is unavailable`);
