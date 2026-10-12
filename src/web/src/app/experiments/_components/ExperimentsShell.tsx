@@ -573,8 +573,8 @@ export default function ExperimentsShell({
                   : "Interactive lesson")}
             </h1>
             {lesson &&
-              lesson.document.lesson.instruction !==
-                lesson.document.lesson.title && (
+              lesson.document.lesson.instruction.normalize("NFKC") !==
+                lesson.document.lesson.title.normalize("NFKC") && (
                 <p className="workspace-lesson-note">
                   {lesson.document.lesson.instruction}
                 </p>

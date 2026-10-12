@@ -1053,66 +1053,66 @@ export function SpatialBoard({
           </>
         ) : (
           <>
-              <SceneToolbar
-                label="Board navigation"
-                actions={[]}
-                className="board-camera-tools"
-              >
-                <SceneIconButton
-                  icon="pan"
-                  label="Pan"
-                  disabled={fixed}
-                  pressed={pan}
-                  onClick={() => {
-                    setDrawingTool(pan ? "select" : "hand");
-                    setPan(!pan);
-                  }}
-                />
-                <SceneIconButton
-                  icon="zoom-out"
-                  label="Zoom out"
-                  disabled={fixed}
-                  onClick={() => zoomFromToolbar(1 / 1.2)}
-                />
-                <output aria-label="Board zoom">
-                  {Math.round(c.zoom * 100)}%
-                </output>
-                <SceneIconButton
-                  icon="zoom-in"
-                  label="Zoom in"
-                  disabled={fixed}
-                  onClick={() => zoomFromToolbar(1.2)}
-                />
-                <SceneIconButton
-                  icon="fit"
-                  label="Fit content"
-                  disabled={fixed}
-                  onClick={fitContent}
-                />
-                <details className="board-navigation-help">
-                  <summary aria-label="Board navigation help">?</summary>
-                  <div>
-                    <button type="button" onClick={() => setCamera(null)}>
-                      Starting view
-                    </button>
+            <SceneToolbar
+              label="Board navigation"
+              actions={[]}
+              className="board-camera-tools"
+            >
+              <SceneIconButton
+                icon="pan"
+                label="Pan"
+                disabled={fixed}
+                pressed={pan}
+                onClick={() => {
+                  setDrawingTool(pan ? "select" : "hand");
+                  setPan(!pan);
+                }}
+              />
+              <SceneIconButton
+                icon="zoom-out"
+                label="Zoom out"
+                disabled={fixed}
+                onClick={() => zoomFromToolbar(1 / 1.2)}
+              />
+              <output aria-label="Board zoom">
+                {Math.round(c.zoom * 100)}%
+              </output>
+              <SceneIconButton
+                icon="zoom-in"
+                label="Zoom in"
+                disabled={fixed}
+                onClick={() => zoomFromToolbar(1.2)}
+              />
+              <SceneIconButton
+                icon="fit"
+                label="Fit content"
+                disabled={fixed}
+                onClick={fitContent}
+              />
+              <details className="board-navigation-help">
+                <summary aria-label="Board navigation help">?</summary>
+                <div>
+                  <button type="button" onClick={() => setCamera(null)}>
+                    Starting view
+                  </button>
+                  <p>
+                    {authoring
+                      ? "In Select mode, drag empty space to select multiple items. Hold right-click or Space and drag to pan."
+                      : "Drag empty space to pan."}{" "}
+                    Use Alt + wheel or pinch to zoom. Interact with content
+                    directly.
+                  </p>
+                  {authoring && (
                     <p>
-                      {authoring
-                        ? "In Select mode, drag empty space to select multiple items. Hold right-click or Space and drag to pan."
-                        : "Drag empty space to pan."}{" "}
-                      Use Alt + wheel or pinch to zoom. Interact with content
-                      directly.
+                      Drag a component heading to move it. Shift + click
+                      headings to select several. Use arrow keys on a heading to
+                      position it.
                     </p>
-                    {authoring && (
-                      <p>
-                        Drag a component heading to move it. Shift + click
-                        headings to select several. Use arrow keys on a heading
-                        to position it.
-                      </p>
-                    )}
-                    {actions}
-                  </div>
-                </details>
-              </SceneToolbar>
+                  )}
+                  {actions}
+                </div>
+              </details>
+            </SceneToolbar>
             <div className="board-workspace-tools">
               <details className="board-navigator">
                 <summary>Find content</summary>

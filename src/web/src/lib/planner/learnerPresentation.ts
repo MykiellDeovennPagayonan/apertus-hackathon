@@ -25,9 +25,10 @@ const words = (value: string) =>
 export function learnerPresentation(
   source: AuthoredDocument,
   intent: TeachingIntent,
+  prompt: string,
 ) {
   let document = structuredClone(source);
-  const observationWords = words(intent.observations.join(" "));
+  const observationWords = words(`${prompt} ${intent.question ?? intent.goal}`);
   const interactionWords = words(intent.interactions.join(" "));
   const remove = document.nodes
     .filter((node) => {
@@ -189,7 +190,9 @@ export function learnerPresentation(
       companions.sort((a, b) => {
         const priority = (item: typeof a) => {
           const node = document.nodes.find(
-            (node) => node.id === content.find((layout) => layout.id === item.layoutId)?.node,
+            (node) =>
+              node.id ===
+              content.find((layout) => layout.id === item.layoutId)?.node,
           )!;
           const command = document.connections.find(
             (wire) => wire.from.node === node.id && wire.kind === "command",
@@ -223,7 +226,9 @@ export function learnerPresentation(
       const next = companions[companions.indexOf(item) + 1];
       if (moving && next && node.definition.startsWith("displays/")) {
         const nextNode = document.nodes.find(
-          (node) => node.id === content.find((layout) => layout.id === next.layoutId)?.node,
+          (node) =>
+            node.id ===
+            content.find((layout) => layout.id === next.layoutId)?.node,
         )!;
         const nextCommand = document.connections.find(
           (wire) => wire.from.node === nextNode.id && wire.kind === "command",

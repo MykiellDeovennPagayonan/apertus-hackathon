@@ -173,7 +173,6 @@ export async function createFromAssemblies(
   for (const assembly of assemblies)
     for (const term of assembly.parameters)
       capabilityFrequency.set(term, (capabilityFrequency.get(term) ?? 0) + 1);
-  const observedWords = terms(intent.observations.join(" "));
   const adjustedWords = terms(
     intent.interactions
       .filter((interaction) =>
@@ -185,7 +184,7 @@ export async function createFromAssemblies(
   );
   const requiredCapabilities = [...promptTerms].filter(
     (term) =>
-      (!observedWords.has(term) || adjustedWords.has(term)) &&
+      adjustedWords.has(term) &&
       (capabilityFrequency.get(term) ?? 0) > 0 &&
       capabilityFrequency.get(term)! < assemblies.length / 4,
   );
@@ -243,19 +242,35 @@ export async function createFromAssemblies(
       recommendation = selected.capability.recipeSlug;
     // Uncertainty is a retrieval hint, not evidence that a supported experiment is impossible.
   }
+  const count =
+    intent.instanceCount ??
+    (intent.suggestedStructure === "comparison" ? 2 : 1);
+  const slots = Array.from(
+    { length: count },
+    (_, index) => `experiment${index + 1}`,
+  );
   const selectionSchema = object({
-    activities: {
-      type: "array",
-      minItems: 0,
-      maxItems: 3,
-      items: choice(...cards.map((card) => card.candidate)),
-    },
+    ...Object.fromEntries(
+      slots.map((slot) => [
+        slot,
+        choice(...cards.map((card) => card.candidate), "unavailable"),
+      ]),
+    ),
     omitted: { type: "array", minItems: 0, maxItems: 6, items: text() },
   });
   budget.trace?.("stage", { task: "select_capability" });
+  const namedSubjects = new Set(
+    ranked.flatMap((assembly) =>
+      assembly.models.flatMap((node) =>
+        [...terms(`${publicDefinition(node).title} ${node.definition}`)].filter(
+          (term) => promptTerms.has(term) && (frequency.get(term) ?? 0) < assemblies.length / 4,
+        ),
+      ),
+    ),
+  );
   const groundedIndex = ranked.findIndex(
     (assembly) =>
-      requiredCapabilities.length > 0 &&
+      namedSubjects.size === 1 &&
       requiredCapabilities.every((capability) =>
         assembly.capabilities.has(capability),
       ) &&
@@ -287,7 +302,7 @@ export async function createFromAssemblies(
             {
               role: "system",
               content:
-                "Select working activities for the requested experiment. Return ONLY activities and omitted. activities is an array of candidate ID STRINGS, never activity objects. Select ONE ID for a single model type, including comparisons of that same model. The application creates the requested number of independent copies. Select multiple IDs only for explicitly different model types. Honor requiredCapabilities. Equivalent implementations are alternatives. Check the real descriptions and interactions. The recommendation is advisory. Independent activities cannot be claimed as a coupled simulation unless an activity implements that relationship. omitted lists unavailable behavior; activities is [] if the core behavior is unavailable. Do not write lesson text, copy activity objects or author any wiring.",
+                "Choose one candidate ID STRING for each supplied experiment slot. Return ONLY those exact slot keys and omitted. Never return an activities array or copy the candidate list. The application owns the number of experiments. Repeat an ID when comparing copies of the same model. Choose different model types only when requested. Honor requiredCapabilities. Equivalent implementations are alternatives. Check the real descriptions and interactions. The recommendation is advisory. Independent activities cannot be claimed as a coupled simulation unless an activity implements that relationship. Use unavailable for unsupported core behavior and explain it in omitted. Do not author lesson text or wiring.",
             },
             {
               role: "user",
@@ -297,8 +312,11 @@ export async function createFromAssemblies(
                 recommendation,
                 requiredCapabilities,
                 candidates: cards,
+                experimentSlots: slots,
                 exampleResponse: {
-                  activities: [cards[0].candidate],
+                  ...Object.fromEntries(
+                    slots.map((slot) => [slot, cards[0].candidate]),
+                  ),
                   omitted: [],
                 },
                 responseSchema: toJsonSchema(selectionSchema),
@@ -308,21 +326,15 @@ export async function createFromAssemblies(
           (content) => {
             const { value } = parseArgumentJson(content);
             validateValue(selectionSchema, value);
-            const selected = value as Pick<
-              AssemblyPlan,
-              "activities" | "omitted"
-            >;
-            const count =
-              intent.instanceCount ??
-              (intent.suggestedStructure === "comparison" ? 2 : 1);
+            const selected = value as Record<string, unknown> & {
+              omitted: string[];
+            };
+            const choices = slots.map((slot) => selected[slot] as string);
             const result: AssemblyPlan = {
-              ...selected,
+              omitted: selected.omitted,
               title: (intent.question ?? intent.goal).slice(0, 120),
               instruction: intent.question ?? intent.goal,
-              activities:
-                selected.activities.length === 1
-                  ? Array.from({ length: count }, () => selected.activities[0])
-                  : selected.activities,
+              activities: choices.includes("unavailable") ? [] : choices,
             };
             if (result.activities.length > 3)
               throw new Error(
@@ -359,7 +371,7 @@ export async function createFromAssemblies(
               );
             return result;
           },
-          "Return only activities as an array of supplied ID strings and omitted as an array of unavailable behaviors. The application supplies instance counts and lesson text.",
+          "Return one candidate ID string per supplied experiment slot and omitted. Use exactly the supplied slot keys, never an activities array or additional slots.",
           budget.signal,
           {
             budget,
@@ -536,17 +548,31 @@ export async function createFromAssemblies(
         result.controls = result.controls.map(
           (id) => commandCards.find((command) => command.id === id)!.endpoint,
         );
-        const requestedCommands = commands.filter((command) =>
-          [...terms(command.split(".").at(-1)!)].some(
-            (term) =>
-              requiredCapabilities.includes(term) || adjustedWords.has(term),
+        const adjustmentRequests = intent.interactions.filter((interaction) =>
+          /\b(?:adjust|change|control|set|vary|move|drag|resize|manipulate|modify|increase|decrease)\b/i.test(
+            interaction,
           ),
         );
-        // Grounded adjustments limit exposure; inference must not add unrelated settings.
-        if (requestedCommands.length)
-          result.controls = result.controls.filter((command) =>
-            requestedCommands.includes(command),
+        const requestedCommands = adjustmentRequests.map((interaction) => {
+          const requested = terms(interaction);
+          return commands.filter((command) =>
+            [...terms(command.split(".").at(-1)!)].some(
+              (term) =>
+                !["set", "value", "input", "model"].includes(term) &&
+                requested.has(term),
+            ),
           );
+        });
+        // Prune only when every requested adjustment is grounded; vague wording must not lose a control.
+        if (
+          requestedCommands.length &&
+          requestedCommands.every((matches) => matches.length)
+        ) {
+          const keep = new Set(requestedCommands.flat());
+          result.controls = result.controls.filter((command) =>
+            keep.has(command),
+          );
+        }
         if (result.controls.some((command) => !commands.includes(command)))
           throw new Error("Choose a command actually wired in this activity");
         if (intent.comparisonConditions === "different") {
@@ -739,7 +765,7 @@ export async function createFromAssemblies(
       : plan.instruction,
     explanation: [...new Set([...plan.omitted, ...assumptions])].join("\n"),
   };
-  document = learnerPresentation(document, intent);
+  document = learnerPresentation(document, intent, request.prompt);
   budget.trace?.("validation.start", {});
   for (const required of requestedWires) {
     if (
