@@ -85,7 +85,7 @@ project/
         │   ├── domains/          Explicit domain model contributions
         │   ├── pre-made/         Prepared recipes and town integration
         │   └── runtime/          Validation, authoring, sessions, agents
-        └── scripts/              Contract, browser, database, and live checks
+        └── scripts/              Recipe generator and sanity check
 ```
 
 The web package currently declares Next.js **16.3.8**, React **19.2.8**, TypeScript, Three.js **0.186.1**, React Three Fiber, Drei, Framer Motion, Zustand, MongoDB, and NextAuth. These are repository dependency declarations, not claims about the latest available releases. The package manager is pinned to **pnpm 10.14.0**.
@@ -564,66 +564,18 @@ Build before starting production. Individual stop targets are `stop-web`, `stop-
 
 ## 14. Verification and evidence
 
-### What the repository checks
-
-The repository includes extensive assert-based Node scripts, browser scenarios, provider fault tests, database integration checks, Python API tests, and live model acceptance runs. Each class of check proves a different thing.
-
-**Contract checks** exercise recipe structure, typed commands, validation, composition, transactions, isolation, history, model outputs, and failure behavior. **Browser checks** exercise actual controls, builder operations, responsive layouts, focus, rendering, and save/reload behavior. **Database checks** exercise real ownership and revision conflicts. **Live checks** test actual provider behavior and generation quality under the configured environment.
-
-Mocked provider tests do not prove cloud account access or live generation quality. A screenshot does not establish correct mechanics. A test script being present does not establish that it passed on the current working tree.
-
-### Representative commands
-
-Run web checks from `src/web`:
+Run the minimal web checks from `src/web`:
 
 ```sh
 pnpm test
-pnpm exec tsc --noEmit
 pnpm build
-pnpm test:builder:browser
-pnpm test:board:browser
-pnpm test:generation:providers
-pnpm test:generation:decisions
-pnpm test:projects
-pnpm test:agents
-pnpm test:science
-pnpm test:cycles
-pnpm test:collective
-pnpm test:earth-atmosphere
 ```
 
-The full `pnpm test` script chains many deterministic checks, including builder, generation, agents, science, cycles, collective, and Earth/atmosphere coverage. Additional package scripts target chemistry, math assemblies, spatial catalog, data displays, drawing tools, interactions, provider faults, and domain browsers. Consult [`package.json`](src/web/package.json) for exact membership.
+`pnpm test` checks recipe loading, save/reopen, serialization, rejected imports, and representative controls. Before the demo, manually check generate → interact → save → reload, plus one builder edit. Check sign-in, cloud saves, publishing, and agents if using them in the demo.
 
-Browser suites may require Chromium installation:
+Run `pnpm recipes:generate` after adding or removing premade recipes. Historical verification reports remain in `docs/agent-only/implementation/`; their removed web scripts and commands are no longer part of the development workflow.
 
-```sh
-pnpm exec playwright install chromium
-```
-
-Some suites accept `PLAYWRIGHT_CHROMIUM_EXECUTABLE` or a configured application origin. Inspect the chosen script before running it; not every suite has the same server startup or service requirements.
-
-### Database and live inference checks
-
-`pnpm test:database` uses a disposable MongoDB test configuration and creates/drops uniquely named databases. Project database/browser and agent MongoDB checks have separate package scripts. These checks require appropriate external services and should not target a database containing valuable project data.
-
-Local inference smoke checks are:
-
-```sh
-make -C src/inference smoke
-make -C src/inference smoke-laya
-make -C src/inference test-laya
-make -C src/inference planner-smoke
-```
-
-Live generation, debate, science, cycle, collective, and Earth/atmosphere scripts depend on actual configured model services. They measure provider behavior rather than simply replaying fixtures.
-
-### Earth and atmosphere evidence
-
-The recent evidence package records run indices, screenshot progress, a review gallery, manifests, failures, provider correlation, and source fingerprints. Its full acceptance command is configured for **91 supported requests**: 35 primary generations, 28 paraphrases/informal requests, and 28 contextual follow-ups.
-
-That number describes the acceptance suite, not a newly verified pass count. The evidence guide explicitly distinguishes fresh ordinary-UI inference from API diagnostics and premade replay, retains failed attempts, and requires a source-stable run. Screenshot artifacts can be git-ignored even when the evidence index is tracked.
-
-This guide was verified through source inspection and document checks only. It does not supersede the recorded run outcomes or certify the current working tree as deployable.
+Local inference smoke checks remain available through `make -C src/inference smoke` and `make -C src/inference smoke-laya`.
 
 ## 15. Implementation boundaries
 

@@ -217,5 +217,5 @@ const { renderToStaticMarkup } = require("react-dom/server");
 const { ExperimentView } = load("src/simulations/components/views/ExperimentView.tsx");
 session.disposeSession();
 for(const demo of ["equal-groups","fraction-builder","ratio","coordinates"])
- assert.match(renderToStaticMarkup(React.createElement(ExperimentView,{demo})),/Loading experiment/);
+ assert.match(renderToStaticMarkup(React.createElement(ExperimentView,{demo})),/aria-busy="true"/);
 console.log("Disposed-session rendering waits for activation without constructing a mismatched legacy model.");

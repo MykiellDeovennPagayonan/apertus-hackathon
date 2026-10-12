@@ -30,8 +30,6 @@ The manual builder uses canonical definitions registered with the existing runti
 
 Shared execution never imports `builder/`. `runtime/composition/` owns validation/projection/staging and per-canvas lifecycle; `lessons/` owns formatting and assembly. Builder capture, settings portals, document compatibility, history, and persistence stay under `builder/`. Fraction controls/scenes and drag handles receive command interfaces; their premade view owners provide session adapters.
 
-`pnpm test:architecture` enforces these boundaries and checks pre-refactor document migrations, town paths/timelines, independent construction, and cross-adapter geometry. `pnpm test:public-catalog` checks all built-in recipes, exposed parameters, external bindings, resource runtime behavior, independent copies, atomic batches, migration, remapping, capture, and storage failures. Both are included in `pnpm test`; `pnpm test:public-catalog:browser` covers the catalog workflow in a real browser.
-
 ## Directory structure
 
 ```text
@@ -176,7 +174,7 @@ The shell activates one session after the assembly transition and disposes it on
 
 Trait files include field units, edit timing, ranges, and ownership metadata. The small static catalog uses kind-qualified keys, so a `Building` trait and a `Building` prefab remain distinct. Staged validation checks models/renderers, providers and dependencies, input ranges, identities, references, supported actions, and writer conflicts. Pure models and recipes import no React or Three.js code. SVG definitions are scoped by view instance.
 
-`pnpm test` verifies the preserved formulas/prompts plus prefab independence, invalid commands, topology references, paused edits, synchronized market relocation, full reset, arrival task identity, clock cancellation, canonical recipes, and version-3 migration. `pnpm exec tsc --noEmit` and scoped Biome checks verify the changed app source. Browser acceptance runs against a local server, and `next build --webpack` provides the production-build check when the default Turbopack build stalls in the local environment.
+`pnpm test` runs the recipe sanity check. Use `pnpm build` and manually try the changed controls before the demo.
 
 ### Presentation ownership and cleanup verification
 
@@ -184,7 +182,7 @@ Trait files include field units, edit timing, ranges, and ownership metadata. Th
 
 `controls/RangeInput.tsx` supplies the controlled range event adapter used by both numeric control wrappers. `NumberField` keeps unfinished or rejected text local, while accepted input follows authoritative value changes. Explicit-submit forms retain their own draft/discard policy. Retained natural-system controls return the actual command result to their form. Compatibility entry points remain available.
 
-`pnpm test:components:cleanup` compares public contracts, AI cards/buckets, and all 41 built-in recipes' initial markup against the pre-cleanup baseline. It also verifies command rejection and snapshot discriminants; it runs inside `pnpm test`. `pnpm test:components:cleanup:browser` exercises real React numeric controls without adding a production test route. See [implementation 018 and its evidence](../../../../../docs/agent-only/implementation/018-SAFE-COMPONENT-CLEANUP-AND-AI-COMPATIBILITY.md) for completed changes and remaining verification limits.
+Historical cleanup evidence remains in [implementation 018](../../../../../docs/agent-only/implementation/018-SAFE-COMPONENT-CLEANUP-AND-AI-COMPATIBILITY.md).
 
 ### Spatial public recipes
 
@@ -192,4 +190,4 @@ Trait files include field units, edit timing, ranges, and ownership metadata. Th
 
 The old Projectile/Bridge/Town control exports, ThreeWorldView and PhysicalSystemsView are compatibility entry points backed by recipes. Their previous private control/lesson assembly is retired. Keep compatibility readers and prompt/session adapters until all saved/protocol consumers migrate. Do not use those adapters as dependencies of new public primitives.
 
-Run `npm test`, `npm run test:spatial-catalog:browser`, TypeScript and a production build for spatial changes. Refresh `docs/agent-only/implementation/009-SOURCE-LEDGER.json` with `node scripts/builder/audit-public-catalog.cjs`; it includes new files as well as the original inventory.
+Run `pnpm test` and `pnpm build`, then manually check the board for spatial changes.
