@@ -1,4 +1,13 @@
+import { isPlaybackCommand } from "../../registry/contracts/interactionPolicy";
 import { parameterLeaves } from "../../registry/contracts/controlContract";
+import {
+  inputCapability,
+  inputName,
+  inputRequestSpans,
+  namedInputRequirements,
+  type InputCapability,
+  type InputRequirement,
+} from "../../registry/contracts/inputCapability";
 import { publicDefinition } from "../../registry/index";
 import { catalogRecipeAllowed } from "../../registry/catalogScope";
 import { builtInRecipes } from "../../registry/recipes/builtIn";
@@ -25,6 +34,81 @@ export function controls(recipe: CompositeRecipe) {
       ),
   );
 }
+/** Group equivalent inputs across comparison instances without changing their bindings. */
+export function adjustableBindings(recipe: CompositeRecipe) {
+  const groups = new Map<
+    string,
+    {
+      id: string;
+      definition: string;
+      command: string;
+      field: string;
+      labels: string[];
+      meaning: string;
+      capability: InputCapability;
+      wires: ReturnType<typeof controls>;
+    }
+  >();
+  const nodes = [...recipe.document.nodes, ...recipe.document.resources];
+  for (const wire of controls(recipe)) {
+    const target = nodes.find((node) => node.id === wire.to.node)!;
+    const control = nodes.find((node) => node.id === wire.from.node)!;
+    const definition = publicDefinition(target);
+    const command = definition.commands[wire.to.port];
+    if (
+      (isPlaybackCommand(wire.to.port) && definition.lifecycle.clock) ||
+      !parameterLeaves(command.arguments).length
+    )
+      continue;
+    const field = String(control.configuration.parameter ?? "");
+    const key = JSON.stringify([target.definition, wire.to.port, field]);
+    let group = groups.get(key);
+    if (!group) {
+      group = {
+        id: `input${groups.size + 1}`,
+        definition: target.definition,
+        command: wire.to.port,
+        field,
+        labels: [],
+        meaning: command.description,
+        capability: inputCapability(definition, wire.to.port, field),
+        wires: [],
+      };
+      groups.set(key, group);
+    }
+    group.labels.push(String(control.configuration.label ?? control.label));
+    group.wires.push(wire);
+  }
+  // An input shared by comparison instances must exist on every represented model.
+  for (const group of groups.values())
+    group.capability.names = [
+      ...new Set([
+        ...group.capability.names,
+        ...group.labels.map((label) =>
+          label.replace(/\([^)]*\)|\s*·.*$/g, "").trim(),
+        ),
+      ]),
+    ];
+  return [...groups.values()].filter((group) =>
+    nodes
+      .filter((node) => node.definition === group.definition)
+      .every((node) => group.wires.some((wire) => wire.to.node === node.id)),
+  );
+}
+export function matchInputBinding(
+  interaction: string,
+  bindings: ReturnType<typeof adjustableBindings>,
+) {
+  const requirements = namedInputRequirements(
+    interaction,
+    bindings.map((binding) => binding.capability),
+  );
+  if (requirements.length !== 1) return undefined;
+  const matching = bindings.filter((binding) =>
+    requirements[0].capabilities.includes(binding.capability.id),
+  );
+  return matching.length === 1 ? matching[0] : undefined;
+}
 export function assemblyCandidates(
   request: GenerationRequest,
   intent: TeachingIntent,
@@ -41,69 +125,94 @@ export function assemblyCandidates(
   const assemblies = [
     ...listPremadeRecipes().map(({ recipe }) => recipe),
     ...builtInRecipes,
-  ].filter(catalogRecipeAllowed).map((recipe) => {
-    const models = recipe.document.nodes.filter(
-      (node) => publicDefinition(node).category === "models",
-    );
-    const names = terms(
-      [
-        recipe.title,
-        ...recipe.tags,
-        ...models.flatMap((node) => {
-          const definition = publicDefinition(node);
-          return [
-            definition.title,
-            definition.id,
-            ...definition.tags,
-            ...Object.keys(definition.inputs),
-            ...Object.keys(definition.outputs),
-          ];
-        }),
-      ].join(" "),
-    );
-    const details = terms(
-      [
-        recipe.description,
-        ...models.flatMap((node) => [
-          publicDefinition(node).description,
-          ...Object.keys(publicDefinition(node).commands),
-          ...Object.keys(publicDefinition(node).outputs),
-        ]),
-      ].join(" "),
-    );
-    const capabilities = terms(
-      models
-        .flatMap((node) => {
-          const definition = publicDefinition(node);
-          return [
-            ...Object.keys(definition.inputs),
-            ...Object.keys(definition.outputs),
-            ...Object.keys(definition.commands),
-            ...(definition.configuration.type === "object"
-              ? Object.keys(definition.configuration.properties)
-              : []),
-          ];
-        })
-        .join(" "),
-    );
-    const parameters = terms(
-      models
-        .flatMap((node) =>
-          parameterLeaves(publicDefinition(node).configuration)
-            .filter(
-              (leaf) =>
-                leaf.schema.type === "number" || leaf.schema.type === "integer",
-            )
-            .map((leaf) => leaf.path),
-        )
-        .join(" "),
-    );
-    return { recipe, names, details, models, capabilities, parameters };
-  });
+  ]
+    .filter(catalogRecipeAllowed)
+    .map((recipe) => {
+      const models = recipe.document.nodes.filter(
+        (node) => publicDefinition(node).category === "models",
+      );
+      const names = terms(
+        [
+          recipe.title,
+          ...recipe.tags,
+          ...models.flatMap((node) => {
+            const definition = publicDefinition(node);
+            return [
+              definition.title,
+              definition.id,
+              ...definition.tags,
+              ...Object.keys(definition.inputs),
+              ...Object.keys(definition.outputs),
+            ];
+          }),
+        ].join(" "),
+      );
+      const details = terms(
+        [
+          recipe.description,
+          ...models.flatMap((node) => [
+            publicDefinition(node).description,
+            ...Object.keys(publicDefinition(node).commands),
+            ...Object.keys(publicDefinition(node).outputs),
+          ]),
+        ].join(" "),
+      );
+      return {
+        recipe,
+        names,
+        details,
+        models,
+        bindings: adjustableBindings(recipe),
+      };
+    });
   const frequency = new Map<string, number>();
   for (const assembly of assemblies)
     for (const term of new Set([...assembly.names, ...assembly.details]))
       frequency.set(term, (frequency.get(term) ?? 0) + 1);
+  const inputCapabilities = [
+    ...new Map(
+      assemblies.flatMap(({ bindings }) =>
+        bindings.map(({ capability }) => [capability.id, capability] as const),
+      ),
+    ).values(),
+  ];
+  const spans = inputRequestSpans(request.prompt)
+    .flatMap((span) => span.split(/\band\b|,/i))
+    .map((span) => span.trim())
+    .filter(Boolean);
+  const inputRequirements: InputRequirement[] = [];
+  const unresolvedInputs: string[] = [];
+  const originalRequirements = namedInputRequirements(
+    request.prompt,
+    inputCapabilities,
+  );
+  for (const interaction of [...spans, ...(intent.requestedInputs ?? [])]) {
+    const named = namedInputRequirements(interaction, inputCapabilities);
+    const grounded = originalRequirements.filter((original) =>
+      named.some((requirement) =>
+        requirement.capabilities.some((id) =>
+          original.capabilities.includes(id),
+        ),
+      ),
+    );
+    if (
+      !grounded.length &&
+      !inputRequirements.some((requirement) =>
+        ` ${requirement.interaction} `.includes(` ${inputName(interaction)} `),
+      )
+    )
+      unresolvedInputs.push(interaction);
+    for (const requirement of grounded)
+      if (
+        !inputRequirements.some(
+          (existing) => existing.interaction === requirement.interaction,
+        )
+      )
+        inputRequirements.push(requirement);
+  }
+  const requiredCapabilities = inputRequirements.map(
+    (requirement) => requirement.interaction,
+  );
   const ranked = assemblies
     .map((assembly) => ({
       ...assembly,
@@ -116,32 +225,13 @@ export function assemblyCandidates(
         0,
       ),
     }))
-    .filter(({ score, models }) => score > 0 && models.length > 0)
+    .filter(({ models }) => models.length > 0)
     .sort(
       (a, b) =>
         b.score - a.score ||
         a.recipe.document.nodes.length - b.recipe.document.nodes.length,
     )
     .slice(0, 8);
-  const capabilityFrequency = new Map<string, number>();
-  for (const assembly of assemblies)
-    for (const term of assembly.parameters)
-      capabilityFrequency.set(term, (capabilityFrequency.get(term) ?? 0) + 1);
-  const adjustedWords = terms(
-    intent.interactions
-      .filter((interaction) =>
-        /\b(?:adjust|change|control|set|vary|move|drag|resize|manipulate|increase|decrease)\b/i.test(
-          interaction,
-        ),
-      )
-      .join(" "),
-  );
-  const requiredCapabilities = [...promptTerms].filter(
-    (term) =>
-      adjustedWords.has(term) &&
-      (capabilityFrequency.get(term) ?? 0) > 0 &&
-      capabilityFrequency.get(term)! < assemblies.length / 4,
-  );
   const cards = ranked.map(({ recipe, models }, index) => ({
     candidate: `activity${index + 1}`,
     title: recipe.title,
@@ -176,5 +266,11 @@ export function assemblyCandidates(
       .slice(0, 6)
       .map((limit) => limit.slice(0, 240)),
   }));
-  return { ranked, cards, requiredCapabilities };
+  return {
+    ranked,
+    cards,
+    requiredCapabilities,
+    inputRequirements,
+    unresolvedInputs: [...new Set(unresolvedInputs)],
+  };
 }

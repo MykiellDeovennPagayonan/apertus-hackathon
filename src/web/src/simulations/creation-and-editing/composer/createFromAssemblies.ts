@@ -1,6 +1,7 @@
 import { isPlaybackCommand } from "../../registry/contracts/interactionPolicy";
 import { object } from "../../registry/contracts/parameterSchema";
 import { publicDefinition } from "../../registry/index";
+import { inputCapability } from "../../registry/contracts/inputCapability";
 import { emptyAuthoredDocument } from "../authoring-engine/document";
 import { finalizeRecipe } from "../authoring-engine/finalizeRecipe";
 import {
@@ -28,10 +29,8 @@ export async function createFromAssemblies(
 ): Promise<GenerationResult> {
   budget.enableCompositionMode();
   budget.trace?.("selection.start", {});
-  const { ranked, cards, requiredCapabilities } = assemblyCandidates(
-    request,
-    intent,
-  );
+  const retrieval = assemblyCandidates(request, intent);
+  const { ranked, cards } = retrieval;
   if (!ranked.length)
     return {
       protocolVersion: 1,
@@ -40,11 +39,7 @@ export async function createFromAssemblies(
       message: "I couldn't find an available model for this experiment.",
     };
   budget.trace?.("retrieval", cards);
-  const plan = await selectAssemblyPlan(request, intent, budget, {
-    ranked,
-    cards,
-    requiredCapabilities,
-  });
+  const plan = await selectAssemblyPlan(request, intent, budget, retrieval);
   if (!plan.activities.length)
     return {
       protocolVersion: 1,
@@ -58,6 +53,15 @@ export async function createFromAssemblies(
   const assumptions: string[] = [];
   const requestedWires: { control: string; node: string; command: string }[] =
     [];
+  const requiredInputs: {
+    interaction: string;
+    capability: string;
+    control: string;
+    node: string;
+    command: string;
+    definition: string;
+    field: string;
+  }[] = [];
   const observationWires: {
     source: string;
     output: string;
@@ -77,10 +81,15 @@ export async function createFromAssemblies(
       intent,
       budget,
       source,
-      requiredCapabilities,
+      plan.bindings[index],
     );
     if (presentation.unsupported)
-      return { protocolVersion: 1, status: "unsupported", requestId: request.requestId, message: presentation.unsupported };
+      return {
+        protocolVersion: 1,
+        status: "unsupported",
+        requestId: request.requestId,
+        message: presentation.unsupported,
+      };
     const settings = await configureAssembly(
       request,
       intent,
@@ -89,7 +98,7 @@ export async function createFromAssemblies(
       index,
       plan.activities.length,
       priorConfigurations,
-      requiredCapabilities,
+      plan.bindings[index].controls,
     );
     const configuration = { ...settings, ...presentation };
     const keep = new Set(configuration.controls);
@@ -148,6 +157,18 @@ export async function createFromAssemblies(
       tags: source.tags,
     });
     const prefix = `activity_${index + 1}`;
+    for (const { interaction, capability, binding } of plan.bindings[index]
+      .resolved)
+      for (const wire of binding.wires)
+        requiredInputs.push({
+          interaction,
+          capability,
+          control: `${prefix}/${wire.from.node}`,
+          node: `${prefix}/${wire.to.node}`,
+          command: wire.to.port,
+          definition: binding.definition,
+          field: binding.field,
+        });
     document = insertRecipe(
       document,
       assembly,
@@ -161,8 +182,12 @@ export async function createFromAssemblies(
         pruned,
         (id) => `${prefix}/${id}`,
       ).presentation;
-    for (const wire of wires.filter((wire) =>
-      keep.has(`${wire.to.node}.${wire.to.port}`),
+    for (const wire of wires.filter(
+      (wire) =>
+        keep.has(`${wire.to.node}.${wire.to.port}`) ||
+        plan.bindings[index].resolved.some(({ binding }) =>
+          binding.wires.some((required) => required.id === wire.id),
+        ),
     ))
       requestedWires.push({
         control: `${prefix}/${wire.from.node}`,
@@ -191,6 +216,35 @@ export async function createFromAssemblies(
   };
   document = learnerPresentation(document);
   budget.trace?.("validation.start", {});
+  for (const required of requiredInputs) {
+    const control = document.nodes.find((node) => node.id === required.control);
+    const target = [...document.nodes, ...document.resources].find(
+      (node) => node.id === required.node,
+    );
+    if (
+      !control ||
+      !target ||
+      target.definition !== required.definition ||
+      inputCapability(
+        publicDefinition(target),
+        required.command,
+        required.field,
+      ).id !== required.capability ||
+      String(control.configuration.parameter ?? "") !== required.field ||
+      !document.connections.some(
+        (wire) =>
+          wire.kind === "command" &&
+          wire.from.node === required.control &&
+          wire.to.node === required.node &&
+          wire.to.port === required.command,
+      )
+    )
+      throw new PlannerError(
+        `Missing required binding for ${required.interaction}`,
+        502,
+      );
+  }
+  budget.trace?.("validation.required_inputs", requiredInputs);
   for (const required of requestedWires) {
     if (
       !document.connections.some(

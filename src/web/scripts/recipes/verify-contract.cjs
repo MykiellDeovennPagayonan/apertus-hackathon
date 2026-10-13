@@ -354,6 +354,106 @@ assert.equal(progressFromTrace("stage", { task: "choose_presentation" }), "build
     return budget;
   };
   const originalFetch = global.fetch;
+  {
+    const { assemblyCandidates, adjustableBindings, matchInputBinding } = load("src/simulations/creation-and-editing/component-selection/assemblyCandidates.ts");
+    const { resolveRequiredInputs, choosePresentation } = load("src/simulations/creation-and-editing/composer/choosePresentation.ts");
+    const { selectAssemblyPlan } = load("src/simulations/creation-and-editing/component-selection/assemblyPlan.ts");
+    const { createFromAssemblies } = load("src/simulations/creation-and-editing/composer/createFromAssemblies.ts");
+    const projectileRequest = { ...request, active: undefined, purpose: "create", prompt: "Show me 2 projectiles distance comparison based on angles" };
+    const projectileIntent = { goal: "Compare projectile distance", concepts: ["projectile motion"], interactions: ["Adjust launch angles"], requestedInputs: ["launch angle"], observations: ["distance"], explicitConstraints: [], suggestedStructure: "comparison", instanceCount: 2 };
+    const candidates = assemblyCandidates(projectileRequest, projectileIntent);
+    assert.ok(candidates.requiredCapabilities.includes("angle"));
+    assert.ok(candidates.ranked.some(entry => entry.recipe.id === premadeRecipe("projectile").id));
+    assert.ok(candidates.ranked.every(entry => matchInputBinding("angle", entry.bindings)));
+    const projectile = premadeRecipe("projectile");
+    const angle = matchInputBinding("launch angle", adjustableBindings(projectile));
+    assert.equal(new Set(angle.wires.map(wire => wire.to.node)).size, 2);
+    // An angle output does not qualify as an adjustable angle input.
+    const outputOnly = structuredClone(premadeRecipe("pendulum"));
+    outputOnly.document.connections = outputOnly.document.connections.filter(wire => wire.to.port !== "PEND_SET_AMPLITUDE");
+    assert.ok(registry.publicDefinition(outputOnly.document.nodes.find(node => node.id === "model")).outputs.angle);
+    assert.equal(matchInputBinding("angle", adjustableBindings(outputOnly)), undefined);
+    const incompleteComparison = structuredClone(projectile);
+    incompleteComparison.document.connections = incompleteComparison.document.connections.filter(wire => !(wire.to.port === "set:angle" && wire.to.node === angle.wires[1].to.node));
+    assert.equal(matchInputBinding("angle", adjustableBindings(incompleteComparison)), undefined);
+    global.fetch = async () => { throw new Error("Exact binding resolution must not invoke inference"); };
+    const required = await resolveRequiredInputs(projectileRequest, projectileIntent, makeBudget(), projectile);
+    assert.equal(required.unsupported, undefined);
+    assert.equal(required.controls.length, 2);
+    const missing = await resolveRequiredInputs(projectileRequest, projectileIntent, makeBudget(), incompleteComparison);
+    assert.ok(missing.unsupported);
+    const rectangles = await resolveRequiredInputs(projectileRequest, { ...projectileIntent, requestedInputs: ["width", "height"] }, makeBudget(), premadeRecipe("area-perimeter"));
+    assert.equal(rectangles.resolved.length, 2);
+    assert.deepEqual(new Set(rectangles.resolved.map(entry => entry.binding.field)), new Set(["value.width", "value.height"]));
+    global.fetch = async () => Response.json({ choices: [{ message: { content: JSON.stringify({ candidate: "done" }) } }] });
+    const presentation = await choosePresentation(projectileRequest, projectileIntent, makeBudget(), projectile, required);
+    assert.ok(required.controls.every(endpoint => presentation.controls.includes(endpoint)));
+    const originalMode = process.env.PLANNER_MODE;
+    process.env.PLANNER_MODE = "apertus";
+    try {
+      const rejectedId = candidates.cards[candidates.ranked.findIndex(entry => entry.recipe.id === premadeRecipe("pendulum").id)].candidate;
+      const acceptedId = candidates.cards[candidates.ranked.findIndex(entry => entry.recipe.id === projectile.id)].candidate;
+      let selections = 0;
+      global.fetch = async (_url, options) => {
+        const messages = JSON.parse(options.body).messages;
+        const payload = JSON.parse(messages[1].content);
+        let candidate;
+        if (messages[0].content.startsWith("Choose ONE offered")) {
+          selections++;
+          if (selections === 2) assert.ok(payload.candidates.every(card => card.id !== rejectedId));
+          candidate = selections === 1 ? rejectedId : acceptedId;
+        } else candidate = payload.activity === premadeRecipe("pendulum").title ? "unavailable" : payload.candidates[0].id;
+        return Response.json({ choices: [{ message: { content: JSON.stringify({ candidate }) } }] });
+      };
+      const plan = await selectAssemblyPlan(projectileRequest, { ...projectileIntent, requestedInputs: ["tilt the launcher"] }, makeBudget(), candidates);
+      assert.equal(selections, 2);
+      assert.deepEqual(plan.activities, [acceptedId]);
+      assert.equal(plan.bindings[0].controls.length, 2);
+      const seenSelections = new Set();
+      global.fetch = async (_url, options) => {
+        const messages = JSON.parse(options.body).messages;
+        const payload = JSON.parse(messages[1].content);
+        let candidate = "unavailable";
+        if (messages[0].content.startsWith("Choose ONE offered")) {
+          candidate = payload.candidates[0].id;
+          assert.ok(!seenSelections.has(candidate), "Rejected activities must not be retried");
+          seenSelections.add(candidate);
+        }
+        return Response.json({ choices: [{ message: { content: JSON.stringify({ candidate }) } }] });
+      };
+      const unsupported = await selectAssemblyPlan(projectileRequest, { ...projectileIntent, requestedInputs: ["unsupported input"] }, makeBudget(), candidates);
+      assert.deepEqual(unsupported.activities, []);
+      assert.ok(seenSelections.size <= 3);
+      global.fetch = async (_url, options) => {
+        const messages = JSON.parse(options.body).messages;
+        const payload = JSON.parse(messages[1].content);
+        const candidate = messages[0].content.startsWith("Choose ONE offered")
+          ? payload.candidates.find(card => card.label === projectile.title).id
+          : messages[0].content.startsWith("Decide whether the scene")
+            ? (payload.retained.length ? "done" : payload.candidates.find(card => card.id !== "done").id)
+            : "done";
+        return Response.json({ choices: [{ message: { content: JSON.stringify({ candidate }) } }] });
+      };
+      const generated = await createFromAssemblies(projectileRequest, projectileIntent, makeBudget());
+      assert.equal(generated.status, "created");
+      const { runtime } = loadRecipe(generated.recipe);
+      const models = generated.recipe.document.nodes.filter(node => node.definition === "models/Projectile");
+      assert.equal(models.length, 2);
+      assert.equal(generated.recipe.document.connections.filter(wire => wire.kind === "value" && wire.from.port === "range").length, 2);
+      for (const model of models) {
+        const wire = generated.recipe.document.connections.find(wire => wire.kind === "command" && wire.to.node === model.id && wire.to.port === "set:angle");
+        assert.ok(wire, "Both comparison instances must retain launch-angle controls");
+        assert.ok(runtime.submit(wire.from.node, { value: 45 }).accepted);
+        assert.equal(runtime.getSnapshot().outputs[model.id].configuration.angle, 45);
+      }
+      runtime.dispose();
+    } finally {
+      global.fetch = originalFetch;
+      if (originalMode === undefined) delete process.env.PLANNER_MODE;
+      else process.env.PLANNER_MODE = originalMode;
+    }
+    console.log("Assembly binding eligibility, per-instance inputs, semantic reselection and assembled projectile controls passed.");
+  }
   const calls = [];
   const responses = [{ operations: [] }, { arg1: 7 }];
   global.fetch = async (_url, options) => {
@@ -432,10 +532,10 @@ assert.equal(progressFromTrace("stage", { task: "choose_presentation" }), "build
         const value = presentationCalls === 1 ? { candidate: "unknown" }
           : system.startsWith("Resolve") ? { candidate: payload.candidates[0].id }
           : system.startsWith("Choose ONE additional") ? { candidate: "done" }
-          : { candidate: payload.retained.length ? "done" : payload.candidates[0].id };
+          : { candidate: payload.retained.length ? "done" : payload.candidates.find(card => card.id !== "done").id };
         return Response.json({ choices: [{ message: { content: JSON.stringify(value) } }] });
       };
-      const presentation = await choosePresentation(request, intent, makeBudget(), recipe, []);
+      const presentation = await choosePresentation(request, intent, makeBudget(), recipe);
       assert.ok(presentationCalls > 1);
       assert.ok(presentation.controls.includes("model.SET_ARITHMETIC_TASK"));
       assert.ok(presentation.observations.includes("result"));
@@ -444,7 +544,7 @@ assert.equal(progressFromTrace("stage", { task: "choose_presentation" }), "build
         const system = JSON.parse(options.body).messages[0].content;
         return Response.json({ choices: [{ message: { content: JSON.stringify({ candidate: "done" }) } }] });
       };
-      const requiredPresentation = await choosePresentation(request, { ...intent, requestedInputs: ["starting angle", "pendulum length"] }, makeBudget(), pendulum, []);
+      const requiredPresentation = await choosePresentation(request, { ...intent, requestedInputs: ["starting angle", "pendulum length"] }, makeBudget(), pendulum);
       assert.ok(requiredPresentation.controls.some(command => command.endsWith(".PEND_SET_LENGTH")));
       assert.ok(requiredPresentation.controls.some(command => command.endsWith(".PEND_SET_AMPLITUDE")));
       assert.ok(!requiredPresentation.controls.some(command => command.endsWith(".PEND_SET_GRAVITY")));
@@ -452,7 +552,7 @@ assert.equal(progressFromTrace("stage", { task: "choose_presentation" }), "build
       global.fetch = async (_url, options) => {
         settingsCalls++;
         const payload = JSON.parse(JSON.parse(options.body).messages[1].content);
-        const value = settingsCalls === 1 ? { unknownSetting: 5 } : payload.setting ? { value: { operation: "subtract", a: 7, b: 3 } } : { candidate: payload.alreadyConfigured.length ? "done" : payload.candidates[0].id };
+        const value = settingsCalls === 1 ? { unknownSetting: 5 } : payload.setting ? { value: { operation: "subtract", a: 7, b: 3 } } : { candidate: payload.alreadyConfigured.length ? "done" : payload.candidates.find(card => card.id !== "done").id };
         return Response.json({ choices: [{ message: { content: JSON.stringify(value) } }] });
       };
       const configuration = await configureAssembly(request, intent, makeBudget(), recipe, 0, 1, [], []);
