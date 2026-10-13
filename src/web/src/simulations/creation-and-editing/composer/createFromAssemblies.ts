@@ -74,7 +74,7 @@ export async function createFromAssemblies(
   }[] = [];
   for (const [index, candidate] of plan.activities.entries()) {
     const source =
-      ranked[cards.findIndex((card) => card.candidate === candidate)].recipe;
+      plan.bindings[index].source ?? ranked[cards.findIndex((card) => card.candidate === candidate)].recipe;
     const wires = controls(source);
     const presentation = await choosePresentation(
       request,

@@ -1,9 +1,11 @@
 import {
+  boolean,
   choice,
   object,
   validateValue,
 } from "../../registry/contracts/parameterSchema";
 import { publicDefinition } from "../../registry/index";
+import { parameterLeaves } from "../../registry/contracts/controlContract";
 import type { GenerationBudget } from "../budget";
 import type { GenerationRequest } from "../input/contracts";
 import { parseArgumentJson } from "../input/inference/parseJson";
@@ -17,7 +19,6 @@ import {
   type RequiredInputs,
 } from "../composer/choosePresentation";
 import { selectCapability } from "./selectAssemblies";
-import { resolveInputRequirements } from "./inputRequirements";
 
 export type AssemblyPlan = {
   activities: string[];
@@ -33,30 +34,17 @@ export async function selectAssemblyPlan(
   retrieval: ReturnType<typeof assemblyCandidates>,
 ) {
   const { ranked } = retrieval;
-  const grounded = await resolveInputRequirements(request, budget, retrieval);
-  const cards = retrieval.cards.filter((card) =>
-    grounded.requirements.every((requirement) =>
-      ranked[
-        retrieval.cards.findIndex((peer) => peer.candidate === card.candidate)
-      ].bindings.some((binding) =>
-        requirement.capabilities.includes(binding.capability.id),
-      ),
-    ),
-  );
-  if (grounded.unsupported || !cards.length)
+  const cards = retrieval.cards;
+  if (!cards.length)
     return {
       activities: [],
       bindings: [],
       title: intent.goal.slice(0, 100),
       instruction: intent.question ?? intent.goal,
       omitted: [
-        grounded.unsupported ??
-          "No offered activity supports all required quantities.",
+        "Retrieval found no available activities.",
       ],
     };
-  const requiredCapabilities = grounded.requirements.map(
-    (requirement) => requirement.interaction,
-  );
   let recommendation: string | undefined;
   if ((process.env.PLANNER_MODE ?? "hybrid") === "hybrid") {
     const capabilities: CapabilityCard[] = cards.map((card) => ({
@@ -96,10 +84,10 @@ export async function selectAssemblyPlan(
   const bindings: RequiredInputs[] = [];
   const rejected = new Set<string>();
   let remaining = count;
-  while (remaining > 0) {
+  let complete = false;
+  while (remaining > 0 && !complete) {
     const candidates = cards.filter(
-      (card) =>
-        card.instanceCount <= remaining && !rejected.has(card.candidate),
+      (card) => !rejected.has(card.candidate),
     );
     if (!candidates.length || rejected.size >= 3)
       return {
@@ -116,14 +104,15 @@ export async function selectAssemblyPlan(
         ...candidates.map((card) => card.candidate),
         "unavailable",
       ),
+      complete: boolean,
     });
     budget.trace?.("stage", { task: "select_capability" });
-    const answer = await requestStructured<{ candidate: string }>(
+    const answer = await requestStructured<{ candidate: string; complete: boolean }>(
       [
         {
           role: "system",
           content:
-            'Choose ONE offered activity that supports the original request. Return only {"candidate":"activity1"} using a supplied ID, or {"candidate":"unavailable"} if none supports it. The application assembles instances and validates bindings. Do not return settings, layouts, schemas or an experiment plan.',
+            'Choose ONE offered activity by its models and scientific meaning, preserving the ORIGINAL request. Return only {"candidate":"supplied-id","complete":true} when this activity together with alreadySelected covers the whole request. A single activity can already contain several objects or a complete comparison; do not duplicate it merely to match an inferred instance count. Use complete:false only when another independent activity is still needed. The remainingInstances value and recommendation are hints, not semantic eligibility gates. Registered commands can receive learner controls even if no control is currently wired. Return {"candidate":"unavailable","complete":false} if none supports the missing meaning. Do not return settings, layouts or a plan.',
         },
         {
           role: "user",
@@ -131,13 +120,32 @@ export async function selectAssemblyPlan(
             request: request.prompt,
             remainingInstances: remaining,
             recommendation,
-            requiredCapabilities,
+            alreadySelected: activities.map((candidate) =>
+              cards.find((card) => card.candidate === candidate)?.title,
+            ),
             candidates: candidates.map((card) => {
               return {
                 id: card.candidate,
                 label: card.title,
-                meaning: card.description.slice(0, 180),
+                meaning: card.description,
                 instances: card.instanceCount,
+                models: ranked[
+                  retrieval.cards.findIndex((peer) => peer.candidate === card.candidate)
+                ].models.map((node) => {
+                  const definition = publicDefinition(node);
+                  return {
+                    title: definition.title,
+                    meaning: definition.description.slice(0, 400),
+                    commands: Object.entries(definition.commands).map(([command, contract]) => ({
+                      command,
+                      meaning: contract.description,
+                      fields: parameterLeaves(contract.arguments).map(({ path, schema }) => ({
+                        field: path,
+                        unit: "unit" in schema ? schema.unit : undefined,
+                      })),
+                    })),
+                  };
+                }),
                 inputs: ranked[
                   retrieval.cards.findIndex(
                     (peer) => peer.candidate === card.candidate,
@@ -162,15 +170,15 @@ export async function selectAssemblyPlan(
       (content) => {
         const { value } = parseArgumentJson(content);
         validateValue(schema, value);
-        return value as { candidate: string };
+        return value as { candidate: string; complete: boolean };
       },
-      'Return only {"candidate":"one-supplied-id"}. No plan, schema or extra keys.',
+      'Return only candidate and complete, deciding coverage from the original request and supplied models.',
       budget.signal,
       {
         budget,
         stage: "assembly_plan",
         schema: toJsonSchema(schema),
-        maxTokens: 64,
+        maxTokens: 128,
         onEvent: (event, data) =>
           budget.trace?.(`assembly_plan.${event}`, data),
       },
@@ -192,7 +200,6 @@ export async function selectAssemblyPlan(
       intent,
       budget,
       source,
-      grounded.requirements,
     );
     if (resolved.unsupported) {
       rejected.add(answer.candidate);
@@ -205,10 +212,19 @@ export async function selectAssemblyPlan(
     }
     bindings.push(resolved);
     activities.push(answer.candidate);
+    complete = answer.complete;
     remaining -= candidates.find(
       (card) => card.candidate === answer.candidate,
     )!.instanceCount;
   }
+  if (!complete)
+    return {
+      activities: [],
+      bindings: [],
+      title: intent.goal.slice(0, 100),
+      instruction: intent.question ?? intent.goal,
+      omitted: ["Activity selection did not cover the request within the existing instance budget."],
+    };
   const question = intent.question ?? intent.goal;
   const title =
     Array.from(question).length <= 100

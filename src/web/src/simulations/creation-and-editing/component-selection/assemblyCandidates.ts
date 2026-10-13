@@ -2,11 +2,8 @@ import { isPlaybackCommand } from "../../registry/contracts/interactionPolicy";
 import { parameterLeaves } from "../../registry/contracts/controlContract";
 import {
   inputCapability,
-  inputName,
-  inputRequestSpans,
   namedInputRequirements,
   type InputCapability,
-  type InputRequirement,
 } from "../../registry/contracts/inputCapability";
 import { publicDefinition } from "../../registry/index";
 import { catalogRecipeAllowed } from "../../registry/catalogScope";
@@ -169,50 +166,6 @@ export function assemblyCandidates(
   for (const assembly of assemblies)
     for (const term of new Set([...assembly.names, ...assembly.details]))
       frequency.set(term, (frequency.get(term) ?? 0) + 1);
-  const inputCapabilities = [
-    ...new Map(
-      assemblies.flatMap(({ bindings }) =>
-        bindings.map(({ capability }) => [capability.id, capability] as const),
-      ),
-    ).values(),
-  ];
-  const spans = inputRequestSpans(request.prompt)
-    .flatMap((span) => span.split(/\band\b|,/i))
-    .map((span) => span.trim())
-    .filter(Boolean);
-  const inputRequirements: InputRequirement[] = [];
-  const unresolvedInputs: string[] = [];
-  const originalRequirements = namedInputRequirements(
-    request.prompt,
-    inputCapabilities,
-  );
-  for (const interaction of [...spans, ...(intent.requestedInputs ?? [])]) {
-    const named = namedInputRequirements(interaction, inputCapabilities);
-    const grounded = originalRequirements.filter((original) =>
-      named.some((requirement) =>
-        requirement.capabilities.some((id) =>
-          original.capabilities.includes(id),
-        ),
-      ),
-    );
-    if (
-      !grounded.length &&
-      !inputRequirements.some((requirement) =>
-        ` ${requirement.interaction} `.includes(` ${inputName(interaction)} `),
-      )
-    )
-      unresolvedInputs.push(interaction);
-    for (const requirement of grounded)
-      if (
-        !inputRequirements.some(
-          (existing) => existing.interaction === requirement.interaction,
-        )
-      )
-        inputRequirements.push(requirement);
-  }
-  const requiredCapabilities = inputRequirements.map(
-    (requirement) => requirement.interaction,
-  );
   const ranked = assemblies
     .map((assembly) => ({
       ...assembly,
@@ -269,8 +222,5 @@ export function assemblyCandidates(
   return {
     ranked,
     cards,
-    requiredCapabilities,
-    inputRequirements,
-    unresolvedInputs: [...new Set(unresolvedInputs)],
   };
 }

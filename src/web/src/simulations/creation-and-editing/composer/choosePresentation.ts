@@ -9,7 +9,6 @@ import type { CompositeRecipe } from "../authoring-engine/document";
 import type { GenerationBudget } from "../budget";
 import {
   adjustableBindings,
-  assemblyCandidates,
   controls,
 } from "../component-selection/assemblyCandidates";
 import type { GenerationRequest } from "../input/contracts";
@@ -18,9 +17,10 @@ import { toJsonSchema } from "../input/inference/structuredSchema";
 import { requestStructured } from "../input/inference/transport";
 import type { TeachingIntent } from "../intent-interpreter/contracts";
 import type { InputRequirement } from "../../registry/contracts/inputCapability";
-import { resolveInputRequirements } from "../component-selection/inputRequirements";
+import { resolveInputRequirements, withAvailableInputs } from "../component-selection/inputRequirements";
 
 export type RequiredInputs = {
+  source?: CompositeRecipe;
   controls: string[];
   resolved: {
     interaction: string;
@@ -37,12 +37,15 @@ export async function resolveRequiredInputs(
   source: CompositeRecipe,
   requirements?: InputRequirement[],
 ): Promise<RequiredInputs> {
+  const originalControls = new Set(source.document.nodes.map((node) => node.id));
+  const originalPresentation = source.document.presentation;
+  source = withAvailableInputs(source);
   const bindings = adjustableBindings(source);
   if (!requirements) {
     const grounded = await resolveInputRequirements(
       request,
       budget,
-      assemblyCandidates(request, intent),
+      source,
     );
     if (grounded.unsupported)
       return { controls: [], resolved: [], unsupported: grounded.unsupported };
@@ -70,7 +73,12 @@ export async function resolveRequiredInputs(
       controls: binding.wires.map((wire) => `${wire.to.node}.${wire.to.port}`),
     });
   }
+  // New controls need automatic geometry; bindings and scientific state remain authoritative.
+  if (resolved.some(({ binding }) => binding.wires.some((wire) => !originalControls.has(wire.from.node))))
+    delete source.document.presentation;
+  else if (originalPresentation) source.document.presentation = originalPresentation;
   return {
+    source,
     controls: [
       ...new Set(
         resolved.flatMap(({ binding }) =>
@@ -96,6 +104,10 @@ export async function choosePresentation(
   unsupported?: string;
 }> {
   budget.trace?.("stage", { task: "choose_presentation" });
+  const required = requiredInputs ?? (await resolveRequiredInputs(request, intent, budget, source));
+  if (required.unsupported)
+    return { controls: [], observations: [], unsupported: required.unsupported };
+  source = required.source ?? source;
   const wires = controls(source);
   const nodes = [...source.document.nodes, ...source.document.resources];
   const commandCards = [
@@ -158,15 +170,6 @@ export async function choosePresentation(
       meaning: publicDefinition(node).description.slice(0, 160),
       communicates: publicDefinition(node).presentedOutputs ?? [],
     }));
-  const required =
-    requiredInputs ??
-    (await resolveRequiredInputs(request, intent, budget, source));
-  if (required.unsupported)
-    return {
-      controls: [],
-      observations: [],
-      unsupported: required.unsupported,
-    };
   const selectedControls = new Set(
     commandCards
       .filter(

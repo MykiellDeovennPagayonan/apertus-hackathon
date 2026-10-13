@@ -123,6 +123,7 @@ export async function configureAssembly(
             request: request.prompt,
             instance: index + 1,
             instances: instanceCount,
+            comparisonConditions: intent.comparisonConditions,
             alreadyConfigured: Object.keys(result.overrides),
             candidates: [
               {
@@ -133,6 +134,10 @@ export async function configureAssembly(
               ...remaining.map((parameter) => ({
                 id: parameter.key,
                 label: parameter.name,
+                current: result.overrides[parameter.name] ?? parameter.default,
+                priorValues: priorConfigurations
+                  .filter((previous) => previous.activity === source.id)
+                  .map((previous) => previous.overrides[parameter.name] ?? parameter.default),
               })),
             ],
           }),
@@ -150,6 +155,9 @@ export async function configureAssembly(
         stage: "assembly_settings",
         schema: toJsonSchema(selectionSchema),
         maxTokens: 64,
+        verify: (answer) => {
+          if (answer.candidate === "done") verifyOverrides(result);
+        },
         onEvent: (event, data) =>
           budget.trace?.(`assembly_settings.${event}`, data),
       },
