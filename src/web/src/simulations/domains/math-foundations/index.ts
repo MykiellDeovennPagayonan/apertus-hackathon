@@ -1,4 +1,4 @@
-import { lineParameterSchema } from "../../components/contracts/LineParameters";
+import { lineParameterSchema } from "../../registry/contracts/objects/LineParameters";
 import {
   circleMeasure,
   type EquationState,
@@ -6,12 +6,12 @@ import {
   equationInitial,
   equationMeasure,
   lineMeasure,
-} from "../../components/systems/math-foundations/models";
+} from "../../legacy/components/systems/math-foundations/models";
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
-import { num, object } from "../../runtime/parameterSchema";
+} from "../../registry/contracts/domainContribution";
+import { num, object } from "../../registry/contracts/parameterSchema";
 
 const action = (
   value: ReturnType<typeof num> | undefined,

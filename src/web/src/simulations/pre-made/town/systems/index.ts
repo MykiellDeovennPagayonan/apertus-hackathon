@@ -1,3 +1,3 @@
-export { BehaviorRunnerSystem } from "../../../components/systems/BehaviorRunnerSystem";
-export { NavigationSystem } from "../../../components/systems/NavigationSystem";
-export { PathFollowingSystem } from "../../../components/systems/PathFollowingSystem";
+export { BehaviorRunnerSystem } from "../../../legacy/components/systems/BehaviorRunnerSystem";
+export { NavigationSystem } from "../../../legacy/components/systems/NavigationSystem";
+export { PathFollowingSystem } from "../../../legacy/components/systems/PathFollowingSystem";

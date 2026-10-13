@@ -181,7 +181,7 @@ The inspected component tree contains 238 files, including styles, types, and he
 | `behaviors/` | 2 | Town behavior |
 | Contracts, registry, README | 11 | Shared contracts and infrastructure |
 
-[The registry](../../../src/web/src/simulations/components/registry.ts) contains eight manual object definitions: Line, Square, Ground, Building, Road, Person, Gas Container, and Fraction Bar.
+[The registry](../../../src/web/src/simulations/registry/objects/registry.ts) contains eight manual object definitions: Line, Square, Ground, Building, Road, Person, Gas Container, and Fraction Bar.
 
 [CompositionLibrary](../../../src/web/src/simulations/builder/composition/CompositionLibrary.tsx) filters these by scene kind and adds a hardcoded set of canvas, slider, number, toggle, button, readout, intersection, comparison, and trip choices. It does not discover all component folders or runtime catalog entries.
 
@@ -207,7 +207,7 @@ These contain both useful primitive implementations and authored compositions. E
 
 ### 3.5 Restricted graph and document vocabulary
 
-[Current composition types](../../../src/web/src/simulations/runtime/composition/types.ts) support four control widgets, fixed measurement relationships, and `primary`/`details` slots.
+[Current composition types](../../../src/web/src/simulations/creation-and-editing/runtime-engine/composition/types.ts) support four control widgets, fixed measurement relationships, and `primary`/`details` slots.
 
 [Graph derivation](../../../src/web/src/simulations/builder/graph/deriveGraph.ts) handles specific control/property, object/canvas, result, pair-measurement, and town-trip relationships. A general component graph requires typed ports and definitions for controls, displays, behaviors, and layout as well as objects.
 
@@ -1565,13 +1565,13 @@ Decisions already established by this specification:
 - [Physical and diagram composition](../features/MANUAL_BUILDER_DOMAIN_COMPOSITION.md)
 - [Component architecture](../../COMPONENT_ARCHITECTURE.md)
 - [Manual builder guide](../../MANUAL_EXPERIMENT_BUILDER.md)
-- [Current component README](../../../src/web/src/simulations/components/README.md)
+- [Current component README](../../../src/web/src/simulations/legacy/components/README.md)
 - [Current library](../../../src/web/src/simulations/builder/composition/CompositionLibrary.tsx)
 - [Current graph](../../../src/web/src/simulations/builder/graph/deriveGraph.ts)
-- [Current composition types](../../../src/web/src/simulations/runtime/composition/types.ts)
-- [Current component contract](../../../src/web/src/simulations/components/contracts/ComponentDefinition.ts)
-- [Domain contribution contract](../../../src/web/src/simulations/runtime/contribution.ts)
-- [Runtime catalog](../../../src/web/src/simulations/runtime/catalog.ts)
+- [Current composition types](../../../src/web/src/simulations/creation-and-editing/runtime-engine/composition/types.ts)
+- [Current component contract](../../../src/web/src/simulations/registry/contracts/objects/ComponentDefinition.ts)
+- [Domain contribution contract](../../../src/web/src/simulations/registry/contracts/domainContribution.ts)
+- [Runtime catalog](../../../src/web/src/simulations/legacy/runtime/catalog.ts)
 - [Clipboard/group operations](../../../src/web/src/simulations/builder/editor/selection.ts)
 
 

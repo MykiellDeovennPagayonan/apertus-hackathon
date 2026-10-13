@@ -1,0 +1,97 @@
+"use client";
+import { IMPORTED_HTML } from "../../runtime-engine/imported/contract";
+import { ImportedHTMLView } from "./ImportedHTMLView";
+
+import { useContext } from "react";
+import type { DocumentRuntime } from "../../runtime-engine/DocumentRuntime";
+import type { ComponentInstance } from "../../authoring-engine/document";
+import { publicDefinition } from "../../../registry/index";
+import { AgentActions } from "../../../legacy/components/controls/AgentActions";
+import { FoodWebPopulationControl } from "../../../legacy/components/controls/FoodWebPopulationControl";
+import { AgentProfileView, AgentTranscriptView } from "../../../legacy/components/views/agents/AgentViews";
+import {
+  CycleAction,
+  CycleActivity,
+  CycleCaption,
+} from "../../../legacy/components/views/biogeochemistry/CyclePanels";
+import { LessonControls } from "../../../legacy/components/views/earth-atmosphere/LessonControls";
+import { CollectiveControl } from "../../../legacy/components/views/collective/Controls";
+import { MathReadoutView } from "../../../legacy/components/views/MathReadoutView";
+import { ScienceControls, ScienceObservations } from "../../../legacy/components/views/SciencePanels";
+import { CanvasPresentation } from "./CanvasPresentation";
+import { ControlPresentation } from "./ControlPresentation";
+import { SnapshotContext } from "./contexts";
+import { DisplayPresentation } from "./DisplayPresentation";
+import { Appearance } from "./RecipeAppearance";
+import { mathBoard } from "./snapshotAdapters";
+
+export function NodeView({
+  node,
+  runtime,
+}: {
+  node: ComponentInstance;
+  runtime: DocumentRuntime;
+}) {
+  const snapshot = useContext(SnapshotContext);
+  const def = publicDefinition(node);
+  if (node.definition === IMPORTED_HTML) return <ImportedHTMLView node={node} runtime={runtime} />;
+  if (/^(controls|displays)\/earth-atmosphere-/.test(node.definition))
+    return <LessonControls node={node} runtime={runtime} />;
+  if (node.definition === "displays/AgentProfile")
+    return <AgentProfileView node={node} runtime={runtime} />;
+  if (node.definition === "displays/AgentTranscript")
+    return <AgentTranscriptView node={node} runtime={runtime} />;
+  if (node.definition === "controls/AgentActions")
+    return <AgentActions node={node} runtime={runtime} />;
+  if (node.definition === "controls/FoodWebPopulation")
+    return <FoodWebPopulationControl node={node} runtime={runtime} />;
+  if (node.definition.startsWith("controls/science-"))
+    return <ScienceControls node={node} runtime={runtime} />;
+  if (node.definition === "displays/ScienceObservations")
+    return <ScienceObservations node={node} runtime={runtime} />;
+  if (/^controls\/cycle-(oxygen|nitrogen|carbon)-action$/.test(node.definition))
+    return <CycleAction node={node} runtime={runtime} />;
+  if (
+    /^controls\/cycle-(oxygen|nitrogen|carbon)-activity$/.test(node.definition)
+  )
+    return <CycleActivity node={node} runtime={runtime} />;
+  if (
+    /^displays\/cycle-(oxygen|nitrogen|carbon)-caption$/.test(node.definition)
+  )
+    return <CycleCaption node={node} runtime={runtime} />;
+  if (/^(controls|displays)\/collective-/.test(node.definition))
+    return <CollectiveControl node={node} runtime={runtime} />;
+  if (def.category === "models") return null;
+  if (def.category === "controls")
+    return <ControlPresentation node={node} runtime={runtime} />;
+  if (def.category === "appearance") {
+    const modelBinding = runtime.document.connections.find(
+      (c) =>
+        c.kind === "attachment" &&
+        c.to.node === node.id &&
+        c.to.port === "model",
+    );
+    const board = modelBinding
+      ? mathBoard(snapshot.outputs[modelBinding.from.node]?.board)
+      : undefined;
+    return (
+      <div className="recipe-scene-content">
+        <Appearance node={node} runtime={runtime} />
+        {board &&
+          !runtime.document.connections.some(
+            (link) =>
+              link.kind === "value" &&
+              link.from.node === modelBinding?.from.node &&
+              link.from.port === "board",
+          ) && <MathReadoutView board={board} />}
+      </div>
+    );
+  }
+  if (def.category === "displays")
+    return <DisplayPresentation node={node} runtime={runtime} />;
+  if (node.definition === "canvases/World")
+    return <Appearance node={node} runtime={runtime} />;
+  if (def.category === "canvases")
+    return <CanvasPresentation node={node} runtime={runtime} />;
+  return null;
+}

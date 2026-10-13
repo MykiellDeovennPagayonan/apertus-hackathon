@@ -1,0 +1,485 @@
+{
+  "caseId": "C01",
+  "prompt": "Make a pendulum swing where I can adjust its starting angle and length",
+  "status": "failed",
+  "requestId": "31ffb85e-1b80-4c5a-9b39-46face3d079c",
+  "message": "Apertus repeated the same invalid stage arguments: value: unknown field PHYS_STEP",
+  "sliders": [],
+  "bounds": [],
+  "body": "✳\npAperSim\nHome\nExperiments\nCommunity\nMy projects\nSign in\nINTERACTIVE SIMULATIONS\nCreate an experiment.\n\nDescribe what you want to simulate, or open an existing experiment.\n\nCouldn't complete that simulation change.\nTry again\nDetails\nCreate\n↑\nTry\nPendulum\nProjectiles\nLine\nCreate manually →\nCreate your own simulations\nExample experiments\nTHREE EXPERIMENTS TO TRY\nPHYSICS\nFIG. 01\nwhat if θ = 45°?\nLAUNCH\nLAND\nProjectile motion\n\nAdjust launch speed and angle to compare trajectories.\n\nApertus optional\nProjectile motion\n↗\nSTRUCTURES\nFIG. 02\nload\nTruss bridge\n\nChange the bridge structure and load to compare forces.\n\nApertus optional\nTruss bridge\n↗\nSIMULATION\nFIG. 03\nTown simulation\n\nSet routes and schedules, then track movement through town.\n\nApertus optional\nLiving town\n↗\npAperSim\n Local-first simulations\n2026",
+  "before": {
+    "correlationId": null,
+    "recipe": null,
+    "context": null,
+    "state": null
+  },
+  "after": {
+    "correlationId": null,
+    "recipe": null,
+    "context": null,
+    "state": null
+  },
+  "diagnostics": {
+    "configuration": {
+      "mode": "hybrid",
+      "llm": {
+        "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+        "provider": "apertus",
+        "connection": "local",
+        "baseUrl": "http://127.0.0.1:43101/v1",
+        "structuredOutput": "auto",
+        "contextCapacity": null,
+        "maxTokens": 1024,
+        "temperature": 0,
+        "reasoningEffort": null,
+        "timeout": 120000
+      },
+      "decision": {
+        "provider": "laya",
+        "policy": "See selection.decision or composition.decision for actual acceptance."
+      },
+      "deadlineMs": 240000
+    },
+    "events": [
+      {
+        "event": "teaching_intent.inference",
+        "elapsedMs": 24116,
+        "data": {
+          "stage": "teaching_intent",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 24114,
+          "finishReason": "stop",
+          "maxTokens": 768,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 938,
+            "outputTokens": 147,
+            "totalTokens": 1085
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "selection.decision",
+        "elapsedMs": 24847,
+        "data": {
+          "status": "rejected",
+          "provider": "laya",
+          "model": "aac6fef/laya-multilingual-mlx",
+          "usage": {
+            "input_tokens": 452,
+            "output_tokens": 0
+          },
+          "durationMs": 491,
+          "answer": {
+            "type": "choice",
+            "choice": "activity8",
+            "probabilities": {
+              "activity1": 0.0764,
+              "activity2": 0.1334,
+              "activity3": 0.0372,
+              "activity4": 0.0593,
+              "activity5": 0.0864,
+              "activity6": 0.0692,
+              "activity7": 0.0404,
+              "activity8": 0.4132,
+              "unclear": 0.0844
+            },
+            "confidence": 0.1557
+          },
+          "timing": {
+            "inference_ms": 412.441,
+            "server_ms": 412.78
+          }
+        }
+      },
+      {
+        "event": "assembly_plan.inference",
+        "elapsedMs": 38994,
+        "data": {
+          "stage": "assembly_plan",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 14142,
+          "finishReason": "stop",
+          "maxTokens": 256,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 2821,
+            "outputTokens": 7,
+            "totalTokens": 2828
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "assembly_plan.inference",
+        "elapsedMs": 42267,
+        "data": {
+          "stage": "assembly_plan",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 3238,
+          "finishReason": "stop",
+          "maxTokens": 256,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 2945,
+            "outputTokens": 15,
+            "totalTokens": 2960
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "presentation.decision",
+        "elapsedMs": 43027,
+        "data": {
+          "provider": "laya",
+          "model": "aac6fef/laya-multilingual-mlx",
+          "durationMs": 721,
+          "usage": {
+            "input_tokens": 2701,
+            "output_tokens": 0
+          },
+          "decisions": [
+            {
+              "id": "PHYS_PLAY",
+              "kind": "control",
+              "status": "accepted",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.7958,
+                  "omit": 0.2042
+                },
+                "confidence": 0.2698
+              }
+            },
+            {
+              "id": "PHYS_RESTART",
+              "kind": "control",
+              "status": "accepted",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.8243,
+                  "omit": 0.1757
+                },
+                "confidence": 0.3295
+              }
+            },
+            {
+              "id": "PHYS_STEP",
+              "kind": "control",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.6813,
+                  "omit": 0.3187
+                },
+                "confidence": 0.097
+              }
+            },
+            {
+              "id": "PEND_SET_LENGTH",
+              "kind": "control",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.6553,
+                  "omit": 0.3447
+                },
+                "confidence": 0.0708
+              }
+            },
+            {
+              "id": "PEND_SET_GRAVITY",
+              "kind": "control",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.673,
+                  "omit": 0.327
+                },
+                "confidence": 0.0881
+              }
+            },
+            {
+              "id": "PEND_SET_AMPLITUDE",
+              "kind": "control",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.6469,
+                  "omit": 0.3531
+                },
+                "confidence": 0.0632
+              }
+            },
+            {
+              "id": "RESET",
+              "kind": "control",
+              "status": "accepted",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.7823,
+                  "omit": 0.2177
+                },
+                "confidence": 0.244
+              }
+            },
+            {
+              "id": "display/period",
+              "kind": "observation",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.6868,
+                  "omit": 0.3132
+                },
+                "confidence": 0.1032
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "presentation.decision",
+        "elapsedMs": 43560,
+        "data": {
+          "provider": "laya",
+          "model": "aac6fef/laya-multilingual-mlx",
+          "durationMs": 533,
+          "usage": {
+            "input_tokens": 2663,
+            "output_tokens": 0
+          },
+          "decisions": [
+            {
+              "id": "display/angle",
+              "kind": "observation",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.7334,
+                  "omit": 0.2666
+                },
+                "confidence": 0.1634
+              }
+            },
+            {
+              "id": "display/elapsed",
+              "kind": "observation",
+              "status": "accepted",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.7795,
+                  "omit": 0.2205
+                },
+                "confidence": 0.2389
+              }
+            },
+            {
+              "id": "display/cycles",
+              "kind": "observation",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.7307,
+                  "omit": 0.2693
+                },
+                "confidence": 0.1595
+              }
+            },
+            {
+              "id": "display/lastPeriod",
+              "kind": "observation",
+              "status": "accepted",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.7538,
+                  "omit": 0.2462
+                },
+                "confidence": 0.1948
+              }
+            },
+            {
+              "id": "display/x",
+              "kind": "observation",
+              "status": "accepted",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.7925,
+                  "omit": 0.2075
+                },
+                "confidence": 0.2633
+              }
+            },
+            {
+              "id": "display/y",
+              "kind": "observation",
+              "status": "accepted",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.7998,
+                  "omit": 0.2002
+                },
+                "confidence": 0.2777
+              }
+            },
+            {
+              "id": "display/points",
+              "kind": "observation",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.6822,
+                  "omit": 0.3178
+                },
+                "confidence": 0.098
+              }
+            },
+            {
+              "id": "assumptions",
+              "kind": "observation",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.595,
+                  "omit": 0.405
+                },
+                "confidence": 0.0262
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "assembly_presentation.inference",
+        "elapsedMs": 52748,
+        "data": {
+          "stage": "assembly_presentation",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 9184,
+          "finishReason": "stop",
+          "maxTokens": 512,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 982,
+            "outputTokens": 37,
+            "totalTokens": 1019
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "assembly_presentation.inference",
+        "elapsedMs": 60900,
+        "data": {
+          "stage": "assembly_presentation",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 8135,
+          "finishReason": "stop",
+          "maxTokens": 512,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 1051,
+            "outputTokens": 68,
+            "totalTokens": 1119
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "assembly_presentation.inference",
+        "elapsedMs": 68679,
+        "data": {
+          "stage": "assembly_presentation",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 7765,
+          "finishReason": "stop",
+          "maxTokens": 512,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 1051,
+            "outputTokens": 68,
+            "totalTokens": 1119
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "failure",
+        "elapsedMs": 68680,
+        "data": {
+          "status": 502,
+          "message": "Apertus repeated the same invalid stage arguments: value: unknown field PHYS_STEP",
+          "cause": "Apertus repeated the same invalid stage arguments: value: unknown field PHYS_STEP"
+        }
+      }
+    ],
+    "issues": [
+      {
+        "event": "assembly_plan.schemaFailure",
+        "reason": "Expected one JSON object. Begin with { and end with }. Return only the stage schema.",
+        "issueKey": "Expected one JSON object. Begin with { and end with }. Return only the stage schema."
+      },
+      {
+        "event": "assembly_presentation.schemaFailure",
+        "reason": "value: unknown field PHYS_STEP",
+        "issueKey": "value: unknown field PHYS_STEP"
+      },
+      {
+        "event": "assembly_presentation.schemaFailure",
+        "reason": "value: unknown field PHYS_STEP",
+        "issueKey": "value: unknown field PHYS_STEP"
+      },
+      {
+        "event": "assembly_presentation.schemaFailure",
+        "reason": "value: unknown field PHYS_STEP",
+        "issueKey": "value: unknown field PHYS_STEP"
+      }
+    ]
+  }
+}

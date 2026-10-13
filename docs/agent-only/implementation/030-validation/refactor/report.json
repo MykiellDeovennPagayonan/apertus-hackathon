@@ -1,0 +1,63 @@
+[
+  {
+    "caseId": "C01",
+    "status": "failed",
+    "message": "Cannot reach local Apertus. Start it with make -C src/inference run.",
+    "sliders": [],
+    "bounds": []
+  },
+  {
+    "caseId": "E01",
+    "status": "blocked_by_creation"
+  },
+  {
+    "caseId": "C02",
+    "status": "failed",
+    "message": "Cannot reach local Apertus. Start it with make -C src/inference run.",
+    "sliders": [],
+    "bounds": []
+  },
+  {
+    "caseId": "C03",
+    "status": "failed",
+    "message": "Cannot reach local Apertus. Start it with make -C src/inference run.",
+    "sliders": [],
+    "bounds": []
+  },
+  {
+    "caseId": "C04",
+    "status": "failed",
+    "message": "Cannot reach local Apertus. Start it with make -C src/inference run.",
+    "sliders": [],
+    "bounds": []
+  },
+  {
+    "caseId": "E02",
+    "status": "blocked_by_creation"
+  },
+  {
+    "caseId": "C05",
+    "status": "failed",
+    "message": "Cannot reach local Apertus. Start it with make -C src/inference run.",
+    "sliders": [],
+    "bounds": []
+  },
+  {
+    "caseId": "E03",
+    "status": "blocked_by_creation"
+  },
+  {
+    "caseId": "C06",
+    "status": "failed",
+    "message": "Cannot reach local Apertus. Start it with make -C src/inference run.",
+    "sliders": [],
+    "bounds": []
+  },
+  {
+    "caseId": "C07",
+    "status": "failed",
+    "message": "Cannot reach local Apertus. Start it with make -C src/inference run.",
+    "sliders": [],
+    "bounds": []
+  }
+]

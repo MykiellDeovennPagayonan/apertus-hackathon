@@ -1,19 +1,19 @@
-import { validateBoard } from "../../runtime/authoring/board";
+import { validateBoard } from "../../creation-and-editing/authoring-engine/presentation/board";
 import {
   validateAuthoredDocument,
   validateEditorMetadata,
-} from "../../runtime/authoring/validate";
-import { validateCommand } from "../../runtime/capabilities";
-import { validateScene } from "../../runtime/composition/index";
+} from "../../creation-and-editing/validator/document";
+import { validateCommand } from "../../legacy/runtime/capabilities";
+import { validateScene } from "../../creation-and-editing/runtime-engine/composition/index";
 import {
   boolean,
   choice,
   num,
   object,
   validateValue,
-} from "../../runtime/parameterSchema";
-import { requireRecord } from "../../runtime/records";
-import { parseRecipe, resolveRecipe } from "../../runtime/resolver";
+} from "../../registry/contracts/parameterSchema";
+import { requireRecord } from "../../legacy/runtime/records";
+import { parseRecipe, resolveRecipe } from "../../legacy/runtime/resolver";
 import { templates } from "../descriptors";
 import { pendingConnections } from "../editor/workspaceCommands";
 import { initialParameters, requireRecipe, targetFor } from "./legacy";

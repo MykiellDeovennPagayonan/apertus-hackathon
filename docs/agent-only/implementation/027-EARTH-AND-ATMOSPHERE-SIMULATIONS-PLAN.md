@@ -52,18 +52,18 @@ The paths below were inspected for this plan. They are current integration point
 
 | Existing foundation | How this work uses it |
 | --- | --- |
-| `src/web/src/simulations/runtime/contribution.ts` | Implement versioned `DomainModel` contracts with initialize, apply, measure, configuration/reconfigure, and optional authoritative-clock step |
-| `src/web/src/simulations/runtime/assembly.ts` | Add the domain to the explicit contribution list and register only implemented presentation adapters |
-| `src/web/src/simulations/runtime/authoring/providers.ts` | Reuse the assembly-model provider bridge; avoid a second simulation engine inside React |
-| `src/web/src/simulations/components/catalog/index.ts` | Register public definitions, compatible typed ports, discoverability, and configuration contracts |
-| `src/web/src/simulations/components/catalog/explorationTeaching.ts` | Add teaching requirements, focused dependencies, selection keys, limitations, and scene-first composition guidance |
-| `src/web/src/simulations/components/views/recipe/NodeView.tsx` | Route independent action, activity, and caption components through the existing recipe host |
-| `src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx` | Route the seven appearances to their actual views and consume accepted snapshots |
-| `src/web/src/lib/planner/bucket.ts` | Retrieve relevant catalog cards from ordinary language and interpreted intent |
-| `src/web/src/lib/planner/selection/compositionStrategy.ts` | Actual Laya topic selection with confidence/probability acceptance and an explicit no-fit choice |
-| `src/web/src/lib/planner/compose.ts`, `focusedTurn.ts`, `compositionTools.ts`, `turnSchema.ts` | Actual Apertus typed authoring operations and bounded construction |
-| `src/web/src/lib/planner/compositionQuality.ts`, `coverage.ts` | Runnable graph, required teaching pieces, request constraints, and supported/partial coverage |
-| `src/web/src/lib/planner/browser.ts`, `constructionPublisher.ts` | Correlation, progress, stale-result protection, and accepted-result activation |
+| `src/web/src/simulations/registry/contracts/domainContribution.ts` | Implement versioned `DomainModel` contracts with initialize, apply, measure, configuration/reconfigure, and optional authoritative-clock step |
+| `src/web/src/simulations/legacy/runtime/assembly.ts` | Add the domain to the explicit contribution list and register only implemented presentation adapters |
+| `src/web/src/simulations/creation-and-editing/runtime-engine/providers/index.ts` | Reuse the assembly-model provider bridge; avoid a second simulation engine inside React |
+| `src/web/src/simulations/registry/index.ts` | Register public definitions, compatible typed ports, discoverability, and configuration contracts |
+| `src/web/src/simulations/legacy/components/catalog/explorationTeaching.ts` | Add teaching requirements, focused dependencies, selection keys, limitations, and scene-first composition guidance |
+| `src/web/src/simulations/creation-and-editing/simulation/recipe/NodeView.tsx` | Route independent action, activity, and caption components through the existing recipe host |
+| `src/web/src/simulations/creation-and-editing/simulation/recipe/RecipeAppearance.tsx` | Route the seven appearances to their actual views and consume accepted snapshots |
+| `src/web/src/simulations/creation-and-editing/component-selection/componentCandidates.ts` | Retrieve relevant catalog cards from ordinary language and interpreted intent |
+| `src/web/src/simulations/creation-and-editing/component-selection/selectCompositionStrategy.ts` | Actual Laya topic selection with confidence/probability acceptance and an explicit no-fit choice |
+| `src/web/src/simulations/creation-and-editing/composer/composeFromComponents.ts`, `focusedTurn.ts`, `compositionTools.ts`, `turnSchema.ts` | Actual Apertus typed authoring operations and bounded construction |
+| `src/web/src/simulations/creation-and-editing/validator/compositionQuality.ts`, `coverage.ts` | Runnable graph, required teaching pieces, request constraints, and supported/partial coverage |
+| `src/web/src/simulations/creation-and-editing/input/browser.ts`, `constructionPublisher.ts` | Correlation, progress, stale-result protection, and accepted-result activation |
 | `src/web/scripts/domains/science/` and `collective-and-evolution/` | Patterns for domain checks and browser evidence; do not blindly inherit old panel layouts or API-first acceptance claims |
 | `src/inference/Makefile`, `serve_apertus.py`, `laya/` | Current local Apertus and Laya launch and readiness paths |
 

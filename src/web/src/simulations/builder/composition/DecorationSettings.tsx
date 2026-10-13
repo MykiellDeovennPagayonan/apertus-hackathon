@@ -1,5 +1,5 @@
-import { publicDefinition } from "../../components/catalog";
-import type { ComponentInstance } from "../../runtime/authoring/types";
+import { publicDefinition } from "../../registry/index";
+import type { ComponentInstance } from "../../creation-and-editing/authoring-engine/document";
 import type { ComponentCatalog } from "./useComponentCatalog";
 
 export function DecorationSettings({

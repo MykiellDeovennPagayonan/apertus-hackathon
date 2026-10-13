@@ -2,13 +2,13 @@ const assert = require("node:assert/strict");
 const React = require("react");
 const { renderToStaticMarkup } = require("react-dom/server");
 const { load } = require("../test-loader.cjs");
-const { premadeRecipe } = load("src/simulations/runtime/recipes/registry.ts");
-const { loadRecipe } = load("src/simulations/runtime/recipes/loadRecipe.ts");
+const { premadeRecipe } = load("src/simulations/registry/recipes/premade.ts");
+const { loadRecipe } = load("src/simulations/creation-and-editing/runtime-engine/loadRecipe.ts");
 const { CoolingScene } = load(
-  "src/simulations/components/visuals/physics/ThermalOpticsScenes.tsx",
+  "src/simulations/legacy/components/visuals/physics/ThermalOpticsScenes.tsx",
 );
 const { COOLING_DURATION } = load(
-  "src/simulations/components/systems/physics/cooling.ts",
+  "src/simulations/legacy/components/systems/physics/cooling.ts",
 );
 const { runtime } = loadRecipe(premadeRecipe("cooling-drinks"));
 

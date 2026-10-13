@@ -1,6 +1,6 @@
 # Simulation pipeline refactor: complete file manifest
 
-Proposed destinations only. No source files have been moved. See [the plan](SIMULATION_PIPELINE_REFACTOR_PLAN.md) for ownership and behavior requirements.
+Migration inventory used for the implemented source moves and responsibility extractions. See [the plan](SIMULATION_PIPELINE_REFACTOR_PLAN.md) for behavior requirements and [the current walkthrough](SIMULATION_GENERATION_AND_EDITING_PIPELINE.md) for final ownership. Counts below describe the original source inventory, not a new census.
 
 Inventory: **554 existing files mapped**, **31 new extraction/integration files**, **567 current caller/document paths flagged**. These counts overlap: a moved file may also need import edits.
 
@@ -1194,3 +1194,21 @@ This list includes moved files with internal imports. Entries that remain in pla
 ## 7. Unresolved reachability is not deletion authorization
 
 Legacy preservation includes currently used code. Absent recipe references do not establish dead code. Native promotion does not authorize deleting legacy identities used by saved recipes. At implementation time inspect dynamic lookup, generated imports and CSS/asset URLs in addition to this static inventory. Do not create all proposed extraction files as empty placeholders.
+
+
+## 8. Implemented extraction details
+
+The source inventory was migrated without forwarding exports or an alternate `lib/planner` implementation. The two old registration barrels were replaced by their split owners: `components/catalog/index.ts` contributes to `registry/index.ts`, `registry/legacyDefinitions.ts`, native object projections and domain metadata; `components/composites/catalog.ts` contributes to defaults, model recipes, learning capture and built-in registration. Their proposed legacy barrel destinations are intentionally absent.
+
+These concrete helper files supplement the proposed tree without adding inference stages:
+
+- `creation-and-editing/input/inference/stage.ts`: the existing structured-stage parser/transport invocation formerly in the planner coordinator.
+- `creation-and-editing/component-selection/assemblyPlan.ts`: existing assembly-instance selection wire/validation, separate from confidence-gated capability selection.
+- `creation-and-editing/component-selection/selectRecipe.ts`: the retained recipe capability strategy, with its selection schema under the same owner.
+- `creation-and-editing/composer/recipeCreation.ts`: existing transaction receipt handling for the retained recipe strategy.
+- `registry/definitions/shared.ts` and `controlDefinitions.ts`: native data-only definition factories and generic/control metadata, extracted from legacy declarations.
+- `registry/objects/publicDefinitions.ts`: authored-object projection into the public identity contract.
+
+`pipeline.ts` owns public `createSimulation`/`editSimulation` request entry points and shared admission/budget/correlation handling. Composer functions are strategy coordinators; their direct imports are internal. Browser consumers import client transport/contracts/rendering directly; the registry imports no inference configuration or React scenes.
+
+Behavioral changes following relocation include independent flat presentation/value wires, avoiding configuration inference when no parameters are exposed, structured owner-specific repair keys, one bounded edit target reselection, preservation of live nested configuration siblings, early edit progress, and propagation of existing domain output descriptions. Actual browser outcomes remain separate from contract-test results in the evidence ledger.

@@ -4,8 +4,8 @@ import {
   useRef,
   useState,
 } from "react";
-import type { ConstructionUpdate } from "../../../lib/planner/construction";
-import { requireRecord } from "../../runtime/records";
+import type { ConstructionUpdate } from "../../creation-and-editing/simulation/construction/contracts";
+import { requireRecord } from "../../legacy/runtime/records";
 import { BuilderIcon } from "../BuilderIcon";
 import { ConnectionNode } from "../ConnectionNode";
 import { ConnectionViewport } from "../ConnectionViewport";

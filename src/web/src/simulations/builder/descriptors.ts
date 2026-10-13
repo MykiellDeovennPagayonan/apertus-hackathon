@@ -1,7 +1,7 @@
-import { lineProperties } from "../components/contracts/LineParameters";
-import { modelProvider } from "../runtime/assembly";
-import { operations } from "../runtime/capabilities";
-import type { Recipe } from "../runtime/resolver";
+import { lineProperties } from "../registry/contracts/objects/LineParameters";
+import { modelProvider } from "../legacy/runtime/assembly";
+import { operations } from "../legacy/runtime/capabilities";
+import type { Recipe } from "../legacy/runtime/resolver";
 
 export type TemplateId = "gas" | "fractions" | "line" | "town";
 export type Slot = "primary" | "details";

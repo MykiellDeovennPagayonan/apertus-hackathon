@@ -1,4 +1,4 @@
-import { listPremadeRecipes } from "../../../simulations/runtime/recipes/registry";
+import { listPremadeRecipes } from "../../../simulations/registry/recipes/premade";
 
 const entries: Record<
   string,

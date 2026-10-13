@@ -262,9 +262,9 @@ The repository separates LLM inference from decision routing. Verify both the ac
 
 Read the resolved configuration, not just a single environment variable. Relevant implementations include:
 
-- `src/web/src/lib/llm/config.ts` — provider/model selection and generic overrides.
-- `src/web/src/lib/apertus/config.ts` and `transport.ts` — local/hosted configuration, bounded structured requests, concurrency, retries, and metadata.
-- `src/web/src/lib/decisions/config.ts` and `providers/laya.ts` — decision routing and real Laya requests.
+- `src/web/src/simulations/creation-and-editing/input/inference/config.ts` — provider/model selection and generic overrides.
+- `src/web/src/simulations/creation-and-editing/input/inference/apertusConfig.ts` and `transport.ts` — local/hosted configuration, bounded structured requests, concurrency, retries, and metadata.
+- `src/web/src/simulations/creation-and-editing/component-selection/decisions/config.ts` and `providers/laya.ts` — decision routing and real Laya requests.
 
 The following example matches the current local defaults; it is **not evidence that these services are running**:
 

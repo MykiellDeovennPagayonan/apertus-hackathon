@@ -1,8 +1,8 @@
 import {
   type ProductionState,
   productionMeasure,
-} from "../../components/systems/social-systems/production";
-import type { DomainContribution } from "../../runtime/contribution";
+} from "../../legacy/components/systems/social-systems/production";
+import type { DomainContribution } from "../../registry/contracts/domainContribution";
 import { comparisonModel } from "../comparisonModel";
 
 const production = comparisonModel({

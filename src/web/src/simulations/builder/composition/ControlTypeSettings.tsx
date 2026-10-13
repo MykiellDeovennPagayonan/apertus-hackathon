@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { publicDefinition } from "../../components/catalog";
-import { requireValue } from "../../runtime/authoring/requireValue";
-import type { ComponentInstance } from "../../runtime/authoring/types";
+import { publicDefinition } from "../../registry/index";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
+import type { ComponentInstance } from "../../creation-and-editing/authoring-engine/document";
 import { BuilderIcon } from "../BuilderIcon";
 import {
   changeControlType,

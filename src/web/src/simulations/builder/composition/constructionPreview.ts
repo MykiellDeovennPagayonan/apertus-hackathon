@@ -1,5 +1,5 @@
-import type { ConstructionUpdate } from "../../../lib/planner/construction";
-import type { GenerationResult } from "../../../lib/planner/schema";
+import type { ConstructionUpdate } from "../../creation-and-editing/simulation/construction/contracts";
+import type { GenerationResult } from "../../creation-and-editing/input/results";
 import type { ExperimentDocument } from "../document/types";
 import { validateDocument } from "../document/validateDocument";
 

@@ -1,16 +1,12 @@
-import { publicDefinitions } from "../../components/catalog";
-import {
-  definitionDiscovery,
-  discoverySections,
-  searchRank,
-} from "../../components/catalog/discovery";
-import { retiredControls } from "../../components/controls/controlContract";
+import { publicDefinitions } from "../../registry/index";
+import { discoverableDefinition, definitionDiscovery, discoverySections, searchRank } from "../../registry/discovery";
+import { retiredControls } from "../../registry/contracts/controlContract";
 /** Search ranking and browsing use discovery metadata, never runtime ID spelling. */
 export function libraryChoices(category: string, query: string) {
   const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  const order = (d: import("../../runtime/authoring/types").PublicDefinition) =>
+  const order = (d: import("../../registry/contracts/publicDefinition").PublicDefinition) =>
     discoverySections.findIndex((s) => s.id === definitionDiscovery(d).group);
-  return [...publicDefinitions.values()]
+  return [...publicDefinitions.values()].filter(discoverableDefinition)
     .filter((d) => {
       if (retiredControls.has(d.id)) return false;
       if (["displays/Text", "displays/Box"].includes(d.id)) return false;

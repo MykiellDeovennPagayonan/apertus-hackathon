@@ -2,7 +2,7 @@
 
 **Status:** Component extraction implemented, 2026-10-02. The library, import-only premade selections, and runtime infrastructure now exist. Model/regression verification, type checking, and lint pass. Production build and browser review remain limited by sandbox port restrictions and the installed Framer Motion/motion-dom export mismatch.
 
-This plan implements the responsibilities in [Component Architecture](../../COMPONENT_ARCHITECTURE.md) and [Component Contracts](../COMPONENT_CONTRACTS.md). The [components README](../../../src/web/src/simulations/components/README.md) explains where code belongs. The contracts remain authoritative for execution, ownership, validation, and the nine component kinds.
+This plan implements the responsibilities in [Component Architecture](../../COMPONENT_ARCHITECTURE.md) and [Component Contracts](../COMPONENT_CONTRACTS.md). The [components README](../../../src/web/src/simulations/legacy/components/README.md) explains where code belongs. The contracts remain authoritative for execution, ownership, validation, and the nine component kinds.
 
 ## 1. Directory decision
 

@@ -1,12 +1,12 @@
 "use client";
-import "../../components/views/recipe/imported-component.css";
+import "../../creation-and-editing/simulation/recipe/imported-component.css";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { schemaDefault } from "../../components/composites/catalog";
+import { schemaDefault } from "../../registry/contracts/defaults";
 import {
   hasArray,
   ImportedValueForm,
-} from "../../components/controls/ImportedValueForm";
-import type { CompositeRecipe } from "../../runtime/authoring/types";
+} from "../../legacy/components/controls/ImportedValueForm";
+import type { CompositeRecipe } from "../../creation-and-editing/authoring-engine/document";
 import {
   type Diagnostic,
   declarationsSchema,
@@ -15,10 +15,10 @@ import {
   inputValues,
   inspectSource,
   type VerificationReport,
-} from "../../runtime/imported/contract";
-import { htmlRecipe } from "../../runtime/imported/recipe";
-import { ComponentRunner } from "../../runtime/imported/runner";
-import { repairBrief, verifyComponent } from "../../runtime/imported/verify";
+} from "../../creation-and-editing/runtime-engine/imported/contract";
+import { htmlRecipe } from "../../creation-and-editing/authoring-engine/compatibility/importedRecipe";
+import { ComponentRunner } from "../../creation-and-editing/runtime-engine/imported/runner";
+import { repairBrief, verifyComponent } from "../../creation-and-editing/validator/imported";
 import type { ComponentCatalog } from "./useComponentCatalog";
 
 export function HTMLComponentImport({

@@ -9,7 +9,7 @@ import {
   type SavedExperiment,
   saveEntry,
 } from "../../../simulations/builder/persistence/storage";
-import type { RecipeSession } from "../../../simulations/runtime/recipeSession";
+import type { RecipeSession } from "../../../simulations/creation-and-editing/runtime-engine/RecipeSession";
 
 const LAST_RECIPE = "apertus-accepted-recipe-id";
 const expected = new Map<string, SavedExperiment>();

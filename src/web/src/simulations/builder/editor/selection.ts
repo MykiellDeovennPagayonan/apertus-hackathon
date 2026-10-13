@@ -1,14 +1,14 @@
-import { publicDefinition } from "../../components/catalog";
-import { builtInRecipe } from "../../components/composites/catalog";
+import { publicDefinition } from "../../registry/index";
+import { builtInRecipe } from "../../registry/recipes/builtIn";
 import {
   insertRecipe,
   removeNodes,
   selectionRecipe,
-} from "../../runtime/authoring/recipes";
-import { requireValue } from "../../runtime/authoring/requireValue";
-import { entrance } from "../../runtime/composition/index";
-import { clockTarget } from "../../runtime/composition/projectCanvas";
-import { requireRecord } from "../../runtime/records";
+} from "../../creation-and-editing/authoring-engine/recipes";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
+import { entrance } from "../../creation-and-editing/runtime-engine/composition/index";
+import { clockTarget } from "../../creation-and-editing/runtime-engine/composition/projectCanvas";
+import { requireRecord } from "../../legacy/runtime/records";
 import type { ExperimentDocument } from "../document";
 import { compositionGraph } from "../graph/deriveGraph";
 

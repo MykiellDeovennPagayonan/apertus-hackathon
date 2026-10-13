@@ -4,20 +4,20 @@ import {
   isPairOutput,
   outputSpec,
   pairKind,
-} from "../../components/contracts/composition";
+} from "../../registry/contracts/objects/composition";
 import { formatHour } from "../../lessons/formatHour";
 import {
   type CompositionScene,
   outputs,
   properties,
   propertyValue,
-} from "../../runtime/composition/index";
+} from "../../creation-and-editing/runtime-engine/composition/index";
 import {
   canvasFor,
   canvasTarget,
   clockTarget,
-} from "../../runtime/composition/projectCanvas";
-import { requireRecord } from "../../runtime/records";
+} from "../../creation-and-editing/runtime-engine/composition/projectCanvas";
+import { requireRecord } from "../../legacy/runtime/records";
 import type { ExperimentDocument } from "../document";
 import { controlDefaults } from "../editor/workspaceCommands";
 import { authoredGraph } from "./authoredGraph";

@@ -2,19 +2,19 @@ const assert = require("node:assert/strict");
 const React = require("react");
 const { renderToStaticMarkup } = require("react-dom/server");
 const { load } = require("../test-loader.cjs");
-const { premadeRecipe } = load("src/simulations/runtime/recipes/registry.ts");
-const { loadRecipe } = load("src/simulations/runtime/recipes/loadRecipe.ts");
+const { premadeRecipe } = load("src/simulations/registry/recipes/premade.ts");
+const { loadRecipe } = load("src/simulations/creation-and-editing/runtime-engine/loadRecipe.ts");
 const { publicDefinition } = load(
-  "src/simulations/components/catalog/index.ts",
+  "src/simulations/registry/index.ts",
 );
 const { ScalarControl } = load(
-  "src/simulations/components/controls/ScalarControl.tsx",
+  "src/simulations/registry/controls/ScalarControl.tsx",
 );
 const { responsiveBoardRows, expandResponsiveContent } = load(
-  "src/simulations/runtime/authoring/responsiveLayout.ts",
+  "src/simulations/creation-and-editing/authoring-engine/presentation/responsiveLayout.ts",
 );
 const { GasEquilibriumVisual } = load(
-  "src/simulations/components/visuals/chemistry/ChemistryVisuals.tsx",
+  "src/simulations/legacy/components/visuals/chemistry/ChemistryVisuals.tsx",
 );
 
 const recipe = premadeRecipe("gas-equilibrium");

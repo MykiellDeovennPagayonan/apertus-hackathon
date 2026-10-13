@@ -3,18 +3,18 @@
 import Link from "next/link";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import CommandBar from "../../../app/_components/CommandBar";
-import { publicDefinition } from "../../components/catalog";
-import { definitionDiscovery } from "../../components/catalog/discovery";
-import { hasControlSettings } from "../../components/controls/controlContract";
-import { SchemaForm } from "../../components/controls/SchemaForm";
-import { RecipeLesson } from "../../components/views/RecipeLesson";
+import { publicDefinition } from "../../registry/index";
+import { definitionDiscovery } from "../../registry/discovery";
+import { hasControlSettings } from "../../registry/contracts/controlContract";
+import { SchemaForm } from "../../registry/controls/SchemaForm";
+import { RecipeLesson } from "../../creation-and-editing/simulation/RecipeLesson";
 import {
   reconcileBoard,
   separateBoardLayout,
-} from "../../runtime/authoring/board";
-import { regenerateTruss } from "../../runtime/authoring/regenerateTruss";
-import { requireValue } from "../../runtime/authoring/requireValue";
-import { object } from "../../runtime/parameterSchema";
+} from "../../creation-and-editing/authoring-engine/presentation/board";
+import { regenerateTruss } from "../../creation-and-editing/authoring-engine/regenerateTruss";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
+import { object } from "../../registry/contracts/parameterSchema";
 import { BuilderIcon } from "../BuilderIcon";
 import { ComponentDialog } from "../ComponentDialog";
 import {

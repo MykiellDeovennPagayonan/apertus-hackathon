@@ -1,4 +1,4 @@
-import { economicsDefaults } from "../../components/resources/economics/defaults";
+import { economicsDefaults } from "../../legacy/components/resources/economics/defaults";
 import {
   costAndProfitApply,
   costAndProfitInitial,
@@ -15,16 +15,16 @@ import {
   tradeAndTariffsApply,
   tradeAndTariffsInitial,
   tradeAndTariffsMeasure,
-} from "../../components/systems/economics/models";
+} from "../../legacy/components/systems/economics/models";
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
+} from "../../registry/contracts/domainContribution";
 import {
   num,
   object,
   type ParameterSchema,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 
 const action = (
   value: ParameterSchema | undefined,

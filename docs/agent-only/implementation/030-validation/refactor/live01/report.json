@@ -1,0 +1,81 @@
+[
+  {
+    "caseId": "C01",
+    "status": "failed",
+    "message": "Apertus repeated the same invalid stage arguments: value: unknown field PHYS_STEP",
+    "sliders": [],
+    "bounds": []
+  },
+  {
+    "caseId": "E01",
+    "status": "blocked_by_creation"
+  },
+  {
+    "caseId": "C02",
+    "status": "failed",
+    "message": "Apertus repeated the same invalid stage arguments: value.overrides: unknown field initialVelocity",
+    "sliders": [],
+    "bounds": []
+  },
+  {
+    "caseId": "C03",
+    "status": "created",
+    "sliders": [
+      {
+        "label": "Slope",
+        "value": "1",
+        "min": "-20",
+        "max": "20"
+      },
+      {
+        "label": "Vertical intercept",
+        "value": "0",
+        "min": "-100",
+        "max": "100"
+      }
+    ],
+    "bounds": []
+  },
+  {
+    "caseId": "C04",
+    "status": "failed",
+    "message": "Apertus repeated the same invalid stage arguments: value: unknown field SET_ARITHMETIC_TASK",
+    "sliders": [],
+    "bounds": []
+  },
+  {
+    "caseId": "E02",
+    "status": "blocked_by_creation"
+  },
+  {
+    "caseId": "C05",
+    "status": "failed",
+    "message": "Apertus repeated the same invalid stage arguments: value.controls: expected object",
+    "sliders": [],
+    "bounds": []
+  },
+  {
+    "caseId": "E03",
+    "status": "blocked_by_creation"
+  },
+  {
+    "caseId": "C06",
+    "status": "created",
+    "sliders": [
+      {
+        "label": "Volume",
+        "value": "1",
+        "min": "0.25",
+        "max": "2"
+      }
+    ],
+    "bounds": []
+  },
+  {
+    "caseId": "C07",
+    "status": "failed",
+    "message": "Apertus repeated the same invalid stage arguments: value.overrides: unknown field commonDenominator",
+    "sliders": [],
+    "bounds": []
+  }
+]

@@ -1,0 +1,773 @@
+{
+  "caseId": "C03",
+  "prompt": "Make me a line where I can adjust its slope and y axis",
+  "status": "created",
+  "requestId": "ce96e3b3-e5e9-4048-bce7-ddad1f44fcbb",
+  "sliders": [
+    {
+      "label": "Slope",
+      "value": "1",
+      "min": "-20",
+      "max": "20"
+    },
+    {
+      "label": "Vertical intercept",
+      "value": "0",
+      "min": "-100",
+      "max": "100"
+    }
+  ],
+  "beforeBounds": [],
+  "bounds": [],
+  "body": "← Experiments\nHow does changing the slope and y-intercept affect the line's position and orientation?\nExperiment options\n100%\n?\nFind content\n-5\n-4\n-3\n-2\n-1\n0\n1\n2\n3\n4\n5\n-5\n-4\n-3\n-2\n-1\n0\n1\n2\n3\n4\n5\nx\ny\nSlope\n-20\n20\nVertical intercept\n-100\n100\nRestore starting values\nEquation\n5 properties\nType\nline-equation\nslope\n1\nintercept\n0\nvertical\nDisabled\nx\n0\nSlope\n1\n💡 Ideas\nApply\n↑",
+  "before": {
+    "correlationId": null,
+    "recipe": null,
+    "context": null,
+    "state": null
+  },
+  "after": {
+    "requestId": null,
+    "sessionId": "recipe-9a398492-c700-40c2-b969-ffc1eb203f93",
+    "authoredRevision": 0,
+    "interactionRevision": 0,
+    "recipe": {
+      "recipeVersion": 2,
+      "id": "7452001e-5eb5-48d5-beba-ccc32b3c17a9",
+      "version": 1,
+      "title": "How does changing the slope and y-intercept affect the line's position and orientation?",
+      "description": "How does changing the slope and y-intercept affect the line's position and orientation?",
+      "tags": [
+        "line graph",
+        "slope",
+        "y-intercept",
+        "adjustment"
+      ],
+      "nested": [],
+      "parameters": [],
+      "externalPorts": [],
+      "dependencies": [
+        {
+          "id": "prefabs/AuthoredLine",
+          "version": 1
+        },
+        {
+          "id": "canvases/cartesian",
+          "version": 1
+        },
+        {
+          "id": "controls/Slider",
+          "version": 1
+        },
+        {
+          "id": "controls/Button",
+          "version": 1
+        },
+        {
+          "id": "displays/Readout",
+          "version": 1
+        }
+      ],
+      "assumptions": [],
+      "document": {
+        "formatVersion": 3,
+        "nodes": [
+          {
+            "id": "activity_1/model",
+            "definition": "prefabs/AuthoredLine",
+            "version": 1,
+            "label": "Line",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "label": "Line",
+              "color": "#4367b2",
+              "kind": "line",
+              "a": {
+                "x": 0,
+                "y": 0
+              },
+              "b": {
+                "x": 2,
+                "y": 2
+              },
+              "width": 3,
+              "dashed": false,
+              "draggable": true
+            }
+          },
+          {
+            "id": "activity_1/canvas",
+            "definition": "canvases/cartesian",
+            "version": 1,
+            "label": "Cartesian plane",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "xMin": -5,
+              "xMax": 5,
+              "yMin": -5,
+              "yMax": 5,
+              "grid": true,
+              "snap": 0.5
+            }
+          },
+          {
+            "id": "activity_1/control/set:slope",
+            "definition": "controls/Slider",
+            "version": 1,
+            "label": "Slope slider",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "label": "Slope",
+              "mode": "immediate",
+              "initial": "{\"value\":1}"
+            }
+          },
+          {
+            "id": "activity_1/control/set:intercept",
+            "definition": "controls/Slider",
+            "version": 1,
+            "label": "Intercept slider",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "label": "Vertical intercept",
+              "mode": "immediate",
+              "initial": "{\"value\":0}"
+            }
+          },
+          {
+            "id": "activity_1/control/reset",
+            "definition": "controls/Button",
+            "version": 1,
+            "label": "Reset line",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "label": "Restore starting values",
+              "mode": "submit",
+              "initial": "{}"
+            }
+          },
+          {
+            "id": "activity_1/display/equation",
+            "definition": "displays/Readout",
+            "version": 1,
+            "label": "Equation",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "label": "Equation",
+              "precision": 3
+            }
+          },
+          {
+            "id": "activity_1/display/slope",
+            "definition": "displays/Readout",
+            "version": 1,
+            "label": "Slope result",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "label": "Slope",
+              "precision": 3
+            }
+          }
+        ],
+        "connections": [
+          {
+            "id": "activity_1/link/canvas",
+            "kind": "attachment",
+            "from": {
+              "node": "activity_1/model",
+              "port": "appearance"
+            },
+            "to": {
+              "node": "activity_1/canvas",
+              "port": "objects"
+            }
+          },
+          {
+            "id": "activity_1/link/control/set:slope",
+            "kind": "command",
+            "from": {
+              "node": "activity_1/control/set:slope",
+              "port": "submit"
+            },
+            "to": {
+              "node": "activity_1/model",
+              "port": "set:slope"
+            }
+          },
+          {
+            "id": "activity_1/link/control/set:intercept",
+            "kind": "command",
+            "from": {
+              "node": "activity_1/control/set:intercept",
+              "port": "submit"
+            },
+            "to": {
+              "node": "activity_1/model",
+              "port": "set:intercept"
+            }
+          },
+          {
+            "id": "activity_1/link/control/reset",
+            "kind": "command",
+            "from": {
+              "node": "activity_1/control/reset",
+              "port": "submit"
+            },
+            "to": {
+              "node": "activity_1/model",
+              "port": "reset"
+            }
+          },
+          {
+            "id": "activity_1/link/output/equation",
+            "kind": "value",
+            "from": {
+              "node": "activity_1/model",
+              "port": "equation"
+            },
+            "to": {
+              "node": "activity_1/display/equation",
+              "port": "value"
+            }
+          },
+          {
+            "id": "activity_1/link/output/slope",
+            "kind": "value",
+            "from": {
+              "node": "activity_1/model",
+              "port": "slope"
+            },
+            "to": {
+              "node": "activity_1/display/slope",
+              "port": "value"
+            }
+          }
+        ],
+        "resources": [],
+        "scopes": [
+          {
+            "id": "activity_1/scope/lab",
+            "label": "Line"
+          }
+        ],
+        "groups": [
+          {
+            "id": "activity_1/group/prebuilt/prefabs-AuthoredLine",
+            "label": "Line exploration",
+            "members": [
+              "activity_1/model",
+              "activity_1/canvas",
+              "activity_1/control/set:slope",
+              "activity_1/control/set:intercept",
+              "activity_1/control/reset",
+              "activity_1/display/equation",
+              "activity_1/display/slope"
+            ],
+            "source": {
+              "id": "prebuilt/prefabs-AuthoredLine",
+              "version": 1
+            },
+            "collapsed": false,
+            "parameters": [],
+            "exposedPorts": []
+          }
+        ],
+        "layout": {
+          "id": "layout/learner",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [
+            {
+              "id": "activity_1/layout/canvas",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/canvas"
+            },
+            {
+              "id": "activity_1/layout/control/set:slope",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/control/set:slope"
+            },
+            {
+              "id": "activity_1/layout/control/set:intercept",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/control/set:intercept"
+            },
+            {
+              "id": "activity_1/layout/control/reset",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/control/reset"
+            },
+            {
+              "id": "activity_1/layout/display/equation",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/display/equation"
+            },
+            {
+              "id": "activity_1/layout/display/slope",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/display/slope"
+            }
+          ]
+        },
+        "lesson": {
+          "title": "How does changing the slope and y-intercept affect the line's position and orientation?",
+          "instruction": "How does changing the slope and y-intercept affect the line's position and orientation?",
+          "explanation": ""
+        },
+        "editor": {
+          "positions": {},
+          "zoom": 1
+        },
+        "presentation": {
+          "version": 1,
+          "mode": "board",
+          "items": [
+            {
+              "id": "board/activity_1/layout/canvas",
+              "layoutId": "activity_1/layout/canvas",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 640,
+                "height": 480
+              },
+              "zIndex": 0,
+              "locked": false,
+              "responsiveMinHeight": 320
+            },
+            {
+              "id": "board/activity_1/layout/control/set:slope",
+              "layoutId": "activity_1/layout/control/set:slope",
+              "rect": {
+                "x": 664,
+                "y": 0,
+                "width": 320,
+                "height": 144
+              },
+              "zIndex": 1,
+              "locked": false,
+              "responsiveMinHeight": 144
+            },
+            {
+              "id": "board/activity_1/layout/control/set:intercept",
+              "layoutId": "activity_1/layout/control/set:intercept",
+              "rect": {
+                "x": 664,
+                "y": 160,
+                "width": 320,
+                "height": 144
+              },
+              "zIndex": 2,
+              "locked": false,
+              "responsiveMinHeight": 144
+            },
+            {
+              "id": "board/activity_1/layout/control/reset",
+              "layoutId": "activity_1/layout/control/reset",
+              "rect": {
+                "x": 664,
+                "y": 320,
+                "width": 320,
+                "height": 144
+              },
+              "zIndex": 3,
+              "locked": false,
+              "responsiveMinHeight": 144
+            },
+            {
+              "id": "board/activity_1/layout/display/equation",
+              "layoutId": "activity_1/layout/display/equation",
+              "rect": {
+                "x": 664,
+                "y": 480,
+                "width": 320,
+                "height": 100
+              },
+              "zIndex": 4,
+              "locked": false,
+              "responsiveMinHeight": 100
+            },
+            {
+              "id": "board/activity_1/layout/display/slope",
+              "layoutId": "activity_1/layout/display/slope",
+              "rect": {
+                "x": 664,
+                "y": 596,
+                "width": 320,
+                "height": 100
+              },
+              "zIndex": 5,
+              "locked": false,
+              "responsiveMinHeight": 100
+            }
+          ],
+          "groups": [],
+          "startView": {
+            "x": -24,
+            "y": -24,
+            "width": 1032,
+            "height": 744
+          },
+          "navigation": {
+            "mode": "bounded",
+            "minZoom": 0.25,
+            "maxZoom": 2
+          },
+          "immersive": {
+            "startup": "board",
+            "allowReturnToBoard": true,
+            "overlays": []
+          },
+          "responsive": true,
+          "responsiveGap": 24,
+          "responsiveRows": [
+            [
+              "board/activity_1/layout/canvas"
+            ],
+            [
+              "board/activity_1/layout/control/set:slope"
+            ],
+            [
+              "board/activity_1/layout/control/set:intercept"
+            ],
+            [
+              "board/activity_1/layout/control/reset"
+            ],
+            [
+              "board/activity_1/layout/display/equation"
+            ],
+            [
+              "board/activity_1/layout/display/slope"
+            ]
+          ]
+        }
+      }
+    },
+    "coverage": null,
+    "state": {
+      "state": {
+        "activity_1/model": {
+          "label": "Line",
+          "color": "#4367b2",
+          "kind": "line",
+          "a": {
+            "x": 0,
+            "y": 0
+          },
+          "b": {
+            "x": 2,
+            "y": 2
+          },
+          "width": 3,
+          "dashed": false,
+          "draggable": true,
+          "id": "activity_1/model"
+        }
+      },
+      "outputs": {
+        "activity_1/model": {
+          "data": {
+            "label": "Line",
+            "color": "#4367b2",
+            "kind": "line",
+            "a": {
+              "x": 0,
+              "y": 0
+            },
+            "b": {
+              "x": 2,
+              "y": 2
+            },
+            "width": 3,
+            "dashed": false,
+            "draggable": true,
+            "id": "activity_1/model"
+          },
+          "equation": {
+            "kind": "line-equation",
+            "slope": 1,
+            "intercept": 0,
+            "vertical": false,
+            "x": 0
+          },
+          "yAtZero": 0,
+          "yAtOne": 1,
+          "rise": 1,
+          "run": 1,
+          "slope": 1,
+          "intercept": 0,
+          "intersection": "Choose another line"
+        }
+      }
+    }
+  },
+  "diagnostics": {
+    "configuration": {
+      "mode": "hybrid",
+      "llm": {
+        "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+        "provider": "apertus",
+        "connection": "local",
+        "baseUrl": "http://127.0.0.1:43101/v1",
+        "structuredOutput": "auto",
+        "contextCapacity": null,
+        "maxTokens": 1024,
+        "temperature": 0,
+        "reasoningEffort": null,
+        "timeout": 120000
+      },
+      "decision": {
+        "provider": "laya",
+        "policy": "See selection.decision or composition.decision for actual acceptance."
+      },
+      "deadlineMs": 240000
+    },
+    "events": [
+      {
+        "event": "teaching_intent.inference",
+        "elapsedMs": 16865,
+        "data": {
+          "stage": "teaching_intent",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 16863,
+          "finishReason": "stop",
+          "maxTokens": 768,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 936,
+            "outputTokens": 139,
+            "totalTokens": 1075
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "selection.decision",
+        "elapsedMs": 17658,
+        "data": {
+          "status": "rejected",
+          "provider": "laya",
+          "model": "aac6fef/laya-multilingual-mlx",
+          "usage": {
+            "input_tokens": 448,
+            "output_tokens": 0
+          },
+          "durationMs": 451,
+          "answer": {
+            "type": "choice",
+            "choice": "activity3",
+            "probabilities": {
+              "activity1": 0.1562,
+              "activity2": 0.1171,
+              "activity3": 0.3335,
+              "activity4": 0.033,
+              "activity5": 0.0755,
+              "activity6": 0.0287,
+              "activity7": 0.0472,
+              "activity8": 0.0237,
+              "unclear": 0.185
+            },
+            "confidence": 0.1525
+          },
+          "timing": {
+            "inference_ms": 430.52,
+            "server_ms": 430.677
+          }
+        }
+      },
+      {
+        "event": "assembly_plan.inference",
+        "elapsedMs": 24159,
+        "data": {
+          "stage": "assembly_plan",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 6498,
+          "finishReason": "stop",
+          "maxTokens": 256,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 1904,
+            "outputTokens": 14,
+            "totalTokens": 1918
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "presentation.decision",
+        "elapsedMs": 26967,
+        "data": {
+          "provider": "laya",
+          "model": "aac6fef/laya-multilingual-mlx",
+          "durationMs": 2804,
+          "usage": {
+            "input_tokens": 1615,
+            "output_tokens": 0
+          },
+          "decisions": [
+            {
+              "id": "set:slope",
+              "kind": "control",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.5708,
+                  "omit": 0.4292
+                },
+                "confidence": 0.0145
+              }
+            },
+            {
+              "id": "set:intercept",
+              "kind": "control",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "omit",
+                "probabilities": {
+                  "include": 0.478,
+                  "omit": 0.522
+                },
+                "confidence": 0.0014
+              }
+            },
+            {
+              "id": "reset",
+              "kind": "control",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "omit",
+                "probabilities": {
+                  "include": 0.3614,
+                  "omit": 0.6386
+                },
+                "confidence": 0.0562
+              }
+            },
+            {
+              "id": "display/equation",
+              "kind": "observation",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.5758,
+                  "omit": 0.4242
+                },
+                "confidence": 0.0167
+              }
+            },
+            {
+              "id": "display/slope",
+              "kind": "observation",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "omit",
+                "probabilities": {
+                  "include": 0.4376,
+                  "omit": 0.5624
+                },
+                "confidence": 0.0113
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "assembly_presentation.inference",
+        "elapsedMs": 33013,
+        "data": {
+          "stage": "assembly_presentation",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 6046,
+          "finishReason": "stop",
+          "maxTokens": 512,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 511,
+            "outputTokens": 31,
+            "totalTokens": 542
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "assembly_configuration.inference",
+        "elapsedMs": 38224,
+        "data": {
+          "stage": "assembly_configuration",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 5201,
+          "finishReason": "stop",
+          "maxTokens": 512,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 871,
+            "outputTokens": 25,
+            "totalTokens": 896
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "result",
+        "elapsedMs": 38346,
+        "data": {
+          "status": "created",
+          "nodes": 7,
+          "coverage": {
+            "level": "full",
+            "covered": [
+              "line graph",
+              "slope",
+              "y-intercept",
+              "adjustment"
+            ],
+            "omitted": [],
+            "explanation": ""
+          }
+        }
+      }
+    ],
+    "issues": []
+  }
+}

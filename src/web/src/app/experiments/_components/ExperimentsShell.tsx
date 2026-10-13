@@ -3,36 +3,36 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { requestGeneration } from "../../../lib/planner/browser";
+import { requestGeneration } from "../../../simulations/creation-and-editing/input/browser";
 import {
   formatUserFacingDetails,
   formatUserFacingStatus,
-} from "../../../lib/planner/errorFormatting";
+} from "../../../simulations/creation-and-editing/input/errorFormatting";
 import {
   type GenerationStage,
   generationStages,
-} from "../../../lib/planner/progress";
-import type { GenerationRequest } from "../../../lib/planner/schema";
-import { ControlsTarget } from "../../../simulations/components/views/ControlsOverlay";
-import { ExperimentView } from "../../../simulations/components/views/ExperimentView";
-import { RecipeLesson } from "../../../simulations/components/views/RecipeLesson";
-import { templateNames } from "../../../simulations/runtime/capabilities";
-import { isDemo } from "../../../simulations/runtime/legacyPlan";
+} from "../../../simulations/creation-and-editing/input/progress";
+import type { GenerationRequest } from "../../../simulations/creation-and-editing/input/contracts";
+import { ControlsTarget } from "../../../simulations/legacy/components/views/ControlsOverlay";
+import { ExperimentView } from "../../../simulations/legacy/components/views/ExperimentView";
+import { RecipeLesson } from "../../../simulations/creation-and-editing/simulation/RecipeLesson";
+import { templateNames } from "../../../simulations/legacy/runtime/capabilities";
+import { isDemo } from "../../../simulations/legacy/runtime/legacyPlan";
 import {
   acceptGenerationResult,
   activateRecipeSession,
   getRecipeSession,
   type RecipeSession,
-} from "../../../simulations/runtime/recipeSession";
-import { hasPremadeRecipe } from "../../../simulations/runtime/recipes/registry";
+} from "../../../simulations/creation-and-editing/runtime-engine/RecipeSession";
+import { hasPremadeRecipe } from "../../../simulations/registry/recipes/premade";
 import {
   activatePremadeSession,
   disposeSession,
   executePlan,
   getDiagnosticSnapshot,
   saveRecipe,
-} from "../../../simulations/runtime/session";
-import type { DemoType } from "../../../simulations/runtime/types";
+} from "../../../simulations/legacy/runtime/session";
+import type { DemoType } from "../../../simulations/legacy/runtime/types";
 import CommandBar, { type ComposerStatus } from "../../_components/CommandBar";
 import LandingPage from "../../_components/LandingPage";
 import SiteHeader from "../../_components/SiteHeader";

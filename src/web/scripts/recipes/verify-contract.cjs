@@ -3,21 +3,21 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { load } = require("../test-loader.cjs");
 const { premadeRecipe, listPremadeRecipes } = load(
-  "src/simulations/runtime/recipes/registry.ts",
+  "src/simulations/registry/recipes/premade.ts",
 );
-const { loadRecipe } = load("src/simulations/runtime/recipes/loadRecipe.ts");
+const { loadRecipe } = load("src/simulations/creation-and-editing/runtime-engine/loadRecipe.ts");
 const { serializeRecipe } = load(
-  "src/simulations/runtime/recipes/serializeRecipe.ts",
+  "src/simulations/creation-and-editing/authoring-engine/serializeRecipe.ts",
 );
 const { parseDocument, serializeDocument } = load(
   "src/simulations/builder/document/serialization.ts",
 );
-const { remapDocument } = load("src/simulations/runtime/authoring/recipes.ts");
+const { remapDocument } = load("src/simulations/creation-and-editing/authoring-engine/recipes.ts");
 const { DocumentRuntime } = load(
-  "src/simulations/runtime/authoring/runtime.ts",
+  "src/simulations/creation-and-editing/runtime-engine/DocumentRuntime.ts",
 );
 const { mathReadout } = load(
-  "src/simulations/components/views/MathReadoutView.tsx",
+  "src/simulations/legacy/components/views/MathReadoutView.tsx",
 );
 const cases = fs
   .readdirSync(path.join(__dirname, "cases"))
@@ -90,7 +90,7 @@ assert.ok(pulley.reset().accepted);
 assert.equal(pulley.getSnapshot().outputs.model.tension, 200);
 assert.equal(pulley.getSnapshot().outputs.model.rise, 0);
 const { commandPresentation } = load(
-  "src/simulations/components/controls/commandPresentation.ts",
+  "src/simulations/registry/contracts/commandPresentation.ts",
 );
 assert.equal(
   commandPresentation("PULLEY_STRANDS", "prefabs/physics/Pulley").presentation
@@ -189,7 +189,7 @@ console.log(
   "All migrated premade recipes: exact opening and builder round trips, independent copies, rejected candidates, counting, addition/subtraction, shared launches and bridge load response passed.",
 );
 
-const session = load("src/simulations/runtime/session.ts");
+const session = load("src/simulations/legacy/runtime/session.ts");
 for (const { slug } of cases) {
   session.activatePremadeSession(slug);
   const saved = session.saveRecipe();
@@ -245,10 +245,197 @@ console.log("Seven refined activities: correct results, equal sharing/remainder,
 
 const React = require("react");
 const { renderToStaticMarkup } = require("react-dom/server");
-const { ExperimentView } = load("src/simulations/components/views/ExperimentView.tsx");
+const { ExperimentView } = load("src/simulations/legacy/components/views/ExperimentView.tsx");
 session.disposeSession();
 for(const demo of ["equal-groups","fraction-builder","ratio","coordinates"])
  assert.match(renderToStaticMarkup(React.createElement(ExperimentView,{demo})),/aria-busy="true"/);
 console.log("Disposed-session rendering waits for activation without constructing a mismatched legacy model.");
 require("./verify-gas-equilibrium.cjs");
 require("./verify-lever.cjs");
+
+// Refactor boundaries retain every identity while discovery excludes compatibility-only entries.
+const registry = load("src/simulations/registry/index.ts");
+const { legacyDefinitions } = load("src/simulations/registry/legacyDefinitions.ts");
+const { discoverableDefinition } = load("src/simulations/registry/discovery.ts");
+const { builtInRecipes } = load("src/simulations/registry/recipes/builtIn.ts");
+assert.equal(registry.publicDefinitions.size, 458);
+assert.equal(builtInRecipes.length, 49);
+for (const recipe of builtInRecipes) {
+  const loaded = loadRecipe(recipe);
+  assert.deepEqual(loaded.document, recipe.document);
+  const canonical = JSON.parse(serializeRecipe(loaded.recipe));
+  assert.deepEqual(JSON.parse(serializeRecipe(canonical)), canonical);
+  loaded.runtime.dispose();
+}
+const nativeIds = new Set([
+  ...load("src/simulations/registry/definitions/controls.ts").controlsDefinitions,
+  ...load("src/simulations/registry/definitions/displays.ts").displaysDefinitions,
+  ...load("src/simulations/registry/definitions/canvases.ts").canvasesDefinitions,
+  ...load("src/simulations/registry/objects/publicDefinitions.ts").objectDefinitions,
+  ...load("src/simulations/registry/models/domainModels.ts").domainDefinitions,
+].map(definition => definition.id));
+assert.ok(legacyDefinitions.every(definition => !nativeIds.has(definition.id)));
+assert.equal(discoverableDefinition(registry.publicDefinition("controls/ArithmeticTask")), false);
+assert.ok(Object.isFrozen(registry.publicDefinition("controls/Slider").configuration));
+assert.match(registry.publicDefinition("prefabs/physical-systems/Pendulum").outputs.period.description, /full oscillation/);
+const { progressFromTrace } = load("src/simulations/creation-and-editing/input/progress.ts");
+assert.equal(progressFromTrace("stage", { task: "edit_target" }), "planning_changes");
+assert.equal(progressFromTrace("stage", { task: "choose_presentation" }), "building");
+
+// Exercise extracted stages through the real transport with deterministic in-memory responses.
+// These are contract tests, not evidence of live inference quality.
+(async () => {
+  const { editCandidates } = load("src/simulations/creation-and-editing/component-selection/editCandidates.ts");
+  const { editPlanHelpers } = load("src/simulations/creation-and-editing/composer/editPlan.ts");
+  const { editArguments } = load("src/simulations/creation-and-editing/composer/editArguments.ts");
+  const { editSimulation } = load("src/simulations/creation-and-editing/composer/edit.ts");
+  const { validateEditPlan } = load("src/simulations/creation-and-editing/validator/edit.ts");
+  const { GenerationBudget } = load("src/simulations/creation-and-editing/budget.ts");
+  const recipe = premadeRecipe("arithmetic");
+  const model = recipe.document.nodes.find(node => node.id === "model");
+  const request = { protocolVersion: 1, requestId: "contract/edit", purpose: "edit", prompt: "Change the first operand", destination: "lesson", viewport: { width: 1440, height: 1000 }, active: { sessionId: "contract/session", authoredRevision: 2, interactionRevision: 4, recipe, runtimeContext: { model: { config: { ...model.configuration, task: { operation: "subtract", a: 10, b: 4 } } } } } };
+  const before = structuredClone(request);
+  const env = editCandidates(request);
+  const helpers = editPlanHelpers(env);
+  const candidate = env.candidates.find(entry => entry.tool === "configure" && entry.schema.properties.target.values[0] === "model").id;
+  assert.throws(() => validateEditPlan({ mode: "edit", selections: { [candidate]: { scope: "selected", fields: [{ name: "task.a" }] } } }, env, helpers.adjustedValue, () => {}));
+  assert.throws(() => validateEditPlan({ mode: "edit", selections: { [candidate]: { scope: "selected", fields: ["task.a"] } }, adjustments: [{ candidate, field: "task.a", operation: "set", operand: -1 }] }, env, helpers.adjustedValue, () => {}));
+  const makeBudget = () => {
+    const budget = new GenerationBudget();
+    Object.defineProperty(budget, "llmConfig", { value: { provider: "apertus", connection: "local", localRuntime: "mlx", label: "Contract test", baseUrl: "http://contract.invalid/v1", model: "contract", structuredOutput: "strict-json", timeout: 10000, maxTokens: 4096, concurrency: 1 } });
+    return budget;
+  };
+  const originalFetch = global.fetch;
+  const calls = [];
+  const responses = [{ operations: [] }, { arg1: 7 }];
+  global.fetch = async (_url, options) => {
+    calls.push(JSON.parse(options.body));
+    assert.ok(responses.length, "Unexpected inference call");
+    return Response.json({ choices: [{ message: { content: JSON.stringify(responses.shift()) } }] });
+  };
+  try {
+    const plan = { mode: "edit", selections: [{ candidate, scope: "selected", fields: ["task.a"] }], message: "" };
+    const result = await editArguments(request, makeBudget(), env, plan);
+    assert.deepEqual(result.operations[0].arguments.changes.task, { operation: "subtract", a: 7, b: 4 });
+    const feedback = JSON.parse(calls[1].messages.at(-1).content).feedback;
+    assert.deepEqual(feedback.response_keys, ["arg1"]);
+    assert.equal(responses.length, 0);
+    assert.deepEqual(request, before);
+
+    // A rejected model removal can reselect the actual control, with no draft applied in between.
+    const stages = [];
+    const taskControl = recipe.document.connections.find(wire => wire.kind === "command" && wire.to.port === "SET_ARITHMETIC_TASK").from.node;
+    const removeModel = env.candidates.find(entry => entry.tool === "remove" && entry.node === "model").id;
+    const removeControl = env.candidates.find(entry => entry.tool === "remove" && entry.node === taskControl).id;
+    let targetCalls = 0;
+    global.fetch = async (_url, options) => {
+      const body = JSON.parse(options.body);
+      const system = body.messages[0].content;
+      let response;
+      if (system.startsWith("Choose ONLY")) {
+        targetCalls++;
+        stages.push("target");
+        if (targetCalls === 2) assert.ok(JSON.parse(body.messages[1].content).recovery.rejectedCandidates.includes(removeModel));
+        response = { mode: "edit", candidates: [targetCalls === 1 ? removeModel : removeControl] };
+      } else {
+        stages.push("plan");
+        response = { [JSON.parse(body.messages[1].content).operations[0].id]: true };
+      }
+      return Response.json({ choices: [{ message: { content: JSON.stringify(response) } }] });
+    };
+    const updated = await editSimulation({ ...request, prompt: "Remove the task control" }, makeBudget());
+    assert.equal(targetCalls, 2);
+    assert.equal(updated.status, "updated");
+    assert.ok(updated.recipe.document.nodes.some(node => node.id === "model"));
+    assert.ok(!updated.recipe.document.nodes.some(node => node.id === taskControl));
+    assert.deepEqual(updated.recipe.document.nodes.find(node => node.id === "model").configuration, model.configuration);
+    assert.deepEqual(request, before);
+
+    const { editPlan: composeEditPlan } = load("src/simulations/creation-and-editing/composer/editPlan.ts");
+    let fieldCalls = 0;
+    global.fetch = async (_url, options) => {
+      fieldCalls++;
+      const payload = JSON.parse(JSON.parse(options.body).messages[1].content);
+      const field = payload.fields.find(entry => entry.name === "task.a").id;
+      assert.ok(JSON.stringify(JSON.parse(options.body).messages).length < 28000);
+      const value = fieldCalls === 1 ? { [field]: { name: "task.a" } } : fieldCalls === 2 ? {} : { [field]: true };
+      return Response.json({ choices: [{ message: { content: JSON.stringify(value) } }] });
+    };
+    const fieldPlan = await composeEditPlan(request, makeBudget(), { ...env, candidateChoices: [...env.candidateChoices, ...Array.from({ length: 1000 }, () => ({ ...env.candidateChoices[0], description: "unused catalog detail ".repeat(100) }))] }, { mode: "edit", candidates: [candidate] });
+    assert.equal(fieldCalls, 3);
+    assert.deepEqual(fieldPlan.selections[0].fields, ["task.a"]);
+    const sceneItem = recipe.document.presentation.items.find(item => item.layoutId.includes("appearance"));
+    const resize = env.candidates.find(entry => entry.tool === "resize" && entry.schema.properties.target.values[0] === sceneItem.id);
+    global.fetch = async () => { throw new Error("Computed resize must not invoke inference"); };
+    const resized = await editArguments(request, makeBudget(), env, { mode: "edit", selections: [{ candidate: resize.id, scope: "selected", fields: ["height"], adjustments: [{ field: "height", operation: "offset", operand: 80 }] }], message: "" });
+    assert.equal(resized.operations[0].arguments.width, sceneItem.rect.width);
+    assert.equal(resized.operations[0].arguments.height, sceneItem.rect.height + 80);
+    const { choosePresentation } = load("src/simulations/creation-and-editing/composer/choosePresentation.ts");
+    const { configureAssembly } = load("src/simulations/creation-and-editing/composer/configureAssembly.ts");
+    const intent = { goal: "Explore arithmetic", concepts: ["arithmetic"], interactions: ["adjust operands"], observations: ["result"], explicitConstraints: [], suggestedStructure: "single" };
+    const originalMode = process.env.PLANNER_MODE;
+    process.env.PLANNER_MODE = "apertus";
+    try {
+      let presentationCalls = 0;
+      global.fetch = async (_url, options) => {
+        presentationCalls++;
+        const messages = JSON.parse(options.body).messages;
+        const payload = JSON.parse(messages[1].content);
+        assert.ok(payload.items.every(item => item.id.startsWith("item")));
+        const value = presentationCalls === 1 ? { controls: {} } : Object.fromEntries(payload.items.map(item => [item.id, true]));
+        if (presentationCalls === 2) assert.deepEqual(JSON.parse(messages.at(-1).content).feedback.response_keys, payload.items.map(item => item.id));
+        return Response.json({ choices: [{ message: { content: JSON.stringify(value) } }] });
+      };
+      const presentation = await choosePresentation(request, intent, makeBudget(), recipe, []);
+      assert.equal(presentationCalls, 2);
+      assert.ok(presentation.controls.includes("model.SET_ARITHMETIC_TASK"));
+      assert.ok(presentation.observations.includes("result"));
+      let settingsCalls = 0;
+      global.fetch = async (_url, options) => {
+        settingsCalls++;
+        const payload = JSON.parse(JSON.parse(options.body).messages[1].content);
+        assert.ok(!payload.controls && !payload.observations && !payload.items);
+        const value = settingsCalls === 1 ? { unknownSetting: 5 } : { [payload.parameters[0].id]: { operation: "subtract", a: 7, b: 3 } };
+        return Response.json({ choices: [{ message: { content: JSON.stringify(value) } }] });
+      };
+      const configuration = await configureAssembly(request, intent, makeBudget(), recipe, 0, 1, [], []);
+      assert.equal(settingsCalls, 2);
+      assert.deepEqual(configuration.overrides, { task: { operation: "subtract", a: 7, b: 3 } });
+      global.fetch = async () => { throw new Error("No model call is needed without exposed parameters"); };
+      assert.deepEqual(await configureAssembly(request, intent, makeBudget(), premadeRecipe("projectile"), 0, 1, [], []), { overrides: {} });
+    } finally {
+      if (originalMode === undefined) delete process.env.PLANNER_MODE;
+      else process.env.PLANNER_MODE = originalMode;
+    }
+  } finally { global.fetch = originalFetch; }
+  console.log("Pipeline contracts: all identities and built-ins resolve, live siblings survive, invalid fields reject, keyed repairs and bounded target reselection passed.");
+})().catch(error => { console.error(error); process.exitCode = 1; });
+
+// Type-only imports cannot pull server inference or React scenes across these boundaries.
+const ts = require("typescript");
+function runtimeImports(entry, visited = new Set()) {
+  const file = path.resolve(__dirname, "../..", entry);
+  if (visited.has(file)) return [];
+  visited.add(file);
+  const source = ts.createSourceFile(file, fs.readFileSync(file, "utf8"), ts.ScriptTarget.Latest, true);
+  return source.statements.flatMap(statement => {
+    if (!ts.isImportDeclaration(statement) && !ts.isExportDeclaration(statement)) return [];
+    if (!statement.moduleSpecifier || statement.isTypeOnly || statement.importClause?.isTypeOnly) return [];
+    const bindings = statement.importClause?.namedBindings ?? statement.exportClause;
+    if (bindings && (ts.isNamedImports(bindings) || ts.isNamedExports(bindings)) && bindings.elements.every(element => element.isTypeOnly)) return [];
+    const name = statement.moduleSpecifier.text;
+    if (!name.startsWith(".")) return [name];
+    const base = path.resolve(path.dirname(file), name);
+    const target = [base, `${base}.ts`, `${base}.tsx`, path.join(base, "index.ts")].find(candidate => fs.existsSync(candidate) && fs.statSync(candidate).isFile());
+    assert.ok(target, `Missing runtime import ${name} in ${file}`);
+    if (!/\.tsx?$/.test(target)) return [target];
+    return [target, ...runtimeImports(target, visited)];
+  });
+}
+const registryImports = runtimeImports("src/simulations/registry/index.ts");
+assert.ok(!registryImports.some(file => file === "react" || file.includes("/input/inference/") || file.endsWith("/registry/recipes/builtIn.ts")));
+for (const entry of ["src/simulations/creation-and-editing/input/browser.ts", "src/simulations/creation-and-editing/simulation/RecipeLesson.tsx", "src/simulations/builder/composition/useBuilderAi.ts"]) {
+  const imports = runtimeImports(entry);
+  assert.ok(!imports.some(file => file.includes("/input/inference/config") || file.includes("/input/inference/transport") || file.endsWith("/creation-and-editing/server.ts")), `${entry} reaches server inference`);
+}
+console.log("Registry and browser import boundaries passed.");

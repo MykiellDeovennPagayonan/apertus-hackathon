@@ -3,7 +3,7 @@ import {
   isPairOutput,
   outputSpec,
   pairKind,
-} from "../../components/contracts/composition";
+} from "../../registry/contracts/objects/composition";
 import {
   type CompositionScene,
   type Measurement,
@@ -11,8 +11,8 @@ import {
   properties,
   type SceneControl,
   validateScene,
-} from "../../runtime/composition/index";
-import { templateForScene } from "../../runtime/composition/runtimeState";
+} from "../../creation-and-editing/runtime-engine/composition/index";
+import { templateForScene } from "../../creation-and-editing/runtime-engine/composition/runtimeState";
 import { requireRecord } from "../document";
 import { controlDefaults, targetChoices } from "../editor/workspaceCommands";
 

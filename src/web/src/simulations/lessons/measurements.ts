@@ -1,9 +1,9 @@
-import type { PersonSnapshot } from "../components/systems/ScheduledTripSystem";
-import { observeMeasurement } from "../runtime/composition/observations";
+import type { PersonSnapshot } from "../legacy/components/systems/ScheduledTripSystem";
+import { observeMeasurement } from "../creation-and-editing/runtime-engine/composition/observations";
 import type {
   CompositionScene,
   Measurement,
-} from "../runtime/composition/types";
+} from "../creation-and-editing/runtime-engine/composition/types";
 export function measurementValue(
   m: Measurement,
   scene: CompositionScene,

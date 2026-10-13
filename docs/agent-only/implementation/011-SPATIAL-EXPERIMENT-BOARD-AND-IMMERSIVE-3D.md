@@ -72,7 +72,7 @@ Relevant implementation areas:
 | Area | Existing source | Planned responsibility |
 | --- | --- | --- |
 | Experiment wrapper | `src/web/src/simulations/builder/document/types.ts` | Versioning and integration with authored presentation data. |
-| Authored document and layout | `src/web/src/simulations/runtime/authoring/types.ts` | Spatial presentation schema and references. |
+| Authored document and layout | `src/web/src/simulations/creation-and-editing/authoring-engine/document.ts` | Spatial presentation schema and references. |
 | Document parsing and validation | `builder/document/serialization.ts`, `builder/document/validateDocument.ts`, `runtime/authoring/validate.ts` | Version-aware normalization, validation, and recovery. |
 | Build shell | `builder/composition/CompositionBuilder.tsx` | Board tools, selection, settings, and preview entry. |
 | Graph navigation | `builder/ConnectionViewport.tsx` | Reference implementation for gesture behavior; extract only truly shared utilities. |

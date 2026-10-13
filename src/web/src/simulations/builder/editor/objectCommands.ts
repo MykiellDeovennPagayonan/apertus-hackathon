@@ -1,10 +1,10 @@
-import { createObject, objectSpaces } from "../../components/registry";
-import { entrance } from "../../components/systems/BuildingGeometrySystem";
+import { createObject, objectSpaces } from "../../registry/objects/registry";
+import { entrance } from "../../legacy/components/systems/BuildingGeometrySystem";
 import type {
   ObjectKind,
   SceneObject,
-} from "../../components/traits/SceneObjects";
-import type { CompositionScene } from "../../runtime/composition/types";
+} from "../../legacy/components/traits/SceneObjects";
+import type { CompositionScene } from "../../creation-and-editing/runtime-engine/composition/types";
 export function addSceneObject(
   scene: CompositionScene,
   kind: ObjectKind,

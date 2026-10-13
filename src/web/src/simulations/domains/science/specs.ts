@@ -1,7 +1,7 @@
 import type {
   ScienceSpec,
   Setting,
-} from "../../components/systems/science/contracts";
+} from "../../legacy/components/systems/science/contracts";
 
 const setting = (
   key: string,

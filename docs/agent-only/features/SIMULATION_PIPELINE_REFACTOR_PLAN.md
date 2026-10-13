@@ -1,6 +1,8 @@
 # Simulation creation and editing refactor plan
 
-Date: October 13, 2026. Status: proposed, not implemented.
+Date: October 13, 2026. Status: structural refactor implemented; functional acceptance incomplete (E01/E02 remain unresolved).
+
+Current ownership is documented in [the implementation walkthrough](SIMULATION_GENERATION_AND_EDITING_PIPELINE.md). Browser outcomes and preserved failures are recorded in [030-validation](../implementation/030-validation/README.md). The requirements below remain the completion criteria; a successful build does not establish the functional mission.
 
 This plan follows the requested module diagram. All orchestration for AI creation/editing, authoring execution, validation, runtime activation and lesson rendering lives under `src/web/src/simulations/creation-and-editing/`. The component/recipe catalog lives beside it in `simulations/registry/`. Components that are not explicitly promoted remain under `simulations/legacy/components/`.
 

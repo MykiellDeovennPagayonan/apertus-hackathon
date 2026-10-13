@@ -239,3 +239,13 @@ Append an entry per observed failure/fix with:
 Save actual Playwright captures under `screenshots/` when execution begins. Follow the plan's case/phase naming convention. Inspect each image and explain what it proves. Preserve before/after captures; never replace a failed baseline with a passing image.
 
 Baseline captures are linked above. C01's changed-controls screenshot is also the before state for E01.
+
+## Simulation pipeline refactor — October 13, 2026
+
+The source migration and owner contracts are implemented; see [031 — Simulation pipeline refactor](../031-SIMULATION-PIPELINE-REFACTOR.md) for the final modules, checks, browser measurements and remaining limits.
+
+The closing refactor pass created all seven requested lessons, with recorded interactions. The latest E01/E02 inference edits still fail safely and preserve the complete recipe/session. E03 enlarges the actual triangle SVG from 304 × 211.594 to 384 × 267.281 pixels while preserving live distance/height and wiring. Extra selected controls/readouts and an ungrounded comparison question remain presentation concerns. There is no complete ten-case functional pass.
+
+The existing recipe/contract suite, TypeScript, generated registry freshness, production webpack build and diff checks pass. New contract assertions cover all 458 identities, all 49 built-ins alongside 90 premades, browser/server import boundaries, live sibling preservation, flat wire validation, single-dimension resizing, bounded target recovery and feedback that stays within the unchanged context bound.
+
+Evidence remains under [refactor](refactor/): service-unavailable results, first real-provider results, closing passes and targeted corrections are separate. Exact generated/accepted recipe reopen checks prove the readable camera and retained ladder size/values; they are not substituted inference evidence. The task-owned browser/model services were stopped and temporary TypeScript build entries removed. No provider/model change, deployment, paid-provider check, commit or publish was performed.

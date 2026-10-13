@@ -14,11 +14,11 @@ import type {
 } from "../../../lib/projects/types";
 import { parseDocument } from "../../../simulations/builder/document/serialization";
 import { editableDocument } from "../../../simulations/builder/persistence/recovery";
-import { RecipeLesson } from "../../../simulations/components/views/RecipeLesson";
+import { RecipeLesson } from "../../../simulations/creation-and-editing/simulation/RecipeLesson";
 import type {
   AuthoredDocument,
   CompositeRecipe,
-} from "../../../simulations/runtime/authoring/types";
+} from "../../../simulations/creation-and-editing/authoring-engine/document";
 import LoadingState from "../../_components/LoadingState";
 import SiteHeader from "../../_components/SiteHeader";
 export default function PublicationDetail({ id }: { id: string }) {

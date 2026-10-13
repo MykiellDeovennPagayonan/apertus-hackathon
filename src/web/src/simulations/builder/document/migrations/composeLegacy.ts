@@ -1,10 +1,10 @@
-import { sceneKinds } from "../../../components/contracts/composition";
+import { sceneKinds } from "../../../registry/contracts/objects/composition";
 import {
   CITIZEN_COUNT,
   MARKET_DEFAULT,
   MARKET_NEAR_SCHOOL,
   STATIC_BUILDINGS,
-} from "../../../components/resources/TownLayout";
+} from "../../../legacy/components/resources/TownLayout";
 import {
   type BuildingObject,
   blankScene,
@@ -15,10 +15,10 @@ import {
   type PersonObject,
   properties,
   type RoadObject,
-} from "../../../runtime/composition/index";
-import { canvasTarget } from "../../../runtime/composition/projectCanvas";
-import { requireRecord } from "../../../runtime/records";
-import { resolveRecipe } from "../../../runtime/resolver";
+} from "../../../creation-and-editing/runtime-engine/composition/index";
+import { canvasTarget } from "../../../creation-and-editing/runtime-engine/composition/projectCanvas";
+import { requireRecord } from "../../../legacy/runtime/records";
+import { resolveRecipe } from "../../../legacy/runtime/resolver";
 import { upgradeWorkspace } from "../../editor/workspaceCommands";
 import type { ExperimentDocument } from "../types";
 /** Explicit migration keeps the previous saved record intact until the author saves. */

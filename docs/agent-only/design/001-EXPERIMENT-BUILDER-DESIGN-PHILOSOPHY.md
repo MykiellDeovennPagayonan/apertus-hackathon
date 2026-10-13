@@ -251,7 +251,7 @@ Relevant sources:
 | Library discovery and filters | [CompositionLibrary.tsx](../../../src/web/src/simulations/builder/composition/CompositionLibrary.tsx) |
 | Graph selection and wiring | [CompositionGraph.tsx](../../../src/web/src/simulations/builder/composition/CompositionGraph.tsx) |
 | Modal behavior | [ComponentDialog.tsx](../../../src/web/src/simulations/builder/ComponentDialog.tsx) |
-| Shared schema-driven forms | [SchemaForm.tsx](../../../src/web/src/simulations/components/controls/SchemaForm.tsx) |
+| Shared schema-driven forms | [SchemaForm.tsx](../../../src/web/src/simulations/registry/controls/SchemaForm.tsx) |
 | Focused flow regression test | [verify-builder-input-editor-browser.cjs](../../../src/web/scripts/verify-builder-input-editor-browser.cjs) |
 | Broader builder UX regression test | [verify-builder-ux-reliability-browser.cjs](../../../src/web/scripts/verify-builder-ux-reliability-browser.cjs) |
 

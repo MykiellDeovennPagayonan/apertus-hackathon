@@ -1,4 +1,4 @@
-import type { CompositionScene } from "../runtime/composition/types";
+import type { CompositionScene } from "../creation-and-editing/runtime-engine/composition/types";
 export interface CompositionLessonInput {
   scene?: CompositionScene;
   template: string;

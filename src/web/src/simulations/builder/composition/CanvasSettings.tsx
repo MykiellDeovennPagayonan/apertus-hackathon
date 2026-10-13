@@ -1,5 +1,5 @@
-import type { CanvasComponent } from "../../runtime/composition/types";
-import { requireRecord } from "../../runtime/records";
+import type { CanvasComponent } from "../../creation-and-editing/runtime-engine/composition/types";
+import { requireRecord } from "../../legacy/runtime/records";
 export function CanvasSettings({
   canvas,
   update,

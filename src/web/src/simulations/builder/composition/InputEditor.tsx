@@ -1,10 +1,10 @@
-import { IMPORTED_HTML } from "../../runtime/imported/contract";
+import { IMPORTED_HTML } from "../../creation-and-editing/runtime-engine/imported/contract";
 import { useMemo, useState } from "react";
-import { publicDefinition, publicDefinitions } from "../../components/catalog";
-import { ImportedValueForm } from "../../components/controls/ImportedValueForm";
-import { requireValue } from "../../runtime/authoring/requireValue";
-import { DocumentRuntime } from "../../runtime/authoring/runtime";
-import type { Endpoint } from "../../runtime/authoring/types";
+import { publicDefinition, publicDefinitions } from "../../registry/index";
+import { ImportedValueForm } from "../../legacy/components/controls/ImportedValueForm";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
+import { DocumentRuntime } from "../../creation-and-editing/runtime-engine/DocumentRuntime";
+import type { Endpoint } from "../../creation-and-editing/authoring-engine/document";
 import { BuilderIcon } from "../BuilderIcon";
 import { ComponentDialog } from "../ComponentDialog";
 import type { ExperimentDocument } from "../document";

@@ -83,7 +83,7 @@ Settings are persisted authored choices. Inputs are live values supplied manuall
 
 ### Supported value schemas
 
-Reuse `src/web/src/simulations/runtime/parameterSchema.ts`:
+Reuse `src/web/src/simulations/registry/contracts/parameterSchema.ts`:
 
 | Type | Required or supported constraints | Host behavior |
 | --- | --- | --- |

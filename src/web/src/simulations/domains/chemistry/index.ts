@@ -1,4 +1,4 @@
-import { chemistryDefaults } from "../../components/resources/chemistry/definitions";
+import { chemistryDefaults } from "../../legacy/components/resources/chemistry/definitions";
 import {
   beerLambertApply,
   beerLambertInitial,
@@ -26,18 +26,18 @@ import {
   titrationApply,
   titrationInitial,
   titrationMeasure,
-} from "../../components/systems/chemistry/models";
+} from "../../legacy/components/systems/chemistry/models";
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
+} from "../../registry/contracts/domainContribution";
 import {
   boolean,
   choice,
   num,
   object,
   type ParameterSchema,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 
 const action = (
   value: ParameterSchema | undefined,

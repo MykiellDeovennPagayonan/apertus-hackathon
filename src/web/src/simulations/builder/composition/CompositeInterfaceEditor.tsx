@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { publicDefinition } from "../../components/catalog";
+import { publicDefinition } from "../../registry/index";
 import type {
   AuthoredDocument,
   ExposedPort,
   Group,
-} from "../../runtime/authoring/types";
+} from "../../creation-and-editing/authoring-engine/document";
 import { portLabel } from "../graph/authoredGraph";
 
 /** Choices are real child endpoints; the collapsed node never invents runtime ports. */

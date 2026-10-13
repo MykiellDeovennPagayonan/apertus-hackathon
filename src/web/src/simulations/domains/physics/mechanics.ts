@@ -3,58 +3,58 @@ import {
   buoyancyMeasure,
   buoyancyParameters,
   buoyancyState,
-} from "../../components/systems/physics/buoyancy";
+} from "../../legacy/components/systems/physics/buoyancy";
 import {
   collisionDefaults,
   collisionMeasure,
   collisionParameters,
   collisionState,
-} from "../../components/systems/physics/collision";
+} from "../../legacy/components/systems/physics/collision";
 import {
   flowDefaults,
   flowMeasure,
   flowParameters,
   flowState,
-} from "../../components/systems/physics/flow";
+} from "../../legacy/components/systems/physics/flow";
 import {
   gearsDefaults,
   gearsMeasure,
   gearsParameters,
   gearsState,
-} from "../../components/systems/physics/gears";
+} from "../../legacy/components/systems/physics/gears";
 import {
   hydraulicsDefaults,
   hydraulicsMeasure,
   hydraulicsParameters,
   hydraulicsState,
-} from "../../components/systems/physics/hydraulics";
+} from "../../legacy/components/systems/physics/hydraulics";
 import {
   parachuteAdvance,
   parachuteDefaults,
   parachuteMeasure,
   parachuteParameters,
   parachuteState,
-} from "../../components/systems/physics/parachute";
+} from "../../legacy/components/systems/physics/parachute";
 import {
   pressureDefaults,
   pressureMeasure,
   pressureParameters,
   pressureState,
-} from "../../components/systems/physics/pressure";
+} from "../../legacy/components/systems/physics/pressure";
 import {
   pulleyDefaults,
   pulleyMeasure,
   pulleyParameters,
   pulleyState,
-} from "../../components/systems/physics/pulley";
+} from "../../legacy/components/systems/physics/pulley";
 import {
   tippingDefaults,
   tippingMeasure,
   tippingParameters,
   tippingState,
-} from "../../components/systems/physics/tipping";
-import type { DomainModel } from "../../runtime/contribution";
-import { object, validateValue } from "../../runtime/parameterSchema";
+} from "../../legacy/components/systems/physics/tipping";
+import type { DomainModel } from "../../registry/contracts/domainContribution";
+import { object, validateValue } from "../../registry/contracts/parameterSchema";
 
 const dependencies = {
   resources: [],

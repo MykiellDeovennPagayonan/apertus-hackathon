@@ -3,9 +3,9 @@ import {
   validateDocument,
   validateRunnableDocument,
 } from "../../simulations/builder/document/validateDocument";
-import type { CompositeRecipe } from "../../simulations/runtime/authoring/types";
-import { assertData } from "../../simulations/runtime/authoring/validate";
-import { parseRecipe } from "../../simulations/runtime/recipes/schema";
+import type { CompositeRecipe } from "../../simulations/creation-and-editing/authoring-engine/document";
+import { assertData } from "../../simulations/creation-and-editing/validator/document";
+import { parseRecipe } from "../../simulations/creation-and-editing/validator/parseRecipe";
 import { ProjectError, type ProjectPayload, type ProjectType } from "./types";
 export function nameFields(value: unknown) {
   if (typeof value !== "string" || /[\p{Cc}\p{Cf}]/u.test(value))

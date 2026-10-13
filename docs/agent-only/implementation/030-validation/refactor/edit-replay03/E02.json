@@ -1,0 +1,1089 @@
+{
+  "id": "E02",
+  "prompt": "can you set it to be 7 minus 3?",
+  "requestId": "0f929282-1f9d-4e3c-8163-2f5dc509b76c",
+  "status": "failed",
+  "message": "Apertus repeated the same invalid stage arguments: value.mode: expected one of edit, clarify, unsupported",
+  "beforeBounds": [
+    {
+      "width": 598,
+      "height": 258.40625
+    }
+  ],
+  "afterBounds": [
+    {
+      "width": 598,
+      "height": 258.40625
+    }
+  ],
+  "sliders": [],
+  "before": {
+    "requestId": null,
+    "sessionId": "recipe-29ad740d-e6ab-4a3f-b1f0-aa71eee3a71a",
+    "authoredRevision": 0,
+    "interactionRevision": 0,
+    "recipe": {
+      "recipeVersion": 2,
+      "id": "b8a8f1dd-5a81-433d-b2a1-92c177682730",
+      "version": 1,
+      "title": "How do you add or subtract using circles in a diagram?",
+      "description": "How do you add or subtract using circles in a diagram?",
+      "tags": [
+        "operation",
+        "circle",
+        "number line",
+        "visual representation"
+      ],
+      "nested": [],
+      "parameters": [],
+      "externalPorts": [],
+      "dependencies": [
+        {
+          "id": "models/arithmetic",
+          "version": 1
+        },
+        {
+          "id": "appearance/arithmetic",
+          "version": 1
+        },
+        {
+          "id": "controls/ArithmeticActivity",
+          "version": 1
+        },
+        {
+          "id": "displays/Readout",
+          "version": 1
+        }
+      ],
+      "assumptions": [
+        "The board owns tokens and exact fraction state. Token interactions invoke its declared commands."
+      ],
+      "document": {
+        "formatVersion": 3,
+        "nodes": [
+          {
+            "id": "activity_1/model",
+            "definition": "models/arithmetic",
+            "version": 1,
+            "label": "Arithmetic",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "task": {
+                "operation": "add",
+                "a": 3,
+                "b": 2
+              },
+              "looping": false
+            }
+          },
+          {
+            "id": "activity_1/appearance",
+            "definition": "appearance/arithmetic",
+            "version": 1,
+            "label": "Arithmetic appearance",
+            "scope": "activity_1/scope/lab",
+            "configuration": {}
+          },
+          {
+            "id": "activity_1/control/SET_ARITHMETIC_TASK",
+            "definition": "controls/ArithmeticActivity",
+            "version": 1,
+            "label": "Arithmetic controls",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "label": "Arithmetic controls"
+            }
+          },
+          {
+            "id": "activity_1/result",
+            "definition": "displays/Readout",
+            "version": 1,
+            "label": "Your calculation",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "label": "Your calculation",
+              "precision": 0
+            }
+          }
+        ],
+        "connections": [
+          {
+            "id": "activity_1/link/appearance",
+            "kind": "attachment",
+            "from": {
+              "node": "activity_1/model",
+              "port": "appearance"
+            },
+            "to": {
+              "node": "activity_1/appearance",
+              "port": "model"
+            }
+          },
+          {
+            "id": "activity_1/link/control/SET_ARITHMETIC_TASK",
+            "kind": "command",
+            "from": {
+              "node": "activity_1/control/SET_ARITHMETIC_TASK",
+              "port": "submit"
+            },
+            "to": {
+              "node": "activity_1/model",
+              "port": "SET_ARITHMETIC_TASK"
+            }
+          },
+          {
+            "id": "activity_1/link/result",
+            "kind": "value",
+            "from": {
+              "node": "activity_1/model",
+              "port": "board"
+            },
+            "to": {
+              "node": "activity_1/result",
+              "port": "value"
+            }
+          }
+        ],
+        "resources": [],
+        "scopes": [
+          {
+            "id": "activity_1/scope/lab",
+            "label": "Arithmetic"
+          }
+        ],
+        "groups": [
+          {
+            "id": "activity_1/group/prebuilt/models-arithmetic",
+            "label": "Addition & subtraction",
+            "members": [
+              "activity_1/model",
+              "activity_1/appearance",
+              "activity_1/control/SET_ARITHMETIC_TASK",
+              "activity_1/result"
+            ],
+            "source": {
+              "id": "prebuilt/models-arithmetic",
+              "version": 1
+            },
+            "collapsed": false,
+            "parameters": [],
+            "exposedPorts": []
+          }
+        ],
+        "layout": {
+          "id": "layout/learner",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [
+            {
+              "id": "activity_1/layout/appearance",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/appearance"
+            },
+            {
+              "id": "activity_1/layout/result",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/result"
+            },
+            {
+              "id": "activity_1/layout/control/SET_ARITHMETIC_TASK",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/control/SET_ARITHMETIC_TASK"
+            }
+          ]
+        },
+        "lesson": {
+          "title": "How do you add or subtract using circles in a diagram?",
+          "instruction": "How do you add or subtract using circles in a diagram?",
+          "explanation": "The board owns tokens and exact fraction state. Token interactions invoke its declared commands."
+        },
+        "editor": {
+          "positions": {},
+          "zoom": 1
+        },
+        "presentation": {
+          "version": 1,
+          "mode": "board",
+          "items": [
+            {
+              "id": "board/activity_1/layout/appearance",
+              "layoutId": "activity_1/layout/appearance",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 640,
+                "height": 430
+              },
+              "zIndex": 0,
+              "locked": false,
+              "responsiveMinHeight": 300
+            },
+            {
+              "id": "board/activity_1/layout/result",
+              "layoutId": "activity_1/layout/result",
+              "rect": {
+                "x": 664,
+                "y": 176,
+                "width": 320,
+                "height": 100
+              },
+              "zIndex": 1,
+              "locked": false,
+              "responsiveMinHeight": 100
+            },
+            {
+              "id": "board/activity_1/layout/control/SET_ARITHMETIC_TASK",
+              "layoutId": "activity_1/layout/control/SET_ARITHMETIC_TASK",
+              "rect": {
+                "x": 664,
+                "y": 0,
+                "width": 320,
+                "height": 160
+              },
+              "zIndex": 2,
+              "locked": false,
+              "responsiveMinHeight": 160
+            }
+          ],
+          "groups": [],
+          "startView": {
+            "x": -24,
+            "y": -24,
+            "width": 1032,
+            "height": 478
+          },
+          "navigation": {
+            "mode": "bounded",
+            "minZoom": 0.25,
+            "maxZoom": 2
+          },
+          "immersive": {
+            "startup": "board",
+            "allowReturnToBoard": true,
+            "overlays": []
+          },
+          "responsive": true,
+          "responsiveGap": 24,
+          "responsiveRows": [
+            [
+              "board/activity_1/layout/appearance"
+            ],
+            [
+              "board/activity_1/layout/control/SET_ARITHMETIC_TASK"
+            ],
+            [
+              "board/activity_1/layout/result"
+            ]
+          ]
+        }
+      }
+    },
+    "coverage": null,
+    "state": {
+      "state": {
+        "activity_1/model": {
+          "visual": {
+            "visual": "OperationZonesVisual",
+            "target": "svg",
+            "resources": [
+              "MathAppearance"
+            ]
+          },
+          "id": "activity_1/model",
+          "feedback": "",
+          "sequence": {
+            "looping": false,
+            "phase": "intro",
+            "cursor": 0,
+            "elapsed": 0,
+            "playing": false,
+            "run": 1
+          },
+          "demo": "arithmetic",
+          "operation": "add",
+          "a": 3,
+          "b": 2,
+          "result": 5,
+          "tokens": [
+            {
+              "id": "activity_1/model/token-0",
+              "order": 0,
+              "zone": 0,
+              "ordinal": null,
+              "visual": {
+                "visual": "CounterTokenVisual",
+                "target": "svg",
+                "resources": [
+                  "MathAppearance"
+                ]
+              }
+            },
+            {
+              "id": "activity_1/model/token-1",
+              "order": 1,
+              "zone": 0,
+              "ordinal": null,
+              "visual": {
+                "visual": "CounterTokenVisual",
+                "target": "svg",
+                "resources": [
+                  "MathAppearance"
+                ]
+              }
+            },
+            {
+              "id": "activity_1/model/token-2",
+              "order": 2,
+              "zone": 0,
+              "ordinal": null,
+              "visual": {
+                "visual": "CounterTokenVisual",
+                "target": "svg",
+                "resources": [
+                  "MathAppearance"
+                ]
+              }
+            },
+            {
+              "id": "activity_1/model/token-3",
+              "order": 3,
+              "zone": 1,
+              "ordinal": null,
+              "visual": {
+                "visual": "CounterTokenVisual",
+                "target": "svg",
+                "resources": [
+                  "MathAppearance"
+                ]
+              }
+            },
+            {
+              "id": "activity_1/model/token-4",
+              "order": 4,
+              "zone": 1,
+              "ordinal": null,
+              "visual": {
+                "visual": "CounterTokenVisual",
+                "target": "svg",
+                "resources": [
+                  "MathAppearance"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "outputs": {
+        "activity_1/model": {
+          "board": {
+            "visual": {
+              "visual": "OperationZonesVisual",
+              "target": "svg",
+              "resources": [
+                "MathAppearance"
+              ]
+            },
+            "id": "activity_1/model",
+            "feedback": "",
+            "sequence": {
+              "looping": false,
+              "phase": "intro",
+              "cursor": 0,
+              "elapsed": 0,
+              "playing": false,
+              "run": 1
+            },
+            "demo": "arithmetic",
+            "operation": "add",
+            "a": 3,
+            "b": 2,
+            "result": 5,
+            "tokens": [
+              {
+                "id": "activity_1/model/token-0",
+                "order": 0,
+                "zone": 0,
+                "ordinal": null,
+                "visual": {
+                  "visual": "CounterTokenVisual",
+                  "target": "svg",
+                  "resources": [
+                    "MathAppearance"
+                  ]
+                }
+              },
+              {
+                "id": "activity_1/model/token-1",
+                "order": 1,
+                "zone": 0,
+                "ordinal": null,
+                "visual": {
+                  "visual": "CounterTokenVisual",
+                  "target": "svg",
+                  "resources": [
+                    "MathAppearance"
+                  ]
+                }
+              },
+              {
+                "id": "activity_1/model/token-2",
+                "order": 2,
+                "zone": 0,
+                "ordinal": null,
+                "visual": {
+                  "visual": "CounterTokenVisual",
+                  "target": "svg",
+                  "resources": [
+                    "MathAppearance"
+                  ]
+                }
+              },
+              {
+                "id": "activity_1/model/token-3",
+                "order": 3,
+                "zone": 1,
+                "ordinal": null,
+                "visual": {
+                  "visual": "CounterTokenVisual",
+                  "target": "svg",
+                  "resources": [
+                    "MathAppearance"
+                  ]
+                }
+              },
+              {
+                "id": "activity_1/model/token-4",
+                "order": 4,
+                "zone": 1,
+                "ordinal": null,
+                "visual": {
+                  "visual": "CounterTokenVisual",
+                  "target": "svg",
+                  "resources": [
+                    "MathAppearance"
+                  ]
+                }
+              }
+            ]
+          },
+          "feedback": "",
+          "playing": false
+        }
+      }
+    }
+  },
+  "after": {
+    "requestId": null,
+    "sessionId": "recipe-29ad740d-e6ab-4a3f-b1f0-aa71eee3a71a",
+    "authoredRevision": 0,
+    "interactionRevision": 0,
+    "recipe": {
+      "recipeVersion": 2,
+      "id": "b8a8f1dd-5a81-433d-b2a1-92c177682730",
+      "version": 1,
+      "title": "How do you add or subtract using circles in a diagram?",
+      "description": "How do you add or subtract using circles in a diagram?",
+      "tags": [
+        "operation",
+        "circle",
+        "number line",
+        "visual representation"
+      ],
+      "nested": [],
+      "parameters": [],
+      "externalPorts": [],
+      "dependencies": [
+        {
+          "id": "models/arithmetic",
+          "version": 1
+        },
+        {
+          "id": "appearance/arithmetic",
+          "version": 1
+        },
+        {
+          "id": "controls/ArithmeticActivity",
+          "version": 1
+        },
+        {
+          "id": "displays/Readout",
+          "version": 1
+        }
+      ],
+      "assumptions": [
+        "The board owns tokens and exact fraction state. Token interactions invoke its declared commands."
+      ],
+      "document": {
+        "formatVersion": 3,
+        "nodes": [
+          {
+            "id": "activity_1/model",
+            "definition": "models/arithmetic",
+            "version": 1,
+            "label": "Arithmetic",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "task": {
+                "operation": "add",
+                "a": 3,
+                "b": 2
+              },
+              "looping": false
+            }
+          },
+          {
+            "id": "activity_1/appearance",
+            "definition": "appearance/arithmetic",
+            "version": 1,
+            "label": "Arithmetic appearance",
+            "scope": "activity_1/scope/lab",
+            "configuration": {}
+          },
+          {
+            "id": "activity_1/control/SET_ARITHMETIC_TASK",
+            "definition": "controls/ArithmeticActivity",
+            "version": 1,
+            "label": "Arithmetic controls",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "label": "Arithmetic controls"
+            }
+          },
+          {
+            "id": "activity_1/result",
+            "definition": "displays/Readout",
+            "version": 1,
+            "label": "Your calculation",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "label": "Your calculation",
+              "precision": 0
+            }
+          }
+        ],
+        "connections": [
+          {
+            "id": "activity_1/link/appearance",
+            "kind": "attachment",
+            "from": {
+              "node": "activity_1/model",
+              "port": "appearance"
+            },
+            "to": {
+              "node": "activity_1/appearance",
+              "port": "model"
+            }
+          },
+          {
+            "id": "activity_1/link/control/SET_ARITHMETIC_TASK",
+            "kind": "command",
+            "from": {
+              "node": "activity_1/control/SET_ARITHMETIC_TASK",
+              "port": "submit"
+            },
+            "to": {
+              "node": "activity_1/model",
+              "port": "SET_ARITHMETIC_TASK"
+            }
+          },
+          {
+            "id": "activity_1/link/result",
+            "kind": "value",
+            "from": {
+              "node": "activity_1/model",
+              "port": "board"
+            },
+            "to": {
+              "node": "activity_1/result",
+              "port": "value"
+            }
+          }
+        ],
+        "resources": [],
+        "scopes": [
+          {
+            "id": "activity_1/scope/lab",
+            "label": "Arithmetic"
+          }
+        ],
+        "groups": [
+          {
+            "id": "activity_1/group/prebuilt/models-arithmetic",
+            "label": "Addition & subtraction",
+            "members": [
+              "activity_1/model",
+              "activity_1/appearance",
+              "activity_1/control/SET_ARITHMETIC_TASK",
+              "activity_1/result"
+            ],
+            "source": {
+              "id": "prebuilt/models-arithmetic",
+              "version": 1
+            },
+            "collapsed": false,
+            "parameters": [],
+            "exposedPorts": []
+          }
+        ],
+        "layout": {
+          "id": "layout/learner",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [
+            {
+              "id": "activity_1/layout/appearance",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/appearance"
+            },
+            {
+              "id": "activity_1/layout/result",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/result"
+            },
+            {
+              "id": "activity_1/layout/control/SET_ARITHMETIC_TASK",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/control/SET_ARITHMETIC_TASK"
+            }
+          ]
+        },
+        "lesson": {
+          "title": "How do you add or subtract using circles in a diagram?",
+          "instruction": "How do you add or subtract using circles in a diagram?",
+          "explanation": "The board owns tokens and exact fraction state. Token interactions invoke its declared commands."
+        },
+        "editor": {
+          "positions": {},
+          "zoom": 1
+        },
+        "presentation": {
+          "version": 1,
+          "mode": "board",
+          "items": [
+            {
+              "id": "board/activity_1/layout/appearance",
+              "layoutId": "activity_1/layout/appearance",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 640,
+                "height": 430
+              },
+              "zIndex": 0,
+              "locked": false,
+              "responsiveMinHeight": 300
+            },
+            {
+              "id": "board/activity_1/layout/result",
+              "layoutId": "activity_1/layout/result",
+              "rect": {
+                "x": 664,
+                "y": 176,
+                "width": 320,
+                "height": 100
+              },
+              "zIndex": 1,
+              "locked": false,
+              "responsiveMinHeight": 100
+            },
+            {
+              "id": "board/activity_1/layout/control/SET_ARITHMETIC_TASK",
+              "layoutId": "activity_1/layout/control/SET_ARITHMETIC_TASK",
+              "rect": {
+                "x": 664,
+                "y": 0,
+                "width": 320,
+                "height": 160
+              },
+              "zIndex": 2,
+              "locked": false,
+              "responsiveMinHeight": 160
+            }
+          ],
+          "groups": [],
+          "startView": {
+            "x": -24,
+            "y": -24,
+            "width": 1032,
+            "height": 478
+          },
+          "navigation": {
+            "mode": "bounded",
+            "minZoom": 0.25,
+            "maxZoom": 2
+          },
+          "immersive": {
+            "startup": "board",
+            "allowReturnToBoard": true,
+            "overlays": []
+          },
+          "responsive": true,
+          "responsiveGap": 24,
+          "responsiveRows": [
+            [
+              "board/activity_1/layout/appearance"
+            ],
+            [
+              "board/activity_1/layout/control/SET_ARITHMETIC_TASK"
+            ],
+            [
+              "board/activity_1/layout/result"
+            ]
+          ]
+        }
+      }
+    },
+    "coverage": null,
+    "state": {
+      "state": {
+        "activity_1/model": {
+          "visual": {
+            "visual": "OperationZonesVisual",
+            "target": "svg",
+            "resources": [
+              "MathAppearance"
+            ]
+          },
+          "id": "activity_1/model",
+          "feedback": "",
+          "sequence": {
+            "looping": false,
+            "phase": "intro",
+            "cursor": 0,
+            "elapsed": 0,
+            "playing": false,
+            "run": 1
+          },
+          "demo": "arithmetic",
+          "operation": "add",
+          "a": 3,
+          "b": 2,
+          "result": 5,
+          "tokens": [
+            {
+              "id": "activity_1/model/token-0",
+              "order": 0,
+              "zone": 0,
+              "ordinal": null,
+              "visual": {
+                "visual": "CounterTokenVisual",
+                "target": "svg",
+                "resources": [
+                  "MathAppearance"
+                ]
+              }
+            },
+            {
+              "id": "activity_1/model/token-1",
+              "order": 1,
+              "zone": 0,
+              "ordinal": null,
+              "visual": {
+                "visual": "CounterTokenVisual",
+                "target": "svg",
+                "resources": [
+                  "MathAppearance"
+                ]
+              }
+            },
+            {
+              "id": "activity_1/model/token-2",
+              "order": 2,
+              "zone": 0,
+              "ordinal": null,
+              "visual": {
+                "visual": "CounterTokenVisual",
+                "target": "svg",
+                "resources": [
+                  "MathAppearance"
+                ]
+              }
+            },
+            {
+              "id": "activity_1/model/token-3",
+              "order": 3,
+              "zone": 1,
+              "ordinal": null,
+              "visual": {
+                "visual": "CounterTokenVisual",
+                "target": "svg",
+                "resources": [
+                  "MathAppearance"
+                ]
+              }
+            },
+            {
+              "id": "activity_1/model/token-4",
+              "order": 4,
+              "zone": 1,
+              "ordinal": null,
+              "visual": {
+                "visual": "CounterTokenVisual",
+                "target": "svg",
+                "resources": [
+                  "MathAppearance"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "outputs": {
+        "activity_1/model": {
+          "board": {
+            "visual": {
+              "visual": "OperationZonesVisual",
+              "target": "svg",
+              "resources": [
+                "MathAppearance"
+              ]
+            },
+            "id": "activity_1/model",
+            "feedback": "",
+            "sequence": {
+              "looping": false,
+              "phase": "intro",
+              "cursor": 0,
+              "elapsed": 0,
+              "playing": false,
+              "run": 1
+            },
+            "demo": "arithmetic",
+            "operation": "add",
+            "a": 3,
+            "b": 2,
+            "result": 5,
+            "tokens": [
+              {
+                "id": "activity_1/model/token-0",
+                "order": 0,
+                "zone": 0,
+                "ordinal": null,
+                "visual": {
+                  "visual": "CounterTokenVisual",
+                  "target": "svg",
+                  "resources": [
+                    "MathAppearance"
+                  ]
+                }
+              },
+              {
+                "id": "activity_1/model/token-1",
+                "order": 1,
+                "zone": 0,
+                "ordinal": null,
+                "visual": {
+                  "visual": "CounterTokenVisual",
+                  "target": "svg",
+                  "resources": [
+                    "MathAppearance"
+                  ]
+                }
+              },
+              {
+                "id": "activity_1/model/token-2",
+                "order": 2,
+                "zone": 0,
+                "ordinal": null,
+                "visual": {
+                  "visual": "CounterTokenVisual",
+                  "target": "svg",
+                  "resources": [
+                    "MathAppearance"
+                  ]
+                }
+              },
+              {
+                "id": "activity_1/model/token-3",
+                "order": 3,
+                "zone": 1,
+                "ordinal": null,
+                "visual": {
+                  "visual": "CounterTokenVisual",
+                  "target": "svg",
+                  "resources": [
+                    "MathAppearance"
+                  ]
+                }
+              },
+              {
+                "id": "activity_1/model/token-4",
+                "order": 4,
+                "zone": 1,
+                "ordinal": null,
+                "visual": {
+                  "visual": "CounterTokenVisual",
+                  "target": "svg",
+                  "resources": [
+                    "MathAppearance"
+                  ]
+                }
+              }
+            ]
+          },
+          "feedback": "",
+          "playing": false
+        }
+      }
+    }
+  },
+  "body": "← Experiments\nHow do you add or subtract using circles in a diagram?\nExperiment options\n100%\n?\nFind content\nAdd 2 circles to 3\n\nPress the button below, or tap a circle to move it.\n\nTogether\nTo add\n+\nAdd 2 circles\nYour calculation\n3 + 2 = ?\n\n3 circles together.\n\n+ Add\n− Subtract\nFirst number\nAdd\n\nChange a number to start a fresh calculation.\n\nCouldn't complete that simulation change.\nTry again\nDetails\n💡 Ideas\nApply\n↑",
+  "diagnostics": {
+    "configuration": {
+      "mode": "hybrid",
+      "llm": {
+        "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+        "provider": "apertus",
+        "connection": "local",
+        "baseUrl": "http://127.0.0.1:43101/v1",
+        "structuredOutput": "auto",
+        "contextCapacity": null,
+        "maxTokens": 1024,
+        "temperature": 0,
+        "reasoningEffort": null,
+        "timeout": 120000
+      },
+      "decision": {
+        "provider": "laya",
+        "policy": "See selection.decision or composition.decision for actual acceptance."
+      },
+      "deadlineMs": 240000
+    },
+    "events": [
+      {
+        "event": "edit_target.inference",
+        "elapsedMs": 6586,
+        "data": {
+          "stage": "edit_target",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 6584,
+          "finishReason": "stop",
+          "maxTokens": 256,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 1071,
+            "outputTokens": 37,
+            "totalTokens": 1108
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "edit_intent.inference",
+        "elapsedMs": 12765,
+        "data": {
+          "stage": "edit_intent",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 6175,
+          "finishReason": "stop",
+          "maxTokens": 512,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 578,
+            "outputTokens": 52,
+            "totalTokens": 630
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "edit_intent.inference",
+        "elapsedMs": 18987,
+        "data": {
+          "stage": "edit_intent",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 6221,
+          "finishReason": "stop",
+          "maxTokens": 512,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 882,
+            "outputTokens": 43,
+            "totalTokens": 925
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "edit_intent.inference",
+        "elapsedMs": 33717,
+        "data": {
+          "stage": "edit_intent",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 14722,
+          "finishReason": "stop",
+          "maxTokens": 512,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 3421,
+            "outputTokens": 52,
+            "totalTokens": 3473
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "failure",
+        "elapsedMs": 33720,
+        "data": {
+          "status": 502,
+          "message": "Apertus repeated the same invalid stage arguments: value.mode: expected one of edit, clarify, unsupported",
+          "cause": "Apertus repeated the same invalid stage arguments: value.mode: expected one of edit, clarify, unsupported"
+        }
+      }
+    ],
+    "issues": [
+      {
+        "event": "edit_intent.schemaFailure",
+        "reason": "value.mode: expected one of edit, clarify, unsupported",
+        "issueKey": "invalid_value:value.mode"
+      },
+      {
+        "event": "edit_intent.schemaFailure",
+        "reason": "Edits need selections; new, unsupported and clarify must have none",
+        "issueKey": "missing_selection"
+      },
+      {
+        "event": "edit_intent.schemaFailure",
+        "reason": "value.mode: expected one of edit, clarify, unsupported",
+        "issueKey": "invalid_value:value.mode"
+      }
+    ]
+  }
+}

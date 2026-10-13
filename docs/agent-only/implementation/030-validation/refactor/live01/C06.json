@@ -1,0 +1,509 @@
+{
+  "caseId": "C06",
+  "prompt": "How does gas pressure change with volume",
+  "status": "created",
+  "requestId": "a05fba71-8db3-4738-9cb2-b1c6f16094e4",
+  "sliders": [
+    {
+      "label": "Volume",
+      "value": "1",
+      "min": "0.25",
+      "max": "2"
+    }
+  ],
+  "bounds": [],
+  "body": "← Experiments\nHow does gas pressure change when volume changes at constant temperature?\nExperiment options\n100%\n?\nFind content\nVolume\nL\n0.25\n2\n💡 Ideas\nApply\n↑",
+  "before": {
+    "correlationId": null,
+    "recipe": null,
+    "context": null,
+    "state": null
+  },
+  "after": {
+    "requestId": null,
+    "sessionId": "recipe-4fd7631f-4b3b-42c9-8083-d477e4faf39c",
+    "authoredRevision": 0,
+    "interactionRevision": 0,
+    "recipe": {
+      "recipeVersion": 2,
+      "id": "547a5fd2-5ed6-4c70-ab1f-a1935080852c",
+      "version": 1,
+      "title": "How does gas pressure change when volume changes at constant temperature?",
+      "description": "How does gas pressure change when volume changes at constant temperature?",
+      "tags": [
+        "gas pressure",
+        "volume",
+        "inverse relationship"
+      ],
+      "nested": [],
+      "parameters": [],
+      "externalPorts": [],
+      "dependencies": [
+        {
+          "id": "prefabs/AuthoredGasContainer",
+          "version": 1
+        },
+        {
+          "id": "canvases/physical",
+          "version": 1
+        },
+        {
+          "id": "controls/Slider",
+          "version": 1
+        }
+      ],
+      "assumptions": [],
+      "document": {
+        "formatVersion": 3,
+        "nodes": [
+          {
+            "id": "activity_1/model",
+            "definition": "prefabs/AuthoredGasContainer",
+            "version": 1,
+            "label": "Gas container",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "kind": "gas",
+              "label": "Gas container",
+              "color": "#285e56",
+              "display": {
+                "x": 0,
+                "y": 0,
+                "width": 100,
+                "height": 48
+              },
+              "inputs": {
+                "amount": 1,
+                "temperature": 300,
+                "volume": 1,
+                "playing": true
+              },
+              "particles": true
+            }
+          },
+          {
+            "id": "activity_1/canvas",
+            "definition": "canvases/physical",
+            "version": 1,
+            "label": "2D physical canvas",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "xMin": 0,
+              "xMax": 100,
+              "yMin": 0,
+              "yMax": 48,
+              "grid": false,
+              "snap": 0.5
+            }
+          },
+          {
+            "id": "activity_1/control/set:volume",
+            "definition": "controls/Slider",
+            "version": 1,
+            "label": "Slider",
+            "scope": "activity_1/scope/lab",
+            "configuration": {
+              "label": "Volume",
+              "mode": "immediate",
+              "initial": "{\"value\":1}"
+            }
+          }
+        ],
+        "connections": [
+          {
+            "id": "activity_1/link/canvas",
+            "kind": "attachment",
+            "from": {
+              "node": "activity_1/model",
+              "port": "appearance"
+            },
+            "to": {
+              "node": "activity_1/canvas",
+              "port": "objects"
+            }
+          },
+          {
+            "id": "activity_1/link/control/set:volume",
+            "kind": "command",
+            "from": {
+              "node": "activity_1/control/set:volume",
+              "port": "submit"
+            },
+            "to": {
+              "node": "activity_1/model",
+              "port": "set:volume"
+            }
+          }
+        ],
+        "resources": [],
+        "scopes": [
+          {
+            "id": "activity_1/scope/lab",
+            "label": "Gas container"
+          }
+        ],
+        "groups": [
+          {
+            "id": "activity_1/group/prebuilt/prefabs-AuthoredGasContainer",
+            "label": "Gas pressure",
+            "members": [
+              "activity_1/model",
+              "activity_1/canvas",
+              "activity_1/control/set:volume"
+            ],
+            "source": {
+              "id": "prebuilt/prefabs-AuthoredGasContainer",
+              "version": 1
+            },
+            "collapsed": false,
+            "parameters": [],
+            "exposedPorts": []
+          }
+        ],
+        "layout": {
+          "id": "layout/learner",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [
+            {
+              "id": "activity_1/layout/canvas",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/canvas"
+            },
+            {
+              "id": "activity_1/layout/control/set:volume",
+              "kind": "stack",
+              "label": "",
+              "gap": 16,
+              "columns": 2,
+              "children": [],
+              "node": "activity_1/control/set:volume"
+            }
+          ]
+        },
+        "lesson": {
+          "title": "How does gas pressure change when volume changes at constant temperature?",
+          "instruction": "How does gas pressure change when volume changes at constant temperature?",
+          "explanation": ""
+        },
+        "editor": {
+          "positions": {},
+          "zoom": 1
+        },
+        "presentation": {
+          "version": 1,
+          "mode": "board",
+          "items": [
+            {
+              "id": "board/activity_1/layout/canvas",
+              "layoutId": "activity_1/layout/canvas",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 640,
+                "height": 480
+              },
+              "zIndex": 0,
+              "locked": false,
+              "responsiveMinHeight": 320
+            },
+            {
+              "id": "board/activity_1/layout/control/set:volume",
+              "layoutId": "activity_1/layout/control/set:volume",
+              "rect": {
+                "x": 664,
+                "y": 0,
+                "width": 320,
+                "height": 144
+              },
+              "zIndex": 1,
+              "locked": false,
+              "responsiveMinHeight": 144
+            }
+          ],
+          "groups": [],
+          "startView": {
+            "x": -24,
+            "y": -24,
+            "width": 1032,
+            "height": 528
+          },
+          "navigation": {
+            "mode": "bounded",
+            "minZoom": 0.25,
+            "maxZoom": 2
+          },
+          "immersive": {
+            "startup": "board",
+            "allowReturnToBoard": true,
+            "overlays": []
+          },
+          "responsive": true,
+          "responsiveGap": 24,
+          "responsiveRows": [
+            [
+              "board/activity_1/layout/canvas"
+            ],
+            [
+              "board/activity_1/layout/control/set:volume"
+            ]
+          ]
+        }
+      }
+    },
+    "coverage": null,
+    "state": {
+      "state": {
+        "activity_1/model": {
+          "kind": "gas",
+          "label": "Gas container",
+          "color": "#285e56",
+          "display": {
+            "x": 0,
+            "y": 0,
+            "width": 100,
+            "height": 48
+          },
+          "inputs": {
+            "amount": 1,
+            "temperature": 300,
+            "volume": 1,
+            "playing": true
+          },
+          "particles": true,
+          "id": "activity_1/model"
+        }
+      },
+      "outputs": {
+        "activity_1/model": {
+          "data": {
+            "kind": "gas",
+            "label": "Gas container",
+            "color": "#285e56",
+            "display": {
+              "x": 0,
+              "y": 0,
+              "width": 100,
+              "height": 48
+            },
+            "inputs": {
+              "amount": 1,
+              "temperature": 300,
+              "volume": 1,
+              "playing": true
+            },
+            "particles": true,
+            "id": "activity_1/model"
+          },
+          "pressureKPa": 2.4943387854
+        }
+      }
+    }
+  },
+  "diagnostics": {
+    "configuration": {
+      "mode": "hybrid",
+      "llm": {
+        "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+        "provider": "apertus",
+        "connection": "local",
+        "baseUrl": "http://127.0.0.1:43101/v1",
+        "structuredOutput": "auto",
+        "contextCapacity": null,
+        "maxTokens": 1024,
+        "temperature": 0,
+        "reasoningEffort": null,
+        "timeout": 120000
+      },
+      "decision": {
+        "provider": "laya",
+        "policy": "See selection.decision or composition.decision for actual acceptance."
+      },
+      "deadlineMs": 240000
+    },
+    "events": [
+      {
+        "event": "teaching_intent.inference",
+        "elapsedMs": 12257,
+        "data": {
+          "stage": "teaching_intent",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 12256,
+          "finishReason": "stop",
+          "maxTokens": 768,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 924,
+            "outputTokens": 111,
+            "totalTokens": 1035
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "selection.decision",
+        "elapsedMs": 12828,
+        "data": {
+          "status": "rejected",
+          "provider": "laya",
+          "model": "aac6fef/laya-multilingual-mlx",
+          "usage": {
+            "input_tokens": 396,
+            "output_tokens": 0
+          },
+          "durationMs": 406,
+          "answer": {
+            "type": "choice",
+            "choice": "unclear",
+            "probabilities": {
+              "activity1": 0.0315,
+              "activity2": 0.197,
+              "activity3": 0.1059,
+              "activity4": 0.1899,
+              "activity5": 0.0509,
+              "activity6": 0.0283,
+              "activity7": 0.1089,
+              "activity8": 0.0173,
+              "unclear": 0.2702
+            },
+            "confidence": 0.1353
+          },
+          "timing": {
+            "inference_ms": 385.692,
+            "server_ms": 385.883
+          }
+        }
+      },
+      {
+        "event": "assembly_plan.inference",
+        "elapsedMs": 21299,
+        "data": {
+          "stage": "assembly_plan",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 8469,
+          "finishReason": "stop",
+          "maxTokens": 256,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 2433,
+            "outputTokens": 16,
+            "totalTokens": 2449
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "presentation.decision",
+        "elapsedMs": 21699,
+        "data": {
+          "provider": "laya",
+          "model": "aac6fef/laya-multilingual-mlx",
+          "durationMs": 399,
+          "usage": {
+            "input_tokens": 548,
+            "output_tokens": 0
+          },
+          "decisions": [
+            {
+              "id": "set:volume",
+              "kind": "control",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.5708,
+                  "omit": 0.4292
+                },
+                "confidence": 0.0145
+              }
+            },
+            {
+              "id": "display/pressureKPa",
+              "kind": "observation",
+              "status": "rejected",
+              "answer": {
+                "type": "choice",
+                "choice": "include",
+                "probabilities": {
+                  "include": 0.5205,
+                  "omit": 0.4795
+                },
+                "confidence": 0.0012
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "assembly_presentation.inference",
+        "elapsedMs": 24974,
+        "data": {
+          "stage": "assembly_presentation",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 3274,
+          "finishReason": "stop",
+          "maxTokens": 512,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 384,
+            "outputTokens": 24,
+            "totalTokens": 408
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "assembly_configuration.inference",
+        "elapsedMs": 36614,
+        "data": {
+          "stage": "assembly_configuration",
+          "provider": "apertus",
+          "connection": "local",
+          "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+          "elapsedMs": 11634,
+          "finishReason": "stop",
+          "maxTokens": 512,
+          "contextCapacity": null,
+          "usage": {
+            "promptTokens": 863,
+            "outputTokens": 94,
+            "totalTokens": 957
+          },
+          "constrained": false
+        }
+      },
+      {
+        "event": "result",
+        "elapsedMs": 36681,
+        "data": {
+          "status": "created",
+          "nodes": 3,
+          "coverage": {
+            "level": "full",
+            "covered": [
+              "gas pressure",
+              "volume",
+              "inverse relationship"
+            ],
+            "omitted": [],
+            "explanation": ""
+          }
+        }
+      }
+    ],
+    "issues": []
+  }
+}
