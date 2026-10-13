@@ -51,18 +51,23 @@ export async function selectEditTargets(
           clarification: request.clarification,
           currentLesson: document.lesson,
           responseSchema: toJsonSchema(targetSchema),
-          components: selectionCatalog.components.map((component) => ({
-            ...component,
-            runtime: undefined,
-            candidates: component.candidates.map((candidate) => ({
-              id: candidate.id,
-              mode: candidate.mode,
-              operation: candidate.operation,
-              description: candidate.description,
-              fields: Object.keys(candidate.fieldContracts ?? {}),
-              fixedArguments: candidate.fixedArguments,
-            })),
-          })),
+          components: selectionCatalog.components.map(
+            ({
+              currentConfiguration: _configuration,
+              runtime: _runtime,
+              ...component
+            }) => ({
+              ...component,
+              candidates: component.candidates.map((candidate) => ({
+                id: candidate.id,
+                mode: candidate.mode,
+                operation: candidate.operation,
+                description: candidate.description,
+                fields: Object.keys(candidate.fieldContracts ?? {}),
+                fixedArguments: candidate.fixedArguments,
+              })),
+            }),
+          ),
           candidates: selectionCatalog.candidates.map((candidate) => ({
             id: candidate.id,
             mode: candidate.mode,

@@ -3,7 +3,11 @@ import { object } from "../../registry/contracts/parameterSchema";
 import { publicDefinition } from "../../registry/index";
 import { emptyAuthoredDocument } from "../authoring-engine/document";
 import { finalizeRecipe } from "../authoring-engine/finalizeRecipe";
-import { insertRecipe, removeNodes } from "../authoring-engine/recipes";
+import {
+  insertRecipe,
+  remapDocument,
+  removeNodes,
+} from "../authoring-engine/recipes";
 import type { GenerationBudget } from "../budget";
 import {
   assemblyCandidates,
@@ -52,7 +56,14 @@ export async function createFromAssemblies(
     };
   let document = emptyAuthoredDocument();
   const assumptions: string[] = [];
-  const requestedWires: { node: string; command: string }[] = [];
+  const requestedWires: { control: string; node: string; command: string }[] =
+    [];
+  const observationWires: {
+    source: string;
+    output: string;
+    display: string;
+    input: string;
+  }[] = [];
   const priorConfigurations: {
     activity: string;
     overrides: Record<string, unknown>;
@@ -68,6 +79,8 @@ export async function createFromAssemblies(
       source,
       requiredCapabilities,
     );
+    if (presentation.unsupported)
+      return { protocolVersion: 1, status: "unsupported", requestId: request.requestId, message: presentation.unsupported };
     const settings = await configureAssembly(
       request,
       intent,
@@ -143,12 +156,29 @@ export async function createFromAssemblies(
       },
       (id) => `${prefix}/${id}`,
     );
+    if (plan.activities.length === 1 && pruned.presentation?.mode === "board")
+      document.presentation = remapDocument(
+        pruned,
+        (id) => `${prefix}/${id}`,
+      ).presentation;
     for (const wire of wires.filter((wire) =>
       keep.has(`${wire.to.node}.${wire.to.port}`),
     ))
       requestedWires.push({
+        control: `${prefix}/${wire.from.node}`,
         node: `${prefix}/${wire.to.node}`,
         command: wire.to.port,
+      });
+    for (const wire of source.document.connections.filter(
+      (wire) =>
+        wire.kind === "value" &&
+        presentation.observations.includes(wire.to.node),
+    ))
+      observationWires.push({
+        source: `${prefix}/${wire.from.node}`,
+        output: wire.from.port,
+        display: `${prefix}/${wire.to.node}`,
+        input: wire.to.port,
       });
     assumptions.push(...source.assumptions);
   }
@@ -166,6 +196,7 @@ export async function createFromAssemblies(
       !document.connections.some(
         (wire) =>
           wire.kind === "command" &&
+          wire.from.node === required.control &&
           wire.to.node === required.node &&
           wire.to.port === required.command,
       )
@@ -175,6 +206,21 @@ export async function createFromAssemblies(
         502,
       );
   }
+  for (const required of observationWires)
+    if (
+      !document.connections.some(
+        (wire) =>
+          wire.kind === "value" &&
+          wire.from.node === required.source &&
+          wire.from.port === required.output &&
+          wire.to.node === required.display &&
+          wire.to.port === required.input,
+      )
+    )
+      throw new PlannerError(
+        `Missing selected observation: ${required.output}`,
+        502,
+      );
   const recipe = finalizeRecipe(document, {
     id: `generated/${request.requestId}`,
     assumptions: [...new Set(assumptions)],

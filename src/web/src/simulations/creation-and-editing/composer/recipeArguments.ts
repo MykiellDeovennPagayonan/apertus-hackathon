@@ -1,3 +1,4 @@
+import { arrangementTemplates } from "../authoring-engine/presentation/arrangement";
 import {
   acceptsScalar,
   parameterLeaves,
@@ -18,7 +19,10 @@ import {
   validateValue,
 } from "../../registry/contracts/parameterSchema";
 import { premadeRecipe } from "../../registry/recipes/premade";
-import { type JsonSchema, toJsonSchema } from "../input/inference/structuredSchema";
+import {
+  type JsonSchema,
+  toJsonSchema,
+} from "../input/inference/structuredSchema";
 import {
   activeHandles,
   capabilityCards,
@@ -173,14 +177,19 @@ export function allowedOperations(
     { tool: "set_lesson", schema: lessonSchema },
     {
       tool: "arrange",
-      schema: object({
-        template: choice("scene-with-sidebar", "comparison", "vertical"),
-        main: targetList,
-        controls: targetList,
-        results: targetList,
-        narrowOrder: targetList,
-        preserveLocked: { type: "boolean" },
-      }),
+      schema: object(
+        {
+          template: choice(...arrangementTemplates),
+          main: targetList,
+          controls: targetList,
+          results: targetList,
+          beside: targetList,
+          below: targetList,
+          narrowOrder: targetList,
+          preserveLocked: { type: "boolean" },
+        },
+        ["beside", "below"],
+      ),
     },
   ];
   for (const slug of ["arithmetic", "area-perimeter", "bridge"])
@@ -259,9 +268,7 @@ export function allowedOperations(
     }
     let snapshotOutputs: Record<string, unknown> = {};
     try {
-      snapshotOutputs =
-        inspectDocument(document).outputs[handle.target] ??
-        {};
+      snapshotOutputs = inspectDocument(document).outputs[handle.target] ?? {};
     } catch {
       // Document might not be runnable yet
     }

@@ -119,6 +119,7 @@ export const pendulumModel: DomainModel = {
   ),
   defaults: { ...physicalDefaults.pendulum },
   requiredObservations: ["period", "angle", "elapsed"],
+  presentedOutputs: ["angle"],
   graphOutput: "points",
   outputs: {
     period: output(

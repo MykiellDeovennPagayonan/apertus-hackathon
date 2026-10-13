@@ -94,7 +94,11 @@ export async function focusedTurn(
                   },
                 ]
               : candidates,
-            context,
+            context: {
+              goal: (context as { acceptedIntent?: { goal?: string } }).acceptedIntent?.goal,
+              nodes: ((context as { nodes?: {id: string; label?: string; definition: string}[] }).nodes ?? []).map(({id, label, definition}) => ({id, label, definition})),
+              priorOperation: (context as { priorOperation?: unknown }).priorOperation,
+            },
             completion: allowDone ? "done is available" : undefined,
           }),
         },
@@ -346,7 +350,7 @@ export async function focusedTurn(
             : "") +
           (tools[0].tool === "configure"
             ? 'Edit the existing component to demonstrate the condition in the user request. Return ONLY {"target":"supplied-id","changes":{"setting":newValue}}. Use exact target IDs and actual setting names from the schema. A question such as "what happens if" requests an experiment with that condition applied. Choose a sensible changed value within the contract unless the user supplies a value. The context contains CURRENT settings, not the answer. changes is a patch: include only requested changes, preserving unrelated settings. Never copy the current configuration unchanged; never return schemas, types or parameter definitions. Follow the supplied fidelity facts.'
-            : `You provide arguments for the ${tools[0].tool} authoring tool. Return ONLY the argument object matching the schema. The root keys are the parameter names, not argumentSchema or action. Return values, NEVER a schema. For configure, changes is a patch of concrete values for only the requested settings; retain every unrelated setting. Preserve explicit user values; omitted configuration overrides may be {} to keep registered defaults. The application allocates insertion aliases. Copy target IDs and command names exactly. Use concise labels without repeating units that controls already display. When controlLabelPrefix is supplied, the label MUST start with that exact prefix so independent sources remain identifiable. For repeated model instances, include the supplied instance label in each control label. Labels must respect contract units. Keep lesson title under 80 characters and use a concise topic name. Keep lesson instruction under 500 characters and explanation under 1500 characters. Follow the supplied fidelity facts; do not invent outputs, effects or instructions. For arrange, template is the string "scene-with-sidebar"; main, controls, results and narrowOrder are arrays of STRING IDs, such as ["node-id"], NEVER objects like [{"id":"node-id"}]. Copy IDs from exampleResponse. Put appearances in main, controls in controls, and observations in results; never assign the same node to several roles.${fieldInstruction}${scienceInstruction}`),
+            : `You provide arguments for the ${tools[0].tool} authoring tool. Return ONLY the argument object matching the schema. The root keys are the parameter names, not argumentSchema or action. Return values, NEVER a schema. For configure, changes is a patch of concrete values for only the requested settings; retain every unrelated setting. Preserve explicit user values; omitted configuration overrides may be {} to keep registered defaults. The application allocates insertion aliases. Copy target IDs and command names exactly. Use concise labels without repeating units that controls already display. When controlLabelPrefix is supplied, the label MUST start with that exact prefix so independent sources remain identifiable. For repeated model instances, include the supplied instance label in each control label. Labels must respect contract units. Keep lesson title under 80 characters and use a concise topic name. Keep lesson instruction under 500 characters and explanation under 1500 characters. Follow the supplied fidelity facts; do not invent outputs, effects or instructions. For arrange, choose a supplied template string; use "automatic" unless a placement was requested; main, controls, results and narrowOrder are arrays of STRING IDs, such as ["node-id"], NEVER objects like [{"id":"node-id"}]. Copy IDs from exampleResponse. Put appearances in main, controls in controls, and observations in results. For requested placement use beside and below arrays of existing IDs; either region accepts controls or observations. Placement never changes bindings or removes content; never assign the same node to beside and below.${fieldInstruction}${scienceInstruction}`),
       },
       {
         role: "user",
@@ -363,7 +367,10 @@ export async function focusedTurn(
                 ? undefined
                 : tools[0]?.tool === "configure"
                   ? editContext
-                  : context,
+                  : {
+                      nodes: contextNodes.filter(node => node.id === controlTarget?.id),
+                      fidelity: (context as { fidelity?: string[] }).fidelity,
+                    },
           definitions,
           commandContracts: tools.flatMap((tool) => {
             if (tool.tool !== "add_control" || tool.schema.type !== "object")

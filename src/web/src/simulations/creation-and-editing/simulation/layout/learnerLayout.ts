@@ -1,10 +1,5 @@
 import { publicDefinition } from "../../../registry/index";
-import { isPlaybackCommand } from "../../../registry/contracts/interactionPolicy";
-import {
-  boardItemMinimum,
-  convertToBoard,
-  extent,
-} from "../../authoring-engine/presentation/board";
+import { arrangeDocument } from "../../authoring-engine/presentation/arrangement";
 import { removeNodes } from "../../authoring-engine/recipes";
 import {
   type AuthoredDocument,
@@ -58,6 +53,13 @@ export function learnerPresentation(source: AuthoredDocument) {
     });
   }
 
+  if (
+    document.presentation?.mode === "board" &&
+    document.presentation.responsive &&
+    !removedCanvases.length
+  )
+    return document;
+
   const leaves = (layout: Layout): Layout[] => {
     if (
       layout.node ||
@@ -74,115 +76,12 @@ export function learnerPresentation(source: AuthoredDocument) {
     .filter((layout) => !!layout.node || layout.children.length > 0);
   document.layout = { ...emptyLayout("layout/learner"), children: content };
   for (const layout of content) if (layout.node) layout.label = "";
-  document.presentation = convertToBoard(document);
-  const presentation = document.presentation;
-  presentation.responsive = true;
-  presentation.responsiveGap = 24;
-  presentation.responsiveRows = [];
-  let top = 0;
-  for (const scene of content.filter((layout) => {
-    const node = document.nodes.find((node) => node.id === layout.node);
-    return (
-      node &&
-      ["appearance", "canvases"].includes(publicDefinition(node).category)
-    );
-  })) {
-    const sceneNode = document.nodes.find((node) => node.id === scene.node)!;
-    const sceneItem = presentation.items.find(
-      (item) => item.layoutId === scene.id,
-    )!;
-    const modelIds = new Set(
-      document.connections
-        .filter(
-          (wire) => wire.to.node === sceneNode.id && wire.kind === "attachment",
-        )
-        .map((wire) => wire.from.node),
-    );
-    const companions = content
-      .filter((layout) => {
-        const node = document.nodes.find((node) => node.id === layout.node);
-        return (
-          node &&
-          ["controls", "displays"].includes(publicDefinition(node).category) &&
-          document.connections.some(
-            (wire) =>
-              (modelIds.has(wire.to.node) && wire.from.node === node.id) ||
-              (modelIds.has(wire.from.node) && wire.to.node === node.id),
-          )
-        );
-      })
-      .map(
-        (layout) =>
-          presentation.items.find((item) => item.layoutId === layout.id)!,
-      );
-    const moving = [...modelIds].some(
-      (id) =>
-        publicDefinition(document.nodes.find((node) => node.id === id)!)
-          .lifecycle.clock,
-    );
-    sceneItem.rect = { x: 0, y: top, width: 640, height: moving ? 430 : 480 };
-    if (sceneItem.layoutId !== undefined)
-      sceneItem.responsiveMinHeight = moving ? 300 : 320;
-    let side = top;
-    if (moving)
-      companions.sort((a, b) => {
-        const priority = (item: typeof a) => {
-          const node = document.nodes.find(
-            (node) =>
-              node.id ===
-              content.find((layout) => layout.id === item.layoutId)?.node,
-          )!;
-          const command = document.connections.find(
-            (wire) => wire.from.node === node.id && wire.kind === "command",
-          )?.to.port;
-          return command && !isPlaybackCommand(command) ? 0 : 1;
-        };
-        return priority(a) - priority(b);
-      });
-    for (const item of companions) {
-      const layout = content.find((layout) => layout.id === item.layoutId)!;
-      const node = document.nodes.find((node) => node.id === layout.node)!;
-      const command = document.connections.find(
-        (wire) => wire.from.node === node.id && wire.kind === "command",
-      )?.to.port;
-      const height = Math.max(
-        boardItemMinimum(document, item.layoutId).height,
-        command && isPlaybackCommand(command)
-          ? 64
-          : node.definition.startsWith("displays/")
-            ? 100
-            : 144,
-      );
-      item.rect = {
-        x: 664,
-        y: side,
-        width: 320,
-        height,
-      };
-      if (item.layoutId !== undefined) item.responsiveMinHeight = height;
-      side += height + 16;
-    }
-    presentation.responsiveRows.push([sceneItem.id]);
-    for (const item of companions) presentation.responsiveRows.push([item.id]);
-    top =
-      Math.max(
-        sceneItem.rect.y + sceneItem.rect.height,
-        ...companions.map((item) => item.rect.y + item.rect.height),
-      ) + 32;
-  }
-  const placed = new Set(presentation.responsiveRows.flat());
-  for (const item of presentation.items.filter(
-    (item) => !placed.has(item.id),
-  )) {
-    const height = Math.max(
-      100,
-      boardItemMinimum(document, item.layoutId).height,
-    );
-    item.rect = { x: 0, y: top, width: 640, height };
-    if (item.layoutId !== undefined) item.responsiveMinHeight = height;
-    presentation.responsiveRows.push([item.id]);
-    top += height + 16;
-  }
-  presentation.startView = extent(presentation.items.map((item) => item.rect));
-  return document;
+  return arrangeDocument(document, {
+    template: "automatic",
+    main: [],
+    controls: [],
+    results: [],
+    narrowOrder: [],
+    preserveLocked: true,
+  });
 }

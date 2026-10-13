@@ -10,11 +10,22 @@ import {
 import type { AuthoredDocument } from "../document";
 import { validateAuthoredDocument } from "../../validator/document";
 
+export const arrangementTemplates = [
+  "automatic",
+  "scene-with-sidebar",
+  "scene-with-footer",
+  "scene-with-results",
+  "scene-with-split-controls",
+  "comparison",
+  "vertical",
+] as const;
 export type ArrangementRequest = {
-  template: "scene-with-sidebar" | "comparison" | "vertical";
+  template: (typeof arrangementTemplates)[number];
   main: string[];
   controls: string[];
   results: string[];
+  beside?: string[];
+  below?: string[];
   narrowOrder: string[];
   preserveLocked: true;
 };
@@ -72,6 +83,8 @@ export function arrangeDocument(
     ...request.main,
     ...request.controls,
     ...request.results,
+    ...(request.beside ?? []),
+    ...(request.below ?? []),
     ...request.narrowOrder,
   ])
     if (!layouts.some((l) => l.node === id || l.id === id))
@@ -94,6 +107,22 @@ export function arrangeDocument(
             ? publicDefinition(node).category
             : "layout";
   };
+  for (const item of board.items.filter(
+    (item): item is ComponentBoardItem => !!item.layoutId,
+  )) {
+    if (
+      matches(item, request.beside ?? []) &&
+      matches(item, request.below ?? [])
+    )
+      throw new Error(`${item.id}: choose beside or below, not both`);
+    if (
+      category(item) === "appearance" &&
+      matches(item, [...(request.beside ?? []), ...(request.below ?? [])])
+    )
+      throw new Error(
+        `${item.id}: the main scene cannot also be companion content`,
+      );
+  }
   // Data-connected models share presentation space while runtime scopes stay
   // isolated. Independent comparison models remain separate columns/sections.
   const clusters = new Map(next.scopes.map((scope) => [scope.id, scope.id]));
@@ -142,9 +171,148 @@ export function arrangeDocument(
       (i) => !scenes.includes(i) && !controls.includes(i),
     );
     const sceneNode = scenes.length === 1 ? nodeFor(scenes[0]) : undefined;
+    if (
+      [
+        "automatic",
+        "scene-with-footer",
+        "scene-with-results",
+        "scene-with-split-controls",
+      ].includes(request.template) ||
+      request.beside !== undefined ||
+      request.below !== undefined
+    ) {
+      const wide =
+        sceneNode &&
+        publicDefinition(sceneNode).learnerLayout === "scene-first";
+      const comparison = scopes.length > 1;
+      const x = comparison ? index * 576 : 0;
+      const y = comparison ? baseY : nextScopeY;
+      const width = comparison ? 552 : 980;
+      const compactResults = results.every((item) =>
+        ["displays/Readout", "displays/StatusMessage"].includes(
+          nodeFor(item)?.definition ?? "",
+        ),
+      );
+      const resultsSide =
+        request.template === "scene-with-results" ||
+        (request.template === "automatic" &&
+          scenes.length > 0 &&
+          results.length > 0 &&
+          results.length <= 2 &&
+          compactResults &&
+          !wide &&
+          !comparison);
+      const controlsBelow =
+        request.template === "scene-with-footer" ||
+        resultsSide ||
+        !!wide ||
+        comparison;
+      const companions = [...controls, ...results];
+      const explicitPlacement =
+        request.beside !== undefined || request.below !== undefined;
+      const sideItems = explicitPlacement
+        ? companions.filter((item) =>
+            request.beside !== undefined
+              ? matches(item, request.beside)
+              : !matches(item, request.below ?? []),
+          )
+        : request.template === "scene-with-split-controls"
+          ? companions.slice(0, Math.ceil(companions.length / 2))
+          : resultsSide
+            ? results
+            : controlsBelow
+              ? []
+              : controls;
+      const belowItems = companions.filter((item) => !sideItems.includes(item));
+      const sceneWidth = sideItems.length ? width - 344 : width;
+      const place = (
+        item: ComponentBoardItem,
+        rect: ComponentBoardItem["rect"],
+      ) => {
+        if (!item.locked) item.rect = rect;
+      };
+      let sceneY = y;
+      for (const item of scenes) {
+        const minimum = boardItemMinimum(next, item.layoutId);
+        const height = Math.max(minimum.height, wide ? 360 : 430);
+        place(item, {
+          x,
+          y: sceneY,
+          width: Math.max(minimum.width, sceneWidth),
+          height,
+        });
+        item.responsiveMinHeight = Math.max(minimum.height, wide ? 260 : 300);
+        rows.push([item.id]);
+        sceneY += height + 24;
+      }
+      const heightFor = (item: ComponentBoardItem) => {
+        const node = nodeFor(item);
+        const minimum = boardItemMinimum(next, item.layoutId);
+        return Math.max(
+          minimum.height,
+          node?.definition === "controls/ArithmeticActivity"
+            ? 220
+            : category(item) === "controls"
+              ? 128
+              : 100,
+        );
+      };
+      const side = (items: ComponentBoardItem[]) => {
+        let bottom = y;
+        for (const item of items) {
+          const height = heightFor(item);
+          place(item, {
+            x: x + sceneWidth + 24,
+            y: bottom,
+            width: Math.max(320, boardItemMinimum(next, item.layoutId).width),
+            height,
+          });
+          item.responsiveMinHeight = height;
+          rows.push([item.id]);
+          bottom += height + 16;
+        }
+        return bottom;
+      };
+      const sideBottom = side(sideItems);
+      let bottom = Math.max(sceneY, sideBottom);
+      const below = (items: ComponentBoardItem[], columns: number) => {
+        for (let offset = 0; offset < items.length; offset += columns) {
+          const row = items.slice(offset, offset + columns);
+          const height = Math.max(...row.map(heightFor));
+          const itemWidth = (width - 24 * (row.length - 1)) / row.length;
+          row.forEach((item, column) => {
+            place(item, {
+              x: x + column * (itemWidth + 24),
+              y: bottom,
+              width: Math.max(
+                itemWidth,
+                boardItemMinimum(next, item.layoutId).width,
+              ),
+              height,
+            });
+            item.responsiveMinHeight = height;
+          });
+          rows.push(row.map((item) => item.id));
+          bottom += height + 24;
+        }
+      };
+      if (explicitPlacement || request.template === "scene-with-split-controls")
+        below(belowItems, comparison ? 1 : 2);
+      else {
+        below(
+          belowItems.filter((item) => results.includes(item)),
+          compactResults ? 2 : 1,
+        );
+        below(
+          belowItems.filter((item) => controls.includes(item)),
+          comparison ? 1 : 2,
+        );
+      }
+      nextScopeY = bottom + 24;
+      continue;
+    }
     const sceneFirst =
-      sceneNode &&
-      publicDefinition(sceneNode).learnerLayout === "scene-first";
+      sceneNode && publicDefinition(sceneNode).learnerLayout === "scene-first";
     if (sceneFirst) {
       board.responsiveGap = 16;
       const place = (

@@ -1,3 +1,4 @@
+import { arrangementTemplates } from "./presentation/arrangement";
 import { publicDefinitions } from "../../registry/index";
 import { parameterLeaves } from "../../registry/contracts/controlContract";
 import { hasBoundControl } from "./bindings";
@@ -16,7 +17,10 @@ import {
   type ParameterSchema,
 } from "../../registry/contracts/parameterSchema";
 import { premadeRecipe } from "../../registry/recipes/premade";
-import { type JsonSchema, toJsonSchema } from "../input/inference/structuredSchema";
+import {
+  type JsonSchema,
+  toJsonSchema,
+} from "../input/inference/structuredSchema";
 import type { ComponentBucketCard } from "../component-selection/componentCandidates";
 
 const alias: ParameterSchema = {
@@ -203,34 +207,49 @@ export function buildTurnTools(
   const layoutTargets = document.layout.children.map((l) => l.node ?? l.id);
   tools.push({
     tool: "arrange",
-    schema: object({
-      template: choice("scene-with-sidebar", "comparison", "vertical"),
-      main: {
-        type: "array",
-        minItems: 0,
-        maxItems: 8,
-        items: layoutTargets.length > 0 ? choice(...layoutTargets) : text,
+    schema: object(
+      {
+        template: choice(...arrangementTemplates),
+        main: {
+          type: "array",
+          minItems: 0,
+          maxItems: 8,
+          items: layoutTargets.length > 0 ? choice(...layoutTargets) : text,
+        },
+        controls: {
+          type: "array",
+          minItems: 0,
+          maxItems: 8,
+          items: layoutTargets.length > 0 ? choice(...layoutTargets) : text,
+        },
+        results: {
+          type: "array",
+          minItems: 0,
+          maxItems: 8,
+          items: layoutTargets.length > 0 ? choice(...layoutTargets) : text,
+        },
+        beside: {
+          type: "array",
+          minItems: 0,
+          maxItems: 8,
+          items: layoutTargets.length > 0 ? choice(...layoutTargets) : text,
+        },
+        below: {
+          type: "array",
+          minItems: 0,
+          maxItems: 8,
+          items: layoutTargets.length > 0 ? choice(...layoutTargets) : text,
+        },
+        narrowOrder: {
+          type: "array",
+          minItems: 0,
+          maxItems: 8,
+          items: layoutTargets.length > 0 ? choice(...layoutTargets) : text,
+        },
+        preserveLocked: { type: "boolean" },
       },
-      controls: {
-        type: "array",
-        minItems: 0,
-        maxItems: 8,
-        items: layoutTargets.length > 0 ? choice(...layoutTargets) : text,
-      },
-      results: {
-        type: "array",
-        minItems: 0,
-        maxItems: 8,
-        items: layoutTargets.length > 0 ? choice(...layoutTargets) : text,
-      },
-      narrowOrder: {
-        type: "array",
-        minItems: 0,
-        maxItems: 8,
-        items: layoutTargets.length > 0 ? choice(...layoutTargets) : text,
-      },
-      preserveLocked: { type: "boolean" },
-    }),
+      ["beside", "below"],
+    ),
   });
 
   if (document.presentation?.mode === "board")

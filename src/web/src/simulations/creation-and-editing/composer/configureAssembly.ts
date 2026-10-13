@@ -1,6 +1,7 @@
 import { acceptedCommandArguments } from "../../registry/contracts/commandPresentation";
 import {
   object,
+  choice,
   validateValue,
 } from "../../registry/contracts/parameterSchema";
 import { publicDefinition } from "../../registry/index";
@@ -31,55 +32,9 @@ export async function configureAssembly(
     ...parameter,
     key: `setting${index + 1}`,
   }));
-  const schema = object(
-    Object.fromEntries(
-      parameters.map((parameter) => [parameter.key, parameter.schema]),
-    ),
-    parameters.map((parameter) => parameter.key),
-  );
   budget.trace?.("stage", { task: "configure_selected_recipe" });
-  return await requestStructured<{ overrides: Record<string, unknown> }>(
-    [
-      {
-        role: "system",
-        content:
-          "Configure starting settings for the original learning request. Return ONLY ONE flat patch object keyed by the supplied setting IDs. The application maps IDs to parameters. Do not invent parameter names or an overrides envelope. Use {} unless starting values were requested. Preserve exact quantities and units. For different-condition comparisons choose different requested values within their contracts using priorConfigurations. Do not return controls, observations, visibility decisions or schemas.",
-      },
-      {
-        role: "user",
-        content: JSON.stringify({
-          request: request.prompt,
-          intent,
-          activity: source.title,
-          instance: index + 1,
-          instances: instanceCount,
-          priorConfigurations,
-          parameters: parameters.map((parameter) => ({
-            id: parameter.key,
-            name: parameter.name,
-            default:
-              [...source.document.nodes, ...source.document.resources].find(
-                (node) => node.id === parameter.node,
-              )!.configuration[parameter.field] ?? parameter.default,
-            schema: parameter.schema,
-          })),
-          responseSchema: toJsonSchema(schema),
-        }),
-      },
-    ],
-    (content) => {
-      const { value } = parseArgumentJson(content);
-      validateValue(schema, value);
-      const result = {
-        overrides: Object.fromEntries(
-          Object.entries(value as Record<string, unknown>).map(
-            ([key, setting]) => [
-              parameters.find((parameter) => parameter.key === key)!.name,
-              setting,
-            ],
-          ),
-        ),
-      };
+  const result: { overrides: Record<string, unknown> } = { overrides: {} };
+  const verifyOverrides = (result: { overrides: Record<string, unknown> }) => {
       if (intent.comparisonConditions === "different") {
         for (const previous of priorConfigurations.filter(
           (previous) => previous.activity === source.id,
@@ -157,26 +112,34 @@ export async function configureAssembly(
             );
         }
       }
-      return result;
-    },
-    "Return a flat object using ONLY the supplied setting IDs and actual values. Omit settings that were not requested. Return {} for unchanged defaults. Do not return an overrides envelope, parameter names, visibility decisions or schemas.",
-    budget.signal,
-    {
-      budget,
-      stage: "assembly_configuration",
-      schema: toJsonSchema(schema),
-      maxTokens: 512,
-      repairFeedback: (error) => ({
-        key: error instanceof Error ? error.message : "invalid_settings",
-        details: {
-          response_keys: parameters.map((parameter) => parameter.key),
-          expected_contract: toJsonSchema(schema),
-          parameter_ids: parameters.map(({ key, name }) => ({ id: key, name })),
-          root: "flat setting-keyed patch; {} preserves defaults",
-        },
-      }),
-      onEvent: (event, data) =>
-        budget.trace?.(`assembly_configuration.${event}`, data),
-    },
-  );
+  };
+  let remaining = parameters;
+  while (remaining.length) {
+    const selectionSchema = object({ candidate: choice("done", ...remaining.map(parameter => parameter.key)) });
+    const selected = await requestStructured<{candidate: string}>([
+      { role: "system", content: 'Choose ONE setting whose starting VALUE the original request specifies, or return {"candidate":"done"} to keep defaults. An adjustable input does not request an initial value. For different-condition comparisons choose the requested distinguishing setting. Never return a list.' },
+      { role: "user", content: JSON.stringify({ request: request.prompt, instance: index + 1, instances: instanceCount, alreadyConfigured: Object.keys(result.overrides), candidates: [{id: "done", label: "Keep all remaining registered starting values; no initial value change is requested"}, ...remaining.map(parameter => ({id: parameter.key, label: parameter.name}))] }) },
+    ], content => { const {value} = parseArgumentJson(content); validateValue(selectionSchema, value); return value as {candidate: string}; },
+    'Return only {"candidate":"done"} or one supplied setting ID.', budget.signal, {
+      budget, stage: "assembly_settings", schema: toJsonSchema(selectionSchema), maxTokens: 64,
+      onEvent: (event, data) => budget.trace?.(`assembly_settings.${event}`, data),
+    });
+    if (selected.candidate === "done") break;
+    const parameter = remaining.find(parameter => parameter.key === selected.candidate)!;
+    const schema = object({ value: parameter.schema });
+    const current = [...source.document.nodes, ...source.document.resources].find(node => node.id === parameter.node)!.configuration[parameter.field] ?? parameter.default;
+    const answer = await requestStructured<{value: unknown}>([
+      { role: "system", content: 'Set the one selected starting setting from the original request. Preserve explicit quantities and units. Return only {"value":actualValue}; never return a schema or other settings. For a requested different-condition comparison, distinguish this instance from prior values.' },
+      { role: "user", content: JSON.stringify({ request: request.prompt, instance: index + 1, instances: instanceCount, setting: { name: parameter.name, current, contract: toJsonSchema(parameter.schema) }, priorValues: priorConfigurations.filter(previous => previous.activity === source.id).map(previous => previous.overrides[parameter.name] ?? current) }) },
+    ], content => { const { value } = parseArgumentJson(content); validateValue(schema, value); return value as {value: unknown}; },
+    'Return only {"value":actualValue} matching the selected setting contract.', budget.signal, {
+      budget, stage: "assembly_setting_value", schema: toJsonSchema(schema), maxTokens: 256,
+      verify: answer => { if (remaining.length === 1) verifyOverrides({overrides: {...result.overrides, [parameter.name]: answer.value}}); },
+      onEvent: (event, data) => budget.trace?.(`assembly_setting_value.${event}`, data),
+    });
+    result.overrides[parameter.name] = answer.value;
+    remaining = remaining.filter(candidate => candidate.key !== parameter.key);
+  }
+  verifyOverrides(result);
+  return result;
 }

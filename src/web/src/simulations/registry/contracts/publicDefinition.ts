@@ -39,6 +39,8 @@ export type PublicDefinition = {
     | "layout";
   /** Scene-led lessons place small controls and captions below the visual. */
   learnerLayout?: "scene-first";
+  /** Model output names already communicated by this scene. */
+  presentedOutputs?: readonly string[];
   tags: readonly string[];
   configuration: ParameterSchema;
   defaults: Record<string, unknown>;

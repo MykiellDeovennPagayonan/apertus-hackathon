@@ -18,7 +18,6 @@ import {
   emptyAuthoredDocument,
   emptyLayout,
 } from "../authoring-engine/document";
-import { type Message, requestStructured } from "../input/inference/transport";
 import { buildInitialCard, retrieveComponentBucket } from "../component-selection/componentCandidates";
 import type { GenerationBudget } from "../budget";
 import { requiresLayaComposition } from "./policy";
@@ -30,29 +29,11 @@ import {
 import { computeOpenCompositionCoverage } from "../validator/coverage";
 import { PlannerError } from "../errors";
 import { focusedTurn } from "./operationArguments";
-import { type FixerResult, fixAndValidateToolResponse } from "../authoring-engine/normalizeOperations";
 import type { GenerationRequest } from "../input/contracts";
 import type { GenerationResult } from "../input/results";
 import type { TeachingIntent } from "../intent-interpreter/contracts";
 import { selectCompositionStrategy } from "../component-selection/selectCompositionStrategy";
-import { buildTurnEnvelopeSchema, buildTurnTools } from "../authoring-engine/tools";
-
-const TURN_SYSTEM_PROMPT = `You are the component and composite builder agent for Apertus.
-Your task is to build or modify an interactive simulation composite matching the user's intent.
-A composite is a reusable assembly of connected components (models, controls, observations, canvases) with typed ports and layout.
-Each turn, you must return a single JSON turn envelope containing either:
-1. {"action": "tool", "tool": {"tool": "<tool_name>", "arguments": { ... }}, "note": "<brief rationale>"}
-2. {"action": "done", "note": "<brief summary>"}
-
-Recommended sequence of operations:
-1. Insert required model/prefab components (insert_component with definition and alias).
-2. Connect required ports between components if needed (connect).
-3. Configure model parameters to reflect constraints (configure).
-4. Add only controls needed for the active learning question. Process lessons need one contextual primary action, not every adjustable parameter.
-5. Use one timely caption for process lessons. Add numerical observations or graphs only when the question requires them. Follow topic guidance for independent action/caption dependencies.
-6. Set composite metadata and lesson info (set_lesson) and layout arrangement (arrange).
-7. Return action "done" when the composite is fully assembled and configured.
-Only use valid tool names and arguments from the provided schema. Do not output markdown fences or explanatory text outside the JSON envelope.`;
+import { buildTurnTools } from "../authoring-engine/tools";
 
 export async function compose(
   request: GenerationRequest,
@@ -333,68 +314,6 @@ export async function compose(
     );
     const suggestions = suggestConnections(draft.document);
 
-    const isCompositeBuilder =
-      (request.active?.sessionId?.startsWith("builder-") ?? false) ||
-      /\b(?:builder|composite|component)\b/i.test(request.prompt) ||
-      Boolean(request.requestId?.includes("builder")) ||
-      request.active == null;
-
-    const contextData = {
-      strategy,
-      allowedTools: [...new Set(turnTools.map((t) => t.tool))],
-      requirements: Object.fromEntries(
-        bucket
-          .filter((c) => compositionRequirements[c.id])
-          .map((c) => [c.id, compositionRequirements[c.id]]),
-      ),
-      incomplete: requiredLaya ? compositionIssues(draft.document) : [],
-      mode: isCompositeBuilder ? "composite_builder" : "experiment_planner",
-      draftSummary: {
-        nodes: nodesSummary,
-        connections: connectionsSummary,
-        groups:
-          draft.document.groups?.map((g) => ({
-            id: g.id,
-            label: g.label,
-            members: g.members,
-            parameters: g.parameters,
-            exposedPorts: g.exposedPorts,
-          })) ?? [],
-        unconnectedRequiredPorts: suggestions.map(
-          (s) =>
-            `${s.to.node}.${s.to.port} (compatible candidate: ${s.from.node}.${s.from.port})`,
-        ),
-        revision: draft.revision,
-      },
-      compositeDetails: request.active?.recipe
-        ? {
-            id: request.active.recipe.id,
-            title: request.active.recipe.title,
-            description: request.active.recipe.description,
-            parameters: request.active.recipe.parameters,
-            externalPorts: request.active.recipe.externalPorts,
-            tags: request.active.recipe.tags,
-            assumptions: request.active.recipe.assumptions,
-            discovery: request.active.recipe.discovery,
-          }
-        : undefined,
-      bucketComponents: bucket.map((c) => ({
-        id: c.id,
-        kind: c.kind,
-        summary: c.summary,
-        supports: c.supports,
-        commands: c.commands,
-        outputs: c.outputs.map((o) => o.name),
-      })),
-      lastOperation: lastReceipt
-        ? {
-            status: lastReceipt.status,
-            summary: lastReceipt.summary,
-            issues: lastReceipt.issues,
-          }
-        : null,
-    };
-
     const modelNodes = draft.document.nodes.filter(
       (n) => publicDefinition(n.definition).category === "models",
     );
@@ -405,89 +324,14 @@ export async function compose(
       (n) => publicDefinition(n.definition).category === "displays",
     ).length;
 
-    let stepHint = "";
-    if (isCompositeBuilder) {
-      if (modelNodes.length === 0) {
-        stepHint =
-          "Step: insert the core physical or mathematical model component (insert_component or insert_recipe).";
-      } else if (
-        draft.document.connections.length === 0 &&
-        (controlCount > 0 || observationCount > 0)
-      ) {
-        stepHint =
-          "Step: connect controls or observation readouts to model ports (connect).";
-      } else if (wantsMoreControls && executedPayloads.size === 0) {
-        stepHint =
-          "Step: add interactive control components (add_control) to satisfy user addition request.";
-      } else if (wantsMoreObservations && executedPayloads.size === 0) {
-        stepHint =
-          "Step: add observation or display components (add_observation) to satisfy user addition request.";
-      } else if (controlCount === 0) {
-        stepHint =
-          "Step: add interactive control components (add_control) to manipulate composite model parameters.";
-      } else if (observationCount === 0) {
-        stepHint =
-          "Step: add observation or display components (add_observation) to visualize composite outputs.";
-      } else {
-        stepHint =
-          "Step: configure parameters (configure), set composite title/description (set_lesson), arrange layout (arrange), or return action 'done'.";
-      }
-    } else {
-      const wantedModels = intent.suggestedStructure === "comparison" ? 2 : 1;
-      const wantedControls = wantedModels;
-      const wantedObservations = wantedModels;
-      if (modelNodes.length < wantedModels) {
-        stepHint =
-          wantedModels > 1
-            ? "Step: insert the models to compare (insert_component or insert_recipe)."
-            : "Step: insert the single model needed (insert_component or insert_recipe).";
-      } else if (controlCount < wantedControls) {
-        stepHint =
-          "Step: add an interactive control (add_control) using a command and field that exist on the target model.";
-      } else if (observationCount < wantedObservations) {
-        stepHint =
-          "Step: add an observation readout (add_observation) using an output that exists on the source model.";
-      } else {
-        stepHint =
-          "Step: configure parameters (configure), set lesson info (set_lesson), arrange layout (arrange), or return action 'done'.";
-      }
-    }
-
-    const messages: Message[] = [
-      { role: "system", content: TURN_SYSTEM_PROMPT },
-      {
-        role: "user",
-        content: isCompositeBuilder
-          ? `Original composite request: "${request.prompt}"\nGoal: "${intent.goal}"\nComposite Assembly Guidance: ${stepHint}\nContext:\n${JSON.stringify(
-              contextData,
-              null,
-              2,
-            )}\n\nChoose the next single tool operation to build or modify this composite, or choose done if complete.`
-          : `Original request: "${request.prompt}"\nLearning goal: "${intent.goal}"\nGuidance: ${stepHint}\nContext:\n${JSON.stringify(
-              contextData,
-              null,
-              2,
-            )}\n\nChoose the next single tool operation to perform, or choose done if complete.`,
-      },
-    ];
-
-    const canFinish = !(
-      modelNodes.length === 0 ||
-      (controlCount === 0 && observationCount === 0) ||
-      (wantsMoreControls && controlCount === 0) ||
-      (wantsMoreObservations && observationCount === 0)
-    );
-    const turnJsonSchema = buildTurnEnvelopeSchema(turnTools, canFinish);
-
-    if (requiredLaya) budget.beginTurn();
+    budget.beginTurn();
     budget.trace?.("turn.start", {
       turn: turn + 1,
       revision: draft.revision,
       availableTools: turnTools.map((t) => t.tool),
     });
 
-    const turnResult = requiredLaya
-      ? await focusedTurn(
+    const turnResult = await focusedTurn(
           request.prompt,
           turnTools,
           {
@@ -558,34 +402,6 @@ export async function compose(
               lastReceipt?.status === "applied" &&
               compositionIssues(draft.document).length === 0,
           ),
-        )
-      : await requestStructured<FixerResult>(
-          messages,
-          (content: string) => {
-            const fixed = fixAndValidateToolResponse(
-              content,
-              liveHandles,
-              undefined,
-              (event, data) => {
-                budget.trace?.(event, data);
-              },
-              draft.document,
-            );
-            if (fixed.issues.length > 0) {
-              throw new Error(fixed.issues.join("; "));
-            }
-            return fixed;
-          },
-          'Return a single valid JSON turn envelope matching schema: {"action": "tool"|"done", "tool": {...}, "note": "..."}.',
-          budget.signal,
-          {
-            budget,
-            schema: turnJsonSchema,
-            maxTokens: 768,
-            onEvent: (event, data) =>
-              budget.trace?.(`turn_${turn + 1}.${event}`, data),
-            stage: `turn_${turn + 1}`,
-          },
         );
 
     if (turnResult.unsupported) {

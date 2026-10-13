@@ -1,18 +1,16 @@
-import {
-  object,
-  validateValue,
-} from "../../registry/contracts/parameterSchema";
+import { object, choice, validateValue } from "../../registry/contracts/parameterSchema";
 import { publicDefinition } from "../../registry/index";
+import { isPlaybackCommand } from "../../registry/contracts/interactionPolicy";
 import type { CompositeRecipe } from "../authoring-engine/document";
 import type { GenerationBudget } from "../budget";
 import { controls, terms } from "../component-selection/assemblyCandidates";
-import { acceptChoice } from "../component-selection/decisions/acceptance";
-import type { ChoiceQuestion } from "../component-selection/decisions/contracts";
 import type { GenerationRequest } from "../input/contracts";
 import { parseArgumentJson } from "../input/inference/parseJson";
 import { toJsonSchema } from "../input/inference/structuredSchema";
 import { requestStructured } from "../input/inference/transport";
 import type { TeachingIntent } from "../intent-interpreter/contracts";
+
+/** The application retains bindings; inference resolves one small decision at a time. */
 export async function choosePresentation(
   request: GenerationRequest,
   intent: TeachingIntent,
@@ -22,291 +20,104 @@ export async function choosePresentation(
 ) {
   budget.trace?.("stage", { task: "choose_presentation" });
   const wires = controls(source);
-  const commands = [
-    ...new Set(wires.map((wire) => `${wire.to.node}.${wire.to.port}`)),
-  ];
-  const commandCards = commands.map((id) => {
-    const wire = wires.find(
-      (wire) => `${wire.to.node}.${wire.to.port}` === id,
-    )!;
-    const control = source.document.nodes.find(
-      (node) => node.id === wire.from.node,
-    )!;
-    const key =
-      commands.filter((command) => command.endsWith(`.${wire.to.port}`))
-        .length === 1
-        ? wire.to.port
-        : id;
+  const nodes = [...source.document.nodes, ...source.document.resources];
+  const commandCards = [...new Set(wires.map(wire => `${wire.to.node}.${wire.to.port}`))].map((endpoint, index) => {
+    const wire = wires.find(wire => `${wire.to.node}.${wire.to.port}` === endpoint)!;
+    const control = nodes.find(node => node.id === wire.from.node)!;
+    const model = nodes.find(node => node.id === wire.to.node)!;
+    const command = publicDefinition(model).commands[wire.to.port];
     return {
-      id: key,
-      endpoint: id,
+      id: `c${index + 1}`,
+      endpoint,
       label: String(control.configuration.label ?? control.label),
-      description: publicDefinition(
-        source.document.nodes.find((node) => node.id === wire.to.node)!,
-      ).commands[wire.to.port].description,
+      meaning: command.description.slice(0, 200),
+      adjustable: command.arguments.type === "object" && Object.keys(command.arguments.properties).length > 0,
+      playback: isPlaybackCommand(wire.to.port) && publicDefinition(model).lifecycle.clock,
     };
   });
-  const observationCards = source.document.nodes
-    .filter((node) => publicDefinition(node).category === "displays")
-    .map((node) => ({
-      id: node.id,
-      label: String(node.configuration.label ?? node.label),
-      description: publicDefinition(node).description,
-      outputs: source.document.connections
-        .filter((wire) => wire.kind === "value" && wire.to.node === node.id)
-        .map((wire) => ({
-          name: wire.from.port,
-          contract: publicDefinition(
-            [...source.document.nodes, ...source.document.resources].find(
-              (node) => node.id === wire.from.node,
-            )!,
-          ).outputs[wire.from.port],
-        })),
-    }));
-  const visibilityCards = [
-    ...commandCards.map((card) => ({ ...card, kind: "control" as const })),
-    ...observationCards.map((card) => ({
-      ...card,
-      kind: "observation" as const,
-    })),
-  ];
-  const acceptedVisibility = new Map<string, boolean>();
-  if ((process.env.PLANNER_MODE ?? "hybrid") === "hybrid") {
-    budget.maxDecisionCalls =
-      budget.decisionCalls + Math.ceil(visibilityCards.length / 8);
-    for (let offset = 0; offset < visibilityCards.length; offset += 8) {
-      const batch = visibilityCards.slice(offset, offset + 8);
-      const questions: Record<string, ChoiceQuestion> = Object.fromEntries(
-        batch.map((card, index) => [
-          `visibility${index + 1}`,
-          {
-            type: "choice",
-            instructions:
-              "Decide whether this item is essential to the original learning request. Availability alone is insufficient. Unrelated inputs stay fixed; duplicate/internal measurements stay hidden.",
-            criteria: {
-              include: `${card.kind}: ${card.label}. ${card.description}. This item is a requested input, essential action, or necessary observation of the requested outcome.`,
-              omit: `${card.kind}: ${card.label}. This item is unrelated, duplicates information already communicated by the scene, or exposes an internal measurement rather than the requested outcome.`,
-            },
-          },
-        ]),
-      );
-      budget.consumeDecisionCall();
-      try {
-        const { provider, policy } = budget.decision;
-        const response = await provider(
-          {
-            state: {
-              originalRequest: request.prompt,
-              intent,
-              activity: source.title,
-              scenes: source.document.nodes
-                .filter((node) =>
-                  ["appearance", "canvases"].includes(
-                    publicDefinition(node).category,
-                  ),
-                )
-                .map((node) => ({
-                  title: publicDefinition(node).title,
-                  description:
-                    source.document.connections
-                      .filter(
-                        (wire) =>
-                          wire.kind === "value" && wire.to.node === node.id,
-                      )
-                      .map(
-                        (wire) =>
-                          publicDefinition(
-                            [
-                              ...source.document.nodes,
-                              ...source.document.resources,
-                            ].find((node) => node.id === wire.from.node)!,
-                          ).outputs[wire.from.port].description,
-                      )
-                      .filter(Boolean)
-                      .join(" ") || publicDefinition(node).description,
-                })),
-            },
-            questions,
-          },
-          budget.signal,
-        );
-        const decisions = batch.map((card, index) => {
-          const key = `visibility${index + 1}`;
-          const accepted = acceptChoice(
-            response.answers[key],
-            questions[key],
-            policy.probabilityGate,
-            policy.confidenceGate,
-          );
-          if (accepted)
-            acceptedVisibility.set(
-              `${card.kind}:${card.id}`,
-              accepted.choice === "include",
-            );
-          return {
-            id: card.id,
-            kind: card.kind,
-            status: accepted ? "accepted" : "rejected",
-            answer: response.answers[key],
-          };
-        });
-        budget.trace?.("presentation.decision", {
-          provider: response.provider,
-          model: response.model,
-          durationMs: response.durationMs,
-          usage: response.usage,
-          decisions,
-        });
-      } catch (error) {
-        budget.check();
-        budget.signal.throwIfAborted();
-        budget.trace?.("presentation.decision", {
-          status: "unavailable",
-          reason:
-            error instanceof Error ? error.message : "Decision unavailable",
-        });
-      }
-    }
-  }
-  for (const capability of requiredCapabilities) {
-    const matching = commandCards.filter((card) =>
-      terms(card.endpoint).has(capability),
-    );
-    if (
-      matching.length &&
-      matching.every(
-        (card) => acceptedVisibility.get(`control:${card.id}`) === false,
-      )
-    )
-      for (const card of matching)
-        acceptedVisibility.delete(`control:${card.id}`);
-  }
-  const unresolvedControls = commandCards.filter(
-    (card) => !acceptedVisibility.has(`control:${card.id}`),
-  );
-  const unresolvedObservations = observationCards.filter(
-    (card) => !acceptedVisibility.has(`observation:${card.id}`),
-  );
+  const observationCards = source.document.nodes.filter(node => publicDefinition(node).category === "displays").map((node, index) => ({
+    id: `r${index + 1}`,
+    node: node.id,
+    label: String(node.configuration.label ?? node.label),
+    outputs: source.document.connections.filter(wire => wire.kind === "value" && wire.to.node === node.id).map(wire => {
+      const contract = publicDefinition(nodes.find(node => node.id === wire.from.node)!).outputs[wire.from.port];
+      return { name: wire.from.port, meaning: contract.description?.slice(0, 140), unit: contract.unit };
+    }),
+  }));
+  const scenes = source.document.nodes.filter(node => ["appearance", "canvases"].includes(publicDefinition(node).category)).map(node => ({
+    label: publicDefinition(node).title,
+    meaning: publicDefinition(node).description.slice(0, 160),
+    communicates: publicDefinition(node).presentedOutputs ?? [],
+  }));
+  const selectedControls = new Set(commandCards.filter(card => card.playback).map(card => card.id));
+  const adjustable = commandCards.filter(card => card.adjustable && !card.playback);
+  const requestedInputs = intent.requestedInputs ?? intent.interactions.filter(interaction => /\b(?:adjust|change|modify|control|set|vary|move|drag|resize|manipulate|increase|decrease|choose|select)\b/i.test(interaction));
+  const labelTerms = adjustable.map(card => terms(card.label));
 
-  const choices = [
-    ...unresolvedControls.map((card) => ({
-      ...card,
-      kind: "control" as const,
-    })),
-    ...unresolvedObservations.map((card) => ({
-      ...card,
-      kind: "observation" as const,
-    })),
-  ].map((card, index) => ({ ...card, key: `item${index + 1}` }));
-  const choiceKeys = new Map(
-    choices.map((card) => [`${card.kind}:${card.id}`, card.key]),
-  );
-  const schema = object(
-    Object.fromEntries(
-      choices.map((card) => [
-        card.key,
-        { type: "boolean" as const, description: card.label },
-      ]),
-    ),
-  );
-  const response =
-    unresolvedControls.length || unresolvedObservations.length
-      ? await requestStructured<Record<string, boolean>>(
-          [
-            {
-              role: "system",
-              content:
-                "Select only requested inputs, essential actions, and necessary observations for the original learning request. Return ONE flat object keyed only by the supplied item IDs with boolean values. Availability alone does not mean needed. Keep unrelated independent variables at their authored defaults; do not add an input merely because it changes model behavior. Omit internal measurements already communicated by the scene unless explicitly requested. Do not return values, settings, schemas or arrays.",
-            },
-            {
-              role: "user",
-              content: JSON.stringify({
-                request: request.prompt,
-                intent,
-                activity: source.title,
-                items: choices.map(({ key, kind, label, description }) => ({
-                  id: key,
-                  kind,
-                  label,
-                  description,
-                })),
-                responseSchema: toJsonSchema(schema),
-              }),
-            },
-          ],
-          (content) => {
-            const { value } = parseArgumentJson(content);
-            validateValue(schema, value);
-            return value as Record<string, boolean>;
-          },
-          "Return only a flat object with the supplied item IDs as keys and boolean values. Do not return control names, nested objects, arrays or settings.",
-          budget.signal,
-          {
-            budget,
-            stage: "assembly_presentation",
-            schema: toJsonSchema(schema),
-            maxTokens: 512,
-            repairFeedback: (error) => ({
-              key:
-                error instanceof Error ? error.message : "invalid_presentation",
-              details: {
-                response_keys: choices.map((card) => card.key),
-                expected_contract: toJsonSchema(schema),
-                value_type: "boolean",
-                root: "flat item-keyed object",
-              },
-            }),
-            verify: (response) => {
-              verifyPresentation(response);
-            },
-            onEvent: (event, data) =>
-              budget.trace?.(`assembly_presentation.${event}`, data),
-          },
-        )
-      : {};
-  function verifyPresentation(response: Record<string, boolean>) {
-    const result = project(response);
-    for (const capability of requiredCapabilities) {
-      const matching = wires.filter((wire) =>
-        terms(wire.to.port).has(capability),
-      );
-      if (
-        matching.length &&
-        !matching.some((wire) =>
-          result.controls.includes(`${wire.to.node}.${wire.to.port}`),
-        )
-      )
-        throw new Error(
-          `The requested ${capability} adjustment needs a persistent control. Include ${matching.map((wire) => `${wire.to.node}.${wire.to.port}`).join(" or ")} in the presentation.`,
-        );
+  for (const interaction of requestedInputs) {
+    const words = terms(interaction);
+    const matching = adjustable.filter((_, index) => [...labelTerms[index]].some(word => words.has(word) && labelTerms.filter(label => label.has(word)).length === 1));
+    if (matching.length) {
+      for (const card of matching) selectedControls.add(card.id);
+      budget.trace?.("presentation.binding", { interaction, controls: matching.map(card => card.endpoint), source: "registry label" });
+      continue;
     }
-    if (
-      intent.interactions.length &&
-      commands.some((command) => !/reset$/i.test(command)) &&
-      !result.controls.length
-    )
-      throw new Error(
-        "The requested interactive experiment needs persistent controls.",
-      );
+    if (!adjustable.length)
+      return { controls: [], observations: [], unsupported: `The available activity has no adjustable input for ${interaction}.` };
+    const schema = object({ candidate: choice(...adjustable.map(card => card.id), "unavailable") });
+    const answer = await requestStructured<{candidate: string}>([
+      { role: "system", content: 'Resolve the requested interaction using one supported input. Return only {"candidate":"c1"} using a supplied ID, or {"candidate":"unavailable"}. Do not substitute playback or an unrelated quantity.' },
+      { role: "user", content: JSON.stringify({ request: request.prompt, interaction, candidates: adjustable.map(({id, label, meaning}) => ({id, label, meaning})) }) },
+    ], content => { const {value} = parseArgumentJson(content); validateValue(schema, value); return value as {candidate: string}; },
+    'Return only {"candidate":"supplied-id"}. No schema or extra keys.', budget.signal, {
+      budget, stage: "assembly_input", schema: toJsonSchema(schema), maxTokens: 64,
+      onEvent: (event, data) => budget.trace?.(`assembly_input.${event}`, data),
+    });
+    if (answer.candidate === "unavailable")
+      return { controls: [], observations: [], unsupported: `The available activity cannot support ${interaction}.` };
+    selectedControls.add(answer.candidate);
+    budget.trace?.("presentation.binding", { interaction, controls: [commandCards.find(card => card.id === answer.candidate)!.endpoint], source: "semantic selection" });
   }
-  function project(response: Record<string, boolean>) {
-    return {
-      controls: commandCards
-        .filter(
-          (card) =>
-            acceptedVisibility.get(`control:${card.id}`) ??
-            response[choiceKeys.get(`control:${card.id}`)!],
-        )
-        .map((card) => card.endpoint),
-      observations: observationCards
-        .filter(
-          (card) =>
-            acceptedVisibility.get(`observation:${card.id}`) ??
-            response[choiceKeys.get(`observation:${card.id}`)!],
-        )
-        .map((card) => card.id),
-    };
+
+  const selectNext = async (kind: "controls" | "observations", candidates: {id: string; label: string}[], retained: string[]) => {
+    const schema = object({ candidate: choice("done", ...candidates.map(card => card.id)) });
+    const answer = await requestStructured<{candidate: string}>([
+      { role: "system", content: kind === "controls"
+        ? 'The requested inputs and necessary playback are already retained. Decide whether the ORIGINAL request is complete. Choose done when it is complete. Choose another control only if the activity cannot work without it. Return {"candidate":"done"}. Do not expose unrelated variables or optional restart/reset/step actions. Return one supplied candidate ID, never an array.'
+        : 'Decide whether the scene and retained components already explain the ORIGINAL requested outcome. Choose done when they do. Choose one observation only for missing necessary feedback, never duplicate values. Return {"candidate":"done"}. Do not invent measurements from a learning question or expose internal diagnostics. Return one supplied candidate ID, never an array.' },
+      { role: "user", content: JSON.stringify({ request: request.prompt, scenes, controls: commandCards.filter(card => selectedControls.has(card.id)).map(card => card.label), retained, candidates: [{id: "done", label: kind === "controls" ? "The requested interactions are already supported; add no more controls" : "The scene and retained components already communicate the requested outcome; add no readout"}, ...candidates] }) },
+    ], content => { const {value} = parseArgumentJson(content); validateValue(schema, value); return value as {candidate: string}; },
+    'Return only {"candidate":"done"} or {"candidate":"one-supplied-id"}. Do not copy the candidate list.', budget.signal, {
+      budget, stage: `assembly_${kind}`, schema: toJsonSchema(schema), maxTokens: 64,
+      onEvent: (event, data) => budget.trace?.(`assembly_${kind}.${event}`, data),
+    });
+    return answer.candidate;
+  };
+  let remainingControls = commandCards.filter(card => !selectedControls.has(card.id));
+  while (remainingControls.length) {
+    const id = await selectNext("controls", remainingControls.map(({id, label, meaning}) => ({id, label, meaning})), commandCards.filter(card => selectedControls.has(card.id)).map(card => card.label));
+    if (id === "done") break;
+    selectedControls.add(id);
+    remainingControls = remainingControls.filter(card => card.id !== id);
   }
-  verifyPresentation(response);
-  return project(response);
+  const selectedObservations = new Set<string>();
+  let remainingObservations = observationCards;
+  while (remainingObservations.length) {
+    const id = await selectNext("observations", remainingObservations.map(({id, label, outputs}) => ({id, label, outputs})), observationCards.filter(card => selectedObservations.has(card.id)).map(card => card.label));
+    if (id === "done") break;
+    selectedObservations.add(id);
+    remainingObservations = remainingObservations.filter(card => card.id !== id);
+  }
+  const result = {
+    controls: commandCards.filter(card => selectedControls.has(card.id)).map(card => card.endpoint),
+    observations: observationCards.filter(card => selectedObservations.has(card.id)).map(card => card.node),
+  };
+  for (const capability of requiredCapabilities) {
+    const matching = wires.filter(wire => terms(wire.to.port).has(capability));
+    if (matching.length && !matching.some(wire => result.controls.includes(`${wire.to.node}.${wire.to.port}`)))
+      return { ...result, unsupported: `The selected interface is missing the requested ${capability} adjustment.` };
+  }
+  budget.trace?.("presentation.review", { controls: result.controls.length, observations: result.observations.length, exceedsGuidance: result.controls.length > 3 || result.observations.length > 1 });
+  budget.trace?.("presentation.selection", result);
+  return { ...result, unsupported: undefined };
 }

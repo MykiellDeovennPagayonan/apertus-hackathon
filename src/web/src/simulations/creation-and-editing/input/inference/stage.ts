@@ -78,7 +78,7 @@ export async function requestStage<T>(
       }
       return result;
     },
-    `Return only this stage's schema, preserving the original constraints. Do not repeat valid prior operations.${
+    `Return only the answer matching the original responseSchema, preserving the original constraints. Do not repeat valid prior operations.${
       task === "teaching_intent"
         ? " Keep each of concepts, interactions, and observations to at most THREE concise entries. Combine related concepts into one entry. Do not list individual terms as separate concepts. This is a compact intent summary, not a glossary."
         : task === "runtime_command_arguments"
@@ -94,6 +94,10 @@ export async function requestStage<T>(
       maxTokens,
       stage: task,
       verify,
+      repairFeedback: (error) => ({
+        key: error instanceof Error ? error.message : "invalid_stage_response",
+        details: { expected_contract: schema },
+      }),
       onEvent: (event, data) => budget.trace?.(`${task}.${event}`, data),
     },
   );

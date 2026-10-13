@@ -14,8 +14,11 @@ import { MathReadoutView } from "../../../legacy/components/views/MathReadoutVie
 import { MemberInspector } from "../../../legacy/components/views/MemberInspector";
 
 import { AuthorContext, SnapshotContext } from "./contexts";
-import { display } from "./formatObservation";
-import { boundObservation, readoutLabel } from "../../../registry/contracts/observations";
+import { display, lineEquation } from "./formatObservation";
+import {
+  boundObservation,
+  readoutLabel,
+} from "../../../registry/contracts/observations";
 import { mathBoard } from "./snapshotAdapters";
 
 function BridgeSelectionHint() {
@@ -239,9 +242,13 @@ export function DisplayPresentation({
         value !== 0 &&
         Math.abs(value) < 1e-12;
       const label = readoutLabel(
-        String(config.label), source?.definition, binding?.from.port, unit,
+        String(config.label),
+        source?.definition,
+        binding?.from.port,
+        unit,
       );
-      if (value && typeof value === "object")
+      const equation = lineEquation(value, Number(config.precision ?? 3));
+      if (value && typeof value === "object" && equation === undefined)
         return (
           <PropertyInspector
             label={label}
@@ -261,11 +268,12 @@ export function DisplayPresentation({
                 : undefined
             }
           >
-            {value === ""
-              ? "Unavailable"
-              : nearCancellation
-                ? "≈ 0"
-                : display(value, Number(config.precision))}
+            {equation ??
+              (value === ""
+                ? "Unavailable"
+                : nearCancellation
+                  ? "≈ 0"
+                  : display(value, Number(config.precision)))}
             <small>{unit}</small>
           </output>
         </section>
@@ -281,8 +289,11 @@ export function DisplayPresentation({
       return (
         <MemberInspector
           member={
-            (value as { member: import("../../../legacy/components/traits/MemberEndpoints").Member })
-              .member
+            (
+              value as {
+                member: import("../../../legacy/components/traits/MemberEndpoints").Member;
+              }
+            ).member
           }
           response={
             (

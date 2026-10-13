@@ -21,6 +21,7 @@ import type { AuthoredDocument, CompositeRecipe, Endpoint } from "./document";
 import {
   type ArrangementRequest,
   arrangeDocument,
+  arrangementTemplates,
 } from "./presentation/arrangement";
 import {
   boardItemMinimum,
@@ -122,9 +123,7 @@ export function validateToolRequest(request: ToolRequest) {
   if (
     request.tool === "arrange" &&
     (request.arguments.preserveLocked !== true ||
-      !["scene-with-sidebar", "comparison", "vertical"].includes(
-        request.arguments.template,
-      ))
+      !arrangementTemplates.includes(request.arguments.template))
   )
     throw new Error("Invalid semantic arrangement");
 }
@@ -270,6 +269,12 @@ export function applyAuthoringOperation(
         main: map(request.arguments.main),
         controls: map(request.arguments.controls),
         results: map(request.arguments.results),
+        ...(request.arguments.beside !== undefined
+          ? { beside: map(request.arguments.beside) }
+          : {}),
+        ...(request.arguments.below !== undefined
+          ? { below: map(request.arguments.below) }
+          : {}),
         narrowOrder: map(request.arguments.narrowOrder),
       });
       break;

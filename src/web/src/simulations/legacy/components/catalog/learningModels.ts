@@ -148,6 +148,7 @@ export const learningAppearances: PublicDefinition[] = learningDefinitions.map(
     id: `appearance/${m.id.slice(7)}`,
     title: `${m.title} appearance`,
     category: "appearance",
+    presentedOutputs: m.outputs.board ? ["board"] : [],
     configuration: object({}),
     defaults: {},
     inputs: { model: { kind: "attachment", unit: m.id } },

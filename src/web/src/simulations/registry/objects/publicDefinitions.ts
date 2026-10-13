@@ -43,7 +43,12 @@ for (const d of Object.values(componentDefinitions)) {
       ...Object.fromEntries(
         Object.entries(d.outputContracts).map(([key, p]) => [
           key,
-          { kind: "value", unit: p.unit ?? "", crossScope: true } as Port,
+          {
+            kind: "value",
+            unit: p.unit ?? "",
+            description: p.label,
+            crossScope: true,
+          } as Port,
         ]),
       ),
       model: { kind: "attachment", unit: d.id, cardinality: "many" },

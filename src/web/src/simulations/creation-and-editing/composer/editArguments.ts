@@ -133,6 +133,55 @@ export async function editArguments(
     ),
     argumentFields.filter((entry) => entry.optional).map((entry) => entry.key),
   );
+  const selectedNodeIds = new Set(
+    selected.flatMap((candidate) => {
+      if (candidate.tool === "arrange")
+        return context.presentation.flatMap(item => item.node ? [item.node] : []);
+      const node = candidate.instance?.id ?? candidate.node;
+      return node ? [node] : [];
+    }),
+  );
+  const focusedContext = {
+    request: request.prompt,
+    clarification: request.clarification,
+    destination: context.destination,
+    currentLesson: selected.some((candidate) => candidate.tool === "set_lesson")
+      ? document.lesson
+      : undefined,
+    nodes: context.nodes
+      .filter((node) => selectedNodeIds.has(node.id))
+      .map(({ assumptions: _assumptions, ...node }) => ({
+        ...node,
+        currentConfiguration: Object.fromEntries(
+          Object.entries(node.currentConfiguration).filter(([field]) =>
+            selected.some(
+              (candidate) =>
+                candidate.instance?.id === node.id &&
+                plan.selections
+                  .find((selection) => selection.candidate === candidate.id)
+                  ?.fields.some((path) => path.split(".")[0] === field),
+            ),
+          ),
+        ),
+        runtime: selected.some(
+          (candidate) =>
+            candidate.kind === "runtime" && candidate.node === node.id,
+        )
+          ? node.runtime
+          : undefined,
+      })),
+    connections: context.connections.filter(
+      (wire) =>
+        selectedNodeIds.has(wire.from.node) ||
+        selectedNodeIds.has(wire.to.node),
+    ),
+    presentation: selected.some(candidate => candidate.tool === "arrange") ? context.presentation : selected.flatMap((candidate) => {
+      const item = presentationItem(candidate);
+      return item
+        ? [{ id: item.id, bounds: item.rect, locked: item.locked }]
+        : [];
+    }),
+  };
   const argumentsSchema = toJsonSchema(argumentsContract);
   budget.trace?.("stage", { task: "edit_arguments" });
   const compile = (
@@ -212,7 +261,7 @@ export async function editArguments(
             role: "user",
             content: JSON.stringify({
               task: "edit_arguments",
-              ...context,
+              ...focusedContext,
               acceptedEdit: plan,
               arguments: argumentFields.map(
                 ({ key, candidate, field, contract, optional }) => ({

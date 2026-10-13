@@ -89,6 +89,37 @@ assert.equal(pulley.getSnapshot().outputs.model.rise, 0.5);
 assert.ok(pulley.reset().accepted);
 assert.equal(pulley.getSnapshot().outputs.model.tension, 200);
 assert.equal(pulley.getSnapshot().outputs.model.rise, 0);
+// Arrangement changes geometry only; inputs and outputs can exchange regions.
+const { arrangeDocument } = load("src/simulations/creation-and-editing/authoring-engine/presentation/arrangement.ts");
+const arrangementSource = premadeRecipe("arithmetic").document;
+const arrangementBefore = structuredClone(arrangementSource);
+const controlId = "control/SET_ARITHMETIC_TASK";
+const resultId = "result";
+const placement = { template: "automatic", main: [], controls: [], results: [], narrowOrder: [], preserveLocked: true };
+const besideResult = arrangeDocument(arrangementSource, { ...placement, beside: [resultId], below: [controlId] });
+const besideControl = arrangeDocument(arrangementSource, { ...placement, beside: [controlId], below: [resultId] });
+for (const arranged of [besideResult, besideControl]) {
+  assert.deepEqual(arranged.nodes, arrangementBefore.nodes);
+  assert.deepEqual(arranged.connections, arrangementBefore.connections);
+  assert.deepEqual(arranged.resources, arrangementBefore.resources);
+  assert.deepEqual(JSON.parse(serializeRecipe({ ...premadeRecipe("arithmetic"), document: arranged })).document, arranged);
+}
+const boundsFor = (document, node) => document.presentation.items.find(item => document.layout.children.find(layout => layout.id === item.layoutId)?.node === node).rect;
+assert.ok(boundsFor(besideResult, resultId).x > boundsFor(besideResult, controlId).x);
+assert.ok(boundsFor(besideControl, controlId).x > boundsFor(besideControl, resultId).x);
+assert.throws(() => arrangeDocument(arrangementSource, { ...placement, beside: [controlId], below: [controlId] }), /choose beside or below/);
+assert.deepEqual(arrangementSource, arrangementBefore);
+const { parseIntentResponse } = load("src/simulations/creation-and-editing/intent-interpreter/contracts.ts");
+const longQuestion = "How does the Pythagorean theorem help determine the length of a ladder when height and base measurements are known?";
+assert.ok(longQuestion.length > 100);
+assert.equal(parseIntentResponse({ goal: "Measure a ladder", concepts: [], interactions: [], observations: [], requestedInputs: [], explicitConstraints: [], suggestedStructure: "single", instanceCount: 1, comparisonConditions: "unspecified", question: longQuestion }, "Measure a ladder").question, longQuestion);
+const { lineEquation } = load("src/simulations/creation-and-editing/simulation/recipe/formatObservation.ts");
+for (const [value, expected] of [
+  [{ kind: "line-equation", vertical: false, slope: 2, intercept: 3 }, "y = 2x + 3"],
+  [{ kind: "line-equation", vertical: false, slope: -1, intercept: -2 }, "y = −x − 2"],
+  [{ kind: "line-equation", vertical: false, slope: 0, intercept: 0 }, "y = 0"],
+  [{ kind: "line-equation", vertical: true, x: 4 }, "x = 4"],
+]) assert.equal(lineEquation(value), expected);
 const { commandPresentation } = load(
   "src/simulations/registry/contracts/commandPresentation.ts",
 );
@@ -379,27 +410,36 @@ assert.equal(progressFromTrace("stage", { task: "choose_presentation" }), "build
       let presentationCalls = 0;
       global.fetch = async (_url, options) => {
         presentationCalls++;
-        const messages = JSON.parse(options.body).messages;
-        const payload = JSON.parse(messages[1].content);
-        assert.ok(payload.items.every(item => item.id.startsWith("item")));
-        const value = presentationCalls === 1 ? { controls: {} } : Object.fromEntries(payload.items.map(item => [item.id, true]));
-        if (presentationCalls === 2) assert.deepEqual(JSON.parse(messages.at(-1).content).feedback.response_keys, payload.items.map(item => item.id));
+        const payload = JSON.parse(JSON.parse(options.body).messages[1].content);
+        const system = JSON.parse(options.body).messages[0].content;
+        const value = presentationCalls === 1 ? { candidate: "unknown" }
+          : system.startsWith("Resolve") ? { candidate: payload.candidates[0].id }
+          : system.startsWith("Choose ONE additional") ? { candidate: "done" }
+          : { candidate: payload.retained.length ? "done" : payload.candidates[0].id };
         return Response.json({ choices: [{ message: { content: JSON.stringify(value) } }] });
       };
       const presentation = await choosePresentation(request, intent, makeBudget(), recipe, []);
-      assert.equal(presentationCalls, 2);
+      assert.ok(presentationCalls > 1);
       assert.ok(presentation.controls.includes("model.SET_ARITHMETIC_TASK"));
       assert.ok(presentation.observations.includes("result"));
+      const pendulum = load("src/simulations/registry/recipes/modelRecipe.ts").modelRecipe("prefabs/physical-systems/Pendulum");
+      global.fetch = async (_url, options) => {
+        const system = JSON.parse(options.body).messages[0].content;
+        return Response.json({ choices: [{ message: { content: JSON.stringify({ candidate: "done" }) } }] });
+      };
+      const requiredPresentation = await choosePresentation(request, { ...intent, requestedInputs: ["starting angle", "pendulum length"] }, makeBudget(), pendulum, []);
+      assert.ok(requiredPresentation.controls.some(command => command.endsWith(".PEND_SET_LENGTH")));
+      assert.ok(requiredPresentation.controls.some(command => command.endsWith(".PEND_SET_AMPLITUDE")));
+      assert.ok(!requiredPresentation.controls.some(command => command.endsWith(".PEND_SET_GRAVITY")));
       let settingsCalls = 0;
       global.fetch = async (_url, options) => {
         settingsCalls++;
         const payload = JSON.parse(JSON.parse(options.body).messages[1].content);
-        assert.ok(!payload.controls && !payload.observations && !payload.items);
-        const value = settingsCalls === 1 ? { unknownSetting: 5 } : { [payload.parameters[0].id]: { operation: "subtract", a: 7, b: 3 } };
+        const value = settingsCalls === 1 ? { unknownSetting: 5 } : payload.setting ? { value: { operation: "subtract", a: 7, b: 3 } } : { candidate: payload.alreadyConfigured.length ? "done" : payload.candidates[0].id };
         return Response.json({ choices: [{ message: { content: JSON.stringify(value) } }] });
       };
       const configuration = await configureAssembly(request, intent, makeBudget(), recipe, 0, 1, [], []);
-      assert.equal(settingsCalls, 2);
+      assert.equal(settingsCalls, 4);
       assert.deepEqual(configuration.overrides, { task: { operation: "subtract", a: 7, b: 3 } });
       global.fetch = async () => { throw new Error("No model call is needed without exposed parameters"); };
       assert.deepEqual(await configureAssembly(request, intent, makeBudget(), premadeRecipe("projectile"), 0, 1, [], []), { overrides: {} });

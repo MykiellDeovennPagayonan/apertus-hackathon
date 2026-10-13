@@ -134,7 +134,7 @@ export async function createSimulation(
               ? "comparison"
               : request.viewport.width < 700
                 ? "vertical"
-                : "scene-with-sidebar",
+                : "automatic",
           main: [],
           controls: [],
           results: [],
@@ -219,7 +219,7 @@ export async function createSimulation(
                 template:
                   configuration.instances.length > 1
                     ? "comparison"
-                    : "scene-with-sidebar",
+                    : "automatic",
                 main: [],
                 controls: [],
                 results: [],

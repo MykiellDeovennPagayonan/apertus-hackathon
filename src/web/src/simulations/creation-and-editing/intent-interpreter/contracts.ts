@@ -11,6 +11,8 @@ export type TeachingIntent = {
   concepts: string[];
   interactions: string[];
   observations: string[];
+  requestedInputs?: string[];
+  requestedOutputs?: string[];
   explicitConstraints: { meaning: string; sourceText: string }[];
   suggestedStructure: "single" | "comparison";
   instanceCount?: number;
@@ -23,6 +25,8 @@ export const intentSchema = object(
     concepts: strings(8),
     interactions: strings(8),
     observations: strings(8),
+    requestedInputs: strings(8),
+    requestedOutputs: strings(8),
     explicitConstraints: {
       type: "array",
       minItems: 0,
@@ -34,7 +38,13 @@ export const intentSchema = object(
     comparisonConditions: choice("same", "different", "unspecified"),
     question: text(180),
   },
-  ["instanceCount", "comparisonConditions", "question"],
+  [
+    "instanceCount",
+    "comparisonConditions",
+    "question",
+    "requestedInputs",
+    "requestedOutputs",
+  ],
 );
 export function parseIntentShape(value: unknown): TeachingIntent {
   validateValue(intentSchema, value, "intent");
@@ -60,8 +70,9 @@ export function intentSources(prompt: string) {
 export function intentResponseSchema(prompt: string): ParameterSchema {
   if (intentSchema.type !== "object")
     throw new Error("Intent contract must be an object");
+  const { requestedOutputs: _outputs, ...properties } = intentSchema.properties;
   return object({
-    ...intentSchema.properties,
+    ...properties,
     explicitConstraints: {
       type: "array",
       minItems: 0,

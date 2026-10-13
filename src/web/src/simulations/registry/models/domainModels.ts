@@ -111,6 +111,9 @@ for (const m of assemblyModels) {
     application: { target: m.ref },
     lifecycle: { ...publicDefinition(m.ref).lifecycle, clock: false },
   });
+  for (const output of m.presentedOutputs ?? [])
+    if (!Object.hasOwn(m.outputs, output))
+      throw new Error(`${m.ref}: unknown presented output ${output}`);
   const id = `appearance/${m.presentation}`;
   register({
     id,
@@ -127,6 +130,7 @@ for (const m of assemblyModels) {
       ? `Display an attached ${m.name} model snapshot. ${m.description}`
       : `Display an attached ${m.name} model snapshot`,
     category: "appearance",
+    presentedOutputs: m.presentedOutputs,
     tags: [m.ref.split("/")[1]],
     configuration:
       m.ref.startsWith("prefabs/science/") ||

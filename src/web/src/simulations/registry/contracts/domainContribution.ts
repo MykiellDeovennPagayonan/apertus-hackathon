@@ -27,6 +27,8 @@ export interface DomainModel {
   dependencies: Selections;
   /** Adapter ID must have a concrete registered client implementation before advertisement. */
   presentation: string;
+  /** Output names visibly communicated by the registered presentation adapter. */
+  presentedOutputs?: readonly string[];
   requiredObservations: readonly string[];
   maximumInstances: number;
   graphOutput?: string;
