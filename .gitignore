@@ -31,3 +31,12 @@
 /deploy/raspberry-pi/.env
 
 /docs/paper/
+
+# Local repair-memory services, weights, credentials, and browser evidence.
+/deploy/repair-memory/.env
+/deploy/repair-memory/.roles.json
+/deploy/repair-memory/.venv/
+/deploy/repair-memory/models/
+/deploy/repair-memory/*.log
+/docs/agent-only/implementation/033-validation/screenshots/
+/docs/agent-only/implementation/033-validation/private/

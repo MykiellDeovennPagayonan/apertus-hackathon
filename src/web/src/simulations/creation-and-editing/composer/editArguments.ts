@@ -136,7 +136,9 @@ export async function editArguments(
   const selectedNodeIds = new Set(
     selected.flatMap((candidate) => {
       if (candidate.tool === "arrange")
-        return context.presentation.flatMap(item => item.node ? [item.node] : []);
+        return context.presentation.flatMap((item) =>
+          item.node ? [item.node] : [],
+        );
       const node = candidate.instance?.id ?? candidate.node;
       return node ? [node] : [];
     }),
@@ -175,12 +177,14 @@ export async function editArguments(
         selectedNodeIds.has(wire.from.node) ||
         selectedNodeIds.has(wire.to.node),
     ),
-    presentation: selected.some(candidate => candidate.tool === "arrange") ? context.presentation : selected.flatMap((candidate) => {
-      const item = presentationItem(candidate);
-      return item
-        ? [{ id: item.id, bounds: item.rect, locked: item.locked }]
-        : [];
-    }),
+    presentation: selected.some((candidate) => candidate.tool === "arrange")
+      ? context.presentation
+      : selected.flatMap((candidate) => {
+          const item = presentationItem(candidate);
+          return item
+            ? [{ id: item.id, bounds: item.rect, locked: item.locked }]
+            : [];
+        }),
   };
   const argumentsSchema = toJsonSchema(argumentsContract);
   budget.trace?.("stage", { task: "edit_arguments" });
@@ -311,6 +315,18 @@ export async function editArguments(
           schema: argumentsSchema,
           maxTokens: 1024,
           stage: "edit_arguments",
+          memoryContext: {
+            revision: "edit-arguments-v1",
+            tools: [
+              ...new Set(argumentFields.map((entry) => entry.candidate.tool)),
+            ],
+            fields: Object.fromEntries(
+              argumentFields.map(({ key, candidate, field }) => [
+                key,
+                `${candidate.instance?.definition ?? candidate.tool}:${candidate.instance?.version ?? ""}:${candidate.tool}:${field}`,
+              ]),
+            ),
+          },
           maxRepairsPerIssue: 3,
           repairFeedback: (error) => {
             const feedback = repairFeedback(error);

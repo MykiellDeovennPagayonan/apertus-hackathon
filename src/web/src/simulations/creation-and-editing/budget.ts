@@ -1,11 +1,12 @@
 import { readDecisionConfig } from "./component-selection/decisions/config";
 import { createDecisionProvider } from "./component-selection/decisions/factory";
-import { type LlmConfig, readLlmConfig } from "./input/inference/config";
-import { compositionDeadlineMs } from "./composer/policy";
-import type { ConstructionPublisher } from "./simulation/construction/publisher";
-import { PlannerError } from "./errors";
 import { readSelectionPolicy } from "./component-selection/decisions/policy";
 import type { DecisionSelectionDependencies } from "./component-selection/selectAssemblies";
+import { compositionDeadlineMs } from "./composer/policy";
+import { PlannerError } from "./errors";
+import { type LlmConfig, readLlmConfig } from "./input/inference/config";
+import type { RequestMemory } from "./memory/contracts";
+import type { ConstructionPublisher } from "./simulation/construction/publisher";
 export type TraceSink = (event: string, data: unknown) => void;
 export class GenerationBudget {
   private configuration?: LlmConfig;
@@ -15,6 +16,7 @@ export class GenerationBudget {
     return this.configuration;
   }
   construction?: ConstructionPublisher;
+  memory?: RequestMemory;
   calls = 0;
   repairs = 0;
   turns = 0;

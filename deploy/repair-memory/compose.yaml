@@ -1,0 +1,20 @@
+name: apertus-repair-memory
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.1-pg16
+    environment:
+      POSTGRES_DB: apertus_repair_memory
+      POSTGRES_USER: apertus_memory
+      POSTGRES_PASSWORD: ${REPAIR_MEMORY_POSTGRES_PASSWORD:?Set a private database password}
+    ports:
+      - "127.0.0.1:55446:5432"
+    volumes:
+      - repair-memory-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U apertus_memory -d apertus_repair_memory"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+volumes:
+  repair-memory-data:

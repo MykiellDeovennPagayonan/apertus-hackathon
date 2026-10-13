@@ -333,6 +333,7 @@ assert.equal(progressFromTrace("stage", { task: "choose_presentation" }), "build
 // Exercise extracted stages through the real transport with deterministic in-memory responses.
 // These are contract tests, not evidence of live inference quality.
 (async () => {
+  await require("./verify-repair-memory.cjs")();
   const { editCandidates } = load("src/simulations/creation-and-editing/component-selection/editCandidates.ts");
   const { editPlanHelpers } = load("src/simulations/creation-and-editing/composer/editPlan.ts");
   const { editArguments } = load("src/simulations/creation-and-editing/composer/editArguments.ts");
@@ -594,5 +595,6 @@ assert.ok(!registryImports.some(file => file === "react" || file.includes("/inpu
 for (const entry of ["src/simulations/creation-and-editing/input/browser.ts", "src/simulations/creation-and-editing/simulation/RecipeLesson.tsx", "src/simulations/builder/composition/useBuilderAi.ts"]) {
   const imports = runtimeImports(entry);
   assert.ok(!imports.some(file => file.includes("/input/inference/config") || file.includes("/input/inference/transport") || file.endsWith("/creation-and-editing/server.ts")), `${entry} reaches server inference`);
+  assert.ok(!imports.some(file => file.includes("/lib/repair-memory/")), `${entry} reaches private memory infrastructure`);
 }
 console.log("Registry and browser import boundaries passed.");

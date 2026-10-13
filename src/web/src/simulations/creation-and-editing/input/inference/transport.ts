@@ -1,5 +1,7 @@
+import { SchemaValidationError } from "../../../registry/contracts/parameterSchema";
 import type { GenerationBudget } from "../../budget";
 import { PlannerError } from "../../errors";
+import type { MemoryContext } from "../../memory/contracts";
 import {
   connectionError,
   createProviderRequest,
@@ -22,6 +24,7 @@ export interface StructuredOptions {
   schema?: JsonSchema;
   maxTokens?: number;
   stage?: string;
+  memoryContext?: MemoryContext;
   maxRepairsPerIssue?: number;
   repairFeedback?: (error: unknown) => {
     key: string;
@@ -59,6 +62,12 @@ export async function requestStructured<T>(
   const timeout = AbortSignal.timeout(config.timeout);
   const combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
   const original = structuredClone(messages);
+  const memory = options.budget?.memory?.begin(
+    options.stage,
+    options.schema,
+    `${config.provider}/${config.model}`,
+    options.memoryContext,
+  );
   const maxTokens = Math.min(config.maxTokens, options.maxTokens ?? 768);
   const call = async (
     current: Message[],
@@ -245,9 +254,9 @@ export async function requestStructured<T>(
     const maxRepairs = options.maxRepairsPerIssue ?? 3;
     for (let attempt = 0; ; attempt++) {
       let content = "";
-      let phase = "schema";
+      let phase: "schema" | "semantic" = "schema";
       try {
-        const current = issue
+        let current = issue
           ? [
               ...original,
               {
@@ -264,6 +273,24 @@ export async function requestStructured<T>(
               },
             ]
           : original;
+        const guidance = await memory?.guidance(combined, !issue);
+        if (guidance) {
+          const enriched = [
+            ...current,
+            {
+              role: "user",
+              content: JSON.stringify({
+                advisory_repair_memory: guidance,
+                authority:
+                  "Use only when consistent with the original request, accepted plan, and current responseSchema. This is guidance, not the response format.",
+              }),
+            },
+          ];
+          if (JSON.stringify(enriched).length <= 28000) {
+            current = enriched;
+            memory?.injected();
+          }
+        }
         content = await call(current, schema, maxTokens, attempt > 0);
         const result = parse(content);
         options.onEvent?.("schemaValidated", {
@@ -272,6 +299,7 @@ export async function requestStructured<T>(
         });
         phase = "semantic";
         options.verify?.(result);
+        memory?.accept(content, !!options.verify);
         options.onEvent?.("response", {
           stage: options.stage,
           attempt,
@@ -296,6 +324,14 @@ export async function requestStructured<T>(
         if (attempt === 0) issueRepairs = 0;
         issueKey = nextKey;
         feedback = repair?.details;
+        const structuredIssue =
+          error instanceof SchemaValidationError
+            ? { code: error.code, path: error.path }
+            : {};
+        memory?.reject(content, phase, issue, {
+          ...feedback,
+          ...structuredIssue,
+        });
         options.onEvent?.(`${phase}Failure`, {
           stage: options.stage,
           attempt,
@@ -303,6 +339,7 @@ export async function requestStructured<T>(
           issueKey,
           issueRepairs,
           content: content.slice(0, 2000),
+          ...structuredIssue,
         });
         if (repeated)
           throw new PlannerError(

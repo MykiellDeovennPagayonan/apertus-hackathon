@@ -3,13 +3,18 @@
 PNPM ?= pnpm
 WEB_DIR := src/web
 WEB_PORT ?= 43100
+BENCHMARK_URL ?= http://localhost:$(WEB_PORT)
 APERTUS_PORT ?= 43101
 LAYA_PORT ?= 43102
 
-.PHONY: install dev run run-web run-realistic run-apertus run-laya stop stop-web stop-apertus stop-laya build start
+.PHONY: install dev run run-web run-realistic run-apertus run-laya stop stop-web stop-apertus stop-laya build start benchmark
 
 install:
 	$(PNPM) --dir $(WEB_DIR) install --frozen-lockfile
+
+# Run against an already-running app; no install or build prerequisite.
+benchmark:
+	BENCHMARK_URL="$(BENCHMARK_URL)" npm --prefix src/playwright run benchmark
 
 # `make`, `make run`, or `make run-web` installs dependencies and starts the
 # development server.

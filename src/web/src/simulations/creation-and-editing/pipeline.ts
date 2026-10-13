@@ -8,6 +8,7 @@ import {
   parseGenerationRequest,
 } from "./input/contracts";
 import { type GenerationResult, parseGenerationResult } from "./input/results";
+import type { RequestMemory } from "./memory/contracts";
 import type { ConstructionSink } from "./simulation/construction/contracts";
 import { ConstructionPublisher } from "./simulation/construction/publisher";
 
@@ -51,9 +52,12 @@ export async function planPrompt(
   signal?: AbortSignal,
   trace?: TraceSink,
   sink?: ConstructionSink,
+  memory?: RequestMemory,
 ): Promise<GenerationResult> {
   const request = parseGenerationRequest(input);
   const budget = new GenerationBudget(signal, trace);
+  budget.memory = memory;
+  let outcome = "failed";
   const initial = request.active?.recipe.document ?? emptyAuthoredDocument();
   const publisher =
     request.destination === "builder" &&
@@ -89,10 +93,14 @@ export async function planPrompt(
       );
     }
     budget.check();
-    return parseGenerationResult(result, request);
+    const validated = parseGenerationResult(result, request);
+    outcome = validated.status;
+    return validated;
   } catch (error) {
     budget.check();
     throw error;
+  } finally {
+    await memory?.finish(budget.signal.aborted ? "cancelled" : outcome);
   }
 }
 

@@ -9,7 +9,8 @@
     "lint": "biome check",
     "format": "biome format --write",
     "test": "node scripts/recipes/verify-contract.cjs",
-    "recipes:generate": "node scripts/recipes/generate-registry.cjs"
+    "recipes:generate": "node scripts/recipes/generate-registry.cjs",
+    "repair-memory": "node --env-file-if-exists=.env.local scripts/repair-memory.cjs"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "3.11.3",
@@ -20,6 +21,7 @@
     "next": "16.3.8",
     "next-auth": "4.24.15",
     "parse5": "7.3.0",
+    "pg": "8.16.3",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "three": "0.186.1",
@@ -28,6 +30,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.2",
     "@types/node": "^20",
+    "@types/pg": "8.15.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "0.186.0",

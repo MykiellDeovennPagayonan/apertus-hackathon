@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { setTimeout as yieldToBrowser } from "node:timers/promises";
+import { createRequestMemory } from "../../../lib/repair-memory/runtime";
 import { startTrace } from "../diagnostics";
 import { PlannerError } from "../errors";
 import { planPrompt } from "../server";
@@ -82,6 +83,7 @@ export async function handleGenerationRequest(request: Request) {
       );
     }
     trace = startTrace(correlationId, input.prompt);
+    const memory = await createRequestMemory(trace);
     if (request.headers.get("Accept")?.includes("application/x-ndjson")) {
       const diagnostic = trace;
       const body = generationEventStream(
@@ -112,6 +114,7 @@ export async function handleGenerationRequest(request: Request) {
                   signal: constructionSignal,
                 });
               },
+              memory,
             );
             report("result", {
               status: result.status,
@@ -162,7 +165,13 @@ export async function handleGenerationRequest(request: Request) {
         },
       });
     }
-    const result = await planPrompt(input, request.signal, trace);
+    const result = await planPrompt(
+      input,
+      request.signal,
+      trace,
+      undefined,
+      memory,
+    );
     trace("result", {
       status: result.status,
       ...("recipe" in result

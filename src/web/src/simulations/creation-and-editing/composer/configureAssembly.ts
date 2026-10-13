@@ -1,7 +1,7 @@
 import { acceptedCommandArguments } from "../../registry/contracts/commandPresentation";
 import {
-  object,
   choice,
+  object,
   validateValue,
 } from "../../registry/contracts/parameterSchema";
 import { publicDefinition } from "../../registry/index";
@@ -197,6 +197,11 @@ export async function configureAssembly(
       {
         budget,
         stage: "assembly_setting_value",
+        memoryContext: {
+          revision: "assembly-setting-v1",
+          tools: [source.id],
+          fields: { value: parameter.field },
+        },
         schema: toJsonSchema(schema),
         maxTokens: 256,
         verify: (answer) => {

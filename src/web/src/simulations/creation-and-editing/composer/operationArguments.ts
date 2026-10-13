@@ -1,17 +1,17 @@
-import { publicDefinitions } from "../../registry/index";
 import { schemaDefault } from "../../registry/contracts/defaults";
-import type { ToolRequest } from "../authoring-engine/operations";
 import {
   choice,
   object,
   validateValue,
 } from "../../registry/contracts/parameterSchema";
+import { publicDefinitions } from "../../registry/index";
+import type { FixerResult } from "../authoring-engine/normalizeOperations";
+import type { ToolRequest } from "../authoring-engine/operations";
+import type { AllowedTurnTool } from "../authoring-engine/tools";
+import type { GenerationBudget } from "../budget";
+import { parseArgumentJson } from "../input/inference/parseJson";
 import { toJsonSchema } from "../input/inference/structuredSchema";
 import { requestStructured } from "../input/inference/transport";
-import { parseArgumentJson } from "../input/inference/parseJson";
-import type { GenerationBudget } from "../budget";
-import type { FixerResult } from "../authoring-engine/normalizeOperations";
-import type { AllowedTurnTool } from "../authoring-engine/tools";
 
 /** Application owns the envelope; inference supplies only the chosen operation's arguments. */
 export async function focusedTurn(
@@ -95,9 +95,21 @@ export async function focusedTurn(
                 ]
               : candidates,
             context: {
-              goal: (context as { acceptedIntent?: { goal?: string } }).acceptedIntent?.goal,
-              nodes: ((context as { nodes?: {id: string; label?: string; definition: string}[] }).nodes ?? []).map(({id, label, definition}) => ({id, label, definition})),
-              priorOperation: (context as { priorOperation?: unknown }).priorOperation,
+              goal: (context as { acceptedIntent?: { goal?: string } })
+                .acceptedIntent?.goal,
+              nodes: (
+                (
+                  context as {
+                    nodes?: {
+                      id: string;
+                      label?: string;
+                      definition: string;
+                    }[];
+                  }
+                ).nodes ?? []
+              ).map(({ id, label, definition }) => ({ id, label, definition })),
+              priorOperation: (context as { priorOperation?: unknown })
+                .priorOperation,
             },
             completion: allowDone ? "done is available" : undefined,
           }),
@@ -368,7 +380,9 @@ export async function focusedTurn(
                 : tools[0]?.tool === "configure"
                   ? editContext
                   : {
-                      nodes: contextNodes.filter(node => node.id === controlTarget?.id),
+                      nodes: contextNodes.filter(
+                        (node) => node.id === controlTarget?.id,
+                      ),
                       fidelity: (context as { fidelity?: string[] }).fidelity,
                     },
           definitions,
@@ -486,6 +500,10 @@ export async function focusedTurn(
       schema: responseSchema,
       maxTokens: 512,
       stage: `turn_${turn + 1}`,
+      memoryContext: {
+        revision: "operation-arguments-v1",
+        tools: [tools[0].tool],
+      },
       onEvent: (event, data) =>
         budget.trace?.(`turn_${turn + 1}.${event}`, data),
     },

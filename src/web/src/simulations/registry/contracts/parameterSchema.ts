@@ -45,13 +45,22 @@ export const object = (
 ): ParameterSchema => ({ type: "object", properties, optional });
 export const boolean: ParameterSchema = { type: "boolean" };
 export const identity: ParameterSchema = { type: "string", maxLength: 100 };
+export class SchemaValidationError extends Error {
+  constructor(
+    readonly code: string,
+    readonly path: string,
+    message: string,
+  ) {
+    super(message);
+  }
+}
 export function validateValue(
   schema: ParameterSchema,
   value: unknown,
   path = "value",
 ): void {
-  const fail = (reason: string): never => {
-    throw new Error(`${path}: ${reason}`);
+  const fail = (reason: string, code = "invalid_value"): never => {
+    throw new SchemaValidationError(code, path, `${path}: ${reason}`);
   };
   switch (schema.type) {
     case "number":
@@ -100,7 +109,7 @@ export function validateValue(
       const data = value as Record<string, unknown>;
       for (const key of Object.keys(data))
         if (!Object.hasOwn(schema.properties, key))
-          fail(`unknown field ${key}`);
+          fail(`unknown field ${key}`, "unknown_field");
       for (const [key, field] of Object.entries(schema.properties)) {
         if (!Object.hasOwn(data, key) && schema.optional?.includes(key))
           continue;
