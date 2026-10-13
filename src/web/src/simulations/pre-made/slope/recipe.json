@@ -1,0 +1,617 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/slope",
+  "version": 1,
+  "title": "Slope and intercept",
+  "description": "Change the slope and y-intercept and watch the line and its equation change.",
+  "tags": [
+    "cartesian",
+    "line",
+    "lab",
+    "mathematics",
+    "slope"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/AuthoredLine",
+        "version": 1,
+        "label": "Line",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Line",
+          "color": "#4367b2",
+          "kind": "line",
+          "a": {
+            "x": 0,
+            "y": 0
+          },
+          "b": {
+            "x": 2,
+            "y": 2
+          },
+          "width": 3,
+          "dashed": false,
+          "draggable": true
+        }
+      },
+      {
+        "id": "canvas",
+        "definition": "canvases/cartesian",
+        "version": 1,
+        "label": "Cartesian plane",
+        "scope": "scope/lab",
+        "configuration": {
+          "xMin": -5,
+          "xMax": 5,
+          "yMin": -5,
+          "yMax": 5,
+          "grid": true,
+          "snap": 0.5
+        }
+      },
+      {
+        "id": "control/set:slope",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Slope slider",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Slope",
+          "mode": "immediate",
+          "initial": "{\"value\":1}"
+        }
+      },
+      {
+        "id": "control/set:intercept",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Intercept slider",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Vertical intercept",
+          "mode": "immediate",
+          "initial": "{\"value\":0}"
+        }
+      },
+      {
+        "id": "control/reset",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Reset line",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Restore starting values",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      },
+      {
+        "id": "display/equation",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Equation",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Equation",
+          "precision": 3
+        }
+      },
+      {
+        "id": "display/slope",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Slope result",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Slope",
+          "precision": 3
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/canvas",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "canvas",
+          "port": "objects"
+        }
+      },
+      {
+        "id": "link/control/set:slope",
+        "kind": "command",
+        "from": {
+          "node": "control/set:slope",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "set:slope"
+        }
+      },
+      {
+        "id": "link/control/set:intercept",
+        "kind": "command",
+        "from": {
+          "node": "control/set:intercept",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "set:intercept"
+        }
+      },
+      {
+        "id": "link/control/reset",
+        "kind": "command",
+        "from": {
+          "node": "control/reset",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "reset"
+        }
+      },
+      {
+        "id": "link/output/equation",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "equation"
+        },
+        "to": {
+          "node": "display/equation",
+          "port": "value"
+        }
+      },
+      {
+        "id": "link/output/slope",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "slope"
+        },
+        "to": {
+          "node": "display/slope",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Line"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/learner",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/canvas",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "canvas"
+        },
+        {
+          "id": "layout/control/set:slope",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "control/set:slope"
+        },
+        {
+          "id": "layout/control/set:intercept",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "control/set:intercept"
+        },
+        {
+          "id": "layout/control/reset",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "control/reset"
+        },
+        {
+          "id": "layout/display/equation",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "display/equation"
+        },
+        {
+          "id": "layout/display/slope",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "display/slope"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Slope and intercept",
+      "instruction": "Change the slope and y-intercept and watch the line and its equation change.",
+      "explanation": ""
+    },
+    "editor": {
+      "positions": {
+        "model": {
+          "x": 340,
+          "y": 0
+        },
+        "canvas": {
+          "x": 680,
+          "y": 0
+        },
+        "control/set:slope": {
+          "x": 0,
+          "y": 0
+        },
+        "control/set:intercept": {
+          "x": 0,
+          "y": 220
+        },
+        "control/reset": {
+          "x": 0,
+          "y": 440
+        },
+        "display/equation": {
+          "x": 1020,
+          "y": 0
+        },
+        "display/slope": {
+          "x": 1020,
+          "y": 220
+        }
+      },
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/canvas",
+          "layoutId": "layout/canvas",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 636,
+            "height": 430
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 300
+        },
+        {
+          "id": "board/layout/control/set:slope",
+          "layoutId": "layout/control/set:slope",
+          "rect": {
+            "x": 0,
+            "y": 454,
+            "width": 478,
+            "height": 128
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 128
+        },
+        {
+          "id": "board/layout/control/set:intercept",
+          "layoutId": "layout/control/set:intercept",
+          "rect": {
+            "x": 502,
+            "y": 454,
+            "width": 478,
+            "height": 128
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 128
+        },
+        {
+          "id": "board/layout/control/reset",
+          "layoutId": "layout/control/reset",
+          "rect": {
+            "x": 0,
+            "y": 606,
+            "width": 980,
+            "height": 128
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 128
+        },
+        {
+          "id": "board/layout/display/equation",
+          "layoutId": "layout/display/equation",
+          "rect": {
+            "x": 660,
+            "y": 0,
+            "width": 320,
+            "height": 100
+          },
+          "zIndex": 4,
+          "locked": false,
+          "responsiveMinHeight": 100
+        },
+        {
+          "id": "board/layout/display/slope",
+          "layoutId": "layout/display/slope",
+          "rect": {
+            "x": 660,
+            "y": 116,
+            "width": 320,
+            "height": 100
+          },
+          "zIndex": 5,
+          "locked": false,
+          "responsiveMinHeight": 100
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1028,
+        "height": 782
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/canvas"
+        ],
+        [
+          "board/layout/display/equation"
+        ],
+        [
+          "board/layout/display/slope"
+        ],
+        [
+          "board/layout/control/set:slope",
+          "board/layout/control/set:intercept"
+        ],
+        [
+          "board/layout/control/reset"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "label",
+      "node": "model",
+      "field": "label",
+      "schema": {
+        "type": "string",
+        "maxLength": 100
+      },
+      "default": "Line"
+    },
+    {
+      "name": "color",
+      "node": "model",
+      "field": "color",
+      "schema": {
+        "type": "string",
+        "maxLength": 7
+      },
+      "default": "#4367b2"
+    },
+    {
+      "name": "kind",
+      "node": "model",
+      "field": "kind",
+      "schema": {
+        "type": "enum",
+        "values": [
+          "line"
+        ]
+      },
+      "default": "line"
+    },
+    {
+      "name": "a",
+      "node": "model",
+      "field": "a",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "minimum": -1000,
+            "maximum": 1000,
+            "unit": ""
+          },
+          "y": {
+            "type": "number",
+            "minimum": -1000,
+            "maximum": 1000,
+            "unit": ""
+          }
+        },
+        "optional": []
+      },
+      "default": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "name": "b",
+      "node": "model",
+      "field": "b",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "minimum": -1000,
+            "maximum": 1000,
+            "unit": ""
+          },
+          "y": {
+            "type": "number",
+            "minimum": -1000,
+            "maximum": 1000,
+            "unit": ""
+          }
+        },
+        "optional": []
+      },
+      "default": {
+        "x": 2,
+        "y": 2
+      }
+    },
+    {
+      "name": "width",
+      "node": "model",
+      "field": "width",
+      "schema": {
+        "type": "number",
+        "minimum": 0.5,
+        "maximum": 16,
+        "unit": ""
+      },
+      "default": 3
+    },
+    {
+      "name": "dashed",
+      "node": "model",
+      "field": "dashed",
+      "schema": {
+        "type": "boolean"
+      },
+      "default": false
+    },
+    {
+      "name": "draggable",
+      "node": "model",
+      "field": "draggable",
+      "schema": {
+        "type": "boolean"
+      },
+      "default": true
+    }
+  ],
+  "externalPorts": [
+    {
+      "name": "Line appearance",
+      "endpoint": {
+        "node": "model",
+        "port": "appearance"
+      },
+      "direction": "output",
+      "port": {
+        "kind": "attachment",
+        "unit": "cartesian",
+        "cardinality": "many"
+      },
+      "required": false
+    },
+    {
+      "name": "Slope",
+      "endpoint": {
+        "node": "model",
+        "port": "slope"
+      },
+      "direction": "output",
+      "port": {
+        "kind": "value",
+        "unit": "",
+        "description": "Slope",
+        "crossScope": true
+      },
+      "required": false
+    },
+    {
+      "name": "Intercept",
+      "endpoint": {
+        "node": "model",
+        "port": "intercept"
+      },
+      "direction": "output",
+      "port": {
+        "kind": "value",
+        "unit": "",
+        "description": "Y intercept",
+        "crossScope": true
+      },
+      "required": false
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "prefabs/AuthoredLine",
+      "version": 1
+    },
+    {
+      "id": "canvases/cartesian",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [],
+  "discovery": {
+    "kind": "experiment",
+    "group": "experiments",
+    "summary": "Explore slope and intercept with one line, two sliders, a reset button, and live equation and slope results.",
+    "placement": "Own canvas, or reuse a compatible destination"
+  },
+  "catalog": {
+    "icon": "╱",
+    "category": "mathematics",
+    "order": 161
+  }
+}

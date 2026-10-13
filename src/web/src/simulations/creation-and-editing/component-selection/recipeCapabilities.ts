@@ -1,4 +1,8 @@
 import { publicDefinition, publicDefinitions } from "../../registry/index";
+import {
+  catalogComponentIds,
+  catalogRecipeAllowed,
+} from "../../registry/catalogScope";
 import { recipeOverrideSchema } from "../authoring-engine/operations";
 import type { AuthoredDocument } from "../authoring-engine/document";
 import {
@@ -36,6 +40,7 @@ export type CapabilityCard = {
 };
 export function capabilityCards(): CapabilityCard[] {
   return listPremadeRecipes()
+    .filter(({ recipe }) => catalogRecipeAllowed(recipe))
     .filter(({ slug, recipe }) =>
       generationEligibility.some(
         (entry) => entry.slug === slug && entry.version === recipe.version,
@@ -165,6 +170,7 @@ export function activeHandles(document: AuthoredDocument) {
 }
 export function compatibleComponents() {
   return [...publicDefinitions.values()]
+    .filter((d) => catalogComponentIds.has(d.id))
     .filter((d) =>
       [
         "displays/Text",

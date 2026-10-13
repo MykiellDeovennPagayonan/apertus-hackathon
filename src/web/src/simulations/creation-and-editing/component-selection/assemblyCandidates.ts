@@ -1,5 +1,6 @@
 import { parameterLeaves } from "../../registry/contracts/controlContract";
 import { publicDefinition } from "../../registry/index";
+import { catalogRecipeAllowed } from "../../registry/catalogScope";
 import { builtInRecipes } from "../../registry/recipes/builtIn";
 import { listPremadeRecipes } from "../../registry/recipes/premade";
 import type { CompositeRecipe } from "../authoring-engine/document";
@@ -40,7 +41,7 @@ export function assemblyCandidates(
   const assemblies = [
     ...listPremadeRecipes().map(({ recipe }) => recipe),
     ...builtInRecipes,
-  ].map((recipe) => {
+  ].filter(catalogRecipeAllowed).map((recipe) => {
     const models = recipe.document.nodes.filter(
       (node) => publicDefinition(node).category === "models",
     );

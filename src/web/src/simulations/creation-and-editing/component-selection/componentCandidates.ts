@@ -1,5 +1,13 @@
 import { publicDefinitions } from "../../registry/index";
-import { discoverableDefinition, definitionDiscovery, searchRank } from "../../registry/discovery";
+import {
+  catalogComponentIds,
+  catalogRecipeAllowed,
+} from "../../registry/catalogScope";
+import {
+  discoverableDefinition,
+  definitionDiscovery,
+  searchRank,
+} from "../../registry/discovery";
 import { compositionRequirements } from "../../legacy/components/catalog/explorationTeaching";
 import { listPremadeRecipes } from "../../registry/recipes/premade";
 import type { TeachingIntent } from "../intent-interpreter/contracts";
@@ -386,6 +394,7 @@ export function retrieveComponentBucket(
 
   // 1. Score composite recipes
   for (const { slug, recipe } of listPremadeRecipes()) {
+    if (!catalogRecipeAllowed(recipe)) continue;
     const card = buildCompositeCard(slug);
     if (!card) continue;
     const rank = searchRank(recipe.title, query);
@@ -402,7 +411,8 @@ export function retrieveComponentBucket(
 
   // 2. Score initial components (models, prefabs, controls, displays)
   const candidateIds = [
-    ...[...publicDefinitions.values()].filter(discoverableDefinition)
+    ...[...publicDefinitions.values()]
+      .filter(discoverableDefinition)
       .filter((d) => d.category === "models")
       .map((d) => d.id),
     "controls/Slider",
@@ -416,6 +426,7 @@ export function retrieveComponentBucket(
   ];
 
   for (const id of candidateIds) {
+    if (!catalogComponentIds.has(id)) continue;
     const card = buildInitialCard(id);
     if (!card) continue;
     const rank = searchRank(card.title, query);
@@ -534,6 +545,7 @@ export function retrieveComponentBucket(
     selected.splice(0);
     selectedIds.clear();
     const visit = (id: string) => {
+      if (!catalogComponentIds.has(id)) return;
       if (selectedIds.has(id)) return;
       const card = buildInitialCard(id);
       if (!card) return;
@@ -543,7 +555,9 @@ export function retrieveComponentBucket(
         visit(dependency);
       if (requirements?.appearance) visit(requirements.appearance);
       else
-        for (const def of [...publicDefinitions.values()].filter(discoverableDefinition))
+        for (const def of [...publicDefinitions.values()].filter(
+          discoverableDefinition,
+        ))
           if (def.category === "appearance" && def.inputs.model?.unit === id)
             visit(def.id);
     };
@@ -558,6 +572,7 @@ export function retrieveComponentBucket(
     "controls/NumberInput",
   ];
   for (const id of essentialScaffolding) {
+    if (!catalogComponentIds.has(id)) continue;
     const card = buildInitialCard(id);
     if (card) addCard(card);
   }

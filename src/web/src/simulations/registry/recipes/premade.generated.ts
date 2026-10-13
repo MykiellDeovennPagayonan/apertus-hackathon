@@ -60,35 +60,37 @@ import recipe57 from "../../pre-made/nitrogen-cycle/recipe.json";
 import recipe58 from "../../pre-made/nutrient-limitation/recipe.json";
 import recipe59 from "../../pre-made/oxygen-cycle/recipe.json";
 import recipe60 from "../../pre-made/parachutes/recipe.json";
-import recipe61 from "../../pre-made/phase-change/recipe.json";
-import recipe62 from "../../pre-made/pipe-flow/recipe.json";
-import recipe63 from "../../pre-made/plate-boundaries/recipe.json";
-import recipe64 from "../../pre-made/pollination-network/recipe.json";
-import recipe65 from "../../pre-made/price-elasticity/recipe.json";
-import recipe66 from "../../pre-made/probability/recipe.json";
-import recipe67 from "../../pre-made/projectile/recipe.json";
-import recipe68 from "../../pre-made/pulleys/recipe.json";
-import recipe69 from "../../pre-made/pythagorean/recipe.json";
-import recipe70 from "../../pre-made/rainbow-formation/recipe.json";
-import recipe71 from "../../pre-made/ratio/recipe.json";
-import recipe72 from "../../pre-made/rc-circuit/recipe.json";
-import recipe73 from "../../pre-made/scale-floor-plan/recipe.json";
-import recipe74 from "../../pre-made/score-spread/recipe.json";
-import recipe75 from "../../pre-made/shared-fishing-lake/recipe.json";
-import recipe76 from "../../pre-made/study-regression/recipe.json";
-import recipe77 from "../../pre-made/survey-sampling/recipe.json";
-import recipe78 from "../../pre-made/teams-and-podiums/recipe.json";
-import recipe79 from "../../pre-made/tile-patterns/recipe.json";
-import recipe80 from "../../pre-made/tipping/recipe.json";
-import recipe81 from "../../pre-made/trade-and-tariffs/recipe.json";
-import recipe82 from "../../pre-made/tree-height/recipe.json";
-import recipe83 from "../../pre-made/tsunami-formation/recipe.json";
-import recipe84 from "../../pre-made/volcano-life-cycle/recipe.json";
-import recipe85 from "../../pre-made/voting-systems/recipe.json";
-import recipe86 from "../../pre-made/water-cycle/recipe.json";
-import recipe87 from "../../pre-made/water-pressure/recipe.json";
-import recipe88 from "../../pre-made/weather-formation/recipe.json";
-import recipe89 from "../../pre-made/wildfire/recipe.json";
+import recipe61 from "../../pre-made/pendulum/recipe.json";
+import recipe62 from "../../pre-made/phase-change/recipe.json";
+import recipe63 from "../../pre-made/pipe-flow/recipe.json";
+import recipe64 from "../../pre-made/plate-boundaries/recipe.json";
+import recipe65 from "../../pre-made/pollination-network/recipe.json";
+import recipe66 from "../../pre-made/price-elasticity/recipe.json";
+import recipe67 from "../../pre-made/probability/recipe.json";
+import recipe68 from "../../pre-made/projectile/recipe.json";
+import recipe69 from "../../pre-made/pulleys/recipe.json";
+import recipe70 from "../../pre-made/pythagorean/recipe.json";
+import recipe71 from "../../pre-made/rainbow-formation/recipe.json";
+import recipe72 from "../../pre-made/ratio/recipe.json";
+import recipe73 from "../../pre-made/rc-circuit/recipe.json";
+import recipe74 from "../../pre-made/scale-floor-plan/recipe.json";
+import recipe75 from "../../pre-made/score-spread/recipe.json";
+import recipe76 from "../../pre-made/shared-fishing-lake/recipe.json";
+import recipe77 from "../../pre-made/slope/recipe.json";
+import recipe78 from "../../pre-made/study-regression/recipe.json";
+import recipe79 from "../../pre-made/survey-sampling/recipe.json";
+import recipe80 from "../../pre-made/teams-and-podiums/recipe.json";
+import recipe81 from "../../pre-made/tile-patterns/recipe.json";
+import recipe82 from "../../pre-made/tipping/recipe.json";
+import recipe83 from "../../pre-made/trade-and-tariffs/recipe.json";
+import recipe84 from "../../pre-made/tree-height/recipe.json";
+import recipe85 from "../../pre-made/tsunami-formation/recipe.json";
+import recipe86 from "../../pre-made/volcano-life-cycle/recipe.json";
+import recipe87 from "../../pre-made/voting-systems/recipe.json";
+import recipe88 from "../../pre-made/water-cycle/recipe.json";
+import recipe89 from "../../pre-made/water-pressure/recipe.json";
+import recipe90 from "../../pre-made/weather-formation/recipe.json";
+import recipe91 from "../../pre-made/wildfire/recipe.json";
 export const premadeSources = {
   "accumulated-water": recipe0,
   "acid-base-titration": recipe1,
@@ -151,33 +153,35 @@ export const premadeSources = {
   "nutrient-limitation": recipe58,
   "oxygen-cycle": recipe59,
   "parachutes": recipe60,
-  "phase-change": recipe61,
-  "pipe-flow": recipe62,
-  "plate-boundaries": recipe63,
-  "pollination-network": recipe64,
-  "price-elasticity": recipe65,
-  "probability": recipe66,
-  "projectile": recipe67,
-  "pulleys": recipe68,
-  "pythagorean": recipe69,
-  "rainbow-formation": recipe70,
-  "ratio": recipe71,
-  "rc-circuit": recipe72,
-  "scale-floor-plan": recipe73,
-  "score-spread": recipe74,
-  "shared-fishing-lake": recipe75,
-  "study-regression": recipe76,
-  "survey-sampling": recipe77,
-  "teams-and-podiums": recipe78,
-  "tile-patterns": recipe79,
-  "tipping": recipe80,
-  "trade-and-tariffs": recipe81,
-  "tree-height": recipe82,
-  "tsunami-formation": recipe83,
-  "volcano-life-cycle": recipe84,
-  "voting-systems": recipe85,
-  "water-cycle": recipe86,
-  "water-pressure": recipe87,
-  "weather-formation": recipe88,
-  "wildfire": recipe89,
+  "pendulum": recipe61,
+  "phase-change": recipe62,
+  "pipe-flow": recipe63,
+  "plate-boundaries": recipe64,
+  "pollination-network": recipe65,
+  "price-elasticity": recipe66,
+  "probability": recipe67,
+  "projectile": recipe68,
+  "pulleys": recipe69,
+  "pythagorean": recipe70,
+  "rainbow-formation": recipe71,
+  "ratio": recipe72,
+  "rc-circuit": recipe73,
+  "scale-floor-plan": recipe74,
+  "score-spread": recipe75,
+  "shared-fishing-lake": recipe76,
+  "slope": recipe77,
+  "study-regression": recipe78,
+  "survey-sampling": recipe79,
+  "teams-and-podiums": recipe80,
+  "tile-patterns": recipe81,
+  "tipping": recipe82,
+  "trade-and-tariffs": recipe83,
+  "tree-height": recipe84,
+  "tsunami-formation": recipe85,
+  "volcano-life-cycle": recipe86,
+  "voting-systems": recipe87,
+  "water-cycle": recipe88,
+  "water-pressure": recipe89,
+  "weather-formation": recipe90,
+  "wildfire": recipe91,
 } as const;

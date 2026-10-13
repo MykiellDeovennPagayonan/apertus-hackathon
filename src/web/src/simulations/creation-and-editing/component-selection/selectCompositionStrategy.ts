@@ -1,7 +1,11 @@
 import { publicDefinitions } from "../../registry/index";
+import { catalogComponentIds } from "../../registry/catalogScope";
 import { compositionRequirements } from "../../legacy/components/catalog/explorationTeaching";
 import type { ChoiceQuestion } from "./decisions/contracts";
-import { buildInitialCard, type ComponentBucketCard } from "./componentCandidates";
+import {
+  buildInitialCard,
+  type ComponentBucketCard,
+} from "./componentCandidates";
 import type { GenerationBudget } from "../budget";
 import { PlannerError } from "../errors";
 import type { TeachingIntent } from "../intent-interpreter/contracts";
@@ -39,6 +43,7 @@ export async function selectCompositionStrategy(
   const contrasting = Object.entries(compositionRequirements)
     .filter(
       ([id, r]) =>
+        catalogComponentIds.has(id) &&
         r.selectionGroup &&
         groups.has(r.selectionGroup) &&
         !retrievedIds.has(id),

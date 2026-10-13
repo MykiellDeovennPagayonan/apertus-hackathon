@@ -1,5 +1,9 @@
 import { arrangementTemplates } from "./presentation/arrangement";
 import { publicDefinitions } from "../../registry/index";
+import {
+  catalogComponentIds,
+  catalogRecipeAllowed,
+} from "../../registry/catalogScope";
 import { parameterLeaves } from "../../registry/contracts/controlContract";
 import { hasBoundControl } from "./bindings";
 import { boardItemMinimum } from "./presentation/board";
@@ -60,6 +64,7 @@ export function buildTurnTools(
   const initialCards = bucketCards.filter((c) => c.kind === "initial");
   for (const card of initialCards) {
     const def = publicDefinitions.get(card.id);
+    if (!catalogComponentIds.has(card.id)) continue;
     if (!def) continue;
     const existingCount = document.nodes.filter(
       (n) => n.definition === card.id,
@@ -85,6 +90,7 @@ export function buildTurnTools(
     if (!card.recipeSlug) continue;
     try {
       const recipe = premadeRecipe(card.recipeSlug);
+      if (!catalogRecipeAllowed(recipe)) continue;
       tools.push({
         tool: "insert_recipe",
         schema: object({

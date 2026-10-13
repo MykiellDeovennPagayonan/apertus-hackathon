@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { load } = require("../test-loader.cjs");
+require("./verify-catalog-scope.cjs");
 const { premadeRecipe, listPremadeRecipes } = load(
   "src/simulations/registry/recipes/premade.ts",
 );
@@ -28,15 +29,31 @@ assert.equal(listPremadeRecipes().length, cases.length);
 const { premadeExperiments } = load(
   "src/app/experiments/_lib/premadeExperiments.ts",
 );
-assert.deepEqual(
-  Object.keys(premadeExperiments).sort(),
-  [...listPremadeRecipes().map(({ slug }) => slug), "gas", "town"].sort(),
-);
+assert.equal(Object.keys(premadeExperiments).length, 40);
+for (const slug of ["pendulum", "slope", "bridge", "shared-fishing-lake"])
+  assert.ok(premadeExperiments[slug]);
+for (const slug of ["gas", "town", "loan-payments", "nitrogen-cycle"])
+  assert.equal(premadeExperiments[slug], undefined);
 for (const { slug, recipe } of listPremadeRecipes()) {
+  if (!premadeExperiments[slug]) continue;
   assert.equal(premadeExperiments[slug].title, recipe.title);
   assert.equal(premadeExperiments[slug].description, recipe.description);
   assert.equal(premadeExperiments[slug].icon, recipe.catalog.icon);
+  assert.equal(premadeExperiments[slug].category, recipe.catalog.category);
 }
+const pendulumRecipe = loadRecipe(premadeRecipe("pendulum")).runtime;
+const initialPeriod = pendulumRecipe.getSnapshot().outputs.model.period;
+assert.ok(pendulumRecipe.submit("control/PEND_SET_LENGTH", { value: 10 }).accepted);
+assert.ok(pendulumRecipe.getSnapshot().outputs.model.period > initialPeriod);
+assert.ok(pendulumRecipe.submit("control/PEND_SET_AMPLITUDE", { value: 45 }).accepted);
+assert.equal(pendulumRecipe.getSnapshot().outputs.model.configuration.amplitude, 45);
+assert.ok(pendulumRecipe.submit("control/PHYS_RESTART", {}).accepted);
+assert.equal(pendulumRecipe.getSnapshot().outputs.model.configuration.playing, true);
+const slopeRecipe = loadRecipe(premadeRecipe("slope")).runtime;
+assert.ok(slopeRecipe.submit("control/set:slope", { value: 2 }).accepted);
+assert.ok(slopeRecipe.submit("control/set:intercept", { value: 3 }).accepted);
+assert.equal(slopeRecipe.getSnapshot().outputs.model.slope, 2);
+assert.equal(slopeRecipe.getSnapshot().outputs.model.equation.intercept, 3);
 // A simple observation need not reserve the height of a full control panel.
 const compactObservation = structuredClone(premadeRecipe("area-perimeter"));
 compactObservation.document.presentation.items[1].responsiveMinHeight = 100;

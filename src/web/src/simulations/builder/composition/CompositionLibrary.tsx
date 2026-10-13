@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { publicDefinition } from "../../registry/index";
+import { catalogRecipeAllowed } from "../../registry/catalogScope";
 import { definitionDiscovery, discoverySections, searchRank } from "../../registry/discovery";
 import { SchemaForm } from "../../registry/controls/SchemaForm";
 import type { CompositeRecipe } from "../../creation-and-editing/authoring-engine/document";
@@ -88,6 +89,7 @@ export function CompositionLibrary({
           )
           .map((definition) => ({ definition })),
         ...catalog.allRecipes
+          .filter(catalogRecipeAllowed)
           .filter((recipe) => {
             const meta = recipeMetadata(recipe);
             const terms = catalog.query
