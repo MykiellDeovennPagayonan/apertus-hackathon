@@ -93,7 +93,12 @@ export async function planPrompt(
       );
     }
     budget.check();
-    const validated = parseGenerationResult(result, request);
+    const validated =
+      result.status === "created" || result.status === "updated"
+        ? budget.validate("final.document", () =>
+            parseGenerationResult(result, request),
+          )
+        : parseGenerationResult(result, request);
     outcome = validated.status;
     return validated;
   } catch (error) {

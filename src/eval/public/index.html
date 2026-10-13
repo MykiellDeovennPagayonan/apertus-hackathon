@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Apertus evaluation</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header>
+    <a class="brand" href="/">Apertus <span>evaluation</span></a>
+    <nav aria-label="Evaluation views">
+      <button id="review-tab" aria-pressed="true">Review screenshots</button>
+      <button id="metrics-tab" aria-pressed="false">Measurements</button>
+    </nav>
+  </header>
+  <main>
+    <p id="error" role="alert" hidden></p>
+    <section id="empty" hidden>
+      <p class="eyebrow">Ready when your results are</p>
+      <h1>Forty questions. Your judgment.</h1>
+      <p>Completed benchmark batches appear here automatically. Start with Apertus, then add the other models.</p>
+      <code>make benchmark-model MODEL=apertus-1.5-8b</code>
+      <p><button id="reload">Check for results</button></p>
+    </section>
+    <section id="workspace" hidden>
+      <div class="session-bar">
+        <label>Evaluation session <select id="sessions"></select></label>
+        <span id="saved" role="status" aria-live="polite"></span>
+        <button id="export">Download JSON</button>
+      </div>
+      <div id="new-results" hidden>
+        <span>New benchmark results are available. Your existing votes are preserved.</span>
+        <button id="new-session">Review latest results</button>
+      </div>
+      <section id="review">
+        <div class="question-header">
+          <p class="eyebrow" id="progress"></p>
+          <h1 id="prompt" tabindex="-1"></h1>
+          <p>Choose every result you prefer. You can select more than one.</p>
+          <p id="single" hidden>One result is available in this session. Compare models in a new session after adding another batch.</p>
+        </div>
+        <div id="candidates" class="candidates"></div>
+        <footer class="question-actions">
+          <button id="previous">Previous question</button>
+          <label class="none"><input type="checkbox" id="none"> None preferred</label>
+          <button id="next" class="primary">Next question</button>
+        </footer>
+      </section>
+      <section id="metrics" hidden>
+        <p class="eyebrow">Automatic benchmark results</p>
+        <h1>Completion, time, and validation</h1>
+        <p>Success means a final experiment rendered without observed errors. Scientific correctness and interactions are not scored.</p>
+        <div class="table-scroll"><table>
+          <caption>Forty attempts per model in this session</caption>
+          <thead><tr><th scope="col">Model</th><th scope="col">Success</th><th scope="col">First pass</th><th scope="col">Among validated</th><th scope="col">Median time</th><th scope="col">p95 time</th><th scope="col">Unknown metrics</th></tr></thead>
+          <tbody id="metric-rows"></tbody>
+        </table></div>
+        <p>Time covers submission to final usable render, for successful runs only. Missing validation evidence stays unknown. Local and hosted runs use different hardware and network conditions.</p>
+        <div id="details"></div>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

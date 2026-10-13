@@ -1,7 +1,7 @@
+import { inputCapability } from "../../registry/contracts/inputCapability";
 import { isPlaybackCommand } from "../../registry/contracts/interactionPolicy";
 import { object } from "../../registry/contracts/parameterSchema";
 import { publicDefinition } from "../../registry/index";
-import { inputCapability } from "../../registry/contracts/inputCapability";
 import { emptyAuthoredDocument } from "../authoring-engine/document";
 import { finalizeRecipe } from "../authoring-engine/finalizeRecipe";
 import {
@@ -74,7 +74,8 @@ export async function createFromAssemblies(
   }[] = [];
   for (const [index, candidate] of plan.activities.entries()) {
     const source =
-      plan.bindings[index].source ?? ranked[cards.findIndex((card) => card.candidate === candidate)].recipe;
+      plan.bindings[index].source ??
+      ranked[cards.findIndex((card) => card.candidate === candidate)].recipe;
     const wires = controls(source);
     const presentation = await choosePresentation(
       request,
@@ -216,69 +217,73 @@ export async function createFromAssemblies(
   };
   document = learnerPresentation(document);
   budget.trace?.("validation.start", {});
-  for (const required of requiredInputs) {
-    const control = document.nodes.find((node) => node.id === required.control);
-    const target = [...document.nodes, ...document.resources].find(
-      (node) => node.id === required.node,
-    );
-    if (
-      !control ||
-      !target ||
-      target.definition !== required.definition ||
-      inputCapability(
-        publicDefinition(target),
-        required.command,
-        required.field,
-      ).id !== required.capability ||
-      String(control.configuration.parameter ?? "") !== required.field ||
-      !document.connections.some(
-        (wire) =>
-          wire.kind === "command" &&
-          wire.from.node === required.control &&
-          wire.to.node === required.node &&
-          wire.to.port === required.command,
-      )
-    )
-      throw new PlannerError(
-        `Missing required binding for ${required.interaction}`,
-        502,
+  const recipe = budget.validate("assembly.document", () => {
+    for (const required of requiredInputs) {
+      const control = document.nodes.find(
+        (node) => node.id === required.control,
       );
-  }
-  budget.trace?.("validation.required_inputs", requiredInputs);
-  for (const required of requestedWires) {
-    if (
-      !document.connections.some(
-        (wire) =>
-          wire.kind === "command" &&
-          wire.from.node === required.control &&
-          wire.to.node === required.node &&
-          wire.to.port === required.command,
-      )
-    )
-      throw new PlannerError(
-        `Missing requested interaction: ${required.command}`,
-        502,
+      const target = [...document.nodes, ...document.resources].find(
+        (node) => node.id === required.node,
       );
-  }
-  for (const required of observationWires)
-    if (
-      !document.connections.some(
-        (wire) =>
-          wire.kind === "value" &&
-          wire.from.node === required.source &&
-          wire.from.port === required.output &&
-          wire.to.node === required.display &&
-          wire.to.port === required.input,
+      if (
+        !control ||
+        !target ||
+        target.definition !== required.definition ||
+        inputCapability(
+          publicDefinition(target),
+          required.command,
+          required.field,
+        ).id !== required.capability ||
+        String(control.configuration.parameter ?? "") !== required.field ||
+        !document.connections.some(
+          (wire) =>
+            wire.kind === "command" &&
+            wire.from.node === required.control &&
+            wire.to.node === required.node &&
+            wire.to.port === required.command,
+        )
       )
-    )
-      throw new PlannerError(
-        `Missing selected observation: ${required.output}`,
-        502,
-      );
-  const recipe = finalizeRecipe(document, {
-    id: `generated/${request.requestId}`,
-    assumptions: [...new Set(assumptions)],
-    tags: [...intent.concepts],
+        throw new PlannerError(
+          `Missing required binding for ${required.interaction}`,
+          502,
+        );
+    }
+    budget.trace?.("validation.required_inputs", requiredInputs);
+    for (const required of requestedWires) {
+      if (
+        !document.connections.some(
+          (wire) =>
+            wire.kind === "command" &&
+            wire.from.node === required.control &&
+            wire.to.node === required.node &&
+            wire.to.port === required.command,
+        )
+      )
+        throw new PlannerError(
+          `Missing requested interaction: ${required.command}`,
+          502,
+        );
+    }
+    for (const required of observationWires)
+      if (
+        !document.connections.some(
+          (wire) =>
+            wire.kind === "value" &&
+            wire.from.node === required.source &&
+            wire.from.port === required.output &&
+            wire.to.node === required.display &&
+            wire.to.port === required.input,
+        )
+      )
+        throw new PlannerError(
+          `Missing selected observation: ${required.output}`,
+          502,
+        );
+    return finalizeRecipe(document, {
+      id: `generated/${request.requestId}`,
+      assumptions: [...new Set(assumptions)],
+      tags: [...intent.concepts],
+    });
   });
   await budget.construction?.publish(recipe.document, 1, "checking");
   return {

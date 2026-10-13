@@ -1,5 +1,5 @@
-import { readConfig as readApertusConfig } from "./apertusConfig";
 import { offlineEnabled } from "../../../../lib/deployment";
+import { readConfig as readApertusConfig } from "./apertusConfig";
 
 export interface LlmConfig {
   provider: "apertus" | "openai" | "anthropic";
@@ -48,7 +48,7 @@ export function readLlmConfig(env: NodeJS.ProcessEnv = process.env): LlmConfig {
       localRuntime: legacy.localRuntime as LlmConfig["localRuntime"],
       structuredOutput:
         legacy.structuredOutput === "auto" ? "auto" : "strict-json",
-      label: "Apertus",
+      label: legacy.provider === "local" ? "Apertus" : "Hugging Face",
     };
   } else {
     const key = provider === "openai" ? "OPENAI_API_KEY" : "ANTHROPIC_API_KEY";

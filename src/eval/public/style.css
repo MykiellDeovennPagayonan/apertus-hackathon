@@ -1,0 +1,49 @@
+:root { color-scheme: light; font-family: system-ui, sans-serif; color: #263c37; background: #f8f7f2; accent-color: #237365; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 4vw; border-bottom: 1px solid #d8ddd5; }
+.brand { color: inherit; text-decoration: none; font-size: 21px; font-weight: 750; }
+.brand span { font-weight: 400; color: #60706a; }
+nav { display: flex; gap: 8px; }
+button, select { font: inherit; color: inherit; background: #fff; border: 1px solid #b8c8c0; border-radius: 8px; min-height: 44px; padding: 10px 16px; cursor: pointer; }
+button:hover { background: #e9efea; }
+button[aria-pressed="true"] { background: #dfebe4; border-color: #237365; }
+button:disabled { cursor: default; opacity: .55; }
+button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px solid #be711c; outline-offset: 4px; }
+main { width: min(1600px, 94vw); margin: 30px auto 60px; }
+h1 { font-size: clamp(25px, 2.7vw, 38px); line-height: 1.3; letter-spacing: -.025em; max-width: 1100px; margin: 10px 0 14px; }
+p { line-height: 1.6; }
+.eyebrow { font-size: 13px; text-transform: uppercase; letter-spacing: .09em; font-weight: 650; color: #64756b; }
+.session-bar { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.session-bar label { font-size: 14px; display: flex; gap: 12px; align-items: center; }
+#saved { color: #627168; font-size: 14px; margin-left: auto; }
+#error { background: #fbe6dd; border: 1px solid #b35836; padding: 16px; border-radius: 8px; }
+#new-results { margin: 20px 0; padding: 16px; background: #e8eee4; border-radius: 8px; }
+#new-results button { margin-left: 16px; }
+.question-header { margin: 34px 0 26px; }
+.question-header > p:not(.eyebrow) { color: #627168; margin: 8px 0; }
+.candidates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.candidate { border: 2px solid #d2ddd3; border-radius: 12px; overflow: hidden; background: #fff; min-width: 0; }
+.candidate:has(input:checked) { border-color: #237365; box-shadow: 0 0 0 2px #237365; }
+.candidate:focus-within { outline: 3px solid #be711c; outline-offset: 3px; }
+.candidate > label { display: flex; gap: 12px; padding: 16px 20px; align-items: center; cursor: pointer; min-height: 56px; }
+input[type="checkbox"] { width: 22px; height: 22px; margin: 0; flex-shrink: 0; }
+.candidate img { display: block; width: 100%; height: auto; border-top: 1px solid #e0e6df; }
+.candidate .unavailable { padding: 70px 24px; color: #67736e; text-align: center; border-top: 1px solid #e0e6df; }
+.candidate label:has(input:disabled) { cursor: default; color: #69776e; }
+.question-actions { display: flex; align-items: center; gap: 20px; padding: 28px 0; }
+.none { display: flex; align-items: center; gap: 10px; min-height: 44px; margin-left: auto; }
+.primary { background: #237365; color: #fff; border-color: #237365; }
+.primary:hover { background: #195a50; }
+#empty { max-width: 700px; margin: 12vh auto; }
+code { display: block; padding: 18px; background: #e8ece5; border-radius: 8px; overflow-wrap: anywhere; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; background: #fff; }
+caption { text-align: left; margin-bottom: 16px; font-weight: 600; }
+th, td { padding: 16px; text-align: left; border-bottom: 1px solid #dce2d9; }
+th { background: #e9eee6; }
+details { border-bottom: 1px solid #dce2d9; padding: 16px 0; }
+summary { cursor: pointer; min-height: 44px; padding: 10px 0; font-weight: 600; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #edf0e8; padding: 16px; }
+[hidden] { display: none !important; }
+@media (max-width: 800px) { header { align-items: flex-start; flex-direction: column; } .candidates { grid-template-columns: 1fr; } .session-bar label { flex-direction: column; align-items: flex-start; } .question-actions { flex-wrap: wrap; gap: 12px; } .none { margin-left: 0; } .question-actions .primary { margin-left: auto; } #saved { margin-left: 0; } }

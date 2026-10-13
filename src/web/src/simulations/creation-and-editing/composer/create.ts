@@ -196,7 +196,9 @@ export async function createSimulation(
     },
   );
   budget.trace?.("validation.start", {});
-  let { draft, recipe, coverage } = construct(configuration, true);
+  let { draft, recipe, coverage } = budget.validate("recipe.document", () =>
+    construct(configuration, true),
+  );
   await budget.construction?.publish(
     draft.document,
     draft.revision,

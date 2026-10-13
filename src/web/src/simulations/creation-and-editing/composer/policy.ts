@@ -9,11 +9,10 @@ export function requiresLayaComposition(env: NodeJS.ProcessEnv = process.env) {
   if (
     policy === "required-laya" &&
     ((env.PLANNER_MODE ?? "hybrid") !== "hybrid" ||
-      (env.DECISION_PROVIDER ?? "laya") !== "laya" ||
-      (env.LLM_PROVIDER ?? "apertus") !== "apertus")
+      (env.DECISION_PROVIDER ?? "laya") !== "laya")
   )
     throw new PlannerError(
-      "Required Laya composition needs PLANNER_MODE=hybrid, DECISION_PROVIDER=laya and LLM_PROVIDER=apertus.",
+      "Required Laya composition needs PLANNER_MODE=hybrid and DECISION_PROVIDER=laya.",
       503,
     );
   return policy === "required-laya";

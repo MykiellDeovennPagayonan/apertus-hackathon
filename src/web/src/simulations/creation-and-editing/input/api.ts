@@ -131,7 +131,10 @@ export async function handleGenerationRequest(request: Request) {
               result,
             });
           } catch (error) {
-            if (signal.aborted) return;
+            if (signal.aborted) {
+              diagnostic("failure", { status: 499 });
+              return;
+            }
             const status = error instanceof PlannerError ? error.status : 500;
             const message =
               error instanceof PlannerError

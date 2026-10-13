@@ -1,7 +1,7 @@
-import type { JsonSchema } from "./structuredSchema";
-import type { Message } from "./transport";
 import { PlannerError } from "../../errors";
 import type { LlmConfig } from "./config";
+import type { JsonSchema } from "./structuredSchema";
+import type { Message } from "./transport";
 
 /** Translate only the provider grammar. Application validators retain all constraints. */
 function providerSchema(
@@ -197,6 +197,8 @@ export function createProviderRequest(
         : {}),
     };
   } else {
+    const llamaCpp =
+      config.connection === "local" && config.localRuntime === "llamacpp";
     if (config.token) headers.Authorization = `Bearer ${config.token}`;
     path = "/chat/completions";
     body = {
@@ -205,29 +207,30 @@ export function createProviderRequest(
       max_tokens: tokens,
       stream: false,
       messages,
-      ...(config.connection === "local" &&
-      (config.localRuntime === "mlx" || config.localRuntime === "llamacpp")
+      ...((config.connection === "local" &&
+        (config.localRuntime === "mlx" ||
+          config.localRuntime === "llamacpp")) ||
+      (config.connection === "huggingface" &&
+        config.model.startsWith("Qwen/Qwen3-") &&
+        config.model.endsWith(":featherless-ai"))
         ? { chat_template_kwargs: { enable_thinking: false } }
         : {}),
-      ...(config.localRuntime === "llamacpp"
-        ? { reasoning_effort: "none" }
-        : {}),
+      ...(llamaCpp ? { reasoning_effort: "none" } : {}),
       ...(wireSchema
         ? {
-            response_format:
-              config.localRuntime === "llamacpp"
-                ? {
-                    type: "json_schema",
+            response_format: llamaCpp
+              ? {
+                  type: "json_schema",
+                  schema: wireSchema,
+                }
+              : {
+                  type: "json_schema",
+                  json_schema: {
+                    name: "authoring_stage",
+                    strict: true,
                     schema: wireSchema,
-                  }
-                : {
-                    type: "json_schema",
-                    json_schema: {
-                      name: "authoring_stage",
-                      strict: true,
-                      schema: wireSchema,
-                    },
                   },
+                },
           }
         : {}),
     };
@@ -371,5 +374,5 @@ export function connectionError(config: LlmConfig) {
     return config.localRuntime === "ollama"
       ? "Cannot reach local Ollama. Start it with ollama serve."
       : "Cannot reach local Apertus. Start it with make -C src/inference run.";
-  return `Cannot reach ${config.provider === "apertus" ? "hosted Apertus" : config.label}. Check its endpoint and credentials.`;
+  return `Cannot reach ${config.label}. Check its endpoint and credentials.`;
 }

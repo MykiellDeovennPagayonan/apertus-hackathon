@@ -68,16 +68,31 @@ export async function requestStructured<T>(
     `${config.provider}/${config.model}`,
     options.memoryContext,
   );
-  const maxTokens = Math.min(config.maxTokens, options.maxTokens ?? 768);
+  // Reasoning shares the output cap; tiny JSON-stage limits would consume it before the answer.
+  const maxTokens =
+    config.provider === "openai" &&
+    config.reasoningEffort &&
+    config.reasoningEffort !== "none"
+      ? config.maxTokens
+      : Math.min(config.maxTokens, options.maxTokens ?? 768);
+  const validationId = options.budget?.validationId(
+    options.stage ?? "structured",
+  );
   const call = async (
     current: Message[],
     schema?: JsonSchema,
     tokens = maxTokens,
     repair = false,
+    repairKind: "composer" | "schema" = "schema",
   ) => {
     if (combined.aborted)
       throw new PlannerError(`${config.label} request cancelled.`, 499);
     options.budget?.consumeCall(repair);
+    if (repair)
+      options.budget?.trace?.("benchmark.repair", {
+        kind: repairKind,
+        stage: options.stage,
+      });
     if (JSON.stringify(current).length > 28000)
       throw new PlannerError("Inference context exceeds stage bounds.", 502);
     const started = Date.now();
@@ -251,6 +266,7 @@ export async function requestStructured<T>(
     let feedback: Record<string, unknown> | undefined;
     let rejectedError: unknown;
     const rejectedResponses = new Set<string>();
+    let rejectedPhase: "schema" | "semantic" = "schema";
     const maxRepairs = options.maxRepairsPerIssue ?? 3;
     for (let attempt = 0; ; attempt++) {
       let content = "";
@@ -291,14 +307,25 @@ export async function requestStructured<T>(
             memory?.injected();
           }
         }
-        content = await call(current, schema, maxTokens, attempt > 0);
+        content = await call(
+          current,
+          schema,
+          maxTokens,
+          attempt > 0,
+          rejectedPhase === "semantic" ? "composer" : "schema",
+        );
         const result = parse(content);
         options.onEvent?.("schemaValidated", {
           stage: options.stage,
           attempt,
         });
         phase = "semantic";
-        options.verify?.(result);
+        const verify = options.verify;
+        if (verify) {
+          if (options.budget && validationId)
+            options.budget.validate(validationId, () => verify(result));
+          else verify(result);
+        }
         memory?.accept(content, !!options.verify);
         options.onEvent?.("response", {
           stage: options.stage,
@@ -307,6 +334,7 @@ export async function requestStructured<T>(
         });
         return result;
       } catch (error) {
+        rejectedPhase = phase;
         if (error instanceof PlannerError || combined.aborted) throw error;
         rejectedError = error;
         issue =

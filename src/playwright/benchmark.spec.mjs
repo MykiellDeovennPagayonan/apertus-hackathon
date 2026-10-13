@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { appendFileSync, mkdirSync } from 'node:fs';
+import { appendFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { benchmarks } from './benchmarks.mjs';
 
 const evidence = new Map();
@@ -16,6 +16,7 @@ test.afterEach(async ({ page }, testInfo) => {
   testInfo.setTimeout(30_000);
   const record = evidence.get(testInfo.testId);
   if (!record) return;
+  if (record.submittedAt !== undefined && record.endedAt === undefined) record.endedAt = performance.now();
   // Hooks have their own bounded cleanup allowance, including after a test timeout.
   const capture = async (name) => {
     try {
@@ -41,8 +42,25 @@ test.afterEach(async ({ page }, testInfo) => {
       }
     }
   } finally {
+    let measurements = null;
+    if (process.env.BENCHMARK_REQUIRE_MEASUREMENTS === 'true' && record.requestId) {
+      try {
+        const response = await page.request.get(`/api/benchmark?id=${encodeURIComponent(record.requestId)}`, { timeout: 8_000 });
+        if (response.ok()) measurements = (await response.json()).measurements;
+      } catch { record.log('measurement-unavailable', { requestId: record.requestId }); }
+    }
+    const metricPath = testInfo.outputPath('measurements.json');
+    writeFileSync(metricPath, JSON.stringify({
+      requestId: record.requestId ?? null,
+      generationMs: record.rendered && record.submittedAt !== undefined ? record.endedAt - record.submittedAt : null,
+      observedMs: record.submittedAt !== undefined ? record.endedAt - record.submittedAt : null,
+      measurements,
+    }));
+    await testInfo.attach('measurements', { path: metricPath, contentType: 'application/json' });
     await testInfo.attach('events', { path: record.path, contentType: 'application/x-ndjson' });
     evidence.delete(testInfo.testId);
+    if (process.env.BENCHMARK_REQUIRE_MEASUREMENTS === 'true' && record.requestId && !measurements?.terminal)
+      throw new Error('Missing terminal benchmark measurements; saved as unknown, never a first-pass success.');
   }
 });
 
@@ -59,7 +77,8 @@ for (const benchmark of benchmarks) {
       errors.push({ event, ...data });
       log(event, data);
     };
-    evidence.set(testInfo.testId, { path, log, errors });
+    const record = { path, log, errors };
+    evidence.set(testInfo.testId, record);
     log('start', { ...benchmark, timeoutMs: 300_000 });
     page.on('pageerror', (error) => fail('page-error', { message: error.stack || error.message }));
     page.on('console', (message) => {
@@ -69,6 +88,8 @@ for (const benchmark of benchmarks) {
       if (new URL(request.url()).pathname === '/api/apertus' && request.method() === 'POST') {
         let requestId;
         try { requestId = request.postDataJSON()?.requestId; } catch {}
+        record.requestId = requestId;
+        record.submittedAt ??= performance.now();
         log('generation-request', { requestId, method: request.method(), url: safeUrl(request.url()) });
       }
     });
@@ -118,12 +139,15 @@ for (const benchmark of benchmarks) {
       return false;
     }, undefined, { timeout: remaining() });
     const result = await terminal.jsonValue();
+    record.endedAt = performance.now();
+    record.rendered = result.status === 'RENDERED';
     log('terminal', result);
     expect(result.status, result.message).toBe('RENDERED');
     await expect(page.locator('.workspace-stage > *').first()).toBeVisible();
     // Observe only startup/render errors, without interacting or checking correctness.
     await page.waitForTimeout(2_000);
-    const alerts = await page.getByRole('alert').filter({ visible: true }).allTextContents();
+    // Next's clipped route announcer uses role=alert for navigation, not errors.
+    const alerts = await page.getByRole('alert').and(page.locator(':not(#__next-route-announcer__)')).filter({ visible: true }).allTextContents();
     for (const message of alerts.filter((value) => value.trim())) fail('visible-alert', { message });
     expect(errors, `Observed errors:\n${JSON.stringify(errors, null, 2)}`).toEqual([]);
     log('accepted', { message: 'Rendered without observed errors; correctness not evaluated' });

@@ -812,10 +812,15 @@ export async function compose(
   // 7. Check runnable
   budget.trace?.("validation.start", {});
   let runCheck = checkRunnable(currentDoc);
+  budget.trace?.("benchmark.validation", {
+    id: "composition.runnable",
+    passed: runCheck.runnable,
+  });
   budget.trace?.("runnable.check", runCheck);
   if (!runCheck.runnable) {
     if (budget.repairs < budget.maxRepairs) {
       budget.consumeCall(true);
+      budget.trace?.("benchmark.repair", { kind: "deterministic" });
       const repairAuto = autoConnectUnambiguous(currentDoc);
       if (repairAuto.connected.length > 0) {
         for (const conn of repairAuto.connected) {
@@ -832,6 +837,10 @@ export async function compose(
       }
       await budget.construction?.publish(draft.document, draft.revision);
       runCheck = checkRunnable(draft.document);
+      budget.trace?.("benchmark.validation", {
+        id: "composition.runnable",
+        passed: runCheck.runnable,
+      });
     }
     if (!runCheck.runnable) {
       return {
@@ -868,12 +877,14 @@ export async function compose(
   }
 
   if (requiredLaya) {
-    const issues = compositionIssues(finalDoc);
-    if (issues.length)
-      throw new PlannerError(
-        `Incomplete interactive composition: ${issues.join("; ")}`,
-        422,
-      );
+    budget.validate("composition.interactive", () => {
+      const issues = compositionIssues(finalDoc);
+      if (issues.length)
+        throw new PlannerError(
+          `Incomplete interactive composition: ${issues.join("; ")}`,
+          422,
+        );
+    });
   }
   const assumptions = [
     ...new Set(

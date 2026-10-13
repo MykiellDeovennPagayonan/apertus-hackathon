@@ -22,6 +22,20 @@ export class GenerationBudget {
   turns = 0;
   decisionCalls = 0;
   maxDecisionCalls = 1;
+  private validationSequence = 0;
+  validationId(stage: string) {
+    return `${stage}/${++this.validationSequence}`;
+  }
+  validate<T>(id: string, check: () => T): T {
+    try {
+      const result = check();
+      this.trace?.("benchmark.validation", { id, passed: true });
+      return result;
+    } catch (error) {
+      this.trace?.("benchmark.validation", { id, passed: false });
+      throw error;
+    }
+  }
   private decisionDependencies?: DecisionSelectionDependencies;
   get decision(): DecisionSelectionDependencies {
     if (!this.decisionDependencies) {

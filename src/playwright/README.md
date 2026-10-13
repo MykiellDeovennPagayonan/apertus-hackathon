@@ -1,5 +1,7 @@
 # Forty-prompt generation benchmark
 
+For the selected-model command, automatic evaluator import, first-pass measurements and team JSON voting, see [the standalone evaluation app](../eval/README.md). The existing command below still targets an already running app.
+
 This is the command-driven Playwright runner requested for the fixed flow. It uses Playwright directly, not an MCP agent. It does not build the app, run application tests, inspect PostgreSQL, or evaluate correctness.
 
 ## Run

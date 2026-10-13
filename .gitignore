@@ -40,3 +40,7 @@
 /deploy/repair-memory/*.log
 /docs/agent-only/implementation/033-validation/screenshots/
 /docs/agent-only/implementation/033-validation/private/
+
+# Generated benchmark datasets and evaluator browser captures.
+/src/eval/public/benchmarks/
+/src/eval/test-output/

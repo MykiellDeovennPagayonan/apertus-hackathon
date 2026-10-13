@@ -1,11 +1,13 @@
-import { readLlmConfig } from "./input/inference/config";
+import { BenchmarkMeasurements } from "./benchmark";
 import { compositionDeadlineMs } from "./composer/policy";
+import { readLlmConfig } from "./input/inference/config";
 export interface PlannerTrace {
   id: string;
   startedAt: string;
   prompt: string;
   configuration: unknown;
   events: { event: string; elapsedMs: number; data: unknown }[];
+  measurements: BenchmarkMeasurements;
 }
 const globalDiagnostics = globalThis as typeof globalThis & {
   plannerTraces?: Map<string, PlannerTrace>;
@@ -14,7 +16,8 @@ globalDiagnostics.plannerTraces ??= new Map();
 const traces = globalDiagnostics.plannerTraces;
 export function startTrace(id: string, prompt: string) {
   const enabled =
-    process.env.PLANNER_DIAGNOSTICS === "true" &&
+    (process.env.PLANNER_DIAGNOSTICS === "true" ||
+      process.env.BENCHMARK_MEASUREMENTS === "true") &&
     process.env.NODE_ENV !== "production";
   const started = Date.now();
   let configuration: unknown;
@@ -50,6 +53,7 @@ export function startTrace(id: string, prompt: string) {
     configuration,
     startedAt: new Date(started).toISOString(),
     events: [],
+    measurements: new BenchmarkMeasurements(),
   };
   if (enabled) {
     traces.set(id, trace);
@@ -59,10 +63,14 @@ export function startTrace(id: string, prompt: string) {
     }
   }
   return (event: string, data: unknown) => {
+    if (enabled) trace.measurements.record(event, data, Date.now() - started);
     if (enabled && trace.events.length < 240)
       trace.events.push({ event, elapsedMs: Date.now() - started, data });
   };
 }
 export function readTrace(id: string) {
-  return traces.get(id) ?? null;
+  const trace = traces.get(id);
+  return trace
+    ? { ...trace, measurements: trace.measurements.snapshot() }
+    : null;
 }

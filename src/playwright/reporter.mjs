@@ -1,7 +1,8 @@
 import { createHash } from 'node:crypto';
-import { appendFileSync, mkdirSync, renameSync, writeFileSync } from 'node:fs';
-import { dirname, relative, join } from 'node:path';
+import { appendFileSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { dirname, relative, join, basename } from 'node:path';
 import { benchmarks, benchmarkText } from './benchmarks.mjs';
+import { atomicJson, publishRun, summary } from './artifacts.mjs';
 
 const cell = (value) => String(value).replace(/\|/g, '\\|').replace(/[\r\n]+/g, ' ');
 const plain = (value) => String(value).replace(/\x1b\[[0-9;]*m/g, '');
@@ -12,6 +13,7 @@ export default class BenchmarkReporter {
     mkdirSync(this.dir, { recursive: true });
     this.started = new Date().toISOString();
     this.target = config.projects[0].use.baseURL;
+    this.configuration = process.env.BENCHMARK_CONFIGURATION ? JSON.parse(process.env.BENCHMARK_CONFIGURATION) : null;
     this.rows = benchmarks.map((item) => ({ ...item, status: 'NOT_RUN', seconds: '—', files: [], errors: [] }));
     this.state = 'RUNNING';
     this.progress(`Run folder: ${this.dir}`);
@@ -40,6 +42,8 @@ export default class BenchmarkReporter {
     row.files = result.attachments.filter(({ path }) => path).map(({ name, path }) => ({
       name, path: relative(this.dir, path).split('\\').join('/'),
     }));
+    const metricFile = result.attachments.find(file => file.name === 'measurements' && file.path);
+    if (metricFile) Object.assign(row, JSON.parse(readFileSync(metricFile.path, 'utf8')));
     const completed = this.rows.filter(({ status }) => !['NOT_RUN', 'RUNNING'].includes(status)).length;
     const passed = this.rows.filter(({ status }) => status === 'PASS').length;
     this.progress(`[${completed}/40 complete] ${row.id}: ${row.status} — ${passed} PASS, ${completed - passed} non-pass; ${row.seconds}s`);
@@ -59,15 +63,35 @@ export default class BenchmarkReporter {
     this.write();
     const passed = this.rows.filter(({ status }) => status === 'PASS').length;
     this.progress(`Finished: ${passed}/40 PASS (${(passed / 40 * 100).toFixed(1)}%). Report: ${join(this.dir, 'report.md')}`);
+    if (process.env.BENCHMARK_MODEL_SLUG) {
+      try {
+        publishRun(this.dir);
+        this.progress('Published screenshots and run.json to src/eval.');
+      } catch (error) {
+        this.progress(`Publication failed: ${error.message}. Evidence remains in ${this.dir}; use publish.mjs to retry without regeneration.`);
+        process.exitCode = 1;
+      }
+    }
   }
 
   write() {
+    atomicJson(join(this.dir, 'run.json'), {
+      protocolVersion: 1, id: basename(this.dir), modelSlug: process.env.BENCHMARK_MODEL_SLUG || 'unconfigured',
+      scope: process.env.BENCHMARK_SCOPE || 'full-batch',
+      startedAt: this.started, endedAt: this.ended ?? null, state: this.state,
+      complete: this.state === 'FINISHED' && this.rows.every(row => ['PASS', 'ERROR', 'TIMEOUT'].includes(row.status)),
+      promptHash: createHash('sha256').update(benchmarkText).digest('hex'),
+      configuration: this.configuration,
+      rows: this.rows.map(row => ({ requestId: null, generationMs: null, observedMs: null, measurements: null, ...row })),
+      summary: summary(this.rows),
+    });
     const passed = this.rows.filter(({ status }) => status === 'PASS').length;
     const counts = [...new Set(this.rows.map(({ status }) => status))].map((status) =>
       `${status}: ${this.rows.filter((row) => row.status === status).length}`).join('; ');
     const lines = [
       `# Benchmark run ${this.started}`, '', `State: ${this.state}`, '',
       `App: ${this.target}`, `Started: ${this.started}; ended: ${this.ended || 'in progress'}`, '',
+      ...(process.env.BENCHMARK_SCOPE === 'first-prompt' ? ['**First-prompt trial only. Remaining prompts are NOT_RUN; PASS/40 below is not a full-batch score.**', ''] : []),
       'Scope: generation completes and visibly renders without observed errors. Correctness, interactions, scientific accuracy, and pgvector population are not evaluated.', '',
       'One attempt per prompt; 300-second test timeout; no manual retries. Fresh context per prompt. Screenshot/cleanup hooks can take additional time.', '',
       `Source SHA-256: ${createHash('sha256').update(benchmarkText).digest('hex')}`, '',
