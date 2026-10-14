@@ -1,0 +1,54 @@
+{
+  "protocolVersion": 1,
+  "models": [
+    {
+      "id": "gpt-6-luna",
+      "modelSlug": "gpt-6-luna",
+      "startedAt": "2026-10-13T18:39:34.936Z",
+      "complete": false,
+      "path": "/benchmarks/gpt-6-luna/current.json"
+    },
+    {
+      "id": "gpt-6.1-sol",
+      "modelSlug": "gpt-6.1-sol",
+      "startedAt": "2026-10-13T18:40:04.714Z",
+      "complete": false,
+      "path": "/benchmarks/gpt-6.1-sol/current.json"
+    },
+    {
+      "id": "qwen3-32b",
+      "modelSlug": "qwen3-32b",
+      "startedAt": "2026-10-13T18:40:34.205Z",
+      "complete": false,
+      "path": "/benchmarks/qwen3-32b/current.json"
+    },
+    {
+      "id": "mistral-small-3.1-24b",
+      "modelSlug": "mistral-small-3.1-24b",
+      "startedAt": "2026-10-13T18:41:01.963Z",
+      "complete": false,
+      "path": "/benchmarks/mistral-small-3.1-24b/current.json"
+    },
+    {
+      "id": "apertus-1.5-8b",
+      "modelSlug": "apertus-1.5-8b",
+      "startedAt": "2026-10-14T04:18:08.537Z",
+      "complete": true,
+      "path": "/benchmarks/apertus-1.5-8b/current.json"
+    },
+    {
+      "id": "qwen3-8b",
+      "modelSlug": "qwen3-8b",
+      "startedAt": "2026-10-14T05:19:08.633Z",
+      "complete": true,
+      "path": "/benchmarks/qwen3-8b/current.json"
+    },
+    {
+      "id": "llama-3.1-8b",
+      "modelSlug": "llama-3.1-8b",
+      "startedAt": "2026-10-14T05:38:13.412Z",
+      "complete": true,
+      "path": "/benchmarks/llama-3.1-8b/current.json"
+    }
+  ]
+}

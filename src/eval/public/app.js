@@ -1,3 +1,4 @@
+import { campaignModels } from './campaign.js';
 import { storageKey, latestDataset, createSession, syncSession, ballot, readSessions, exportSession } from './state.js';
 
 const element = id => document.getElementById(id);
@@ -10,19 +11,13 @@ function save() {
 }
 function addSession() {
   active = createSession(latest);
-  store.sessions.push(active); store.active = active.id;
+  store.sessions = [active]; store.active = active.id;
   save(); render();
 }
 function render() {
   element('empty').hidden = Boolean(active);
   element('workspace').hidden = !active;
   if (!active) return;
-  const selector = element('sessions'); selector.replaceChildren();
-  for (const session of store.sessions) {
-    const option = document.createElement('option'); option.value = session.id;
-    option.textContent = `${new Date(session.createdAt).toLocaleString()} · ${session.dataset.runs.length} models · ${session.id.slice(0, 6)}`;
-    option.selected = session.id === active.id; selector.append(option);
-  }
   element('model-count').textContent = `${active.dataset.runs.length} models loaded · new models appear automatically`;
   element('review').hidden = view !== 'review'; element('metrics').hidden = view !== 'metrics';
   element('review-tab').setAttribute('aria-pressed', String(view === 'review'));
@@ -51,19 +46,18 @@ function renderQuestion() {
     const replaced = run.current && candidate.sourceRunId !== currentRow?.sourceRunId;
     checkbox.disabled = !candidate.screenshot || replaced; checkbox.checked = vote?.selected.includes(id) ?? false;
     const name = document.createElement('span'); name.textContent = `Result ${String.fromCharCode(65 + position)}`;
-    label.append(checkbox, name); article.append(label);
+    const heading = document.createElement('span'); heading.className = 'candidate-heading';
+    heading.append(checkbox, name); label.append(heading); article.append(label);
     if (candidate.screenshot && !replaced) {
       const image = document.createElement('img'); image.src = candidate.screenshot; image.alt = `Generated experiment, result ${String.fromCharCode(65 + position)}`;
       image.addEventListener('error', () => {
         checkbox.disabled = true;
         error('A screenshot could not be loaded. Restore the benchmark image before evaluating this question.');
       });
-      const full = document.createElement('a'); full.href = candidate.screenshot; full.target = '_blank'; full.rel = 'noopener';
-      full.setAttribute('aria-label', `Open result ${String.fromCharCode(65 + position)} at full size`);
-      full.append(image); article.append(full);
+      label.append(image);
     } else {
       const message = document.createElement('p'); message.className = 'unavailable';
-      message.textContent = replaced ? 'This image has been replaced. The original vote and version remain in your JSON export.' : 'No successful screenshot available.'; article.append(message);
+      message.textContent = replaced ? 'This image has been replaced. The original vote and version remain in your JSON export.' : 'No successful screenshot available.'; label.append(message);
     }
     checkbox.addEventListener('change', () => {
       const selected = [...cards.querySelectorAll('input:checked')].map(input => input.value);
@@ -125,15 +119,15 @@ async function load() {
     const response = await fetch('/benchmarks/index.json', { cache: 'no-store' });
     if (!response.ok) throw new Error('Could not load benchmark catalog.');
     const index = await response.json();
-    if (index.protocolVersion !== 1 || !Array.isArray(index.runs)) throw new Error('Unsupported benchmark catalog.');
-    const manifests = await Promise.all((index.models ?? index.runs.filter(run => run.complete)).map(async run => {
+    if (index.protocolVersion !== 1 || !Array.isArray(index.models)) throw new Error('Unsupported benchmark catalog.');
+    const manifests = await Promise.all(index.models.filter(run => campaignModels.includes(run.modelSlug)).map(async run => {
       if (!/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,119}$/.test(run.modelSlug) ||
           !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,119}$/.test(run.id) ||
-          ![`/benchmarks/${run.modelSlug}/${run.id}/run.json`, `/benchmarks/${run.modelSlug}/current.json`].includes(run.path)) throw new Error('Invalid catalog path.');
+          run.id !== run.modelSlug || run.path !== `/benchmarks/${run.modelSlug}/current.json`) throw new Error('Invalid catalog path.');
       const response = await fetch(run.path, { cache: 'no-store' });
       if (!response.ok) throw new Error('A benchmark manifest could not be loaded.');
       const manifest = await response.json();
-      if (manifest.id !== run.id || manifest.modelSlug !== run.modelSlug) throw new Error('Catalog identity mismatch.');
+      if (!manifest.current || manifest.id !== run.id || manifest.modelSlug !== run.modelSlug) throw new Error('Catalog identity mismatch.');
       return manifest;
     }));
     latest = latestDataset(manifests);
@@ -143,7 +137,7 @@ async function load() {
     else {
       if (active && latest && active.dataset.id !== latest.id) {
         const updated = syncSession(active, latest);
-        if (updated !== active) { store.sessions.push(updated); active = updated; }
+        if (updated !== active) { store.sessions = [updated]; active = updated; }
         store.active = active.id; save();
         render();
       }
@@ -154,7 +148,6 @@ async function load() {
 }
 element('review-tab').onclick = () => { view = 'review'; render(); };
 element('metrics-tab').onclick = () => { view = 'metrics'; render(); };
-element('sessions').onchange = event => { store.active = event.target.value; active = store.sessions.find(session => session.id === store.active); save(); render(); };
 element('reload').onclick = load;
 element('export').onclick = download;
 element('none').onchange = event => { ballot(active, active.dataset.runs[0].rows[active.question].id, [], event.target.checked); save(); renderQuestion(); };

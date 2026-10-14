@@ -20,7 +20,7 @@ test('publication is repeatable without generation, isolates models and preserve
     assert.equal(published.rows[2].screenshot, null);
     assert.equal(published.rows[0].errors, undefined);
     publishRun(runDir, destination);
-    assert.equal(JSON.parse(readFileSync(join(destination, 'index.json'))).runs.length, 1);
+    assert.equal(JSON.parse(readFileSync(join(destination, 'archive-index.json'))).runs.length, 1);
     run.rows[0].status = 'ERROR'; atomicJson(join(runDir, 'run.json'), run);
     assert.throws(() => publishRun(runDir, destination), /completed batch/);
     run.id = 'different'; run.rows[0].files[0].path = '../outside.png'; atomicJson(join(runDir, 'run.json'), run);

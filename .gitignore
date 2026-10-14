@@ -1,3 +1,6 @@
+# Dependency installations in every app
+node_modules/
+
 # Generated local acceptance evidence
 /docs/agent-only/implementation/005-validation/
 /docs/agent-only/implementation/013-validation/
@@ -41,6 +44,20 @@
 /docs/agent-only/implementation/033-validation/screenshots/
 /docs/agent-only/implementation/033-validation/private/
 
-# Generated benchmark datasets and evaluator browser captures.
-/src/eval/public/benchmarks/
+# Track current campaign assets; keep historical publications and temporary files local.
+/src/eval/public/benchmarks/*
+!/src/eval/public/benchmarks/index.json
+!/src/eval/public/benchmarks/apertus-1.5-8b/
+!/src/eval/public/benchmarks/llama-3.1-8b/
+!/src/eval/public/benchmarks/qwen3-8b/
+!/src/eval/public/benchmarks/gpt-6-luna/
+!/src/eval/public/benchmarks/gpt-6.1-sol/
+!/src/eval/public/benchmarks/qwen3-32b/
+!/src/eval/public/benchmarks/mistral-small-3.1-24b/
+/src/eval/public/benchmarks/*/*
+!/src/eval/public/benchmarks/*/current.json
+!/src/eval/public/benchmarks/*/images/
+/src/eval/public/benchmarks/*/images/*
+!/src/eval/public/benchmarks/*/images/*.png
+/src/eval/dist/
 /src/eval/test-output/

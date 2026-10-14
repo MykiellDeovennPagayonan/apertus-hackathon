@@ -1,6 +1,6 @@
 # Screenshot evaluation app
 
-This standalone app displays automatically imported benchmark screenshots, supports anonymous multi-select preference voting, saves progress in the evaluator's browser, and exports JSON. It needs Node.js 22 or later and no npm dependencies.
+This standalone app displays automatically imported benchmark screenshots, supports anonymous multi-select preference voting, saves progress in the evaluator's browser, and exports JSON. It needs Node.js 22. The runtime and static build use only Node standard libraries; Playwright is a development dependency for browser verification.
 
 From the repository root:
 
@@ -8,7 +8,7 @@ From the repository root:
 make eval
 ```
 
-Open `http://127.0.0.1:43110`. To serve the app to teammates on your network, run `EVAL_HOST=0.0.0.0 make eval` and give them your machine's address and port. Keep the server running during evaluation. Alternatively, copy `src/eval/public` with its generated `benchmarks` folder to a static web host; the app expects to be served at the origin root. Never distribute the web app's environment file or runner failure traces.
+Open `http://127.0.0.1:43110`. To serve the app to teammates on your network, run `EVAL_HOST=0.0.0.0 make eval` and give them your machine's address and port. Keep the server running during evaluation. For static hosting, use the build below; the app expects to be served at the origin root. Never distribute the web app's environment file or runner failure traces.
 
 ## Run a model batch
 
@@ -61,7 +61,7 @@ Pass/fail, submission-to-render time, server timing, first validator outcomes, c
 
 The gallery accumulates models across separate benchmark executions. Start with Apertus; when Qwen, Llama, or another model finishes its forty questions, its screenshots appear beside every existing model automatically. It checks for additions every thirty seconds, on browser refresh, and when returning to the tab. Different execution dates, pipeline settings, or source revisions do not hide other models; their configuration stays attached to measurements. Models must use the same forty prompts.
 
-Each model contributes its latest attempted result for each prompt, including focused runs. Adding a model updates the current evaluation without starting over: selections, current question, and relative order of earlier candidates survive. New candidates are inserted in randomized positions. Existing votes retain the candidate IDs originally shown and are marked for review; Updating a selection immediately records the vote against all currently displayed models; there is no separate confirmation button. JSON exports include model identities and exposure per vote. If the same model is rerun, only its attempted prompt entries are replaced, while the prior evaluation remains saved as history so votes do not silently move to different images.
+Each model contributes its latest attempted result for each prompt, including focused runs. Adding a model updates the current evaluation without starting over: selections, current question, and relative order of earlier candidates survive. New candidates are inserted in randomized positions. Existing votes retain the candidate IDs originally shown and are marked for review; Updating a selection immediately records the vote against all currently displayed models; there is no separate confirmation button. JSON exports include model identities and exposure per vote. If the same model is rerun, only its attempted prompt entries are replaced, the current evaluation is refreshed and selections reset so votes do not silently move to different images. There is no run or evaluation-session selector. Finish collecting the campaign images before teammates begin their one-time evaluation.
 
 If screenshot publication fails, retry the import without calling any model:
 
@@ -69,13 +69,13 @@ If screenshot publication fails, retry the import without calling any model:
 node src/playwright/publish.mjs src/playwright/runs/<run-id>
 ```
 
-Interrupted batches are retained but excluded from default voting. Incomplete or missing telemetry is explicit, not a successful first pass. Generated evidence is ignored by git. A new scored run always has a new run ID; completed evidence is not overwritten.
+Interrupted batches are retained but excluded from default voting. Incomplete or missing telemetry is explicit, not a successful first pass. Raw runner evidence and historical evaluator archives are ignored by Git. The seven campaign models’ current manifests and images are included for Git-based deployment. A new scored run always has a new run ID; completed evidence is not overwritten.
 
 ## Votes and JSON export
 
-Select any number of favorites or “None preferred” for a reviewed question. Changing a vote replaces that question's ballot. “Download JSON” works at any point and records the number of reviewed questions. The export includes evaluator/session IDs, exact prompts, candidate display order, run/model mapping, automatic measurements, selected candidates, and timestamps. Teammates send those files to the organizer for later analysis. Export is also the fallback when browser storage is unavailable or full.
+Click anywhere on a result card, including its photo, to select or deselect it. The checkbox indicates the selection and also supports keyboard voting. Photos do not open a new tab. Select any number of favorites or “None preferred” for a reviewed question. Changing a vote replaces that question's ballot. “Download JSON” works at any point and records the number of reviewed questions. The export includes evaluator/session IDs, exact prompts, candidate display order, run/model mapping, automatic measurements, selected candidates, and timestamps. Teammates send those files to the organizer for later analysis. Export is also the fallback when browser storage is unavailable or full.
 
-Local storage belongs to one browser/origin. Keep the evaluator URL stable and download before clearing browser data. Existing malformed saved data is never silently overwritten; recover/back up it before clearing the app's `apertus-evaluation-v1` storage entry. Human screenshots assess visual preference, not scientific correctness or interactions.
+Local storage belongs to one browser/origin. Keep the evaluator URL stable and download before clearing browser data. Existing malformed saved data is never silently overwritten; recover/back up it before clearing the app's `apertus-evaluation-v2` storage entry. Human screenshots assess visual preference, not scientific correctness or interactions.
 
 ## Verification
 
@@ -86,7 +86,7 @@ node --test src/playwright/tests/*.test.mjs
 node src/eval/tests/browser.mjs
 ```
 
-Browser checks use the existing Playwright installation, fixture batches, and the actual evaluator server. They make no provider calls and do not count as benchmark generations.
+Browser checks use the evaluator’s own Playwright development dependency, fixture batches, and the actual evaluator server. Install it with `npm ci --prefix src/eval`, then install Chromium from `src/eval` with `npx playwright install chromium`. They make no provider calls and do not count as benchmark generations.
 
 `node src/playwright/tests/runner.mjs` additionally exercises the actual full forty-prompt Playwright spec and reporter against a deterministic local fixture app, including a deliberate HTTP failure and a genuine visible alert. It takes about ninety seconds, makes no provider calls, and deletes its fixture run afterward.
 
@@ -96,4 +96,20 @@ Creation-interface changes and the local verification protocol are documented in
 
 The deployed gallery reads `public/benchmarks/index.json` and its `models` entries. Each model has `public/benchmarks/<model>/current.json` and one active image at `public/benchmarks/<model>/images/<prompt>.png`. A finished focused run updates only its attempted prompts; unattempted prompts and other models are retained. A failed latest attempt replaces its previous outcome and clears its active successful image. Republishing older evidence cannot replace a newer prompt result. Run IDs are per-question provenance, not gallery grouping. Each row retains its source configuration; mixed revisions are visible in metrics/export.
 
-All runtime files and images are contained in `src/eval`. Existing run folders remain as archived evidence for earlier evaluations; they are not additional gallery choices. Current-image changes create a new evaluation session while preserving earlier votes and source versions. Replaced current images are unavailable in historical review rather than displaying new pixels as old results. Copy `src/eval` and run `npm start` from that folder, or deploy `public` at the site root. API keys and generation services are unnecessary for evaluation.
+All runtime files and images are contained in `src/eval`. Existing run folders remain as archived evidence for earlier evaluations; they are not additional gallery choices. Current-image replacements refresh the evaluation and reset selections. Only the current evaluation is available; run IDs remain provenance in the JSON export. Copy `src/eval` and run `npm start` from that folder, or deploy its static build at the site root. API keys and generation services are unnecessary for evaluation.
+
+## Git-based static deployment
+
+Use `src/eval` as the project root/base directory on Vercel or Netlify. Set the build command to `npm run build`, output directory to `dist`, and Node version to 22. The included `vercel.json` and `netlify.toml` provide these settings.
+
+```sh
+cd src/eval
+npm ci
+npm run build
+npm test
+npm run test:browser
+```
+
+Commit the evaluator source, configuration, lockfile, `public/benchmarks/index.json`, and each campaign model’s `current.json` and `images/*.png` before deploying from Git. `node_modules`, `dist`, test captures, retired models and historical publication folders remain ignored. The build copies only the seven models listed in `public/campaign.js`, their current manifests and referenced screenshots; it fails if a referenced image is missing. It has no dependency on files outside `src/eval`, API keys or inference services.
+
+There is one current image per model and prompt. A rerun replaces only attempted prompts for that model; other models remain side by side. Evaluators’ selections autosave locally and replace the ballot for that question. Each teammate downloads a JSON file after voting and sends it to the organizer; no shared vote server is required.

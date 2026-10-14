@@ -28,7 +28,7 @@ export function evaluatorServer({ assets = resolve(appRoot, 'benchmarks') } = {}
     } catch (error) {
       if (request.url === '/benchmarks/index.json' && error.code === 'ENOENT') {
         response.writeHead(200, { 'Content-Type': types['.json'], 'Cache-Control': 'no-store' });
-        response.end(JSON.stringify({ protocolVersion: 1, runs: [] }));
+        response.end(JSON.stringify({ protocolVersion: 1, models: [] }));
       } else { response.writeHead(404); response.end('Not found'); }
     }
   });

@@ -1,0 +1,726 @@
+{
+  "protocolVersion": 1,
+  "id": "gpt-6.1-sol",
+  "modelSlug": "gpt-6.1-sol",
+  "scope": "first-prompt",
+  "startedAt": "2026-10-13T18:40:04.714Z",
+  "endedAt": "2026-10-13T18:40:27.839Z",
+  "state": "FINISHED",
+  "complete": false,
+  "promptHash": "7eb999db69a660c06f2af15d25f0e1764a8cc68945a19524c53677c4f042b8d3",
+  "configuration": {
+    "protocolVersion": 1,
+    "llm": {
+      "provider": "openai",
+      "connection": "openai",
+      "label": "OpenAI",
+      "baseUrl": "https://api.openai.com/v1",
+      "model": "gpt-6.1-sol",
+      "structuredOutput": "auto",
+      "contextTokens": null,
+      "timeout": 120000,
+      "maxTokens": 4096,
+      "concurrency": 1,
+      "reasoningEffort": "low"
+    },
+    "decision": {
+      "baseUrl": "http://127.0.0.1:43102",
+      "timeout": 20000,
+      "provider": "laya",
+      "runtimeModel": "aac6fef/laya-multilingual-mlx"
+    },
+    "planner": {
+      "mode": "hybrid",
+      "compositionPolicy": "required-laya",
+      "decisionProvider": "laya",
+      "timeoutMs": 240000,
+      "memoryMode": "off"
+    },
+    "source": {
+      "revision": "8675f0ae925b2fd64dc0e30684f244a3e38d85d4",
+      "dirty": true,
+      "fingerprint": "5bdcd144fdee2474f1a352edd09a78971faa1762fb8075792fcee8b161071304"
+    },
+    "capture": {
+      "width": 1440,
+      "height": 1000,
+      "testTimeoutMs": 300000,
+      "workers": 1,
+      "retries": 0
+    },
+    "hardware": {
+      "hostname": "Mykiells-MacBook-Air.local",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M5",
+      "memoryBytes": 25769803776,
+      "inferenceHardware": "not supplied",
+      "quantization": "not supplied"
+    }
+  },
+  "rows": [
+    {
+      "requestId": "da072125-4319-4fb3-be0f-de426164eaf4",
+      "generationMs": 18289.377417000003,
+      "observedMs": 18289.377417000003,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 18050,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5772,
+            "usage": {
+              "promptTokens": 1129,
+              "outputTokens": 130,
+              "totalTokens": 1259
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4317,
+            "usage": {
+              "promptTokens": 3093,
+              "outputTokens": 19,
+              "totalTokens": 3112
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3288,
+            "usage": {
+              "promptTokens": 723,
+              "outputTokens": 20,
+              "totalTokens": 743
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1985,
+            "usage": {
+              "promptTokens": 569,
+              "outputTokens": 14,
+              "totalTokens": 583
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1913,
+            "usage": {
+              "promptTokens": 393,
+              "outputTokens": 14,
+              "totalTokens": 407
+            }
+          }
+        ]
+      },
+      "number": 1,
+      "id": "projectile",
+      "prompt": "Show me 2 projectiles distance comparison based on angles",
+      "status": "ERROR",
+      "seconds": "22.5",
+      "screenshot": null,
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-13T18-40-03-414Z-36987",
+      "sourceStartedAt": "2026-10-13T18:40:04.714Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "8675f0ae925b2fd64dc0e30684f244a3e38d85d4",
+          "dirty": true,
+          "fingerprint": "5bdcd144fdee2474f1a352edd09a78971faa1762fb8075792fcee8b161071304"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 2,
+      "id": "price-elasticity",
+      "prompt": "Can you show me how changing the price affects how much people buy?",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 3,
+      "id": "pythagorean",
+      "prompt": "I have a ladder leaning against a wall. Let me change how far the bottom is from the wall and how high it reaches to see how long the ladder needs to be.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 4,
+      "id": "acid-base-titration",
+      "prompt": "Show me what happens to the pH when I slowly add a base to an acid.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 5,
+      "id": "cost-and-profit",
+      "prompt": "Make a small business example where I can change how much we produce and see our costs and profit.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 6,
+      "id": "tree-height",
+      "prompt": "How can I work out the height of a tree without climbing it? Show me using the angle from where I stand.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 7,
+      "id": "galvanic-cell",
+      "prompt": "Show me how a battery made with two different metals works. Let me change the solution concentrations and see what happens to the voltage.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 8,
+      "id": "craft-production",
+      "prompt": "Compare making things by hand with using an assembly line. I want to see which produces more in the same time.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 9,
+      "id": "tile-patterns",
+      "prompt": "Why can hexagons cover a floor without gaps but regular pentagons can’t? Let me try both.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 10,
+      "id": "wildfire",
+      "prompt": "Show a wildfire spreading through a forest. Can I change how much dry vegetation there is?",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 11,
+      "id": "can-material",
+      "prompt": "I want to design a can that holds the same amount but uses less metal. Let me try different widths and heights.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 12,
+      "id": "survey-sampling",
+      "prompt": "How many people should I survey? Show me how the results change with a small sample versus a bigger one.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 13,
+      "id": "levers",
+      "prompt": "Show me how a crowbar helps lift something heavy. Let me move the pivot.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 14,
+      "id": "pulleys",
+      "prompt": "Make a pulley lifting a weight so I can see whether more supporting ropes make it easier to lift.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 15,
+      "id": "bicycle-gears",
+      "prompt": "Help me understand bicycle gears. Let me change the front and back gears and see how fast the wheel turns.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 16,
+      "id": "tipping",
+      "prompt": "Show me when a cabinet will tip over if I push it. I want to try different cabinet sizes.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 17,
+      "id": "collisions",
+      "prompt": "Make two carts crash into each other. Let me change their masses and speeds and see what happens after they collide.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 18,
+      "id": "hydraulics",
+      "prompt": "I don’t get how a hydraulic lift works. Can you show me?",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 19,
+      "id": "buoyancy",
+      "prompt": "Why does a steel ship float when a solid steel block sinks? Show me both in water.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 20,
+      "id": "doppler-siren",
+      "prompt": "Show an ambulance passing someone and how the siren frequency changes. Let me change how fast it moves.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 21,
+      "id": "guitar-string",
+      "prompt": "Help me understand how a guitar string makes different notes. Let me change its length and tension.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 22,
+      "id": "cooling-drinks",
+      "prompt": "Show a hot drink cooling down. I want to change the room temperature and see how long it takes.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 23,
+      "id": "magnet-induction",
+      "prompt": "Show me a magnet moving through a coil. What happens to the current if I move it faster or reverse direction?",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 24,
+      "id": "rc-circuit",
+      "prompt": "Make a circuit where a capacitor charges and discharges. Let me change the resistance and see how quickly it happens.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 25,
+      "id": "fraction-number-line",
+      "prompt": "Help me understand fractions using a number line.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 26,
+      "id": "cell-division",
+      "prompt": "Show me what happens to a cell when it divides.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 27,
+      "id": "area-perimeter",
+      "prompt": "Compare two rectangles and their areas",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 28,
+      "id": "beer-lambert",
+      "prompt": "Show light passing through a coloured solution. Let me change how concentrated it is and see how much light gets through.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 29,
+      "id": "arithmetic",
+      "prompt": "Help me learn addition with circles",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 30,
+      "id": "gas-equilibrium",
+      "prompt": "Show me a gas reaction at equilibrium. What happens if I squeeze the container?",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 31,
+      "id": "phase-change",
+      "prompt": "Let me heat a substance and change the pressure to see when it becomes a solid, liquid or gas.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 32,
+      "id": "coordinates",
+      "prompt": "Help me practise plotting points on an x and y grid.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 33,
+      "id": "water-pressure",
+      "prompt": "Show water coming out of a hole in a bottle. Let me change the water level and see how far the stream goes.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 34,
+      "id": "voting-systems",
+      "prompt": "Can the same votes give different winners? Show me an election with different voting systems.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 35,
+      "id": "counting",
+      "prompt": "Help me practise counting circles.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 36,
+      "id": "equal-groups",
+      "prompt": "Show me multiplication with equal groups of dots. Let me change the number of groups and how many dots are in each.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 37,
+      "id": "pendulum",
+      "prompt": "Make a pendulum swing where I can adjust its starting angle and length",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 38,
+      "id": "slope",
+      "prompt": "Make me a line where I can adjust its slope and y axis",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 39,
+      "id": "bridge",
+      "prompt": "Make a bridge with a load on it. Let me move the load and see which parts are under the most stress.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    },
+    {
+      "requestId": null,
+      "generationMs": null,
+      "observedMs": null,
+      "measurements": null,
+      "number": 40,
+      "id": "shared-fishing-lake",
+      "prompt": "Make a fishing lake where I can see what happens if everyone catches too many fish.",
+      "status": "NOT_RUN",
+      "seconds": "—",
+      "screenshot": null,
+      "screenshotAvailable": false
+    }
+  ],
+  "summary": {
+    "total": 40,
+    "passed": 1,
+    "successRate": 0.025,
+    "firstPass": 1,
+    "firstPassRate": 0.025,
+    "validationReached": 1,
+    "firstPassAmongValidated": 1,
+    "unknownMeasurements": 39,
+    "zeroRepairCompletions": 1,
+    "latencySamples": 1,
+    "medianMs": 14688.011583,
+    "p95Ms": 14688.011583,
+    "statuses": {
+      "PASS": 1,
+      "NOT_RUN": 39
+    }
+  },
+  "current": true
+}

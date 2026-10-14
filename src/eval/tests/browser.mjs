@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, rm, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { chromium } from '../../playwright/node_modules/@playwright/test/index.mjs';
+import { chromium } from '@playwright/test';
 import { evaluatorServer } from '../server.mjs';
 import { fixtureRun } from './fixtures.mjs';
 
@@ -19,13 +19,19 @@ try {
   await illustration.setContent('<html><body style="margin:0;background:#f5f6ef;font-family:system-ui;padding:40px;color:#29423a"><p>BENCHMARK TEST FIXTURE</p><h1>Two projectiles, different angles</h1><p>Change the launch angle and compare the landing positions.</p><svg width="900" height="300" viewBox="0 0 900 300"><path d="M30 270 Q200 -180 530 270" fill="none" stroke="#277d70" stroke-width="5"/><path d="M30 270 Q240 90 750 270" fill="none" stroke="#c57837" stroke-width="5"/><path d="M0 270 H900" stroke="#8a9d87" stroke-width="2"/></svg><p>Angle A: 60° &nbsp;&nbsp; Angle B: 30°</p></body></html>');
   const image = await illustration.screenshot(); await illustration.close();
   async function install(runs) {
-    const catalog = { protocolVersion: 1, runs: [] };
+    const catalog = { protocolVersion: 1, models: [] };
     for (const run of runs) {
-      const dir = join(temporary, run.modelSlug, run.id);
+      const current = structuredClone(run);
+      current.id = run.modelSlug; current.current = true;
+      current.rows.forEach(row => {
+        row.sourceRunId = run.id;
+        if (row.screenshot) row.screenshot = `/benchmarks/${run.modelSlug}/images/${row.id}.png?version=${run.id}`;
+      });
+      const dir = join(temporary, run.modelSlug);
       await mkdir(join(dir, 'images'), { recursive: true });
       for (const row of run.rows.filter(row => row.screenshot)) await writeFile(join(dir, 'images', `${row.id}.png`), image);
-      await writeFile(join(dir, 'run.json'), JSON.stringify(run));
-      catalog.runs.push({ id: run.id, modelSlug: run.modelSlug, complete: run.complete, path: `/benchmarks/${run.modelSlug}/${run.id}/run.json` });
+      await writeFile(join(dir, 'current.json'), JSON.stringify(current));
+      catalog.models.push({ id: run.modelSlug, modelSlug: run.modelSlug, complete: run.complete, path: `/benchmarks/${run.modelSlug}/current.json` });
     }
     await writeFile(join(temporary, 'index.json'), JSON.stringify(catalog));
   }
@@ -37,7 +43,14 @@ try {
   await install([first, second]);
   await page.getByRole('button', { name: 'Check for results' }).click();
   await page.getByRole('heading', { name: first.rows[0].prompt }).waitFor();
-  await page.locator('.candidate input').nth(0).check();
+  await page.locator('.candidate img').first().click();
+  assert.equal(await page.locator('.candidate input:checked').count(), 1);
+  await page.locator('.candidate img').first().click();
+  assert.equal(await page.locator('.candidate input:checked').count(), 0);
+  await page.locator('.candidate-heading').first().click();
+  assert.equal(await page.locator('.candidate input:checked').count(), 1);
+  assert.equal(await page.locator('.candidate a').count(), 0);
+  assert.equal(page.context().pages().length, 1);
   await page.locator('.candidate input').nth(1).focus(); await page.keyboard.press('Space');
   assert.equal(await page.locator('.candidate input:checked').count(), 2);
   const selected = await page.locator('.candidate input:checked').evaluateAll(inputs => inputs.map(input => input.value));
@@ -57,13 +70,13 @@ try {
   const exported = JSON.parse(await readFile(await download.path(), 'utf8'));
   assert.equal(exported.completedQuestions, 3); assert.equal(exported.questions[0].ballot.selected.length, 2);
   assert.equal(exported.questions[1].ballot.nonePreferred, true);
-  const remaining = ['gemma-4-e4b', 'gpt-6-luna', 'gpt-6.1-sol', 'qwen3-32b', 'mistral-small-3.2-24b'].map((model, i) => fixtureRun(model, `fixture-extra-${i}`));
+  const remaining = ['llama-3.1-8b', 'gpt-6-luna', 'gpt-6.1-sol', 'qwen3-32b', 'mistral-small-3.1-24b'].map((model, i) => fixtureRun(model, `fixture-extra-${i}`));
   remaining[0].configuration.source = { revision: 'another-execution-revision' };
-  await install([first, second, ...remaining]);
+  await install([first, second, ...remaining, fixtureRun('gemma-4-e4b', 'retired-gemma4'), fixtureRun('gemma-3-12b', 'retired-gemma3'), fixtureRun('mistral-small-3.2-24b', 'retired-mistral')]);
   await page.getByText('7 models loaded', { exact: false }).waitFor({ timeout: 45000 });
   assert.equal(await page.locator('.candidate').count(), 7);
   assert.equal(await page.getByRole('checkbox', { name: 'None preferred' }).isChecked(), true);
-  assert.equal(await page.locator('#sessions option').count(), 1);
+  assert.equal(await page.locator('#sessions').count(), 0);
   await page.getByRole('button', { name: 'Measurements', exact: true }).click();
   assert.equal(await page.locator('#metric-rows tr').count(), 7);
   await page.screenshot({ path: join(evidence, 'measurements-desktop.png'), fullPage: true });
@@ -91,10 +104,10 @@ try {
   await page.getByRole('alert').waitFor(); assert.equal(await page.locator('#saved').innerText(), 'Not saved');
   const context = await browser.newContext();
   const malformed = await context.newPage();
-  await malformed.addInitScript(() => localStorage.setItem('apertus-evaluation-v1', '{broken'));
+  await malformed.addInitScript(() => localStorage.setItem('apertus-evaluation-v2', '{broken'));
   await malformed.goto(origin);
   await malformed.getByRole('alert').waitFor();
-  assert.equal(await malformed.evaluate(() => localStorage.getItem('apertus-evaluation-v1')), '{broken');
+  assert.equal(await malformed.evaluate(() => localStorage.getItem('apertus-evaluation-v2')), '{broken');
   assert.equal((await fetch(`${origin}/../server.mjs`)).status, 404);
   assert.equal((await fetch(`${origin}/`, { method: 'POST' })).status, 405);
   assert.deepEqual(errors, []);

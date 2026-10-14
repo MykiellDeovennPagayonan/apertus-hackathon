@@ -20,13 +20,12 @@
     <section id="empty" hidden>
       <p class="eyebrow">Ready when your results are</p>
       <h1>Forty questions. Your judgment.</h1>
-      <p>Models appear here as their forty-question screenshots are added. Start with Apertus, then add the other models.</p>
+      <p>Current results appear here as benchmark screenshots are added. Start with Apertus, then add the other models.</p>
       <code>make benchmark-model MODEL=apertus-1.5-8b</code>
       <p><button id="reload">Check for results</button></p>
     </section>
     <section id="workspace" hidden>
-      <div class="session-bar">
-        <label>Evaluation session <select id="sessions"></select></label>
+      <div class="evaluation-actions">
         <span id="saved" role="status" aria-live="polite"></span>
         <button id="export">Download JSON</button>
       </div>

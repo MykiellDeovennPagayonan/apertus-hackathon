@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { copyFileSync, unlinkSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
+import { campaignModels } from '../eval/public/campaign.js';
 import { validateRun } from '../eval/public/state.js';
 
 export const artifactRoot = resolve(import.meta.dirname, '../eval/public/benchmarks');
@@ -82,8 +83,10 @@ export function migrateGallery(root = artifactRoot) {
   const path = join(root, 'index.json');
   if (!existsSync(path)) return;
   const index = JSON.parse(readFileSync(path, 'utf8'));
-  const models = new Map((index.models ?? []).map(model => [model.modelSlug, model]));
-  for (const item of [...index.runs].sort((a, b) => a.startedAt.localeCompare(b.startedAt))) {
+  const archivePath = join(root, 'archive-index.json');
+  const archive = existsSync(archivePath) ? JSON.parse(readFileSync(archivePath, 'utf8')) : { protocolVersion: 1, runs: index.runs ?? [] };
+  const models = new Map((index.models ?? []).filter(model => campaignModels.includes(model.modelSlug)).map(model => [model.modelSlug, model]));
+  for (const item of [...archive.runs].filter(item => campaignModels.includes(item.modelSlug)).sort((a, b) => a.startedAt.localeCompare(b.startedAt))) {
     safeId(item.modelSlug); safeId(item.id);
     assert.equal(item.path, `/benchmarks/${item.modelSlug}/${item.id}/run.json`);
     const run = validateRun(JSON.parse(readFileSync(join(root, item.modelSlug, item.id, 'run.json'), 'utf8')));
@@ -91,6 +94,8 @@ export function migrateGallery(root = artifactRoot) {
     models.set(model.modelSlug, model);
   }
   index.models = [...models.values()];
+  delete index.runs;
+  atomicJson(archivePath, archive);
   atomicJson(path, index);
 }
 
@@ -137,12 +142,19 @@ export function publishRun(runDir, root = artifactRoot) {
   const indexPath = join(root, 'index.json');
   const index = existsSync(indexPath) ? JSON.parse(readFileSync(indexPath, 'utf8')) : { protocolVersion: 1, runs: [] };
   assert.equal(index.protocolVersion, 1);
-  index.runs = index.runs.filter(item => item.id !== run.id);
-  index.runs.push({ id: run.id, modelSlug: run.modelSlug, startedAt: run.startedAt, complete: run.complete,
+  const archivePath = join(root, 'archive-index.json');
+  const archive = existsSync(archivePath) ? JSON.parse(readFileSync(archivePath, 'utf8')) : { protocolVersion: 1, runs: index.runs ?? [] };
+  archive.runs = archive.runs.filter(item => item.id !== run.id);
+  archive.runs.push({ id: run.id, modelSlug: run.modelSlug, startedAt: run.startedAt, complete: run.complete,
     path: `/benchmarks/${run.modelSlug}/${run.id}/run.json` });
-  const model = updateCurrent(published, root);
-  index.models = (index.models ?? []).filter(item => item.modelSlug !== model.modelSlug);
-  index.models.push(model);
+  atomicJson(archivePath, archive);
+  delete index.runs;
+  index.models = (index.models ?? []).filter(item => campaignModels.includes(item.modelSlug));
+  if (campaignModels.includes(run.modelSlug)) {
+    const model = updateCurrent(published, root);
+    index.models = index.models.filter(item => item.modelSlug !== model.modelSlug);
+    index.models.push(model);
+  }
   atomicJson(indexPath, index);
   return published;
 }

@@ -1,4 +1,4 @@
-export const storageKey = 'apertus-evaluation-v1';
+export const storageKey = 'apertus-evaluation-v2';
 const statuses = ['PASS', 'ERROR', 'TIMEOUT', 'INTERRUPTED', 'NOT_RUN', 'RUNNING'];
 const idPattern = /^[a-zA-Z0-9][a-zA-Z0-9._-]{0,119}$/;
 function requireValue(condition, message) { if (!condition) throw new Error(message); }
