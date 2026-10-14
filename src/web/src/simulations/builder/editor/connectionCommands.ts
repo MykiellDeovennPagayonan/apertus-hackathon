@@ -1,9 +1,9 @@
 import {
   connectAuthored,
   disconnectAuthored,
-} from "../../runtime/authoring/connections";
-import { requireValue } from "../../runtime/authoring/requireValue";
-import type { Endpoint } from "../../runtime/authoring/types";
+} from "../../creation-and-editing/authoring-engine/connections";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
+import type { Endpoint } from "../../creation-and-editing/authoring-engine/document";
 import type { ExperimentDocument } from "../document";
 import { resolveGraphEndpoint } from "../graph/authoredGraph";
 import {

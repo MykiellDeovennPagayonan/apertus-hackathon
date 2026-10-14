@@ -1,1 +1,1 @@
-export { TownExperiment } from "../../../components/compositions/TownExperiment";
+export { TownExperiment } from "../../../legacy/components/compositions/TownExperiment";

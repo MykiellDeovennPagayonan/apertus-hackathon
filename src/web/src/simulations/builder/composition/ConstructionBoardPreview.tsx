@@ -1,5 +1,5 @@
-import type { ConstructionUpdate } from "../../../lib/planner/construction";
-import { publicDefinition } from "../../components/catalog";
+import type { ConstructionUpdate } from "../../creation-and-editing/simulation/construction/contracts";
+import { publicDefinition } from "../../registry/index";
 
 /** Incomplete construction is presentation only: no runtime, effects, or editable bindings. */
 export function ConstructionBoardPreview({

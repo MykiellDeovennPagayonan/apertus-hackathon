@@ -1,10 +1,10 @@
-import type { DomainModel } from "../../runtime/contribution";
+import type { DomainModel } from "../../registry/contracts/domainContribution";
 import {
   boolean,
   num,
   object,
   validateValue,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 import { geometryDependencies, valueAction } from "./common";
 
 const volume = num(100, 2000, "cm³");
@@ -45,23 +45,23 @@ export const canPackagingModel: DomainModel = {
   version: 1,
   name: "Can shape and the least metal",
   description:
-    "Change a can's radius while its height adjusts to keep the same volume. The unrolled wall and the round ends show where the metal goes and which shape uses the least.",
+    "Design a cylindrical can for a selected fixed capacity using the least metal. Adjust its radius to make the can wider or narrower; its height automatically changes as h = V / (πr²), so each shape holds the same volume. Compare current total metal surface area against the least-metal radius and height. The scene shows the can, its unrolled side wall, round ends and surface-area curve.",
   tags: ["optimization", "surface area", "cylinder", "packaging"],
   assumptions: [
     "Ideal cylinder with fixed volume: h = V / (πr²). Closed can S = 2πr² + 2πrh, least metal when h = 2r; an open can (one end) needs least metal when h = r.",
-    "Equal cost per square centimetre; seams, thickness, strength and stacking are ignored.",
+    "Radius controls can width; diameter is twice radius. At fixed volume, radius and height are coupled, so height is derived rather than independently adjustable. Changing capacity starts a different fixed-volume comparison. Equal cost per square centimetre; seams, thickness, strength and stacking are ignored.",
   ],
   parameters,
   defaults: { canVolume: 500, canRadius: 2.5, canClosed: true },
   outputs: {
-    canRadius: { unit: "cm", description: "Radius of the can" },
+    canRadius: { unit: "cm", description: "Radius of the cylindrical can; its full width is twice this value" },
     canHeight: {
       unit: "cm",
-      description: "Height needed for the fixed volume",
+      description: "Derived can height V / (πr²); changes automatically as width changes at fixed capacity",
     },
     wallArea: { unit: "cm²", description: "Area of the unrolled side wall" },
     endsArea: { unit: "cm²", description: "Area of the round end or ends" },
-    surfaceArea: { unit: "cm²", description: "Total metal area" },
+    surfaceArea: { unit: "cm²", description: "Total can material: rectangular unrolled wall plus circular end or ends" },
     bestRadius: { unit: "cm", description: "Radius that uses the least metal" },
     bestHeight: { unit: "cm", description: "Height of the least-metal can" },
     leastArea: { unit: "cm²", description: "Least possible metal area" },
@@ -77,11 +77,11 @@ export const canPackagingModel: DomainModel = {
   actions: {
     "set:canRadius": valueAction(
       radius,
-      "Can radius in centimetres; height follows",
+      "Make the cylindrical can wider or narrower by changing radius in centimetres; height follows automatically to preserve the selected volume",
     ),
     "set:canVolume": valueAction(
       volume,
-      "Volume the can holds in cubic centimetres",
+      "Select the capacity in cubic centimetres; hold this volume constant while comparing radius and derived height",
     ),
     "set:canClosed": valueAction(
       boolean,

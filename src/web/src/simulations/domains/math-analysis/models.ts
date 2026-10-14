@@ -1,14 +1,14 @@
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
+} from "../../registry/contracts/domainContribution";
 import {
   choice,
   num,
   object,
   type ParameterSchema,
   validateValue,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 
 export const list = (
   items: ParameterSchema,

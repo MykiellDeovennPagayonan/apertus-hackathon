@@ -56,4 +56,4 @@ The integration owner is the sole editor during parallel development. Each domai
 
 For every Working entry, link a report covering both rounds and record the candidate and verification date. A per-prompt local pass is provisional until the complete 006 suite passes twice after integration. Existing baseline prompts retain their separate 005 or baseline acceptance scope; do not claim they were retested by testing only the fifteen new prompts.
 
-No new simulations or live acceptance tests were executed while creating this catalog. The authoritative capability sources inspected were [creation planner](../src/web/src/lib/planner/creation.ts), [capabilities](../src/web/src/simulations/runtime/capabilities.ts), and [recipe resolver](../src/web/src/simulations/runtime/resolver.ts).
+No new simulations or live acceptance tests were executed while creating this catalog. The authoritative capability sources inspected were [creation planner](../src/web/src/lib/planner/creation.ts), [capabilities](../src/web/src/simulations/legacy/runtime/capabilities.ts), and [recipe resolver](../src/web/src/simulations/legacy/runtime/resolver.ts).

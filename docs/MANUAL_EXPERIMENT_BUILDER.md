@@ -578,14 +578,14 @@ Runtime, world, traits, and resources need not all be described to an AI model o
 
 | Foundation | What exists | Builder work |
 | --- | --- | --- |
-| [Composition definitions](../src/web/src/simulations/runtime/definition.ts) | Selected components, systems, instances, views, and defaults | Authoring adapters around supported definitions |
-| [Model contributions and assemblies](../src/web/src/simulations/runtime/contribution.ts) | Parameters, actions, outputs, observations, and assembly records | Widget bindings, placement, and readable authoring metadata |
-| [Parameter schemas](../src/web/src/simulations/runtime/parameterSchema.ts) and [capabilities](../src/web/src/simulations/runtime/capabilities.ts) | Validation, ranges, targets, and edit timing | Consistent inspector forms and current-value mappings |
-| [Recipe resolver](../src/web/src/simulations/runtime/resolver.ts) | Versioned resolution and serialization | Document envelope, presentation validation, and legacy import |
-| [Runtime session](../src/web/src/simulations/runtime/session.ts) | Validated commands, lifecycle, stepping, initial recipe save/load | Explicit preview ownership and author-document save semantics |
-| [Experiment lesson frame](../src/web/src/simulations/components/views/ExperimentLessonFrame.tsx) | Goal, scene, panel, feedback, and details slots | Container-aware embedding and configurable lesson presentation |
+| [Composition definitions](../src/web/src/simulations/legacy/runtime/definition.ts) | Selected components, systems, instances, views, and defaults | Authoring adapters around supported definitions |
+| [Model contributions and assemblies](../src/web/src/simulations/registry/contracts/domainContribution.ts) | Parameters, actions, outputs, observations, and assembly records | Widget bindings, placement, and readable authoring metadata |
+| [Parameter schemas](../src/web/src/simulations/registry/contracts/parameterSchema.ts) and [capabilities](../src/web/src/simulations/legacy/runtime/capabilities.ts) | Validation, ranges, targets, and edit timing | Consistent inspector forms and current-value mappings |
+| [Recipe resolver](../src/web/src/simulations/legacy/runtime/resolver.ts) | Versioned resolution and serialization | Document envelope, presentation validation, and legacy import |
+| [Runtime session](../src/web/src/simulations/legacy/runtime/session.ts) | Validated commands, lifecycle, stepping, initial recipe save/load | Explicit preview ownership and author-document save semantics |
+| [Experiment lesson frame](../src/web/src/simulations/legacy/components/views/ExperimentLessonFrame.tsx) | Goal, scene, panel, feedback, and details slots | Container-aware embedding and configurable lesson presentation |
 | [Workspace styles](../src/web/src/app/experiments/_components/ExperimentsShell.css) | Reference 2D layouts and town overlays | Consolidate reusable layout instead of relying on shell overrides |
-| [3D view](../src/web/src/simulations/components/views/ThreeWorldView.tsx) | Working town rendering | Configurable town view adapter; broader 3D support later |
+| [3D view](../src/web/src/simulations/legacy/components/views/ThreeWorldView.tsx) | Working town rendering | Configurable town view adapter; broader 3D support later |
 
 The current session infrastructure has a single active session. Start with one preview and expand that same preview for full view. Concurrent independent simulations would require additional session isolation and are outside the initial builder scope.
 

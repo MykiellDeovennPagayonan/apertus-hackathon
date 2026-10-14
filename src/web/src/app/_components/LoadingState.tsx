@@ -18,7 +18,7 @@ export default function LoadingState({
       <div className="app-loading__message">
         {variant === "screen" && (
           <span className="app-loading__brand">
-            APERTUS <span>LOCAL LAB</span>
+            pAperSim <span>LOCAL LAB</span>
           </span>
         )}
         <span className="app-loading__spinner" aria-hidden="true" />

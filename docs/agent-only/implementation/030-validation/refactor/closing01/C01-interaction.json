@@ -1,0 +1,1130 @@
+{
+  "requestId": null,
+  "sessionId": "recipe-248e42cc-4635-426b-9b4a-7ca83f6ae166",
+  "authoredRevision": 0,
+  "interactionRevision": 2,
+  "recipe": {
+    "recipeVersion": 2,
+    "id": "c7cbcc87-94f6-4576-92eb-93d40d0fd857",
+    "version": 1,
+    "title": "How does changing the starting angle and length of a pendulum affect its swing period?",
+    "description": "How does changing the starting angle and length of a pendulum affect its swing period?",
+    "tags": [
+      "pendulum motion",
+      "angular displacement",
+      "length dependence",
+      "period measurement"
+    ],
+    "nested": [],
+    "parameters": [],
+    "externalPorts": [],
+    "dependencies": [
+      {
+        "id": "prefabs/physical-systems/Pendulum",
+        "version": 1
+      },
+      {
+        "id": "appearance/physical-pendulum",
+        "version": 1
+      },
+      {
+        "id": "controls/Toggle",
+        "version": 1
+      },
+      {
+        "id": "controls/Button",
+        "version": 1
+      },
+      {
+        "id": "controls/Slider",
+        "version": 1
+      },
+      {
+        "id": "displays/Readout",
+        "version": 1
+      },
+      {
+        "id": "displays/Chart",
+        "version": 1
+      },
+      {
+        "id": "displays/Text",
+        "version": 1
+      }
+    ],
+    "assumptions": [
+      "Ideal rigid-rod pendulum released at rest, starting angle 0–90°. No friction or air resistance.",
+      "Nonlinear motion solves θ″=−(g/L)sinθ using the elliptic time coordinate. The calculated period is 4√(L/g)K(sin(amplitude/2)); motion is independent of frame rate. Changing length, gravity or starting angle restarts the run.",
+      "Comparisons use shared gravity and initial amplitude. Length is the independent variable."
+    ],
+    "document": {
+      "formatVersion": 3,
+      "nodes": [
+        {
+          "id": "activity_1/model",
+          "definition": "prefabs/physical-systems/Pendulum",
+          "version": 1,
+          "label": "Compare pendulum lengths",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "length": 5,
+            "gravity": 9.81,
+            "amplitude": 30,
+            "playing": true
+          }
+        },
+        {
+          "id": "activity_1/appearance",
+          "definition": "appearance/physical-pendulum",
+          "version": 1,
+          "label": "Compare pendulum lengths appearance",
+          "scope": "activity_1/scope/lab",
+          "configuration": {}
+        },
+        {
+          "id": "activity_1/control/PHYS_PLAY",
+          "definition": "controls/Toggle",
+          "version": 1,
+          "label": "Toggle",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Playback",
+            "mode": "submit",
+            "initial": "{\"value\":false}"
+          }
+        },
+        {
+          "id": "activity_1/control/PHYS_RESTART",
+          "definition": "controls/Button",
+          "version": 1,
+          "label": "Action button",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Restart motion",
+            "mode": "submit",
+            "initial": "{}"
+          }
+        },
+        {
+          "id": "activity_1/control/PHYS_STEP",
+          "definition": "controls/Button",
+          "version": 1,
+          "label": "Action button",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Advance motion by 0.1 seconds",
+            "mode": "submit",
+            "initial": "{}"
+          }
+        },
+        {
+          "id": "activity_1/control/PEND_SET_LENGTH",
+          "definition": "controls/Slider",
+          "version": 1,
+          "label": "Slider",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Pendulum length",
+            "mode": "immediate",
+            "initial": "{\"value\":5}"
+          }
+        },
+        {
+          "id": "activity_1/control/PEND_SET_GRAVITY",
+          "definition": "controls/Slider",
+          "version": 1,
+          "label": "Slider",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Gravity",
+            "mode": "immediate",
+            "initial": "{\"value\":9.81}"
+          }
+        },
+        {
+          "id": "activity_1/control/PEND_SET_AMPLITUDE",
+          "definition": "controls/Slider",
+          "version": 1,
+          "label": "Slider",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Starting angle",
+            "mode": "immediate",
+            "initial": "{\"value\":30}"
+          }
+        },
+        {
+          "id": "activity_1/control/RESET",
+          "definition": "controls/Button",
+          "version": 1,
+          "label": "Action button",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Restart activity",
+            "mode": "submit",
+            "initial": "{}"
+          }
+        },
+        {
+          "id": "activity_1/display/period",
+          "definition": "displays/Readout",
+          "version": 1,
+          "label": "Readout",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Period",
+            "precision": 3
+          }
+        },
+        {
+          "id": "activity_1/display/angle",
+          "definition": "displays/Readout",
+          "version": 1,
+          "label": "Readout",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Angle",
+            "precision": 3
+          }
+        },
+        {
+          "id": "activity_1/display/elapsed",
+          "definition": "displays/Readout",
+          "version": 1,
+          "label": "Readout",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Elapsed time",
+            "precision": 3
+          }
+        },
+        {
+          "id": "activity_1/display/cycles",
+          "definition": "displays/Readout",
+          "version": 1,
+          "label": "Readout",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Completed cycles",
+            "precision": 3
+          }
+        },
+        {
+          "id": "activity_1/display/lastPeriod",
+          "definition": "displays/Readout",
+          "version": 1,
+          "label": "Readout",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Last complete period",
+            "precision": 3
+          }
+        },
+        {
+          "id": "activity_1/display/x",
+          "definition": "displays/Readout",
+          "version": 1,
+          "label": "Readout",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Horizontal position",
+            "precision": 3
+          }
+        },
+        {
+          "id": "activity_1/display/y",
+          "definition": "displays/Readout",
+          "version": 1,
+          "label": "Readout",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Vertical position",
+            "precision": 3
+          }
+        },
+        {
+          "id": "activity_1/display/points",
+          "definition": "displays/Chart",
+          "version": 1,
+          "label": "Chart",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "label": "Angle",
+            "precision": 3,
+            "xKey": "x",
+            "xLabel": "Model time",
+            "xUnit": "s",
+            "yLabel": "Angle",
+            "yUnit": "degrees",
+            "columns": [
+              {
+                "key": "x",
+                "label": "Model time",
+                "unit": "s",
+                "type": "number"
+              },
+              {
+                "key": "y",
+                "label": "Angle",
+                "unit": "degrees",
+                "type": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": "activity_1/assumptions",
+          "definition": "displays/Text",
+          "version": 1,
+          "label": "Text",
+          "scope": "activity_1/scope/lab",
+          "configuration": {
+            "text": "Ideal rigid-rod pendulum released at rest, starting angle 0–90°. No friction or air resistance.\nNonlinear motion solves θ″=−(g/L)sinθ using the elliptic time coordinate. The calculated period is 4√(L/g)K(sin(amplitude/2)); motion is independent of frame rate. Changing length, gravity or starting angle restarts the run.\nComparisons use shared gravity and initial amplitude. Length is the independent variable.",
+            "variant": "body",
+            "border": false,
+            "borderColor": "#d5cdbb",
+            "borderWidth": 1,
+            "borderRadius": 0,
+            "backgroundColor": "transparent",
+            "opacity": 1
+          }
+        }
+      ],
+      "connections": [
+        {
+          "id": "activity_1/link/appearance",
+          "kind": "attachment",
+          "from": {
+            "node": "activity_1/model",
+            "port": "appearance"
+          },
+          "to": {
+            "node": "activity_1/appearance",
+            "port": "model"
+          }
+        },
+        {
+          "id": "activity_1/link/control/PHYS_PLAY",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/control/PHYS_PLAY",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/model",
+            "port": "PHYS_PLAY"
+          }
+        },
+        {
+          "id": "activity_1/link/control/PHYS_RESTART",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/control/PHYS_RESTART",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/model",
+            "port": "PHYS_RESTART"
+          }
+        },
+        {
+          "id": "activity_1/link/control/PHYS_STEP",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/control/PHYS_STEP",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/model",
+            "port": "PHYS_STEP"
+          }
+        },
+        {
+          "id": "activity_1/link/control/PEND_SET_LENGTH",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/control/PEND_SET_LENGTH",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/model",
+            "port": "PEND_SET_LENGTH"
+          }
+        },
+        {
+          "id": "activity_1/link/control/PEND_SET_GRAVITY",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/control/PEND_SET_GRAVITY",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/model",
+            "port": "PEND_SET_GRAVITY"
+          }
+        },
+        {
+          "id": "activity_1/link/control/PEND_SET_AMPLITUDE",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/control/PEND_SET_AMPLITUDE",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/model",
+            "port": "PEND_SET_AMPLITUDE"
+          }
+        },
+        {
+          "id": "activity_1/link/control/RESET",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/control/RESET",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/model",
+            "port": "RESET"
+          }
+        },
+        {
+          "id": "activity_1/link/output/period",
+          "kind": "value",
+          "from": {
+            "node": "activity_1/model",
+            "port": "period"
+          },
+          "to": {
+            "node": "activity_1/display/period",
+            "port": "value"
+          }
+        },
+        {
+          "id": "activity_1/link/output/angle",
+          "kind": "value",
+          "from": {
+            "node": "activity_1/model",
+            "port": "angle"
+          },
+          "to": {
+            "node": "activity_1/display/angle",
+            "port": "value"
+          }
+        },
+        {
+          "id": "activity_1/link/output/elapsed",
+          "kind": "value",
+          "from": {
+            "node": "activity_1/model",
+            "port": "elapsed"
+          },
+          "to": {
+            "node": "activity_1/display/elapsed",
+            "port": "value"
+          }
+        },
+        {
+          "id": "activity_1/link/output/cycles",
+          "kind": "value",
+          "from": {
+            "node": "activity_1/model",
+            "port": "cycles"
+          },
+          "to": {
+            "node": "activity_1/display/cycles",
+            "port": "value"
+          }
+        },
+        {
+          "id": "activity_1/link/output/lastPeriod",
+          "kind": "value",
+          "from": {
+            "node": "activity_1/model",
+            "port": "lastPeriod"
+          },
+          "to": {
+            "node": "activity_1/display/lastPeriod",
+            "port": "value"
+          }
+        },
+        {
+          "id": "activity_1/link/output/x",
+          "kind": "value",
+          "from": {
+            "node": "activity_1/model",
+            "port": "x"
+          },
+          "to": {
+            "node": "activity_1/display/x",
+            "port": "value"
+          }
+        },
+        {
+          "id": "activity_1/link/output/y",
+          "kind": "value",
+          "from": {
+            "node": "activity_1/model",
+            "port": "y"
+          },
+          "to": {
+            "node": "activity_1/display/y",
+            "port": "value"
+          }
+        },
+        {
+          "id": "activity_1/link/output/points",
+          "kind": "value",
+          "from": {
+            "node": "activity_1/model",
+            "port": "points"
+          },
+          "to": {
+            "node": "activity_1/display/points",
+            "port": "value"
+          }
+        }
+      ],
+      "resources": [],
+      "scopes": [
+        {
+          "id": "activity_1/scope/lab",
+          "label": "Compare pendulum lengths"
+        }
+      ],
+      "groups": [
+        {
+          "id": "activity_1/group/prebuilt/prefabs-physical-systems-Pendulum",
+          "label": "Compare pendulum lengths",
+          "members": [
+            "activity_1/model",
+            "activity_1/appearance",
+            "activity_1/control/PHYS_PLAY",
+            "activity_1/control/PHYS_RESTART",
+            "activity_1/control/PHYS_STEP",
+            "activity_1/control/PEND_SET_LENGTH",
+            "activity_1/control/PEND_SET_GRAVITY",
+            "activity_1/control/PEND_SET_AMPLITUDE",
+            "activity_1/control/RESET",
+            "activity_1/display/period",
+            "activity_1/display/angle",
+            "activity_1/display/elapsed",
+            "activity_1/display/cycles",
+            "activity_1/display/lastPeriod",
+            "activity_1/display/x",
+            "activity_1/display/y",
+            "activity_1/display/points",
+            "activity_1/assumptions"
+          ],
+          "source": {
+            "id": "prebuilt/prefabs-physical-systems-Pendulum",
+            "version": 1
+          },
+          "collapsed": false,
+          "parameters": [],
+          "exposedPorts": []
+        }
+      ],
+      "layout": {
+        "id": "layout/learner",
+        "kind": "stack",
+        "label": "",
+        "gap": 16,
+        "columns": 2,
+        "children": [
+          {
+            "id": "activity_1/layout/appearance",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/appearance"
+          },
+          {
+            "id": "activity_1/layout/display/period",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/display/period"
+          },
+          {
+            "id": "activity_1/layout/display/angle",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/display/angle"
+          },
+          {
+            "id": "activity_1/layout/control/PHYS_PLAY",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/control/PHYS_PLAY"
+          },
+          {
+            "id": "activity_1/layout/control/PEND_SET_LENGTH",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/control/PEND_SET_LENGTH"
+          },
+          {
+            "id": "activity_1/layout/control/PEND_SET_GRAVITY",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/control/PEND_SET_GRAVITY"
+          },
+          {
+            "id": "activity_1/layout/control/PEND_SET_AMPLITUDE",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/control/PEND_SET_AMPLITUDE"
+          },
+          {
+            "id": "activity_1/layout/control/PHYS_STEP",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/control/PHYS_STEP"
+          },
+          {
+            "id": "activity_1/layout/control/RESET",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/control/RESET"
+          },
+          {
+            "id": "activity_1/layout/control/PHYS_RESTART",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/control/PHYS_RESTART"
+          },
+          {
+            "id": "activity_1/layout/display/elapsed",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/display/elapsed"
+          },
+          {
+            "id": "activity_1/layout/display/cycles",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/display/cycles"
+          },
+          {
+            "id": "activity_1/layout/display/lastPeriod",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/display/lastPeriod"
+          },
+          {
+            "id": "activity_1/layout/display/x",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/display/x"
+          },
+          {
+            "id": "activity_1/layout/display/y",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/display/y"
+          },
+          {
+            "id": "activity_1/layout/display/points",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/display/points"
+          },
+          {
+            "id": "activity_1/layout/assumptions",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/assumptions"
+          }
+        ]
+      },
+      "lesson": {
+        "title": "How does changing the starting angle and length of a pendulum affect its swing period?",
+        "instruction": "How does changing the starting angle and length of a pendulum affect its swing period?",
+        "explanation": "Ideal rigid-rod pendulum released at rest, starting angle 0–90°. No friction or air resistance.\nNonlinear motion solves θ″=−(g/L)sinθ using the elliptic time coordinate. The calculated period is 4√(L/g)K(sin(amplitude/2)); motion is independent of frame rate. Changing length, gravity or starting angle restarts the run.\nComparisons use shared gravity and initial amplitude. Length is the independent variable."
+      },
+      "editor": {
+        "positions": {},
+        "zoom": 1
+      },
+      "presentation": {
+        "version": 1,
+        "mode": "board",
+        "items": [
+          {
+            "id": "board/activity_1/layout/appearance",
+            "layoutId": "activity_1/layout/appearance",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 430
+            },
+            "zIndex": 0,
+            "locked": false,
+            "responsiveMinHeight": 300
+          },
+          {
+            "id": "board/activity_1/layout/display/period",
+            "layoutId": "activity_1/layout/display/period",
+            "rect": {
+              "x": 664,
+              "y": 960,
+              "width": 320,
+              "height": 100
+            },
+            "zIndex": 1,
+            "locked": false,
+            "responsiveMinHeight": 100
+          },
+          {
+            "id": "board/activity_1/layout/display/angle",
+            "layoutId": "activity_1/layout/display/angle",
+            "rect": {
+              "x": 664,
+              "y": 1076,
+              "width": 320,
+              "height": 100
+            },
+            "zIndex": 2,
+            "locked": false,
+            "responsiveMinHeight": 100
+          },
+          {
+            "id": "board/activity_1/layout/control/PHYS_PLAY",
+            "layoutId": "activity_1/layout/control/PHYS_PLAY",
+            "rect": {
+              "x": 664,
+              "y": 1192,
+              "width": 320,
+              "height": 80
+            },
+            "zIndex": 3,
+            "locked": false,
+            "responsiveMinHeight": 80
+          },
+          {
+            "id": "board/activity_1/layout/control/PEND_SET_LENGTH",
+            "layoutId": "activity_1/layout/control/PEND_SET_LENGTH",
+            "rect": {
+              "x": 664,
+              "y": 0,
+              "width": 320,
+              "height": 144
+            },
+            "zIndex": 4,
+            "locked": false,
+            "responsiveMinHeight": 144
+          },
+          {
+            "id": "board/activity_1/layout/control/PEND_SET_GRAVITY",
+            "layoutId": "activity_1/layout/control/PEND_SET_GRAVITY",
+            "rect": {
+              "x": 664,
+              "y": 160,
+              "width": 320,
+              "height": 144
+            },
+            "zIndex": 5,
+            "locked": false,
+            "responsiveMinHeight": 144
+          },
+          {
+            "id": "board/activity_1/layout/control/PEND_SET_AMPLITUDE",
+            "layoutId": "activity_1/layout/control/PEND_SET_AMPLITUDE",
+            "rect": {
+              "x": 664,
+              "y": 320,
+              "width": 320,
+              "height": 144
+            },
+            "zIndex": 6,
+            "locked": false,
+            "responsiveMinHeight": 144
+          },
+          {
+            "id": "board/activity_1/layout/control/PHYS_STEP",
+            "layoutId": "activity_1/layout/control/PHYS_STEP",
+            "rect": {
+              "x": 664,
+              "y": 480,
+              "width": 320,
+              "height": 144
+            },
+            "zIndex": 7,
+            "locked": false,
+            "responsiveMinHeight": 144
+          },
+          {
+            "id": "board/activity_1/layout/control/RESET",
+            "layoutId": "activity_1/layout/control/RESET",
+            "rect": {
+              "x": 664,
+              "y": 640,
+              "width": 320,
+              "height": 144
+            },
+            "zIndex": 8,
+            "locked": false,
+            "responsiveMinHeight": 144
+          },
+          {
+            "id": "board/activity_1/layout/control/PHYS_RESTART",
+            "layoutId": "activity_1/layout/control/PHYS_RESTART",
+            "rect": {
+              "x": 664,
+              "y": 800,
+              "width": 320,
+              "height": 144
+            },
+            "zIndex": 9,
+            "locked": false,
+            "responsiveMinHeight": 144
+          },
+          {
+            "id": "board/activity_1/layout/display/elapsed",
+            "layoutId": "activity_1/layout/display/elapsed",
+            "rect": {
+              "x": 664,
+              "y": 1288,
+              "width": 320,
+              "height": 100
+            },
+            "zIndex": 10,
+            "locked": false,
+            "responsiveMinHeight": 100
+          },
+          {
+            "id": "board/activity_1/layout/display/cycles",
+            "layoutId": "activity_1/layout/display/cycles",
+            "rect": {
+              "x": 664,
+              "y": 1404,
+              "width": 320,
+              "height": 100
+            },
+            "zIndex": 11,
+            "locked": false,
+            "responsiveMinHeight": 100
+          },
+          {
+            "id": "board/activity_1/layout/display/lastPeriod",
+            "layoutId": "activity_1/layout/display/lastPeriod",
+            "rect": {
+              "x": 664,
+              "y": 1520,
+              "width": 320,
+              "height": 100
+            },
+            "zIndex": 12,
+            "locked": false,
+            "responsiveMinHeight": 100
+          },
+          {
+            "id": "board/activity_1/layout/display/x",
+            "layoutId": "activity_1/layout/display/x",
+            "rect": {
+              "x": 664,
+              "y": 1636,
+              "width": 320,
+              "height": 100
+            },
+            "zIndex": 13,
+            "locked": false,
+            "responsiveMinHeight": 100
+          },
+          {
+            "id": "board/activity_1/layout/display/y",
+            "layoutId": "activity_1/layout/display/y",
+            "rect": {
+              "x": 664,
+              "y": 1752,
+              "width": 320,
+              "height": 100
+            },
+            "zIndex": 14,
+            "locked": false,
+            "responsiveMinHeight": 100
+          },
+          {
+            "id": "board/activity_1/layout/display/points",
+            "layoutId": "activity_1/layout/display/points",
+            "rect": {
+              "x": 664,
+              "y": 1868,
+              "width": 320,
+              "height": 160
+            },
+            "zIndex": 15,
+            "locked": false,
+            "responsiveMinHeight": 160
+          },
+          {
+            "id": "board/activity_1/layout/assumptions",
+            "layoutId": "activity_1/layout/assumptions",
+            "rect": {
+              "x": 0,
+              "y": 2060,
+              "width": 640,
+              "height": 100
+            },
+            "zIndex": 16,
+            "locked": false,
+            "responsiveMinHeight": 100
+          }
+        ],
+        "groups": [],
+        "startView": {
+          "x": -24,
+          "y": -24,
+          "width": 1032,
+          "height": 2208
+        },
+        "navigation": {
+          "mode": "bounded",
+          "minZoom": 0.25,
+          "maxZoom": 2
+        },
+        "immersive": {
+          "startup": "board",
+          "allowReturnToBoard": true,
+          "overlays": []
+        },
+        "responsive": true,
+        "responsiveGap": 24,
+        "responsiveRows": [
+          [
+            "board/activity_1/layout/appearance"
+          ],
+          [
+            "board/activity_1/layout/control/PEND_SET_LENGTH"
+          ],
+          [
+            "board/activity_1/layout/control/PEND_SET_GRAVITY"
+          ],
+          [
+            "board/activity_1/layout/control/PEND_SET_AMPLITUDE"
+          ],
+          [
+            "board/activity_1/layout/control/PHYS_STEP"
+          ],
+          [
+            "board/activity_1/layout/control/RESET"
+          ],
+          [
+            "board/activity_1/layout/control/PHYS_RESTART"
+          ],
+          [
+            "board/activity_1/layout/display/period"
+          ],
+          [
+            "board/activity_1/layout/display/angle"
+          ],
+          [
+            "board/activity_1/layout/control/PHYS_PLAY"
+          ],
+          [
+            "board/activity_1/layout/display/elapsed"
+          ],
+          [
+            "board/activity_1/layout/display/cycles"
+          ],
+          [
+            "board/activity_1/layout/display/lastPeriod"
+          ],
+          [
+            "board/activity_1/layout/display/x"
+          ],
+          [
+            "board/activity_1/layout/display/y"
+          ],
+          [
+            "board/activity_1/layout/display/points"
+          ],
+          [
+            "board/activity_1/layout/assumptions"
+          ]
+        ]
+      }
+    }
+  },
+  "coverage": null,
+  "state": {
+    "state": {
+      "activity_1/model": {
+        "length": 5.199,
+        "gravity": 10.109,
+        "amplitude": 30,
+        "playing": true,
+        "elapsed": 0.8332000000000114
+      }
+    },
+    "outputs": {
+      "activity_1/model": {
+        "period": 4.584385893312668,
+        "angle": 12.534601285426458,
+        "elapsed": 0.8332000000000114,
+        "cycles": 0,
+        "lastPeriod": null,
+        "x": 1.128334632985564,
+        "y": -5.075082458049852,
+        "points": [
+          {
+            "x": 0,
+            "y": 29.999999999999996
+          },
+          {
+            "x": 0.3820321577760557,
+            "y": 26.0183121896693
+          },
+          {
+            "x": 0.7640643155521114,
+            "y": 15.065377521821379
+          },
+          {
+            "x": 1.146096473328167,
+            "y": 1.4987068009252605e-14
+          },
+          {
+            "x": 1.5281286311042228,
+            "y": -15.065377521821356
+          },
+          {
+            "x": 1.9101607888802785,
+            "y": -26.01831218966931
+          },
+          {
+            "x": 2.292192946656334,
+            "y": -29.999999999999996
+          },
+          {
+            "x": 2.6742251044323897,
+            "y": -26.01831218966931
+          },
+          {
+            "x": 3.0562572622084456,
+            "y": -15.065377521821365
+          },
+          {
+            "x": 3.4382894199845015,
+            "y": 4.132908802694027e-14
+          },
+          {
+            "x": 3.820321577760557,
+            "y": 15.065377521821349
+          },
+          {
+            "x": 4.2023537355366125,
+            "y": 26.018312189669302
+          },
+          {
+            "x": 4.584385893312668,
+            "y": 29.999999999999996
+          },
+          {
+            "x": 4.966418051088724,
+            "y": 26.0183121896693
+          },
+          {
+            "x": 5.348450208864779,
+            "y": 15.065377521821379
+          },
+          {
+            "x": 5.730482366640835,
+            "y": 1.4987068009252605e-14
+          },
+          {
+            "x": 6.112514524416891,
+            "y": -15.065377521821356
+          },
+          {
+            "x": 6.494546682192947,
+            "y": -26.01831218966931
+          },
+          {
+            "x": 6.876578839969003,
+            "y": -29.999999999999996
+          },
+          {
+            "x": 7.258610997745058,
+            "y": -26.01831218966931
+          },
+          {
+            "x": 7.640643155521114,
+            "y": -15.065377521821365
+          },
+          {
+            "x": 8.022675313297169,
+            "y": -2.1572573013674522e-14
+          },
+          {
+            "x": 8.404707471073225,
+            "y": 15.065377521821349
+          },
+          {
+            "x": 8.786739628849281,
+            "y": 26.018312189669302
+          },
+          {
+            "x": 9.168771786625337,
+            "y": 29.999999999999996
+          }
+        ],
+        "configuration": {
+          "length": 5.199,
+          "gravity": 10.109,
+          "amplitude": 30,
+          "playing": true
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,3 @@
-export { ExperimentView } from "../../../components/views/ExperimentView";
-export { MetricsView } from "../../../components/views/MetricsView";
-export { ThreeWorldView } from "../../../components/views/ThreeWorldView";
+export { ExperimentView } from "../../../legacy/components/views/ExperimentView";
+export { MetricsView } from "../../../legacy/components/views/MetricsView";
+export { ThreeWorldView } from "../../../legacy/components/views/ThreeWorldView";

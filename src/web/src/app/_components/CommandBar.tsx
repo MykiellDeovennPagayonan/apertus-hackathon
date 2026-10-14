@@ -2,11 +2,11 @@ import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import {
   formatUserFacingDetails,
   formatUserFacingStatus,
-} from "../../lib/planner/errorFormatting";
+} from "../../simulations/creation-and-editing/input/errorFormatting";
 import {
   type GenerationStage,
   generationStages,
-} from "../../lib/planner/progress";
+} from "../../simulations/creation-and-editing/input/progress";
 import { BuilderIcon } from "../../simulations/builder/BuilderIcon";
 import "./CommandBar.css";
 export type ComposerStatus = {
@@ -399,7 +399,7 @@ export default function CommandBar({
               disabled={disabled}
               onClick={() => choose(c)}
             >
-              {["Addition", "Area & perimeter", "Truss bridge"][index] ?? c}
+              {["Pendulum", "Projectiles", "Line"][index] ?? c}
             </button>
           ))}
         </div>

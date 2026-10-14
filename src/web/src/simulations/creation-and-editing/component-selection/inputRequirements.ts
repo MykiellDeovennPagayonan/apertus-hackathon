@@ -1,0 +1,145 @@
+import {
+  boolean,
+  object,
+  choice,
+  validateValue,
+} from "../../registry/contracts/parameterSchema";
+import type { InputRequirement } from "../../registry/contracts/inputCapability";
+import { publicDefinition } from "../../registry/index";
+import { emptyLayout, type CompositeRecipe } from "../authoring-engine/document";
+import type { GenerationBudget } from "../budget";
+import type { GenerationRequest } from "../input/contracts";
+import { parseArgumentJson } from "../input/inference/parseJson";
+import { toJsonSchema } from "../input/inference/structuredSchema";
+import { requestStructured } from "../input/inference/transport";
+import { adjustableBindings, modelCapabilities } from "./assemblyCandidates";
+import { addBoundControl, hasBoundControl } from "../authoring-engine/bindings";
+import { acceptsScalar, parameterLeaves } from "../../registry/contracts/controlContract";
+import { commandPresentation } from "../../registry/contracts/commandPresentation";
+
+/** Registered scalar commands are capabilities even when a template omits their widgets. */
+export function withAvailableInputs(source: CompositeRecipe): CompositeRecipe {
+  const recipe = structuredClone(source);
+  let nextId = recipe.document.nodes.length;
+  const generated = new Map<string, Set<string>>();
+  for (const node of source.document.nodes) {
+    const definition = publicDefinition(node);
+    if (definition.category !== "models") continue;
+    for (const [command, contract] of Object.entries(definition.commands)) {
+      const presentation = commandPresentation(command, definition.id);
+      for (const leaf of parameterLeaves(contract.arguments)) {
+        if (hasBoundControl(recipe.document, node.id, command, leaf.path)) continue;
+        const widget = ([
+          ["slider", "controls/Slider"],
+          ["toggle", "controls/Toggle"],
+          ["select", "controls/Select"],
+        ] as const).find(([, control]) => acceptsScalar(control, leaf.schema));
+        if (!widget) continue;
+        let id: string;
+        do { id = `available-input/${nextId++}`; }
+        while (recipe.document.nodes.some((node) => node.id === id));
+        recipe.document = addBoundControl(recipe.document, {
+          target: node.id,
+          command,
+          field: leaf.path,
+          widget: widget[0],
+          label: `${node.label}: ${presentation.presentation[leaf.path]?.label ?? presentation.label ?? contract.description}`,
+        }, id);
+        const controls = generated.get(node.scope) ?? new Set<string>();
+        controls.add(id);
+        generated.set(node.scope, controls);
+        // A template's fixed board hosts do not cover newly appended layouts.
+        delete recipe.document.presentation;
+      }
+    }
+  }
+  for (const [scope, controls] of generated) {
+    const children = recipe.document.layout.children.filter(layout => controls.has(layout.node ?? ""));
+    recipe.document.layout.children = recipe.document.layout.children.filter(layout => !controls.has(layout.node ?? ""));
+    recipe.document.layout.children.push({
+      ...emptyLayout(`layout/additional-controls/${scope}`),
+      kind: "disclosure", label: "Additional controls", children,
+    });
+  }
+  return recipe;
+}
+
+/** Apertus interprets requested quantities; the application preserves selected identities. */
+export async function resolveInputRequirements(
+  request: GenerationRequest,
+  budget: GenerationBudget,
+  source: CompositeRecipe,
+): Promise<{ requirements: InputRequirement[]; unsupported?: string }> {
+  const bindings = adjustableBindings(source);
+  const schema = object({
+    supported: boolean,
+    inputs: {
+      type: "array",
+      minItems: 0,
+      maxItems: bindings.length,
+      items: choice(...bindings.map((binding) => binding.id), "unavailable"),
+    },
+  });
+  const answer = await requestStructured<{ supported: boolean; inputs: string[] }>(
+    [
+      {
+        role: "system",
+        content:
+          'Interpret the ORIGINAL request against the supplied executable model contracts. Assess coverage of the requested system, learner adjustments, visible outcomes and comparison before resolving input bindings. Each supplied instance is an actual model instance; check whether their capabilities together provide the requested comparison. Then decide whether the supplied models implement that system and outcome with the actual commands and outputs. A similar diagram, adjustable number or mathematically related quantity does not make a different physical or mathematical investigation equivalent. Supported means the complete requested investigation is possible; otherwise return supported:false and inputs:[]. Preset lesson questions are not evidence of capability. Resolve informal wording using the supplied meanings, units and bindings, not literal names. Return only {"supported":true,"inputs":["supplied-input-id"]}. The inputs array contains string keys from the supplied input dictionary, never descriptor objects. Retain every input the user requests to adjust and any input necessary to perform the requested activity. Outcomes, observations and comparison labels are not additional adjustable quantities. Do not invent requirements from a generated learning question. Return an empty inputs array when none is needed. If a requested quantity or behavior is genuinely missing, return {"supported":false,"inputs":[]}. Never substitute another quantity or use unavailable as an input ID.',
+      },
+      {
+        role: "user",
+        content: JSON.stringify({
+          request: request.prompt,
+          limitations: source.assumptions,
+          models: modelCapabilities(source),
+          inputs: Object.fromEntries(bindings.map((binding) => [binding.id, {
+            labels: binding.labels,
+            meaning: binding.meaning,
+            model: publicDefinition(
+              [...source.document.nodes, ...source.document.resources].find(
+                (node) => node.id === binding.wires[0].to.node,
+              )!,
+            ).title,
+            command: binding.command,
+            field: binding.field,
+            fields: binding.capability.fields,
+            units: binding.capability.units,
+            instances: binding.wires.map((wire) => wire.to.node),
+          }])),
+        }),
+      },
+    ],
+    (content) => {
+      const { value } = parseArgumentJson(content);
+      validateValue(schema, value);
+      const answer = value as { supported: boolean; inputs: string[] };
+      if (new Set(answer.inputs).size !== answer.inputs.length ||
+          answer.inputs.some((id) => !bindings.some((binding) => binding.id === id)))
+        throw new Error("Return distinct supplied input IDs; use an empty array for unsupported activities");
+      return answer;
+    },
+    'Return only supported:boolean and inputs:string[]. Use distinct keys from the input dictionary, not descriptor objects; preserve the original request.',
+    budget.signal,
+    {
+      budget,
+      stage: "assembly_input_requirement",
+      schema: toJsonSchema(schema),
+      maxTokens: 384,
+      maxRepairsPerIssue: 1,
+      onEvent: (event, data) => budget.trace?.(`assembly_input_requirement.${event}`, data),
+    },
+  );
+  const requirements = answer.inputs.map((id) => {
+    const binding = bindings.find((binding) => binding.id === id)!;
+    return {
+      interaction: binding.labels.join(" / "),
+      capabilities: [binding.capability.id],
+    };
+  });
+  budget.trace?.("assembly.requirements", { supported: answer.supported, requirements });
+  return {
+    requirements,
+    ...(answer.supported ? {} : { unsupported: "The selected activity cannot represent the requested interactions." }),
+  };
+}

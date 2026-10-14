@@ -1,0 +1,434 @@
+{
+  "recipeVersion": 2,
+  "id": "prebuilt/pendulum",
+  "version": 1,
+  "title": "Pendulum swing",
+  "description": "How do length and starting angle change a pendulum’s swing?",
+  "tags": [
+    "physical-systems",
+    "physical-pendulum",
+    "lab",
+    "physics",
+    "pendulum"
+  ],
+  "document": {
+    "formatVersion": 3,
+    "nodes": [
+      {
+        "id": "model",
+        "definition": "prefabs/physical-systems/Pendulum",
+        "version": 1,
+        "label": "Compare pendulum lengths",
+        "scope": "scope/lab",
+        "configuration": {
+          "length": 5,
+          "gravity": 9.81,
+          "amplitude": 30,
+          "playing": true
+        }
+      },
+      {
+        "id": "appearance",
+        "definition": "appearance/physical-pendulum",
+        "version": 1,
+        "label": "Compare pendulum lengths appearance",
+        "scope": "scope/lab",
+        "configuration": {}
+      },
+      {
+        "id": "control/PHYS_RESTART",
+        "definition": "controls/Button",
+        "version": 1,
+        "label": "Action button",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Restart motion",
+          "mode": "submit",
+          "initial": "{}"
+        }
+      },
+      {
+        "id": "control/PEND_SET_LENGTH",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Slider",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Pendulum length",
+          "mode": "immediate",
+          "initial": "{\"value\":5}",
+          "step": 0.1
+        }
+      },
+      {
+        "id": "control/PEND_SET_AMPLITUDE",
+        "definition": "controls/Slider",
+        "version": 1,
+        "label": "Slider",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Starting angle",
+          "mode": "immediate",
+          "initial": "{\"value\":30}",
+          "step": 1
+        }
+      },
+      {
+        "id": "display/period",
+        "definition": "displays/Readout",
+        "version": 1,
+        "label": "Readout",
+        "scope": "scope/lab",
+        "configuration": {
+          "label": "Period",
+          "precision": 3
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "link/appearance",
+        "kind": "attachment",
+        "from": {
+          "node": "model",
+          "port": "appearance"
+        },
+        "to": {
+          "node": "appearance",
+          "port": "model"
+        }
+      },
+      {
+        "id": "link/control/PHYS_RESTART",
+        "kind": "command",
+        "from": {
+          "node": "control/PHYS_RESTART",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PHYS_RESTART"
+        }
+      },
+      {
+        "id": "link/control/PEND_SET_LENGTH",
+        "kind": "command",
+        "from": {
+          "node": "control/PEND_SET_LENGTH",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PEND_SET_LENGTH"
+        }
+      },
+      {
+        "id": "link/control/PEND_SET_AMPLITUDE",
+        "kind": "command",
+        "from": {
+          "node": "control/PEND_SET_AMPLITUDE",
+          "port": "submit"
+        },
+        "to": {
+          "node": "model",
+          "port": "PEND_SET_AMPLITUDE"
+        }
+      },
+      {
+        "id": "link/output/period",
+        "kind": "value",
+        "from": {
+          "node": "model",
+          "port": "period"
+        },
+        "to": {
+          "node": "display/period",
+          "port": "value"
+        }
+      }
+    ],
+    "resources": [],
+    "scopes": [
+      {
+        "id": "scope/lab",
+        "label": "Compare pendulum lengths"
+      }
+    ],
+    "groups": [],
+    "layout": {
+      "id": "layout/learner",
+      "kind": "stack",
+      "label": "",
+      "gap": 16,
+      "columns": 2,
+      "children": [
+        {
+          "id": "layout/appearance",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "appearance"
+        },
+        {
+          "id": "layout/display/period",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "display/period"
+        },
+        {
+          "id": "layout/control/PEND_SET_LENGTH",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "control/PEND_SET_LENGTH"
+        },
+        {
+          "id": "layout/control/PEND_SET_AMPLITUDE",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "control/PEND_SET_AMPLITUDE"
+        },
+        {
+          "id": "layout/control/PHYS_RESTART",
+          "kind": "stack",
+          "label": "",
+          "gap": 16,
+          "columns": 2,
+          "children": [],
+          "node": "control/PHYS_RESTART"
+        }
+      ]
+    },
+    "lesson": {
+      "title": "Pendulum swing",
+      "instruction": "How do length and starting angle change a pendulum’s swing?",
+      "explanation": "Ideal rigid-rod pendulum released at rest, starting angle 0–90°. No friction or air resistance.\nNonlinear motion solves θ″=−(g/L)sinθ using the elliptic time coordinate. The calculated period is 4√(L/g)K(sin(amplitude/2)); motion is independent of frame rate. Changing length, gravity or starting angle restarts the run.\nComparisons use shared gravity and initial amplitude. Length is the independent variable."
+    },
+    "editor": {
+      "positions": {
+        "model": {
+          "x": 340,
+          "y": 0
+        },
+        "appearance": {
+          "x": 680,
+          "y": 0
+        },
+        "control/PHYS_RESTART": {
+          "x": 0,
+          "y": 220
+        },
+        "control/PEND_SET_LENGTH": {
+          "x": 0,
+          "y": 440
+        },
+        "control/PEND_SET_AMPLITUDE": {
+          "x": 0,
+          "y": 660
+        },
+        "display/period": {
+          "x": 1020,
+          "y": 0
+        }
+      },
+      "zoom": 1
+    },
+    "presentation": {
+      "version": 1,
+      "mode": "board",
+      "items": [
+        {
+          "id": "board/layout/appearance",
+          "layoutId": "layout/appearance",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 620,
+            "height": 584
+          },
+          "zIndex": 0,
+          "locked": false,
+          "responsiveMinHeight": 420
+        },
+        {
+          "id": "board/layout/display/period",
+          "layoutId": "layout/display/period",
+          "rect": {
+            "x": 644,
+            "y": 0,
+            "width": 360,
+            "height": 104
+          },
+          "zIndex": 1,
+          "locked": false,
+          "responsiveMinHeight": 104
+        },
+        {
+          "id": "board/layout/control/PEND_SET_LENGTH",
+          "layoutId": "layout/control/PEND_SET_LENGTH",
+          "rect": {
+            "x": 644,
+            "y": 120,
+            "width": 360,
+            "height": 176
+          },
+          "zIndex": 2,
+          "locked": false,
+          "responsiveMinHeight": 176
+        },
+        {
+          "id": "board/layout/control/PEND_SET_AMPLITUDE",
+          "layoutId": "layout/control/PEND_SET_AMPLITUDE",
+          "rect": {
+            "x": 644,
+            "y": 312,
+            "width": 360,
+            "height": 176
+          },
+          "zIndex": 3,
+          "locked": false,
+          "responsiveMinHeight": 176
+        },
+        {
+          "id": "board/layout/control/PHYS_RESTART",
+          "layoutId": "layout/control/PHYS_RESTART",
+          "rect": {
+            "x": 644,
+            "y": 504,
+            "width": 360,
+            "height": 80
+          },
+          "zIndex": 4,
+          "locked": false,
+          "responsiveMinHeight": 80
+        }
+      ],
+      "groups": [],
+      "startView": {
+        "x": -24,
+        "y": -24,
+        "width": 1052,
+        "height": 632
+      },
+      "navigation": {
+        "mode": "bounded",
+        "minZoom": 0.25,
+        "maxZoom": 2
+      },
+      "immersive": {
+        "startup": "board",
+        "allowReturnToBoard": true,
+        "overlays": []
+      },
+      "responsive": true,
+      "responsiveRows": [
+        [
+          "board/layout/appearance"
+        ],
+        [
+          "board/layout/display/period"
+        ],
+        [
+          "board/layout/control/PEND_SET_LENGTH"
+        ],
+        [
+          "board/layout/control/PEND_SET_AMPLITUDE"
+        ],
+        [
+          "board/layout/control/PHYS_RESTART"
+        ]
+      ]
+    }
+  },
+  "nested": [],
+  "parameters": [
+    {
+      "name": "length",
+      "node": "model",
+      "field": "length",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 20,
+        "unit": "m"
+      },
+      "default": 5
+    },
+    {
+      "name": "gravity",
+      "node": "model",
+      "field": "gravity",
+      "schema": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 30,
+        "unit": "m/s²"
+      },
+      "default": 9.81
+    },
+    {
+      "name": "amplitude",
+      "node": "model",
+      "field": "amplitude",
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 90,
+        "unit": "deg"
+      },
+      "default": 30
+    },
+    {
+      "name": "playing",
+      "node": "model",
+      "field": "playing",
+      "schema": {
+        "type": "boolean"
+      },
+      "default": true
+    }
+  ],
+  "externalPorts": [],
+  "dependencies": [
+    {
+      "id": "prefabs/physical-systems/Pendulum",
+      "version": 1
+    },
+    {
+      "id": "appearance/physical-pendulum",
+      "version": 1
+    },
+    {
+      "id": "controls/Button",
+      "version": 1
+    },
+    {
+      "id": "controls/Slider",
+      "version": 1
+    },
+    {
+      "id": "displays/Readout",
+      "version": 1
+    }
+  ],
+  "assumptions": [
+    "Ideal rigid-rod pendulum released at rest, starting angle 0–90°. No friction or air resistance.",
+    "Nonlinear motion solves θ″=−(g/L)sinθ using the elliptic time coordinate. The calculated period is 4√(L/g)K(sin(amplitude/2)); motion is independent of frame rate. Changing length, gravity or starting angle restarts the run.",
+    "Comparisons use shared gravity and initial amplitude. Length is the independent variable."
+  ],
+  "catalog": {
+    "icon": "◌",
+    "category": "physics",
+    "order": 160
+  }
+}

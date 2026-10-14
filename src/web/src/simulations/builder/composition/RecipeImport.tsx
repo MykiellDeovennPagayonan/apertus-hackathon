@@ -1,9 +1,9 @@
 "use client";
-import { inspectSource, componentLimits } from "../../runtime/imported/contract";
+import { inspectSource, componentLimits } from "../../creation-and-editing/runtime-engine/imported/contract";
 import { HTMLComponentImport } from "./HTMLComponentImport";
 import { useEffect, useRef, useState } from "react";
-import { validateRecipe } from "../../runtime/authoring/recipes";
-import type { CompositeRecipe } from "../../runtime/authoring/types";
+import { validateRecipe } from "../../creation-and-editing/validator/recipe";
+import type { CompositeRecipe } from "../../creation-and-editing/authoring-engine/document";
 import { BuilderIcon } from "../BuilderIcon";
 import { FeedbackView } from "./FeedbackView";
 import { type Feedback, makeFeedback } from "./feedback";

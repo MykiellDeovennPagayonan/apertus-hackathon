@@ -3,7 +3,7 @@ import {
   saveRemoteComponent,
 } from "../../../lib/library/client";
 import { saveProject } from "../../../lib/projects/client";
-import type { CompositeRecipe } from "../../runtime/authoring/types";
+import type { CompositeRecipe } from "../../creation-and-editing/authoring-engine/document";
 import { RECIPE_LIBRARY_KEY, RecipeRepository } from "./RecipeRepository";
 
 const cached = new Map<

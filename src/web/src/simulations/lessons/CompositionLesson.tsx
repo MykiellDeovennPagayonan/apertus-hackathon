@@ -2,26 +2,26 @@
 import "./composition-lesson.css";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
-import { canvasNames } from "../components/contracts/composition";
-import { ActionButton } from "../components/controls/ActionButton";
-import { BoundControl } from "../components/controls/BoundControl";
-import { OptionSelect } from "../components/controls/OptionSelect";
-import { ParameterSlider } from "../components/controls/ParameterSlider";
-import { ToggleControl } from "../components/controls/ToggleControl";
-import { clockProperties } from "../components/registry";
+import { canvasNames } from "../registry/contracts/objects/composition";
+import { ActionButton } from "../registry/controls/ActionButton";
+import { BoundControl } from "../legacy/components/controls/BoundControl";
+import { OptionSelect } from "../legacy/components/controls/OptionSelect";
+import { ParameterSlider } from "../legacy/components/controls/ParameterSlider";
+import { ToggleControl } from "../legacy/components/controls/ToggleControl";
+import { clockProperties } from "../registry/objects/registry";
 import {
   CompositionCanvas,
   type CompositionCanvasProps,
-} from "../components/views/CompositionCanvas";
+} from "../legacy/components/views/CompositionCanvas";
 import {
   type CompositionScene,
   propertyValue,
   type SceneObject,
   validateScene,
-} from "../runtime/composition/index";
-import { projectedScene } from "../runtime/composition/projectCanvas";
-import { useCanvasRuntime } from "../runtime/composition/useCanvasRuntime";
-import { requireRecord } from "../runtime/records";
+} from "../creation-and-editing/runtime-engine/composition/index";
+import { projectedScene } from "../creation-and-editing/runtime-engine/composition/projectCanvas";
+import { useCanvasRuntime } from "../creation-and-editing/runtime-engine/composition/useCanvasRuntime";
+import { requireRecord } from "../legacy/runtime/records";
 import { measurementValue } from "./measurements";
 import type { CompositionLessonInput } from "./types";
 

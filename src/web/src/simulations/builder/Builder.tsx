@@ -19,9 +19,9 @@ import type {
   ProjectSummary,
   ProjectType,
 } from "../../lib/projects/types";
-import { builtInRecipe } from "../components/composites/catalog";
-import type { CompositeRecipe } from "../runtime/authoring/types";
-import { parseRecipe } from "../runtime/recipes/schema";
+import { builtInRecipe } from "../registry/recipes/builtIn";
+import type { CompositeRecipe } from "../creation-and-editing/authoring-engine/document";
+import { parseRecipe } from "../creation-and-editing/validator/parseRecipe";
 import { BuilderIcon } from "./BuilderIcon";
 import { ComponentDialog } from "./ComponentDialog";
 import CompositionBuilder from "./composition/CompositionBuilder";

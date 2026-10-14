@@ -1,10 +1,10 @@
-import type { DomainModel } from "../../runtime/contribution";
+import type { DomainModel } from "../../registry/contracts/domainContribution";
 import {
   choice,
   object,
   type ParameterSchema,
   validateValue,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 import { buttonAction, geometryDependencies } from "./common";
 
 /** Asymmetric L with unequal arms, listed anticlockwise. */

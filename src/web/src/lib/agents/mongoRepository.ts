@@ -3,7 +3,7 @@ import {
   AgentError,
   type AgentRun,
   type RunRepository,
-} from "../../simulations/runtime/agents/contracts";
+} from "../../simulations/creation-and-editing/runtime-engine/agents/contracts";
 
 /** Bounded aggregate: memory, events, receipt and world state commit in one CAS write. */
 export class MongoRunRepository implements RunRepository {

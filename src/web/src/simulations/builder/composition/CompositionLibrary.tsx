@@ -1,16 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { publicDefinition } from "../../components/catalog";
-import {
-  definitionDiscovery,
-  discoverySections,
-  searchRank,
-} from "../../components/catalog/discovery";
-import { SchemaForm } from "../../components/controls/SchemaForm";
-import type {
-  CompositeRecipe,
-  PublicDefinition,
-} from "../../runtime/authoring/types";
-import { object } from "../../runtime/parameterSchema";
+import { publicDefinition } from "../../registry/index";
+import { catalogRecipeAllowed } from "../../registry/catalogScope";
+import { definitionDiscovery, discoverySections, searchRank } from "../../registry/discovery";
+import { SchemaForm } from "../../registry/controls/SchemaForm";
+import type { CompositeRecipe } from "../../creation-and-editing/authoring-engine/document";
+import type { PublicDefinition } from "../../registry/contracts/publicDefinition";
+import { object } from "../../registry/contracts/parameterSchema";
 import { BuilderIcon } from "../BuilderIcon";
 import { ComponentDialog } from "../ComponentDialog";
 import { portLabel } from "../graph/authoredGraph";
@@ -94,6 +89,7 @@ export function CompositionLibrary({
           )
           .map((definition) => ({ definition })),
         ...catalog.allRecipes
+          .filter(catalogRecipeAllowed)
           .filter((recipe) => {
             const meta = recipeMetadata(recipe);
             const terms = catalog.query

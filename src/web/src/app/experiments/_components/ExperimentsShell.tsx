@@ -3,36 +3,36 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { requestGeneration } from "../../../lib/planner/browser";
+import { requestGeneration } from "../../../simulations/creation-and-editing/input/browser";
 import {
   formatUserFacingDetails,
   formatUserFacingStatus,
-} from "../../../lib/planner/errorFormatting";
+} from "../../../simulations/creation-and-editing/input/errorFormatting";
 import {
   type GenerationStage,
   generationStages,
-} from "../../../lib/planner/progress";
-import type { GenerationRequest } from "../../../lib/planner/schema";
-import { ControlsTarget } from "../../../simulations/components/views/ControlsOverlay";
-import { ExperimentView } from "../../../simulations/components/views/ExperimentView";
-import { RecipeLesson } from "../../../simulations/components/views/RecipeLesson";
-import { templateNames } from "../../../simulations/runtime/capabilities";
-import { isDemo } from "../../../simulations/runtime/legacyPlan";
+} from "../../../simulations/creation-and-editing/input/progress";
+import type { GenerationRequest } from "../../../simulations/creation-and-editing/input/contracts";
+import { ControlsTarget } from "../../../simulations/legacy/components/views/ControlsOverlay";
+import { ExperimentView } from "../../../simulations/legacy/components/views/ExperimentView";
+import { RecipeLesson } from "../../../simulations/creation-and-editing/simulation/RecipeLesson";
+import { templateNames } from "../../../simulations/legacy/runtime/capabilities";
+import { isDemo } from "../../../simulations/legacy/runtime/legacyPlan";
 import {
   acceptGenerationResult,
   activateRecipeSession,
   getRecipeSession,
   type RecipeSession,
-} from "../../../simulations/runtime/recipeSession";
-import { hasPremadeRecipe } from "../../../simulations/runtime/recipes/registry";
+} from "../../../simulations/creation-and-editing/runtime-engine/RecipeSession";
+import { hasPremadeRecipe } from "../../../simulations/registry/recipes/premade";
 import {
   activatePremadeSession,
   disposeSession,
   executePlan,
   getDiagnosticSnapshot,
   saveRecipe,
-} from "../../../simulations/runtime/session";
-import type { DemoType } from "../../../simulations/runtime/types";
+} from "../../../simulations/legacy/runtime/session";
+import type { DemoType } from "../../../simulations/legacy/runtime/types";
 import CommandBar, { type ComposerStatus } from "../../_components/CommandBar";
 import LandingPage from "../../_components/LandingPage";
 import SiteHeader from "../../_components/SiteHeader";
@@ -75,7 +75,11 @@ export default function ExperimentsShell({
   const options = useRef<HTMLDetailsElement>(null);
   const workspace = useRef<HTMLDivElement>(null);
   const composerElement = useRef<HTMLDivElement>(null);
-  const clarification = useRef<{ sessionId: string; prompt: string; question: string } | null>(null);
+  const clarification = useRef<{
+    sessionId: string;
+    prompt: string;
+    question: string;
+  } | null>(null);
   const pending = useRef<{
     controller: AbortController;
     request: GenerationRequest;
@@ -278,10 +282,16 @@ export default function ExperimentsShell({
       prompt: text,
       purpose: ready && getRecipeSession() ? "edit" : "create",
       viewport: { width: window.innerWidth, height: window.innerHeight },
-      active: ready ? getRecipeSession()?.requestContext() ?? null : null,
+      active: ready ? (getRecipeSession()?.requestContext() ?? null) : null,
     };
-    if (clarification.current && clarification.current.sessionId === request.active?.sessionId)
-      request.clarification = { prompt: clarification.current.prompt, question: clarification.current.question };
+    if (
+      clarification.current &&
+      clarification.current.sessionId === request.active?.sessionId
+    )
+      request.clarification = {
+        prompt: clarification.current.prompt,
+        question: clarification.current.question,
+      };
     else clarification.current = null;
     const owner = { controller, request };
     pending.current = owner;
@@ -334,7 +344,12 @@ export default function ExperimentsShell({
         return;
       }
       if (result.status === "clarification") {
-        if (request.active) clarification.current = { sessionId: request.active.sessionId, prompt: request.clarification?.prompt ?? request.prompt, question: result.message };
+        if (request.active)
+          clarification.current = {
+            sessionId: request.active.sessionId,
+            prompt: request.clarification?.prompt ?? request.prompt,
+            question: result.message,
+          };
         setStatus({ kind: "info", text: result.message });
         return;
       }
@@ -347,7 +362,9 @@ export default function ExperimentsShell({
         });
         return;
       }
-      updateProgress(result.status === "created" ? "opening" : "committing_changes");
+      updateProgress(
+        result.status === "created" ? "opening" : "committing_changes",
+      );
       const session = acceptGenerationResult(result, request, disposeSession);
       syncSession();
       setDemo(null);
@@ -357,10 +374,7 @@ export default function ExperimentsShell({
       const details =
         result.status === "runtime_action"
           ? result.message
-          : [
-              result.learnerExplanation,
-              result.coverage?.explanation,
-            ]
+          : [result.learnerExplanation, result.coverage?.explanation]
               .filter(Boolean)
               .join("\n\n");
       setLastRequest({ prompt: text, details });
@@ -374,7 +388,7 @@ export default function ExperimentsShell({
           result.status === "created"
             ? "Ready — explore your lesson."
             : result.status === "updated"
-              ? (result.learnerExplanation || "Your changes were applied.")
+              ? result.learnerExplanation || "Your changes were applied."
               : "Action applied.",
         details,
       });
@@ -420,7 +434,7 @@ export default function ExperimentsShell({
       );
       const anchor = document.createElement("a");
       anchor.href = url;
-      anchor.download = "apertus-experiment.json";
+      anchor.download = "pAperSim-experiment.json";
       anchor.click();
       setStatus({ kind: "success", text: "Recipe download started." });
     } catch (error) {
@@ -500,9 +514,9 @@ export default function ExperimentsShell({
               "Add another observation",
             ]
           : [
-              "Help me learn addition with circles",
-              "Compare two rectangles and their areas",
-              "Help me learn how a truss bridge carries a load",
+              "Make a pendulum swing where I can adjust its starting angle and length",
+              "Show me 2 projectiles distance comparison based on angles",
+              "Make me a line where I can adjust its slope and y axis",
             ]
       }
       disabled={busy}
@@ -530,7 +544,7 @@ export default function ExperimentsShell({
           )}
           <div className="manual-create-entry">
             <Link href="/experiments/builder">Create manually →</Link>
-            <span>Choose a canvas and build it yourself.</span>
+            <span>Create your own simulations</span>
           </div>
         </LandingPage>
       );
@@ -558,6 +572,13 @@ export default function ExperimentsShell({
                   ? premadeExperiments[demo].title
                   : "Interactive lesson")}
             </h1>
+            {lesson &&
+              lesson.document.lesson.instruction.normalize("NFKC") !==
+                lesson.document.lesson.title.normalize("NFKC") && (
+                <p className="workspace-lesson-note">
+                  {lesson.document.lesson.instruction}
+                </p>
+              )}
           </header>
           <details className="gas-experiment-tools" ref={options}>
             <summary>Experiment options</summary>

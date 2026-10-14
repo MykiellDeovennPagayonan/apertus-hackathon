@@ -2,8 +2,8 @@
   "recipeVersion": 2,
   "id": "prebuilt/models-area-perimeter",
   "version": 1,
-  "title": "Area & perimeter",
-  "description": "How do side lengths change the inside area and the outside perimeter?",
+  "title": "Rectangle area and perimeter",
+  "description": "Explore the area inside a flat rectangle and the perimeter around its boundary by independently changing width and height. One rectangle per model instance; use separate instances to compare rectangular regions.",
   "tags": ["mathematics", "area-perimeter", "lab"],
   "document": {
     "formatVersion": 3,
@@ -214,7 +214,7 @@
       ]
     },
     "lesson": {
-      "title": "Area & perimeter",
+      "title": "Rectangle area and perimeter",
       "instruction": "Change the side lengths. Watch area and perimeter respond.",
       "explanation": "Side lengths describe a rectangle in metres and range from 0.1 to 100. Area is width times height in square metres; perimeter is twice their sum in metres. The drawing preserves the side-length proportion while adapting its scale to fit."
     },

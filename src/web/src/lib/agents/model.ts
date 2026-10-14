@@ -3,16 +3,16 @@ import {
   agentContext,
   parseAgentProposal,
   validateObservationProposal,
-} from "../../simulations/components/systems/AgentSystems";
+} from "../../simulations/legacy/components/systems/AgentSystems";
 import {
   AgentError,
   type AgentModel,
   AgentModelError,
   type ModelIdentity,
-} from "../../simulations/runtime/agents/contracts";
-import type { JsonSchema } from "../apertus/structuredSchema";
-import { requestStructured } from "../apertus/transport";
-import { readLlmConfig } from "../llm/config";
+} from "../../simulations/creation-and-editing/runtime-engine/agents/contracts";
+import type { JsonSchema } from "../../simulations/creation-and-editing/input/inference/structuredSchema";
+import { requestStructured } from "../../simulations/creation-and-editing/input/inference/transport";
+import { readLlmConfig } from "../../simulations/creation-and-editing/input/inference/config";
 
 export function configuredModelIdentity(): ModelIdentity {
   const config = readLlmConfig();

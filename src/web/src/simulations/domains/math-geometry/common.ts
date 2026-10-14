@@ -1,5 +1,5 @@
-import type { DomainModel } from "../../runtime/contribution";
-import { object, type ParameterSchema } from "../../runtime/parameterSchema";
+import type { DomainModel } from "../../registry/contracts/domainContribution";
+import { object, type ParameterSchema } from "../../registry/contracts/parameterSchema";
 
 type Action = DomainModel["actions"][string];
 

@@ -1,25 +1,25 @@
 import {
   type FoodWebState,
   foodWebMeasure,
-} from "../../components/systems/ecology/foodWeb";
-import { foodWebSpecies } from "../../components/systems/ecology/foodWebSpecies";
+} from "../../legacy/components/systems/ecology/foodWeb";
+import { foodWebSpecies } from "../../legacy/components/systems/ecology/foodWebSpecies";
 import {
   type NutrientState,
   nutrientsMeasure,
-} from "../../components/systems/ecology/nutrients";
+} from "../../legacy/components/systems/ecology/nutrients";
 import {
   treatmentPatches,
   WILDFIRE_MAP,
   type WildfireState,
   wildfireMeasure,
-} from "../../components/systems/ecology/wildfire";
-import type { DomainContribution } from "../../runtime/contribution";
+} from "../../legacy/components/systems/ecology/wildfire";
+import type { DomainContribution } from "../../registry/contracts/domainContribution";
 import {
   choice,
   num,
   object,
   validateValue,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 import { comparisonModel } from "../comparisonModel";
 
 const nutrients = comparisonModel({

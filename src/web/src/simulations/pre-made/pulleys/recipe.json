@@ -3,12 +3,8 @@
   "id": "prebuilt/pulleys",
   "version": 1,
   "title": "Supporting rope strands",
-  "description": "Does less pulling force mean more rope travel?",
-  "tags": [
-    "physics",
-    "pulley",
-    "supporting rope strands"
-  ],
+  "description": "Discover the tradeoff between pulling force and rope travel.",
+  "tags": ["physics", "pulley", "supporting rope strands"],
   "document": {
     "formatVersion": 3,
     "nodes": [
@@ -20,8 +16,8 @@
         "scope": "scope/lab",
         "configuration": {
           "loadForce": 200,
-          "strands": 4,
-          "pull": 1
+          "strands": 1,
+          "pull": 0
         }
       },
       {
@@ -41,7 +37,7 @@
         "configuration": {
           "label": "Supporting strands",
           "mode": "immediate",
-          "initial": "{\"value\": 4}"
+          "initial": "{\"value\": 1}"
         }
       },
       {
@@ -53,10 +49,10 @@
         "configuration": {
           "label": "Rope pulled",
           "mode": "immediate",
-          "initial": "{\"value\": 1}",
+          "initial": "{\"value\": 0}",
           "parameter": "value",
           "step": 0.01,
-          "showNumber": false
+          "showNumber": true
         }
       }
     ],
@@ -144,7 +140,7 @@
     },
     "lesson": {
       "title": "Supporting rope strands",
-      "instruction": "Does less pulling force mean more rope travel?",
+      "instruction": "Can you lift the same load with less force?",
       "explanation": "Validated fixed (1), single movable (2), and two-moving-wheel tackle (4) routings. One continuous rope, vertical supporting strands, massless frictionless pulleys; quasi-static, no acceleration or angled strands."
     },
     "editor": {
@@ -161,8 +157,8 @@
           "rect": {
             "x": 0,
             "y": 0,
-            "width": 680,
-            "height": 340
+            "width": 620,
+            "height": 400
           },
           "zIndex": 0,
           "locked": false,
@@ -172,35 +168,35 @@
           "id": "board/layout/strands",
           "layoutId": "layout/strands",
           "rect": {
-            "x": 0,
-            "y": 360,
-            "width": 220,
-            "height": 160
+            "x": 644,
+            "y": 32,
+            "width": 280,
+            "height": 96
           },
-          "zIndex": 2,
+          "zIndex": 1,
           "locked": false,
-          "responsiveMinHeight": 100
+          "responsiveMinHeight": 96
         },
         {
           "id": "board/layout/pull",
           "layoutId": "layout/pull",
           "rect": {
-            "x": 234,
-            "y": 360,
-            "width": 220,
+            "x": 644,
+            "y": 144,
+            "width": 280,
             "height": 128
           },
-          "zIndex": 3,
+          "zIndex": 2,
           "locked": false,
-          "responsiveMinHeight": 100
+          "responsiveMinHeight": 128
         }
       ],
       "groups": [],
       "startView": {
         "x": -24,
         "y": -24,
-        "width": 728,
-        "height": 568
+        "width": 972,
+        "height": 448
       },
       "navigation": {
         "mode": "bounded",
@@ -214,20 +210,16 @@
       },
       "responsive": true,
       "responsiveRows": [
-        [
-          "board/layout/appearance"
-        ],
-        [
-          "board/layout/strands",
-          "board/layout/pull"
-        ]
+        ["board/layout/appearance"],
+        ["board/layout/strands"],
+        ["board/layout/pull"]
       ],
       "responsiveGap": 16,
       "learnerArea": {
         "x": -24,
         "y": -24,
-        "width": 1000,
-        "height": 720
+        "width": 972,
+        "height": 448
       }
     }
   },
@@ -251,13 +243,9 @@
       "field": "strands",
       "schema": {
         "type": "enum",
-        "values": [
-          1,
-          2,
-          4
-        ]
+        "values": [1, 2, 4]
       },
-      "default": 4
+      "default": 1
     },
     {
       "name": "pull",
@@ -269,7 +257,7 @@
         "maximum": 2,
         "unit": "m"
       },
-      "default": 1
+      "default": 0
     }
   ],
   "externalPorts": [],

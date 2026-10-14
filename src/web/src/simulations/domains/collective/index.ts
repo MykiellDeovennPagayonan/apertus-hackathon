@@ -4,32 +4,32 @@ import {
   crowdCaption,
   crowdDefaults,
   initializeCrowd,
-} from "../../components/systems/collective/crowd";
+} from "../../legacy/components/systems/collective/crowd";
 import {
   type FishingState,
   fishingCaption,
   fishingDay,
   fishingDefaults,
   initializeFishing,
-} from "../../components/systems/collective/fishing";
+} from "../../legacy/components/systems/collective/fishing";
 import {
   initializeSelection,
   type SelectionState,
   selectionCaption,
   selectionDefaults,
   selectionGeneration,
-} from "../../components/systems/collective/selection";
+} from "../../legacy/components/systems/collective/selection";
 import {
   initializeVoting,
   type VotingState,
   votingCaption,
   votingDefaults,
   votingRound,
-} from "../../components/systems/collective/voting";
+} from "../../legacy/components/systems/collective/voting";
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
+} from "../../registry/contracts/domainContribution";
 import {
   boolean,
   choice,
@@ -37,7 +37,7 @@ import {
   object,
   type ParameterSchema,
   validateValue,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 export const collectiveKinds = [
   "fishing",
   "crowd",

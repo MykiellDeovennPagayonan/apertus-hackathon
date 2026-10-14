@@ -66,7 +66,7 @@
         "label": "Pressure (atm)",
         "scope": "scope/lab",
         "configuration": {
-          "label": "Pressure (atm)",
+          "label": "Pressure",
           "precision": 2
         }
       },
@@ -88,7 +88,7 @@
         "label": "[NO₂] (mol/L)",
         "scope": "scope/lab",
         "configuration": {
-          "label": "[NO₂] (mol/L)",
+          "label": "NO₂ concentration",
           "precision": 3
         }
       }
@@ -222,7 +222,7 @@
           "id": "layout/task",
           "kind": "stack",
           "label": "Conditions",
-          "gap": 16,
+          "gap": 20,
           "columns": 1,
           "children": [
             {
@@ -277,53 +277,53 @@
           "id": "board/layout/result/pressure",
           "layoutId": "layout/result/pressure",
           "rect": {
-            "x": 644,
-            "y": 0,
-            "width": 162,
-            "height": 110
+            "x": 0,
+            "y": 374,
+            "width": 312,
+            "height": 134
           },
           "zIndex": 0,
           "locked": false,
-          "responsiveMinHeight": 96
+          "responsiveMinHeight": 128
         },
         {
           "id": "board/layout/result/kc",
           "layoutId": "layout/result/kc",
           "rect": {
-            "x": 822,
-            "y": 0,
-            "width": 162,
-            "height": 110
+            "x": 336,
+            "y": 374,
+            "width": 312,
+            "height": 134
           },
           "zIndex": 0,
           "locked": false,
-          "responsiveMinHeight": 96
+          "responsiveMinHeight": 128
         },
         {
           "id": "board/layout/result/no2",
           "layoutId": "layout/result/no2",
           "rect": {
-            "x": 644,
-            "y": 126,
-            "width": 162,
-            "height": 110
+            "x": 672,
+            "y": 374,
+            "width": 312,
+            "height": 134
           },
           "zIndex": 0,
           "locked": false,
-          "responsiveMinHeight": 96
+          "responsiveMinHeight": 128
         },
         {
           "id": "board/layout/task",
           "layoutId": "layout/task",
           "rect": {
             "x": 644,
-            "y": 252,
+            "y": 0,
             "width": 340,
-            "height": 180
+            "height": 350
           },
           "zIndex": 0,
           "locked": false,
-          "responsiveMinHeight": 160
+          "responsiveMinHeight": 320
         }
       ],
       "groups": [],
@@ -345,11 +345,11 @@
       },
       "responsive": true,
       "responsiveRows": [
-        ["board/layout/appearance"],
-        ["board/layout/task"],
-        ["board/layout/result/pressure", "board/layout/result/kc"],
-        ["board/layout/result/no2"]
-      ]
+        ["board/layout/appearance", "board/layout/task"],
+        ["board/layout/result/pressure", "board/layout/result/no2"],
+        ["board/layout/result/kc"]
+      ],
+      "responsiveGap": 24
     }
   },
   "nested": [],

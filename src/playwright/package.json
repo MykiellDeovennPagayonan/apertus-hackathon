@@ -1,0 +1,11 @@
+{
+  "name": "apertus-benchmark",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "benchmark": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0"
+  }
+}

@@ -1,6 +1,6 @@
-import type { CompositionScene } from "../../runtime/composition/index";
-import type { TripComponent } from "../../runtime/composition/types";
-import { requireRecord } from "../../runtime/records";
+import type { CompositionScene } from "../../creation-and-editing/runtime-engine/composition/index";
+import type { TripComponent } from "../../creation-and-editing/runtime-engine/composition/types";
+import { requireRecord } from "../../legacy/runtime/records";
 import { connectPorts } from "../graph/deriveGraph";
 export function TripSettings({
   trip,

@@ -1,11 +1,11 @@
-import type { DomainModel } from "../../runtime/contribution";
+import type { DomainModel } from "../../registry/contracts/domainContribution";
 import {
   boolean,
   num,
   object,
   type ParameterSchema,
   validateValue,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 import { buttonAction, geometryDependencies, valueAction } from "./common";
 
 type Cell = { x: number; y: number };

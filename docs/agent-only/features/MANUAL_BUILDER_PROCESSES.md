@@ -36,7 +36,7 @@ The graph generates a card for each component and derives ports from its capabil
 
 Cards are initially packed into columns by role. Their spacing accounts for port count and card height. Adding a component checks for overlap and reveals its card in the workspace.
 
-Component creation is coordinated by [CompositionBuilder.tsx](../../../src/web/src/simulations/builder/composition/CompositionBuilder.tsx). Object definitions and capabilities live in [registry.ts](../../../src/web/src/simulations/components/registry.ts).
+Component creation is coordinated by [CompositionBuilder.tsx](../../../src/web/src/simulations/builder/composition/CompositionBuilder.tsx). Object definitions and capabilities live in [registry.ts](../../../src/web/src/simulations/registry/objects/registry.ts).
 
 ## 3. Connecting ports changes the experiment
 
@@ -101,7 +101,7 @@ Moving a line to another plane is rejected when it would break an existing inter
 
 These checks provide useful defaults and immediate feedback. Document validation also checks imported documents and settings edits independently of the connector UI.
 
-Connection checks live in [deriveGraph.ts](../../../src/web/src/simulations/builder/graph/deriveGraph.ts); workspace validation lives in [validateWorkspace.ts](../../../src/web/src/simulations/runtime/composition/validateWorkspace.ts).
+Connection checks live in [deriveGraph.ts](../../../src/web/src/simulations/builder/graph/deriveGraph.ts); workspace validation lives in [validateWorkspace.ts](../../../src/web/src/simulations/creation-and-editing/validator/canvas/validateWorkspace.ts).
 
 ## 6. Assembling a runnable scene for each canvas
 
@@ -117,7 +117,7 @@ An intersection is included only when both lines are present in the projected sc
 
 Each canvas receives its own runtime state. Several planes can belong to one authored workspace while operating as separate experiments, with independent bounds and settings. The workspace supports up to eight canvases, arranged side by side or stacked. Its canvases must use the same space kind as the scene.
 
-Projection is implemented in [projectCanvas.ts](../../../src/web/src/simulations/runtime/composition/projectCanvas.ts), and preview assembly in [CompositionLesson.tsx](../../../src/web/src/simulations/lessons/CompositionLesson.tsx).
+Projection is implemented in [projectCanvas.ts](../../../src/web/src/simulations/creation-and-editing/runtime-engine/composition/projectCanvas.ts), and preview assembly in [CompositionLesson.tsx](../../../src/web/src/simulations/lessons/CompositionLesson.tsx).
 
 ## 7. Updating geometry through a control
 
@@ -145,7 +145,7 @@ Storing lines as points also supports vertical lines naturally. Their equation c
 
 Intersection calculations distinguish parallel lines from coincident lines and return appropriate messages rather than misleading coordinates.
 
-Property updates are implemented in [registry.ts](../../../src/web/src/simulations/components/registry.ts). Result calculations live in [observations.ts](../../../src/web/src/simulations/runtime/composition/observations.ts).
+Property updates are implemented in [registry.ts](../../../src/web/src/simulations/registry/objects/registry.ts). Result calculations live in [observations.ts](../../../src/web/src/simulations/creation-and-editing/runtime-engine/composition/observations.ts).
 
 ## 8. Dragging geometry on the Cartesian plane
 
@@ -167,7 +167,7 @@ Both axes share a scale, preserving the shape of squares. Thin lines have wider 
 
 Pan and zoom change local viewing bounds. Reset restores the authored bounds. Grid tick intervals adapt to the visible range using readable steps based on 1, 2, 5, and 10.
 
-The plane and its interaction logic are implemented in [CartesianView.tsx](../../../src/web/src/simulations/components/views/CartesianView.tsx).
+The plane and its interaction logic are implemented in [CartesianView.tsx](../../../src/web/src/simulations/legacy/components/views/CartesianView.tsx).
 
 ## 9. Authoring and experimentation have different lifetimes
 
@@ -179,7 +179,7 @@ Authors can experiment with controls and explicitly select **Use current setting
 
 The runtime distinguishes configuration changes from many presentation changes. Updating a label or line color can refresh the display while preserving current runtime geometry. Changing authored geometry establishes new starting configuration.
 
-The distinction is implemented in [useCanvasRuntime.ts](../../../src/web/src/simulations/runtime/composition/useCanvasRuntime.ts), with capture and settings portals coordinated by [BuilderPreview.tsx](../../../src/web/src/simulations/builder/preview/BuilderPreview.tsx).
+The distinction is implemented in [useCanvasRuntime.ts](../../../src/web/src/simulations/creation-and-editing/runtime-engine/composition/useCanvasRuntime.ts), with capture and settings portals coordinated by [BuilderPreview.tsx](../../../src/web/src/simulations/builder/preview/BuilderPreview.tsx).
 
 ## 10. Editing, undo, and recovery
 

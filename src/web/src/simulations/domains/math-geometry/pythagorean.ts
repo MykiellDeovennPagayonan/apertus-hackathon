@@ -1,5 +1,9 @@
-import type { DomainModel } from "../../runtime/contribution";
-import { num, object, validateValue } from "../../runtime/parameterSchema";
+import type { DomainModel } from "../../registry/contracts/domainContribution";
+import {
+  num,
+  object,
+  validateValue,
+} from "../../registry/contracts/parameterSchema";
 
 const length = num(0.1, 20, "m");
 const parameters = object({ distance: length, height: length });
@@ -56,6 +60,7 @@ export const pythagoreanModel: DomainModel = {
   },
   presentation: "math-pythagorean",
   requiredObservations: ["ladderLength"],
+  presentedOutputs: ["distance", "height", "ladderLength"],
   maximumInstances: 2,
   initialize: accepted,
   configuration: accepted,

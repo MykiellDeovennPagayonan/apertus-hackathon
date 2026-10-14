@@ -48,11 +48,11 @@ Paths below are relative to the project root.
 | Plan validation | `src/web/src/lib/apertus/schema.ts` validates a demo and up to eight commands | No prefab creation, component selection, or composition plans; math is excluded |
 | API | `src/web/src/app/api/apertus/route.ts` validates bounded requests and invokes the client | Request context is a small flat state summary |
 | Browser flow | `src/web/src/app/playground/_components/PlaygroundShell.tsx` requests plans and dispatches commands | Math uses local matching; original demos receive model plans; batches can partially apply |
-| Catalog | `src/web/src/simulations/runtime/catalog.ts` and `mathCatalog.ts` register definitions | Metadata does not fully describe parameters, operations, outputs, and compatibility |
-| Providers | `src/web/src/simulations/runtime/providers.ts` maps systems to trusted implementations | Provider presence does not yet supply a general composition execution adapter |
-| Validation | `src/web/src/simulations/runtime/validation.ts` validates selections and stages prefab data | Validation is tied to known demo models; staged data is not generally committed by activation |
-| Activation | `src/web/src/simulations/runtime/session.ts` activates predefined demos | Original demos reset their existing stores; math activates a single staged board |
-| Presentation | `src/web/src/simulations/components/views/ExperimentView.tsx` renders predefined combinations | Selecting arbitrary view IDs does not dynamically bind and render them |
+| Catalog | `src/web/src/simulations/legacy/runtime/catalog.ts` and `mathCatalog.ts` register definitions | Metadata does not fully describe parameters, operations, outputs, and compatibility |
+| Providers | `src/web/src/simulations/legacy/runtime/providers.ts` maps systems to trusted implementations | Provider presence does not yet supply a general composition execution adapter |
+| Validation | `src/web/src/simulations/legacy/runtime/validation.ts` validates selections and stages prefab data | Validation is tied to known demo models; staged data is not generally committed by activation |
+| Activation | `src/web/src/simulations/legacy/runtime/session.ts` activates predefined demos | Original demos reset their existing stores; math activates a single staged board |
+| Presentation | `src/web/src/simulations/legacy/components/views/ExperimentView.tsx` renders predefined combinations | Selecting arbitrary view IDs does not dynamically bind and render them |
 
 There are eight existing experiments: projectile, bridge, town, counting, arithmetic, equal groups, fraction builder, and fraction number line. Connect these before duplicating their capabilities.
 

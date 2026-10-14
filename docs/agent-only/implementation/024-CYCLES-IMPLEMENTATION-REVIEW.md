@@ -59,10 +59,10 @@ Representative marks illustrate elemental pathways or relative availability; the
 - [Conservative transfers and three process models](../../../src/web/src/simulations/components/systems/biogeochemistry/).
 - [Original scene drawings](../../../src/web/src/simulations/components/visuals/biogeochemistry/).
 - [Learner scenes, actions, captions and investigation dialogs](../../../src/web/src/simulations/components/views/biogeochemistry/).
-- [Independent component contracts](../../../src/web/src/simulations/components/catalog/biogeochemistry.ts).
+- [Independent component contracts](../../../src/web/src/simulations/legacy/components/catalog/biogeochemistry.ts).
 - Premade JSON ownership: [oxygen](../../../src/web/src/simulations/pre-made/oxygen-cycle/recipe.json), [nitrogen](../../../src/web/src/simulations/pre-made/nitrogen-cycle/recipe.json), [carbon](../../../src/web/src/simulations/pre-made/carbon-cycle/recipe.json).
-- [Generation argument focusing](../../../src/web/src/lib/planner/compositionTools.ts) connects the contextual components' declared events instead of creating a redundant generic control for each command.
-- [Arrangement](../../../src/web/src/simulations/runtime/authoring/arrangement.ts) respects the public `scene-first` presentation preference while preserving authored values, wiring and locked rectangles.
+- [Generation argument focusing](../../../src/web/src/simulations/creation-and-editing/composer/availableOperations.ts) connects the contextual components' declared events instead of creating a redundant generic control for each command.
+- [Arrangement](../../../src/web/src/simulations/creation-and-editing/authoring-engine/presentation/arrangement.ts) respects the public `scene-first` presentation preference while preserving authored values, wiring and locked rectangles.
 - [Builder preview](../../../src/web/src/simulations/builder/composition/CompositionBuilder.tsx) removes the AI editing composer while Try lesson or appearance preview is active.
 
 Saving and Remix use the project's existing authored-recipe lifecycle. Saved starting values and wiring persist; incidental exploration time is not silently written into the authored recipe. Runtime capture also supports the model's current activity configuration through the standard provider contract.

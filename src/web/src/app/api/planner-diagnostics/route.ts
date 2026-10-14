@@ -1,4 +1,4 @@
-import { readTrace } from "../../../lib/planner/diagnostics";
+import { readTrace } from "../../../simulations/creation-and-editing/diagnostics";
 export const runtime = "nodejs";
 export async function GET(request: Request) {
   if (

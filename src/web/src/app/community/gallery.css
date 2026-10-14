@@ -495,9 +495,9 @@
   align-items: center;
   margin-top: 46px;
   padding: 28px;
-  border: 1px solid var(--gallery-line);
+  border: 1px solid var(--border);
   border-radius: 16px;
-  background: #e5ebdf;
+  background: var(--panel);
 }
 .community-contribute-icon {
   display: grid;

@@ -313,7 +313,7 @@ export class ProjectRepository {
       content = renamePayload(type, payload(type, source.payload), names.name);
     if (type === "composition")
       (
-        content as import("../../simulations/runtime/authoring/types").CompositeRecipe
+        content as import("../../simulations/creation-and-editing/authoring-engine/document").CompositeRecipe
       ).id = id;
     let credits: Attribution[] | undefined;
     if (source.sourcePublicationIds !== undefined) {

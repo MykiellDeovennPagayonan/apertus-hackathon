@@ -18,7 +18,7 @@ export type DraftRecovery = {
   sharingAllowed?: boolean;
   basedOnPublicationId?: string;
   expectedLocal?: SavedExperiment;
-  expectedComposition?: import("../../runtime/authoring/types").CompositeRecipe;
+  expectedComposition?: import("../../creation-and-editing/authoring-engine/document").CompositeRecipe;
   recovery?: string;
 };
 export function editableDocument(document: ExperimentDocument) {

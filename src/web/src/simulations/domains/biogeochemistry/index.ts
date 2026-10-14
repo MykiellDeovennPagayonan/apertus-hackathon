@@ -1,7 +1,7 @@
 import {
   carbonAdvance,
   carbonInitial,
-} from "../../components/systems/biogeochemistry/carbon";
+} from "../../legacy/components/systems/biogeochemistry/carbon";
 import {
   activities,
   activityFor,
@@ -9,25 +9,25 @@ import {
   type CycleState,
   cycleCommand,
   cycleNames,
-} from "../../components/systems/biogeochemistry/contracts";
+} from "../../legacy/components/systems/biogeochemistry/contracts";
 import {
   nitrogenAdvance,
   nitrogenInitial,
-} from "../../components/systems/biogeochemistry/nitrogen";
+} from "../../legacy/components/systems/biogeochemistry/nitrogen";
 import {
   oxygenAdvance,
   oxygenInitial,
-} from "../../components/systems/biogeochemistry/oxygen";
+} from "../../legacy/components/systems/biogeochemistry/oxygen";
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
+} from "../../registry/contracts/domainContribution";
 import {
   choice,
   num,
   object,
   validateValue,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 export const cycleKinds: CycleKind[] = ["oxygen", "nitrogen", "carbon"];
 export { activities, cycleCommand, cycleNames };
 export const assumptions: Record<CycleKind, string[]> = {

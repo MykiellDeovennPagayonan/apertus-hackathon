@@ -277,7 +277,7 @@ export default function AuthScreen({
   return (
     <main className="auth-page">
       <Link href="/" className="auth-brand">
-        <span aria-hidden="true">✳</span> apertus{" "}
+        <span aria-hidden="true">✳</span> pAperSim{" "}
         <span className="auth-suffix">/ local lab</span>
       </Link>
       <section

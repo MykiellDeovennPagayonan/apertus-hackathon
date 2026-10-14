@@ -1,7 +1,7 @@
 import { nameFields } from "../../../lib/projects/validation";
-import { validateRecipe } from "../../runtime/authoring/recipes";
-import type { CompositeRecipe } from "../../runtime/authoring/types";
-import { parseRecipe } from "../../runtime/recipes/schema";
+import { validateRecipe } from "../../creation-and-editing/validator/recipe";
+import type { CompositeRecipe } from "../../creation-and-editing/authoring-engine/document";
+import { parseRecipe } from "../../creation-and-editing/validator/parseRecipe";
 export const RECIPE_LIBRARY_KEY = "apertus-composites-v1";
 export type RecipeStore = Pick<Storage, "getItem" | "setItem">;
 export class RecipeRepository {

@@ -2,8 +2,8 @@ import {
   createCheckoutScenario,
   createGrowthScenario,
   createTrafficRing,
-} from "../../components/prefabs/dynamic-systems/objects";
-import { dynamicDefaults } from "../../components/resources/dynamic-systems/defaults";
+} from "../../legacy/components/prefabs/dynamic-systems/objects";
+import { dynamicDefaults } from "../../legacy/components/resources/dynamic-systems/defaults";
 import {
   growthApply,
   growthMeasure,
@@ -13,18 +13,18 @@ import {
   trafficConfiguration,
   trafficMeasure,
   trafficStep,
-} from "../../components/systems/dynamic-systems/models";
+} from "../../legacy/components/systems/dynamic-systems/models";
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
+} from "../../registry/contracts/domainContribution";
 import {
   boolean,
   choice,
   num,
   object,
   type ParameterSchema,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 
 const action = (
   value: ParameterSchema | undefined,

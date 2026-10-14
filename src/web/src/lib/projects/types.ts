@@ -1,5 +1,5 @@
 import type { ExperimentDocument } from "../../simulations/builder/document/types";
-import type { CompositeRecipe } from "../../simulations/runtime/authoring/types";
+import type { CompositeRecipe } from "../../simulations/creation-and-editing/authoring-engine/document";
 export type ProjectType = "experiment" | "composition";
 export type ProjectPayload = ExperimentDocument | CompositeRecipe;
 export type Attribution = {

@@ -1,5 +1,5 @@
-import type { CompositionScene } from "../../runtime/composition/types";
-import type { Recipe } from "../../runtime/resolver";
+import type { CompositionScene } from "../../creation-and-editing/runtime-engine/composition/types";
+import type { Recipe } from "../../legacy/runtime/resolver";
 import type { Slot, TemplateId } from "../descriptors";
 export interface ControlRecord {
   id: string;
@@ -25,10 +25,10 @@ export interface ResultRecord {
 export interface ExperimentDocument {
   documentVersion: 1 | 2 | 3;
   recipeMetadata?: Omit<
-    import("../../runtime/authoring/types").CompositeRecipe,
+    import("../../creation-and-editing/authoring-engine/document").CompositeRecipe,
     "document"
   >;
-  authored?: import("../../runtime/authoring/types").AuthoredDocument;
+  authored?: import("../../creation-and-editing/authoring-engine/document").AuthoredDocument;
   scene?: CompositionScene;
   template: TemplateId;
   recipe: Recipe | null;

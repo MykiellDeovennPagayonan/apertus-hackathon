@@ -1,8 +1,8 @@
-import { reconcileBoard } from "../../runtime/authoring/board";
+import { reconcileBoard } from "../../creation-and-editing/authoring-engine/presentation/board";
 import {
   isDrawingItem,
   removeBoardDrawings,
-} from "../../runtime/authoring/drawings";
+} from "../../creation-and-editing/authoring-engine/drawings";
 import type { ExperimentDocument } from "../document";
 import { type ComponentClipboard, pasteComponents } from "./selection";
 export type BoardClipboard = ComponentClipboard & { itemIds: string[] };

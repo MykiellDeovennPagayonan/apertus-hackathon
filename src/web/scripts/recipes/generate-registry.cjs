@@ -18,7 +18,7 @@ const source =
   "\n} as const;\n";
 const target = path.resolve(
   __dirname,
-  "../../src/simulations/runtime/recipes/premadeRegistry.generated.ts",
+  "../../src/simulations/registry/recipes/premade.generated.ts",
 );
 if (process.argv.includes("--check")) {
   if (fs.readFileSync(target, "utf8") !== source)

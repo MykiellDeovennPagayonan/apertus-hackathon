@@ -1,18 +1,18 @@
 "use client";
 
 import { useId, useState } from "react";
-import { publicDefinition } from "../../components/catalog";
+import { publicDefinition } from "../../registry/index";
 import {
   type DataColumn,
   outputDataPresentation,
   presentData,
-} from "../../components/views/dataPresentation";
+} from "../../registry/contracts/dataPresentation";
 import type {
   AuthoredDocument,
   ComponentInstance,
-} from "../../runtime/authoring/types";
-import type { ActionResult } from "../../runtime/commands";
-import { validateValue } from "../../runtime/parameterSchema";
+} from "../../creation-and-editing/authoring-engine/document";
+import type { ActionResult } from "../../creation-and-editing/runtime-engine/commands";
+import { validateValue } from "../../registry/contracts/parameterSchema";
 
 /** Authored display settings use a recoverable draft and one undoable apply operation. */
 export function DataDisplaySettings({

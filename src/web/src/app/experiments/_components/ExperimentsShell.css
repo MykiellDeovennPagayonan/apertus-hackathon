@@ -131,6 +131,34 @@
   gap: 18px;
   margin: 32px 0;
 }
+.experiment-catalog__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 24px;
+  text-align: left;
+}
+.experiment-catalog__filters label {
+  display: grid;
+  gap: 8px;
+  flex: 1 1 220px;
+}
+.experiment-catalog__filters input,
+.experiment-catalog__filters select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+}
+.experiment-catalog__filters input:focus-visible,
+.experiment-catalog__filters select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 .experiment-catalog__card {
   padding: 24px;
   text-align: left;
@@ -360,6 +388,11 @@
     24px / 1.2 Georgia,
     serif;
   margin: 4px 0 0;
+}
+.workspace-lesson-note {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--text-dim);
 }
 .workspace-toolbar {
   position: static;

@@ -1,4 +1,4 @@
-# Apertus Local Lab web app
+# pAperSim web app
 
 Next.js frontend and backend for shared, interactive simulation recipes.
 
@@ -14,7 +14,7 @@ make run-apertus
 make run-web
 ```
 
-Open http://localhost:43100. Home requests automatically activate a validated lesson. Arithmetic, rectangle area/perimeter, and truss bridge are the generation scope. The premade library and builder retain their other existing experiments and work without inference. Generated lessons use the same RecipeLesson, SpatialBoard, controls, and runtime as premade and builder lessons.
+Open http://localhost:43100. Home requests automatically activate a validated lesson. Creation searches both the premade library and the built-in component assemblies. The premade library and builder retain their other existing experiments and work without inference. Generated lessons use the same RecipeLesson, SpatialBoard, controls, and runtime as premade and builder lessons.
 
 Local inference targets Apple Silicon, Python 3.12, and Metal. Setup creates `src/inference/.venv`; the pinned runner downloads `m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4` on first use. Allow enough disk and unified memory for weights and context. `make -C src/inference smoke` checks the running service; `make -C src/inference planner-smoke` runs one live generation pass. `make stop` stops local services.
 
@@ -22,15 +22,17 @@ Laya is optional for ambiguous selection. To enable it, run `make -C src/inferen
 
 ## Generation and saved lessons
 
-`POST /api/apertus` uses a versioned GenerationRequest/GenerationResult protocol. Apertus interprets teaching intent and returns small arguments for the exact selected recipe or typed authoring tools. Application code owns identifiers, bindings, layout, topology, validation, and the complete expanded recipe. The new path does not use the historical planner.
+`POST /api/apertus` uses a versioned GenerationRequest/GenerationResult protocol. Apertus interprets teaching intent, including independent instance count. Creation searches both recipe catalogs using term rarity and the original request. A named model with matching requested numeric parameters resolves against its real contracts; ambiguous choices use a small AI selection response. In hybrid mode Laya provides an advisory recommendation; uncertain or unavailable selection falls back to Apertus. Apertus supplies validated parameter overrides and requested command IDs. Application code expands existing assemblies, allocates identifiers, preserves their wiring, and checks requested controls before activating the complete recipe. Editing retains typed authoring tools and revision checks.
 
-The request has one deadline (at most 120 seconds), six LLM calls, one repair per stage and two repairs total, one optional Laya selection, one broader retrieval, and twelve successful authoring operations. Each repair uses a fresh focused prompt. Apertus structured-output support is probed by behavior in `auto` mode; cloud providers use native schema formats; `strict-json` uses the same schema and semantic validation without requesting provider grammar support. Provider token usage is recorded when supplied; absent usage is recorded as unknown. Set `LLM_CONTEXT_TOKENS` (or the legacy `APERTUS_CONTEXT_TOKENS` for Apertus) only to a verified provider context capacity.
+Creation permits up to three independent activity instances, one deadline (120 seconds by default, 240 seconds in required-Laya composition mode), a bounded composition call budget, one optional Laya selection, and up to three repairs per stage and three repairs total. Repairs remain subject to the shared call budget and deadline. Each repair uses a fresh focused prompt. Apertus structured-output support is probed by behavior in `auto` mode; cloud providers use native schema formats; `strict-json` uses the same schema and semantic validation without requesting provider grammar support. Provider token usage is recorded when supplied; absent usage is recorded as unknown. Set `LLM_CONTEXT_TOKENS` (or the legacy `APERTUS_CONTEXT_TOKENS` for Apertus) only to a verified provider context capacity.
 
-Generation supports arithmetic addition/subtraction, independent rectangle comparisons, and the existing truss mechanism. Bridge responses remain heuristic: requests for engineering deflection retain a useful bridge lesson with visible limitations. Friction, momentum, weight alone, and unrelated concepts have no supported teaching overlap. A partial result explicitly identifies covered and omitted concepts.
+Generation uses the capabilities of the selected registered assemblies, including their declared scientific limits. Independent instances can compare conditions with separate controls. Different activities remain independent unless a registered assembly explicitly couples their models; unsupported relationships must be reported rather than invented. A partial result identifies omitted behavior. Physics models retain their existing approximations and assumptions.
 
 Created or updated authored lessons are saved through the normal recipe library. Reload restores the accepted initial recipe. Runtime exploration changes current state without changing the saved starting values. Authored undo/redo retains recipe and coverage metadata. Save recipe, Open recipe, and voluntary Remix use the normal import/export and builder paths. Invalid output, cancellation, stale revisions, unsupported requests, and storage failures preserve the current lesson; storage failures expose a downloadable recovery recipe.
 
 ## Accounts and MongoDB persistence
+
+Composer repair memory is optional and uses PostgreSQL/pgvector alongside MongoDB. It defaults to off. See the [repair-memory runbook](../../deploy/repair-memory/README.md) for migrations, 384-dimensional embeddings, separate runtime/worker/reviewer credentials, extraction, and rollout. Existing generation continues when memory is unavailable.
 
 NextAuth uses encrypted JWT sessions and the official MongoDB adapter for user identities and Google account links. Library requests recheck the user and session version in MongoDB. Configure the server-only variables in `.env.local` from `.env.example`: `MONGODB_URI`, `MONGODB_DB_NAME`, `NEXTAUTH_SECRET`, and `NEXTAUTH_URL`. Google additionally requires `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`. Generate a secret with `node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"`. Never commit its output. Set `NEXTAUTH_URL` to the app's actual origin; for local port 43100, register `http://localhost:43100/api/auth/callback/google` as the authorized redirect URI in your Google OAuth web client. Restart Next.js after changing configuration. See the [NextAuth Google setup](https://next-auth.js.org/providers/google). Previously issued database sessions require signing in again after the JWT migration.
 
@@ -52,7 +54,7 @@ Collections and indexes initialize on the first database connection. Library col
 
 `GET`/`PUT /api/library/simulations` and `/api/library/components` derive the owner from the verified server session. Clients cannot choose another owner. Requests carry the expected account to reject stale tabs after account switches; saves require the configured origin and JSON bodies of at most 2 MB. Database errors return a generic unavailable message.
 
-For integration verification, point `MONGODB_TEST_URI` at a disposable local MongoDB server and run `pnpm test:database` from `src/web`. It creates and drops uniquely named test databases, starts its own local Next.js server, and tests real sessions, ownership, validation, concurrent conflicts, and browser save/load. Install Chromium with `pnpm exec playwright install chromium` or set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to an installed browser. These tests seed test sessions; live Google OAuth still requires a configured OAuth client and a manual sign-in check.
+For the demo, manually check sign-in, save/load, and account isolation with the configured MongoDB instance. Live Google OAuth requires real credentials.
 
 ## Provider configuration
 
@@ -106,7 +108,7 @@ Without these overrides, Apertus keeps its existing `APERTUS_*` settings. Cloud 
 
 Native schema adapters wrap root arrays, translate OpenAI optional properties to nullable required fields and restore omitted fields before validation, and remove unsupported Anthropic grammar constraints while retaining them in field descriptions. The original application validators still enforce all bounds and semantic rules. HTTP failures and refusals do not consume JSON repair attempts. Local diagnostics identify provider, connection, model, duration and normalized token usage without credentials; Anthropic input usage includes cached input tokens. Enable `PLANNER_DIAGNOSTICS=true` only locally; traces contain prompts and are disabled in production.
 
-Run `pnpm test:generation:providers` for deterministic adapter/configuration fault coverage. These mocked tests do not establish live OpenAI, Anthropic or hosted Apertus quality or account access. For a live smoke test, configure the provider, restart the app, generate the same prompt in Builder or Experiments, and inspect the diagnostic trace. Switch providers and restart between comparison runs, using the same starting experiment state.
+For a live smoke test, configure the provider, restart the app, generate the same prompt in Builder or Experiments, and inspect the diagnostic trace. Switch providers and restart between comparison runs, using the same starting experiment state.
 
 API references: [OpenAI GPT-5.6 Luna](https://developers.openai.com/api/docs/models/gpt-5.6-luna), [OpenAI structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs), [Anthropic Messages](https://platform.claude.com/docs/en/api/messages/create), and [Anthropic structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs).
 
@@ -154,7 +156,7 @@ For multiple backend replicas, add a shared account rate limiter and a short cir
 
 Before relying on Jev selection quality, run paired live evaluations on identical prompts and starting state with each provider. Measure selection correctness, fallback frequency, end-to-end latency, and input-token cost. Include ambiguous, unsupported, multilingual, and adversarial requests. Jev documents weaknesses around arithmetic, counting, temporal comparisons, and instruction-like text in state; keep calculations and execution in deterministic code. [Official model limitations](https://docs.typesafe.ai/model-jaggedness/jev-1.13).
 
-Run `pnpm test:generation:decisions` for deterministic transport/configuration/fallback coverage. These tests use mocked responses and do not establish live model access or accuracy. A live generation only verifies Jev if its trace shows an actual Jev call; an unambiguous request or a successful LLM fallback does not verify the integration's decision quality.
+A live generation only verifies Jev if its diagnostic trace shows an actual Jev call.
 
 ## Verification
 
@@ -162,33 +164,12 @@ From `src/web`:
 
 ```sh
 pnpm test
-pnpm exec tsc --noEmit
 pnpm build
-pnpm test:generation:browser
-pnpm test:generation:architecture
 ```
 
-The deterministic suite checks recipe/runtime contracts, atomic transactions, idempotence, stale revisions, sibling preservation, binding compatibility, round trips, clock behavior, bounded transport, focused repairs, and semantic argument validation. Architecture checks resolve imports and CLI entry points, verify pure headless authoring, and compare protected premade/gas content against the captured baseline.
+`pnpm test` runs one recipe sanity check: loading, serialization, save/reopen, independent copies, rejected imports, and representative controls. Before the demo, manually check generate → interact → save → reload and one builder edit. Check sign-in and cloud saves if using accounts.
 
-Browser runners need a running diagnostic-enabled app. Enable `PLANNER_DIAGNOSTICS=true` and `NEXT_PUBLIC_EXPERIMENT_DIAGNOSTICS=true`, restart Next.js, and optionally set `UX_TEST_URL`. Install Chromium with `pnpm exec playwright install chromium`, set `PLAYWRIGHT_CHROMIUM_EXECUTABLE`, or use the detected macOS Chrome installation.
-
-```sh
-# Deterministic API fixtures: home activation, interactions, persistence,
-# cancellation/supersession, invalid responses, and storage recovery.
-pnpm test:generation:browser
-# Real inference: five independent attempts per fixed case (15 total).
-GENERATION_EVIDENCE_DIR=/tmp/apertus-generation pnpm test:generation:live
-# Replay accepted exports over five viewport profiles and motion settings.
-GENERATION_EVIDENCE_DIR=/tmp/apertus-generation pnpm test:generation:ux
-```
-
-Live and accepted-export UX runners require fresh evidence directories to preserve prior attempts and failures. For a second UX run, point `GENERATION_ACCEPTED_DIR` to the retained live directory and use a new `GENERATION_EVIDENCE_DIR`. Explicit fixture development replay permits reusing its temporary directory.
-
-Live checks use the normal prompt UI with no API interception or recipe injection. They retain correlated requests, responses, diagnostics, actual runtime state, numeric interaction oracles, exports, traces, screenshots, geometry, and browser errors. `GENERATION_RUNS=1` is a smoke run, not the fifteen-attempt acceptance gate. UX requires accepted exports from the live run. `GENERATION_UX_ALLOW_FIXTURES=1` explicitly labels a development replay using deterministic exports; it does not establish live acceptance. Captures require human visual review before Phase 5 signoff.
-
-The bounded `/api/planner-diagnostics?id=...` buffer and read-only `window.__experimentSnapshot()` are disabled in production. Diagnostics contain prompts and should be enabled only for local evidence collection. Do not expose credentials through public environment variables.
-
-Implementation, cleanup, and verification evidence for phases 1–3 live in `../../docs/agent-only/implementation/015-validation/`. Historical 003–005 evaluations describe superseded implementations and do not measure the current generator.
+Run `pnpm recipes:generate` after adding or removing premade recipes. The remaining scripts are the registry generator, recipe sanity check, its TypeScript loader, and recipe case fixtures.
 
 ## Ownership
 
@@ -225,7 +206,7 @@ Canonical data lives in `projects`, `communityPublications`, and `publicationSer
 
 #### Migration and rollback
 
-Back up the database before enabling this release (for example, use your deployment's snapshot facility or `mongodump` with securely supplied credentials). Inventory legacy records with `pnpm db:migrate-projects`; use `pnpm db:migrate-projects -- --apply` to migrate all owners. Owner migration also happens lazily on first library access.
+Back up the database before enabling this release (for example, use your deployment's snapshot facility or `mongodump` with securely supplied credentials). Owner migration happens lazily on first library access.
 
 Migration copies rather than deletes source records, preserves revisions/timestamps, and defaults sharing to false. Per-owner leases serialize concurrent migrations; receipts retain source identities and hashes. Legacy duplicate titles get deterministic `(imported N)` suffixes; original titles stay in receipts. Unsupported records are quarantined, retained, and offered for export on My projects. Local originals also remain after explicit account import.
 
@@ -233,20 +214,13 @@ Verify counts, quarantined receipts, and representative round trips before rollo
 
 #### Moderation and operations
 
-Signed-in users can report public projects. `pnpm db:moderate-community` lists the most recent 50 open reports for maintainers with server-only database access. `pnpm db:moderate-community -- --withdraw <publicationId>` withdraws the exact publication and resolves its reports; the snapshot stays preserved. Establish an actual review rotation before opening publishing to a broad audience. There is no public administrative endpoint.
+Signed-in users can report public projects. Reports remain in MongoDB; this hackathon version has no moderation CLI or public administrative endpoint.
 
 Schedule backups of the canonical collections and test restore procedures. Save revisions prevent accidental overwrite; they are not historical backups. The initial release intentionally has no automatic cloud autosave, offline retry queue, collaborative editing, likes, or comments. List APIs use bounded cursor pagination; compatibility library APIs remain temporarily available for older callers.
 
 #### Verification
 
-- `pnpm test`: existing deterministic suite plus project/AI/storage regression contracts.
-- `pnpm exec tsc --noEmit`: source and generated-route type checks.
-- `MONGODB_TEST_URI=<disposable-replica-set-uri> pnpm test:projects:database`: real names, migration, conflict, immutable version, retry, and composition tests.
-- `MONGODB_TEST_URI=<disposable-replica-set-uri> pnpm test:database`: existing MongoDB and authenticated browser/API checks.
-- `MONGODB_TEST_URI=<disposable-replica-set-uri> pnpm test:projects:browser`: community and builder end-to-end acceptance checks.
-- `pnpm exec next build --webpack`: production build verification.
-
-Browser checks require Chromium installed for the locked Playwright version, or `PLAYWRIGHT_CHROMIUM_EXECUTABLE` pointing to an installed compatible executable. Database tests create uniquely named temporary databases and drop only those databases during cleanup. Never point `MONGODB_TEST_URI` at production credentials.
+Manually check private save/reopen, publishing, and account isolation if these features are part of the demo.
 
 ## Realistic prompt composition with Laya and Apertus
 
@@ -269,11 +243,7 @@ LAYA_BASE_URL=http://127.0.0.1:43102
 
 Start both inference services with the existing setup/run targets, check `smoke` and `smoke-laya`, then run `make run-realistic` from the repository root (or set the variables above and restart the web app). The local MLX launcher applies the tokenizer regex compatibility fix without modifying downloaded model files. Required composition allows up to 24 turns, 28 Apertus calls, three repairs, and one Laya decision; the default total deadline is 240 seconds (120 seconds in optional mode). `PLANNER_TIMEOUT_MS` explicitly overrides it. Required mode preserves the current lesson and reports a failure when Laya is unavailable or does not meet the confidence gate; it cannot silently claim both-provider success via an Apertus-only fallback. `COMPOSITION_DECISION_POLICY=optional` retains the previous selection policy.
 
-Use `pnpm test:generation:realistic` for deterministic component/physics/transaction checks. With local diagnostics enabled, run `pnpm test:generation:realistic:live` for five independent attempts per exact prompt and desktop interaction/screenshots at 1440×900, 1920×1080 and 1280×720. `GENERATION_RUNS=1` is a smoke run; `GENERATION_CASE=pendulum|traffic|circuit|eclipse|sound` narrows debugging. Use `UX_TEST_URL=http://localhost:<port>` for an isolated dev server. Raw evidence is restricted to the git-ignored `docs/agent-only/implementation/019-validation/` tree with a fresh run directory. Actual provider/model traces and numerical interaction assertions are required; mocked fixtures do not establish live acceptance. Review screenshots before accepting the report.
-
 Eclipse geometry is a scaled planar teaching model. Sound cancellation is ideal pressure superposition at one point with no audio output or real headphone controller. Existing pendulum/circuit/traffic fidelity assumptions remain visible in generated lessons.
-
-Replay a retained run with `REALISTIC_REPLAY_DIR=<absolute ignored live-run directory> pnpm test:generation:realistic:replay`. This imports the run's accepted recipes through the ordinary UI and checks both desktop motion preferences; it is UX replay, not new inference. `REALISTIC_REPLAY_REARRANGE=1` additionally reapplies only shared presentation arrangement for debugging; reports distinguish this from an unchanged accepted export. Failed attempts remain retained. The required local setup uses a bounded 20-second decision timeout to accommodate cold MLX inference; the optional decision default remains 3 seconds.
 
 ## Runtime AI agents
 
@@ -287,15 +257,6 @@ Agent infrastructure lives in `simulations/runtime/agents/`; pure systems, trait
 
 Persistent runs are bounded single-document aggregates: event, memory, world state, receipt and revision commit in one conditional majority write. Leases and fencing reject stale workers; retries cannot duplicate an accepted logical action. The LLM call happens outside the database write and may execute more than once. Recipes save initial configuration; run history and private notes are separate. Public projections/downloads exclude private memory and plans.
 
-Verification commands from `src/web`:
-
-```sh
-pnpm test:agents                  # Deterministic core and mocked provider contracts
-pnpm test:agents:live             # Existing app and actual configured LLM required
-pnpm test:agents:browser          # Existing app, real LLM and Chromium/Chrome required
-MONGODB_TEST_URI=... pnpm test:agents:database  # Disposable database only
-```
-
-Live/browser tests default to `http://localhost:43100`; override `AGENT_TEST_ORIGIN` to match the configured application origin. Cloud model calls use the configured account and may incur costs. Local verification used actual Apertus through MLX; cloud transport verification is mocked. The Mongo integration test creates and drops a uniquely named test database. It is separate from the default suite and requires a provided test service.
+For the demo, manually check Next response, pause/cancel, restart, and transcript download with the configured provider.
 
 See [general foundations](../../docs/agent-only/implementation/021-AI-AGENT-SIMULATION-FOUNDATIONS.md) and [implementation evidence](../../docs/agent-only/implementation/021-IMPLEMENTATION-EVIDENCE.md) for boundaries, coverage, and optional extensions.

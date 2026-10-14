@@ -1,5 +1,5 @@
-import { matchesAny } from "../../simulations/components/controls/promptMatchers";
-import type { DemoType } from "../../simulations/runtime/types";
+import { matchesAny } from "../../simulations/legacy/components/controls/promptMatchers";
+import type { DemoType } from "../../simulations/legacy/runtime/types";
 
 export function resolveExperimentPrompt(prompt: string): DemoType | null {
   const p = prompt.toLowerCase();

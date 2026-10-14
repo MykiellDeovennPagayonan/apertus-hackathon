@@ -1,4 +1,4 @@
-export { DailySchedule } from "../../../components/resources/DailySchedule";
-export { TownAppearance } from "../../../components/resources/TownAppearance";
-export { TownLayout } from "../../../components/resources/TownLayout";
-export { WalkingProfile } from "../../../components/resources/WalkingProfile";
+export { DailySchedule } from "../../../legacy/components/resources/DailySchedule";
+export { TownAppearance } from "../../../legacy/components/resources/TownAppearance";
+export { TownLayout } from "../../../legacy/components/resources/TownLayout";
+export { WalkingProfile } from "../../../legacy/components/resources/WalkingProfile";

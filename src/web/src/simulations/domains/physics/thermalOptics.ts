@@ -1,28 +1,28 @@
-import * as capacitor from "../../components/systems/physics/capacitor";
-import * as conduction from "../../components/systems/physics/conduction";
+import * as capacitor from "../../legacy/components/systems/physics/capacitor";
+import * as conduction from "../../legacy/components/systems/physics/conduction";
 import {
   coolingDefaults,
   coolingMeasure,
   coolingParameters,
   coolingState,
-} from "../../components/systems/physics/cooling";
-import * as doppler from "../../components/systems/physics/doppler";
-import * as fibre from "../../components/systems/physics/fibre";
-import * as induction from "../../components/systems/physics/induction";
-import * as latent from "../../components/systems/physics/latent";
-import * as lens from "../../components/systems/physics/lens";
-import * as string from "../../components/systems/physics/string";
-import * as turning from "../../components/systems/physics/turning";
+} from "../../legacy/components/systems/physics/cooling";
+import * as doppler from "../../legacy/components/systems/physics/doppler";
+import * as fibre from "../../legacy/components/systems/physics/fibre";
+import * as induction from "../../legacy/components/systems/physics/induction";
+import * as latent from "../../legacy/components/systems/physics/latent";
+import * as lens from "../../legacy/components/systems/physics/lens";
+import * as string from "../../legacy/components/systems/physics/string";
+import * as turning from "../../legacy/components/systems/physics/turning";
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
+} from "../../registry/contracts/domainContribution";
 import {
   num,
   object,
   type ParameterSchema,
   validateValue,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 
 export const coolingModel: DomainModel = {
   ref: "prefabs/physics/Cooling",

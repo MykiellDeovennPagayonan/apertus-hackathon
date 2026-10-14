@@ -1,5 +1,5 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
-import { SceneIconButton } from "../components/views/SceneToolbar";
+import { SceneIconButton } from "../legacy/components/views/SceneToolbar";
 
 const clamp = (value: number, min: number, max: number) =>
   Math.max(min, Math.min(max, value));

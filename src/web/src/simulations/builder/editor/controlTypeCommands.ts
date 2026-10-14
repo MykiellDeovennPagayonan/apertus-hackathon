@@ -1,17 +1,17 @@
-import { publicDefinition } from "../../components/catalog";
-import { schemaDefault } from "../../components/composites/catalog";
-import { acceptedCommandArguments } from "../../components/controls/commandPresentation";
+import { publicDefinition } from "../../registry/index";
+import { schemaDefault } from "../../registry/contracts/defaults";
+import { acceptedCommandArguments } from "../../registry/contracts/commandPresentation";
 import {
   acceptsScalar,
   parameterLeaves,
   scalarControls,
-} from "../../components/controls/controlContract";
-import { requireValue } from "../../runtime/authoring/requireValue";
+} from "../../registry/contracts/controlContract";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
 import type {
   AuthoredDocument,
   ComponentInstance,
-} from "../../runtime/authoring/types";
-import { validateAuthoredDocument } from "../../runtime/authoring/validate";
+} from "../../creation-and-editing/authoring-engine/document";
+import { validateAuthoredDocument } from "../../creation-and-editing/validator/document";
 
 export const interchangeableControls = [
   "controls/Slider",

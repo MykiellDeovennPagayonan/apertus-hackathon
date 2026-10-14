@@ -1,7 +1,7 @@
 import type { Db } from "mongodb";
 import type { SavedExperiment } from "../../simulations/builder/persistence/storage";
-import type { CompositeRecipe } from "../../simulations/runtime/authoring/types";
-import { parseRecipe } from "../../simulations/runtime/recipes/schema";
+import type { CompositeRecipe } from "../../simulations/creation-and-editing/authoring-engine/document";
+import { parseRecipe } from "../../simulations/creation-and-editing/validator/parseRecipe";
 import { migrateOwner } from "../projects/migration";
 import { ProjectRepository } from "../projects/Repository";
 import { type Project, ProjectError } from "../projects/types";

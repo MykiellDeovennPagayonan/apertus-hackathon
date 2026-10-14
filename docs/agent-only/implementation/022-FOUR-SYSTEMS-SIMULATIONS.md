@@ -162,15 +162,15 @@ The exact names can be adjusted during implementation if an existing abstraction
 | --- | --- |
 | `src/web/src/simulations/domains/social-systems/index.ts` | Production model contract, schema, commands, outputs, assumptions, and presentation identity. |
 | `src/web/src/simulations/domains/ecology/index.ts` | Wildfire, food-web, and nutrient model registration. Split into individual files if the index becomes more than registration/composition. |
-| `src/web/src/simulations/components/systems/social-systems/production.ts` | Pure production calculations and invariants. |
-| `src/web/src/simulations/components/systems/ecology/wildfire.ts` | Deterministic patch spread and paired-scenario metrics. |
-| `src/web/src/simulations/components/systems/ecology/foodWeb.ts` | Fictional-web response model and direct/indirect effect classification. |
-| `src/web/src/simulations/components/systems/ecology/nutrients.ts` | Limiting-resource, co-limitation, biomass, height, and deficiency calculations. |
-| `src/web/src/simulations/components/visuals/social-systems/ProductionComparisonVisual.tsx` | Parallel production lanes and work-in-progress visualization. |
-| `src/web/src/simulations/components/visuals/ecology/WildfireComparisonVisual.tsx` | Paired landscape/fire visualization. |
-| `src/web/src/simulations/components/visuals/ecology/FoodWebVisual.tsx` | Energy-flow graph and aligned population comparison. |
-| `src/web/src/simulations/components/visuals/ecology/NutrientLimitationVisual.tsx` | Plant, nutrient bars, and limiting-resource cue. |
-| `src/web/src/simulations/components/views/systems-comparisons.css` | Shared visual grammar scoped to these comparisons. Split where selectors cease to be shared. |
+| `src/web/src/simulations/legacy/components/systems/social-systems/production.ts` | Pure production calculations and invariants. |
+| `src/web/src/simulations/legacy/components/systems/ecology/wildfire.ts` | Deterministic patch spread and paired-scenario metrics. |
+| `src/web/src/simulations/legacy/components/systems/ecology/foodWeb.ts` | Fictional-web response model and direct/indirect effect classification. |
+| `src/web/src/simulations/legacy/components/systems/ecology/nutrients.ts` | Limiting-resource, co-limitation, biomass, height, and deficiency calculations. |
+| `src/web/src/simulations/legacy/components/visuals/social-systems/ProductionComparisonVisual.tsx` | Parallel production lanes and work-in-progress visualization. |
+| `src/web/src/simulations/legacy/components/visuals/ecology/WildfireComparisonVisual.tsx` | Paired landscape/fire visualization. |
+| `src/web/src/simulations/legacy/components/visuals/ecology/FoodWebVisual.tsx` | Energy-flow graph and aligned population comparison. |
+| `src/web/src/simulations/legacy/components/visuals/ecology/NutrientLimitationVisual.tsx` | Plant, nutrient bars, and limiting-resource cue. |
+| `src/web/src/simulations/legacy/components/views/systems-comparisons.css` | Shared visual grammar scoped to these comparisons. Split where selectors cease to be shared. |
 | `src/web/src/simulations/pre-made/craft-production/recipe.json` | Complete authored production lesson. |
 | `src/web/src/simulations/pre-made/wildfire/recipe.json` | Complete authored wildfire lesson. |
 | `src/web/src/simulations/pre-made/food-web/recipe.json` | Complete authored food-web lesson. |
@@ -183,26 +183,26 @@ The exact names can be adjusted during implementation if an existing abstraction
 
 | Existing path | Planned change |
 | --- | --- |
-| `src/web/src/simulations/runtime/assembly.ts` | Add explicit domain contributions and presentation contract identities. |
-| `src/web/src/simulations/components/catalog/index.ts` | Registration should flow from domain contributions. Change only if the generic registration needs a domain-neutral extension. |
-| `src/web/src/simulations/components/views/recipe/RecipeAppearance.tsx` | Map presentation identities to visual adapters. Refactor to a registry if four mappings make the table unwieldy. |
-| `src/web/src/simulations/components/views/RecipeLesson.tsx` | Import the scoped comparison stylesheet unless an existing supported colocation pattern is cleaner. |
-| `src/web/src/simulations/runtime/types.ts` | Extend the premade slug type if static typing requires explicit new identifiers. |
+| `src/web/src/simulations/legacy/runtime/assembly.ts` | Add explicit domain contributions and presentation contract identities. |
+| `src/web/src/simulations/registry/index.ts` | Registration should flow from domain contributions. Change only if the generic registration needs a domain-neutral extension. |
+| `src/web/src/simulations/creation-and-editing/simulation/recipe/RecipeAppearance.tsx` | Map presentation identities to visual adapters. Refactor to a registry if four mappings make the table unwieldy. |
+| `src/web/src/simulations/creation-and-editing/simulation/RecipeLesson.tsx` | Import the scoped comparison stylesheet unless an existing supported colocation pattern is cleaner. |
+| `src/web/src/simulations/legacy/runtime/types.ts` | Extend the premade slug type if static typing requires explicit new identifiers. |
 | `src/web/src/app/experiments/_lib/premadeExperiments.ts` | No manual catalog entry should be needed. Change only for a generic typing issue. |
-| `src/web/src/simulations/runtime/recipes/premadeRegistry.generated.ts` | Regenerated by `pnpm recipes:generate`; never hand-edit. |
+| `src/web/src/simulations/registry/recipes/premade.generated.ts` | Regenerated by `pnpm recipes:generate`; never hand-edit. |
 | `src/web/package.json` | Add focused verification scripts only if direct commands would otherwise be undiscoverable. |
 | `docs/agent-only/implementation/014-PREMADE-EXPERIMENT-REFINEMENT-TRACKER.md` | Add four rows and evidence only after each simulation passes its full review. |
 | This document | Record decisions, screenshot critique, verification output, and remaining gaps. |
 
 ### 6.3 Shared files to read and preferably not change
 
-- `src/web/src/simulations/components/controls/NumberField.tsx`
-- `src/web/src/simulations/components/controls/ScalarControl.tsx`
-- `src/web/src/simulations/components/views/recipe-lesson.css`
-- `src/web/src/simulations/components/views/board/board.css`
-- `src/web/src/simulations/runtime/authoring/runtime.ts`
-- `src/web/src/simulations/runtime/recipes/loadRecipe.ts`
-- `src/web/src/simulations/runtime/recipes/schema.ts`
+- `src/web/src/simulations/registry/controls/NumberField.tsx`
+- `src/web/src/simulations/registry/controls/ScalarControl.tsx`
+- `src/web/src/simulations/creation-and-editing/simulation/recipe-lesson.css`
+- `src/web/src/simulations/creation-and-editing/simulation/board/board.css`
+- `src/web/src/simulations/creation-and-editing/runtime-engine/DocumentRuntime.ts`
+- `src/web/src/simulations/creation-and-editing/runtime-engine/loadRecipe.ts`
+- `src/web/src/simulations/creation-and-editing/validator/parseRecipe.ts`
 - `src/web/src/simulations/pre-made/gas/gas-pressure.recipe.json`
 
 If a shared defect is found, fix it at the shared source with regression coverage. Do not add recipe-specific CSS overrides to conceal a broken generic control or board constraint.

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { numericField } from "../../components/contracts/numericField";
-import { componentDefinition } from "../../components/registry";
+import { numericField } from "../../registry/contracts/objects/numericField";
+import { componentDefinition } from "../../registry/objects/registry";
 import {
   type CompositionScene,
   entrance,
@@ -8,7 +8,7 @@ import {
   propertyValue,
   type SceneObject,
   setProperty,
-} from "../../runtime/composition/index";
+} from "../../creation-and-editing/runtime-engine/composition/index";
 export function ObjectSettings({
   object: o,
   scene,

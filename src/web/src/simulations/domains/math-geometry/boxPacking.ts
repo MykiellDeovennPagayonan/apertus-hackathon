@@ -1,10 +1,10 @@
-import type { DomainModel } from "../../runtime/contribution";
+import type { DomainModel } from "../../registry/contracts/domainContribution";
 import {
   boolean,
   num,
   object,
   validateValue,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 import { buttonAction, geometryDependencies } from "./common";
 
 const length = num(1, 300, "cm");
