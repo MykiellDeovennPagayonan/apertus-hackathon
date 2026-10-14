@@ -74,18 +74,17 @@ function renderMetrics() {
   const body = element('metric-rows'); body.replaceChildren();
   const details = element('details'); details.replaceChildren();
   for (const run of active.dataset.runs) {
-    const measured = run.rows.filter(row => row.measurements?.validationReached);
-    const first = measured.filter(row => row.measurements.firstPass === true).length;
     const passed = run.rows.filter(row => row.status === 'PASS');
+    const first = passed.filter(row => row.measurements?.terminal &&
+      ['schemaRepairs', 'composerFeedback', 'deterministicRepairs'].every(key => row.measurements[key] === 0)).length;
     const times = passed.map(row => row.generationMs).filter(Number.isFinite).sort((a, b) => a - b);
     const midpoint = Math.floor(times.length / 2);
     const median = times.length ? times.length % 2 ? times[midpoint] : (times[midpoint - 1] + times[midpoint]) / 2 : null;
     const tr = document.createElement('tr');
     for (const value of [run.configuration?.llm?.model ?? run.modelSlug,
       `${passed.length}/40 (${(passed.length / 40 * 100).toFixed(1)}%)`, `${first}/40 (${(first / 40 * 100).toFixed(1)}%)`,
-      measured.length ? `${first}/${measured.length} (${(first / measured.length * 100).toFixed(1)}%)` : 'Unknown', `${seconds(median)} (${times.length} samples)`,
-      seconds(times.length ? times[Math.ceil(times.length * .95) - 1] : null),
-      String(run.rows.filter(row => !row.measurements?.terminal).length)]) {
+      `${seconds(median)} (${times.length} samples)`,
+      seconds(times.length ? times[Math.ceil(times.length * .95) - 1] : null)]) {
       const td = document.createElement('td'); td.textContent = value; tr.append(td);
     }
     body.append(tr);

@@ -114,14 +114,19 @@ export function readSessions(text) {
 
 export function exportSession(session) {
   validateSession(session);
-  return { protocolVersion: 1, exportedAt: new Date().toISOString(), sessionId: session.id, evaluatorId: session.evaluatorId,
-    createdAt: session.createdAt, datasetId: session.dataset.id, promptHash: session.dataset.promptHash,
-    completedQuestions: Object.values(session.ballots).filter(vote => vote.reviewed).length,
-    totalQuestions: 40, runs: session.dataset.runs,
-    questions: session.dataset.runs[0].rows.map(row => ({ id: row.id, prompt: row.prompt,
-      candidates: session.order[row.id].map((id, index) => ({ id, position: index + 1,
-        runId: session.dataset.runs.find(run => id === `${run.id}/${row.id}`).rows[row.number - 1].sourceRunId ?? session.dataset.runs.find(run => id === `${run.id}/${row.id}`).id,
-        modelSlug: session.dataset.runs.find(run => id === `${run.id}/${row.id}`).modelSlug })),
-      ballot: session.ballots[row.id] ?? null })),
-  };
+  const votes = session.dataset.runs[0].rows
+    .filter(row => {
+      const vote = session.ballots[row.id];
+      return vote && (vote.selected.length > 0 || vote.nonePreferred);
+    })
+    .map(row => {
+      const vote = session.ballots[row.id];
+      return {
+        simulationId: row.id, prompt: row.prompt,
+        selectedModels: vote.selected.map(id => session.dataset.runs.find(run => id === `${run.id}/${row.id}`).modelSlug),
+        nonePreferred: vote.nonePreferred, reviewed: vote.reviewed, updatedAt: vote.updatedAt,
+      };
+    });
+  return { protocolVersion: 2, evaluatorId: session.evaluatorId, exportedAt: new Date().toISOString(),
+    completedQuestions: votes.filter(vote => vote.reviewed).length, totalQuestions: 40, votes };
 }

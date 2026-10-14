@@ -51,9 +51,10 @@
         <p>Success means a final experiment rendered without observed errors. Scientific correctness and interactions are not scored.</p>
         <div class="table-scroll"><table>
           <caption>Forty questions per loaded model</caption>
-          <thead><tr><th scope="col">Model</th><th scope="col">Success</th><th scope="col">First pass</th><th scope="col">Among validated</th><th scope="col">Median time</th><th scope="col">p95 time</th><th scope="col">Unknown metrics</th></tr></thead>
+          <thead><tr><th scope="col">Model</th><th scope="col">Success</th><th scope="col">First pass</th><th scope="col">Median time</th><th scope="col">p95 time</th></tr></thead>
           <tbody id="metric-rows"></tbody>
         </table></div>
+        <p>First pass means a successful generation with zero JSON/schema repairs, validator returns to the composer, and deterministic repairs, out of all forty prompts. Missing repair counts do not count as a first pass.</p>
         <p>Time covers submission to final usable render, for successful runs only. Missing validation evidence stays unknown. Local and hosted runs use different hardware and network conditions.</p>
         <div id="details"></div>
       </section>

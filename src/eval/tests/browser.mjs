@@ -40,6 +40,9 @@ try {
   await page.goto(origin);
   await page.getByRole('heading', { name: 'Forty questions. Your judgment.' }).waitFor();
   const first = fixtureRun(), second = fixtureRun('qwen3-8b', 'fixture-qwen');
+  first.rows[0].measurements.schemaRepairs = 1; // Still passed validation first time.
+  first.rows[4].measurements.deterministicRepairs = 1;
+  delete first.rows[5].measurements.schemaRepairs; // Unknown is not zero.
   await install([first, second]);
   await page.getByRole('button', { name: 'Check for results' }).click();
   await page.getByRole('heading', { name: first.rows[0].prompt }).waitFor();
@@ -68,8 +71,8 @@ try {
   await page.getByRole('button', { name: 'Download JSON' }).click();
   const download = await downloading;
   const exported = JSON.parse(await readFile(await download.path(), 'utf8'));
-  assert.equal(exported.completedQuestions, 3); assert.equal(exported.questions[0].ballot.selected.length, 2);
-  assert.equal(exported.questions[1].ballot.nonePreferred, true);
+  assert.equal(exported.completedQuestions, 3); assert.equal(exported.votes[0].selectedModels.length, 2);
+  assert.equal(exported.votes[1].nonePreferred, true);
   const remaining = ['llama-3.1-8b', 'gpt-6-luna', 'gpt-6.1-sol', 'qwen3-32b', 'mistral-small-3.1-24b'].map((model, i) => fixtureRun(model, `fixture-extra-${i}`));
   remaining[0].configuration.source = { revision: 'another-execution-revision' };
   await install([first, second, ...remaining, fixtureRun('gemma-4-e4b', 'retired-gemma4'), fixtureRun('gemma-3-12b', 'retired-gemma3'), fixtureRun('mistral-small-3.2-24b', 'retired-mistral')]);
@@ -79,6 +82,9 @@ try {
   assert.equal(await page.locator('#sessions').count(), 0);
   await page.getByRole('button', { name: 'Measurements', exact: true }).click();
   assert.equal(await page.locator('#metric-rows tr').count(), 7);
+  const apertusMetrics = page.locator('#metric-rows tr').filter({ hasText: 'apertus-1.5-8b' });
+  assert.equal(await apertusMetrics.locator('td').nth(2).innerText(), '35/40 (87.5%)');
+  assert.equal(await apertusMetrics.locator('td').count(), 5);
   await page.screenshot({ path: join(evidence, 'measurements-desktop.png'), fullPage: true });
   await page.getByRole('button', { name: 'Review screenshots' }).click();
   await page.getByRole('button', { name: 'Previous question' }).click();
@@ -92,9 +98,10 @@ try {
   const updatedDownload = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download JSON' }).click();
   const updated = JSON.parse(await readFile(await (await updatedDownload).path(), 'utf8'));
-  assert.equal(updated.runs.length, 7);
-  assert.equal(updated.questions[0].ballot.candidateIds.length, 7);
-  assert.equal(updated.questions[1].ballot.candidateIds.length, 2);
+  assert.equal(updated.runs, undefined);
+  assert.equal(updated.votes[0].selectedModels.length, 3);
+  assert.equal(updated.votes[0].reviewed, true);
+  assert.equal(updated.votes[1].reviewed, false);
   assert.equal(updated.completedQuestions, 1);
   await page.setViewportSize({ width: 720, height: 650 });
   await page.screenshot({ path: join(evidence, 'voting-small.png'), fullPage: true });

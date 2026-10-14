@@ -3,7 +3,7 @@ import test from 'node:test';
 import { fixtureRun } from './fixtures.mjs';
 import { latestDataset, createSession, syncSession, ballot, readSessions, exportSession, validateRun } from '../public/state.js';
 
-test('multi-select, edits, none preferred and export preserve exposure and identity', () => {
+test('vote-only export maps selections to models and simulations without benchmark data', () => {
   const runs = [fixtureRun(), fixtureRun('qwen3-8b', 'fixture-qwen')];
   const dataset = latestDataset(runs);
   const session = createSession(dataset, () => 'session-id', () => 0);
@@ -19,10 +19,16 @@ test('multi-select, edits, none preferred and export preserve exposure and ident
   assert.deepEqual(restored.order, session.order);
   const exported = exportSession(restored);
   assert.equal(exported.completedQuestions, 2);
-  assert.equal(exported.questions[0].candidates.length, 2);
-  assert.equal(exported.questions[1].ballot.nonePreferred, true);
-  assert.equal(exported.questions[2].ballot, null);
-  assert.equal(exported.runs[0].rows[2].measurements, null);
+  assert.equal(exported.votes.length, 2);
+  assert.deepEqual(exported.votes[0].selectedModels, ['qwen3-8b']);
+  assert.equal(exported.votes[0].simulationId, 'question-1');
+  assert.equal(exported.votes[0].prompt, runs[0].rows[0].prompt);
+  assert.equal(exported.votes[1].nonePreferred, true);
+  assert.deepEqual(exported.votes[1].selectedModels, []);
+  assert.deepEqual(Object.keys(exported).sort(), ['protocolVersion', 'evaluatorId', 'exportedAt', 'completedQuestions', 'totalQuestions', 'votes'].sort());
+  assert.deepEqual(Object.keys(exported.votes[0]).sort(), ['simulationId', 'prompt', 'selectedModels', 'nonePreferred', 'reviewed', 'updatedAt'].sort());
+  ballot(restored, 'question-1', []);
+  assert.equal(exportSession(restored).votes.length, 1, 'Cleared selections are not votes');
 });
 
 test('newest complete batches form new datasets without altering earlier sessions', () => {
@@ -92,7 +98,7 @@ test('invalid artifacts and saved ballots are rejected rather than silently rese
   assert.throws(() => readSessions(JSON.stringify({ protocolVersion: 1, active: 'session', sessions: [session] })), /candidate order/);
 });
 
-test('current per-question versions are exported and replacements preserve earlier votes', () => {
+test('replaced images reset current votes without exporting run history', () => {
   const run = fixtureRun();
   run.id = run.modelSlug; run.current = true; run.complete = false;
   run.rows.forEach(row => { row.sourceRunId = 'first'; row.screenshot = row.status === 'PASS' ? `/benchmarks/${run.modelSlug}/images/${row.id}.png?version=first` : null; });
@@ -103,9 +109,19 @@ test('current per-question versions are exported and replacements preserve earli
   replacement.rows[0].screenshot = `/benchmarks/${run.modelSlug}/images/question-1.png?version=focused`;
   const next = syncSession(original, latestDataset([replacement]));
   assert.notEqual(next, original);
-  assert.equal(exportSession(original).questions[0].candidates[0].runId, 'first');
-  assert.equal(exportSession(next).questions[0].candidates[0].runId, 'focused');
-  assert.equal(exportSession(next).questions[3].candidates[0].runId, 'first');
+  assert.deepEqual(exportSession(original).votes[0].selectedModels, ['apertus-1.5-8b']);
+  assert.deepEqual(exportSession(next).votes, []);
   assert.equal(original.ballots['question-1'].reviewed, true);
   assert.equal(exportSession(next).completedQuestions, 0);
+});
+
+test('each question is shuffled independently and navigation keeps its saved order', () => {
+  let calls = 0;
+  const session = createSession(latestDataset([fixtureRun(), fixtureRun('qwen3-8b', 'qwen')]), () => 'session', () => calls++ % 2 ? 0.99 : 0);
+  assert.equal(calls, 40);
+  assert.notDeepEqual(session.order['question-1'].map(id => id.split('/')[0]), session.order['question-2'].map(id => id.split('/')[0]));
+  const order = structuredClone(session.order);
+  session.question++; session.question--;
+  const restored = readSessions(JSON.stringify({ protocolVersion: 1, active: session.id, sessions: [session] })).sessions[0];
+  assert.deepEqual(restored.order, order);
 });
