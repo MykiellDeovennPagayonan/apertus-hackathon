@@ -38,6 +38,14 @@ test('summary keeps unknown evidence distinct and excludes timeout from latency'
 });
 
 test('profiles select exactly one model, enforce credentials and avoid memory contamination', () => {
+  assert.throws(() => modelEnvironment('apertus-1.5-8b', {}), /HF_TOKEN/);
+  const apertus = modelEnvironment('apertus-1.5-8b', { HF_TOKEN: 'test', APERTUS_PROVIDER: 'local', LAYA_BASE_URL: 'http://127.0.0.1:43102' });
+  assert.equal(apertus.APERTUS_PROVIDER, 'huggingface');
+  assert.equal(apertus.LLM_MODEL, 'swiss-ai/Apertus-v1.5-8B');
+  assert.equal(apertus.LAYA_BASE_URL, 'http://127.0.0.1:43102');
+  const local = modelEnvironment('apertus-1.5-8b', { BENCHMARK_APERTUS_LOCAL: 'true', APERTUS_LOCAL_MODEL: 'Apertus-v1.5-8B', LAYA_BASE_URL: 'http://127.0.0.1:43102' });
+  assert.equal(local.APERTUS_PROVIDER, 'local');
+  assert.equal(local.LAYA_BASE_URL, 'http://127.0.0.1:43102');
   assert.throws(() => modelEnvironment('qwen3-8b', {}), /HF_TOKEN/);
   assert.throws(() => modelEnvironment('gpt-6-luna', {}), /OPENAI_API_KEY/);
   assert.throws(() => modelEnvironment('apertus-1.5-8b', { REPAIR_MEMORY_MODE: 'repair' }), /memory comparison/);

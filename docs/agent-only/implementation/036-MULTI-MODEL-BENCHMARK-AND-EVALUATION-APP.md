@@ -19,11 +19,13 @@ Build a standalone application at `src/eval` for the team's screenshot evaluatio
 
 The first Apertus-only batch provides the automatic measurements and a screenshot review. Comparative preference becomes useful once another model's batch is added. Do not add a separate human pass/fail rubric in the initial version: automatic pass/fail and human preference are separate records.
 
+All open-weight benchmark inference must use Hugging Face, including Apertus. GPT models use OpenAI. Laya remains local. The local Apertus sweep started on 2026-10-14 was stopped at the user’s request, then explicitly authorized to resume locally from prompt 38. Preserve its local provider identity and resumption provenance. It may be used for screenshot evaluation, but its timing is a local exception to the hosted campaign. Shared HF routing does not currently serve Apertus v1.5 8B; an exact-model endpoint or explicit model replacement is required before the hosted batch.
+
 ## 2. Model order
 
 | Stage | Batch | Model | Connection |
 | --- | --- | --- | --- |
-| 1 | `apertus-1.5-8b` | Apertus 1.5 8B, keeping the current text model and quantization | Existing Apertus connection |
+| 1 | `apertus-1.5-8b` | `swiss-ai/Apertus-v1.5-8B`; requires an accessible dedicated endpoint | Hugging Face |
 | 2 | `llama-3.1-8b` | `meta-llama/Llama-3.1-8B-Instruct:featherless-ai` | Hugging Face |
 | 2 | `qwen3-8b` | `Qwen/Qwen3-8B:featherless-ai` | Hugging Face |
 | 3 | `gpt-6-luna` | `gpt-6-luna` | OpenAI |
@@ -128,7 +130,9 @@ Use the current fixed five-minute test budget initially. Make pipeline/provider 
 
 The main task is “Choose the screenshots you prefer for this question.” Show the exact question, large anonymous image cards with accessible checkbox selection, progress, and a clear Next question action. Show all available candidates in one comparison view with scrolling and readable image sizes rather than tiny thumbnails. Keep model identity, generation speed, success percentages, repair counts, and aggregate votes out of this voting view to avoid influencing preference. Provide organizer measurements separately.
 
-At session creation, snapshot the chosen run IDs and available candidates. Default to the newest complete batch per model; adding a new batch offers a new dataset/session rather than silently changing an existing ballot. Shuffle positions per prompt for a new session and persist the order across refreshes. Sessions on an Apertus-only dataset remain distinguishable from later comparative sessions.
+The gallery is model based and accumulates models across separate executions. Use the newest complete screenshot set per model, with the same forty prompts. Different source revisions or pipeline configurations remain attached to measurements but do not block displaying models together. Newly completed models automatically join the current gallery every thirty seconds, on refresh, or when returning to the tab. Preserve selected favorites, current question, and the relative order of existing candidates; insert new anonymous candidates at randomized positions. No new session is required to add another model.
+
+Each ballot records the candidates originally exposed. Adding models retains earlier selections and marks those ballots for review. Confirming the selection records exposure to the current complete model set. A rerun of an existing model replaces only its gallery entry; preserve the previous evaluation as history rather than transferring votes to a changed image. Retain execution IDs for screenshot provenance and metrics, not as the grouping shown to evaluators.
 
 Store a generated evaluator/session ID, dataset identity, candidate order, ballots, and current question in local storage. Votes reference stable artifact IDs regardless of display position. Editing a selection replaces that question's ballot instead of adding duplicate votes. Browser storage errors must be visible and must not falsely show “saved.” Do not silently discard malformed or incompatible saved state.
 

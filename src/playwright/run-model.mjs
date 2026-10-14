@@ -40,7 +40,11 @@ function completion(child) {
 async function main() {
   const slug = process.argv[2];
   const firstOnly = process.argv[3] === '--first';
-  if (process.argv.length > (firstOnly ? 4 : 3)) throw new Error('Usage: run-model.mjs <model> [--first]');
+  const caseFlag = process.argv[3]?.startsWith('--cases=') ? process.argv[3].slice(8) : null;
+  const cases = caseFlag === null ? null : caseFlag.split(',').map(Number);
+  if (cases && (!cases.length || cases.some(value => !Number.isInteger(value) || value < 1 || value > 40) || new Set(cases).size !== cases.length))
+    throw new Error('Focused cases must be distinct question numbers from 1 through 40.');
+  if (process.argv.length > (firstOnly || cases ? 4 : 3)) throw new Error('Usage: run-model.mjs <model> [--first | --cases=1,2]');
   const env = modelEnvironment(slug);
   const next = join(webDir, 'node_modules/next/dist/bin/next');
   const playwright = join(root, 'src/playwright/node_modules/@playwright/test/cli.js');
@@ -63,7 +67,7 @@ async function main() {
   const port = net.address().port;
   await new Promise(resolve => net.close(resolve));
   env.BENCHMARK_URL = `http://127.0.0.1:${port}`;
-  env.BENCHMARK_SCOPE = firstOnly ? 'first-prompt' : 'full-batch';
+  env.BENCHMARK_SCOPE = firstOnly ? 'first-prompt' : cases ? 'focused-trial' : 'full-batch';
   env.APERTUS_BENCHMARK_RUN_ID = runId;
   env.APERTUS_BROWSER_TEST_DIR = '.next-benchmark';
   const log = openSync(join(runDir, 'web.log'), 'wx');
@@ -111,15 +115,15 @@ async function main() {
     configuration.hardware = { hostname: hostname(), platform: platform(), arch: arch(), cpu: cpus()[0]?.model, memoryBytes: totalmem(),
       inferenceHardware: env.BENCHMARK_INFERENCE_HARDWARE ?? 'not supplied', quantization: env.BENCHMARK_QUANTIZATION ?? 'not supplied' };
     env.BENCHMARK_CONFIGURATION = JSON.stringify(configuration);
-    if (!firstOnly) {
+    if (!firstOnly && !cases) {
       console.log('Running the provider setup smoke check (unscored, may use billed tokens).');
       const smoke = await fetch(`${env.BENCHMARK_URL}/api/benchmark`, { method: 'POST', headers: { 'X-Benchmark-Setup': 'true' }, signal: boundedSignal(180_000) });
       atomicJson(probe, { stage: 'provider-smoke', scored: false, ready: smoke.ok, configuration });
       if (!smoke.ok) throw new Error('Provider setup failed. Verify endpoint, model access and credentials before a scored batch.');
-    } else atomicJson(probe, { stage: 'first-prompt-trial', scored: false, configuration });
+    } else atomicJson(probe, { stage: env.BENCHMARK_SCOPE, scored: false, configuration });
     if (interrupted) return 130;
-    console.log(firstOnly ? 'Running only the first prompt once; this is not a complete benchmark batch.' : 'Setup passed. Running all 40 prompts once, sequentially.');
-    const runner = launch([playwright, 'test', ...(firstOnly ? ['--grep', '01 projectile$'] : [])], { cwd: join(root, 'src/playwright'), env, stdio: 'inherit' });
+    console.log(firstOnly || cases ? `Running a ${env.BENCHMARK_SCOPE} development check; this is not a complete benchmark batch.` : 'Setup passed. Running all 40 prompts once, sequentially.');
+    const runner = launch([playwright, 'test', ...(firstOnly ? ['--grep', '01 projectile$'] : cases ? ['--grep', ` (${cases.map(value => String(value).padStart(2, '0')).join('|')}) `] : [])], { cwd: join(root, 'src/playwright'), env, stdio: 'inherit' });
     return await completion(runner);
   } finally {
     stop(server);

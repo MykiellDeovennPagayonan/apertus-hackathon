@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { fixtureRun } from './fixtures.mjs';
-import { latestDataset, createSession, ballot, readSessions, exportSession, validateRun } from '../public/state.js';
+import { latestDataset, createSession, syncSession, ballot, readSessions, exportSession, validateRun } from '../public/state.js';
 
 test('multi-select, edits, none preferred and export preserve exposure and identity', () => {
   const runs = [fixtureRun(), fixtureRun('qwen3-8b', 'fixture-qwen')];
@@ -39,7 +39,48 @@ test('newest complete batches form new datasets without altering earlier session
   assert.throws(() => latestDataset([newer, mismatched]), /different prompt sets/);
   const changedPolicy = fixtureRun('gemma-4-e4b', 'different-policy');
   changedPolicy.configuration.planner = { compositionPolicy: 'optional' };
-  assert.throws(() => latestDataset([newer, changedPolicy]), /different pipeline settings/);
+  assert.equal(latestDataset([newer, changedPolicy]).runs.length, 2);
+});
+
+test('models accumulate across executions while votes, position and exposure survive', () => {
+  const first = fixtureRun();
+  const session = createSession(latestDataset([first]), () => 'session');
+  session.question = 7;
+  ballot(session, 'question-1', session.order['question-1']);
+  ballot(session, 'question-2', [], true);
+  const selected = [...session.ballots['question-1'].selected];
+  const second = fixtureRun('qwen3-8b', 'qwen');
+  second.configuration.source = { revision: 'a-new-revision' };
+  const third = fixtureRun('llama-3.1-8b', 'llama');
+  const dataset = latestDataset([first, second, third]);
+  assert.equal(syncSession(session, dataset, () => 0), session);
+  assert.equal(session.dataset.runs.length, 3);
+  assert.equal(session.question, 7);
+  assert.deepEqual(session.ballots['question-1'].selected, selected);
+  assert.equal(session.ballots['question-1'].candidateIds.length, 1);
+  assert.equal(session.ballots['question-1'].reviewed, false);
+  assert.equal(session.ballots['question-2'].nonePreferred, true);
+  assert.equal(session.ballots['question-2'].reviewed, false);
+  assert.equal(exportSession(session).completedQuestions, 0);
+  ballot(session, 'question-1', selected);
+  assert.equal(session.ballots['question-1'].candidateIds.length, 3);
+  assert.equal(exportSession(session).completedQuestions, 1);
+  const restored = readSessions(JSON.stringify({ protocolVersion: 1, active: session.id, sessions: [session] })).sessions[0];
+  assert.deepEqual(restored.order, session.order);
+  assert.equal(syncSession(session, dataset), session);
+});
+
+test('replacing one model keeps other models and preserves the old evaluation', () => {
+  const first = fixtureRun(), second = fixtureRun('qwen3-8b', 'qwen');
+  const old = createSession(latestDataset([first, second]), () => 'original');
+  ballot(old, 'question-1', old.order['question-1']);
+  const rerun = fixtureRun('apertus-1.5-8b', 'new-apertus');
+  rerun.startedAt = '2026-10-15T01:00:00.000Z';
+  const next = syncSession(old, latestDataset([first, second, rerun]));
+  assert.notEqual(next, old);
+  assert.equal(next.evaluatorId, old.evaluatorId);
+  assert.deepEqual(next.dataset.runs.map(run => run.id), ['new-apertus', 'qwen']);
+  assert.equal(old.ballots['question-1'].selected.length, 2);
 });
 
 test('invalid artifacts and saved ballots are rejected rather than silently reset', () => {

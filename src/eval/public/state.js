@@ -26,9 +26,6 @@ export function latestDataset(input) {
   if (!runs.length) return null;
   requireValue(runs.every(run => run.promptHash === runs[0].promptHash && run.rows.every((row, index) =>
     row.id === runs[0].rows[index].id && row.prompt === runs[0].rows[index].prompt)), 'Batches have different prompt sets. Keep these campaigns separate.');
-  const pipeline = run => JSON.stringify({ planner: run.configuration?.planner, decision: run.configuration?.decision,
-    capture: run.configuration?.capture, source: run.configuration?.source });
-  requireValue(runs.every(run => pipeline(run) === pipeline(runs[0])), 'Batches use different pipeline settings or source revisions. Keep these campaigns separate.');
   return { id: runs.map(run => run.id).join('|'), promptHash: runs[0].promptHash, runs };
 }
 
@@ -53,7 +50,31 @@ export function ballot(session, promptId, selected, nonePreferred = false) {
   requireValue(!nonePreferred || selected.length === 0, 'None preferred cannot include favorites.');
   requireValue(selected.every(id => order.includes(id) && session.dataset.runs.some(run =>
     `${run.id}/${promptId}` === id && run.rows.find(row => row.id === promptId)?.screenshot)), 'Cannot select unavailable candidates.');
-  session.ballots[promptId] = { selected: [...selected], nonePreferred, reviewed: nonePreferred || selected.length > 0, updatedAt: new Date().toISOString() };
+  session.ballots[promptId] = { selected: [...selected], nonePreferred, reviewed: nonePreferred || selected.length > 0,
+    candidateIds: [...order], updatedAt: new Date().toISOString() };
+}
+
+export function syncSession(session, dataset, random = Math.random) {
+  if (session.dataset.id === dataset.id) return session;
+  requireValue(session.dataset.promptHash === dataset.promptHash, 'Models have different prompt sets.');
+  // A replacement screenshot needs fresh votes; keep the original evaluation as history.
+  if (!session.dataset.runs.every(previous => dataset.runs.some(run => run.modelSlug === previous.modelSlug && run.id === previous.id))) {
+    const next = createSession(dataset);
+    next.evaluatorId = session.evaluatorId;
+    return next;
+  }
+  for (const row of dataset.runs[0].rows) {
+    const order = session.order[row.id];
+    const vote = session.ballots[row.id];
+    if (vote) vote.candidateIds ??= [...order];
+    for (const run of dataset.runs) {
+      const id = `${run.id}/${row.id}`;
+      if (!order.includes(id)) order.splice(Math.floor(random() * (order.length + 1)), 0, id);
+    }
+    if (vote) vote.reviewed = false;
+  }
+  session.dataset = structuredClone(dataset);
+  return session;
 }
 
 export function validateSession(session) {
@@ -69,7 +90,11 @@ export function validateSession(session) {
     requireValue(typeof vote.nonePreferred === 'boolean' && typeof vote.reviewed === 'boolean' && typeof vote.updatedAt === 'string', 'Invalid saved ballot.');
     const checked = { ...session, ballots: {} };
     ballot(checked, id, vote.selected, vote.nonePreferred);
-    requireValue(checked.ballots[id].reviewed === vote.reviewed, 'Invalid saved review state.');
+    const exposed = vote.candidateIds ?? session.order[id];
+    requireValue(Array.isArray(exposed) && new Set(exposed).size === exposed.length &&
+      exposed.every(candidate => session.order[id].includes(candidate)), 'Invalid ballot exposure.');
+    requireValue(vote.selected.every(candidate => exposed.includes(candidate)), 'Selected candidate was not exposed.');
+    requireValue((checked.ballots[id].reviewed && exposed.length === session.order[id].length) === vote.reviewed, 'Invalid saved review state.');
   }
   return session;
 }
@@ -92,7 +117,8 @@ export function exportSession(session) {
     totalQuestions: 40, runs: session.dataset.runs,
     questions: session.dataset.runs[0].rows.map(row => ({ id: row.id, prompt: row.prompt,
       candidates: session.order[row.id].map((id, index) => ({ id, position: index + 1,
-        runId: session.dataset.runs.find(run => id === `${run.id}/${row.id}`).id })),
+        runId: session.dataset.runs.find(run => id === `${run.id}/${row.id}`).id,
+        modelSlug: session.dataset.runs.find(run => id === `${run.id}/${row.id}`).modelSlug })),
       ballot: session.ballots[row.id] ?? null })),
   };
 }

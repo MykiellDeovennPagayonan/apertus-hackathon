@@ -91,7 +91,7 @@ export default class BenchmarkReporter {
     const lines = [
       `# Benchmark run ${this.started}`, '', `State: ${this.state}`, '',
       `App: ${this.target}`, `Started: ${this.started}; ended: ${this.ended || 'in progress'}`, '',
-      ...(process.env.BENCHMARK_SCOPE === 'first-prompt' ? ['**First-prompt trial only. Remaining prompts are NOT_RUN; PASS/40 below is not a full-batch score.**', ''] : []),
+      ...(process.env.BENCHMARK_SCOPE && process.env.BENCHMARK_SCOPE !== 'full-batch' ? ['**Development trial only. Remaining prompts are NOT_RUN; PASS/40 below is not a full-batch score.**', ''] : []),
       'Scope: generation completes and visibly renders without observed errors. Correctness, interactions, scientific accuracy, and pgvector population are not evaluated.', '',
       'One attempt per prompt; 300-second test timeout; no manual retries. Fresh context per prompt. Screenshot/cleanup hooks can take additional time.', '',
       `Source SHA-256: ${createHash('sha256').update(benchmarkText).digest('hex')}`, '',

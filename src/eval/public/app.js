@@ -1,7 +1,7 @@
-import { storageKey, latestDataset, createSession, ballot, readSessions, exportSession } from './state.js';
+import { storageKey, latestDataset, createSession, syncSession, ballot, readSessions, exportSession } from './state.js';
 
 const element = id => document.getElementById(id);
-let store, latest, active, view = 'review', storageReadable = true;
+let store, latest, active, view = 'review', storageReadable = true, loading = false;
 function error(message) { element('error').textContent = message; element('error').hidden = false; }
 function save() {
   if (!storageReadable) { element('saved').textContent = 'Not saved locally. Download JSON to preserve this session.'; return; }
@@ -23,7 +23,7 @@ function render() {
     option.textContent = `${new Date(session.createdAt).toLocaleString()} · ${session.dataset.runs.length} models · ${session.id.slice(0, 6)}`;
     option.selected = session.id === active.id; selector.append(option);
   }
-  element('new-results').hidden = !latest || latest.id === active.dataset.id;
+  element('model-count').textContent = `${active.dataset.runs.length} models loaded · new models appear automatically`;
   element('review').hidden = view !== 'review'; element('metrics').hidden = view !== 'metrics';
   element('review-tab').setAttribute('aria-pressed', String(view === 'review'));
   element('metrics-tab').setAttribute('aria-pressed', String(view === 'metrics'));
@@ -37,6 +37,8 @@ function renderQuestion() {
   element('prompt').textContent = row.prompt;
   element('single').hidden = active.dataset.runs.length !== 1;
   element('none').checked = Boolean(vote?.nonePreferred);
+  element('confirm').disabled = !vote || (!vote.nonePreferred && !vote.selected.length);
+  element('review-needed').hidden = !vote || vote.reviewed || !(vote.nonePreferred || vote.selected.length);
   element('previous').disabled = active.question === 0;
   element('next').textContent = active.question === 39 ? 'Download results' : 'Next question';
   const cards = element('candidates'); cards.replaceChildren();
@@ -65,7 +67,10 @@ function renderQuestion() {
     checkbox.addEventListener('change', () => {
       const selected = [...cards.querySelectorAll('input:checked')].map(input => input.value);
       ballot(active, row.id, selected); element('none').checked = false;
-      save(); element('progress').textContent = `Question ${active.question + 1} of 40 · ${Object.values(active.ballots).filter(item => item.reviewed).length} reviewed`;
+      save();
+      element('progress').textContent = `Question ${active.question + 1} of 40 · ${Object.values(active.ballots).filter(item => item.reviewed).length} reviewed`;
+      element('review-needed').hidden = true;
+      element('confirm').disabled = selected.length === 0;
     });
     cards.append(article);
   });
@@ -92,7 +97,7 @@ function renderMetrics() {
     body.append(tr);
     const disclosure = document.createElement('details');
     const title = document.createElement('summary'); title.textContent = `${run.modelSlug} · per-question measurements and configuration`;
-    const pre = document.createElement('pre'); pre.textContent = JSON.stringify({ runId: run.id, configuration: run.configuration,
+    const pre = document.createElement('pre'); pre.textContent = JSON.stringify({ modelSlug: run.modelSlug, runId: run.id, configuration: run.configuration,
       questions: run.rows.map(row => ({ id: row.id, status: row.status, generationMs: row.generationMs, observedMs: row.observedMs,
         screenshotAvailable: row.screenshotAvailable, measurements: row.measurements })) }, null, 2);
     disclosure.append(title, pre); details.append(disclosure);
@@ -106,6 +111,8 @@ function download() {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 async function load() {
+  if (loading) return;
+  loading = true;
   try {
     if (!store) {
       try { store = readSessions(localStorage.getItem(storageKey)); }
@@ -130,18 +137,34 @@ async function load() {
       return manifest;
     }));
     latest = latestDataset(manifests);
+    const previous = active;
     active = store.sessions.find(session => session.id === store.active);
-    if (!active && latest) addSession(); else render();
+    if (!active && latest) addSession();
+    else {
+      if (active && latest && active.dataset.id !== latest.id) {
+        const updated = syncSession(active, latest);
+        if (updated !== active) { store.sessions.push(updated); active = updated; }
+        store.active = active.id; save();
+        render();
+      }
+      else if (previous !== active || !active) render();
+    }
   } catch (problem) { error(problem.message); if (store) { active = store.sessions.find(session => session.id === store.active); render(); } }
+  finally { loading = false; }
 }
 element('review-tab').onclick = () => { view = 'review'; render(); };
 element('metrics-tab').onclick = () => { view = 'metrics'; render(); };
 element('sessions').onchange = event => { store.active = event.target.value; active = store.sessions.find(session => session.id === store.active); save(); render(); };
-element('new-session').onclick = addSession;
 element('reload').onclick = load;
 element('export').onclick = download;
 element('none').onchange = event => { ballot(active, active.dataset.runs[0].rows[active.question].id, [], event.target.checked); save(); renderQuestion(); };
+element('confirm').onclick = () => {
+  const row = active.dataset.runs[0].rows[active.question];
+  const vote = active.ballots[row.id];
+  if (vote) { ballot(active, row.id, vote.selected, vote.nonePreferred); save(); renderQuestion(); }
+};
 element('previous').onclick = () => { active.question--; save(); renderQuestion(); element('prompt').focus(); };
 element('next').onclick = () => { if (active.question === 39) download(); else { active.question++; save(); renderQuestion(); element('prompt').focus(); } };
 load();
 document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+setInterval(load, 30000);

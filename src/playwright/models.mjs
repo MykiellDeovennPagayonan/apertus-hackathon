@@ -1,5 +1,5 @@
 export const models = {
-  'apertus-1.5-8b': { provider: 'apertus' },
+  'apertus-1.5-8b': { provider: 'huggingface', model: 'swiss-ai/Apertus-v1.5-8B' },
   'llama-3.1-8b': { provider: 'huggingface', model: 'meta-llama/Llama-3.1-8B-Instruct:featherless-ai' },
   'qwen3-8b': { provider: 'huggingface', model: 'Qwen/Qwen3-8B:featherless-ai' },
   'gpt-6-luna': { provider: 'openai', model: 'gpt-6-luna' },
@@ -16,7 +16,11 @@ export function modelEnvironment(slug, source = process.env) {
     BENCHMARK_MODEL_SLUG: slug, PLANNER_MAX_CONCURRENT_REQUESTS: '1', LLM_MAX_CONCURRENT_REQUESTS: '1' };
   if ((source.REPAIR_MEMORY_MODE ?? 'off') !== 'off')
     throw new Error('This campaign requires REPAIR_MEMORY_MODE=off; a frozen memory comparison is separate work.');
-  if (profile.provider === 'openai') {
+  if (slug === 'apertus-1.5-8b' && source.BENCHMARK_APERTUS_LOCAL === 'true') {
+    env.LLM_PROVIDER = 'apertus'; env.APERTUS_PROVIDER = 'local';
+    env.LLM_MODEL = source.APERTUS_LOCAL_MODEL;
+    if (!env.LLM_MODEL?.trim()) throw new Error('Local Apertus benchmark requires APERTUS_LOCAL_MODEL.');
+  } else if (profile.provider === 'openai') {
     if (!source.OPENAI_API_KEY?.trim()) throw new Error('Provide OPENAI_API_KEY in the server environment.');
     env.LLM_PROVIDER = 'openai'; env.LLM_MODEL = profile.model;
     env.OPENAI_REASONING_EFFORT = source.OPENAI_REASONING_EFFORT?.trim() || (slug === 'gpt-6-luna' ? 'none' : 'low');

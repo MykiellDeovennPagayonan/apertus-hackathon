@@ -50,6 +50,14 @@ test.afterEach(async ({ page }, testInfo) => {
       } catch { record.log('measurement-unavailable', { requestId: record.requestId }); }
     }
     const metricPath = testInfo.outputPath('measurements.json');
+    if (process.env.PLANNER_DIAGNOSTICS === 'true' && record.requestId) {
+      const diagnosticResponse = await page.request.get(`/api/planner-diagnostics?id=${encodeURIComponent(record.requestId)}`, { timeout: 8_000 });
+      if (diagnosticResponse.ok()) {
+        const diagnosticPath = testInfo.outputPath('planner-diagnostics.json');
+        writeFileSync(diagnosticPath, JSON.stringify(await diagnosticResponse.json(), null, 2));
+        await testInfo.attach('planner-diagnostics', { path: diagnosticPath, contentType: 'application/json' });
+      }
+    }
     writeFileSync(metricPath, JSON.stringify({
       requestId: record.requestId ?? null,
       generationMs: record.rendered && record.submittedAt !== undefined ? record.endedAt - record.submittedAt : null,
