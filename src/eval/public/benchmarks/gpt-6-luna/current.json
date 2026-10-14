@@ -3,10 +3,10 @@
   "id": "gpt-6-luna",
   "modelSlug": "gpt-6-luna",
   "scope": "first-prompt",
-  "startedAt": "2026-10-13T18:39:34.936Z",
-  "endedAt": "2026-10-13T18:39:58.344Z",
+  "startedAt": "2026-10-14T05:57:00.866Z",
+  "endedAt": "2026-10-14T06:13:30.313Z",
   "state": "FINISHED",
-  "complete": false,
+  "complete": true,
   "promptHash": "7eb999db69a660c06f2af15d25f0e1764a8cc68945a19524c53677c4f042b8d3",
   "configuration": {
     "protocolVersion": 1,
@@ -37,9 +37,9 @@
       "memoryMode": "off"
     },
     "source": {
-      "revision": "8675f0ae925b2fd64dc0e30684f244a3e38d85d4",
+      "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
       "dirty": true,
-      "fingerprint": "5bdcd144fdee2474f1a352edd09a78971faa1762fb8075792fcee8b161071304"
+      "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
     },
     "capture": {
       "width": 1440,
@@ -60,12 +60,12 @@
   },
   "rows": [
     {
-      "requestId": "7d07e9f5-0d78-418f-9c3e-b701fb704c16",
-      "generationMs": 18638.53375,
-      "observedMs": 18638.53375,
+      "requestId": "5497e9f7-ea63-47f1-8dfc-336c9a7d9ca5",
+      "generationMs": 27894.153625000003,
+      "observedMs": 27894.153625000003,
       "measurements": {
         "terminal": "created",
-        "elapsedMs": 18361,
+        "elapsedMs": 27124,
         "validationReached": true,
         "firstPass": true,
         "validationStages": 2,
@@ -87,37 +87,37 @@
           {
             "stage": "teaching_intent",
             "model": "gpt-6-luna",
-            "elapsedMs": 2847,
+            "elapsedMs": 2454,
             "usage": {
               "promptTokens": 1129,
-              "outputTokens": 119,
-              "totalTokens": 1248
+              "outputTokens": 122,
+              "totalTokens": 1251
             }
           },
           {
             "stage": "assembly_plan",
             "model": "gpt-6-luna",
-            "elapsedMs": 2278,
+            "elapsedMs": 1659,
             "usage": {
-              "promptTokens": 3077,
+              "promptTokens": 4340,
               "outputTokens": 19,
-              "totalTokens": 3096
+              "totalTokens": 4359
             }
           },
           {
             "stage": "assembly_input_requirement",
             "model": "gpt-6-luna",
-            "elapsedMs": 3203,
+            "elapsedMs": 12990,
             "usage": {
-              "promptTokens": 723,
+              "promptTokens": 1000,
               "outputTokens": 20,
-              "totalTokens": 743
+              "totalTokens": 1020
             }
           },
           {
             "stage": "assembly_controls",
             "model": "gpt-6-luna",
-            "elapsedMs": 2705,
+            "elapsedMs": 1604,
             "usage": {
               "promptTokens": 569,
               "outputTokens": 14,
@@ -127,7 +127,7 @@
           {
             "stage": "assembly_observations",
             "model": "gpt-6-luna",
-            "elapsedMs": 4890,
+            "elapsedMs": 6201,
             "usage": {
               "promptTokens": 393,
               "outputTokens": 15,
@@ -137,7 +137,7 @@
           {
             "stage": "assembly_observations",
             "model": "gpt-6-luna",
-            "elapsedMs": 1935,
+            "elapsedMs": 1457,
             "usage": {
               "promptTokens": 347,
               "outputTokens": 14,
@@ -149,12 +149,12 @@
       "number": 1,
       "id": "projectile",
       "prompt": "Show me 2 projectiles distance comparison based on angles",
-      "status": "ERROR",
-      "seconds": "22.8",
-      "screenshot": null,
-      "screenshotAvailable": false,
-      "sourceRunId": "2026-10-13T18-39-33-656Z-36713",
-      "sourceStartedAt": "2026-10-13T18:39:34.936Z",
+      "status": "PASS",
+      "seconds": "37.2",
+      "screenshot": "/benchmarks/gpt-6-luna/images/projectile.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
       "sourceConfiguration": {
         "protocolVersion": 1,
         "llm": {
@@ -184,9 +184,9 @@
           "memoryMode": "off"
         },
         "source": {
-          "revision": "8675f0ae925b2fd64dc0e30684f244a3e38d85d4",
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
           "dirty": true,
-          "fingerprint": "5bdcd144fdee2474f1a352edd09a78971faa1762fb8075792fcee8b161071304"
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
         },
         "capture": {
           "width": 1440,
@@ -207,511 +207,5395 @@
       }
     },
     {
-      "requestId": null,
+      "requestId": "d14e6ca1-f19a-48a5-8643-0f28ec27532e",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 6586.184666000001,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 6568,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1872,
+            "usage": {
+              "promptTokens": 1135,
+              "outputTokens": 94,
+              "totalTokens": 1229
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1301,
+            "usage": {
+              "promptTokens": 4439,
+              "outputTokens": 19,
+              "totalTokens": 4458
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1679,
+            "usage": {
+              "promptTokens": 941,
+              "outputTokens": 17,
+              "totalTokens": 958
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1439,
+            "usage": {
+              "promptTokens": 3936,
+              "outputTokens": 19,
+              "totalTokens": 3955
+            }
+          }
+        ]
+      },
       "number": 2,
       "id": "price-elasticity",
       "prompt": "Can you show me how changing the price affects how much people buy?",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "10.1",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "66589686-ef47-44f2-b5c3-25ac701185ad",
+      "generationMs": 22707.361125,
+      "observedMs": 22707.361125,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 22575,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2217,
+            "usage": {
+              "promptTokens": 1176,
+              "outputTokens": 152,
+              "totalTokens": 1328
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1357,
+            "usage": {
+              "promptTokens": 4883,
+              "outputTokens": 19,
+              "totalTokens": 4902
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1340,
+            "usage": {
+              "promptTokens": 748,
+              "outputTokens": 23,
+              "totalTokens": 771
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 17422,
+            "usage": {
+              "promptTokens": 206,
+              "outputTokens": 14,
+              "totalTokens": 220
+            }
+          }
+        ]
+      },
       "number": 3,
       "id": "pythagorean",
       "prompt": "I have a ladder leaning against a wall. Let me change how far the bottom is from the wall and how high it reaches to see how long the ladder needs to be.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "27.3",
+      "screenshot": "/benchmarks/gpt-6-luna/images/pythagorean.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "5ce51e1e-c9c3-4c9f-9e6f-647ece93332f",
+      "generationMs": 37192.92020899999,
+      "observedMs": 37192.92020899999,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 37055,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 7420,
+            "usage": {
+              "promptTokens": 1142,
+              "outputTokens": 133,
+              "totalTokens": 1275
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1266,
+            "usage": {
+              "promptTokens": 4824,
+              "outputTokens": 19,
+              "totalTokens": 4843
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 4093,
+            "usage": {
+              "promptTokens": 1337,
+              "outputTokens": 20,
+              "totalTokens": 1357
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 20835,
+            "usage": {
+              "promptTokens": 406,
+              "outputTokens": 14,
+              "totalTokens": 420
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 845,
+            "usage": {
+              "promptTokens": 279,
+              "outputTokens": 15,
+              "totalTokens": 294
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1393,
+            "usage": {
+              "promptTokens": 248,
+              "outputTokens": 14,
+              "totalTokens": 262
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 939,
+            "usage": {
+              "promptTokens": 173,
+              "outputTokens": 14,
+              "totalTokens": 187
+            }
+          }
+        ]
+      },
       "number": 4,
       "id": "acid-base-titration",
       "prompt": "Show me what happens to the pH when I slowly add a base to an acid.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "41.7",
+      "screenshot": "/benchmarks/gpt-6-luna/images/acid-base-titration.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "c3ccf6bd-fe5e-45e1-b897-97420d52bb1c",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 18553.034,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 18540,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2250,
+            "usage": {
+              "promptTokens": 1146,
+              "outputTokens": 118,
+              "totalTokens": 1264
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 13458,
+            "usage": {
+              "promptTokens": 4781,
+              "outputTokens": 19,
+              "totalTokens": 4800
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1416,
+            "usage": {
+              "promptTokens": 889,
+              "outputTokens": 17,
+              "totalTokens": 906
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1163,
+            "usage": {
+              "promptTokens": 4223,
+              "outputTokens": 19,
+              "totalTokens": 4242
+            }
+          }
+        ]
+      },
       "number": 5,
       "id": "cost-and-profit",
       "prompt": "Make a small business example where I can change how much we produce and see our costs and profit.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "22.3",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "7d0c47cf-e168-42d9-a823-b8a63766a837",
+      "generationMs": 17533.4475,
+      "observedMs": 17533.4475,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 17400,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 1,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 7919,
+            "usage": {
+              "promptTokens": 1154,
+              "outputTokens": 768,
+              "totalTokens": 1922
+            }
+          },
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 3220,
+            "usage": {
+              "promptTokens": 1644,
+              "outputTokens": 159,
+              "totalTokens": 1803
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1419,
+            "usage": {
+              "promptTokens": 4494,
+              "outputTokens": 19,
+              "totalTokens": 4513
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1494,
+            "usage": {
+              "promptTokens": 1089,
+              "outputTokens": 26,
+              "totalTokens": 1115
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1806,
+            "usage": {
+              "promptTokens": 277,
+              "outputTokens": 15,
+              "totalTokens": 292
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1229,
+            "usage": {
+              "promptTokens": 244,
+              "outputTokens": 14,
+              "totalTokens": 258
+            }
+          }
+        ]
+      },
       "number": 6,
       "id": "tree-height",
       "prompt": "How can I work out the height of a tree without climbing it? Show me using the angle from where I stand.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "21.9",
+      "screenshot": "/benchmarks/gpt-6-luna/images/tree-height.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "a046fc66-b358-4967-9abe-ce6a127629be",
+      "generationMs": 11960.9015,
+      "observedMs": 11960.9015,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 11837,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2723,
+            "usage": {
+              "promptTokens": 1158,
+              "outputTokens": 123,
+              "totalTokens": 1281
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 3089,
+            "usage": {
+              "promptTokens": 4854,
+              "outputTokens": 19,
+              "totalTokens": 4873
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1039,
+            "usage": {
+              "promptTokens": 1128,
+              "outputTokens": 23,
+              "totalTokens": 1151
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2703,
+            "usage": {
+              "promptTokens": 316,
+              "outputTokens": 15,
+              "totalTokens": 331
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1112,
+            "usage": {
+              "promptTokens": 283,
+              "outputTokens": 14,
+              "totalTokens": 297
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 902,
+            "usage": {
+              "promptTokens": 201,
+              "outputTokens": 14,
+              "totalTokens": 215
+            }
+          }
+        ]
+      },
       "number": 7,
       "id": "galvanic-cell",
       "prompt": "Show me how a battery made with two different metals works. Let me change the solution concentrations and see what happens to the voltage.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "16.7",
+      "screenshot": "/benchmarks/gpt-6-luna/images/galvanic-cell.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "5c43aaa7-5b3a-4159-bee8-e8b511a64a97",
+      "generationMs": 13716.636957999996,
+      "observedMs": 13716.636957999996,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 13574,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 3226,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 147,
+              "totalTokens": 1299
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1414,
+            "usage": {
+              "promptTokens": 3781,
+              "outputTokens": 19,
+              "totalTokens": 3800
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1782,
+            "usage": {
+              "promptTokens": 848,
+              "outputTokens": 20,
+              "totalTokens": 868
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 861,
+            "usage": {
+              "promptTokens": 240,
+              "outputTokens": 14,
+              "totalTokens": 254
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 944,
+            "usage": {
+              "promptTokens": 414,
+              "outputTokens": 15,
+              "totalTokens": 429
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 3554,
+            "usage": {
+              "promptTokens": 385,
+              "outputTokens": 15,
+              "totalTokens": 400
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1502,
+            "usage": {
+              "promptTokens": 356,
+              "outputTokens": 14,
+              "totalTokens": 370
+            }
+          }
+        ]
+      },
       "number": 8,
       "id": "craft-production",
       "prompt": "Compare making things by hand with using an assembly line. I want to see which produces more in the same time.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "18.0",
+      "screenshot": "/benchmarks/gpt-6-luna/images/craft-production.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "de13cb9d-bc14-4631-835f-f00d19bee694",
+      "generationMs": 8159.942374999991,
+      "observedMs": 8159.942374999991,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 8057,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 4,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 4,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2806,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 189,
+              "totalTokens": 1341
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1216,
+            "usage": {
+              "promptTokens": 4403,
+              "outputTokens": 19,
+              "totalTokens": 4422
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1268,
+            "usage": {
+              "promptTokens": 732,
+              "outputTokens": 20,
+              "totalTokens": 752
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1153,
+            "usage": {
+              "promptTokens": 175,
+              "outputTokens": 15,
+              "totalTokens": 190
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1420,
+            "usage": {
+              "promptTokens": 156,
+              "outputTokens": 14,
+              "totalTokens": 170
+            }
+          }
+        ]
+      },
       "number": 9,
       "id": "tile-patterns",
       "prompt": "Why can hexagons cover a floor without gaps but regular pentagons can’t? Let me try both.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "12.8",
+      "screenshot": "/benchmarks/gpt-6-luna/images/tile-patterns.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "cfb61f59-8a24-4bc1-a9af-b31e2be7cdcb",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 4474.832082999987,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 4451,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2236,
+            "usage": {
+              "promptTokens": 1143,
+              "outputTokens": 109,
+              "totalTokens": 1252
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1994,
+            "usage": {
+              "promptTokens": 4393,
+              "outputTokens": 19,
+              "totalTokens": 4412
+            }
+          }
+        ]
+      },
       "number": 10,
       "id": "wildfire",
       "prompt": "Show a wildfire spreading through a forest. Can I change how much dry vegetation there is?",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "7.6",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "2f4d59f6-7c26-4cfe-82ab-3838ef0f0bf3",
+      "generationMs": 28988.298,
+      "observedMs": 28988.298,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 28857,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2576,
+            "usage": {
+              "promptTokens": 1154,
+              "outputTokens": 148,
+              "totalTokens": 1302
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2423,
+            "usage": {
+              "promptTokens": 3999,
+              "outputTokens": 19,
+              "totalTokens": 4018
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1136,
+            "usage": {
+              "promptTokens": 1107,
+              "outputTokens": 20,
+              "totalTokens": 1127
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1269,
+            "usage": {
+              "promptTokens": 303,
+              "outputTokens": 15,
+              "totalTokens": 318
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1056,
+            "usage": {
+              "promptTokens": 296,
+              "outputTokens": 14,
+              "totalTokens": 310
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 20191,
+            "usage": {
+              "promptTokens": 199,
+              "outputTokens": 14,
+              "totalTokens": 213
+            }
+          }
+        ]
+      },
       "number": 11,
       "id": "can-material",
       "prompt": "I want to design a can that holds the same amount but uses less metal. Let me try different widths and heights.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "33.4",
+      "screenshot": "/benchmarks/gpt-6-luna/images/can-material.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "ed25b20e-9159-4ba3-93e9-bc5f32ee9dbd",
+      "generationMs": 28937.65825,
+      "observedMs": 28937.65825,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 28836,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 25329,
+            "usage": {
+              "promptTokens": 1150,
+              "outputTokens": 117,
+              "totalTokens": 1267
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1212,
+            "usage": {
+              "promptTokens": 4694,
+              "outputTokens": 19,
+              "totalTokens": 4713
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1145,
+            "usage": {
+              "promptTokens": 1115,
+              "outputTokens": 20,
+              "totalTokens": 1135
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 861,
+            "usage": {
+              "promptTokens": 380,
+              "outputTokens": 14,
+              "totalTokens": 394
+            }
+          }
+        ]
+      },
       "number": 12,
       "id": "survey-sampling",
       "prompt": "How many people should I survey? Show me how the results change with a small sample versus a bigger one.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "33.2",
+      "screenshot": "/benchmarks/gpt-6-luna/images/survey-sampling.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "51bfa79a-0923-43ce-909d-b40812fc1356",
+      "generationMs": 47782.537167,
+      "observedMs": 47782.537167,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 47667,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 14779,
+            "usage": {
+              "promptTokens": 1140,
+              "outputTokens": 112,
+              "totalTokens": 1252
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1267,
+            "usage": {
+              "promptTokens": 4561,
+              "outputTokens": 19,
+              "totalTokens": 4580
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 28876,
+            "usage": {
+              "promptTokens": 1122,
+              "outputTokens": 20,
+              "totalTokens": 1142
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1170,
+            "usage": {
+              "promptTokens": 307,
+              "outputTokens": 14,
+              "totalTokens": 321
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1167,
+            "usage": {
+              "promptTokens": 239,
+              "outputTokens": 14,
+              "totalTokens": 253
+            }
+          }
+        ]
+      },
       "number": 13,
       "id": "levers",
       "prompt": "Show me how a crowbar helps lift something heavy. Let me move the pivot.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "51.9",
+      "screenshot": "/benchmarks/gpt-6-luna/images/levers.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "f3053d1d-5966-49b0-8a47-64ab07955893",
+      "generationMs": 135122.733541,
+      "observedMs": 135122.733541,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 134991,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 87903,
+            "usage": {
+              "promptTokens": 1146,
+              "outputTokens": 143,
+              "totalTokens": 1289
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 20443,
+            "usage": {
+              "promptTokens": 4065,
+              "outputTokens": 19,
+              "totalTokens": 4084
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 15453,
+            "usage": {
+              "promptTokens": 670,
+              "outputTokens": 23,
+              "totalTokens": 693
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1483,
+            "usage": {
+              "promptTokens": 213,
+              "outputTokens": 15,
+              "totalTokens": 228
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1008,
+            "usage": {
+              "promptTokens": 151,
+              "outputTokens": 14,
+              "totalTokens": 165
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 8238,
+            "usage": {
+              "promptTokens": 195,
+              "outputTokens": 14,
+              "totalTokens": 209
+            }
+          }
+        ]
+      },
       "number": 14,
       "id": "pulleys",
       "prompt": "Make a pulley lifting a weight so I can see whether more supporting ropes make it easier to lift.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "139.5",
+      "screenshot": "/benchmarks/gpt-6-luna/images/pulleys.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "a5fbcadd-8343-4739-b415-f00a2e914619",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 6356.958166999975,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 6340,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2290,
+            "usage": {
+              "promptTokens": 1150,
+              "outputTokens": 117,
+              "totalTokens": 1267
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1388,
+            "usage": {
+              "promptTokens": 4332,
+              "outputTokens": 19,
+              "totalTokens": 4351
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1342,
+            "usage": {
+              "promptTokens": 743,
+              "outputTokens": 17,
+              "totalTokens": 760
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1092,
+            "usage": {
+              "promptTokens": 3926,
+              "outputTokens": 19,
+              "totalTokens": 3945
+            }
+          }
+        ]
+      },
       "number": 15,
       "id": "bicycle-gears",
       "prompt": "Help me understand bicycle gears. Let me change the front and back gears and see how fast the wheel turns.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "9.7",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "1fd53a95-227c-4023-a57e-7f5c608cdc03",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 6313.12375,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 6294,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1995,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 131,
+              "totalTokens": 1279
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1630,
+            "usage": {
+              "promptTokens": 4424,
+              "outputTokens": 19,
+              "totalTokens": 4443
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1217,
+            "usage": {
+              "promptTokens": 765,
+              "outputTokens": 17,
+              "totalTokens": 782
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1197,
+            "usage": {
+              "promptTokens": 4015,
+              "outputTokens": 19,
+              "totalTokens": 4034
+            }
+          }
+        ]
+      },
       "number": 16,
       "id": "tipping",
       "prompt": "Show me when a cabinet will tip over if I push it. I want to try different cabinet sizes.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "9.8",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "1aa83bb8-4f15-4593-9203-eb3f1b75cea6",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 14827.122791999998,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 14810,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1841,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 163,
+              "totalTokens": 1315
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 6856,
+            "usage": {
+              "promptTokens": 4147,
+              "outputTokens": 19,
+              "totalTokens": 4166
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1368,
+            "usage": {
+              "promptTokens": 800,
+              "outputTokens": 17,
+              "totalTokens": 817
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 4588,
+            "usage": {
+              "promptTokens": 3691,
+              "outputTokens": 19,
+              "totalTokens": 3710
+            }
+          }
+        ]
+      },
       "number": 17,
       "id": "collisions",
       "prompt": "Make two carts crash into each other. Let me change their masses and speeds and see what happens after they collide.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "18.1",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "cef7dbc4-1fc5-4e7f-9351-939bbfd73aaf",
+      "generationMs": 9068.2255,
+      "observedMs": 9068.2255,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 8950,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1789,
+            "usage": {
+              "promptTokens": 1137,
+              "outputTokens": 127,
+              "totalTokens": 1264
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1776,
+            "usage": {
+              "promptTokens": 4445,
+              "outputTokens": 19,
+              "totalTokens": 4464
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2013,
+            "usage": {
+              "promptTokens": 914,
+              "outputTokens": 26,
+              "totalTokens": 940
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 3078,
+            "usage": {
+              "promptTokens": 252,
+              "outputTokens": 14,
+              "totalTokens": 266
+            }
+          }
+        ]
+      },
       "number": 18,
       "id": "hydraulics",
       "prompt": "I don’t get how a hydraulic lift works. Can you show me?",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "13.4",
+      "screenshot": "/benchmarks/gpt-6-luna/images/hydraulics.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "c7ca4a41-466f-4267-985b-66c497b1a651",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 8294.053916,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 8276,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2916,
+            "usage": {
+              "promptTokens": 1144,
+              "outputTokens": 152,
+              "totalTokens": 1296
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2516,
+            "usage": {
+              "promptTokens": 4198,
+              "outputTokens": 19,
+              "totalTokens": 4217
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1096,
+            "usage": {
+              "promptTokens": 719,
+              "outputTokens": 17,
+              "totalTokens": 736
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1151,
+            "usage": {
+              "promptTokens": 3795,
+              "outputTokens": 19,
+              "totalTokens": 3814
+            }
+          }
+        ]
+      },
       "number": 19,
       "id": "buoyancy",
       "prompt": "Why does a steel ship float when a solid steel block sinks? Show me both in water.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "11.6",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "3f6703e4-aa02-412a-85a1-d36019281fbc",
+      "generationMs": 15000.973750000001,
+      "observedMs": 15000.973750000001,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 14869,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2181,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 145,
+              "totalTokens": 1293
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1361,
+            "usage": {
+              "promptTokens": 4132,
+              "outputTokens": 19,
+              "totalTokens": 4151
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 8591,
+            "usage": {
+              "promptTokens": 677,
+              "outputTokens": 20,
+              "totalTokens": 697
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1232,
+            "usage": {
+              "promptTokens": 222,
+              "outputTokens": 14,
+              "totalTokens": 236
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1118,
+            "usage": {
+              "promptTokens": 259,
+              "outputTokens": 14,
+              "totalTokens": 273
+            }
+          }
+        ]
+      },
       "number": 20,
       "id": "doppler-siren",
       "prompt": "Show an ambulance passing someone and how the siren frequency changes. Let me change how fast it moves.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "19.4",
+      "screenshot": "/benchmarks/gpt-6-luna/images/doppler-siren.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "b411331b-808e-4697-80a1-a9a7fa84ec14",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 9929.438584,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 9873,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 5064,
+            "usage": {
+              "promptTokens": 1144,
+              "outputTokens": 143,
+              "totalTokens": 1287
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1771,
+            "usage": {
+              "promptTokens": 4532,
+              "outputTokens": 19,
+              "totalTokens": 4551
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1131,
+            "usage": {
+              "promptTokens": 714,
+              "outputTokens": 17,
+              "totalTokens": 731
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1669,
+            "usage": {
+              "promptTokens": 4182,
+              "outputTokens": 19,
+              "totalTokens": 4201
+            }
+          }
+        ]
+      },
       "number": 21,
       "id": "guitar-string",
       "prompt": "Help me understand how a guitar string makes different notes. Let me change its length and tension.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "13.6",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "b50c69bc-4f02-4649-a02c-eac3fdb16e02",
+      "generationMs": 37676.667959,
+      "observedMs": 37676.667959,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 37534,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2602,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 131,
+              "totalTokens": 1279
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1280,
+            "usage": {
+              "promptTokens": 4771,
+              "outputTokens": 19,
+              "totalTokens": 4790
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 15355,
+            "usage": {
+              "promptTokens": 644,
+              "outputTokens": 23,
+              "totalTokens": 667
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 18053,
+            "usage": {
+              "promptTokens": 326,
+              "outputTokens": 14,
+              "totalTokens": 340
+            }
+          }
+        ]
+      },
       "number": 22,
       "id": "cooling-drinks",
       "prompt": "Show a hot drink cooling down. I want to change the room temperature and see how long it takes.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "42.4",
+      "screenshot": "/benchmarks/gpt-6-luna/images/cooling-drinks.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "bb987fe0-795d-4bc2-ab29-bc404196b875",
+      "generationMs": 51478.315083,
+      "observedMs": 51478.315083,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 51392,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2824,
+            "usage": {
+              "promptTokens": 1153,
+              "outputTokens": 130,
+              "totalTokens": 1283
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1948,
+            "usage": {
+              "promptTokens": 3629,
+              "outputTokens": 19,
+              "totalTokens": 3648
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 18666,
+            "usage": {
+              "promptTokens": 716,
+              "outputTokens": 20,
+              "totalTokens": 736
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1537,
+            "usage": {
+              "promptTokens": 247,
+              "outputTokens": 14,
+              "totalTokens": 261
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 26147,
+            "usage": {
+              "promptTokens": 315,
+              "outputTokens": 14,
+              "totalTokens": 329
+            }
+          }
+        ]
+      },
       "number": 23,
       "id": "magnet-induction",
       "prompt": "Show me a magnet moving through a coil. What happens to the current if I move it faster or reverse direction?",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "55.9",
+      "screenshot": "/benchmarks/gpt-6-luna/images/magnet-induction.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "53956a69-67f4-474a-a0eb-c46d075f7ab2",
+      "generationMs": 13234.568167000005,
+      "observedMs": 13234.568167000005,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 13142,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 5489,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 117,
+              "totalTokens": 1269
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1645,
+            "usage": {
+              "promptTokens": 4033,
+              "outputTokens": 19,
+              "totalTokens": 4052
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1949,
+            "usage": {
+              "promptTokens": 599,
+              "outputTokens": 20,
+              "totalTokens": 619
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2231,
+            "usage": {
+              "promptTokens": 236,
+              "outputTokens": 14,
+              "totalTokens": 250
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1512,
+            "usage": {
+              "promptTokens": 288,
+              "outputTokens": 14,
+              "totalTokens": 302
+            }
+          }
+        ]
+      },
       "number": 24,
       "id": "rc-circuit",
       "prompt": "Make a circuit where a capacitor charges and discharges. Let me change the resistance and see how quickly it happens.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "17.6",
+      "screenshot": "/benchmarks/gpt-6-luna/images/rc-circuit.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "a5caf8c7-c31d-49f8-98b6-412b0d8c8107",
+      "generationMs": 21889.224833999993,
+      "observedMs": 21889.224833999993,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 21756,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 4515,
+            "usage": {
+              "promptTokens": 1124,
+              "outputTokens": 103,
+              "totalTokens": 1227
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1400,
+            "usage": {
+              "promptTokens": 3955,
+              "outputTokens": 19,
+              "totalTokens": 3974
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 14448,
+            "usage": {
+              "promptTokens": 672,
+              "outputTokens": 20,
+              "totalTokens": 692
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1131,
+            "usage": {
+              "promptTokens": 202,
+              "outputTokens": 14,
+              "totalTokens": 216
+            }
+          }
+        ]
+      },
       "number": 25,
       "id": "fraction-number-line",
       "prompt": "Help me understand fractions using a number line.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "26.3",
+      "screenshot": "/benchmarks/gpt-6-luna/images/fraction-number-line.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "071721dd-ddd5-4c46-8f14-d22c27a1ff45",
+      "generationMs": 34021.56541600003,
+      "observedMs": 34021.56541600003,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 33854,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 24136,
+            "usage": {
+              "promptTokens": 1128,
+              "outputTokens": 93,
+              "totalTokens": 1221
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2727,
+            "usage": {
+              "promptTokens": 4837,
+              "outputTokens": 19,
+              "totalTokens": 4856
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1568,
+            "usage": {
+              "promptTokens": 1310,
+              "outputTokens": 17,
+              "totalTokens": 1327
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1794,
+            "usage": {
+              "promptTokens": 399,
+              "outputTokens": 14,
+              "totalTokens": 413
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2155,
+            "usage": {
+              "promptTokens": 209,
+              "outputTokens": 14,
+              "totalTokens": 223
+            }
+          }
+        ]
+      },
       "number": 26,
       "id": "cell-division",
       "prompt": "Show me what happens to a cell when it divides.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "38.9",
+      "screenshot": "/benchmarks/gpt-6-luna/images/cell-division.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "9554aae3-fe55-4461-be81-6689a4af4d92",
+      "generationMs": 32696.119917000004,
+      "observedMs": 32696.119917000004,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 32560,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 24187,
+            "usage": {
+              "promptTokens": 1119,
+              "outputTokens": 115,
+              "totalTokens": 1234
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2025,
+            "usage": {
+              "promptTokens": 4378,
+              "outputTokens": 19,
+              "totalTokens": 4397
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1563,
+            "usage": {
+              "promptTokens": 782,
+              "outputTokens": 23,
+              "totalTokens": 805
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1183,
+            "usage": {
+              "promptTokens": 287,
+              "outputTokens": 15,
+              "totalTokens": 302
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2066,
+            "usage": {
+              "promptTokens": 247,
+              "outputTokens": 15,
+              "totalTokens": 262
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1146,
+            "usage": {
+              "promptTokens": 178,
+              "outputTokens": 14,
+              "totalTokens": 192
+            }
+          }
+        ]
+      },
       "number": 27,
       "id": "area-perimeter",
       "prompt": "Compare two rectangles and their areas",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "37.0",
+      "screenshot": "/benchmarks/gpt-6-luna/images/area-perimeter.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "6c56c5a9-bd4a-4519-9d5e-238e57dca7f4",
+      "generationMs": 10687.729709000007,
+      "observedMs": 10687.729709000007,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 10476,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1495,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 131,
+              "totalTokens": 1283
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1175,
+            "usage": {
+              "promptTokens": 4987,
+              "outputTokens": 19,
+              "totalTokens": 5006
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1256,
+            "usage": {
+              "promptTokens": 1058,
+              "outputTokens": 20,
+              "totalTokens": 1078
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 911,
+            "usage": {
+              "promptTokens": 282,
+              "outputTokens": 14,
+              "totalTokens": 296
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1468,
+            "usage": {
+              "promptTokens": 304,
+              "outputTokens": 15,
+              "totalTokens": 319
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1112,
+            "usage": {
+              "promptTokens": 261,
+              "outputTokens": 15,
+              "totalTokens": 276
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2842,
+            "usage": {
+              "promptTokens": 196,
+              "outputTokens": 14,
+              "totalTokens": 210
+            }
+          }
+        ]
+      },
       "number": 28,
       "id": "beer-lambert",
       "prompt": "Show light passing through a coloured solution. Let me change how concentrated it is and see how much light gets through.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "15.2",
+      "screenshot": "/benchmarks/gpt-6-luna/images/beer-lambert.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "17eb7901-c403-4c12-b1f5-a362e1ea3266",
+      "generationMs": 12000.655792000005,
+      "observedMs": 12000.655792000005,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 11875,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1602,
+            "usage": {
+              "promptTokens": 1119,
+              "outputTokens": 106,
+              "totalTokens": 1225
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1676,
+            "usage": {
+              "promptTokens": 3923,
+              "outputTokens": 19,
+              "totalTokens": 3942
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1427,
+            "usage": {
+              "promptTokens": 576,
+              "outputTokens": 20,
+              "totalTokens": 596
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1968,
+            "usage": {
+              "promptTokens": 194,
+              "outputTokens": 14,
+              "totalTokens": 208
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1702,
+            "usage": {
+              "promptTokens": 189,
+              "outputTokens": 15,
+              "totalTokens": 204
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1638,
+            "usage": {
+              "promptTokens": 241,
+              "outputTokens": 24,
+              "totalTokens": 265
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1620,
+            "usage": {
+              "promptTokens": 161,
+              "outputTokens": 14,
+              "totalTokens": 175
+            }
+          }
+        ]
+      },
       "number": 29,
       "id": "arithmetic",
       "prompt": "Help me learn addition with circles",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "16.4",
+      "screenshot": "/benchmarks/gpt-6-luna/images/arithmetic.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "a1589e40-8b5c-4e18-b999-9062719b9f63",
+      "generationMs": 12644.910332999978,
+      "observedMs": 12644.910332999978,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 12517,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2038,
+            "usage": {
+              "promptTokens": 1139,
+              "outputTokens": 129,
+              "totalTokens": 1268
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1326,
+            "usage": {
+              "promptTokens": 4441,
+              "outputTokens": 19,
+              "totalTokens": 4460
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1308,
+            "usage": {
+              "promptTokens": 972,
+              "outputTokens": 20,
+              "totalTokens": 992
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1363,
+            "usage": {
+              "promptTokens": 231,
+              "outputTokens": 14,
+              "totalTokens": 245
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1573,
+            "usage": {
+              "promptTokens": 308,
+              "outputTokens": 15,
+              "totalTokens": 323
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1630,
+            "usage": {
+              "promptTokens": 273,
+              "outputTokens": 15,
+              "totalTokens": 288
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2129,
+            "usage": {
+              "promptTokens": 243,
+              "outputTokens": 14,
+              "totalTokens": 257
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 897,
+            "usage": {
+              "promptTokens": 188,
+              "outputTokens": 14,
+              "totalTokens": 202
+            }
+          }
+        ]
+      },
       "number": 30,
       "id": "gas-equilibrium",
       "prompt": "Show me a gas reaction at equilibrium. What happens if I squeeze the container?",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "17.0",
+      "screenshot": "/benchmarks/gpt-6-luna/images/gas-equilibrium.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "edfe436c-92f5-4164-8a8e-60cdaf2c6dd5",
+      "generationMs": 12697.252584000002,
+      "observedMs": 12697.252584000002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 12564,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1803,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 130,
+              "totalTokens": 1278
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1167,
+            "usage": {
+              "promptTokens": 4441,
+              "outputTokens": 19,
+              "totalTokens": 4460
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1567,
+            "usage": {
+              "promptTokens": 1018,
+              "outputTokens": 23,
+              "totalTokens": 1041
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2828,
+            "usage": {
+              "promptTokens": 248,
+              "outputTokens": 14,
+              "totalTokens": 262
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1508,
+            "usage": {
+              "promptTokens": 316,
+              "outputTokens": 15,
+              "totalTokens": 331
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1052,
+            "usage": {
+              "promptTokens": 287,
+              "outputTokens": 14,
+              "totalTokens": 301
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2313,
+            "usage": {
+              "promptTokens": 212,
+              "outputTokens": 14,
+              "totalTokens": 226
+            }
+          }
+        ]
+      },
       "number": 31,
       "id": "phase-change",
       "prompt": "Let me heat a substance and change the pressure to see when it becomes a solid, liquid or gas.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "17.2",
+      "screenshot": "/benchmarks/gpt-6-luna/images/phase-change.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "edc00603-b41c-450c-a2cb-ef0a3c17ffd4",
+      "generationMs": 6196.394290999975,
+      "observedMs": 6196.394290999975,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 6057,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1730,
+            "usage": {
+              "promptTokens": 1130,
+              "outputTokens": 102,
+              "totalTokens": 1232
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1202,
+            "usage": {
+              "promptTokens": 4988,
+              "outputTokens": 19,
+              "totalTokens": 5007
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1165,
+            "usage": {
+              "promptTokens": 543,
+              "outputTokens": 23,
+              "totalTokens": 566
+            }
+          }
+        ]
+      },
       "number": 32,
       "id": "coordinates",
       "prompt": "Help me practise plotting points on an x and y grid.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "10.6",
+      "screenshot": "/benchmarks/gpt-6-luna/images/coordinates.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "b0fed4a5-3904-4c66-9778-bb55d664e86f",
+      "generationMs": 6913.594708000019,
+      "observedMs": 6913.594708000019,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 6808,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1566,
+            "usage": {
+              "promptTokens": 1156,
+              "outputTokens": 143,
+              "totalTokens": 1299
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1270,
+            "usage": {
+              "promptTokens": 4599,
+              "outputTokens": 19,
+              "totalTokens": 4618
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1708,
+            "usage": {
+              "promptTokens": 809,
+              "outputTokens": 20,
+              "totalTokens": 829
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 972,
+            "usage": {
+              "promptTokens": 226,
+              "outputTokens": 14,
+              "totalTokens": 240
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1111,
+            "usage": {
+              "promptTokens": 221,
+              "outputTokens": 14,
+              "totalTokens": 235
+            }
+          }
+        ]
+      },
       "number": 33,
       "id": "water-pressure",
       "prompt": "Show water coming out of a hole in a bottle. Let me change the water level and see how far the stream goes.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "11.2",
+      "screenshot": "/benchmarks/gpt-6-luna/images/water-pressure.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "893a821c-10c3-4f2e-a2ab-1835d6a8bbd5",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 6958.161708,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 6945,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1660,
+            "usage": {
+              "promptTokens": 1140,
+              "outputTokens": 143,
+              "totalTokens": 1283
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1441,
+            "usage": {
+              "promptTokens": 4514,
+              "outputTokens": 19,
+              "totalTokens": 4533
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1960,
+            "usage": {
+              "promptTokens": 1012,
+              "outputTokens": 17,
+              "totalTokens": 1029
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1636,
+            "usage": {
+              "promptTokens": 4008,
+              "outputTokens": 19,
+              "totalTokens": 4027
+            }
+          }
+        ]
+      },
       "number": 34,
       "id": "voting-systems",
       "prompt": "Can the same votes give different winners? Show me an election with different voting systems.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "10.3",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "def46dca-d067-41aa-b656-88336afa311f",
+      "generationMs": 6762.969917,
+      "observedMs": 6762.969917,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 6658,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1387,
+            "usage": {
+              "promptTokens": 1118,
+              "outputTokens": 77,
+              "totalTokens": 1195
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1359,
+            "usage": {
+              "promptTokens": 3607,
+              "outputTokens": 19,
+              "totalTokens": 3626
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1215,
+            "usage": {
+              "promptTokens": 597,
+              "outputTokens": 20,
+              "totalTokens": 617
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1171,
+            "usage": {
+              "promptTokens": 187,
+              "outputTokens": 14,
+              "totalTokens": 201
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1302,
+            "usage": {
+              "promptTokens": 194,
+              "outputTokens": 14,
+              "totalTokens": 208
+            }
+          }
+        ]
+      },
       "number": 35,
       "id": "counting",
       "prompt": "Help me practise counting circles.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "11.3",
+      "screenshot": "/benchmarks/gpt-6-luna/images/counting.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "92400948-afe6-4ac9-bff8-ec4d4a84ab3a",
+      "generationMs": 11039.4525,
+      "observedMs": 11039.4525,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 10907,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 6594,
+            "usage": {
+              "promptTokens": 1154,
+              "outputTokens": 160,
+              "totalTokens": 1314
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1267,
+            "usage": {
+              "promptTokens": 4286,
+              "outputTokens": 19,
+              "totalTokens": 4305
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1400,
+            "usage": {
+              "promptTokens": 638,
+              "outputTokens": 20,
+              "totalTokens": 658
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1347,
+            "usage": {
+              "promptTokens": 214,
+              "outputTokens": 14,
+              "totalTokens": 228
+            }
+          }
+        ]
+      },
       "number": 36,
       "id": "equal-groups",
       "prompt": "Show me multiplication with equal groups of dots. Let me change the number of groups and how many dots are in each.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "15.5",
+      "screenshot": "/benchmarks/gpt-6-luna/images/equal-groups.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "05b3a7af-508b-4da3-9e86-726b1658a0f5",
+      "generationMs": 9806.089791999999,
+      "observedMs": 9806.089791999999,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 9657,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1763,
+            "usage": {
+              "promptTokens": 1135,
+              "outputTokens": 111,
+              "totalTokens": 1246
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1283,
+            "usage": {
+              "promptTokens": 4661,
+              "outputTokens": 19,
+              "totalTokens": 4680
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1505,
+            "usage": {
+              "promptTokens": 1195,
+              "outputTokens": 23,
+              "totalTokens": 1218
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1089,
+            "usage": {
+              "promptTokens": 273,
+              "outputTokens": 14,
+              "totalTokens": 287
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1277,
+            "usage": {
+              "promptTokens": 246,
+              "outputTokens": 14,
+              "totalTokens": 260
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1620,
+            "usage": {
+              "promptTokens": 229,
+              "outputTokens": 14,
+              "totalTokens": 243
+            }
+          }
+        ]
+      },
       "number": 37,
       "id": "pendulum",
       "prompt": "Make a pendulum swing where I can adjust its starting angle and length",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "14.3",
+      "screenshot": "/benchmarks/gpt-6-luna/images/pendulum.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "94aeb163-a0a2-40b6-b685-837907d4d0f3",
+      "generationMs": 12461.474791,
+      "observedMs": 12461.474791,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 12339,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 1,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1801,
+            "usage": {
+              "promptTokens": 1133,
+              "outputTokens": 114,
+              "totalTokens": 1247
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2656,
+            "usage": {
+              "promptTokens": 3881,
+              "outputTokens": 78,
+              "totalTokens": 3959
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1518,
+            "usage": {
+              "promptTokens": 4023,
+              "outputTokens": 19,
+              "totalTokens": 4042
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1539,
+            "usage": {
+              "promptTokens": 635,
+              "outputTokens": 23,
+              "totalTokens": 658
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1285,
+            "usage": {
+              "promptTokens": 212,
+              "outputTokens": 14,
+              "totalTokens": 226
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 931,
+            "usage": {
+              "promptTokens": 243,
+              "outputTokens": 15,
+              "totalTokens": 258
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1110,
+            "usage": {
+              "promptTokens": 216,
+              "outputTokens": 14,
+              "totalTokens": 230
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1231,
+            "usage": {
+              "promptTokens": 323,
+              "outputTokens": 14,
+              "totalTokens": 337
+            }
+          }
+        ]
+      },
       "number": 38,
       "id": "slope",
       "prompt": "Make me a line where I can adjust its slope and y axis",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "16.8",
+      "screenshot": "/benchmarks/gpt-6-luna/images/slope.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "b63a2fe9-f7aa-4bed-9714-718c52513ef9",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 11943.203833,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 11931,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 7386,
+            "usage": {
+              "promptTokens": 1154,
+              "outputTokens": 149,
+              "totalTokens": 1303
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1125,
+            "usage": {
+              "promptTokens": 4708,
+              "outputTokens": 19,
+              "totalTokens": 4727
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1645,
+            "usage": {
+              "promptTokens": 1188,
+              "outputTokens": 17,
+              "totalTokens": 1205
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1442,
+            "usage": {
+              "promptTokens": 4096,
+              "outputTokens": 19,
+              "totalTokens": 4115
+            }
+          }
+        ]
+      },
       "number": 39,
       "id": "bridge",
       "prompt": "Make a bridge with a load on it. Let me move the load and see which parts are under the most stress.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "15.4",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "ac068664-8ced-44df-a9a8-d7a7aa545e5d",
+      "generationMs": 9712.0595,
+      "observedMs": 9712.0595,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 9533,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1687,
+            "usage": {
+              "promptTokens": 1140,
+              "outputTokens": 97,
+              "totalTokens": 1237
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1360,
+            "usage": {
+              "promptTokens": 4098,
+              "outputTokens": 19,
+              "totalTokens": 4117
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1802,
+            "usage": {
+              "promptTokens": 1153,
+              "outputTokens": 35,
+              "totalTokens": 1188
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1519,
+            "usage": {
+              "promptTokens": 386,
+              "outputTokens": 14,
+              "totalTokens": 400
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1076,
+            "usage": {
+              "promptTokens": 284,
+              "outputTokens": 15,
+              "totalTokens": 299
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1844,
+            "usage": {
+              "promptTokens": 251,
+              "outputTokens": 14,
+              "totalTokens": 265
+            }
+          }
+        ]
+      },
       "number": 40,
       "id": "shared-fishing-lake",
       "prompt": "Make a fishing lake where I can see what happens if everyone catches too many fish.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "14.1",
+      "screenshot": "/benchmarks/gpt-6-luna/images/shared-fishing-lake.png?version=2026-10-14T05-56-54-380Z-41033",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T05-56-54-380Z-41033",
+      "sourceStartedAt": "2026-10-14T05:57:00.866Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6-luna",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "none"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     }
   ],
   "summary": {

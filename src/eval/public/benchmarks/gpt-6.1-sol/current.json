@@ -3,10 +3,10 @@
   "id": "gpt-6.1-sol",
   "modelSlug": "gpt-6.1-sol",
   "scope": "first-prompt",
-  "startedAt": "2026-10-13T18:40:04.714Z",
-  "endedAt": "2026-10-13T18:40:27.839Z",
+  "startedAt": "2026-10-14T06:36:57.750Z",
+  "endedAt": "2026-10-14T06:57:32.712Z",
   "state": "FINISHED",
-  "complete": false,
+  "complete": true,
   "promptHash": "7eb999db69a660c06f2af15d25f0e1764a8cc68945a19524c53677c4f042b8d3",
   "configuration": {
     "protocolVersion": 1,
@@ -37,9 +37,9 @@
       "memoryMode": "off"
     },
     "source": {
-      "revision": "8675f0ae925b2fd64dc0e30684f244a3e38d85d4",
+      "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
       "dirty": true,
-      "fingerprint": "5bdcd144fdee2474f1a352edd09a78971faa1762fb8075792fcee8b161071304"
+      "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
     },
     "capture": {
       "width": 1440,
@@ -60,12 +60,12 @@
   },
   "rows": [
     {
-      "requestId": "da072125-4319-4fb3-be0f-de426164eaf4",
-      "generationMs": 18289.377417000003,
-      "observedMs": 18289.377417000003,
+      "requestId": "a0b4e9fb-e67f-4c2b-9464-e5075dd183cc",
+      "generationMs": 17962.375333,
+      "observedMs": 17962.375333,
       "measurements": {
         "terminal": "created",
-        "elapsedMs": 18050,
+        "elapsedMs": 17221,
         "validationReached": true,
         "firstPass": true,
         "validationStages": 2,
@@ -87,37 +87,37 @@
           {
             "stage": "teaching_intent",
             "model": "gpt-6.1-sol",
-            "elapsedMs": 5772,
+            "elapsedMs": 6086,
             "usage": {
               "promptTokens": 1129,
-              "outputTokens": 130,
-              "totalTokens": 1259
+              "outputTokens": 127,
+              "totalTokens": 1256
             }
           },
           {
             "stage": "assembly_plan",
             "model": "gpt-6.1-sol",
-            "elapsedMs": 4317,
+            "elapsedMs": 3379,
             "usage": {
-              "promptTokens": 3093,
+              "promptTokens": 4363,
               "outputTokens": 19,
-              "totalTokens": 3112
+              "totalTokens": 4382
             }
           },
           {
             "stage": "assembly_input_requirement",
             "model": "gpt-6.1-sol",
-            "elapsedMs": 3288,
+            "elapsedMs": 3380,
             "usage": {
-              "promptTokens": 723,
+              "promptTokens": 1000,
               "outputTokens": 20,
-              "totalTokens": 743
+              "totalTokens": 1020
             }
           },
           {
             "stage": "assembly_controls",
             "model": "gpt-6.1-sol",
-            "elapsedMs": 1985,
+            "elapsedMs": 2135,
             "usage": {
               "promptTokens": 569,
               "outputTokens": 14,
@@ -127,7 +127,7 @@
           {
             "stage": "assembly_observations",
             "model": "gpt-6.1-sol",
-            "elapsedMs": 1913,
+            "elapsedMs": 1632,
             "usage": {
               "promptTokens": 393,
               "outputTokens": 14,
@@ -139,12 +139,12 @@
       "number": 1,
       "id": "projectile",
       "prompt": "Show me 2 projectiles distance comparison based on angles",
-      "status": "ERROR",
-      "seconds": "22.5",
-      "screenshot": null,
-      "screenshotAvailable": false,
-      "sourceRunId": "2026-10-13T18-40-03-414Z-36987",
-      "sourceStartedAt": "2026-10-13T18:40:04.714Z",
+      "status": "PASS",
+      "seconds": "24.6",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/projectile.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
       "sourceConfiguration": {
         "protocolVersion": 1,
         "llm": {
@@ -174,9 +174,9 @@
           "memoryMode": "off"
         },
         "source": {
-          "revision": "8675f0ae925b2fd64dc0e30684f244a3e38d85d4",
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
           "dirty": true,
-          "fingerprint": "5bdcd144fdee2474f1a352edd09a78971faa1762fb8075792fcee8b161071304"
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
         },
         "capture": {
           "width": 1440,
@@ -197,511 +197,5343 @@
       }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "66ef0ce9-89e4-4027-8d08-0f4fcc08af2b",
+      "generationMs": 66414.9995,
+      "observedMs": 66414.9995,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 66074,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4750,
+            "usage": {
+              "promptTokens": 1135,
+              "outputTokens": 92,
+              "totalTokens": 1227
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3218,
+            "usage": {
+              "promptTokens": 4439,
+              "outputTokens": 19,
+              "totalTokens": 4458
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3425,
+            "usage": {
+              "promptTokens": 941,
+              "outputTokens": 20,
+              "totalTokens": 961
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2766,
+            "usage": {
+              "promptTokens": 255,
+              "outputTokens": 14,
+              "totalTokens": 269
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 43683,
+            "usage": {
+              "promptTokens": 306,
+              "outputTokens": 14,
+              "totalTokens": 320
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5001,
+            "usage": {
+              "promptTokens": 167,
+              "outputTokens": 36,
+              "totalTokens": 203
+            }
+          }
+        ]
+      },
       "number": 2,
       "id": "price-elasticity",
       "prompt": "Can you show me how changing the price affects how much people buy?",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "72.3",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/price-elasticity.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "545cfeb0-c718-46cf-a39f-37f356453dd4",
+      "generationMs": 14512.512959,
+      "observedMs": 14512.512959,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 14376,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5552,
+            "usage": {
+              "promptTokens": 1176,
+              "outputTokens": 170,
+              "totalTokens": 1346
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2002,
+            "usage": {
+              "promptTokens": 4957,
+              "outputTokens": 19,
+              "totalTokens": 4976
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3755,
+            "usage": {
+              "promptTokens": 748,
+              "outputTokens": 23,
+              "totalTokens": 771
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2370,
+            "usage": {
+              "promptTokens": 206,
+              "outputTokens": 14,
+              "totalTokens": 220
+            }
+          }
+        ]
+      },
       "number": 3,
       "id": "pythagorean",
       "prompt": "I have a ladder leaning against a wall. Let me change how far the bottom is from the wall and how high it reaches to see how long the ladder needs to be.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "19.5",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/pythagorean.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "171aba90-60cd-4dcf-aeae-48f74a835021",
+      "generationMs": 39269.29375000001,
+      "observedMs": 39269.29375000001,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 39179,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4946,
+            "usage": {
+              "promptTokens": 1142,
+              "outputTokens": 147,
+              "totalTokens": 1289
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2179,
+            "usage": {
+              "promptTokens": 4609,
+              "outputTokens": 19,
+              "totalTokens": 4628
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3149,
+            "usage": {
+              "promptTokens": 1337,
+              "outputTokens": 49,
+              "totalTokens": 1386
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 22508,
+            "usage": {
+              "promptTokens": 406,
+              "outputTokens": 14,
+              "totalTokens": 420
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2815,
+            "usage": {
+              "promptTokens": 279,
+              "outputTokens": 14,
+              "totalTokens": 293
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3245,
+            "usage": {
+              "promptTokens": 173,
+              "outputTokens": 33,
+              "totalTokens": 206
+            }
+          }
+        ]
+      },
       "number": 4,
       "id": "acid-base-titration",
       "prompt": "Show me what happens to the pH when I slowly add a base to an acid.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "44.0",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/acid-base-titration.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "e53cb30d-1230-459e-8f04-8c6fbde4b656",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 34782.754292,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 34751,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 31140,
+            "usage": {
+              "promptTokens": 1146,
+              "outputTokens": 103,
+              "totalTokens": 1249
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3303,
+            "usage": {
+              "promptTokens": 4781,
+              "outputTokens": 37,
+              "totalTokens": 4818
+            }
+          }
+        ]
+      },
       "number": 5,
       "id": "cost-and-profit",
       "prompt": "Make a small business example where I can change how much we produce and see our costs and profit.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "38.5",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "2e7f55e0-eac2-4bb9-96da-9dbd1bdb1582",
+      "generationMs": 16301.818499999998,
+      "observedMs": 16301.818499999998,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 16173,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 6726,
+            "usage": {
+              "promptTokens": 1154,
+              "outputTokens": 185,
+              "totalTokens": 1339
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2192,
+            "usage": {
+              "promptTokens": 4494,
+              "outputTokens": 19,
+              "totalTokens": 4513
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2707,
+            "usage": {
+              "promptTokens": 1089,
+              "outputTokens": 26,
+              "totalTokens": 1115
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2224,
+            "usage": {
+              "promptTokens": 277,
+              "outputTokens": 14,
+              "totalTokens": 291
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1977,
+            "usage": {
+              "promptTokens": 244,
+              "outputTokens": 14,
+              "totalTokens": 258
+            }
+          }
+        ]
+      },
       "number": 6,
       "id": "tree-height",
       "prompt": "How can I work out the height of a tree without climbing it? Show me using the angle from where I stand.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "20.8",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/tree-height.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "aa3aaaaf-e8ec-4b8b-8d0f-226e4c053b75",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 9942.998708,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 9914,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 6784,
+            "usage": {
+              "promptTokens": 1158,
+              "outputTokens": 134,
+              "totalTokens": 1292
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2861,
+            "usage": {
+              "promptTokens": 4547,
+              "outputTokens": 19,
+              "totalTokens": 4566
+            }
+          }
+        ]
+      },
       "number": 7,
       "id": "galvanic-cell",
       "prompt": "Show me how a battery made with two different metals works. Let me change the solution concentrations and see what happens to the voltage.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "13.5",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "23e0509b-1590-479a-a28e-786e43fe4d78",
+      "generationMs": 18459.996791,
+      "observedMs": 18459.996791,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 18341,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5354,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 164,
+              "totalTokens": 1316
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1810,
+            "usage": {
+              "promptTokens": 4060,
+              "outputTokens": 19,
+              "totalTokens": 4079
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5730,
+            "usage": {
+              "promptTokens": 848,
+              "outputTokens": 162,
+              "totalTokens": 1010
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2131,
+            "usage": {
+              "promptTokens": 252,
+              "outputTokens": 14,
+              "totalTokens": 266
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3009,
+            "usage": {
+              "promptTokens": 410,
+              "outputTokens": 14,
+              "totalTokens": 424
+            }
+          }
+        ]
+      },
       "number": 8,
       "id": "craft-production",
       "prompt": "Compare making things by hand with using an assembly line. I want to see which produces more in the same time.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "22.9",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/craft-production.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "ad2e0b34-d54a-40f7-9e66-24f209346841",
+      "generationMs": 21870.367875,
+      "observedMs": 21870.367875,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 21726,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 4,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 4,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5825,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 166,
+              "totalTokens": 1318
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2029,
+            "usage": {
+              "promptTokens": 4865,
+              "outputTokens": 19,
+              "totalTokens": 4884
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 6527,
+            "usage": {
+              "promptTokens": 732,
+              "outputTokens": 108,
+              "totalTokens": 840
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4177,
+            "usage": {
+              "promptTokens": 174,
+              "outputTokens": 36,
+              "totalTokens": 210
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2856,
+            "usage": {
+              "promptTokens": 156,
+              "outputTokens": 38,
+              "totalTokens": 194
+            }
+          }
+        ]
+      },
       "number": 9,
       "id": "tile-patterns",
       "prompt": "Why can hexagons cover a floor without gaps but regular pentagons can’t? Let me try both.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "26.3",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/tile-patterns.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "ef5fa3d0-9b02-4c7e-918b-ca6c8da768b7",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 18693.807540999995,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 18651,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4189,
+            "usage": {
+              "promptTokens": 1143,
+              "outputTokens": 112,
+              "totalTokens": 1255
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2090,
+            "usage": {
+              "promptTokens": 4393,
+              "outputTokens": 53,
+              "totalTokens": 4446
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4814,
+            "usage": {
+              "promptTokens": 1025,
+              "outputTokens": 99,
+              "totalTokens": 1124
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 7148,
+            "usage": {
+              "promptTokens": 3845,
+              "outputTokens": 19,
+              "totalTokens": 3864
+            }
+          }
+        ]
+      },
       "number": 10,
       "id": "wildfire",
       "prompt": "Show a wildfire spreading through a forest. Can I change how much dry vegetation there is?",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "22.8",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "975440b6-6079-45ae-9f75-fc4657d4cb2a",
+      "generationMs": 43714.478542000004,
+      "observedMs": 43714.478542000004,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 43555,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5565,
+            "usage": {
+              "promptTokens": 1154,
+              "outputTokens": 159,
+              "totalTokens": 1313
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2292,
+            "usage": {
+              "promptTokens": 3999,
+              "outputTokens": 19,
+              "totalTokens": 4018
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2435,
+            "usage": {
+              "promptTokens": 1107,
+              "outputTokens": 50,
+              "totalTokens": 1157
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 29779,
+            "usage": {
+              "promptTokens": 303,
+              "outputTokens": 14,
+              "totalTokens": 317
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3171,
+            "usage": {
+              "promptTokens": 199,
+              "outputTokens": 40,
+              "totalTokens": 239
+            }
+          }
+        ]
+      },
       "number": 11,
       "id": "can-material",
       "prompt": "I want to design a can that holds the same amount but uses less metal. Let me try different widths and heights.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "48.3",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/can-material.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "538c92f1-7173-4516-9d5b-9cb8ec5afe84",
+      "generationMs": 19368.703917000006,
+      "observedMs": 19368.703917000006,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 19237,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5530,
+            "usage": {
+              "promptTokens": 1150,
+              "outputTokens": 149,
+              "totalTokens": 1299
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2030,
+            "usage": {
+              "promptTokens": 4571,
+              "outputTokens": 19,
+              "totalTokens": 4590
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 8618,
+            "usage": {
+              "promptTokens": 1115,
+              "outputTokens": 20,
+              "totalTokens": 1135
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2692,
+            "usage": {
+              "promptTokens": 380,
+              "outputTokens": 14,
+              "totalTokens": 394
+            }
+          }
+        ]
+      },
       "number": 12,
       "id": "survey-sampling",
       "prompt": "How many people should I survey? Show me how the results change with a small sample versus a bigger one.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "24.1",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/survey-sampling.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "0c64095a-2c05-437e-90f8-f9662cb64ee9",
+      "generationMs": 15669.659042,
+      "observedMs": 15669.659042,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 15541,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5246,
+            "usage": {
+              "promptTokens": 1140,
+              "outputTokens": 119,
+              "totalTokens": 1259
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3026,
+            "usage": {
+              "promptTokens": 4538,
+              "outputTokens": 19,
+              "totalTokens": 4557
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2410,
+            "usage": {
+              "promptTokens": 1122,
+              "outputTokens": 20,
+              "totalTokens": 1142
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2577,
+            "usage": {
+              "promptTokens": 307,
+              "outputTokens": 14,
+              "totalTokens": 321
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1860,
+            "usage": {
+              "promptTokens": 239,
+              "outputTokens": 14,
+              "totalTokens": 253
+            }
+          }
+        ]
+      },
       "number": 13,
       "id": "levers",
       "prompt": "Show me how a crowbar helps lift something heavy. Let me move the pivot.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "20.4",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/levers.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "28788765-6ea1-48d1-8e63-9f219804538b",
+      "generationMs": 61045.352958,
+      "observedMs": 61045.352958,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 60811,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 18717,
+            "usage": {
+              "promptTokens": 1146,
+              "outputTokens": 120,
+              "totalTokens": 1266
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2464,
+            "usage": {
+              "promptTokens": 4065,
+              "outputTokens": 19,
+              "totalTokens": 4084
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3270,
+            "usage": {
+              "promptTokens": 670,
+              "outputTokens": 23,
+              "totalTokens": 693
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2839,
+            "usage": {
+              "promptTokens": 213,
+              "outputTokens": 41,
+              "totalTokens": 254
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4095,
+            "usage": {
+              "promptTokens": 151,
+              "outputTokens": 59,
+              "totalTokens": 210
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 27893,
+            "usage": {
+              "promptTokens": 195,
+              "outputTokens": 14,
+              "totalTokens": 209
+            }
+          }
+        ]
+      },
       "number": 14,
       "id": "pulleys",
       "prompt": "Make a pulley lifting a weight so I can see whether more supporting ropes make it easier to lift.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "66.3",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/pulleys.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "4142d885-a2d5-4657-bc36-2565c88cddf9",
+      "generationMs": 16808.990749999997,
+      "observedMs": 16808.990749999997,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 16119,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5461,
+            "usage": {
+              "promptTokens": 1150,
+              "outputTokens": 112,
+              "totalTokens": 1262
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1826,
+            "usage": {
+              "promptTokens": 4369,
+              "outputTokens": 19,
+              "totalTokens": 4388
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2930,
+            "usage": {
+              "promptTokens": 743,
+              "outputTokens": 48,
+              "totalTokens": 791
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2813,
+            "usage": {
+              "promptTokens": 232,
+              "outputTokens": 14,
+              "totalTokens": 246
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1739,
+            "usage": {
+              "promptTokens": 259,
+              "outputTokens": 14,
+              "totalTokens": 273
+            }
+          }
+        ]
+      },
       "number": 15,
       "id": "bicycle-gears",
       "prompt": "Help me understand bicycle gears. Let me change the front and back gears and see how fast the wheel turns.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "22.2",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/bicycle-gears.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "382ef534-89fa-48f2-a868-fabe3403dcdc",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 11955.109499999991,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 11913,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4779,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 108,
+              "totalTokens": 1256
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 6708,
+            "usage": {
+              "promptTokens": 4390,
+              "outputTokens": 74,
+              "totalTokens": 4464
+            }
+          }
+        ]
+      },
       "number": 16,
       "id": "tipping",
       "prompt": "Show me when a cabinet will tip over if I push it. I want to try different cabinet sizes.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "16.6",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "b1bcb1a5-69f2-406b-b285-a189c7a45df2",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 9441.852167000001,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 9265,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5407,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 134,
+              "totalTokens": 1286
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2872,
+            "usage": {
+              "promptTokens": 4292,
+              "outputTokens": 31,
+              "totalTokens": 4323
+            }
+          }
+        ]
+      },
       "number": 17,
       "id": "collisions",
       "prompt": "Make two carts crash into each other. Let me change their masses and speeds and see what happens after they collide.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "14.9",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "6891ad81-07a5-4b5f-ba83-558f55d98912",
+      "generationMs": 14450.115249999999,
+      "observedMs": 14450.115249999999,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 14076,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5937,
+            "usage": {
+              "promptTokens": 1137,
+              "outputTokens": 113,
+              "totalTokens": 1250
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2150,
+            "usage": {
+              "promptTokens": 4719,
+              "outputTokens": 19,
+              "totalTokens": 4738
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3017,
+            "usage": {
+              "promptTokens": 914,
+              "outputTokens": 26,
+              "totalTokens": 940
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2040,
+            "usage": {
+              "promptTokens": 252,
+              "outputTokens": 14,
+              "totalTokens": 266
+            }
+          }
+        ]
+      },
       "number": 18,
       "id": "hydraulics",
       "prompt": "I don’t get how a hydraulic lift works. Can you show me?",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "19.7",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/hydraulics.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "c0d76f53-4455-463b-aa5b-43103416794a",
+      "generationMs": 27689.042875,
+      "observedMs": 27689.042875,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 27549,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 7,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 7,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5473,
+            "usage": {
+              "promptTokens": 1144,
+              "outputTokens": 159,
+              "totalTokens": 1303
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1672,
+            "usage": {
+              "promptTokens": 3984,
+              "outputTokens": 19,
+              "totalTokens": 4003
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2183,
+            "usage": {
+              "promptTokens": 719,
+              "outputTokens": 17,
+              "totalTokens": 736
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1441,
+            "usage": {
+              "promptTokens": 228,
+              "outputTokens": 14,
+              "totalTokens": 242
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2623,
+            "usage": {
+              "promptTokens": 307,
+              "outputTokens": 53,
+              "totalTokens": 360
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2577,
+            "usage": {
+              "promptTokens": 162,
+              "outputTokens": 38,
+              "totalTokens": 200
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4203,
+            "usage": {
+              "promptTokens": 287,
+              "outputTokens": 78,
+              "totalTokens": 365
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3926,
+            "usage": {
+              "promptTokens": 170,
+              "outputTokens": 56,
+              "totalTokens": 226
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2700,
+            "usage": {
+              "promptTokens": 261,
+              "outputTokens": 51,
+              "totalTokens": 312
+            }
+          }
+        ]
+      },
       "number": 19,
       "id": "buoyancy",
       "prompt": "Why does a steel ship float when a solid steel block sinks? Show me both in water.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "33.6",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/buoyancy.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "d5f893fb-2c38-4013-9bcc-b3bbd3e8a686",
+      "generationMs": 20150.477583000007,
+      "observedMs": 20150.477583000007,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 19999,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 9601,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 163,
+              "totalTokens": 1311
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3558,
+            "usage": {
+              "promptTokens": 4132,
+              "outputTokens": 19,
+              "totalTokens": 4151
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4858,
+            "usage": {
+              "promptTokens": 677,
+              "outputTokens": 23,
+              "totalTokens": 700
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1671,
+            "usage": {
+              "promptTokens": 259,
+              "outputTokens": 14,
+              "totalTokens": 273
+            }
+          }
+        ]
+      },
       "number": 20,
       "id": "doppler-siren",
       "prompt": "Show an ambulance passing someone and how the siren frequency changes. Let me change how fast it moves.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "24.9",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/doppler-siren.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "08a79cfc-262c-44e1-a4b7-a05a62fc3614",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 8974.907584,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 8950,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5646,
+            "usage": {
+              "promptTokens": 1144,
+              "outputTokens": 167,
+              "totalTokens": 1311
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2552,
+            "usage": {
+              "promptTokens": 4377,
+              "outputTokens": 34,
+              "totalTokens": 4411
+            }
+          }
+        ]
+      },
       "number": 21,
       "id": "guitar-string",
       "prompt": "Help me understand how a guitar string makes different notes. Let me change its length and tension.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "13.8",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "11a0f282-8ee8-47ee-b778-65fa030dc02f",
+      "generationMs": 13031.033542000001,
+      "observedMs": 13031.033542000001,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 12889,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5664,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 130,
+              "totalTokens": 1278
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1960,
+            "usage": {
+              "promptTokens": 4771,
+              "outputTokens": 19,
+              "totalTokens": 4790
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3225,
+            "usage": {
+              "promptTokens": 644,
+              "outputTokens": 23,
+              "totalTokens": 667
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1742,
+            "usage": {
+              "promptTokens": 326,
+              "outputTokens": 14,
+              "totalTokens": 340
+            }
+          }
+        ]
+      },
       "number": 22,
       "id": "cooling-drinks",
       "prompt": "Show a hot drink cooling down. I want to change the room temperature and see how long it takes.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "17.7",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/cooling-drinks.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "f5e06d29-f239-47e9-b282-1b7f413718d4",
+      "generationMs": 25433.71275,
+      "observedMs": 25433.71275,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 25275,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5345,
+            "usage": {
+              "promptTokens": 1153,
+              "outputTokens": 169,
+              "totalTokens": 1322
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2863,
+            "usage": {
+              "promptTokens": 3867,
+              "outputTokens": 19,
+              "totalTokens": 3886
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3827,
+            "usage": {
+              "promptTokens": 716,
+              "outputTokens": 70,
+              "totalTokens": 786
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3191,
+            "usage": {
+              "promptTokens": 235,
+              "outputTokens": 14,
+              "totalTokens": 249
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3117,
+            "usage": {
+              "promptTokens": 315,
+              "outputTokens": 63,
+              "totalTokens": 378
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3119,
+            "usage": {
+              "promptTokens": 166,
+              "outputTokens": 38,
+              "totalTokens": 204
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3440,
+            "usage": {
+              "promptTokens": 295,
+              "outputTokens": 44,
+              "totalTokens": 339
+            }
+          }
+        ]
+      },
       "number": 23,
       "id": "magnet-induction",
       "prompt": "Show me a magnet moving through a coil. What happens to the current if I move it faster or reverse direction?",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "30.1",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/magnet-induction.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "d233612d-3950-44a6-b1e1-407ca3f26f00",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 8272.110834,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 8253,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5064,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 116,
+              "totalTokens": 1268
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2691,
+            "usage": {
+              "promptTokens": 4307,
+              "outputTokens": 31,
+              "totalTokens": 4338
+            }
+          }
+        ]
+      },
       "number": 24,
       "id": "rc-circuit",
       "prompt": "Make a circuit where a capacitor charges and discharges. Let me change the resistance and see how quickly it happens.",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "12.0",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "08e8822f-4bbe-4ec2-a0d4-06244db5d3a4",
+      "generationMs": 12921.02,
+      "observedMs": 12921.02,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 12757,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5162,
+            "usage": {
+              "promptTokens": 1124,
+              "outputTokens": 116,
+              "totalTokens": 1240
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1652,
+            "usage": {
+              "promptTokens": 3638,
+              "outputTokens": 19,
+              "totalTokens": 3657
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3140,
+            "usage": {
+              "promptTokens": 672,
+              "outputTokens": 20,
+              "totalTokens": 692
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2552,
+            "usage": {
+              "promptTokens": 202,
+              "outputTokens": 14,
+              "totalTokens": 216
+            }
+          }
+        ]
+      },
       "number": 25,
       "id": "fraction-number-line",
       "prompt": "Help me understand fractions using a number line.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "17.5",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/fraction-number-line.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "9e2f1bed-a3ad-4f67-9eea-f358a64bad4e",
+      "generationMs": 14206.034209000001,
+      "observedMs": 14206.034209000001,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 14023,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4157,
+            "usage": {
+              "promptTokens": 1128,
+              "outputTokens": 91,
+              "totalTokens": 1219
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2355,
+            "usage": {
+              "promptTokens": 4465,
+              "outputTokens": 19,
+              "totalTokens": 4484
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2435,
+            "usage": {
+              "promptTokens": 1310,
+              "outputTokens": 17,
+              "totalTokens": 1327
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1934,
+            "usage": {
+              "promptTokens": 399,
+              "outputTokens": 14,
+              "totalTokens": 413
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2230,
+            "usage": {
+              "promptTokens": 209,
+              "outputTokens": 14,
+              "totalTokens": 223
+            }
+          }
+        ]
+      },
       "number": 26,
       "id": "cell-division",
       "prompt": "Show me what happens to a cell when it divides.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "18.8",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/cell-division.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
+      "requestId": "40ade8d0-75fb-4cbb-a529-8fbb36b75c47",
       "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "observedMs": 12378.578792,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 12357,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4570,
+            "usage": {
+              "promptTokens": 1119,
+              "outputTokens": 103,
+              "totalTokens": 1222
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2391,
+            "usage": {
+              "promptTokens": 4410,
+              "outputTokens": 19,
+              "totalTokens": 4429
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2915,
+            "usage": {
+              "promptTokens": 782,
+              "outputTokens": 17,
+              "totalTokens": 799
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2001,
+            "usage": {
+              "promptTokens": 3929,
+              "outputTokens": 19,
+              "totalTokens": 3948
+            }
+          }
+        ]
+      },
       "number": 27,
       "id": "area-perimeter",
       "prompt": "Compare two rectangles and their areas",
-      "status": "NOT_RUN",
-      "seconds": "—",
+      "status": "ERROR",
+      "seconds": "16.4",
       "screenshot": null,
-      "screenshotAvailable": false
+      "screenshotAvailable": false,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "210e3e53-099d-4fdb-85dc-7b0eca0df3e5",
+      "generationMs": 14948.787,
+      "observedMs": 14948.787,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 14696,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4908,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 112,
+              "totalTokens": 1264
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2025,
+            "usage": {
+              "promptTokens": 4987,
+              "outputTokens": 19,
+              "totalTokens": 5006
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1776,
+            "usage": {
+              "promptTokens": 1058,
+              "outputTokens": 20,
+              "totalTokens": 1078
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2095,
+            "usage": {
+              "promptTokens": 282,
+              "outputTokens": 14,
+              "totalTokens": 296
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1695,
+            "usage": {
+              "promptTokens": 304,
+              "outputTokens": 14,
+              "totalTokens": 318
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1898,
+            "usage": {
+              "promptTokens": 196,
+              "outputTokens": 14,
+              "totalTokens": 210
+            }
+          }
+        ]
+      },
       "number": 28,
       "id": "beer-lambert",
       "prompt": "Show light passing through a coloured solution. Let me change how concentrated it is and see how much light gets through.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "19.9",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/beer-lambert.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "0b4f530a-9777-41a2-8f35-15db1b8569f6",
+      "generationMs": 19431.656417000002,
+      "observedMs": 19431.656417000002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 19273,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4984,
+            "usage": {
+              "promptTokens": 1119,
+              "outputTokens": 120,
+              "totalTokens": 1239
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2001,
+            "usage": {
+              "promptTokens": 3657,
+              "outputTokens": 19,
+              "totalTokens": 3676
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1467,
+            "usage": {
+              "promptTokens": 576,
+              "outputTokens": 20,
+              "totalTokens": 596
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2567,
+            "usage": {
+              "promptTokens": 194,
+              "outputTokens": 14,
+              "totalTokens": 208
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3495,
+            "usage": {
+              "promptTokens": 189,
+              "outputTokens": 41,
+              "totalTokens": 230
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2684,
+            "usage": {
+              "promptTokens": 241,
+              "outputTokens": 24,
+              "totalTokens": 265
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1743,
+            "usage": {
+              "promptTokens": 161,
+              "outputTokens": 14,
+              "totalTokens": 175
+            }
+          }
+        ]
+      },
       "number": 29,
       "id": "arithmetic",
       "prompt": "Help me learn addition with circles",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "24.0",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/arithmetic.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "687e2c13-9cd7-492d-927e-4269039657d9",
+      "generationMs": 19350.228875,
+      "observedMs": 19350.228875,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 19202,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5047,
+            "usage": {
+              "promptTokens": 1139,
+              "outputTokens": 151,
+              "totalTokens": 1290
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2031,
+            "usage": {
+              "promptTokens": 4571,
+              "outputTokens": 19,
+              "totalTokens": 4590
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2970,
+            "usage": {
+              "promptTokens": 972,
+              "outputTokens": 20,
+              "totalTokens": 992
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2608,
+            "usage": {
+              "promptTokens": 231,
+              "outputTokens": 14,
+              "totalTokens": 245
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3002,
+            "usage": {
+              "promptTokens": 308,
+              "outputTokens": 14,
+              "totalTokens": 322
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3125,
+            "usage": {
+              "promptTokens": 188,
+              "outputTokens": 35,
+              "totalTokens": 223
+            }
+          }
+        ]
+      },
       "number": 30,
       "id": "gas-equilibrium",
       "prompt": "Show me a gas reaction at equilibrium. What happens if I squeeze the container?",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "23.9",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/gas-equilibrium.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "d373770b-f814-4ab9-a875-3487d4e98d1f",
+      "generationMs": 25049.32645800001,
+      "observedMs": 25049.32645800001,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 24856,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 6292,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 173,
+              "totalTokens": 1321
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1800,
+            "usage": {
+              "promptTokens": 4296,
+              "outputTokens": 19,
+              "totalTokens": 4315
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2050,
+            "usage": {
+              "promptTokens": 1018,
+              "outputTokens": 23,
+              "totalTokens": 1041
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2365,
+            "usage": {
+              "promptTokens": 248,
+              "outputTokens": 14,
+              "totalTokens": 262
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2453,
+            "usage": {
+              "promptTokens": 316,
+              "outputTokens": 14,
+              "totalTokens": 330
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 9023,
+            "usage": {
+              "promptTokens": 212,
+              "outputTokens": 14,
+              "totalTokens": 226
+            }
+          }
+        ]
+      },
       "number": 31,
       "id": "phase-change",
       "prompt": "Let me heat a substance and change the pressure to see when it becomes a solid, liquid or gas.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "30.2",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/phase-change.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "fabc3dd3-14ed-4632-baad-0a144ec22994",
+      "generationMs": 18021.084791999994,
+      "observedMs": 18021.084791999994,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 17868,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 8184,
+            "usage": {
+              "promptTokens": 1130,
+              "outputTokens": 113,
+              "totalTokens": 1243
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3771,
+            "usage": {
+              "promptTokens": 4988,
+              "outputTokens": 19,
+              "totalTokens": 5007
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3499,
+            "usage": {
+              "promptTokens": 543,
+              "outputTokens": 23,
+              "totalTokens": 566
+            }
+          }
+        ]
+      },
       "number": 32,
       "id": "coordinates",
       "prompt": "Help me practise plotting points on an x and y grid.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "22.5",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/coordinates.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "d31dc4d2-7201-45a9-8912-1e1f12dbe2c1",
+      "generationMs": 120124.513708,
+      "observedMs": 120124.513708,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 119991,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 29943,
+            "usage": {
+              "promptTokens": 1156,
+              "outputTokens": 149,
+              "totalTokens": 1305
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 81435,
+            "usage": {
+              "promptTokens": 4540,
+              "outputTokens": 19,
+              "totalTokens": 4559
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2459,
+            "usage": {
+              "promptTokens": 809,
+              "outputTokens": 20,
+              "totalTokens": 829
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2768,
+            "usage": {
+              "promptTokens": 226,
+              "outputTokens": 14,
+              "totalTokens": 240
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2495,
+            "usage": {
+              "promptTokens": 221,
+              "outputTokens": 14,
+              "totalTokens": 235
+            }
+          }
+        ]
+      },
       "number": 33,
       "id": "water-pressure",
       "prompt": "Show water coming out of a hole in a bottle. Let me change the water level and see how far the stream goes.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "125.5",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/water-pressure.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "ae07f11b-36c4-4a4b-a468-ecc58aa6909d",
+      "generationMs": 27798.672541999986,
+      "observedMs": 27798.672541999986,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 27606,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5772,
+            "usage": {
+              "promptTokens": 1140,
+              "outputTokens": 138,
+              "totalTokens": 1278
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2510,
+            "usage": {
+              "promptTokens": 4514,
+              "outputTokens": 19,
+              "totalTokens": 4533
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5410,
+            "usage": {
+              "promptTokens": 1012,
+              "outputTokens": 136,
+              "totalTokens": 1148
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4308,
+            "usage": {
+              "promptTokens": 342,
+              "outputTokens": 14,
+              "totalTokens": 356
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2909,
+            "usage": {
+              "promptTokens": 223,
+              "outputTokens": 14,
+              "totalTokens": 237
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1605,
+            "usage": {
+              "promptTokens": 252,
+              "outputTokens": 15,
+              "totalTokens": 267
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2663,
+            "usage": {
+              "promptTokens": 147,
+              "outputTokens": 38,
+              "totalTokens": 185
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2107,
+            "usage": {
+              "promptTokens": 234,
+              "outputTokens": 14,
+              "totalTokens": 248
+            }
+          }
+        ]
+      },
       "number": 34,
       "id": "voting-systems",
       "prompt": "Can the same votes give different winners? Show me an election with different voting systems.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "32.6",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/voting-systems.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "52d4ebc2-d8ae-4283-8daa-b44c3b7d8cc8",
+      "generationMs": 64902.787332999986,
+      "observedMs": 64902.787332999986,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 64762,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 30575,
+            "usage": {
+              "promptTokens": 1118,
+              "outputTokens": 81,
+              "totalTokens": 1199
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1898,
+            "usage": {
+              "promptTokens": 3656,
+              "outputTokens": 19,
+              "totalTokens": 3675
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2179,
+            "usage": {
+              "promptTokens": 597,
+              "outputTokens": 20,
+              "totalTokens": 617
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 27139,
+            "usage": {
+              "promptTokens": 187,
+              "outputTokens": 14,
+              "totalTokens": 201
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2525,
+            "usage": {
+              "promptTokens": 194,
+              "outputTokens": 14,
+              "totalTokens": 208
+            }
+          }
+        ]
+      },
       "number": 35,
       "id": "counting",
       "prompt": "Help me practise counting circles.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "70.5",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/counting.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "e038c05e-d77d-4bc3-b7a0-5a7872116b59",
+      "generationMs": 44013.642208000005,
+      "observedMs": 44013.642208000005,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 43860,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 32055,
+            "usage": {
+              "promptTokens": 1154,
+              "outputTokens": 147,
+              "totalTokens": 1301
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 6444,
+            "usage": {
+              "promptTokens": 4286,
+              "outputTokens": 19,
+              "totalTokens": 4305
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2608,
+            "usage": {
+              "promptTokens": 638,
+              "outputTokens": 20,
+              "totalTokens": 658
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2265,
+            "usage": {
+              "promptTokens": 214,
+              "outputTokens": 14,
+              "totalTokens": 228
+            }
+          }
+        ]
+      },
       "number": 36,
       "id": "equal-groups",
       "prompt": "Show me multiplication with equal groups of dots. Let me change the number of groups and how many dots are in each.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "48.7",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/equal-groups.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "baf88f01-0ba7-483b-a39a-1aea6e01c99b",
+      "generationMs": 18368.885708999995,
+      "observedMs": 18368.885708999995,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 18194,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 5751,
+            "usage": {
+              "promptTokens": 1135,
+              "outputTokens": 127,
+              "totalTokens": 1262
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2228,
+            "usage": {
+              "promptTokens": 4661,
+              "outputTokens": 19,
+              "totalTokens": 4680
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3203,
+            "usage": {
+              "promptTokens": 1195,
+              "outputTokens": 23,
+              "totalTokens": 1218
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2693,
+            "usage": {
+              "promptTokens": 273,
+              "outputTokens": 14,
+              "totalTokens": 287
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1843,
+            "usage": {
+              "promptTokens": 246,
+              "outputTokens": 14,
+              "totalTokens": 260
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1968,
+            "usage": {
+              "promptTokens": 229,
+              "outputTokens": 14,
+              "totalTokens": 243
+            }
+          }
+        ]
+      },
       "number": 37,
       "id": "pendulum",
       "prompt": "Make a pendulum swing where I can adjust its starting angle and length",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "23.3",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/pendulum.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "63a5e592-adc4-449b-8cb9-f2c7cf5e3b3d",
+      "generationMs": 21939.27429099998,
+      "observedMs": 21939.27429099998,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 21758,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 7322,
+            "usage": {
+              "promptTokens": 1133,
+              "outputTokens": 219,
+              "totalTokens": 1352
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2225,
+            "usage": {
+              "promptTokens": 3881,
+              "outputTokens": 19,
+              "totalTokens": 3900
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2812,
+            "usage": {
+              "promptTokens": 635,
+              "outputTokens": 23,
+              "totalTokens": 658
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 3995,
+            "usage": {
+              "promptTokens": 212,
+              "outputTokens": 14,
+              "totalTokens": 226
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2184,
+            "usage": {
+              "promptTokens": 243,
+              "outputTokens": 14,
+              "totalTokens": 257
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2545,
+            "usage": {
+              "promptTokens": 323,
+              "outputTokens": 14,
+              "totalTokens": 337
+            }
+          }
+        ]
+      },
       "number": 38,
       "id": "slope",
       "prompt": "Make me a line where I can adjust its slope and y axis",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "26.9",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/slope.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "15c6ab90-02eb-4d76-b8be-7b1554c3688c",
+      "generationMs": 16425.598750000005,
+      "observedMs": 16425.598750000005,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 16297,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4610,
+            "usage": {
+              "promptTokens": 1154,
+              "outputTokens": 132,
+              "totalTokens": 1286
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1878,
+            "usage": {
+              "promptTokens": 4411,
+              "outputTokens": 19,
+              "totalTokens": 4430
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2936,
+            "usage": {
+              "promptTokens": 1188,
+              "outputTokens": 56,
+              "totalTokens": 1244
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2496,
+            "usage": {
+              "promptTokens": 683,
+              "outputTokens": 14,
+              "totalTokens": 697
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1942,
+            "usage": {
+              "promptTokens": 310,
+              "outputTokens": 14,
+              "totalTokens": 324
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2072,
+            "usage": {
+              "promptTokens": 198,
+              "outputTokens": 14,
+              "totalTokens": 212
+            }
+          }
+        ]
+      },
       "number": 39,
       "id": "bridge",
       "prompt": "Make a bridge with a load on it. Let me move the load and see which parts are under the most stress.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "21.8",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/bridge.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     },
     {
-      "requestId": null,
-      "generationMs": null,
-      "observedMs": null,
-      "measurements": null,
+      "requestId": "a36d3b5b-6d7f-44cd-9031-7b0fddaf092a",
+      "generationMs": 22458.951875000028,
+      "observedMs": 22458.951875000028,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 22149,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4940,
+            "usage": {
+              "promptTokens": 1140,
+              "outputTokens": 129,
+              "totalTokens": 1269
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2710,
+            "usage": {
+              "promptTokens": 3883,
+              "outputTokens": 19,
+              "totalTokens": 3902
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 4320,
+            "usage": {
+              "promptTokens": 1153,
+              "outputTokens": 57,
+              "totalTokens": 1210
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2093,
+            "usage": {
+              "promptTokens": 431,
+              "outputTokens": 14,
+              "totalTokens": 445
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 2441,
+            "usage": {
+              "promptTokens": 236,
+              "outputTokens": 27,
+              "totalTokens": 263
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6.1-sol",
+            "elapsedMs": 1570,
+            "usage": {
+              "promptTokens": 251,
+              "outputTokens": 14,
+              "totalTokens": 265
+            }
+          }
+        ]
+      },
       "number": 40,
       "id": "shared-fishing-lake",
       "prompt": "Make a fishing lake where I can see what happens if everyone catches too many fish.",
-      "status": "NOT_RUN",
-      "seconds": "—",
-      "screenshot": null,
-      "screenshotAvailable": false
+      "status": "PASS",
+      "seconds": "27.2",
+      "screenshot": "/benchmarks/gpt-6.1-sol/images/shared-fishing-lake.png?version=2026-10-14T06-36-50-397Z-53783",
+      "screenshotAvailable": true,
+      "sourceRunId": "2026-10-14T06-36-50-397Z-53783",
+      "sourceStartedAt": "2026-10-14T06:36:57.750Z",
+      "sourceConfiguration": {
+        "protocolVersion": 1,
+        "llm": {
+          "provider": "openai",
+          "connection": "openai",
+          "label": "OpenAI",
+          "baseUrl": "https://api.openai.com/v1",
+          "model": "gpt-6.1-sol",
+          "structuredOutput": "auto",
+          "contextTokens": null,
+          "timeout": 120000,
+          "maxTokens": 4096,
+          "concurrency": 1,
+          "reasoningEffort": "low"
+        },
+        "decision": {
+          "baseUrl": "http://127.0.0.1:43102",
+          "timeout": 20000,
+          "provider": "laya",
+          "runtimeModel": "aac6fef/laya-multilingual-mlx"
+        },
+        "planner": {
+          "mode": "hybrid",
+          "compositionPolicy": "required-laya",
+          "decisionProvider": "laya",
+          "timeoutMs": 240000,
+          "memoryMode": "off"
+        },
+        "source": {
+          "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+          "dirty": true,
+          "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+        },
+        "capture": {
+          "width": 1440,
+          "height": 1000,
+          "testTimeoutMs": 300000,
+          "workers": 1,
+          "retries": 0
+        },
+        "hardware": {
+          "hostname": "Mykiells-MacBook-Air.local",
+          "platform": "darwin",
+          "arch": "arm64",
+          "cpu": "Apple M5",
+          "memoryBytes": 25769803776,
+          "inferenceHardware": "not supplied",
+          "quantization": "not supplied"
+        }
+      }
     }
   ],
   "summary": {
