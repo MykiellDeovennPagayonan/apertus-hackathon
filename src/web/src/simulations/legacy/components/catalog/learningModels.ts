@@ -38,7 +38,7 @@ const titles: Record<string, string> = {
   "fraction-builder": "Fraction comparison",
   "fraction-number-line": "Fraction number line",
   ratio: "Ratio",
-  "area-perimeter": "Rectangle metrics",
+  "area-perimeter": "Rectangle area and perimeter",
   coordinates: "Coordinates",
   probability: "Random trials",
 };
@@ -63,7 +63,7 @@ export const learningDefinitions: PublicDefinition[] = Object.keys(
     version: 1,
     title: titles[demo],
     description: demo === "area-perimeter"
-      ? "One rectangle with independently adjustable width and height in metres. Computes inside area as width × height in square metres and boundary perimeter as 2 × (width + height) in metres, with a proportional rectangle drawing. Compare different rectangles by using independent model instances."
+      ? "A flat two-dimensional rectangle, with independently adjustable horizontal width and vertical height in metres. The shaded interior shows area A = width × height in square metres; the outline shows boundary perimeter P = 2 × (width + height) in metres. Each instance owns its own dimensions and proportional rectangle drawing. Compare different rectangles by using independent model instances; this model measures planar regions, not volume or three-dimensional surface area."
       : titles[demo],
     category: "models",
     tags: ["mathematics", demo],

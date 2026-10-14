@@ -14,12 +14,19 @@ import type { GenerationRequest } from "../input/contracts";
 import type { TeachingIntent } from "../intent-interpreter/contracts";
 /** The same executable capability context is used for selection and support. */
 export function modelCapabilities(recipe: CompositeRecipe) {
-  return recipe.document.nodes
-    .filter((node) => publicDefinition(node).category === "models")
-    .map((node) => {
-      const definition = publicDefinition(node);
+  const groups = new Map<string, typeof recipe.document.nodes>();
+  for (const node of recipe.document.nodes) {
+    const definition = publicDefinition(node);
+    if (definition.category !== "models") continue;
+    const key = `${definition.id}@${definition.version}`;
+    const instances = groups.get(key) ?? [];
+    instances.push(node);
+    groups.set(key, instances);
+  }
+  return [...groups.values()].map((instances) => {
+      const definition = publicDefinition(instances[0]);
       return {
-        instance: node.id,
+        instances: instances.map((node) => node.id),
         title: definition.title,
         meaning: definition.description,
         limitations: definition.teaching?.limitations ?? [],

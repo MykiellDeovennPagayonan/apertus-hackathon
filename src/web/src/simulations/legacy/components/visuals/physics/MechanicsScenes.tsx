@@ -439,7 +439,7 @@ export function PressureScene({ instance }: { instance: ModelInstance }) {
   return (
     <Scene
       title={`Hole depth ${fmt(o.depth)} m; pressure ${fmt(o.gaugePressure)} Pa; jet range ${fmt(o.range)} m.`}
-      caption={`Lower holes give faster water, but less time to fall. This hole sends water ${fmt(o.range)} m. The water surface stays fixed.`}
+      caption={`Lower holes give faster water, but less time to fall. This hole sends water ${fmt(o.range)} m. The selected water level is maintained between adjustments.`}
     >
       <path
         d="M70 50V290H220V50"
@@ -472,7 +472,7 @@ export function PressureScene({ instance }: { instance: ModelInstance }) {
         Range {fmt(o.range)} m
       </text>
       <text x="75" y="115">
-        Fixed head
+        Maintained level
       </text>
     </Scene>
   );

@@ -59,3 +59,38 @@ test('profiles select exactly one model, enforce credentials and avoid memory co
   assert.throws(() => modelEnvironment('gpt-6.1-sol', { OPENAI_API_KEY: 'test', OPENAI_REASONING_EFFORT: 'none' }), /requires reasoning/);
   assert.equal(modelEnvironment('qwen3-32b', { HF_TOKEN: 'test', BENCHMARK_HF_MODEL: 'Qwen/Qwen3-32B:provider' }).LLM_MODEL, 'Qwen/Qwen3-32B:provider');
 });
+
+test('current gallery merges focused attempts per question, preserves other models and never restores stale successes', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'apertus-current-'));
+  try {
+    const runner = join(dir, 'runner'), root = join(dir, 'public'); mkdirSync(runner);
+    writeFileSync(join(runner, 'result.png'), 'original image');
+    const prepare = run => {
+      run.rows.forEach(row => { delete row.screenshot; row.files = row.status === 'PASS' ? [{ name: 'result', path: 'result.png' }] : []; });
+      atomicJson(join(runner, 'run.json'), run);
+      publishRun(runner, root);
+    };
+    const original = fixtureRun(); prepare(original);
+    prepare(fixtureRun('qwen3-8b', 'qwen'));
+    const focused = fixtureRun('apertus-1.5-8b', 'focused');
+    focused.startedAt = '2026-10-15T01:00:00.000Z'; focused.complete = false;
+    focused.rows.forEach(row => { row.status = 'NOT_RUN'; row.measurements = null; });
+    focused.rows[0].status = 'PASS'; focused.rows[1].status = 'ERROR';
+    writeFileSync(join(runner, 'result.png'), 'replacement image'); prepare(focused);
+    const currentPath = join(root, original.modelSlug, 'current.json');
+    let current = JSON.parse(readFileSync(currentPath));
+    assert.equal(current.rows[0].sourceRunId, 'focused');
+    assert.equal(current.rows[1].status, 'ERROR');
+    assert.equal(current.rows[1].screenshot, null);
+    assert.equal(current.rows[3].sourceRunId, original.id, 'Unattempted prompts retain their last result');
+    assert.equal(readFileSync(join(root, original.modelSlug, 'images/question-1.png'), 'utf8'), 'replacement image');
+    assert.equal(JSON.parse(readFileSync(join(root, 'qwen3-8b/current.json'))).rows[0].sourceRunId, 'qwen');
+    prepare(original); // Re-importing old evidence cannot replace newer per-question results.
+    current = JSON.parse(readFileSync(currentPath));
+    assert.equal(current.rows[0].sourceRunId, 'focused');
+    assert.equal(current.rows[1].status, 'ERROR');
+    const index = JSON.parse(readFileSync(join(root, 'index.json')));
+    assert.equal(index.models.length, 2);
+    assert.ok(index.models.every(model => model.path.endsWith('/current.json')));
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});

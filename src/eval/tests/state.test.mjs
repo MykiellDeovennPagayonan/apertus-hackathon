@@ -91,3 +91,21 @@ test('invalid artifacts and saved ballots are rejected rather than silently rese
   session.order['question-1'] = ['wrong'];
   assert.throws(() => readSessions(JSON.stringify({ protocolVersion: 1, active: 'session', sessions: [session] })), /candidate order/);
 });
+
+test('current per-question versions are exported and replacements preserve earlier votes', () => {
+  const run = fixtureRun();
+  run.id = run.modelSlug; run.current = true; run.complete = false;
+  run.rows.forEach(row => { row.sourceRunId = 'first'; row.screenshot = row.status === 'PASS' ? `/benchmarks/${run.modelSlug}/images/${row.id}.png?version=first` : null; });
+  const original = createSession(latestDataset([run]), () => 'original');
+  ballot(original, 'question-1', original.order['question-1']);
+  const replacement = structuredClone(run);
+  replacement.rows[0].sourceRunId = 'focused';
+  replacement.rows[0].screenshot = `/benchmarks/${run.modelSlug}/images/question-1.png?version=focused`;
+  const next = syncSession(original, latestDataset([replacement]));
+  assert.notEqual(next, original);
+  assert.equal(exportSession(original).questions[0].candidates[0].runId, 'first');
+  assert.equal(exportSession(next).questions[0].candidates[0].runId, 'focused');
+  assert.equal(exportSession(next).questions[3].candidates[0].runId, 'first');
+  assert.equal(original.ballots['question-1'].reviewed, true);
+  assert.equal(exportSession(next).completedQuestions, 0);
+});

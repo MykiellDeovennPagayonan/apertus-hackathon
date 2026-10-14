@@ -85,7 +85,7 @@ export async function resolveInputRequirements(
       {
         role: "system",
         content:
-          'Interpret the ORIGINAL request against the supplied executable model contracts. Assess coverage of the requested system, learner adjustments, visible outcomes and comparison before resolving input bindings. Each supplied instance is an actual model instance; check whether their capabilities together provide the requested comparison. Then decide whether the supplied models implement that system and outcome with the actual commands and outputs. A similar diagram, adjustable number or mathematically related quantity does not make a different physical or mathematical investigation equivalent. Supported means the complete requested investigation is possible; otherwise return supported:false and inputs:[]. Preset lesson questions are not evidence of capability. Resolve informal wording using the supplied meanings, units and bindings, not literal names. Return only {"supported":true,"inputs":["supplied-input-id"]}. Retain every input the user requests to adjust and any input necessary to perform the requested activity. Outcomes, observations and comparison labels are not additional adjustable quantities. Do not invent requirements from a generated learning question. Return an empty inputs array when none is needed. If a requested quantity or behavior is genuinely missing, return {"supported":false,"inputs":[]}. Never substitute another quantity or use unavailable as an input ID.',
+          'Interpret the ORIGINAL request against the supplied executable model contracts. Assess coverage of the requested system, learner adjustments, visible outcomes and comparison before resolving input bindings. Each supplied instance is an actual model instance; check whether their capabilities together provide the requested comparison. Then decide whether the supplied models implement that system and outcome with the actual commands and outputs. A similar diagram, adjustable number or mathematically related quantity does not make a different physical or mathematical investigation equivalent. Supported means the complete requested investigation is possible; otherwise return supported:false and inputs:[]. Preset lesson questions are not evidence of capability. Resolve informal wording using the supplied meanings, units and bindings, not literal names. Return only {"supported":true,"inputs":["supplied-input-id"]}. The inputs array contains string keys from the supplied input dictionary, never descriptor objects. Retain every input the user requests to adjust and any input necessary to perform the requested activity. Outcomes, observations and comparison labels are not additional adjustable quantities. Do not invent requirements from a generated learning question. Return an empty inputs array when none is needed. If a requested quantity or behavior is genuinely missing, return {"supported":false,"inputs":[]}. Never substitute another quantity or use unavailable as an input ID.',
       },
       {
         role: "user",
@@ -93,8 +93,7 @@ export async function resolveInputRequirements(
           request: request.prompt,
           limitations: source.assumptions,
           models: modelCapabilities(source),
-          inputs: bindings.map((binding) => ({
-            id: binding.id,
+          inputs: Object.fromEntries(bindings.map((binding) => [binding.id, {
             labels: binding.labels,
             meaning: binding.meaning,
             model: publicDefinition(
@@ -107,7 +106,7 @@ export async function resolveInputRequirements(
             fields: binding.capability.fields,
             units: binding.capability.units,
             instances: binding.wires.map((wire) => wire.to.node),
-          })),
+          }])),
         }),
       },
     ],
@@ -120,7 +119,7 @@ export async function resolveInputRequirements(
         throw new Error("Return distinct supplied input IDs; use an empty array for unsupported activities");
       return answer;
     },
-    'Return supported and only distinct supplied input IDs, preserving the original request.',
+    'Return only supported:boolean and inputs:string[]. Use distinct keys from the input dictionary, not descriptor objects; preserve the original request.',
     budget.signal,
     {
       budget,

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { copyFileSync, unlinkSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { validateRun } from '../eval/public/state.js';
 
@@ -33,6 +33,65 @@ export function summary(rows) {
     p95Ms: times.length ? times[Math.ceil(times.length * 0.95) - 1] : null,
     statuses: Object.fromEntries([...new Set(rows.map(row => row.status))].map(status => [status, rows.filter(row => row.status === status).length])),
   };
+}
+
+// One active result per model/question; archived evidence never controls gallery grouping.
+function updateCurrent(run, root) {
+  const path = join(root, run.modelSlug, 'current.json');
+  const previous = existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : null;
+  if (previous) assert.equal(previous.promptHash, run.promptHash, 'Cannot mix prompt sets in a model gallery');
+  const current = structuredClone(previous ?? run);
+  current.id = run.modelSlug;
+  current.current = true;
+  current.rows = run.rows.map((row, index) => {
+    const old = previous?.rows[index];
+    if (!['PASS', 'ERROR', 'TIMEOUT', 'INTERRUPTED'].includes(row.status) ||
+        (old?.sourceStartedAt && old.sourceStartedAt > run.startedAt)) {
+      return old ?? { ...row, screenshot: null, screenshotAvailable: false };
+    }
+    const next = { ...row, sourceRunId: run.id, sourceStartedAt: run.startedAt,
+      sourceConfiguration: run.configuration, screenshot: null, screenshotAvailable: false };
+    const target = join(root, run.modelSlug, 'images', `${row.id}.png`);
+    if (row.status === 'PASS' && row.screenshot) {
+      const source = resolve(root, row.screenshot.slice('/benchmarks/'.length));
+      assert.ok(source.startsWith(`${resolve(root)}/`), 'Screenshot must belong to evaluator assets');
+      mkdirSync(dirname(target), { recursive: true });
+      copyFileSync(source, `${target}.tmp`);
+      renameSync(`${target}.tmp`, target);
+      next.screenshot = `/benchmarks/${run.modelSlug}/images/${row.id}.png?version=${run.id}`;
+      next.screenshotAvailable = true;
+    } else if (existsSync(target)) {
+      unlinkSync(target);
+    }
+    return next;
+  });
+  if (!previous || run.startedAt >= previous.startedAt) {
+    current.startedAt = run.startedAt;
+    current.endedAt = run.endedAt;
+    current.configuration = run.configuration;
+  }
+  current.complete = current.rows.every(row => ['PASS', 'ERROR', 'TIMEOUT'].includes(row.status));
+  delete current.sourceHash;
+  validateRun(current);
+  atomicJson(path, current);
+  return { id: current.id, modelSlug: current.modelSlug, startedAt: current.startedAt,
+    complete: current.complete, path: `/benchmarks/${current.modelSlug}/current.json` };
+}
+
+export function migrateGallery(root = artifactRoot) {
+  const path = join(root, 'index.json');
+  if (!existsSync(path)) return;
+  const index = JSON.parse(readFileSync(path, 'utf8'));
+  const models = new Map((index.models ?? []).map(model => [model.modelSlug, model]));
+  for (const item of [...index.runs].sort((a, b) => a.startedAt.localeCompare(b.startedAt))) {
+    safeId(item.modelSlug); safeId(item.id);
+    assert.equal(item.path, `/benchmarks/${item.modelSlug}/${item.id}/run.json`);
+    const run = validateRun(JSON.parse(readFileSync(join(root, item.modelSlug, item.id, 'run.json'), 'utf8')));
+    const model = updateCurrent(run, root);
+    models.set(model.modelSlug, model);
+  }
+  index.models = [...models.values()];
+  atomicJson(path, index);
 }
 
 export function publishRun(runDir, root = artifactRoot) {
@@ -81,6 +140,9 @@ export function publishRun(runDir, root = artifactRoot) {
   index.runs = index.runs.filter(item => item.id !== run.id);
   index.runs.push({ id: run.id, modelSlug: run.modelSlug, startedAt: run.startedAt, complete: run.complete,
     path: `/benchmarks/${run.modelSlug}/${run.id}/run.json` });
+  const model = updateCurrent(published, root);
+  index.models = (index.models ?? []).filter(item => item.modelSlug !== model.modelSlug);
+  index.models.push(model);
   atomicJson(indexPath, index);
   return published;
 }

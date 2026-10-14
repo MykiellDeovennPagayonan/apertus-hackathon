@@ -47,10 +47,12 @@ function renderQuestion() {
     const article = document.createElement('article'); article.className = 'candidate';
     const label = document.createElement('label');
     const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.value = id;
-    checkbox.disabled = !candidate.screenshot; checkbox.checked = vote?.selected.includes(id) ?? false;
+    const currentRow = latest?.runs.find(model => model.modelSlug === run.modelSlug)?.rows[active.question];
+    const replaced = run.current && candidate.sourceRunId !== currentRow?.sourceRunId;
+    checkbox.disabled = !candidate.screenshot || replaced; checkbox.checked = vote?.selected.includes(id) ?? false;
     const name = document.createElement('span'); name.textContent = `Result ${String.fromCharCode(65 + position)}`;
     label.append(checkbox, name); article.append(label);
-    if (candidate.screenshot) {
+    if (candidate.screenshot && !replaced) {
       const image = document.createElement('img'); image.src = candidate.screenshot; image.alt = `Generated experiment, result ${String.fromCharCode(65 + position)}`;
       image.addEventListener('error', () => {
         checkbox.disabled = true;
@@ -61,7 +63,7 @@ function renderQuestion() {
       full.append(image); article.append(full);
     } else {
       const message = document.createElement('p'); message.className = 'unavailable';
-      message.textContent = 'No successful screenshot available.'; article.append(message);
+      message.textContent = replaced ? 'This image has been replaced. The original vote and version remain in your JSON export.' : 'No successful screenshot available.'; article.append(message);
     }
     checkbox.addEventListener('change', () => {
       const selected = [...cards.querySelectorAll('input:checked')].map(input => input.value);
@@ -96,7 +98,7 @@ function renderMetrics() {
     const disclosure = document.createElement('details');
     const title = document.createElement('summary'); title.textContent = `${run.modelSlug} · per-question measurements and configuration`;
     const pre = document.createElement('pre'); pre.textContent = JSON.stringify({ modelSlug: run.modelSlug, runId: run.id, configuration: run.configuration,
-      questions: run.rows.map(row => ({ id: row.id, status: row.status, generationMs: row.generationMs, observedMs: row.observedMs,
+      questions: run.rows.map(row => ({ id: row.id, sourceRunId: row.sourceRunId, configuration: row.sourceConfiguration ?? run.configuration, status: row.status, generationMs: row.generationMs, observedMs: row.observedMs,
         screenshotAvailable: row.screenshotAvailable, measurements: row.measurements })) }, null, 2);
     disclosure.append(title, pre); details.append(disclosure);
   }
@@ -124,10 +126,10 @@ async function load() {
     if (!response.ok) throw new Error('Could not load benchmark catalog.');
     const index = await response.json();
     if (index.protocolVersion !== 1 || !Array.isArray(index.runs)) throw new Error('Unsupported benchmark catalog.');
-    const manifests = await Promise.all(index.runs.filter(run => run.complete).map(async run => {
+    const manifests = await Promise.all((index.models ?? index.runs.filter(run => run.complete)).map(async run => {
       if (!/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,119}$/.test(run.modelSlug) ||
           !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,119}$/.test(run.id) ||
-          run.path !== `/benchmarks/${run.modelSlug}/${run.id}/run.json`) throw new Error('Invalid catalog path.');
+          ![`/benchmarks/${run.modelSlug}/${run.id}/run.json`, `/benchmarks/${run.modelSlug}/current.json`].includes(run.path)) throw new Error('Invalid catalog path.');
       const response = await fetch(run.path, { cache: 'no-store' });
       if (!response.ok) throw new Error('A benchmark manifest could not be loaded.');
       const manifest = await response.json();

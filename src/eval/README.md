@@ -53,7 +53,7 @@ To test only the first prompt for a selected model, run:
 REPAIR_MEMORY_MODE=off node --env-file-if-exists=src/web/.env.local src/playwright/run-model.mjs qwen3-8b --first
 ```
 
-This makes one first-prompt generation attempt, preserving the application's bounded internal repair behavior, and skips the extra provider setup generation. The run is labeled `first-prompt`; the other 39 questions remain NOT_RUN. Screenshots are published, but this incomplete batch is excluded from the evaluator's default complete-dataset voting and is not a forty-prompt score.
+This makes one first-prompt generation attempt, preserving the application's bounded internal repair behavior, and skips the extra provider setup generation. The run is labeled `first-prompt`; the other 39 questions remain NOT_RUN. Its attempted prompt updates that model’s current gallery entry; the other 39 entries remain unchanged. This is not a forty-prompt score.
 
 Original evidence is at `src/playwright/runs/<run-id>/`, including the existing Markdown report, events, screenshots and new `run.json`. Public manifests and screenshots are imported into `src/eval/public/benchmarks/<model-slug>/<run-id>/`. Paths intentionally include model names; evaluators should not inspect them. Failed generations remain recorded and are not selectable successful screenshots.
 
@@ -61,7 +61,7 @@ Pass/fail, submission-to-render time, server timing, first validator outcomes, c
 
 The gallery accumulates models across separate benchmark executions. Start with Apertus; when Qwen, Llama, or another model finishes its forty questions, its screenshots appear beside every existing model automatically. It checks for additions every thirty seconds, on browser refresh, and when returning to the tab. Different execution dates, pipeline settings, or source revisions do not hide other models; their configuration stays attached to measurements. Models must use the same forty prompts.
 
-Each model contributes its newest complete screenshot set. Adding a model updates the current evaluation without starting over: selections, current question, and relative order of earlier candidates survive. New candidates are inserted in randomized positions. Existing votes retain the candidate IDs originally shown and are marked for review; Updating a selection immediately records the vote against all currently displayed models; there is no separate confirmation button. JSON exports include model identities and exposure per vote. If the same model is rerun, its latest set replaces that model's gallery entry, while the prior evaluation remains saved as history so votes do not silently move to different images.
+Each model contributes its latest attempted result for each prompt, including focused runs. Adding a model updates the current evaluation without starting over: selections, current question, and relative order of earlier candidates survive. New candidates are inserted in randomized positions. Existing votes retain the candidate IDs originally shown and are marked for review; Updating a selection immediately records the vote against all currently displayed models; there is no separate confirmation button. JSON exports include model identities and exposure per vote. If the same model is rerun, only its attempted prompt entries are replaced, while the prior evaluation remains saved as history so votes do not silently move to different images.
 
 If screenshot publication fails, retry the import without calling any model:
 
@@ -90,4 +90,10 @@ Browser checks use the existing Playwright installation, fixture batches, and th
 
 `node src/playwright/tests/runner.mjs` additionally exercises the actual full forty-prompt Playwright spec and reporter against a deterministic local fixture app, including a deliberate HTTP failure and a genuine visible alert. It takes about ninety seconds, makes no provider calls, and deletes its fixture run afterward.
 
-Creation-interface changes and the local verification protocol are documented in [creation-interface-loop.md](../../docs/agent-only/implementation/036-validation/creation-interface-loop.md). Focused development probes (`--cases=4,17,24`) are excluded from the complete model gallery.
+Creation-interface changes and the local verification protocol are documented in [creation-interface-loop.md](../../docs/agent-only/implementation/036-validation/creation-interface-loop.md). Focused development probes (`--cases=4,17,24`) update only those current model/prompt entries.
+
+## Current images per model and prompt
+
+The deployed gallery reads `public/benchmarks/index.json` and its `models` entries. Each model has `public/benchmarks/<model>/current.json` and one active image at `public/benchmarks/<model>/images/<prompt>.png`. A finished focused run updates only its attempted prompts; unattempted prompts and other models are retained. A failed latest attempt replaces its previous outcome and clears its active successful image. Republishing older evidence cannot replace a newer prompt result. Run IDs are per-question provenance, not gallery grouping. Each row retains its source configuration; mixed revisions are visible in metrics/export.
+
+All runtime files and images are contained in `src/eval`. Existing run folders remain as archived evidence for earlier evaluations; they are not additional gallery choices. Current-image changes create a new evaluation session while preserving earlier votes and source versions. Replaced current images are unavailable in historical review rather than displaying new pixels as old results. Copy `src/eval` and run `npm start` from that folder, or deploy `public` at the site root. API keys and generation services are unnecessary for evaluation.

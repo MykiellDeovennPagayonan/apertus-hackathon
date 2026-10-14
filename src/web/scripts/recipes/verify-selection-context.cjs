@@ -27,6 +27,8 @@ const { selectAssemblyPlan } = load('src/simulations/creation-and-editing/compon
         result = { candidate: payload.candidates[0].id, complete: true };
       } else {
         assert.deepEqual(payload.models, JSON.parse(JSON.stringify(modelCapabilities(retrieval.ranked[0].recipe))));
+        assert.equal(Array.isArray(payload.inputs), false, 'Input descriptors are keyed by stable identity');
+        assert.ok(Object.keys(payload.inputs).every(id => /^input[0-9]+$/.test(id)));
         result = { supported: true, inputs: [] };
       }
       return Response.json({ choices: [{ message: { content: JSON.stringify(result) } }] });

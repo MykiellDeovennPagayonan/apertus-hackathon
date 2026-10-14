@@ -35,7 +35,7 @@ export const rectangleTeaching: PublicDefinition["teaching"] = {
     "proportional rectangle scene",
   ],
   limitations: [
-    "Rectangles only. Equal perimeter at the start does not lock later exploration.",
+    "One flat rectangle per instance. Simultaneous comparison requires separate independently controlled instances. Width and height may vary independently; no depth, capacity or three-dimensional surface area is calculated.",
   ],
 };
 export const bridgeTeaching: PublicDefinition["teaching"] = {

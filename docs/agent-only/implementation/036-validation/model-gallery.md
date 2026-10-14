@@ -19,3 +19,7 @@ Verification:
 - Artifact/profile tests verify existing publication and model configuration remain intact.
 
 No model generations were rerun, and existing benchmark images and measurements were not changed. Only Apertus currently has a complete real forty-prompt set; further complete model batches will be added automatically.
+
+## Per-prompt current gallery
+
+The gallery now uses `index.json.models` and `<model>/current.json`. Terminal outcomes from focused and full runs update individual prompt entries, leaving unattempted prompts and other models intact. Active images are `<model>/images/<prompt>.png` with a source-run cache version; sourceRunId and sourceConfiguration remain attached to each row. Newer failures clear older successes. Historical publications remain archived but are not gallery choices. Replaced current images are not displayed as historical screenshots. Unit checks cover focused merging, older-run imports, model preservation and vote provenance; browser checks and a standalone-copy check passed before the full40 run 2026-10-14T03-44-57-140Z-19945.

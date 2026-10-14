@@ -11,7 +11,9 @@ export function validateRun(run) {
   run.rows.forEach((row, index) => {
     requireValue(typeof row.id === 'string' && idPattern.test(row.id) && row.number === index + 1 && typeof row.prompt === 'string' && row.prompt.trim() && statuses.includes(row.status), 'Invalid batch question.');
     requireValue(row.screenshot == null || (row.status === 'PASS' &&
-      row.screenshot === `/benchmarks/${run.modelSlug}/${run.id}/images/${row.id}.png`), 'Invalid screenshot path.');
+      (row.screenshot === `/benchmarks/${run.modelSlug}/${run.id}/images/${row.id}.png` ||
+       (run.current === true && typeof row.sourceRunId === 'string' && idPattern.test(row.sourceRunId) &&
+        row.screenshot === `/benchmarks/${run.modelSlug}/images/${row.id}.png?version=${row.sourceRunId}`))), 'Invalid screenshot path.');
   });
   requireValue(typeof run.complete === 'boolean' && (!run.complete || run.rows.every(row => ['PASS', 'ERROR', 'TIMEOUT'].includes(row.status))), 'Invalid batch completion.');
   return run;
@@ -19,14 +21,14 @@ export function validateRun(run) {
 
 export function latestDataset(input) {
   const newest = new Map();
-  for (const run of [...input].map(validateRun).filter(run => run.complete).sort((a, b) => b.startedAt.localeCompare(a.startedAt))) {
+  for (const run of [...input].map(validateRun).filter(run => run.complete || (run.current && run.rows.some(row => ['PASS', 'ERROR', 'TIMEOUT', 'INTERRUPTED'].includes(row.status)))).sort((a, b) => b.startedAt.localeCompare(a.startedAt))) {
     if (!newest.has(run.modelSlug)) newest.set(run.modelSlug, run);
   }
   const runs = [...newest.values()].sort((a, b) => a.modelSlug.localeCompare(b.modelSlug));
   if (!runs.length) return null;
   requireValue(runs.every(run => run.promptHash === runs[0].promptHash && run.rows.every((row, index) =>
     row.id === runs[0].rows[index].id && row.prompt === runs[0].rows[index].prompt)), 'Batches have different prompt sets. Keep these campaigns separate.');
-  return { id: runs.map(run => run.id).join('|'), promptHash: runs[0].promptHash, runs };
+  return { id: runs.map(run => run.id + (run.current ? ':' + run.rows.map(row => row.sourceRunId ?? '').join(',') : '')).join('|'), promptHash: runs[0].promptHash, runs };
 }
 
 // getRandomValues also works on a teammate's HTTP LAN origin, unlike randomUUID.
@@ -58,7 +60,8 @@ export function syncSession(session, dataset, random = Math.random) {
   if (session.dataset.id === dataset.id) return session;
   requireValue(session.dataset.promptHash === dataset.promptHash, 'Models have different prompt sets.');
   // A replacement screenshot needs fresh votes; keep the original evaluation as history.
-  if (!session.dataset.runs.every(previous => dataset.runs.some(run => run.modelSlug === previous.modelSlug && run.id === previous.id))) {
+  if (!session.dataset.runs.every(previous => dataset.runs.some(run => run.modelSlug === previous.modelSlug && run.id === previous.id &&
+      run.rows.every((row, index) => row.sourceRunId === previous.rows[index].sourceRunId)))) {
     const next = createSession(dataset);
     next.evaluatorId = session.evaluatorId;
     return next;
@@ -117,7 +120,7 @@ export function exportSession(session) {
     totalQuestions: 40, runs: session.dataset.runs,
     questions: session.dataset.runs[0].rows.map(row => ({ id: row.id, prompt: row.prompt,
       candidates: session.order[row.id].map((id, index) => ({ id, position: index + 1,
-        runId: session.dataset.runs.find(run => id === `${run.id}/${row.id}`).id,
+        runId: session.dataset.runs.find(run => id === `${run.id}/${row.id}`).rows[row.number - 1].sourceRunId ?? session.dataset.runs.find(run => id === `${run.id}/${row.id}`).id,
         modelSlug: session.dataset.runs.find(run => id === `${run.id}/${row.id}`).modelSlug })),
       ballot: session.ballots[row.id] ?? null })),
   };
