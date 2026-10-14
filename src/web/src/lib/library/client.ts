@@ -1,7 +1,7 @@
 import { validateDocument } from "../../simulations/builder/document/validateDocument";
 import type { SavedExperiment } from "../../simulations/builder/persistence/storage";
-import type { CompositeRecipe } from "../../simulations/runtime/authoring/types";
-import { parseRecipe } from "../../simulations/runtime/recipes/schema";
+import type { CompositeRecipe } from "../../simulations/creation-and-editing/authoring-engine/document";
+import { parseRecipe } from "../../simulations/creation-and-editing/validator/parseRecipe";
 
 function record(value: unknown): asserts value is Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value))

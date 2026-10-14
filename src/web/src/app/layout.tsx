@@ -6,7 +6,7 @@ import { offlineEnabled } from "../lib/deployment";
 import AuthProvider from "./_components/AuthProvider";
 import DeploymentProvider from "./_components/DeploymentProvider";
 export const metadata: Metadata = {
-  title: "Apertus Local Lab",
+  title: "pAperSim",
   description:
     "Interactive physics, structures, and a living town in a local-first simulation lab.",
 };

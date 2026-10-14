@@ -1,5 +1,5 @@
-import { requireRecord } from "../../runtime/records";
-import { type Recipe, resolveRecipe } from "../../runtime/resolver";
+import { requireRecord } from "../../legacy/runtime/records";
+import { type Recipe, resolveRecipe } from "../../legacy/runtime/resolver";
 import { type TemplateId, templateRecipe, templates } from "../descriptors";
 import { composeLegacy } from "./migrations/composeLegacy";
 import type { ControlRecord, ExperimentDocument, ResultRecord } from "./types";

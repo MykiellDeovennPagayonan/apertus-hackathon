@@ -1,4 +1,4 @@
 export {
   addCatalogComponent,
   insertComposite,
-} from "../../runtime/authoring/composites";
+} from "../../creation-and-editing/authoring-engine/composites";

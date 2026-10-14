@@ -1,0 +1,1615 @@
+{
+  "requestId": null,
+  "sessionId": "recipe-c4027ab1-2a05-4df5-9e98-434dbc093158",
+  "authoredRevision": 0,
+  "interactionRevision": 2,
+  "recipe": {
+    "recipeVersion": 2,
+    "id": "d7777edf-c78a-4fa8-90bc-4c4c619d1b0b",
+    "version": 1,
+    "title": "How does the horizontal range differ between projectiles launched at 30° and 45° with the same initi",
+    "description": "How does the horizontal range differ between projectiles launched at 30° and 45° with the same initial velocity?",
+    "tags": [
+      "projectile motion",
+      "range formula",
+      "angle effect"
+    ],
+    "nested": [],
+    "parameters": [],
+    "externalPorts": [],
+    "dependencies": [
+      {
+        "id": "models/Projectile",
+        "version": 1
+      },
+      {
+        "id": "appearance/Projectile",
+        "version": 1
+      },
+      {
+        "id": "appearance/Launcher",
+        "version": 1
+      },
+      {
+        "id": "appearance/Trajectory",
+        "version": 1
+      },
+      {
+        "id": "appearance/VelocityArrow",
+        "version": 1
+      },
+      {
+        "id": "appearance/ProjectileBody",
+        "version": 1
+      },
+      {
+        "id": "controls/Slider",
+        "version": 1
+      },
+      {
+        "id": "displays/Readout",
+        "version": 1
+      },
+      {
+        "id": "controls/Button",
+        "version": 1
+      }
+    ],
+    "assumptions": [
+      "Fixed launch speed of 20 m/s and Earth's gravity of 9.81 m/s². Air resistance is ignored."
+    ],
+    "document": {
+      "formatVersion": 3,
+      "nodes": [
+        {
+          "id": "activity_1/projectile/primary",
+          "definition": "models/Projectile",
+          "version": 1,
+          "label": "Projectile",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "angle": 30,
+            "velocity": 20,
+            "gravity": 9.81,
+            "playing": true,
+            "slowMo": false,
+            "trajectoryVisible": true,
+            "showVectors": false
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/appearance",
+          "definition": "appearance/Projectile",
+          "version": 1,
+          "label": "Projectile scene",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {}
+        },
+        {
+          "id": "activity_1/projectile/primary/appearance/Launcher",
+          "definition": "appearance/Launcher",
+          "version": 1,
+          "label": "Launcher",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "visible": true
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/appearance/Trajectory",
+          "definition": "appearance/Trajectory",
+          "version": 1,
+          "label": "Trajectory",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "visible": true
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/appearance/VelocityArrow",
+          "definition": "appearance/VelocityArrow",
+          "version": 1,
+          "label": "Velocity arrows",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "visible": true
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/appearance/ProjectileBody",
+          "definition": "appearance/ProjectileBody",
+          "version": 1,
+          "label": "Projectile body",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "visible": true
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/control/set:angle",
+          "definition": "controls/Slider",
+          "version": 1,
+          "label": "Ball 1 angle",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "label": "Ball 1 angle",
+            "mode": "immediate",
+            "initial": "{\"value\":30}"
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/display/range",
+          "definition": "displays/Readout",
+          "version": 1,
+          "label": "Ball 1 distance",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "label": "Ball 1 distance",
+            "precision": 2
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/display/maxHeight",
+          "definition": "displays/Readout",
+          "version": 1,
+          "label": "Ball 1 height",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "label": "Ball 1 height",
+            "precision": 2
+          }
+        },
+        {
+          "id": "activity_1/projectile/secondary",
+          "definition": "models/Projectile",
+          "version": 1,
+          "label": "Projectile",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "angle": 60,
+            "velocity": 20,
+            "gravity": 9.81,
+            "playing": true,
+            "slowMo": false,
+            "trajectoryVisible": true,
+            "showVectors": false
+          }
+        },
+        {
+          "id": "activity_1/projectile/secondary/control/set:angle",
+          "definition": "controls/Slider",
+          "version": 1,
+          "label": "Ball 2 angle",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "label": "Ball 2 angle",
+            "mode": "immediate",
+            "initial": "{\"value\":60}"
+          }
+        },
+        {
+          "id": "activity_1/projectile/secondary/display/range",
+          "definition": "displays/Readout",
+          "version": 1,
+          "label": "Ball 2 distance",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "label": "Ball 2 distance",
+            "precision": 2
+          }
+        },
+        {
+          "id": "activity_1/projectile/secondary/display/maxHeight",
+          "definition": "displays/Readout",
+          "version": 1,
+          "label": "Ball 2 height",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "label": "Ball 2 height",
+            "precision": 2
+          }
+        },
+        {
+          "id": "activity_1/launch",
+          "definition": "controls/Button",
+          "version": 1,
+          "label": "Launch both",
+          "scope": "activity_1/scope/projectile-comparison",
+          "configuration": {
+            "label": "Launch both",
+            "mode": "submit",
+            "initial": "{}"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "id": "activity_1/projectile/primary/link/appearance",
+          "kind": "attachment",
+          "from": {
+            "node": "activity_1/projectile/primary",
+            "port": "appearance"
+          },
+          "to": {
+            "node": "activity_1/projectile/primary/appearance",
+            "port": "model"
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/link/appearance/Launcher",
+          "kind": "attachment",
+          "from": {
+            "node": "activity_1/projectile/primary/appearance/Launcher",
+            "port": "scene"
+          },
+          "to": {
+            "node": "activity_1/projectile/primary/appearance",
+            "port": "visuals"
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/link/appearance/Trajectory",
+          "kind": "attachment",
+          "from": {
+            "node": "activity_1/projectile/primary/appearance/Trajectory",
+            "port": "scene"
+          },
+          "to": {
+            "node": "activity_1/projectile/primary/appearance",
+            "port": "visuals"
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/link/appearance/VelocityArrow",
+          "kind": "attachment",
+          "from": {
+            "node": "activity_1/projectile/primary/appearance/VelocityArrow",
+            "port": "scene"
+          },
+          "to": {
+            "node": "activity_1/projectile/primary/appearance",
+            "port": "visuals"
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/link/appearance/ProjectileBody",
+          "kind": "attachment",
+          "from": {
+            "node": "activity_1/projectile/primary/appearance/ProjectileBody",
+            "port": "scene"
+          },
+          "to": {
+            "node": "activity_1/projectile/primary/appearance",
+            "port": "visuals"
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/link/control/set:angle",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/projectile/primary/control/set:angle",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/projectile/primary",
+            "port": "set:angle"
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/link/output/range",
+          "kind": "value",
+          "from": {
+            "node": "activity_1/projectile/primary",
+            "port": "range"
+          },
+          "to": {
+            "node": "activity_1/projectile/primary/display/range",
+            "port": "value"
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/link/output/maxHeight",
+          "kind": "value",
+          "from": {
+            "node": "activity_1/projectile/primary",
+            "port": "maxHeight"
+          },
+          "to": {
+            "node": "activity_1/projectile/primary/display/maxHeight",
+            "port": "value"
+          }
+        },
+        {
+          "id": "activity_1/projectile/secondary/link/appearance/shared-scene",
+          "kind": "attachment",
+          "from": {
+            "node": "activity_1/projectile/secondary",
+            "port": "appearance"
+          },
+          "to": {
+            "node": "activity_1/projectile/primary/appearance",
+            "port": "model"
+          }
+        },
+        {
+          "id": "activity_1/projectile/secondary/link/control/set:angle",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/projectile/secondary/control/set:angle",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/projectile/secondary",
+            "port": "set:angle"
+          }
+        },
+        {
+          "id": "activity_1/projectile/secondary/link/output/range",
+          "kind": "value",
+          "from": {
+            "node": "activity_1/projectile/secondary",
+            "port": "range"
+          },
+          "to": {
+            "node": "activity_1/projectile/secondary/display/range",
+            "port": "value"
+          }
+        },
+        {
+          "id": "activity_1/projectile/secondary/link/output/maxHeight",
+          "kind": "value",
+          "from": {
+            "node": "activity_1/projectile/secondary",
+            "port": "maxHeight"
+          },
+          "to": {
+            "node": "activity_1/projectile/secondary/display/maxHeight",
+            "port": "value"
+          }
+        },
+        {
+          "id": "activity_1/projectile/primary/link/control/set:angle/restart/projectile/secondary",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/projectile/primary/control/set:angle",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/projectile/secondary",
+            "port": "RESTART"
+          },
+          "arguments": {}
+        },
+        {
+          "id": "activity_1/projectile/secondary/link/control/set:angle/restart/projectile/primary",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/projectile/secondary/control/set:angle",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/projectile/primary",
+            "port": "RESTART"
+          },
+          "arguments": {}
+        },
+        {
+          "id": "activity_1/launch/projectile/primary",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/launch",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/projectile/primary",
+            "port": "LAUNCH"
+          },
+          "arguments": {}
+        },
+        {
+          "id": "activity_1/launch/projectile/secondary",
+          "kind": "command",
+          "from": {
+            "node": "activity_1/launch",
+            "port": "submit"
+          },
+          "to": {
+            "node": "activity_1/projectile/secondary",
+            "port": "LAUNCH"
+          },
+          "arguments": {}
+        }
+      ],
+      "resources": [],
+      "scopes": [
+        {
+          "id": "activity_1/scope/projectile-comparison",
+          "label": "Projectile comparison"
+        }
+      ],
+      "groups": [
+        {
+          "id": "activity_1/group/prebuilt/projectile-comparison",
+          "label": "Projectile motion",
+          "members": [
+            "activity_1/projectile/primary",
+            "activity_1/projectile/primary/appearance",
+            "activity_1/projectile/primary/appearance/Launcher",
+            "activity_1/projectile/primary/appearance/Trajectory",
+            "activity_1/projectile/primary/appearance/VelocityArrow",
+            "activity_1/projectile/primary/appearance/ProjectileBody",
+            "activity_1/projectile/primary/control/set:angle",
+            "activity_1/projectile/primary/display/range",
+            "activity_1/projectile/primary/display/maxHeight",
+            "activity_1/projectile/secondary",
+            "activity_1/projectile/secondary/control/set:angle",
+            "activity_1/projectile/secondary/display/range",
+            "activity_1/projectile/secondary/display/maxHeight",
+            "activity_1/launch"
+          ],
+          "source": {
+            "id": "prebuilt/projectile-comparison",
+            "version": 1
+          },
+          "collapsed": false,
+          "parameters": [],
+          "exposedPorts": []
+        }
+      ],
+      "layout": {
+        "id": "layout/learner",
+        "kind": "stack",
+        "label": "",
+        "gap": 16,
+        "columns": 2,
+        "children": [
+          {
+            "id": "activity_1/layout/projectile/primary/appearance",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/projectile/primary/appearance"
+          },
+          {
+            "id": "activity_1/layout/projectile/primary/display/range",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/projectile/primary/display/range"
+          },
+          {
+            "id": "activity_1/layout/projectile/secondary/display/range",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/projectile/secondary/display/range"
+          },
+          {
+            "id": "activity_1/layout/projectile/primary/display/maxHeight",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/projectile/primary/display/maxHeight"
+          },
+          {
+            "id": "activity_1/layout/projectile/secondary/display/maxHeight",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/projectile/secondary/display/maxHeight"
+          },
+          {
+            "id": "activity_1/layout/projectile/primary/control/set:angle",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/projectile/primary/control/set:angle"
+          },
+          {
+            "id": "activity_1/layout/projectile/secondary/control/set:angle",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/projectile/secondary/control/set:angle"
+          },
+          {
+            "id": "activity_1/layout/launch",
+            "kind": "stack",
+            "label": "",
+            "gap": 16,
+            "columns": 2,
+            "children": [],
+            "node": "activity_1/launch"
+          }
+        ]
+      },
+      "lesson": {
+        "title": "How does the horizontal range differ between projectiles launched at 30° and 45° with the same initi",
+        "instruction": "How does the horizontal range differ between projectiles launched at 30° and 45° with the same initial velocity?",
+        "explanation": "Fixed launch speed of 20 m/s and Earth's gravity of 9.81 m/s². Air resistance is ignored."
+      },
+      "editor": {
+        "positions": {},
+        "zoom": 1
+      },
+      "presentation": {
+        "version": 1,
+        "mode": "board",
+        "items": [
+          {
+            "id": "board/activity_1/layout/projectile/primary/appearance",
+            "layoutId": "activity_1/layout/projectile/primary/appearance",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 430
+            },
+            "zIndex": 0,
+            "locked": false,
+            "responsiveMinHeight": 300
+          },
+          {
+            "id": "board/activity_1/layout/projectile/primary/display/range",
+            "layoutId": "activity_1/layout/projectile/primary/display/range",
+            "rect": {
+              "x": 664,
+              "y": 480,
+              "width": 320,
+              "height": 100
+            },
+            "zIndex": 1,
+            "locked": false,
+            "responsiveMinHeight": 100
+          },
+          {
+            "id": "board/activity_1/layout/projectile/secondary/display/range",
+            "layoutId": "activity_1/layout/projectile/secondary/display/range",
+            "rect": {
+              "x": 664,
+              "y": 596,
+              "width": 320,
+              "height": 100
+            },
+            "zIndex": 2,
+            "locked": false,
+            "responsiveMinHeight": 100
+          },
+          {
+            "id": "board/activity_1/layout/projectile/primary/display/maxHeight",
+            "layoutId": "activity_1/layout/projectile/primary/display/maxHeight",
+            "rect": {
+              "x": 664,
+              "y": 712,
+              "width": 320,
+              "height": 100
+            },
+            "zIndex": 3,
+            "locked": false,
+            "responsiveMinHeight": 100
+          },
+          {
+            "id": "board/activity_1/layout/projectile/secondary/display/maxHeight",
+            "layoutId": "activity_1/layout/projectile/secondary/display/maxHeight",
+            "rect": {
+              "x": 664,
+              "y": 828,
+              "width": 320,
+              "height": 100
+            },
+            "zIndex": 4,
+            "locked": false,
+            "responsiveMinHeight": 100
+          },
+          {
+            "id": "board/activity_1/layout/projectile/primary/control/set:angle",
+            "layoutId": "activity_1/layout/projectile/primary/control/set:angle",
+            "rect": {
+              "x": 664,
+              "y": 0,
+              "width": 320,
+              "height": 144
+            },
+            "zIndex": 5,
+            "locked": false,
+            "responsiveMinHeight": 144
+          },
+          {
+            "id": "board/activity_1/layout/projectile/secondary/control/set:angle",
+            "layoutId": "activity_1/layout/projectile/secondary/control/set:angle",
+            "rect": {
+              "x": 664,
+              "y": 160,
+              "width": 320,
+              "height": 144
+            },
+            "zIndex": 6,
+            "locked": false,
+            "responsiveMinHeight": 144
+          },
+          {
+            "id": "board/activity_1/layout/launch",
+            "layoutId": "activity_1/layout/launch",
+            "rect": {
+              "x": 664,
+              "y": 320,
+              "width": 320,
+              "height": 144
+            },
+            "zIndex": 7,
+            "locked": false,
+            "responsiveMinHeight": 144
+          }
+        ],
+        "groups": [],
+        "startView": {
+          "x": -24,
+          "y": -24,
+          "width": 1032,
+          "height": 976
+        },
+        "navigation": {
+          "mode": "bounded",
+          "minZoom": 0.25,
+          "maxZoom": 2
+        },
+        "immersive": {
+          "startup": "board",
+          "allowReturnToBoard": true,
+          "overlays": []
+        },
+        "responsive": true,
+        "responsiveGap": 24,
+        "responsiveRows": [
+          [
+            "board/activity_1/layout/projectile/primary/appearance"
+          ],
+          [
+            "board/activity_1/layout/projectile/primary/control/set:angle"
+          ],
+          [
+            "board/activity_1/layout/projectile/secondary/control/set:angle"
+          ],
+          [
+            "board/activity_1/layout/launch"
+          ],
+          [
+            "board/activity_1/layout/projectile/primary/display/range"
+          ],
+          [
+            "board/activity_1/layout/projectile/secondary/display/range"
+          ],
+          [
+            "board/activity_1/layout/projectile/primary/display/maxHeight"
+          ],
+          [
+            "board/activity_1/layout/projectile/secondary/display/maxHeight"
+          ]
+        ]
+      }
+    }
+  },
+  "coverage": null,
+  "state": {
+    "state": {
+      "activity_1/projectile/primary": {
+        "angle": 30.9,
+        "velocity": 20,
+        "gravity": 9.81,
+        "playing": true,
+        "slowMo": false,
+        "trajectoryVisible": true,
+        "showVectors": false,
+        "elapsed": 0.7999999999999999,
+        "samples": [
+          {
+            "time": 0,
+            "x": 0,
+            "y": 0
+          },
+          {
+            "time": 0.1,
+            "x": 1.7161298114472894,
+            "y": 0.97803250411634
+          },
+          {
+            "time": 0.2,
+            "x": 3.4322596228945788,
+            "y": 1.85796500823268
+          },
+          {
+            "time": 0.3,
+            "x": 5.148389434341867,
+            "y": 2.63979751234902
+          },
+          {
+            "time": 0.4,
+            "x": 6.8645192457891575,
+            "y": 3.32353001646536
+          },
+          {
+            "time": 0.5,
+            "x": 8.580649057236446,
+            "y": 3.9091625205816998
+          },
+          {
+            "time": 0.6,
+            "x": 10.296778868683734,
+            "y": 4.39669502469804
+          },
+          {
+            "time": 0.7,
+            "x": 12.012908680131023,
+            "y": 4.786127528814379
+          },
+          {
+            "time": 0.8,
+            "x": 13.729038491578315,
+            "y": 5.07746003293072
+          }
+        ]
+      },
+      "activity_1/projectile/secondary": {
+        "angle": 60.9,
+        "velocity": 20,
+        "gravity": 9.81,
+        "playing": true,
+        "slowMo": false,
+        "trajectoryVisible": true,
+        "showVectors": false,
+        "elapsed": 0.7999999999999999,
+        "samples": [
+          {
+            "time": 0,
+            "x": 0,
+            "y": 0
+          },
+          {
+            "time": 0.1,
+            "x": 0.9726707608469813,
+            "y": 1.6984944460709301
+          },
+          {
+            "time": 0.2,
+            "x": 1.9453415216939627,
+            "y": 3.29888889214186
+          },
+          {
+            "time": 0.3,
+            "x": 2.9180122825409436,
+            "y": 4.80118333821279
+          },
+          {
+            "time": 0.4,
+            "x": 3.8906830433879254,
+            "y": 6.205377784283721
+          },
+          {
+            "time": 0.5,
+            "x": 4.863353804234906,
+            "y": 7.51147223035465
+          },
+          {
+            "time": 0.6,
+            "x": 5.836024565081887,
+            "y": 8.71946667642558
+          },
+          {
+            "time": 0.7,
+            "x": 6.808695325928868,
+            "y": 9.829361122496511
+          },
+          {
+            "time": 0.8,
+            "x": 7.781366086775851,
+            "y": 10.84115556856744
+          }
+        ]
+      }
+    },
+    "outputs": {
+      "activity_1/projectile/primary": {
+        "range": 35.93490120550427,
+        "maxHeight": 5.37664867615643,
+        "duration": 2.09395005936053,
+        "elapsed": 0.7999999999999999,
+        "samples": [
+          {
+            "time": 0,
+            "x": 0,
+            "y": 0
+          },
+          {
+            "time": 0.1,
+            "x": 1.7161298114472894,
+            "y": 0.97803250411634
+          },
+          {
+            "time": 0.2,
+            "x": 3.4322596228945788,
+            "y": 1.85796500823268
+          },
+          {
+            "time": 0.3,
+            "x": 5.148389434341867,
+            "y": 2.63979751234902
+          },
+          {
+            "time": 0.4,
+            "x": 6.8645192457891575,
+            "y": 3.32353001646536
+          },
+          {
+            "time": 0.5,
+            "x": 8.580649057236446,
+            "y": 3.9091625205816998
+          },
+          {
+            "time": 0.6,
+            "x": 10.296778868683734,
+            "y": 4.39669502469804
+          },
+          {
+            "time": 0.7,
+            "x": 12.012908680131023,
+            "y": 4.786127528814379
+          },
+          {
+            "time": 0.8,
+            "x": 13.729038491578315,
+            "y": 5.07746003293072
+          }
+        ],
+        "trajectory": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0.5989150200917377,
+            "y": 0.35246919099247703
+          },
+          {
+            "x": 1.1978300401834754,
+            "y": 0.6929902738157175
+          },
+          {
+            "x": 1.7967450602752129,
+            "y": 1.0215632484697215
+          },
+          {
+            "x": 2.3956600803669508,
+            "y": 1.3381881149544892
+          },
+          {
+            "x": 2.9945751004586887,
+            "y": 1.6428648732700204
+          },
+          {
+            "x": 3.5934901205504257,
+            "y": 1.9355935234163146
+          },
+          {
+            "x": 4.192405140642164,
+            "y": 2.2163740653933726
+          },
+          {
+            "x": 4.7913201607339015,
+            "y": 2.485206499201194
+          },
+          {
+            "x": 5.3902351808256395,
+            "y": 2.742090824839779
+          },
+          {
+            "x": 5.989150200917377,
+            "y": 2.987027042309128
+          },
+          {
+            "x": 6.588065221009114,
+            "y": 3.2200151516092395
+          },
+          {
+            "x": 7.186980241100851,
+            "y": 3.4410551527401148
+          },
+          {
+            "x": 7.785895261192589,
+            "y": 3.650147045701753
+          },
+          {
+            "x": 8.384810281284327,
+            "y": 3.847290830494156
+          },
+          {
+            "x": 8.983725301376065,
+            "y": 4.032486507117323
+          },
+          {
+            "x": 9.582640321467803,
+            "y": 4.205734075571252
+          },
+          {
+            "x": 10.18155534155954,
+            "y": 4.367033535855944
+          },
+          {
+            "x": 10.780470361651279,
+            "y": 4.516384887971401
+          },
+          {
+            "x": 11.379385381743017,
+            "y": 4.653788131917621
+          },
+          {
+            "x": 11.978300401834755,
+            "y": 4.779243267694605
+          },
+          {
+            "x": 12.577215421926491,
+            "y": 4.892750295302351
+          },
+          {
+            "x": 13.176130442018229,
+            "y": 4.994309214740861
+          },
+          {
+            "x": 13.775045462109968,
+            "y": 5.083920026010135
+          },
+          {
+            "x": 14.373960482201703,
+            "y": 5.161582729110172
+          },
+          {
+            "x": 14.97287550229344,
+            "y": 5.227297324040974
+          },
+          {
+            "x": 15.571790522385179,
+            "y": 5.281063810802537
+          },
+          {
+            "x": 16.170705542476917,
+            "y": 5.322882189394865
+          },
+          {
+            "x": 16.769620562568655,
+            "y": 5.352752459817957
+          },
+          {
+            "x": 17.368535582660392,
+            "y": 5.370674622071812
+          },
+          {
+            "x": 17.96745060275213,
+            "y": 5.376648676156432
+          },
+          {
+            "x": 18.56636562284387,
+            "y": 5.370674622071811
+          },
+          {
+            "x": 19.165280642935606,
+            "y": 5.352752459817957
+          },
+          {
+            "x": 19.76419566302734,
+            "y": 5.322882189394866
+          },
+          {
+            "x": 20.36311068311908,
+            "y": 5.281063810802538
+          },
+          {
+            "x": 20.962025703210816,
+            "y": 5.227297324040974
+          },
+          {
+            "x": 21.560940723302558,
+            "y": 5.161582729110172
+          },
+          {
+            "x": 22.159855743394292,
+            "y": 5.083920026010135
+          },
+          {
+            "x": 22.758770763486034,
+            "y": 4.994309214740863
+          },
+          {
+            "x": 23.357685783577768,
+            "y": 4.892750295302351
+          },
+          {
+            "x": 23.95660080366951,
+            "y": 4.779243267694605
+          },
+          {
+            "x": 24.555515823761244,
+            "y": 4.65378813191762
+          },
+          {
+            "x": 25.154430843852982,
+            "y": 4.516384887971402
+          },
+          {
+            "x": 25.75334586394472,
+            "y": 4.367033535855944
+          },
+          {
+            "x": 26.352260884036458,
+            "y": 4.205734075571252
+          },
+          {
+            "x": 26.951175904128192,
+            "y": 4.032486507117325
+          },
+          {
+            "x": 27.550090924219937,
+            "y": 3.847290830494156
+          },
+          {
+            "x": 28.14900594431167,
+            "y": 3.6501470457017557
+          },
+          {
+            "x": 28.747920964403406,
+            "y": 3.441055152740118
+          },
+          {
+            "x": 29.346835984495147,
+            "y": 3.220015151609241
+          },
+          {
+            "x": 29.94575100458688,
+            "y": 2.98702704230913
+          },
+          {
+            "x": 30.544666024678623,
+            "y": 2.7420908248397797
+          },
+          {
+            "x": 31.143581044770357,
+            "y": 2.485206499201194
+          },
+          {
+            "x": 31.742496064862095,
+            "y": 2.2163740653933743
+          },
+          {
+            "x": 32.34141108495383,
+            "y": 1.9355935234163155
+          },
+          {
+            "x": 32.94032610504557,
+            "y": 1.642864873270021
+          },
+          {
+            "x": 33.53924112513731,
+            "y": 1.338188114954491
+          },
+          {
+            "x": 34.13815614522905,
+            "y": 1.0215632484697217
+          },
+          {
+            "x": 34.737071165320785,
+            "y": 0.6929902738157203
+          },
+          {
+            "x": 35.33598618541252,
+            "y": 0.35246919099247975
+          },
+          {
+            "x": 35.93490120550426,
+            "y": 7.105427357601002e-15
+          }
+        ],
+        "data": {
+          "angle": 30.9,
+          "velocity": 20,
+          "gravity": 9.81,
+          "playing": true,
+          "slowMo": false,
+          "trajectoryVisible": true,
+          "showVectors": false,
+          "elapsed": 0.7999999999999999,
+          "samples": [
+            {
+              "time": 0,
+              "x": 0,
+              "y": 0
+            },
+            {
+              "time": 0.1,
+              "x": 1.7161298114472894,
+              "y": 0.97803250411634
+            },
+            {
+              "time": 0.2,
+              "x": 3.4322596228945788,
+              "y": 1.85796500823268
+            },
+            {
+              "time": 0.3,
+              "x": 5.148389434341867,
+              "y": 2.63979751234902
+            },
+            {
+              "time": 0.4,
+              "x": 6.8645192457891575,
+              "y": 3.32353001646536
+            },
+            {
+              "time": 0.5,
+              "x": 8.580649057236446,
+              "y": 3.9091625205816998
+            },
+            {
+              "time": 0.6,
+              "x": 10.296778868683734,
+              "y": 4.39669502469804
+            },
+            {
+              "time": 0.7,
+              "x": 12.012908680131023,
+              "y": 4.786127528814379
+            },
+            {
+              "time": 0.8,
+              "x": 13.729038491578315,
+              "y": 5.07746003293072
+            }
+          ],
+          "transform": {
+            "position": {
+              "x": 13.729038491578313,
+              "y": 5.077460032930719
+            },
+            "heading": 0
+          },
+          "motion": {
+            "elapsed": 0.7999999999999999,
+            "velocity": {
+              "x": 17.161298114472892,
+              "y": 2.4228250411634003
+            },
+            "status": "flying"
+          },
+          "metrics": {
+            "range": 35.93490120550427,
+            "maxHeight": 5.37664867615643,
+            "duration": 2.09395005936053
+          },
+          "id": "activity_1/projectile/primary",
+          "launch": {
+            "angle": 30.9,
+            "velocity": 20,
+            "origin": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        },
+        "configuration": {
+          "angle": 30.9,
+          "velocity": 20,
+          "gravity": 9.81,
+          "playing": true,
+          "slowMo": false,
+          "trajectoryVisible": true,
+          "showVectors": false
+        }
+      },
+      "activity_1/projectile/secondary": {
+        "range": 34.65413630935225,
+        "maxHeight": 15.565298628916178,
+        "duration": 3.5627817453026096,
+        "elapsed": 0.7999999999999999,
+        "samples": [
+          {
+            "time": 0,
+            "x": 0,
+            "y": 0
+          },
+          {
+            "time": 0.1,
+            "x": 0.9726707608469813,
+            "y": 1.6984944460709301
+          },
+          {
+            "time": 0.2,
+            "x": 1.9453415216939627,
+            "y": 3.29888889214186
+          },
+          {
+            "time": 0.3,
+            "x": 2.9180122825409436,
+            "y": 4.80118333821279
+          },
+          {
+            "time": 0.4,
+            "x": 3.8906830433879254,
+            "y": 6.205377784283721
+          },
+          {
+            "time": 0.5,
+            "x": 4.863353804234906,
+            "y": 7.51147223035465
+          },
+          {
+            "time": 0.6,
+            "x": 5.836024565081887,
+            "y": 8.71946667642558
+          },
+          {
+            "time": 0.7,
+            "x": 6.808695325928868,
+            "y": 9.829361122496511
+          },
+          {
+            "time": 0.8,
+            "x": 7.781366086775851,
+            "y": 10.84115556856744
+          }
+        ],
+        "trajectory": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0.5775689384892042,
+            "y": 1.020391799006727
+          },
+          {
+            "x": 1.1551378769784084,
+            "y": 2.0061940455047518
+          },
+          {
+            "x": 1.7327068154676124,
+            "y": 2.9574067394940733
+          },
+          {
+            "x": 2.310275753956817,
+            "y": 3.874029880974693
+          },
+          {
+            "x": 2.887844692446021,
+            "y": 4.75606346994661
+          },
+          {
+            "x": 3.465413630935225,
+            "y": 5.603507506409823
+          },
+          {
+            "x": 4.04298256942443,
+            "y": 6.416361990364336
+          },
+          {
+            "x": 4.620551507913634,
+            "y": 7.194626921810144
+          },
+          {
+            "x": 5.1981204464028385,
+            "y": 7.938302300747251
+          },
+          {
+            "x": 5.775689384892042,
+            "y": 8.647388127175654
+          },
+          {
+            "x": 6.3532583233812465,
+            "y": 9.321884401095355
+          },
+          {
+            "x": 6.93082726187045,
+            "y": 9.961791122506352
+          },
+          {
+            "x": 7.508396200359654,
+            "y": 10.567108291408648
+          },
+          {
+            "x": 8.08596513884886,
+            "y": 11.137835907802243
+          },
+          {
+            "x": 8.663534077338063,
+            "y": 11.673973971687133
+          },
+          {
+            "x": 9.241103015827267,
+            "y": 12.17552248306332
+          },
+          {
+            "x": 9.818671954316471,
+            "y": 12.642481441930805
+          },
+          {
+            "x": 10.396240892805677,
+            "y": 13.074850848289591
+          },
+          {
+            "x": 10.973809831294878,
+            "y": 13.472630702139668
+          },
+          {
+            "x": 11.551378769784083,
+            "y": 13.835821003481048
+          },
+          {
+            "x": 12.128947708273287,
+            "y": 14.164421752313721
+          },
+          {
+            "x": 12.706516646762493,
+            "y": 14.458432948637693
+          },
+          {
+            "x": 13.284085585251697,
+            "y": 14.717854592452962
+          },
+          {
+            "x": 13.8616545237409,
+            "y": 14.94268668375953
+          },
+          {
+            "x": 14.439223462230105,
+            "y": 15.132929222557394
+          },
+          {
+            "x": 15.016792400719307,
+            "y": 15.288582208846554
+          },
+          {
+            "x": 15.594361339208513,
+            "y": 15.409645642627016
+          },
+          {
+            "x": 16.17193027769772,
+            "y": 15.496119523898772
+          },
+          {
+            "x": 16.74949921618692,
+            "y": 15.548003852661827
+          },
+          {
+            "x": 17.327068154676127,
+            "y": 15.565298628916176
+          },
+          {
+            "x": 17.904637093165327,
+            "y": 15.548003852661829
+          },
+          {
+            "x": 18.482206031654535,
+            "y": 15.49611952389877
+          },
+          {
+            "x": 19.05977497014374,
+            "y": 15.409645642627016
+          },
+          {
+            "x": 19.637343908632943,
+            "y": 15.288582208846556
+          },
+          {
+            "x": 20.214912847122147,
+            "y": 15.132929222557394
+          },
+          {
+            "x": 20.792481785611354,
+            "y": 14.942686683759533
+          },
+          {
+            "x": 21.370050724100555,
+            "y": 14.717854592452962
+          },
+          {
+            "x": 21.947619662589755,
+            "y": 14.458432948637697
+          },
+          {
+            "x": 22.525188601078966,
+            "y": 14.164421752313718
+          },
+          {
+            "x": 23.102757539568167,
+            "y": 13.835821003481048
+          },
+          {
+            "x": 23.680326478057367,
+            "y": 13.472630702139671
+          },
+          {
+            "x": 24.257895416546575,
+            "y": 13.07485084828959
+          },
+          {
+            "x": 24.83546435503578,
+            "y": 12.642481441930805
+          },
+          {
+            "x": 25.413033293524986,
+            "y": 12.175522483063318
+          },
+          {
+            "x": 25.990602232014187,
+            "y": 11.67397397168714
+          },
+          {
+            "x": 26.568171170503394,
+            "y": 11.137835907802241
+          },
+          {
+            "x": 27.145740108992598,
+            "y": 10.567108291408651
+          },
+          {
+            "x": 27.7233090474818,
+            "y": 9.961791122506355
+          },
+          {
+            "x": 28.300877985971006,
+            "y": 9.321884401095353
+          },
+          {
+            "x": 28.87844692446021,
+            "y": 8.647388127175653
+          },
+          {
+            "x": 29.456015862949414,
+            "y": 7.938302300747253
+          },
+          {
+            "x": 30.033584801438614,
+            "y": 7.194626921810148
+          },
+          {
+            "x": 30.611153739927822,
+            "y": 6.416361990364329
+          },
+          {
+            "x": 31.188722678417026,
+            "y": 5.6035075064098265
+          },
+          {
+            "x": 31.766291616906226,
+            "y": 4.756063469946611
+          },
+          {
+            "x": 32.34386055539544,
+            "y": 3.874029880974689
+          },
+          {
+            "x": 32.92142949388464,
+            "y": 2.9574067394940755
+          },
+          {
+            "x": 33.49899843237384,
+            "y": 2.0061940455047633
+          },
+          {
+            "x": 34.076567370863046,
+            "y": 1.020391799006724
+          },
+          {
+            "x": 34.65413630935225,
+            "y": 0
+          }
+        ],
+        "data": {
+          "angle": 60.9,
+          "velocity": 20,
+          "gravity": 9.81,
+          "playing": true,
+          "slowMo": false,
+          "trajectoryVisible": true,
+          "showVectors": false,
+          "elapsed": 0.7999999999999999,
+          "samples": [
+            {
+              "time": 0,
+              "x": 0,
+              "y": 0
+            },
+            {
+              "time": 0.1,
+              "x": 0.9726707608469813,
+              "y": 1.6984944460709301
+            },
+            {
+              "time": 0.2,
+              "x": 1.9453415216939627,
+              "y": 3.29888889214186
+            },
+            {
+              "time": 0.3,
+              "x": 2.9180122825409436,
+              "y": 4.80118333821279
+            },
+            {
+              "time": 0.4,
+              "x": 3.8906830433879254,
+              "y": 6.205377784283721
+            },
+            {
+              "time": 0.5,
+              "x": 4.863353804234906,
+              "y": 7.51147223035465
+            },
+            {
+              "time": 0.6,
+              "x": 5.836024565081887,
+              "y": 8.71946667642558
+            },
+            {
+              "time": 0.7,
+              "x": 6.808695325928868,
+              "y": 9.829361122496511
+            },
+            {
+              "time": 0.8,
+              "x": 7.781366086775851,
+              "y": 10.84115556856744
+            }
+          ],
+          "transform": {
+            "position": {
+              "x": 7.781366086775849,
+              "y": 10.84115556856744
+            },
+            "heading": 0
+          },
+          "motion": {
+            "elapsed": 0.7999999999999999,
+            "velocity": {
+              "x": 9.726707608469813,
+              "y": 9.627444460709302
+            },
+            "status": "flying"
+          },
+          "metrics": {
+            "range": 34.65413630935225,
+            "maxHeight": 15.565298628916178,
+            "duration": 3.5627817453026096
+          },
+          "id": "activity_1/projectile/secondary",
+          "launch": {
+            "angle": 60.9,
+            "velocity": 20,
+            "origin": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        },
+        "configuration": {
+          "angle": 60.9,
+          "velocity": 20,
+          "gravity": 9.81,
+          "playing": true,
+          "slowMo": false,
+          "trajectoryVisible": true,
+          "showVectors": false
+        }
+      }
+    }
+  }
+}

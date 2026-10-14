@@ -8,11 +8,11 @@ import {
   rainbowState,
   tsunamiState,
   weatherState,
-} from "../../components/systems/earth-atmosphere/physics";
+} from "../../legacy/components/systems/earth-atmosphere/physics";
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
+} from "../../registry/contracts/domainContribution";
 import {
   boolean,
   choice,
@@ -20,7 +20,7 @@ import {
   object,
   type ParameterSchema,
   validateValue,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 export const earthKinds = [
   "earthquake",
   "tsunami",

@@ -1,0 +1,56 @@
+{
+  "caseId": "C05",
+  "prompt": "show me how pythagroen theorem is used in measuring ladders",
+  "status": "failed",
+  "requestId": "b960880f-ec36-44a9-8cdd-1469cb4cdc2d",
+  "message": "Cannot reach local Apertus. Start it with make -C src/inference run.",
+  "sliders": [],
+  "bounds": [],
+  "body": "✳\npAperSim\nHome\nExperiments\nCommunity\nMy projects\nSign in\nINTERACTIVE SIMULATIONS\nCreate an experiment.\n\nDescribe what you want to simulate, or open an existing experiment.\n\nAI service is offline.\nTry again\nDetails\nCreate\n↑\nTry\nPendulum\nProjectiles\nLine\nCreate manually →\nCreate your own simulations\nExample experiments\nTHREE EXPERIMENTS TO TRY\nPHYSICS\nFIG. 01\nwhat if θ = 45°?\nLAUNCH\nLAND\nProjectile motion\n\nAdjust launch speed and angle to compare trajectories.\n\nApertus optional\nProjectile motion\n↗\nSTRUCTURES\nFIG. 02\nload\nTruss bridge\n\nChange the bridge structure and load to compare forces.\n\nApertus optional\nTruss bridge\n↗\nSIMULATION\nFIG. 03\nTown simulation\n\nSet routes and schedules, then track movement through town.\n\nApertus optional\nLiving town\n↗\npAperSim\n Local-first simulations\n2026",
+  "before": {
+    "correlationId": null,
+    "recipe": null,
+    "context": null,
+    "state": null
+  },
+  "after": {
+    "correlationId": null,
+    "recipe": null,
+    "context": null,
+    "state": null
+  },
+  "diagnostics": {
+    "configuration": {
+      "mode": "hybrid",
+      "llm": {
+        "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+        "provider": "apertus",
+        "connection": "local",
+        "baseUrl": "http://127.0.0.1:43101/v1",
+        "structuredOutput": "auto",
+        "contextCapacity": null,
+        "maxTokens": 1024,
+        "temperature": 0,
+        "reasoningEffort": null,
+        "timeout": 120000
+      },
+      "decision": {
+        "provider": "laya",
+        "policy": "See selection.decision or composition.decision for actual acceptance."
+      },
+      "deadlineMs": 240000
+    },
+    "events": [
+      {
+        "event": "failure",
+        "elapsedMs": 9,
+        "data": {
+          "status": 502,
+          "message": "Cannot reach local Apertus. Start it with make -C src/inference run.",
+          "cause": "Cannot reach local Apertus. Start it with make -C src/inference run."
+        }
+      }
+    ],
+    "issues": []
+  }
+}

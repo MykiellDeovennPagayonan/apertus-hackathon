@@ -3,27 +3,22 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { unwrapPortable } from "../../../lib/projects/portable";
-import { publicDefinition } from "../../components/catalog";
-import {
-  builtInRecipe,
-  builtInRecipes,
-} from "../../components/composites/catalog";
-import { reconcileBoard } from "../../runtime/authoring/board";
-import {
-  selectionRecipe,
-  validateRecipe,
-} from "../../runtime/authoring/recipes";
-import type { regenerateTruss } from "../../runtime/authoring/regenerateTruss";
-import { requireValue } from "../../runtime/authoring/requireValue";
-import { DocumentRuntime } from "../../runtime/authoring/runtime";
+import { publicDefinition } from "../../registry/index";
+import { builtInRecipe, builtInRecipes } from "../../registry/recipes/builtIn";
+import { reconcileBoard } from "../../creation-and-editing/authoring-engine/presentation/board";
+import { selectionRecipe } from "../../creation-and-editing/authoring-engine/recipes";
+import { validateRecipe } from "../../creation-and-editing/validator/recipe";
+import type { regenerateTruss } from "../../creation-and-editing/authoring-engine/regenerateTruss";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
+import { DocumentRuntime } from "../../creation-and-editing/runtime-engine/DocumentRuntime";
 import type {
   AuthoredDocument,
   CompositeRecipe,
   ExposedParameter,
   Layout,
-} from "../../runtime/authoring/types";
-import { validateAuthoredDocument } from "../../runtime/authoring/validate";
-import { parseRecipe } from "../../runtime/recipes/schema";
+} from "../../creation-and-editing/authoring-engine/document";
+import { validateAuthoredDocument } from "../../creation-and-editing/validator/document";
+import { parseRecipe } from "../../creation-and-editing/validator/parseRecipe";
 import type { ExperimentDocument } from "../document";
 import { planInsertion } from "../editor/insertionPlan";
 import {

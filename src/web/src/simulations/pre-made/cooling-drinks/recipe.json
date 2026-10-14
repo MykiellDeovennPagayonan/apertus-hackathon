@@ -188,46 +188,46 @@
           "rect": {
             "x": 0,
             "y": 0,
-            "width": 680,
-            "height": 390
+            "width": 440,
+            "height": 220
           },
           "zIndex": 0,
           "locked": false,
-          "responsiveMinHeight": 390
+          "responsiveMinHeight": 220
         },
         {
           "id": "board/layout/appearance1",
           "layoutId": "layout/appearance1",
           "rect": {
-            "x": 696,
+            "x": 456,
             "y": 0,
-            "width": 680,
-            "height": 390
+            "width": 440,
+            "height": 220
           },
           "zIndex": 1,
           "locked": false,
-          "responsiveMinHeight": 390
+          "responsiveMinHeight": 220
         },
         {
           "id": "board/layout/control/time",
           "layoutId": "layout/control/time",
           "rect": {
-            "x": 0,
-            "y": 410,
-            "width": 328,
-            "height": 128
+            "x": 320,
+            "y": 236,
+            "width": 576,
+            "height": 176
           },
           "zIndex": 2,
           "locked": false,
-          "responsiveMinHeight": 128
+          "responsiveMinHeight": 176
         }
       ],
       "groups": [],
       "startView": {
         "x": -24,
         "y": -24,
-        "width": 1424,
-        "height": 640
+        "width": 944,
+        "height": 460
       },
       "navigation": {
         "mode": "bounded",
@@ -253,8 +253,8 @@
       "learnerArea": {
         "x": -24,
         "y": -24,
-        "width": 1424,
-        "height": 720
+        "width": 944,
+        "height": 500
       }
     }
   },

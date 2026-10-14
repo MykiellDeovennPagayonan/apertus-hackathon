@@ -1,4 +1,4 @@
-import type { DomainContribution } from "../../runtime/contribution";
+import type { DomainContribution } from "../../registry/contracts/domainContribution";
 import { boxPackingModel } from "./boxPacking";
 import { canPackagingModel } from "./canPackaging";
 import { cubeNetModel } from "./cubeNet";

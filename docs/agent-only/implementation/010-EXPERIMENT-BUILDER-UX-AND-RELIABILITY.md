@@ -178,9 +178,9 @@ Do not infer component type from whether its ID contains `prefabs`, or equate ev
 - [CompositionLibrary.tsx](../../../src/web/src/simulations/builder/composition/CompositionLibrary.tsx): current modal, cards, filters, disclosures, and action ordering.
 - [libraryChoices.ts](../../../src/web/src/simulations/builder/composition/libraryChoices.ts): definition filtering and current registration-order behavior.
 - [useComponentCatalog.ts](../../../src/web/src/simulations/builder/composition/useComponentCatalog.ts): catalog state, recipes, search, and compatibility.
-- [generic.ts](../../../src/web/src/simulations/components/catalog/generic.ts): `base()` currently sets `description: title`.
-- [catalog/index.ts](../../../src/web/src/simulations/components/catalog/index.ts): public definition registration and adapted metadata.
-- [types.ts](../../../src/web/src/simulations/runtime/authoring/types.ts): public definition, recipe, and document contracts.
+- [generic.ts](../../../src/web/src/simulations/legacy/components/catalog/generic.ts): `base()` currently sets `description: title`.
+- [catalog/index.ts](../../../src/web/src/simulations/registry/index.ts): public definition registration and adapted metadata.
+- [types.ts](../../../src/web/src/simulations/creation-and-editing/authoring-engine/document.ts): public definition, recipe, and document contracts.
 - [ComponentDialog.tsx](../../../src/web/src/simulations/builder/ComponentDialog.tsx): dialog lifecycle, focus restoration, and footer.
 - [composition.css](../../../src/web/src/simulations/builder/composition/composition.css): catalog grid, card typography, inputs, and modal layout.
 
@@ -223,9 +223,9 @@ Prefer changing titles and discovery metadata without changing stable definition
 
 ### Reference files
 
-- [Line.ts](../../../src/web/src/simulations/components/definitions/Line.ts): single-object definition and geometry defaults.
-- [composites/catalog.ts](../../../src/web/src/simulations/components/composites/catalog.ts): `modelRecipe()`, automatic controls/readouts, recipe titles, and built-in recipe generation.
-- [catalog/index.ts](../../../src/web/src/simulations/components/catalog/index.ts): adapted Line ports and commands.
+- [Line.ts](../../../src/web/src/simulations/registry/objects/Line.ts): single-object definition and geometry defaults.
+- [composites/catalog.ts](../../../src/web/src/simulations/registry/recipes/builtIn.ts): `modelRecipe()`, automatic controls/readouts, recipe titles, and built-in recipe generation.
+- [catalog/index.ts](../../../src/web/src/simulations/registry/index.ts): adapted Line ports and commands.
 - [compositeCommands.ts](../../../src/web/src/simulations/builder/editor/compositeCommands.ts): `addCatalogComponent()` and `insertComposite()`.
 - [libraryChoices.ts](../../../src/web/src/simulations/builder/composition/libraryChoices.ts): future search ordering policy.
 
@@ -275,11 +275,11 @@ For a complete experiment that owns a canvas, distinguish insertion with its own
 
 - [authoredGraph.ts](../../../src/web/src/simulations/builder/graph/authoredGraph.ts): collapsed groups, boundary port projection, and endpoint resolution.
 - [CompositionGraph.tsx](../../../src/web/src/simulations/builder/composition/CompositionGraph.tsx): `endMove()`, Arrange, keyboard movement, and selection.
-- [validate.ts](../../../src/web/src/simulations/runtime/authoring/validate.ts): group validation and editor-position validation.
+- [validate.ts](../../../src/web/src/simulations/creation-and-editing/validator/document.ts): group validation and editor-position validation.
 - [selection.ts](../../../src/web/src/simulations/builder/editor/selection.ts): grouping, ungrouping, deletion, copy, and paste.
-- [recipes.ts](../../../src/web/src/simulations/runtime/authoring/recipes.ts): recipe expansion, identity remapping, external ports, and node removal.
+- [recipes.ts](../../../src/web/src/simulations/creation-and-editing/authoring-engine/recipes.ts): recipe expansion, identity remapping, external ports, and node removal.
 - [connectionCommands.ts](../../../src/web/src/simulations/builder/editor/connectionCommands.ts): resolved endpoint wiring and validation.
-- [types.ts](../../../src/web/src/simulations/runtime/authoring/types.ts): group and exposed-port schema changes.
+- [types.ts](../../../src/web/src/simulations/creation-and-editing/authoring-engine/document.ts): group and exposed-port schema changes.
 - [useDocumentHistory.ts](../../../src/web/src/simulations/builder/history/useDocumentHistory.ts): atomic edits and editor metadata synchronization.
 
 ## R5. Make destination selection and insertion predictable
@@ -319,7 +319,7 @@ Validate again at execution time and apply all changes atomically. Rejection mus
 - [useComponentCatalog.ts](../../../src/web/src/simulations/builder/composition/useComponentCatalog.ts): destination state, `componentCompatibility()`, `recipeCompatibility()`, and insertion.
 - [CompositionBuilder.tsx](../../../src/web/src/simulations/builder/composition/CompositionBuilder.tsx): `openLibrary()` and target selection.
 - [compositeCommands.ts](../../../src/web/src/simulations/builder/editor/compositeCommands.ts): destination lookup, canvas reuse, scope changes, and validation.
-- [recipes.ts](../../../src/web/src/simulations/runtime/authoring/recipes.ts): expansion and external binding behavior.
+- [recipes.ts](../../../src/web/src/simulations/creation-and-editing/authoring-engine/recipes.ts): expansion and external binding behavior.
 - [useDocumentHistory.ts](../../../src/web/src/simulations/builder/history/useDocumentHistory.ts): transaction acceptance and rejection.
 
 ## R6. Make component previews visible and useful
@@ -352,8 +352,8 @@ The current preview is a list of node labels and definition titles, not a visual
 - [CompositionLibrary.tsx](../../../src/web/src/simulations/builder/composition/CompositionLibrary.tsx): preview button and bottom-of-catalog section.
 - [useComponentCatalog.ts](../../../src/web/src/simulations/builder/composition/useComponentCatalog.ts): preview selection state.
 - [ComponentDialog.tsx](../../../src/web/src/simulations/builder/ComponentDialog.tsx): existing dialog lifecycle and focus restoration.
-- [RecipeLesson.tsx](../../../src/web/src/simulations/components/views/RecipeLesson.tsx): possible reuse for isolated interactive previews.
-- [runtime.ts](../../../src/web/src/simulations/runtime/authoring/runtime.ts): runtime construction and state isolation.
+- [RecipeLesson.tsx](../../../src/web/src/simulations/creation-and-editing/simulation/RecipeLesson.tsx): possible reuse for isolated interactive previews.
+- [runtime.ts](../../../src/web/src/simulations/creation-and-editing/runtime-engine/DocumentRuntime.ts): runtime construction and state isolation.
 
 ## R7. Design a complete import workflow
 
@@ -389,7 +389,7 @@ On failure, retain recoverable input, explain the issue, and offer retry or anot
 - [CompositionLibrary.tsx](../../../src/web/src/simulations/builder/composition/CompositionLibrary.tsx): file input and recovery textarea.
 - [useComponentCatalog.ts](../../../src/web/src/simulations/builder/composition/useComponentCatalog.ts): `importRecipe()`, retention, and browser-lock coordination.
 - [RecipeRepository.ts](../../../src/web/src/simulations/builder/library/RecipeRepository.ts): library persistence and identity handling.
-- [recipes.ts](../../../src/web/src/simulations/runtime/authoring/recipes.ts): recipe validation and dependency contracts.
+- [recipes.ts](../../../src/web/src/simulations/creation-and-editing/authoring-engine/recipes.ts): recipe validation and dependency contracts.
 - [composition.css](../../../src/web/src/simulations/builder/composition/composition.css): import and feedback presentation.
 
 ## R8. Introduce clear, contextual errors and useful diagnostics
@@ -439,7 +439,7 @@ Example movement fallback: `Couldn't move Line exploration. Its position could n
 - [useComponentCatalog.ts](../../../src/web/src/simulations/builder/composition/useComponentCatalog.ts): string feedback and exception forwarding.
 - [useDocumentHistory.ts](../../../src/web/src/simulations/builder/history/useDocumentHistory.ts): edit rejection versus last-valid-preview state.
 - [CompositionGraph.tsx](../../../src/web/src/simulations/builder/composition/CompositionGraph.tsx): connection feedback and graph status.
-- [validate.ts](../../../src/web/src/simulations/runtime/authoring/validate.ts): low-level validation messages.
+- [validate.ts](../../../src/web/src/simulations/creation-and-editing/validator/document.ts): low-level validation messages.
 - [composition.css](../../../src/web/src/simulations/builder/composition/composition.css): current `.composition-notice` and connection-status styling.
 
 ## R9. Turn Build into a coherent lesson composition surface
@@ -482,14 +482,14 @@ The screenshot's missing line and additional number-line content cannot be concl
 ### Reference files
 
 - [CompositionBuilder.tsx](../../../src/web/src/simulations/builder/composition/CompositionBuilder.tsx): Build tab and authoring callbacks.
-- [RecipeLesson.tsx](../../../src/web/src/simulations/components/views/RecipeLesson.tsx): `NodeView`, `LayoutView`, runtime controls, and selection context.
-- [recipe-lesson.css](../../../src/web/src/simulations/components/views/recipe-lesson.css): hardcoded panel and form styling.
-- [composites/catalog.ts](../../../src/web/src/simulations/components/composites/catalog.ts): generated scene/control/details layouts.
-- [recipes.ts](../../../src/web/src/simulations/runtime/authoring/recipes.ts): layout append behavior.
+- [RecipeLesson.tsx](../../../src/web/src/simulations/creation-and-editing/simulation/RecipeLesson.tsx): `NodeView`, `LayoutView`, runtime controls, and selection context.
+- [recipe-lesson.css](../../../src/web/src/simulations/creation-and-editing/simulation/recipe-lesson.css): hardcoded panel and form styling.
+- [composites/catalog.ts](../../../src/web/src/simulations/registry/recipes/builtIn.ts): generated scene/control/details layouts.
+- [recipes.ts](../../../src/web/src/simulations/creation-and-editing/authoring-engine/recipes.ts): layout append behavior.
 - [compositeCommands.ts](../../../src/web/src/simulations/builder/editor/compositeCommands.ts): canvas reuse and layout pruning.
-- [CompositionCanvas.tsx](../../../src/web/src/simulations/components/views/CompositionCanvas.tsx): canvas provider routing.
-- [CartesianView.tsx](../../../src/web/src/simulations/components/views/CartesianView.tsx): Cartesian geometry rendering and author interaction.
-- [runtime.ts](../../../src/web/src/simulations/runtime/authoring/runtime.ts): snapshot construction and document updates.
+- [CompositionCanvas.tsx](../../../src/web/src/simulations/legacy/components/views/CompositionCanvas.tsx): canvas provider routing.
+- [CartesianView.tsx](../../../src/web/src/simulations/legacy/components/views/CartesianView.tsx): Cartesian geometry rendering and author interaction.
+- [runtime.ts](../../../src/web/src/simulations/creation-and-editing/runtime-engine/DocumentRuntime.ts): snapshot construction and document updates.
 
 ## Delivery sequence
 

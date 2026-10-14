@@ -1,4 +1,4 @@
-import { naturalSystemsDefaults } from "../../components/resources/natural-systems/defaults";
+import { naturalSystemsDefaults } from "../../legacy/components/resources/natural-systems/defaults";
 import {
   diffusionApply,
   diffusionConfiguration,
@@ -15,17 +15,17 @@ import {
   predatorPreyInitial,
   predatorPreyMeasure,
   predatorPreyStep,
-} from "../../components/systems/natural-systems/models";
+} from "../../legacy/components/systems/natural-systems/models";
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
+} from "../../registry/contracts/domainContribution";
 import {
   boolean,
   num,
   object,
   type ParameterSchema,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 
 const action = (
   value: ParameterSchema | undefined,

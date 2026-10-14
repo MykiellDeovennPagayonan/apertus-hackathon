@@ -99,12 +99,10 @@ Initial benchmark defaults are 8192 context tokens, three Apertus CPU threads, o
 ```sh
 cd src/web
 pnpm exec tsc --noEmit
-node scripts/deployment/verify-offline.cjs
-node scripts/generation/verify-providers.cjs
-node scripts/generation/verify-decision-providers.cjs
+pnpm test
 pnpm build
 ```
 
 Run `.venv-laya/bin/python -m pytest tests/test_laya_api.py` from `src/inference` for the wrapper tests. CPU weights require the Docker image: its wrapper is installed as `laya_service`, avoiding a name collision with upstream's `laya` library. The existing local MLX `python -m laya` entry point remains available.
 
-When a production build exists, the browser regression can be run from `src/web` with `node scripts/deployment/verify-offline-browser.cjs`. Set `APERTUS_BROWSER_TEST_DIR` if that build used a custom directory. It starts an isolated offline production server and uses local fixtures, without model inference or MongoDB. Install Chromium with `pnpm exec playwright install chromium`, or set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to an existing executable.
+Before the demo, manually check loading the app offline, interacting with a premade recipe, and save/reload on the target device.

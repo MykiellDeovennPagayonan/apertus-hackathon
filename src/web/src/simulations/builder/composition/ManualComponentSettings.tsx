@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { publicDefinition } from "../../components/catalog";
-import { createPublicNode } from "../../components/composites/catalog";
-import { componentDefinitions } from "../../components/registry";
-import { CompositionCanvas } from "../../components/views/CompositionCanvas";
-import { removeNodes } from "../../runtime/authoring/recipes";
-import { requireValue } from "../../runtime/authoring/requireValue";
-import type { ComponentInstance } from "../../runtime/authoring/types";
+import { publicDefinition } from "../../registry/index";
+import { createPublicNode } from "../../registry/recipes/modelRecipe";
+import { componentDefinitions } from "../../registry/objects/registry";
+import { CompositionCanvas } from "../../legacy/components/views/CompositionCanvas";
+import { removeNodes } from "../../creation-and-editing/authoring-engine/recipes";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
+import type { ComponentInstance } from "../../creation-and-editing/authoring-engine/document";
 import type {
   CompositionScene,
   SceneObject,
-} from "../../runtime/composition/index";
+} from "../../creation-and-editing/runtime-engine/composition/index";
 import { CanvasSettings } from "./CanvasSettings";
 import { ObjectSettings } from "./ObjectSettings";
 import type { ComponentCatalog } from "./useComponentCatalog";

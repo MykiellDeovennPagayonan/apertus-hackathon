@@ -13,8 +13,8 @@ export default function SiteHeader({
   const offline = useOffline();
   return (
     <header className="site-header">
-      <Link href="/" className="site-header__brand" aria-label="Apertus home">
-        <span aria-hidden="true">✳</span> apertus
+      <Link href="/" className="site-header__brand" aria-label="pAperSim home">
+        <span aria-hidden="true">✳</span> pAperSim
       </Link>
       <nav aria-label="Main navigation">
         <Link href="/" aria-current={active === "home" ? "page" : undefined}>

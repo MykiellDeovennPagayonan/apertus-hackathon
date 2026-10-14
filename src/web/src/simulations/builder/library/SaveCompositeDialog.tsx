@@ -1,4 +1,4 @@
-import { publicDefinition } from "../../components/catalog";
+import { publicDefinition } from "../../registry/index";
 import { ComponentDialog } from "../ComponentDialog";
 import { FeedbackView } from "../composition/FeedbackView";
 import {

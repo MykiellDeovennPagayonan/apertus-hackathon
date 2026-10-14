@@ -4,7 +4,7 @@
 **Date:** 2026-10-02  
 **Scope:** The five counting, arithmetic, grouping, and fraction simulations discussed with the user.
 
-Follow [Component Architecture](../../COMPONENT_ARCHITECTURE.md), [Component Contracts](../COMPONENT_CONTRACTS.md), and the [component library conventions](../../../src/web/src/simulations/components/README.md). This extends the [existing implementation inventory](001-COMPONENT_IMPLEMENTATION.md); it does not replace the three working demos.
+Follow [Component Architecture](../../COMPONENT_ARCHITECTURE.md), [Component Contracts](../COMPONENT_CONTRACTS.md), and the [component library conventions](../../../src/web/src/simulations/legacy/components/README.md). This extends the [existing implementation inventory](001-COMPONENT_IMPLEMENTATION.md); it does not replace the three working demos.
 
 ## Implementation notes
 

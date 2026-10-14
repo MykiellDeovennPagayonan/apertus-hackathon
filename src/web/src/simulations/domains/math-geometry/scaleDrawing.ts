@@ -1,10 +1,10 @@
-import type { DomainModel } from "../../runtime/contribution";
+import type { DomainModel } from "../../registry/contracts/domainContribution";
 import {
   choice,
   num,
   object,
   validateValue,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 import { geometryDependencies, valueAction } from "./common";
 
 const side = num(1, 20, "m");

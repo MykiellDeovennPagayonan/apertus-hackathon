@@ -2,18 +2,18 @@ import {
   actions,
   canvasNames,
   isPairOutput,
-} from "../../components/contracts/composition";
-import { properties } from "../../components/registry";
-import type { SceneObject } from "../../components/traits/SceneObjects";
+} from "../../registry/contracts/objects/composition";
+import { properties } from "../../registry/objects/registry";
+import type { SceneObject } from "../../legacy/components/traits/SceneObjects";
 import {
   canvasTarget,
   clockTarget,
-} from "../../runtime/composition/projectCanvas";
+} from "../../creation-and-editing/runtime-engine/composition/projectCanvas";
 import type {
   CanvasComponent,
   CompositionScene,
   SceneControl,
-} from "../../runtime/composition/types";
+} from "../../creation-and-editing/runtime-engine/composition/types";
 export function upgradeWorkspace(scene: CompositionScene) {
   if (scene.workspace) return;
   const populated = scene.objects.length > 0;

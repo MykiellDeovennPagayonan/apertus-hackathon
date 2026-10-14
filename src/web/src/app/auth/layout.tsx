@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import PhysicsBackground from "./PhysicsBackground";
 
 export const metadata: Metadata = {
-  title: "Your account · Apertus Local Lab",
+  title: "Your account · pAperSim",
   robots: { index: false, follow: false },
   referrer: "no-referrer",
 };

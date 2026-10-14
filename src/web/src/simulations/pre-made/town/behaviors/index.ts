@@ -1,1 +1,1 @@
-export { DailyRoutine } from "../../../components/behaviors/DailyRoutine";
+export { DailyRoutine } from "../../../legacy/components/behaviors/DailyRoutine";

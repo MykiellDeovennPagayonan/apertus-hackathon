@@ -1,16 +1,16 @@
 import { mechanicsModels } from "./mechanics";
-import type { LeverState } from "../../components/systems/physics/lever";
+import type { LeverState } from "../../legacy/components/systems/physics/lever";
 import {
   leverDefaults,
   leverMeasure,
   leverParameters,
   leverState,
-} from "../../components/systems/physics/lever";
+} from "../../legacy/components/systems/physics/lever";
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
-import { num, object, validateValue } from "../../runtime/parameterSchema";
+} from "../../registry/contracts/domainContribution";
+import { num, object, validateValue } from "../../registry/contracts/parameterSchema";
 
 const setter = (schema: ReturnType<typeof num>, description: string) => ({
   arguments: object({ value: schema }),

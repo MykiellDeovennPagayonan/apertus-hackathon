@@ -1,26 +1,24 @@
 import { unwrapPortable } from "../../../lib/projects/portable";
-import {
-  builtInRecipe,
-  modelRecipe,
-} from "../../components/composites/catalog";
-import { convertToBoard, extent } from "../../runtime/authoring/board";
+import { builtInRecipe } from "../../registry/recipes/builtIn";
+import { modelRecipe } from "../../registry/recipes/modelRecipe";
+import { convertToBoard, extent } from "../../creation-and-editing/authoring-engine/presentation/board";
 import {
   migrateControlDependencies,
   migrateControls,
-} from "../../runtime/authoring/migrateControls";
-import { migrateBoardDrawings } from "../../runtime/authoring/migrateDrawings";
-import { insertRecipe } from "../../runtime/authoring/recipes";
-import { requireValue } from "../../runtime/authoring/requireValue";
-import { spatialRecipeDocument } from "../../runtime/authoring/spatialMigration";
+} from "../../legacy/compatibility/migrateControls";
+import { migrateBoardDrawings } from "../../legacy/compatibility/migrateDrawings";
+import { insertRecipe } from "../../creation-and-editing/authoring-engine/recipes";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
+import { spatialRecipeDocument } from "../../legacy/compatibility/spatialMigration";
 import {
   type CompositeRecipe,
   emptyAuthoredDocument,
-} from "../../runtime/authoring/types";
-import { validateAuthoredDocument } from "../../runtime/authoring/validate";
-import { arrangeFocusedExperiment } from "../../runtime/recipes/compatibility/presentation";
-import { loadRecipe as loadAuthoredRecipe } from "../../runtime/recipes/loadRecipe";
-import { serializeRecipe as serializeAuthoredRecipe } from "../../runtime/recipes/serializeRecipe";
-import { parseRecipe, resolveRecipe } from "../../runtime/resolver";
+} from "../../creation-and-editing/authoring-engine/document";
+import { validateAuthoredDocument } from "../../creation-and-editing/validator/document";
+import { arrangeFocusedExperiment } from "../../legacy/runtime/recipes/compatibility/presentation";
+import { loadRecipe as loadAuthoredRecipe } from "../../creation-and-editing/runtime-engine/loadRecipe";
+import { serializeRecipe as serializeAuthoredRecipe } from "../../creation-and-editing/authoring-engine/serializeRecipe";
+import { parseRecipe, resolveRecipe } from "../../legacy/runtime/resolver";
 import { canonicalDocument, fromAssembly } from "./canonical";
 import { fromRecipe } from "./legacy";
 import type { ExperimentDocument } from "./types";
@@ -30,7 +28,7 @@ export function parseDocument(source: string): ExperimentDocument {
   if (input && typeof input === "object" && "documentVersion" in input) {
     if ("authored" in input && input.authored) {
       const original =
-        input.authored as import("../../runtime/authoring/types").AuthoredDocument;
+        input.authored as import("../../creation-and-editing/authoring-engine/document").AuthoredDocument;
       input.authored = migrateControls(original);
       const metadata =
         "recipeMetadata" in input
@@ -41,7 +39,7 @@ export function parseDocument(source: string): ExperimentDocument {
       if (Array.isArray(metadata?.dependencies))
         metadata.dependencies = migrateControlDependencies(
           original,
-          input.authored as import("../../runtime/authoring/types").AuthoredDocument,
+          input.authored as import("../../creation-and-editing/authoring-engine/document").AuthoredDocument,
           metadata.dependencies,
         );
     }
@@ -54,7 +52,7 @@ export function parseDocument(source: string): ExperimentDocument {
   }
   if (input && typeof input === "object" && "formatVersion" in input) {
     const migrated = migrateControls(
-      input as import("../../runtime/authoring/types").AuthoredDocument,
+      input as import("../../creation-and-editing/authoring-engine/document").AuthoredDocument,
     );
     validateAuthoredDocument(migrated);
     return canonicalDocument(migrateBoardDrawings(migrated));

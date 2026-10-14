@@ -3,27 +3,27 @@ import {
   event,
   type ScienceSpec,
   type ScienceState,
-} from "../../components/systems/science/contracts";
+} from "../../legacy/components/systems/science/contracts";
 import {
   environmentObservation,
   environmentStep,
-} from "../../components/systems/science/environment";
+} from "../../legacy/components/systems/science/environment";
 import {
   lifeObservation,
   lifeStep,
-} from "../../components/systems/science/life";
-import { requireValue } from "../../runtime/authoring/requireValue";
+} from "../../legacy/components/systems/science/life";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
+} from "../../registry/contracts/domainContribution";
 import {
   boolean,
   choice,
   num,
   object,
   validateValue,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 import { scienceKeywords, scienceSpec, scienceSpecs } from "./specs";
 
 export { scienceSpec, scienceSpecs } from "./specs";

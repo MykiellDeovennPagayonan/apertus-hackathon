@@ -1,5 +1,5 @@
-import type { DomainModel } from "../runtime/contribution";
-import { num, object, validateValue } from "../runtime/parameterSchema";
+import type { DomainModel } from "../registry/contracts/domainContribution";
+import { num, object, validateValue } from "../registry/contracts/parameterSchema";
 
 interface ComparisonSpec {
   namespace: string;

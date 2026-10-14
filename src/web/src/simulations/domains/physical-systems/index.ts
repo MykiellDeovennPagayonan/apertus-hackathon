@@ -2,8 +2,8 @@ import {
   createCircuit,
   createPendulum,
   createTrack,
-} from "../../components/prefabs/physical-systems/objects";
-import { physicalDefaults } from "../../components/resources/physical-systems/defaults";
+} from "../../legacy/components/prefabs/physical-systems/objects";
+import { physicalDefaults } from "../../legacy/components/resources/physical-systems/defaults";
 import {
   advance,
   circuitApply,
@@ -12,25 +12,25 @@ import {
   pendulumMeasure,
   trackApply,
   trackMeasure,
-} from "../../components/systems/physical-systems/models";
+} from "../../legacy/components/systems/physical-systems/models";
 import type {
   CircuitState,
   PendulumParameters,
   PendulumState,
   TrackParameters,
   TrackState,
-} from "../../components/traits/physical-systems/state";
+} from "../../legacy/components/traits/physical-systems/state";
 import type {
   DomainContribution,
   DomainModel,
-} from "../../runtime/contribution";
+} from "../../registry/contracts/domainContribution";
 import {
   boolean,
   choice,
   num,
   object,
   type ParameterSchema,
-} from "../../runtime/parameterSchema";
+} from "../../registry/contracts/parameterSchema";
 
 const action = (
   field: ParameterSchema | undefined,
@@ -119,6 +119,7 @@ export const pendulumModel: DomainModel = {
   ),
   defaults: { ...physicalDefaults.pendulum },
   requiredObservations: ["period", "angle", "elapsed"],
+  presentedOutputs: ["angle"],
   graphOutput: "points",
   outputs: {
     period: output(

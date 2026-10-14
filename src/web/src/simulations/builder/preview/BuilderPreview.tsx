@@ -1,6 +1,6 @@
 "use client";
 import { createPortal } from "react-dom";
-import { CompositionCanvas } from "../../components/views/CompositionCanvas";
+import { CompositionCanvas } from "../../legacy/components/views/CompositionCanvas";
 import {
   CompositionLesson,
   type LessonProps,
@@ -14,7 +14,7 @@ export function BuilderPreview(
   > & {
     document: ExperimentDocument;
     onCapture?: (
-      scene: import("../../runtime/composition/types").CompositionScene,
+      scene: import("../../creation-and-editing/runtime-engine/composition/types").CompositionScene,
       canvasId?: string,
     ) => void;
     editor?: {

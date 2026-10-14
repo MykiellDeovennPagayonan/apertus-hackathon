@@ -1,11 +1,11 @@
 "use client";
-import { ImportedValueForm } from "../../components/controls/ImportedValueForm";
-import { IMPORTED_HTML } from "../../runtime/imported/contract";
-import { publicDefinition } from "../../components/catalog";
-import { hasControlSettings } from "../../components/controls/controlContract";
-import { SchemaForm } from "../../components/controls/SchemaForm";
-import { requireValue } from "../../runtime/authoring/requireValue";
-import { emptyLayout, type Layout } from "../../runtime/authoring/types";
+import { ImportedValueForm } from "../../legacy/components/controls/ImportedValueForm";
+import { IMPORTED_HTML } from "../../creation-and-editing/runtime-engine/imported/contract";
+import { publicDefinition } from "../../registry/index";
+import { hasControlSettings } from "../../registry/contracts/controlContract";
+import { SchemaForm } from "../../registry/controls/SchemaForm";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
+import { emptyLayout, type Layout } from "../../creation-and-editing/authoring-engine/document";
 import { interchangeableControls } from "../editor/controlTypeCommands";
 import { ControlSettings } from "./ControlSettings";
 import { ControlTypeSettings } from "./ControlTypeSettings";
@@ -53,7 +53,7 @@ export function ComponentSettings({
           {current.definition === IMPORTED_HTML ? (
             <ImportedValueForm
               key={`${current.id}/${JSON.stringify(current.configuration)}`}
-              schema={{ type: "object", properties: { settings: (publicDefinition(current).configuration as Extract<import("../../runtime/parameterSchema").ParameterSchema, { type: "object" }>).properties.settings, inputs: (publicDefinition(current).configuration as Extract<import("../../runtime/parameterSchema").ParameterSchema, { type: "object" }>).properties.inputs } }}
+              schema={{ type: "object", properties: { settings: (publicDefinition(current).configuration as Extract<import("../../registry/contracts/parameterSchema").ParameterSchema, { type: "object" }>).properties.settings, inputs: (publicDefinition(current).configuration as Extract<import("../../registry/contracts/parameterSchema").ParameterSchema, { type: "object" }>).properties.inputs } }}
               initial={{ settings: current.configuration.settings, inputs: current.configuration.inputs }}
               label="Component settings and manual inputs"
               onSubmit={value => change("Edit imported component", d => {

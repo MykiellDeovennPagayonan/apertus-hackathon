@@ -57,15 +57,14 @@ export default function Community() {
       <main className="community-page community-gallery">
         <header className="community-hero">
           <div className="community-hero-copy">
-            <span className="community-eyebrow">THE COMMUNITY LAB</span>
+            <span className="community-eyebrow">COMMUNITY</span>
             <h1>
-              Ideas are better
+              Browse shared
               <br />
-              when you can <em>try them.</em>
+              <em>experiments.</em>
             </h1>
             <p>
-              Explore experiments made by curious minds. Run one, change
-              something, and make your own discovery.
+              Run experiments shared by other users, or copy one to edit it.
             </p>
             <div className="community-hero-actions">
               <Link
@@ -79,12 +78,12 @@ export default function Community() {
               </Link>
             </div>
             <span className="community-hero-note">
-              Explore freely. Remix with credit.
+              Credit the original author when sharing a remix.
             </span>
           </div>
           <div className="community-hero-art" aria-hidden="true">
             <span className="community-art-label">
-              A LITTLE CHANGE. A NEW DISCOVERY.
+              ADJUST VARIABLES. COMPARE RESULTS.
             </span>
             <svg viewBox="0 0 380 190" fill="none" aria-hidden="true">
               <path
@@ -121,9 +120,9 @@ export default function Community() {
               <BuilderIcon name="forward" />
             </div>
             <div className="community-art-caption">
-              <span>01 / EXPLORE</span>
-              <span>02 / EXPERIMENT</span>
-              <span>03 / REMIX</span>
+              <span>01 / OPEN</span>
+              <span>02 / RUN</span>
+              <span>03 / EDIT</span>
             </div>
           </div>
         </header>
@@ -133,8 +132,8 @@ export default function Community() {
         >
           <div className="community-section-heading">
             <div>
-              <span className="community-eyebrow">MADE TO BE EXPLORED</span>
-              <h2 id="community-browse-title">Find your next experiment</h2>
+              <span className="community-eyebrow">SHARED PROJECTS</span>
+              <h2 id="community-browse-title">Browse projects</h2>
             </div>
             <span className="community-sort">
               <BuilderIcon name="history" /> Newest first
@@ -241,17 +240,17 @@ export default function Community() {
                 <BuilderIcon name={filtered ? "search" : "experiments"} />
               </span>
               <span className="community-eyebrow">
-                {filtered ? "KEEP EXPLORING" : "ROOM FOR YOUR IDEAS"}
+                {filtered ? "SEARCH RESULTS" : "SHARED PROJECTS"}
               </span>
               <h3>
                 {filtered
-                  ? "No matches this time"
-                  : `Be the first to share ${type === "experiment" ? "an experiment" : "a composition"}`}
+                  ? "No matching projects"
+                  : `No ${type === "experiment" ? "experiments" : "compositions"} shared yet`}
               </h3>
               <p>
                 {filtered
-                  ? "Try another search or clear your filters to explore the lab."
-                  : "Build something you’re curious about. Save it to My projects, then publish it for others to explore and remix."}
+                  ? "Change your search or clear the filters."
+                  : "Create a project, save it to My projects, then publish it to the community."}
               </p>
               {filtered ? (
                 <button
@@ -320,7 +319,7 @@ export default function Community() {
                     </div>
                     <span className="community-card-art-note">
                       {p.projectType === "experiment"
-                        ? "CHANGE · OBSERVE · DISCOVER"
+                        ? "RUN · ADJUST · COMPARE"
                         : "CONNECT · REUSE · BUILD"}
                     </span>
                   </Link>
@@ -332,7 +331,7 @@ export default function Community() {
                     </h2>
                     <p className="community-card-description">
                       {p.description ||
-                        "A community-made idea, ready for you to explore and make your own."}
+                        "No description provided."}
                     </p>
                     <div className="community-card-tags">
                       {p.tags.map((t) => (
@@ -399,10 +398,9 @@ export default function Community() {
             <BuilderIcon name="share" />
           </span>
           <div>
-            <h2>Your next discovery could inspire someone.</h2>
+            <h2>Share a project</h2>
             <p>
-              Create an experiment, save it to your projects, and share it with
-              the lab.
+              Save an experiment to My projects, then publish it to the community.
             </p>
           </div>
           <Link className="community-secondary" href="/projects">

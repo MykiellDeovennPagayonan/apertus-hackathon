@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "../../components/views/useCompactDiagram";
+import { useReducedMotion } from "../../legacy/components/views/useCompactDiagram";
 import type { GraphNode } from "../graph/types";
 
 type Positions = Record<string, { x: number; y: number }>;

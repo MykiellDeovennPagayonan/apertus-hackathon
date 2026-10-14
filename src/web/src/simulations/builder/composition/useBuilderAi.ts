@@ -2,13 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ComposerStatus } from "../../../app/_components/CommandBar";
-import { requestGeneration } from "../../../lib/planner/browser";
-import type { ConstructionUpdate } from "../../../lib/planner/construction";
-import { generationStages } from "../../../lib/planner/progress";
-import type { GenerationRequest } from "../../../lib/planner/schema";
-import { publicDefinition } from "../../components/catalog";
-import { reconcileBoard } from "../../runtime/authoring/board";
-import { finalizeRecipe } from "../../runtime/authoring/operations";
+import { requestGeneration } from "../../creation-and-editing/input/browser";
+import type { ConstructionUpdate } from "../../creation-and-editing/simulation/construction/contracts";
+import { generationStages } from "../../creation-and-editing/input/progress";
+import type { GenerationRequest } from "../../creation-and-editing/input/contracts";
+import { publicDefinition } from "../../registry/index";
+import { reconcileBoard } from "../../creation-and-editing/authoring-engine/presentation/board";
+import { finalizeRecipe } from "../../creation-and-editing/authoring-engine/finalizeRecipe";
 import type { ExperimentDocument } from "../document/types";
 import { builderFailureStatus } from "./builderFeedback";
 import {
@@ -45,7 +45,7 @@ export function activeFromBuilderDocument(
     reconcileBoard(authored);
 
     const normalizeParam = (
-      p: import("../../runtime/authoring/types").ExposedParameter,
+      p: import("../../creation-and-editing/authoring-engine/document").ExposedParameter,
     ) => {
       const targetNode = authored.nodes.find((n) => n.id === p.node);
       if (targetNode) {
@@ -73,7 +73,7 @@ export function activeFromBuilderDocument(
     };
 
     const normalizePort = (
-      ep: import("../../runtime/authoring/types").ExposedPort,
+      ep: import("../../creation-and-editing/authoring-engine/document").ExposedPort,
     ) => {
       const targetNode = authored.nodes.find((n) => n.id === ep.endpoint.node);
       if (targetNode) {

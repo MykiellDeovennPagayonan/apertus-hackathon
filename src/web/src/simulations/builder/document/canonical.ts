@@ -1,16 +1,16 @@
-import { publicDefinition } from "../../components/catalog";
-import { createPublicNode } from "../../components/composites/catalog";
-import { componentDefinition } from "../../components/registry";
-import { assemblyDocument } from "../../runtime/authoring/adapters";
-import { convertToBoard } from "../../runtime/authoring/board";
-import { requireValue } from "../../runtime/authoring/requireValue";
+import { publicDefinition } from "../../registry/index";
+import { createPublicNode } from "../../registry/recipes/modelRecipe";
+import { componentDefinition } from "../../registry/objects/registry";
+import { assemblyDocument } from "../../creation-and-editing/authoring-engine/compatibility/assemblyDocument";
+import { convertToBoard } from "../../creation-and-editing/authoring-engine/presentation/board";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
 import {
   emptyAuthoredDocument,
   emptyLayout,
-} from "../../runtime/authoring/types";
-import { validateAuthoredDocument } from "../../runtime/authoring/validate";
-import { projectedScene } from "../../runtime/composition/projectCanvas";
-import type { Assembly } from "../../runtime/contribution";
+} from "../../creation-and-editing/authoring-engine/document";
+import { validateAuthoredDocument } from "../../creation-and-editing/validator/document";
+import { projectedScene } from "../../creation-and-editing/runtime-engine/composition/projectCanvas";
+import type { Assembly } from "../../registry/contracts/domainContribution";
 import { addCanvas, upgradeWorkspace } from "../editor/workspaceCommands";
 import { createBlankDocument } from "./legacy";
 import { composeLegacy } from "./migrations/composeLegacy";

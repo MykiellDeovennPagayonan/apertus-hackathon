@@ -3,58 +3,58 @@ import {
   buoyancyMeasure,
   buoyancyParameters,
   buoyancyState,
-} from "../../components/systems/physics/buoyancy";
+} from "../../legacy/components/systems/physics/buoyancy";
 import {
   collisionDefaults,
   collisionMeasure,
   collisionParameters,
   collisionState,
-} from "../../components/systems/physics/collision";
+} from "../../legacy/components/systems/physics/collision";
 import {
   flowDefaults,
   flowMeasure,
   flowParameters,
   flowState,
-} from "../../components/systems/physics/flow";
+} from "../../legacy/components/systems/physics/flow";
 import {
   gearsDefaults,
   gearsMeasure,
   gearsParameters,
   gearsState,
-} from "../../components/systems/physics/gears";
+} from "../../legacy/components/systems/physics/gears";
 import {
   hydraulicsDefaults,
   hydraulicsMeasure,
   hydraulicsParameters,
   hydraulicsState,
-} from "../../components/systems/physics/hydraulics";
+} from "../../legacy/components/systems/physics/hydraulics";
 import {
   parachuteAdvance,
   parachuteDefaults,
   parachuteMeasure,
   parachuteParameters,
   parachuteState,
-} from "../../components/systems/physics/parachute";
+} from "../../legacy/components/systems/physics/parachute";
 import {
   pressureDefaults,
   pressureMeasure,
   pressureParameters,
   pressureState,
-} from "../../components/systems/physics/pressure";
+} from "../../legacy/components/systems/physics/pressure";
 import {
   pulleyDefaults,
   pulleyMeasure,
   pulleyParameters,
   pulleyState,
-} from "../../components/systems/physics/pulley";
+} from "../../legacy/components/systems/physics/pulley";
 import {
   tippingDefaults,
   tippingMeasure,
   tippingParameters,
   tippingState,
-} from "../../components/systems/physics/tipping";
-import type { DomainModel } from "../../runtime/contribution";
-import { object, validateValue } from "../../runtime/parameterSchema";
+} from "../../legacy/components/systems/physics/tipping";
+import type { DomainModel } from "../../registry/contracts/domainContribution";
+import { object, validateValue } from "../../registry/contracts/parameterSchema";
 
 const dependencies = {
   resources: [],
@@ -423,7 +423,7 @@ export const pressureModel: DomainModel = {
   version: 1,
   name: "Bottle outlet",
   description:
-    "Does a faster outlet always send water farther? Constant water-surface height maintained externally; ideal small horizontal outlet to air. Depth below water determines pressure/speed; height above floor determines fall time. No draining tank, contraction, viscosity or jet breakup.",
+    "Water exits a horizontal hole in a bottle as a curved stream. Adjust water-surface height and hole height above the floor; calculate outlet pressure, exit speed, flight time and horizontal landing distance. The selected water level is maintained externally between adjustments, rather than draining over time. Ideal small outlet to air; no contraction, viscosity or jet breakup.",
   tags: [
     "pressure",
     "bottle",
@@ -436,7 +436,7 @@ export const pressureModel: DomainModel = {
     "does a faster outlet always send water farther?",
   ],
   assumptions: [
-    "Constant water-surface height maintained externally; ideal small horizontal outlet to air. Depth below water determines pressure/speed; height above floor determines fall time. No draining tank, contraction, viscosity or jet breakup.",
+    "Each selected water-surface height is held constant between learner adjustments. The hole must be at or below the water surface. Depth below water determines outlet pressure and speed; hole height above floor determines fall time. Ideal horizontal outlet to air; no draining tank, contraction, viscosity or jet breakup.",
   ],
   parameters: pressureParameters,
   defaults: pressureDefaults,
@@ -444,16 +444,20 @@ export const pressureModel: DomainModel = {
   maximumInstances: 2,
   requiredObservations: [],
   dependencies,
-  outputs: Object.fromEntries(
-    Object.entries({
-      depth: "m",
-      gaugePressure: "Pa",
-      speed: "m/s",
-      flightTime: "s",
-      range: "m",
-    }).map(([key, unit]) => [key, { unit, description: key }]),
-  ),
+  outputs: {
+    depth: { unit: "m", description: "Depth of the outlet below the water surface" },
+    gaugePressure: { unit: "Pa", description: "Water pressure at the outlet above atmospheric pressure" },
+    speed: { unit: "m/s", description: "Horizontal speed of water exiting the hole" },
+    flightTime: { unit: "s", description: "Time for the water stream to fall from the outlet to the floor" },
+    range: { unit: "m", description: "Horizontal distance from the bottle to where the water stream lands on the floor" },
+  },
   actions: {
+    PRESSURE_SURFACEHEIGHT: {
+      arguments: object({ value: pressureParameters.properties.surfaceHeight }),
+      description: "Water level above the floor in metres; at or above the hole. Changes outlet pressure, water exit speed and stream landing distance without moving the hole",
+      timing: "live",
+      target: "instance",
+    },
     PRESSURE_HOLEHEIGHT: {
       arguments: object({ value: pressureParameters.properties.holeHeight }),
       description: "Hole height above floor",
@@ -468,6 +472,8 @@ export const pressureModel: DomainModel = {
     if (!action) throw new Error("Unsupported pressure action");
     validateValue(action.arguments, value === undefined ? {} : { value });
     const s = pressureState(state);
+    if (command === "PRESSURE_SURFACEHEIGHT")
+      return pressureState({ ...s, surfaceHeight: value });
     if (command === "PRESSURE_HOLEHEIGHT")
       return pressureState({ ...s, holeHeight: value });
     throw new Error("Unsupported pressure action");

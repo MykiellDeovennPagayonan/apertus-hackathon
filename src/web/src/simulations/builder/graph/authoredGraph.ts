@@ -1,10 +1,11 @@
-import { publicDefinition } from "../../components/catalog";
+import { publicDefinition } from "../../registry/index";
 import {
   automaticGraphPositions,
   graphRole,
-} from "../../runtime/authoring/graphLayout";
-import { requireValue } from "../../runtime/authoring/requireValue";
-import type { Endpoint, Port } from "../../runtime/authoring/types";
+} from "../../creation-and-editing/authoring-engine/presentation/graphLayout";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
+import type { Endpoint } from "../../creation-and-editing/authoring-engine/document";
+import type { Port } from "../../registry/contracts/publicDefinition";
 import type { ExperimentDocument } from "../document";
 import type { GraphNode, GraphPort, GraphWire, MovingBlock } from "./types";
 

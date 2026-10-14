@@ -592,15 +592,48 @@
   border-color: #4367b2;
   background: rgb(67 103 178 / 6%);
 }
-.manual-builder .connection-group > button {
+.manual-builder .connection-group-header {
   pointer-events: auto;
   position: absolute;
-  top: 4px;
-  left: 8px;
-  height: 28px;
+  top: 6px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  max-width: calc(100% - 24px);
+  border: 1px solid #c9d3c0;
+  border-radius: 10px;
+  background: var(--panel, #fffbef);
+  box-shadow: 0 2px 6px rgb(48 54 46 / 6%);
+  overflow: hidden;
+}
+.manual-builder .connection-group-label {
+  min-width: 0;
   cursor: grab;
   touch-action: none;
-  padding: 3px 10px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.manual-builder .connection-group-edit {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  padding: 0;
+  border: 0;
+  border-left: 1px solid #dce2d5;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted, #626c60);
+}
+.manual-builder .connection-group-header button:focus-visible {
+  outline-offset: -3px;
 }
 .connection-marquee {
   position: absolute;

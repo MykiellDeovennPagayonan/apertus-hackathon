@@ -2,8 +2,8 @@ import type { ComposerStatus } from "../../../app/_components/CommandBar";
 import {
   formatUserFacingDetails,
   formatUserFacingStatus,
-} from "../../../lib/planner/errorFormatting";
-import { publicDefinition } from "../../components/catalog";
+} from "../../creation-and-editing/input/errorFormatting";
+import { publicDefinition } from "../../registry/index";
 import type { ExperimentDocument } from "../document/types";
 import { portLabel } from "../graph/authoredGraph";
 

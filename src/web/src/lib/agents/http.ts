@@ -1,16 +1,16 @@
 import { createHash, randomBytes, randomUUID } from "node:crypto";
-import { validateRunConfiguration } from "../../simulations/components/systems/AgentSystems";
+import { validateRunConfiguration } from "../../simulations/legacy/components/systems/AgentSystems";
 import {
   AgentError,
   runView,
-} from "../../simulations/runtime/agents/contracts";
-import { MemoryRunRepository } from "../../simulations/runtime/agents/memoryRepository";
+} from "../../simulations/creation-and-editing/runtime-engine/agents/contracts";
+import { MemoryRunRepository } from "../../simulations/creation-and-editing/runtime-engine/agents/memoryRepository";
 import {
   AgentRunner,
   createAgentRun,
-} from "../../simulations/runtime/agents/runner";
-import { resolveAgentScenario } from "../../simulations/runtime/agents/scenarios";
-import { AgentWorkQueue } from "../../simulations/runtime/agents/scheduler";
+} from "../../simulations/creation-and-editing/runtime-engine/agents/runner";
+import { resolveAgentScenario } from "../../simulations/creation-and-editing/runtime-engine/agents/scenarios";
+import { AgentWorkQueue } from "../../simulations/creation-and-editing/runtime-engine/agents/scheduler";
 import { getLibrarySession } from "../auth/server";
 import { getDatabase } from "../database/client";
 import { configuredModelIdentity, createAgentModel } from "./model";

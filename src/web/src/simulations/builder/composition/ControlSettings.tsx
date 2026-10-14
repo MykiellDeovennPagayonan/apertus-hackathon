@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import { publicDefinition } from "../../components/catalog";
-import { schemaDefault } from "../../components/composites/catalog";
-import { acceptedCommandArguments } from "../../components/controls/commandPresentation";
+import { publicDefinition } from "../../registry/index";
+import { schemaDefault } from "../../registry/contracts/defaults";
+import { acceptedCommandArguments } from "../../registry/contracts/commandPresentation";
 import {
   acceptsScalar,
   activityContract,
   parameterLeaves,
   readParameter,
   scalarControls,
-} from "../../components/controls/controlContract";
-import { SchemaForm } from "../../components/controls/SchemaForm";
-import { requireValue } from "../../runtime/authoring/requireValue";
-import type { ComponentInstance } from "../../runtime/authoring/types";
-import type { ActionResult } from "../../runtime/commands";
+} from "../../registry/contracts/controlContract";
+import { SchemaForm } from "../../registry/controls/SchemaForm";
+import { requireValue } from "../../creation-and-editing/authoring-engine/requireValue";
+import type { ComponentInstance } from "../../creation-and-editing/authoring-engine/document";
+import type { ActionResult } from "../../creation-and-editing/runtime-engine/commands";
 import { BuilderIcon } from "../BuilderIcon";
 import type { ComponentCatalog } from "./useComponentCatalog";
 
