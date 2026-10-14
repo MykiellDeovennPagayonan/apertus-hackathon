@@ -22,6 +22,7 @@ import {
   convertToBoard,
   extent,
   fit,
+  centeredOpeningCamera,
   outsideLearnerView,
   type Rect,
   reorderBoardItems,
@@ -82,6 +83,7 @@ export function SpatialBoard({
   const sourcePresentation = persisted ?? conversion;
   const viewport = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 900, height: 600 });
+  const [openingInsets, setOpeningInsets] = useState({ top: 96, bottom: 96 });
   const autoLayout =
     requestedAutoLayout ||
     (!authoring &&
@@ -501,14 +503,21 @@ export function SpatialBoard({
     if (!hasBoard || !viewport.current) return;
     const element = viewport.current;
     // Frame imported boards before paint, without waiting for ResizeObserver.
-    setSize({ width: element.clientWidth, height: element.clientHeight });
-    const observer = new ResizeObserver(([entry]) =>
-      setSize({
-        width: entry.contentRect.width,
-        height: entry.contentRect.height,
-      }),
-    );
+    const host = workspace ? element.closest(".experiment-workspace") : null;
+    const header = host?.querySelector(".recipe-lesson > header");
+    const composer = host?.querySelector(".workspace-composer");
+    const measure = () => {
+      setSize({ width: element.clientWidth, height: element.clientHeight });
+      const bounds = element.getBoundingClientRect();
+      const top = Math.max(24, (header?.getBoundingClientRect().bottom ?? bounds.top) - bounds.top + 24);
+      const bottom = Math.max(24, bounds.bottom - (composer?.getBoundingClientRect().top ?? bounds.bottom) + 24);
+      setOpeningInsets(current => current.top === top && current.bottom === bottom ? current : { top, bottom });
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
     observer.observe(element);
+    if (header) observer.observe(header);
+    if (composer) observer.observe(composer);
     const wheel = (event: WheelEvent) => {
       if (
         !event.ctrlKey &&
@@ -522,7 +531,7 @@ export function SpatialBoard({
       observer.disconnect();
       element.removeEventListener("wheel", wheel);
     };
-  }, [hasBoard]);
+  }, [hasBoard, workspace]);
   useEffect(() => {
     if (!authoring && persisted?.immersive.startup === "scene")
       setImmersive(persisted.immersive.sceneItemId ?? null);
@@ -557,9 +566,7 @@ export function SpatialBoard({
   const area = autoLayout
     ? { ...contentArea, height: contentArea.height + 96 }
     : contentArea;
-  // NEVER reserve or clip canvas space for UI. Workspace navigation, tools, and
-  // the composer must float above the full canvas. Do not override this rule by
-  // subtracting their sizes from the viewport or applying chrome-based clipping.
+  // The canvas stays full-size; floating UI only affects the opening camera position.
   const topClearance = workspace ? (size.width < 700 ? 128 : 0) : 24;
   const bottomClearance = workspace ? 0 : 24;
   const navigationArea =
@@ -612,14 +619,13 @@ export function SpatialBoard({
   }
   if (authoring) initial.zoom = Math.min(1, initial.zoom);
   // Reflowed learner content stays at readable scale even in the full workspace.
-  // Frame its opening row below floating headings without shrinking the canvas.
+  // Center the opening content between floating headings and the composer.
   if (freeCanvas && !authoring && (autoLayout || p.responsive)) {
-    initial.zoom = autoLayout ? 1 : Math.min(1, size.width / p.startView.width);
-    initial.centerX = p.startView.x + p.startView.width / 2;
-    initial.centerY =
-      Math.min(...p.items.map((item) => item.rect.y)) -
-      96 / initial.zoom +
-      size.height / (2 * initial.zoom);
+    Object.assign(initial, centeredOpeningCamera(
+      autoLayout ? { ...p.startView, height: extent(p.items.map(item => item.rect)).height } : p.startView,
+      size, openingInsets,
+      autoLayout ? 1 : Math.min(1, size.width / p.startView.width),
+    ));
   }
   const base = camera ?? initial;
   const fixed = !authoring && p.navigation.mode === "fixed";

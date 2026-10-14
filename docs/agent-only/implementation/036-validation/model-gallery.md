@@ -14,7 +14,7 @@ The gallery still checks that all models use the same forty prompts. It no longe
 
 Verification:
 
-- State tests cover addition of multiple models, preserved favorites and exposure, confirmation, refresh persistence, same-model replacement, differing configurations, and malformed saved data.
+- State tests cover addition of multiple models, preserved favorites and exposure, immediate vote saving, refresh persistence, same-model replacement, differing configurations, and malformed saved data.
 - Local browser fixtures exercise a live gallery growing from two to seven models without refresh or a new session, alongside keyboard voting, JSON downloads, responsive layout, and browser storage failure.
 - Artifact/profile tests verify existing publication and model configuration remain intact.
 

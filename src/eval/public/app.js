@@ -37,7 +37,6 @@ function renderQuestion() {
   element('prompt').textContent = row.prompt;
   element('single').hidden = active.dataset.runs.length !== 1;
   element('none').checked = Boolean(vote?.nonePreferred);
-  element('confirm').disabled = !vote || (!vote.nonePreferred && !vote.selected.length);
   element('review-needed').hidden = !vote || vote.reviewed || !(vote.nonePreferred || vote.selected.length);
   element('previous').disabled = active.question === 0;
   element('next').textContent = active.question === 39 ? 'Download results' : 'Next question';
@@ -70,7 +69,6 @@ function renderQuestion() {
       save();
       element('progress').textContent = `Question ${active.question + 1} of 40 · ${Object.values(active.ballots).filter(item => item.reviewed).length} reviewed`;
       element('review-needed').hidden = true;
-      element('confirm').disabled = selected.length === 0;
     });
     cards.append(article);
   });
@@ -158,11 +156,6 @@ element('sessions').onchange = event => { store.active = event.target.value; act
 element('reload').onclick = load;
 element('export').onclick = download;
 element('none').onchange = event => { ballot(active, active.dataset.runs[0].rows[active.question].id, [], event.target.checked); save(); renderQuestion(); };
-element('confirm').onclick = () => {
-  const row = active.dataset.runs[0].rows[active.question];
-  const vote = active.ballots[row.id];
-  if (vote) { ballot(active, row.id, vote.selected, vote.nonePreferred); save(); renderQuestion(); }
-};
 element('previous').onclick = () => { active.question--; save(); renderQuestion(); element('prompt').focus(); };
 element('next').onclick = () => { if (active.question === 39) download(); else { active.question++; save(); renderQuestion(); element('prompt').focus(); } };
 load();

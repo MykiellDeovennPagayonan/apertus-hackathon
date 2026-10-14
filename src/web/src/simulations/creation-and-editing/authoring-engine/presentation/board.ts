@@ -103,6 +103,7 @@ export function boardItemMinimum(
   const definition = d.nodes.find(
     (node) => node.id === layout?.node,
   )?.definition;
+  if (layout?.kind === "disclosure") return { width: 240, height: 64 };
   if (definition?.startsWith("controls/science-")) {
     const node = d.nodes.find((node) => node.id === layout?.node);
     return {
@@ -169,6 +170,22 @@ export function fit(r: Rect, width: number, height: number): Camera {
     centerX: r.x + r.width / 2,
     centerY: r.y + r.height / 2,
     zoom: clamp(Math.min(width / r.width, height / r.height), 0.1, 4),
+  };
+}
+
+/** Center short lessons; keep the first row accessible when content is taller than the screen. */
+export function centeredOpeningCamera(
+  bounds: Rect,
+  viewport: { width: number; height: number },
+  insets: { top: number; bottom: number },
+  zoom: number,
+): Camera {
+  const available = Math.max(1, viewport.height - insets.top - insets.bottom);
+  const top = insets.top + Math.max(0, (available - bounds.height * zoom) / 2);
+  return {
+    zoom,
+    centerX: bounds.x + bounds.width / 2,
+    centerY: bounds.y + (viewport.height / 2 - top) / zoom,
   };
 }
 export function constrain(

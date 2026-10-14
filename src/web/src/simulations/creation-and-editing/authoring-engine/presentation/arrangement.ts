@@ -93,6 +93,15 @@ export function arrangeDocument(
     next.nodes.find(
       (n) => n.id === layouts.find((l) => l.id === item.layoutId)?.node,
     );
+  const firstNode = (layout: AuthoredDocument["layout"]): string | undefined =>
+    layout.node ?? layout.children.map(firstNode).find(Boolean);
+  const categoriesFor = (layout: AuthoredDocument["layout"]): string[] =>
+    layout.node ? [publicDefinition(next.nodes.find(node => node.id === layout.node)!).category]
+      : layout.children.flatMap(categoriesFor);
+  const scopeFor = (item: ComponentBoardItem) => {
+    const layout = layouts.find(layout => layout.id === item.layoutId);
+    return layout ? next.nodes.find(node => node.id === firstNode(layout))?.scope : undefined;
+  };
   const matches = (item: ComponentBoardItem, ids: string[]) =>
     ids.some((id) => id === item.layoutId || id === nodeFor(item)?.id);
   const category = (item: ComponentBoardItem) => {
@@ -105,7 +114,9 @@ export function arrangeDocument(
           ? "displays"
           : node
             ? publicDefinition(node).category
-            : "layout";
+            : categoriesFor(layouts.find(layout => layout.id === item.layoutId)!).length > 0 &&
+                categoriesFor(layouts.find(layout => layout.id === item.layoutId)!).every(category => category === "controls")
+              ? "controls" : "layout";
   };
   for (const item of board.items.filter(
     (item): item is ComponentBoardItem => !!item.layoutId,
@@ -147,7 +158,7 @@ export function arrangeDocument(
       board.items
         .filter((i): i is ComponentBoardItem => !!i.layoutId)
         .flatMap((i) => {
-          const scope = nodeFor(i)?.scope;
+          const scope = scopeFor(i);
           return scope ? [cluster(scope)] : [];
         }),
     ),
@@ -161,7 +172,7 @@ export function arrangeDocument(
   for (const [index, scope] of scopes.entries()) {
     const items = board.items.filter(
       (i): i is ComponentBoardItem =>
-        !!i.layoutId && cluster(nodeFor(i)?.scope ?? "") === scope,
+        !!i.layoutId && cluster(scopeFor(i) ?? "") === scope,
     );
     const scenes = items.filter((i) =>
       ["appearance", "canvases"].includes(category(i)),
@@ -248,6 +259,8 @@ export function arrangeDocument(
       const heightFor = (item: ComponentBoardItem) => {
         const node = nodeFor(item);
         const minimum = boardItemMinimum(next, item.layoutId);
+        if (layouts.find(layout => layout.id === item.layoutId)?.kind === "disclosure")
+          return minimum.height;
         return Math.max(
           minimum.height,
           node?.definition === "controls/ArithmeticActivity"
@@ -281,6 +294,8 @@ export function arrangeDocument(
           const height = Math.max(...row.map(heightFor));
           const itemWidth = (width - 24 * (row.length - 1)) / row.length;
           row.forEach((item, column) => {
+            const itemHeight = layouts.find(layout => layout.id === item.layoutId)?.kind === "disclosure"
+              ? heightFor(item) : height;
             place(item, {
               x: x + column * (itemWidth + 24),
               y: bottom,
@@ -288,9 +303,9 @@ export function arrangeDocument(
                 itemWidth,
                 boardItemMinimum(next, item.layoutId).width,
               ),
-              height,
+              height: itemHeight,
             });
-            item.responsiveMinHeight = height;
+            item.responsiveMinHeight = itemHeight;
           });
           rows.push(row.map((item) => item.id));
           bottom += height + 24;

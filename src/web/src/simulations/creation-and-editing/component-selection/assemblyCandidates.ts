@@ -12,6 +12,29 @@ import { listPremadeRecipes } from "../../registry/recipes/premade";
 import type { CompositeRecipe } from "../authoring-engine/document";
 import type { GenerationRequest } from "../input/contracts";
 import type { TeachingIntent } from "../intent-interpreter/contracts";
+/** The same executable capability context is used for selection and support. */
+export function modelCapabilities(recipe: CompositeRecipe) {
+  return recipe.document.nodes
+    .filter((node) => publicDefinition(node).category === "models")
+    .map((node) => {
+      const definition = publicDefinition(node);
+      return {
+        instance: node.id,
+        title: definition.title,
+        meaning: definition.description,
+        limitations: definition.teaching?.limitations ?? [],
+        commands: Object.entries(definition.commands).map(([id, contract]) => ({
+          id, meaning: contract.description,
+          fields: parameterLeaves(contract.arguments).map(({ path, schema }) => ({
+            field: path, unit: "unit" in schema ? schema.unit : undefined,
+          })),
+        })),
+        outputs: Object.entries(definition.outputs)
+          .filter(([id]) => !["configuration", "appearance"].includes(id))
+          .map(([id, output]) => ({ id, meaning: output.description, unit: output.unit })),
+      };
+    });
+}
 export const terms = (value: string) =>
   new Set(
     value

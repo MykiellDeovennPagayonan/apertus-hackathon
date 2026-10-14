@@ -62,7 +62,9 @@ export const learningDefinitions: PublicDefinition[] = Object.keys(
     id: `models/${demo}`,
     version: 1,
     title: titles[demo],
-    description: titles[demo],
+    description: demo === "area-perimeter"
+      ? "One rectangle with independently adjustable width and height in metres. Computes inside area as width × height in square metres and boundary perimeter as 2 × (width + height) in metres, with a proportional rectangle drawing. Compare different rectangles by using independent model instances."
+      : titles[demo],
     category: "models",
     tags: ["mathematics", demo],
     teaching:
@@ -93,6 +95,11 @@ export const learningDefinitions: PublicDefinition[] = Object.keys(
                   : key === "percentage"
                     ? "%"
                     : "1",
+            ...(demo === "area-perimeter" ? {
+              description: key === "area"
+                ? "Inside area of this rectangle: width × height, in square metres"
+                : "Boundary perimeter of this rectangle: 2 × (width + height), in metres",
+            } : {}),
             crossScope: true,
           },
         ]),

@@ -5,7 +5,7 @@ import {
   validateValue,
 } from "../../registry/contracts/parameterSchema";
 import { publicDefinition } from "../../registry/index";
-import { parameterLeaves } from "../../registry/contracts/controlContract";
+import { modelCapabilities } from "./assemblyCandidates";
 import type { GenerationBudget } from "../budget";
 import type { GenerationRequest } from "../input/contracts";
 import { parseArgumentJson } from "../input/inference/parseJson";
@@ -112,7 +112,8 @@ export async function selectAssemblyPlan(
         {
           role: "system",
           content:
-            'Choose ONE offered activity by its models and scientific meaning, preserving the ORIGINAL request. Return only {"candidate":"supplied-id","complete":true} when this activity together with alreadySelected covers the whole request. A single activity can already contain several objects or a complete comparison; do not duplicate it merely to match an inferred instance count. Use complete:false only when another independent activity is still needed. The remainingInstances value and recommendation are hints, not semantic eligibility gates. Registered commands can receive learner controls even if no control is currently wired. Return {"candidate":"unavailable","complete":false} if none supports the missing meaning. Do not return settings, layouts or a plan.',
+            'Choose ONE offered activity using the ORIGINAL request and the supplied executable capabilities. Assess the requested system, learner adjustments, observable outcomes and comparison coverage before selecting. Each model instance has declared commands, outputs and limitations; lesson titles and preset questions do not establish capability. A similar diagram or mathematical relationship is insufficient when the requested system or outcome differs. Return only {"candidate":"supplied-id","complete":true}. Choose complete:true only when this activity together with alreadySelected covers the whole request. A single activity can already contain several objects or a complete comparison; do not duplicate it merely to match an inferred instance count. Use complete:false only when another independent activity is still needed. remainingInstances and recommendation are hints, not semantic eligibility gates. Registered commands can receive learner controls even if no control is currently wired. Choose {"candidate":"unavailable","complete":false} when no supplied model fulfills the requested investigation. Do not return explanations, settings, layouts or a plan.',
+
         },
         {
           role: "user",
@@ -129,23 +130,10 @@ export async function selectAssemblyPlan(
                 label: card.title,
                 meaning: card.description,
                 instances: card.instanceCount,
-                models: ranked[
+                limitations: card.limitations,
+                models: modelCapabilities(ranked[
                   retrieval.cards.findIndex((peer) => peer.candidate === card.candidate)
-                ].models.map((node) => {
-                  const definition = publicDefinition(node);
-                  return {
-                    title: definition.title,
-                    meaning: definition.description.slice(0, 400),
-                    commands: Object.entries(definition.commands).map(([command, contract]) => ({
-                      command,
-                      meaning: contract.description,
-                      fields: parameterLeaves(contract.arguments).map(({ path, schema }) => ({
-                        field: path,
-                        unit: "unit" in schema ? schema.unit : undefined,
-                      })),
-                    })),
-                  };
-                }),
+                ].recipe),
                 inputs: ranked[
                   retrieval.cards.findIndex(
                     (peer) => peer.candidate === card.candidate,
@@ -157,11 +145,7 @@ export async function selectAssemblyPlan(
                   meaning: binding.meaning.slice(0, 160),
                   instances: binding.wires.length,
                 })),
-                outputs: card.observations
-                  .filter(
-                    (name) => !["configuration", "appearance"].includes(name),
-                  )
-                  .slice(0, 8),
+
               };
             }),
           }),
@@ -172,7 +156,7 @@ export async function selectAssemblyPlan(
         validateValue(schema, value);
         return value as { candidate: string; complete: boolean };
       },
-      'Return only candidate and complete, deciding coverage from the original request and supplied models.',
+      'Return only {"candidate":"supplied-id","complete":true} or {"candidate":"unavailable","complete":false}, preserving the original request.',
       budget.signal,
       {
         budget,

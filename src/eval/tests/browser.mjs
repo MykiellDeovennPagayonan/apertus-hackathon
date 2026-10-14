@@ -73,7 +73,8 @@ try {
   assert.equal(await page.locator('.candidate input:checked').count(), 2);
   assert.deepEqual(await page.locator('.candidate input:checked').evaluateAll(inputs => inputs.map(input => input.value)), selected);
   assert.equal(await page.locator('#review-needed').isVisible(), true);
-  await page.getByRole('button', { name: 'Confirm selection', exact: true }).click();
+  assert.equal(await page.getByRole('button', { name: 'Confirm selection', exact: true }).count(), 0);
+  await page.locator('.candidate input:not(:checked):not(:disabled)').first().check();
   assert.equal(await page.locator('#review-needed').isVisible(), false);
   const updatedDownload = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download JSON' }).click();
@@ -97,7 +98,7 @@ try {
   assert.equal((await fetch(`${origin}/../server.mjs`)).status, 404);
   assert.equal((await fetch(`${origin}/`, { method: 'POST' })).status, 405);
   assert.deepEqual(errors, []);
-  console.log(`Evaluator browser flow passed: keyboard/multi-select, refresh, model accumulation across executions, preserved votes/exposure, confirmation, JSON export, short viewport and storage failure. Screenshots: ${evidence}`);
+  console.log(`Evaluator browser flow passed: keyboard/multi-select, immediate saving, refresh, model accumulation across executions, preserved votes/exposure, JSON export, short viewport and storage failure. Screenshots: ${evidence}`);
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));

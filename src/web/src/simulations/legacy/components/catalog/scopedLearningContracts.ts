@@ -47,8 +47,14 @@ export const scopedLearningContracts = {
       ["width", "height"],
     ),
     commands: {
-      SET_DIMENSIONS: action(object({ value: rectangleDimensions }), "rebuild"),
-      RESET: action(object({}), "rebuild"),
+      SET_DIMENSIONS: {
+        ...action(object({ value: rectangleDimensions }), "rebuild"),
+        description: "Set this rectangle's width and height in metres; recalculate its area, perimeter and proportional drawing independently of other rectangles",
+      },
+      RESET: {
+        ...action(object({}), "rebuild"),
+        description: "Restore this rectangle's authored starting width and height",
+      },
     },
   },
 } satisfies Record<

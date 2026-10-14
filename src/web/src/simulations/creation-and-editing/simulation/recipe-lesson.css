@@ -2141,3 +2141,18 @@ fieldset.math-stepper {
 .recipe-lesson .catalog-form .number-field--compact .experiment-error {
   grid-column: 1 / -1;
 }
+
+.recipe-disclosure > summary {
+  cursor: pointer;
+  padding: 0.75rem;
+  border: 1px solid var(--lesson-border);
+  border-radius: 10px;
+  background: var(--lesson-panel);
+}
+.recipe-disclosure__content {
+  box-sizing: border-box;
+  max-height: min(50dvh, 360px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 12px 4px 96px;
+}

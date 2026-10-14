@@ -6,13 +6,13 @@ import {
 } from "../../registry/contracts/parameterSchema";
 import type { InputRequirement } from "../../registry/contracts/inputCapability";
 import { publicDefinition } from "../../registry/index";
-import type { CompositeRecipe } from "../authoring-engine/document";
+import { emptyLayout, type CompositeRecipe } from "../authoring-engine/document";
 import type { GenerationBudget } from "../budget";
 import type { GenerationRequest } from "../input/contracts";
 import { parseArgumentJson } from "../input/inference/parseJson";
 import { toJsonSchema } from "../input/inference/structuredSchema";
 import { requestStructured } from "../input/inference/transport";
-import { adjustableBindings } from "./assemblyCandidates";
+import { adjustableBindings, modelCapabilities } from "./assemblyCandidates";
 import { addBoundControl, hasBoundControl } from "../authoring-engine/bindings";
 import { acceptsScalar, parameterLeaves } from "../../registry/contracts/controlContract";
 import { commandPresentation } from "../../registry/contracts/commandPresentation";
@@ -21,6 +21,7 @@ import { commandPresentation } from "../../registry/contracts/commandPresentatio
 export function withAvailableInputs(source: CompositeRecipe): CompositeRecipe {
   const recipe = structuredClone(source);
   let nextId = recipe.document.nodes.length;
+  const generated = new Map<string, Set<string>>();
   for (const node of source.document.nodes) {
     const definition = publicDefinition(node);
     if (definition.category !== "models") continue;
@@ -44,10 +45,21 @@ export function withAvailableInputs(source: CompositeRecipe): CompositeRecipe {
           widget: widget[0],
           label: `${node.label}: ${presentation.presentation[leaf.path]?.label ?? presentation.label ?? contract.description}`,
         }, id);
+        const controls = generated.get(node.scope) ?? new Set<string>();
+        controls.add(id);
+        generated.set(node.scope, controls);
         // A template's fixed board hosts do not cover newly appended layouts.
         delete recipe.document.presentation;
       }
     }
+  }
+  for (const [scope, controls] of generated) {
+    const children = recipe.document.layout.children.filter(layout => controls.has(layout.node ?? ""));
+    recipe.document.layout.children = recipe.document.layout.children.filter(layout => !controls.has(layout.node ?? ""));
+    recipe.document.layout.children.push({
+      ...emptyLayout(`layout/additional-controls/${scope}`),
+      kind: "disclosure", label: "Additional controls", children,
+    });
   }
   return recipe;
 }
@@ -73,28 +85,14 @@ export async function resolveInputRequirements(
       {
         role: "system",
         content:
-          'Interpret the ORIGINAL request against this offered activity. Decide whether its models, scenes and command inputs can fulfill the requested meaning. Resolve informal wording using the supplied meanings, units and bindings, not literal names. Return only {"supported":true,"inputs":["supplied-input-id"]}. Retain every input the user requests to adjust and any input necessary to perform the requested activity. Outcomes, observations and comparison labels are not additional adjustable quantities. Do not invent requirements from a generated learning question. Return an empty inputs array when none is needed. If a requested quantity or behavior is genuinely missing, return {"supported":false,"inputs":[]}. Never substitute another quantity or use unavailable as an input ID.',
+          'Interpret the ORIGINAL request against the supplied executable model contracts. Assess coverage of the requested system, learner adjustments, visible outcomes and comparison before resolving input bindings. Each supplied instance is an actual model instance; check whether their capabilities together provide the requested comparison. Then decide whether the supplied models implement that system and outcome with the actual commands and outputs. A similar diagram, adjustable number or mathematically related quantity does not make a different physical or mathematical investigation equivalent. Supported means the complete requested investigation is possible; otherwise return supported:false and inputs:[]. Preset lesson questions are not evidence of capability. Resolve informal wording using the supplied meanings, units and bindings, not literal names. Return only {"supported":true,"inputs":["supplied-input-id"]}. Retain every input the user requests to adjust and any input necessary to perform the requested activity. Outcomes, observations and comparison labels are not additional adjustable quantities. Do not invent requirements from a generated learning question. Return an empty inputs array when none is needed. If a requested quantity or behavior is genuinely missing, return {"supported":false,"inputs":[]}. Never substitute another quantity or use unavailable as an input ID.',
       },
       {
         role: "user",
         content: JSON.stringify({
           request: request.prompt,
-          activity: {
-            title: source.title,
-            meaning: source.description,
-            limitations: source.assumptions,
-          },
-          models: source.document.nodes
-            .filter((node) => publicDefinition(node).category === "models")
-            .map((node) => {
-              const definition = publicDefinition(node);
-              return {
-                instance: node.id,
-                title: definition.title,
-                meaning: definition.description.slice(0, 400),
-                outputs: definition.teaching?.observations ?? Object.keys(definition.outputs),
-              };
-            }),
+          limitations: source.assumptions,
+          models: modelCapabilities(source),
           inputs: bindings.map((binding) => ({
             id: binding.id,
             labels: binding.labels,

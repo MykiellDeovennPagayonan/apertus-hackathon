@@ -341,7 +341,7 @@ function LayoutView({
   if (kind === "disclosure")
     return (
       <details
-        className="recipe-layout"
+        className="recipe-layout recipe-disclosure"
         style={style}
         aria-disabled={disabled || undefined}
         inert={disabled || undefined}
@@ -349,7 +349,9 @@ function LayoutView({
         <summary>
           {layout.label || String(node?.configuration.label ?? "Details")}
         </summary>
-        {content}
+        <div className="recipe-disclosure__content" onWheel={event => event.stopPropagation()}>
+          {content}
+        </div>
       </details>
     );
   return (

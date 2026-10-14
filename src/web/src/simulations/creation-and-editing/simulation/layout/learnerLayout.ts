@@ -66,7 +66,7 @@ export function learnerPresentation(source: AuthoredDocument) {
       layout.visibleWhen ||
       layout.disabledWhen ||
       layout.theme ||
-      ["tabs", "repeater"].includes(layout.kind)
+      ["tabs", "disclosure", "repeater"].includes(layout.kind)
     )
       return [layout];
     return layout.children.flatMap(leaves);
