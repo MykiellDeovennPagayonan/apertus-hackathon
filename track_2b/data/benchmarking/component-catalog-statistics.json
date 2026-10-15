@@ -1,0 +1,74 @@
+{
+  "source": "docs/agent-only/benchmark/component-catalog-report.md",
+  "sha256": "f2e136501004acfbf8bbf855805a0c6643173ee87e8c71a2bf197051d2dfab7b",
+  "scope": "Authored premade-recipe inventory in the documented source snapshot; not model-generated outcomes.",
+  "metrics": [
+    {
+      "measure": "Benchmark experiments",
+      "count": 40
+    },
+    {
+      "measure": "Authored node instances",
+      "count": 251
+    },
+    {
+      "measure": "Authored resource instances",
+      "count": 0
+    },
+    {
+      "measure": "Distinct components used",
+      "count": 110
+    },
+    {
+      "measure": "Used components in the catalog",
+      "count": 110
+    },
+    {
+      "measure": "Used components absent from the catalog",
+      "count": 0
+    },
+    {
+      "measure": "Catalog components unused by these 40 recipes",
+      "count": 25
+    },
+    {
+      "measure": "Former catalog entries now excluded",
+      "count": 222
+    },
+    {
+      "measure": "Total component definitions in the catalog",
+      "count": 135
+    },
+    {
+      "measure": "Total registered public definitions, including hidden entries",
+      "count": 458
+    }
+  ],
+  "categories": [
+    {
+      "category": "appearance",
+      "uniqueDefinitions": 47,
+      "instances": 48
+    },
+    {
+      "category": "canvases",
+      "uniqueDefinitions": 1,
+      "instances": 1
+    },
+    {
+      "category": "controls",
+      "uniqueDefinitions": 13,
+      "instances": 85
+    },
+    {
+      "category": "displays",
+      "uniqueDefinitions": 6,
+      "instances": 47
+    },
+    {
+      "category": "models",
+      "uniqueDefinitions": 43,
+      "instances": 70
+    }
+  ]
+}

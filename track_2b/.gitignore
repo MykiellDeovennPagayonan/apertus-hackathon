@@ -1,0 +1,40 @@
+# Dependency installations in every app
+node_modules/
+
+# Pi model downloads, local deployment configuration, and measured runs
+/deploy/raspberry-pi/models/
+/deploy/raspberry-pi/results/
+/deploy/raspberry-pi/.env
+
+# Local repair-memory services, weights, credentials, and browser evidence.
+/deploy/repair-memory/.env
+/deploy/repair-memory/.roles.json
+/deploy/repair-memory/.venv/
+/deploy/repair-memory/models/
+/deploy/repair-memory/*.log
+
+# Track current campaign assets; keep historical publications and temporary files local.
+/src/eval/public/benchmarks/*
+!/src/eval/public/benchmarks/index.json
+!/src/eval/public/benchmarks/apertus-1.5-8b/
+!/src/eval/public/benchmarks/llama-3.1-8b/
+!/src/eval/public/benchmarks/qwen3-8b/
+!/src/eval/public/benchmarks/gpt-6-luna/
+!/src/eval/public/benchmarks/gpt-6.1-sol/
+!/src/eval/public/benchmarks/qwen3-32b/
+!/src/eval/public/benchmarks/mistral-small-3.1-24b/
+/src/eval/public/benchmarks/*/*
+!/src/eval/public/benchmarks/*/current.json
+!/src/eval/public/benchmarks/*/images/
+/src/eval/public/benchmarks/*/images/*
+!/src/eval/public/benchmarks/*/images/*.png
+/src/eval/dist/
+/src/eval/test-output/
+
+# Local Python/tool caches
+.pytest_cache/
+.pnpm-store/
+
+# Browser verification output and loose development captures
+/docs/agent-only/implementation/
+/src/captures-playwright/

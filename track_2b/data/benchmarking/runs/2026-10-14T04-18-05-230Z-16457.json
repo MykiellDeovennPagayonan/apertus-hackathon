@@ -1,0 +1,5515 @@
+{
+  "protocolVersion": 1,
+  "id": "2026-10-14T04-18-05-230Z-16457",
+  "modelSlug": "apertus-1.5-8b",
+  "scope": "full-batch",
+  "startedAt": "2026-10-14T04:18:08.537Z",
+  "endedAt": "2026-10-14T04:40:36.680Z",
+  "state": "FINISHED",
+  "complete": true,
+  "promptHash": "7eb999db69a660c06f2af15d25f0e1764a8cc68945a19524c53677c4f042b8d3",
+  "configuration": {
+    "protocolVersion": 1,
+    "llm": {
+      "structuredOutput": "auto",
+      "contextTokens": null,
+      "provider": "apertus",
+      "localRuntime": "mlx",
+      "baseUrl": "http://127.0.0.1:43101/v1",
+      "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+      "timeout": 120000,
+      "maxTokens": 1024,
+      "concurrency": 1,
+      "connection": "local",
+      "label": "Apertus"
+    },
+    "decision": {
+      "baseUrl": "http://127.0.0.1:43102",
+      "timeout": 20000,
+      "provider": "laya",
+      "runtimeModel": "aac6fef/laya-multilingual-mlx"
+    },
+    "planner": {
+      "mode": "hybrid",
+      "compositionPolicy": "required-laya",
+      "decisionProvider": "laya",
+      "timeoutMs": 240000,
+      "memoryMode": "off"
+    },
+    "source": {
+      "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+      "dirty": false,
+      "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+    },
+    "capture": {
+      "width": 1440,
+      "height": 1000,
+      "testTimeoutMs": 300000,
+      "workers": 1,
+      "retries": 0
+    },
+    "hardware": {
+      "hostname": "Mykiells-MacBook-Air.local",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M5",
+      "memoryBytes": 25769803776,
+      "inferenceHardware": "not supplied",
+      "quantization": "MXFP4"
+    }
+  },
+  "rows": [
+    {
+      "requestId": "2a8db9a2-d8e6-4835-a132-bbfa2bb0b092",
+      "generationMs": 21135.158750000002,
+      "observedMs": 21135.158750000002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 20808,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 7730,
+            "usage": {
+              "promptTokens": 1038,
+              "outputTokens": 153,
+              "totalTokens": 1191
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 7722,
+            "usage": {
+              "promptTokens": 4688,
+              "outputTokens": 12,
+              "totalTokens": 4700
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2808,
+            "usage": {
+              "promptTokens": 1066,
+              "outputTokens": 28,
+              "totalTokens": 1094
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1203,
+            "usage": {
+              "promptTokens": 503,
+              "outputTokens": 7,
+              "totalTokens": 510
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1121,
+            "usage": {
+              "promptTokens": 461,
+              "outputTokens": 7,
+              "totalTokens": 468
+            }
+          }
+        ]
+      },
+      "number": 1,
+      "id": "projectile",
+      "prompt": "Show me 2 projectiles distance comparison based on angles",
+      "status": "PASS",
+      "seconds": "25.3",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-01-projectile/attachments/prompt-6026b48a8f5ddecbeba06d54225a2fab2e7ede5c.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-01-projectile/attachments/result-b92f142df1dc91fb7c88cd8055a71368b3221845.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-01-projectile/attachments/planner-diagnostics-565850d00d13093bc09fe3f206a92d779c82b935.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-01-projectile/attachments/measurements-80618936a783c78540d9813d9521134c9612f3e2.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-01-projectile/attachments/events-d9e2079fa19d47e4d28fd56f4b2c860c2353e2e9.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "8959fefc-38db-4765-8a04-bf3c67143162",
+      "generationMs": 18418.147375,
+      "observedMs": 18418.147375,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 18316,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 4,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 4,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 5981,
+            "usage": {
+              "promptTokens": 1044,
+              "outputTokens": 114,
+              "totalTokens": 1158
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 7816,
+            "usage": {
+              "promptTokens": 4758,
+              "outputTokens": 12,
+              "totalTokens": 4770
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1888,
+            "usage": {
+              "promptTokens": 961,
+              "outputTokens": 19,
+              "totalTokens": 980
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 791,
+            "usage": {
+              "promptTokens": 307,
+              "outputTokens": 7,
+              "totalTokens": 314
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 887,
+            "usage": {
+              "promptTokens": 154,
+              "outputTokens": 8,
+              "totalTokens": 162
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 802,
+            "usage": {
+              "promptTokens": 135,
+              "outputTokens": 7,
+              "totalTokens": 142
+            }
+          }
+        ]
+      },
+      "number": 2,
+      "id": "price-elasticity",
+      "prompt": "Can you show me how changing the price affects how much people buy?",
+      "status": "PASS",
+      "seconds": "21.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/prompt-c753cdcda8b35ad061f93429b4917d727fdf6ebb.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/result-ccd4791feca4f7819c1a6ab9870decbae9a3f503.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/planner-diagnostics-32065691da90f98aa1ecb441305265b6aee161b4.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/measurements-efd958804e0eebbe208e7f706146a4d9b2d496ce.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/events-75c7924462fa6dcffd8e4b078080c1ca1d39f834.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "f3b25b6f-500d-42b2-bdf3-66450c60587e",
+      "generationMs": 22690.404625000003,
+      "observedMs": 22690.404625000003,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 22595,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 1,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8811,
+            "usage": {
+              "promptTokens": 1086,
+              "outputTokens": 177,
+              "totalTokens": 1263
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 9439,
+            "usage": {
+              "promptTokens": 5368,
+              "outputTokens": 12,
+              "totalTokens": 5380
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1525,
+            "usage": {
+              "promptTokens": 746,
+              "outputTokens": 16,
+              "totalTokens": 762
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 656,
+            "usage": {
+              "promptTokens": 193,
+              "outputTokens": 8,
+              "totalTokens": 201
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 597,
+            "usage": {
+              "promptTokens": 155,
+              "outputTokens": 7,
+              "totalTokens": 162
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 638,
+            "usage": {
+              "promptTokens": 175,
+              "outputTokens": 7,
+              "totalTokens": 182
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 625,
+            "usage": {
+              "promptTokens": 288,
+              "outputTokens": 7,
+              "totalTokens": 295
+            }
+          }
+        ]
+      },
+      "number": 3,
+      "id": "pythagorean",
+      "prompt": "I have a ladder leaning against a wall. Let me change how far the bottom is from the wall and how high it reaches to see how long the ladder needs to be.",
+      "status": "PASS",
+      "seconds": "26.0",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/prompt-20bee4156c544e85236a342ae191f0e32f694332.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/result-d7670bbe54b67bf9a36ba20c5e9c881c89f72e02.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/planner-diagnostics-5438470eedace7dee73b30659c6ebe84401e2ed8.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/measurements-1f3db7ce9d5b54d01fa625af857e2ffc7f207ade.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/events-7d7e2e72d7e115779dff13fe70a912414bb1136a.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "91e0e70d-a582-4cac-a45d-1d21093f8e9d",
+      "generationMs": 21423.825249999994,
+      "observedMs": 21423.825249999994,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 21305,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 7540,
+            "usage": {
+              "promptTokens": 1052,
+              "outputTokens": 146,
+              "totalTokens": 1198
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 9070,
+            "usage": {
+              "promptTokens": 4910,
+              "outputTokens": 12,
+              "totalTokens": 4922
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2857,
+            "usage": {
+              "promptTokens": 1331,
+              "outputTokens": 22,
+              "totalTokens": 1353
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1053,
+            "usage": {
+              "promptTokens": 336,
+              "outputTokens": 7,
+              "totalTokens": 343
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 620,
+            "usage": {
+              "promptTokens": 158,
+              "outputTokens": 7,
+              "totalTokens": 165
+            }
+          }
+        ]
+      },
+      "number": 4,
+      "id": "acid-base-titration",
+      "prompt": "Show me what happens to the pH when I slowly add a base to an acid.",
+      "status": "PASS",
+      "seconds": "24.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/prompt-5566639387394294b0c75a80053d5669fd76e5b0.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/result-70599c60ea3a49941a1b13a611b53914fe3e1cd9.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/planner-diagnostics-f4bc918a2b36695c7782549177079dfc47ac2fee.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/measurements-e7058e90cc4433db858c83aa1b09a3115162357f.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/events-76a561416dafbd317c1a24c064b9f1e36311bf69.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "586c7273-8cbf-4753-b385-5c94b3eac341",
+      "generationMs": 20424.123083,
+      "observedMs": 20424.123083,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 20285,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 6616,
+            "usage": {
+              "promptTokens": 1056,
+              "outputTokens": 128,
+              "totalTokens": 1184
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 9643,
+            "usage": {
+              "promptTokens": 4835,
+              "outputTokens": 12,
+              "totalTokens": 4847
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2098,
+            "usage": {
+              "promptTokens": 922,
+              "outputTokens": 16,
+              "totalTokens": 938
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 990,
+            "usage": {
+              "promptTokens": 357,
+              "outputTokens": 7,
+              "totalTokens": 364
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 691,
+            "usage": {
+              "promptTokens": 182,
+              "outputTokens": 7,
+              "totalTokens": 189
+            }
+          }
+        ]
+      },
+      "number": 5,
+      "id": "cost-and-profit",
+      "prompt": "Make a small business example where I can change how much we produce and see our costs and profit.",
+      "status": "PASS",
+      "seconds": "23.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/prompt-6dd7940dd3b5fb78fed576dfca58fd1387be6c4e.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/result-1f160a3aa1b6154eea09f12251f41c5da954c13c.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/planner-diagnostics-c124de57e5f88a62ab50ac66fb1177638d2add00.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/measurements-b8830278f830e1542c9676cc872dcbb694c5e944.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/events-05817051313c5150f8440d071b419855495202a7.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "d75fc52a-98bb-47ca-8a20-3228b8ec13c1",
+      "generationMs": 28993.613209000017,
+      "observedMs": 28993.613209000017,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 28811,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 9,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 9,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8667,
+            "usage": {
+              "promptTokens": 1064,
+              "outputTokens": 164,
+              "totalTokens": 1228
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11007,
+            "usage": {
+              "promptTokens": 5100,
+              "outputTokens": 12,
+              "totalTokens": 5112
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2832,
+            "usage": {
+              "promptTokens": 1106,
+              "outputTokens": 22,
+              "totalTokens": 1128
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 872,
+            "usage": {
+              "promptTokens": 234,
+              "outputTokens": 8,
+              "totalTokens": 242
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1090,
+            "usage": {
+              "promptTokens": 145,
+              "outputTokens": 8,
+              "totalTokens": 153
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 786,
+            "usage": {
+              "promptTokens": 215,
+              "outputTokens": 8,
+              "totalTokens": 223
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 810,
+            "usage": {
+              "promptTokens": 145,
+              "outputTokens": 7,
+              "totalTokens": 152
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 797,
+            "usage": {
+              "promptTokens": 196,
+              "outputTokens": 8,
+              "totalTokens": 204
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 892,
+            "usage": {
+              "promptTokens": 146,
+              "outputTokens": 10,
+              "totalTokens": 156
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 764,
+            "usage": {
+              "promptTokens": 175,
+              "outputTokens": 7,
+              "totalTokens": 182
+            }
+          }
+        ]
+      },
+      "number": 6,
+      "id": "tree-height",
+      "prompt": "How can I work out the height of a tree without climbing it? Show me using the angle from where I stand.",
+      "status": "PASS",
+      "seconds": "32.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-06-tree-height/attachments/prompt-7de8ae26f1bb4fa173b38f8e127c0c20e9a38c10.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-06-tree-height/attachments/result-64fc9c47b61dc4d0324e02bbd543050cecf8dbc9.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-06-tree-height/attachments/planner-diagnostics-2578465b1b1d265bc20a7f89ff9e00c232ca0f02.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-06-tree-height/attachments/measurements-245f5b765e8053847de64dfc810acbcf0913908d.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-06-tree-height/attachments/events-a44965941f01b2bc2257b1d97a6247373b8f3a57.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "17b61f87-f71f-4ca7-8d32-4bfb374f28e2",
+      "generationMs": 33644.136833,
+      "observedMs": 33644.136833,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 33496,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 1,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8519,
+            "usage": {
+              "promptTokens": 1068,
+              "outputTokens": 148,
+              "totalTokens": 1216
+            }
+          },
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 7969,
+            "usage": {
+              "promptTokens": 1636,
+              "outputTokens": 145,
+              "totalTokens": 1781
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11642,
+            "usage": {
+              "promptTokens": 5161,
+              "outputTokens": 12,
+              "totalTokens": 5173
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 3160,
+            "usage": {
+              "promptTokens": 1157,
+              "outputTokens": 16,
+              "totalTokens": 1173
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1194,
+            "usage": {
+              "promptTokens": 310,
+              "outputTokens": 7,
+              "totalTokens": 317
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 723,
+            "usage": {
+              "promptTokens": 188,
+              "outputTokens": 7,
+              "totalTokens": 195
+            }
+          }
+        ]
+      },
+      "number": 7,
+      "id": "galvanic-cell",
+      "prompt": "Show me how a battery made with two different metals works. Let me change the solution concentrations and see what happens to the voltage.",
+      "status": "PASS",
+      "seconds": "36.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/prompt-20d017270c8c0e2f214fd3f3408de516aafd31ac.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/result-a3c1248a594cf2edaf21bae153f796a3fd2d0d8f.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/planner-diagnostics-541c9e5a12dae5fdab9854e54a5b45a2897ad8bf.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/measurements-fccdcf1b5b482a74e5c8d23fb729f2e473a5f118.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/events-e35190ccf44186d6f4e53e63211f87e7ba8d0ff4.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "c21fc526-cf14-4d8f-b475-d00f790828b0",
+      "generationMs": 20698.217832999973,
+      "observedMs": 20698.217832999973,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 20539,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 7741,
+            "usage": {
+              "promptTokens": 1062,
+              "outputTokens": 133,
+              "totalTokens": 1195
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 9055,
+            "usage": {
+              "promptTokens": 4223,
+              "outputTokens": 12,
+              "totalTokens": 4235
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2181,
+            "usage": {
+              "promptTokens": 878,
+              "outputTokens": 19,
+              "totalTokens": 897
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1155,
+            "usage": {
+              "promptTokens": 413,
+              "outputTokens": 7,
+              "totalTokens": 420
+            }
+          }
+        ]
+      },
+      "number": 8,
+      "id": "craft-production",
+      "prompt": "Compare making things by hand with using an assembly line. I want to see which produces more in the same time.",
+      "status": "PASS",
+      "seconds": "23.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-08-craft-production/attachments/prompt-60f95b255c8e4a7899fb23ad82f6a26cbe79ca50.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-08-craft-production/attachments/result-d0ff18f60a5a34d85f379310ebd9e9061a877325.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-08-craft-production/attachments/planner-diagnostics-2e2be6e42ad3cacb4aca0ec6fe792bd83331645f.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-08-craft-production/attachments/measurements-41b164338689abddde6fa8b859eac8093c9ac9aa.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-08-craft-production/attachments/events-01f92eaf8691a5b6ef26791ef9e25166fd471f50.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "60c7086a-0fc1-493a-95ae-a97527053a93",
+      "generationMs": 22574.293540999992,
+      "observedMs": 22574.293540999992,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 22458,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 4,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 4,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8173,
+            "usage": {
+              "promptTokens": 1062,
+              "outputTokens": 146,
+              "totalTokens": 1208
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10580,
+            "usage": {
+              "promptTokens": 4968,
+              "outputTokens": 12,
+              "totalTokens": 4980
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1695,
+            "usage": {
+              "promptTokens": 741,
+              "outputTokens": 13,
+              "totalTokens": 754
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 740,
+            "usage": {
+              "promptTokens": 163,
+              "outputTokens": 8,
+              "totalTokens": 171
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 960,
+            "usage": {
+              "promptTokens": 143,
+              "outputTokens": 6,
+              "totalTokens": 149
+            }
+          }
+        ]
+      },
+      "number": 9,
+      "id": "tile-patterns",
+      "prompt": "Why can hexagons cover a floor without gaps but regular pentagons can’t? Let me try both.",
+      "status": "PASS",
+      "seconds": "25.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/prompt-7ed561f23772c6451bf087011549f461b20b0bde.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/result-68ca4e1026ec09092ee24b96ff42fb22cb8c5bd1.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/planner-diagnostics-a82f4e6e2e10658fde86c4ee1aaf0b6de6cdfcec.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/measurements-760262f6e3371921a880ad9f02f736f46c895e98.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/events-e1a600cff731cbe28dbc3ba1fc975ed018f0fad8.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "41e1158e-94bf-45fc-8048-2186729f5ed3",
+      "generationMs": 22687.81145800001,
+      "observedMs": 22687.81145800001,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 22338,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8034,
+            "usage": {
+              "promptTokens": 1054,
+              "outputTokens": 144,
+              "totalTokens": 1198
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 9917,
+            "usage": {
+              "promptTokens": 4647,
+              "outputTokens": 12,
+              "totalTokens": 4659
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2786,
+            "usage": {
+              "promptTokens": 1056,
+              "outputTokens": 25,
+              "totalTokens": 1081
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1303,
+            "usage": {
+              "promptTokens": 379,
+              "outputTokens": 7,
+              "totalTokens": 386
+            }
+          }
+        ]
+      },
+      "number": 10,
+      "id": "wildfire",
+      "prompt": "Show a wildfire spreading through a forest. Can I change how much dry vegetation there is?",
+      "status": "PASS",
+      "seconds": "26.0",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-10-wildfire/attachments/prompt-46d9199a5bd5050d40efbbb02e00cf014a956e9c.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-10-wildfire/attachments/result-0e1260a5db6de5fd452303bec2b84661ce3f2a82.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-10-wildfire/attachments/planner-diagnostics-4dd8b2a5e860901be3608b400754aec94f2c002f.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-10-wildfire/attachments/measurements-1d17a7b826e971b8532873496c1e37288704e2d6.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-10-wildfire/attachments/events-7c88c76c6cedba3c4159c434bdf9da9b8d28e23a.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "f4b691fb-7c20-4958-ad72-42aa7eb65187",
+      "generationMs": 23306.76329100004,
+      "observedMs": 23306.76329100004,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 23160,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 6,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 6,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 7745,
+            "usage": {
+              "promptTokens": 1064,
+              "outputTokens": 137,
+              "totalTokens": 1201
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 9090,
+            "usage": {
+              "promptTokens": 4278,
+              "outputTokens": 12,
+              "totalTokens": 4290
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2871,
+            "usage": {
+              "promptTokens": 1125,
+              "outputTokens": 19,
+              "totalTokens": 1144
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 787,
+            "usage": {
+              "promptTokens": 187,
+              "outputTokens": 8,
+              "totalTokens": 195
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 746,
+            "usage": {
+              "promptTokens": 150,
+              "outputTokens": 8,
+              "totalTokens": 158
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 784,
+            "usage": {
+              "promptTokens": 167,
+              "outputTokens": 8,
+              "totalTokens": 175
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 818,
+            "usage": {
+              "promptTokens": 145,
+              "outputTokens": 9,
+              "totalTokens": 154
+            }
+          }
+        ]
+      },
+      "number": 11,
+      "id": "can-material",
+      "prompt": "I want to design a can that holds the same amount but uses less metal. Let me try different widths and heights.",
+      "status": "PASS",
+      "seconds": "26.5",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-11-can-material/attachments/prompt-349ce3e86415dc6eba3cff9f2cb5d55acce94222.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-11-can-material/attachments/result-6c3c019339d9a60c37cd45bb0b5d0657576c5d65.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-11-can-material/attachments/planner-diagnostics-f890d8e4acf8f622e8549767f5ccf79a56d0fe68.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-11-can-material/attachments/measurements-097b7356d4fc1fcb530c3252ed05bf28583cba92.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-11-can-material/attachments/events-f346ccde3405653f19e914329748c6c3fc0f14dd.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "d93ec992-4adf-4ea7-9e95-473a6db63516",
+      "generationMs": 24898.412249999994,
+      "observedMs": 24898.412249999994,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 24763,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8996,
+            "usage": {
+              "promptTokens": 1060,
+              "outputTokens": 164,
+              "totalTokens": 1224
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10984,
+            "usage": {
+              "promptTokens": 5128,
+              "outputTokens": 12,
+              "totalTokens": 5140
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 3191,
+            "usage": {
+              "promptTokens": 1192,
+              "outputTokens": 28,
+              "totalTokens": 1220
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1330,
+            "usage": {
+              "promptTokens": 339,
+              "outputTokens": 7,
+              "totalTokens": 346
+            }
+          }
+        ]
+      },
+      "number": 12,
+      "id": "survey-sampling",
+      "prompt": "How many people should I survey? Show me how the results change with a small sample versus a bigger one.",
+      "status": "PASS",
+      "seconds": "28.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/prompt-f8881e6d2099e2f90f7477317acbcef1655f8dfb.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/result-07463853e83be61a345f944c61f6c9e6390dbab2.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/planner-diagnostics-99175b36ac602a9d1e0791b01f9cc7b795bc5c39.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/measurements-0090e23a054ceee4986c9e879dbc11b18a7ff677.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/events-7796b8b1a85bec5bff0916e85d010b873a1c217c.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "6042df48-799a-4380-b636-308fe4568f6c",
+      "generationMs": 27136.350124999997,
+      "observedMs": 27136.350124999997,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 26973,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8827,
+            "usage": {
+              "promptTokens": 1050,
+              "outputTokens": 164,
+              "totalTokens": 1214
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11360,
+            "usage": {
+              "promptTokens": 5311,
+              "outputTokens": 12,
+              "totalTokens": 5323
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2707,
+            "usage": {
+              "promptTokens": 1165,
+              "outputTokens": 19,
+              "totalTokens": 1184
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 787,
+            "usage": {
+              "promptTokens": 246,
+              "outputTokens": 7,
+              "totalTokens": 253
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 884,
+            "usage": {
+              "promptTokens": 241,
+              "outputTokens": 8,
+              "totalTokens": 249
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1402,
+            "usage": {
+              "promptTokens": 154,
+              "outputTokens": 24,
+              "totalTokens": 178
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 730,
+            "usage": {
+              "promptTokens": 206,
+              "outputTokens": 7,
+              "totalTokens": 213
+            }
+          }
+        ]
+      },
+      "number": 13,
+      "id": "levers",
+      "prompt": "Show me how a crowbar helps lift something heavy. Let me move the pivot.",
+      "status": "PASS",
+      "seconds": "30.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-13-levers/attachments/prompt-3d7c3d9e97d890ee122200a9ecad42123903a854.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-13-levers/attachments/result-5c8302ebd8927c6ad505c23a126cb7d8969cf18a.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-13-levers/attachments/planner-diagnostics-afe9828b0cc57ef4667c6796190a23c6d9653cde.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-13-levers/attachments/measurements-3f029e434828fe6e69d579fbc5c78b1c1b4bbc00.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-13-levers/attachments/events-8bf745d8db6fe9087f0c185941bfe419cdc1680a.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "2a6ea169-2b48-44a9-8efe-ad5088df2ad9",
+      "generationMs": 23922.004791999992,
+      "observedMs": 23922.004791999992,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 23762,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 7,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 7,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8293,
+            "usage": {
+              "promptTokens": 1058,
+              "outputTokens": 148,
+              "totalTokens": 1206
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 9417,
+            "usage": {
+              "promptTokens": 4405,
+              "outputTokens": 12,
+              "totalTokens": 4417
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1659,
+            "usage": {
+              "promptTokens": 687,
+              "outputTokens": 16,
+              "totalTokens": 703
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 939,
+            "usage": {
+              "promptTokens": 203,
+              "outputTokens": 8,
+              "totalTokens": 211
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 671,
+            "usage": {
+              "promptTokens": 134,
+              "outputTokens": 6,
+              "totalTokens": 140
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 803,
+            "usage": {
+              "promptTokens": 185,
+              "outputTokens": 8,
+              "totalTokens": 193
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 846,
+            "usage": {
+              "promptTokens": 144,
+              "outputTokens": 9,
+              "totalTokens": 153
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 827,
+            "usage": {
+              "promptTokens": 165,
+              "outputTokens": 7,
+              "totalTokens": 172
+            }
+          }
+        ]
+      },
+      "number": 14,
+      "id": "pulleys",
+      "prompt": "Make a pulley lifting a weight so I can see whether more supporting ropes make it easier to lift.",
+      "status": "PASS",
+      "seconds": "27.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-14-pulleys/attachments/prompt-6123813acf47638771c0349c486a3d8a915944c4.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-14-pulleys/attachments/result-0dc2cdd4c335baab691cb8a2a73e30b52f6ea863.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-14-pulleys/attachments/planner-diagnostics-4fd7b2ead69ee223c2257551e96ada0d8477fb74.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-14-pulleys/attachments/measurements-658434dcf7e807a9a3dabab3bb7c250c553eaa01.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-14-pulleys/attachments/events-a0750765bbb3a060276cda7e8544af9d851d3a3c.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "2f55b79d-cec0-46a0-9e5e-6d8205b03e96",
+      "generationMs": 33779.74845800002,
+      "observedMs": 33779.74845800002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 33655,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 2,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8772,
+            "usage": {
+              "promptTokens": 1060,
+              "outputTokens": 152,
+              "totalTokens": 1212
+            }
+          },
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8249,
+            "usage": {
+              "promptTokens": 1628,
+              "outputTokens": 151,
+              "totalTokens": 1779
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10230,
+            "usage": {
+              "promptTokens": 4820,
+              "outputTokens": 12,
+              "totalTokens": 4832
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1795,
+            "usage": {
+              "promptTokens": 763,
+              "outputTokens": 16,
+              "totalTokens": 779
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1132,
+            "usage": {
+              "promptTokens": 227,
+              "outputTokens": 7,
+              "totalTokens": 234
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 851,
+            "usage": {
+              "promptTokens": 252,
+              "outputTokens": 8,
+              "totalTokens": 260
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 717,
+            "usage": {
+              "promptTokens": 142,
+              "outputTokens": 8,
+              "totalTokens": 150
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 744,
+            "usage": {
+              "promptTokens": 233,
+              "outputTokens": 8,
+              "totalTokens": 241
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 838,
+            "usage": {
+              "promptTokens": 364,
+              "outputTokens": 7,
+              "totalTokens": 371
+            }
+          }
+        ]
+      },
+      "number": 15,
+      "id": "bicycle-gears",
+      "prompt": "Help me understand bicycle gears. Let me change the front and back gears and see how fast the wheel turns.",
+      "status": "PASS",
+      "seconds": "37.0",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/prompt-5db5c2528567c6ec55420a982fdac8f94b67d279.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/result-bc69c116afc0d61861b7e874bfb9142e5643ed8f.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/planner-diagnostics-47654d4d8419e42a1d6e7a508466de008ffe16d3.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/measurements-fc7c710df9888df736962571f4628aff81fa6f4f.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/events-14cd22d8bfee998b7c22c026a295eb0c778d83c8.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "00407ee1-52f2-4246-beed-1077c94d18dd",
+      "generationMs": 29197.363041999983,
+      "observedMs": 29197.363041999983,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 29070,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 13,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/11",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/12",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/13",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/14",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 13,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8463,
+            "usage": {
+              "promptTokens": 1058,
+              "outputTokens": 155,
+              "totalTokens": 1213
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 9502,
+            "usage": {
+              "promptTokens": 4481,
+              "outputTokens": 12,
+              "totalTokens": 4493
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2017,
+            "usage": {
+              "promptTokens": 794,
+              "outputTokens": 19,
+              "totalTokens": 813
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 946,
+            "usage": {
+              "promptTokens": 267,
+              "outputTokens": 8,
+              "totalTokens": 275
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 774,
+            "usage": {
+              "promptTokens": 142,
+              "outputTokens": 9,
+              "totalTokens": 151
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 900,
+            "usage": {
+              "promptTokens": 247,
+              "outputTokens": 8,
+              "totalTokens": 255
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 720,
+            "usage": {
+              "promptTokens": 140,
+              "outputTokens": 7,
+              "totalTokens": 147
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 737,
+            "usage": {
+              "promptTokens": 229,
+              "outputTokens": 8,
+              "totalTokens": 237
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 755,
+            "usage": {
+              "promptTokens": 142,
+              "outputTokens": 8,
+              "totalTokens": 150
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 730,
+            "usage": {
+              "promptTokens": 210,
+              "outputTokens": 8,
+              "totalTokens": 218
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 863,
+            "usage": {
+              "promptTokens": 142,
+              "outputTokens": 8,
+              "totalTokens": 150
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 926,
+            "usage": {
+              "promptTokens": 191,
+              "outputTokens": 8,
+              "totalTokens": 199
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 696,
+            "usage": {
+              "promptTokens": 139,
+              "outputTokens": 6,
+              "totalTokens": 145
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 729,
+            "usage": {
+              "promptTokens": 173,
+              "outputTokens": 7,
+              "totalTokens": 180
+            }
+          }
+        ]
+      },
+      "number": 16,
+      "id": "tipping",
+      "prompt": "Show me when a cabinet will tip over if I push it. I want to try different cabinet sizes.",
+      "status": "PASS",
+      "seconds": "32.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-16-tipping/attachments/prompt-52ff230e98efdd5f9d3d41d9bd65b6d3a1859e3c.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-16-tipping/attachments/result-907f5ffc009342718e38a07453bc69fe00ceff74.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-16-tipping/attachments/planner-diagnostics-ad6e8f519750e710c0bb965e48a4a3307842c268.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-16-tipping/attachments/measurements-bb82856165e9878c8c3a4bd65d92355b955da099.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-16-tipping/attachments/events-d6fb60c3d6efe506f8502bf95262a604f3807b18.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "b1324044-eaab-4f77-9afa-8c238a627137",
+      "generationMs": 28591.80137500004,
+      "observedMs": 28591.80137500004,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 28474,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 9,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/11",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 9,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 9424,
+            "usage": {
+              "promptTokens": 1066,
+              "outputTokens": 170,
+              "totalTokens": 1236
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10053,
+            "usage": {
+              "promptTokens": 4515,
+              "outputTokens": 12,
+              "totalTokens": 4527
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2467,
+            "usage": {
+              "promptTokens": 812,
+              "outputTokens": 16,
+              "totalTokens": 828
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1039,
+            "usage": {
+              "promptTokens": 226,
+              "outputTokens": 7,
+              "totalTokens": 233
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 978,
+            "usage": {
+              "promptTokens": 269,
+              "outputTokens": 8,
+              "totalTokens": 277
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 658,
+            "usage": {
+              "promptTokens": 146,
+              "outputTokens": 7,
+              "totalTokens": 153
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 804,
+            "usage": {
+              "promptTokens": 251,
+              "outputTokens": 8,
+              "totalTokens": 259
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 725,
+            "usage": {
+              "promptTokens": 146,
+              "outputTokens": 7,
+              "totalTokens": 153
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 712,
+            "usage": {
+              "promptTokens": 233,
+              "outputTokens": 8,
+              "totalTokens": 241
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 680,
+            "usage": {
+              "promptTokens": 147,
+              "outputTokens": 6,
+              "totalTokens": 153
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 705,
+            "usage": {
+              "promptTokens": 215,
+              "outputTokens": 7,
+              "totalTokens": 222
+            }
+          }
+        ]
+      },
+      "number": 17,
+      "id": "collisions",
+      "prompt": "Make two carts crash into each other. Let me change their masses and speeds and see what happens after they collide.",
+      "status": "PASS",
+      "seconds": "31.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-17-collisions/attachments/prompt-bfdca2623041f2c3ab6393c82073dfa506bef9ce.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-17-collisions/attachments/result-b649fc7b36a85774e7255c743d5e0104aff3f51f.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-17-collisions/attachments/planner-diagnostics-f99914ee23d6ae6bde97b3aa6e6e55ca2d216fd9.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-17-collisions/attachments/measurements-3098f76a1421c105b571ece7833c73c215b439a1.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-17-collisions/attachments/events-553f4bd69c5c3e07bd6e957eb33c82e93ae4bc05.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "b490a908-c145-418c-a797-14d9ae110cea",
+      "generationMs": 28532.955625000002,
+      "observedMs": 28532.955625000002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 28390,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 9,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 9,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8145,
+            "usage": {
+              "promptTokens": 1046,
+              "outputTokens": 138,
+              "totalTokens": 1184
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11124,
+            "usage": {
+              "promptTokens": 4955,
+              "outputTokens": 12,
+              "totalTokens": 4967
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2954,
+            "usage": {
+              "promptTokens": 929,
+              "outputTokens": 19,
+              "totalTokens": 948
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1066,
+            "usage": {
+              "promptTokens": 244,
+              "outputTokens": 8,
+              "totalTokens": 252
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 807,
+            "usage": {
+              "promptTokens": 137,
+              "outputTokens": 7,
+              "totalTokens": 144
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 767,
+            "usage": {
+              "promptTokens": 225,
+              "outputTokens": 8,
+              "totalTokens": 233
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 928,
+            "usage": {
+              "promptTokens": 140,
+              "outputTokens": 10,
+              "totalTokens": 150
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 897,
+            "usage": {
+              "promptTokens": 204,
+              "outputTokens": 8,
+              "totalTokens": 212
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 848,
+            "usage": {
+              "promptTokens": 137,
+              "outputTokens": 9,
+              "totalTokens": 146
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 697,
+            "usage": {
+              "promptTokens": 184,
+              "outputTokens": 7,
+              "totalTokens": 191
+            }
+          }
+        ]
+      },
+      "number": 18,
+      "id": "hydraulics",
+      "prompt": "I don’t get how a hydraulic lift works. Can you show me?",
+      "status": "PASS",
+      "seconds": "31.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/prompt-44a2fe144468d75676940384fce892e84243977f.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/result-f2ca410a9c55bd65e80c93829273b50426c5cc46.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/planner-diagnostics-c8814c286cf500b004b90334622f9dbee45f487c.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/measurements-e96182b3cdec649c3dbd37d1d9ee499647760517.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/events-54fb46173e411c87dcd934c8e84bcec91494a12c.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "0fe48402-2226-4e24-8d69-ef960bd10dd5",
+      "generationMs": 23898.78916700004,
+      "observedMs": 23898.78916700004,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 23736,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8177,
+            "usage": {
+              "promptTokens": 1054,
+              "outputTokens": 136,
+              "totalTokens": 1190
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 9839,
+            "usage": {
+              "promptTokens": 4421,
+              "outputTokens": 12,
+              "totalTokens": 4433
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1750,
+            "usage": {
+              "promptTokens": 732,
+              "outputTokens": 13,
+              "totalTokens": 745
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 961,
+            "usage": {
+              "promptTokens": 211,
+              "outputTokens": 7,
+              "totalTokens": 218
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1028,
+            "usage": {
+              "promptTokens": 312,
+              "outputTokens": 8,
+              "totalTokens": 320
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 808,
+            "usage": {
+              "promptTokens": 146,
+              "outputTokens": 9,
+              "totalTokens": 155
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 856,
+            "usage": {
+              "promptTokens": 291,
+              "outputTokens": 7,
+              "totalTokens": 298
+            }
+          }
+        ]
+      },
+      "number": 19,
+      "id": "buoyancy",
+      "prompt": "Why does a steel ship float when a solid steel block sinks? Show me both in water.",
+      "status": "PASS",
+      "seconds": "27.1",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/prompt-dae429e3bb7f65ae0125cad37704644c3c4cf9b5.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/result-181a9362689d965ea58c7c7340bd66faad2bf898.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/planner-diagnostics-8dbbe3f86d92cc4024b991da44a509a0ef8e61ac.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/measurements-b85f2ec7d80f591a9aa3a1528fa3dd368722c58e.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/events-97e64c5641c531ffea0e612f41ca8acb54618673.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "afd8b5af-0214-4759-bb2c-eef04707d2f7",
+      "generationMs": 28544.051916999975,
+      "observedMs": 28544.051916999975,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 28407,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 1,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8586,
+            "usage": {
+              "promptTokens": 1058,
+              "outputTokens": 146,
+              "totalTokens": 1204
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10111,
+            "usage": {
+              "promptTokens": 4380,
+              "outputTokens": 12,
+              "totalTokens": 4392
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2537,
+            "usage": {
+              "promptTokens": 1122,
+              "outputTokens": 10,
+              "totalTokens": 1132
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 3562,
+            "usage": {
+              "promptTokens": 3700,
+              "outputTokens": 12,
+              "totalTokens": 3712
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1767,
+            "usage": {
+              "promptTokens": 676,
+              "outputTokens": 16,
+              "totalTokens": 692
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 766,
+            "usage": {
+              "promptTokens": 252,
+              "outputTokens": 3,
+              "totalTokens": 255
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 752,
+            "usage": {
+              "promptTokens": 379,
+              "outputTokens": 7,
+              "totalTokens": 386
+            }
+          }
+        ]
+      },
+      "number": 20,
+      "id": "doppler-siren",
+      "prompt": "Show an ambulance passing someone and how the siren frequency changes. Let me change how fast it moves.",
+      "status": "PASS",
+      "seconds": "31.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/prompt-424d24942ad8a6fe2e116d0a58afd39aa50eaf9e.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/result-7d1a7e3b435a006d78cdcf4f1a7d9abfb180b625.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/planner-diagnostics-534cb789bae688531a65b43bfc1cd22019579360.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/measurements-7afd9257946d4b037223121137b433410ea8ef21.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/events-4eef2991c8da0dd08394b81d5b81f34bf83cb950.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "d39b4539-fbf6-4ca6-821a-6d6f1e46dee1",
+      "generationMs": 34546.28749999998,
+      "observedMs": 34546.28749999998,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 34386,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 1,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8725,
+            "usage": {
+              "promptTokens": 1054,
+              "outputTokens": 138,
+              "totalTokens": 1192
+            }
+          },
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 8161,
+            "usage": {
+              "promptTokens": 1622,
+              "outputTokens": 134,
+              "totalTokens": 1756
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11922,
+            "usage": {
+              "promptTokens": 4852,
+              "outputTokens": 12,
+              "totalTokens": 4864
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2152,
+            "usage": {
+              "promptTokens": 719,
+              "outputTokens": 19,
+              "totalTokens": 738
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1040,
+            "usage": {
+              "promptTokens": 253,
+              "outputTokens": 8,
+              "totalTokens": 261
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1220,
+            "usage": {
+              "promptTokens": 142,
+              "outputTokens": 9,
+              "totalTokens": 151
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 782,
+            "usage": {
+              "promptTokens": 232,
+              "outputTokens": 7,
+              "totalTokens": 239
+            }
+          }
+        ]
+      },
+      "number": 21,
+      "id": "guitar-string",
+      "prompt": "Help me understand how a guitar string makes different notes. Let me change its length and tension.",
+      "status": "PASS",
+      "seconds": "37.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/prompt-f3e5e8e6dc17b23308d7823c2038fac7020ca052.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/result-394b442ed7db4a225e39b8b04a3be9934482b12b.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/planner-diagnostics-146da16994d8f14ab3968aef448135352642dfbd.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/measurements-243f49cf695578ea48f6dbc0e56b82ad81967dda.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/events-d84806f2568bdcfc5f10fa0812905382c7811790.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "71b13ebc-9c50-4026-8846-b1bba81c0e03",
+      "generationMs": 29293.25345800002,
+      "observedMs": 29293.25345800002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 29043,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 1,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 9052,
+            "usage": {
+              "promptTokens": 1058,
+              "outputTokens": 125,
+              "totalTokens": 1183
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 13292,
+            "usage": {
+              "promptTokens": 5071,
+              "outputTokens": 12,
+              "totalTokens": 5083
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1953,
+            "usage": {
+              "promptTokens": 647,
+              "outputTokens": 16,
+              "totalTokens": 663
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1245,
+            "usage": {
+              "promptTokens": 320,
+              "outputTokens": 8,
+              "totalTokens": 328
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 819,
+            "usage": {
+              "promptTokens": 143,
+              "outputTokens": 7,
+              "totalTokens": 150
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1132,
+            "usage": {
+              "promptTokens": 301,
+              "outputTokens": 9,
+              "totalTokens": 310
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1088,
+            "usage": {
+              "promptTokens": 450,
+              "outputTokens": 7,
+              "totalTokens": 457
+            }
+          }
+        ]
+      },
+      "number": 22,
+      "id": "cooling-drinks",
+      "prompt": "Show a hot drink cooling down. I want to change the room temperature and see how long it takes.",
+      "status": "PASS",
+      "seconds": "32.5",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/prompt-f2d93c51144fe4d815ca4e810e99812681f6ab56.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/result-50b490727985b791dd544e93f39bf575e227eb8e.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/planner-diagnostics-38d6ba0b49773b0f3b51b1e788bf2d5407243ceb.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/measurements-45c95ca184811fb0a0d4ac2f9cc59fa6df681df1.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/events-6f0b9f946554ee9d4d9cb2ac3c6fbe66eb8e2193.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "ca621ab8-1b07-4637-ad3d-95de9ed2c6b1",
+      "generationMs": null,
+      "observedMs": 42010.726957999985,
+      "measurements": {
+        "terminal": "failed",
+        "elapsedMs": 41928,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 3,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11715,
+            "usage": {
+              "promptTokens": 1062,
+              "outputTokens": 167,
+              "totalTokens": 1229
+            }
+          },
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 9929,
+            "usage": {
+              "promptTokens": 1630,
+              "outputTokens": 145,
+              "totalTokens": 1775
+            }
+          },
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10217,
+            "usage": {
+              "promptTokens": 1630,
+              "outputTokens": 148,
+              "totalTokens": 1778
+            }
+          },
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10061,
+            "usage": {
+              "promptTokens": 1630,
+              "outputTokens": 145,
+              "totalTokens": 1775
+            }
+          }
+        ]
+      },
+      "number": 23,
+      "id": "magnet-induction",
+      "prompt": "Show me a magnet moving through a coil. What happens to the current if I move it faster or reverse direction?",
+      "status": "ERROR",
+      "seconds": "44.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/prompt-1199bd03c3e03d255227339c0e9a64f035517305.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/result-85e5124cdcac73b4d5b33cd093920be0e6bf8995.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/error-details-ff0a8686a4925680dd01d96301d056f69d89d6fc.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/planner-diagnostics-1ac48ed54c5b0e843c9cbb55014e10ea0cd96004.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/measurements-3fc3f7eaf90e67f64ac8346f302d55792c558086.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/events-7827cf00166c61e4e6014c8df95310bcd4eb1aa0.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-23-magnet-induction/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-23-magnet-induction/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: Couldn't complete that simulation change.Try againDetails\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "6306961f-197b-4f65-820c-c5c5656d99fd",
+      "generationMs": 37178.001292,
+      "observedMs": 37178.001292,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 36970,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 9,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/11",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 9,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 12042,
+            "usage": {
+              "promptTokens": 1060,
+              "outputTokens": 171,
+              "totalTokens": 1231
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 12679,
+            "usage": {
+              "promptTokens": 4467,
+              "outputTokens": 12,
+              "totalTokens": 4479
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2542,
+            "usage": {
+              "promptTokens": 604,
+              "outputTokens": 13,
+              "totalTokens": 617
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1349,
+            "usage": {
+              "promptTokens": 229,
+              "outputTokens": 7,
+              "totalTokens": 236
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1212,
+            "usage": {
+              "promptTokens": 279,
+              "outputTokens": 8,
+              "totalTokens": 287
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1364,
+            "usage": {
+              "promptTokens": 153,
+              "outputTokens": 11,
+              "totalTokens": 164
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1108,
+            "usage": {
+              "promptTokens": 257,
+              "outputTokens": 8,
+              "totalTokens": 265
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 889,
+            "usage": {
+              "promptTokens": 138,
+              "outputTokens": 7,
+              "totalTokens": 145
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 912,
+            "usage": {
+              "promptTokens": 239,
+              "outputTokens": 8,
+              "totalTokens": 247
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1316,
+            "usage": {
+              "promptTokens": 157,
+              "outputTokens": 11,
+              "totalTokens": 168
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 977,
+            "usage": {
+              "promptTokens": 216,
+              "outputTokens": 7,
+              "totalTokens": 223
+            }
+          }
+        ]
+      },
+      "number": 24,
+      "id": "rc-circuit",
+      "prompt": "Make a circuit where a capacitor charges and discharges. Let me change the resistance and see how quickly it happens.",
+      "status": "PASS",
+      "seconds": "40.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/prompt-06b4216e0087a851f4e6cca4698bf74bf8e9a8e8.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/result-063bd5588a9215a0d3476a24fdbc02dd0a43ff02.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/planner-diagnostics-d7fa7cad011009ccafc399239897e16d2eb42def.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/measurements-548172ce00d4991ad9d5a13f03a5a8ddb25fa727.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/events-3ceddce05a43aabae603ccf6b188cf08015e5d54.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "6d00d9bc-9197-4ece-ae7c-e36bcd7fa5da",
+      "generationMs": 27564.897833000003,
+      "observedMs": 27564.897833000003,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 27332,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10078,
+            "usage": {
+              "promptTokens": 1034,
+              "outputTokens": 123,
+              "totalTokens": 1157
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 12980,
+            "usage": {
+              "promptTokens": 4501,
+              "outputTokens": 12,
+              "totalTokens": 4513
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2756,
+            "usage": {
+              "promptTokens": 697,
+              "outputTokens": 13,
+              "totalTokens": 710
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1238,
+            "usage": {
+              "promptTokens": 191,
+              "outputTokens": 7,
+              "totalTokens": 198
+            }
+          }
+        ]
+      },
+      "number": 25,
+      "id": "fraction-number-line",
+      "prompt": "Help me understand fractions using a number line.",
+      "status": "PASS",
+      "seconds": "30.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/prompt-145084efbaa0abb022d5f10547b6c4bc2fe20e46.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/result-18ec881721145c4456cf5e4d42043c557c9eacf0.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/planner-diagnostics-23394c9255c24f8361fdc34fd181d69809df0833.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/measurements-c36be1cb95fd6fa9e397428356ae76d3e4745ed5.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/events-21d4cbd340c99a6937f870d8fa95a6c888c8e843.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "d44b7aed-befb-4edd-ad58-0b5f6baec2d1",
+      "generationMs": 32973.68325,
+      "observedMs": 32973.68325,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 32639,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10225,
+            "usage": {
+              "promptTokens": 1038,
+              "outputTokens": 130,
+              "totalTokens": 1168
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 13594,
+            "usage": {
+              "promptTokens": 4793,
+              "outputTokens": 12,
+              "totalTokens": 4805
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 5860,
+            "usage": {
+              "promptTokens": 1417,
+              "outputTokens": 45,
+              "totalTokens": 1462
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1646,
+            "usage": {
+              "promptTokens": 313,
+              "outputTokens": 7,
+              "totalTokens": 320
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 828,
+            "usage": {
+              "promptTokens": 215,
+              "outputTokens": 7,
+              "totalTokens": 222
+            }
+          }
+        ]
+      },
+      "number": 26,
+      "id": "cell-division",
+      "prompt": "Show me what happens to a cell when it divides.",
+      "status": "PASS",
+      "seconds": "36.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-26-cell-division/attachments/prompt-691aeabcc2309ff54ad89dc11d163e1c93354fb2.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-26-cell-division/attachments/result-6a38963cc4c8ac320a80ec5799aec68745bacfb1.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-26-cell-division/attachments/planner-diagnostics-5f922cdf8f43641ff2d45f66acc31acc8fdfe113.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-26-cell-division/attachments/measurements-bd5aeb65ea0d27a54cae460d4cdbe2575b2fbf24.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-26-cell-division/attachments/events-8ded69932a874b367f86b0c1e4290c2ab2f92346.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "fc9f2810-7682-4230-8fb8-dadee65d2768",
+      "generationMs": 34381.709707999995,
+      "observedMs": 34381.709707999995,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 34130,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10039,
+            "usage": {
+              "promptTokens": 1028,
+              "outputTokens": 121,
+              "totalTokens": 1149
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 15722,
+            "usage": {
+              "promptTokens": 4647,
+              "outputTokens": 12,
+              "totalTokens": 4659
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2832,
+            "usage": {
+              "promptTokens": 784,
+              "outputTokens": 16,
+              "totalTokens": 800
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1192,
+            "usage": {
+              "promptTokens": 274,
+              "outputTokens": 7,
+              "totalTokens": 281
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1546,
+            "usage": {
+              "promptTokens": 163,
+              "outputTokens": 8,
+              "totalTokens": 171
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1333,
+            "usage": {
+              "promptTokens": 127,
+              "outputTokens": 6,
+              "totalTokens": 133
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 992,
+            "usage": {
+              "promptTokens": 145,
+              "outputTokens": 7,
+              "totalTokens": 152
+            }
+          }
+        ]
+      },
+      "number": 27,
+      "id": "area-perimeter",
+      "prompt": "Compare two rectangles and their areas",
+      "status": "PASS",
+      "seconds": "37.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/prompt-4436389f2191c1d4e6d824187f72476c10dc4687.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/result-95a474bb834d92430a9c418dda58d93d8f4ced00.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/planner-diagnostics-18161c443089da96621564b522e62d8581446bcb.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/measurements-b01f801eb21155945578cb7a18e002d96dae6162.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/events-03bd88d2179df94ec0d89d7a803ba37267810274.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "220f1631-42b8-4bb6-8c8c-58a37b53c069",
+      "generationMs": 36468.29783299999,
+      "observedMs": 36468.29783299999,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 36150,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 13060,
+            "usage": {
+              "promptTokens": 1062,
+              "outputTokens": 144,
+              "totalTokens": 1206
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 14602,
+            "usage": {
+              "promptTokens": 4957,
+              "outputTokens": 12,
+              "totalTokens": 4969
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 3555,
+            "usage": {
+              "promptTokens": 1068,
+              "outputTokens": 19,
+              "totalTokens": 1087
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1433,
+            "usage": {
+              "promptTokens": 310,
+              "outputTokens": 7,
+              "totalTokens": 317
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 979,
+            "usage": {
+              "promptTokens": 184,
+              "outputTokens": 8,
+              "totalTokens": 192
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 911,
+            "usage": {
+              "promptTokens": 145,
+              "outputTokens": 7,
+              "totalTokens": 152
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 969,
+            "usage": {
+              "promptTokens": 165,
+              "outputTokens": 7,
+              "totalTokens": 172
+            }
+          }
+        ]
+      },
+      "number": 28,
+      "id": "beer-lambert",
+      "prompt": "Show light passing through a coloured solution. Let me change how concentrated it is and see how much light gets through.",
+      "status": "PASS",
+      "seconds": "39.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/prompt-244883352b4744c3dc57b042ced61c812e996280.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/result-1a661ca8a6479a7cf83a8da4ec3318021f155189.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/planner-diagnostics-47252a5659268bb09adca8d44f5ad997f5093e9d.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/measurements-e1c8550b86bde978f88478220837faa0e8b7511e.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/events-853bdf3eefc51fa2cf5520c19aa25b776bc88bce.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "83411ef0-e1a8-418f-9aa3-90acad5b7b0a",
+      "generationMs": 28673.731459000002,
+      "observedMs": 28673.731459000002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 28319,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11162,
+            "usage": {
+              "promptTokens": 1028,
+              "outputTokens": 137,
+              "totalTokens": 1165
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 12304,
+            "usage": {
+              "promptTokens": 4133,
+              "outputTokens": 12,
+              "totalTokens": 4145
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2272,
+            "usage": {
+              "promptTokens": 600,
+              "outputTokens": 13,
+              "totalTokens": 613
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 998,
+            "usage": {
+              "promptTokens": 185,
+              "outputTokens": 7,
+              "totalTokens": 192
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1067,
+            "usage": {
+              "promptTokens": 176,
+              "outputTokens": 7,
+              "totalTokens": 183
+            }
+          }
+        ]
+      },
+      "number": 29,
+      "id": "arithmetic",
+      "prompt": "Help me learn addition with circles",
+      "status": "PASS",
+      "seconds": "31.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/prompt-a8c18f5ec5615afc70afa289d7092a5dc51daa3e.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/result-30c6ea7f98f8108f1be9392fefafe4bf18b0933c.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/planner-diagnostics-1ad1f29b837ca5fa015ce0bf811b6d7ad05e29f8.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/measurements-f26828c55280bedff68278d3ad990c025016d715.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/events-64b449ab00344c64f5902c53d248c8b9e2ed9b9f.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "c3a1e75a-4ab4-4395-ba3b-1dfdd3206d5f",
+      "generationMs": 36144.931332999986,
+      "observedMs": 36144.931332999986,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 35900,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 1,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10139,
+            "usage": {
+              "promptTokens": 1048,
+              "outputTokens": 122,
+              "totalTokens": 1170
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 15184,
+            "usage": {
+              "promptTokens": 5160,
+              "outputTokens": 12,
+              "totalTokens": 5172
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 3238,
+            "usage": {
+              "promptTokens": 989,
+              "outputTokens": 16,
+              "totalTokens": 1005
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1418,
+            "usage": {
+              "promptTokens": 300,
+              "outputTokens": 7,
+              "totalTokens": 307
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1065,
+            "usage": {
+              "promptTokens": 176,
+              "outputTokens": 8,
+              "totalTokens": 184
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2378,
+            "usage": {
+              "promptTokens": 134,
+              "outputTokens": 25,
+              "totalTokens": 159
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1071,
+            "usage": {
+              "promptTokens": 247,
+              "outputTokens": 6,
+              "totalTokens": 253
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 935,
+            "usage": {
+              "promptTokens": 158,
+              "outputTokens": 7,
+              "totalTokens": 165
+            }
+          }
+        ]
+      },
+      "number": 30,
+      "id": "gas-equilibrium",
+      "prompt": "Show me a gas reaction at equilibrium. What happens if I squeeze the container?",
+      "status": "PASS",
+      "seconds": "39.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/prompt-55d15fdb73b5d5bb0975f7a053eca4a4f7121c49.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/result-43a00e3432e05a7f385446c99448f844f81afc06.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/planner-diagnostics-9ff4b4a99b4049adba07248cd9e2f7701eafbf69.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/measurements-bd410c5ecbf024b236aa8089ca606ce2824eba27.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/events-cdb07ff93f7858f0a799891dd55c7a27149fc70f.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "2c73100f-502f-4341-a3b6-b19f1a5f7942",
+      "generationMs": 34252.13375000001,
+      "observedMs": 34252.13375000001,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 33984,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11741,
+            "usage": {
+              "promptTokens": 1058,
+              "outputTokens": 146,
+              "totalTokens": 1204
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 13963,
+            "usage": {
+              "promptTokens": 4779,
+              "outputTokens": 12,
+              "totalTokens": 4791
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 3431,
+            "usage": {
+              "promptTokens": 1059,
+              "outputTokens": 19,
+              "totalTokens": 1078
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1458,
+            "usage": {
+              "promptTokens": 309,
+              "outputTokens": 7,
+              "totalTokens": 316
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1132,
+            "usage": {
+              "promptTokens": 201,
+              "outputTokens": 8,
+              "totalTokens": 209
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 836,
+            "usage": {
+              "promptTokens": 144,
+              "outputTokens": 6,
+              "totalTokens": 150
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 905,
+            "usage": {
+              "promptTokens": 183,
+              "outputTokens": 7,
+              "totalTokens": 190
+            }
+          }
+        ]
+      },
+      "number": 31,
+      "id": "phase-change",
+      "prompt": "Let me heat a substance and change the pressure to see when it becomes a solid, liquid or gas.",
+      "status": "PASS",
+      "seconds": "37.5",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-31-phase-change/attachments/prompt-afee287893b6d2a7a637a8e96c381fbad5072503.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-31-phase-change/attachments/result-806a2d0d6a11a5d6ccca30ff62b83adbbd2f7620.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-31-phase-change/attachments/planner-diagnostics-e013c21d9964a09086b3f4c2080a39c6244848ec.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-31-phase-change/attachments/measurements-a3ef714091468b79a496587f0d12d48ba42bbd36.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-31-phase-change/attachments/events-5c14201629f5c7958cd955a87c099dd982547800.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "84ea1d50-07eb-4fd7-8fa3-09cf03da1465",
+      "generationMs": 30022.320542,
+      "observedMs": 30022.320542,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 29805,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11440,
+            "usage": {
+              "promptTokens": 1042,
+              "outputTokens": 141,
+              "totalTokens": 1183
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 15945,
+            "usage": {
+              "promptTokens": 5429,
+              "outputTokens": 12,
+              "totalTokens": 5441
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1999,
+            "usage": {
+              "promptTokens": 550,
+              "outputTokens": 16,
+              "totalTokens": 566
+            }
+          }
+        ]
+      },
+      "number": 32,
+      "id": "coordinates",
+      "prompt": "Help me practise plotting points on an x and y grid.",
+      "status": "PASS",
+      "seconds": "33.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-32-coordinates/attachments/prompt-95bc4d75f41695bcb02ba0b2a937ad86ab0ca821.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-32-coordinates/attachments/result-3a5f8eda1415e37dca6e4059e077dce9802e5d07.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-32-coordinates/attachments/planner-diagnostics-765f94adf3aeb936d805d213183dd68661204c5d.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-32-coordinates/attachments/measurements-5b666d57411cb88757aa9e61adb679a3765bf415.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-32-coordinates/attachments/events-52f0bbda0f50a3ba150fc494735c0508e49879fd.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "c4fa40c3-9a38-4a79-801f-ef16db46fcd5",
+      "generationMs": 36255.66516600002,
+      "observedMs": 36255.66516600002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 36046,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 7,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 7,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10843,
+            "usage": {
+              "promptTokens": 1066,
+              "outputTokens": 130,
+              "totalTokens": 1196
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 15627,
+            "usage": {
+              "promptTokens": 5161,
+              "outputTokens": 12,
+              "totalTokens": 5173
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 3248,
+            "usage": {
+              "promptTokens": 829,
+              "outputTokens": 16,
+              "totalTokens": 845
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1374,
+            "usage": {
+              "promptTokens": 211,
+              "outputTokens": 8,
+              "totalTokens": 219
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1191,
+            "usage": {
+              "promptTokens": 145,
+              "outputTokens": 6,
+              "totalTokens": 151
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1020,
+            "usage": {
+              "promptTokens": 193,
+              "outputTokens": 8,
+              "totalTokens": 201
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1150,
+            "usage": {
+              "promptTokens": 145,
+              "outputTokens": 9,
+              "totalTokens": 154
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1090,
+            "usage": {
+              "promptTokens": 173,
+              "outputTokens": 7,
+              "totalTokens": 180
+            }
+          }
+        ]
+      },
+      "number": 33,
+      "id": "water-pressure",
+      "prompt": "Show water coming out of a hole in a bottle. Let me change the water level and see how far the stream goes.",
+      "status": "PASS",
+      "seconds": "39.5",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/prompt-8e9e4c28b466f8971379148a814f1dcbdb88ff2e.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/result-2bce66cd42c7676c423cf747841afc899db5264a.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/planner-diagnostics-f210eca64e8c13e81b8a1a70decb05359c577e89.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/measurements-34e2dbff7a15799d7bbb16f8c0f3a11091e18496.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/events-8d6d9f5462a3abc698d6ea6459011dee885c1bf5.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "f19b61d6-e79b-435e-b983-4fa5b5643137",
+      "generationMs": null,
+      "observedMs": 53285.85449999996,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 53204,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11657,
+            "usage": {
+              "promptTokens": 1050,
+              "outputTokens": 145,
+              "totalTokens": 1195
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 14845,
+            "usage": {
+              "promptTokens": 5011,
+              "outputTokens": 12,
+              "totalTokens": 5023
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 3078,
+            "usage": {
+              "promptTokens": 1042,
+              "outputTokens": 10,
+              "totalTokens": 1052
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 13246,
+            "usage": {
+              "promptTokens": 4464,
+              "outputTokens": 12,
+              "totalTokens": 4476
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 3097,
+            "usage": {
+              "promptTokens": 1099,
+              "outputTokens": 10,
+              "totalTokens": 1109
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 3741,
+            "usage": {
+              "promptTokens": 3802,
+              "outputTokens": 12,
+              "totalTokens": 3814
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 3006,
+            "usage": {
+              "promptTokens": 1054,
+              "outputTokens": 10,
+              "totalTokens": 1064
+            }
+          }
+        ]
+      },
+      "number": 34,
+      "id": "voting-systems",
+      "prompt": "Can the same votes give different winners? Show me an election with different voting systems.",
+      "status": "ERROR",
+      "seconds": "55.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/prompt-f89fbfea14ef997c1a0a8a6dcf281ae91503f10a.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/result-4c8d33ea87873c92fd0f698379bac964d0932578.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/error-details-9bdebd7b8a98f8cf835fbb14f4af8e885f7ab8e0.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/planner-diagnostics-c95f5093129fe512fbb36e64b2cee5877c53d962.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/measurements-039360d7b29e6b51a77af39f9297de18855b6b16.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/events-8c5fdb84156828a0c13abff8c2c5492cfd2cb7c6.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-34-voting-systems/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-34-voting-systems/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: That request isn't supported yet.Details\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "fbcfce8a-5254-4c7b-a44b-e4ff957f7050",
+      "generationMs": 28965.597833,
+      "observedMs": 28965.597833,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 28710,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11099,
+            "usage": {
+              "promptTokens": 1030,
+              "outputTokens": 132,
+              "totalTokens": 1162
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 12259,
+            "usage": {
+              "promptTokens": 4099,
+              "outputTokens": 12,
+              "totalTokens": 4111
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2109,
+            "usage": {
+              "promptTokens": 624,
+              "outputTokens": 13,
+              "totalTokens": 637
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1336,
+            "usage": {
+              "promptTokens": 181,
+              "outputTokens": 7,
+              "totalTokens": 188
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1346,
+            "usage": {
+              "promptTokens": 188,
+              "outputTokens": 7,
+              "totalTokens": 195
+            }
+          }
+        ]
+      },
+      "number": 35,
+      "id": "counting",
+      "prompt": "Help me practise counting circles.",
+      "status": "PASS",
+      "seconds": "32.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-35-counting/attachments/prompt-4f2b469d7062722b850d8f4e41b06f0871f3b3e9.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-35-counting/attachments/result-73d0daf04f85a55918aa12ed2beecf2244b94beb.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-35-counting/attachments/planner-diagnostics-731fac40cfa56461210f964ccc24ea13c36ed9f2.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-35-counting/attachments/measurements-06e75d9c9e2cf485d6f514791fd3475a6ed26d64.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-35-counting/attachments/events-2f3672466da2ed08d7768e34d8c3f0052376d4a2.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "cc7aacd9-42b3-4129-9e96-76a4df9e295b",
+      "generationMs": 30306.637333000006,
+      "observedMs": 30306.637333000006,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 30066,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 12630,
+            "usage": {
+              "promptTokens": 1064,
+              "outputTokens": 155,
+              "totalTokens": 1219
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 13369,
+            "usage": {
+              "promptTokens": 4473,
+              "outputTokens": 12,
+              "totalTokens": 4485
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2389,
+            "usage": {
+              "promptTokens": 669,
+              "outputTokens": 13,
+              "totalTokens": 682
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 979,
+            "usage": {
+              "promptTokens": 203,
+              "outputTokens": 7,
+              "totalTokens": 210
+            }
+          }
+        ]
+      },
+      "number": 36,
+      "id": "equal-groups",
+      "prompt": "Show me multiplication with equal groups of dots. Let me change the number of groups and how many dots are in each.",
+      "status": "PASS",
+      "seconds": "33.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/prompt-511c375dfb1cafa99be90b8e716a0d1710d2faeb.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/result-118d0ec20fb5a28ef35a122bbf8c7fd61414a3f8.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/planner-diagnostics-4cc05573c6c4613d9314333f323267f42c6e0a5b.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/measurements-d94c53323ea0be8407af19b05047132031890147.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/events-1b954ed9b851cb2604f5e45514a476669dde1769.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "4af90739-070c-4466-aa9c-a9fece5db4fd",
+      "generationMs": 37718.65154200001,
+      "observedMs": 37718.65154200001,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 37479,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 12323,
+            "usage": {
+              "promptTokens": 1044,
+              "outputTokens": 154,
+              "totalTokens": 1198
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 14630,
+            "usage": {
+              "promptTokens": 4976,
+              "outputTokens": 12,
+              "totalTokens": 4988
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 4011,
+            "usage": {
+              "promptTokens": 1241,
+              "outputTokens": 19,
+              "totalTokens": 1260
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1250,
+            "usage": {
+              "promptTokens": 247,
+              "outputTokens": 7,
+              "totalTokens": 254
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1089,
+            "usage": {
+              "promptTokens": 244,
+              "outputTokens": 7,
+              "totalTokens": 251
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1610,
+            "usage": {
+              "promptTokens": 219,
+              "outputTokens": 8,
+              "totalTokens": 227
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1244,
+            "usage": {
+              "promptTokens": 134,
+              "outputTokens": 6,
+              "totalTokens": 140
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 883,
+            "usage": {
+              "promptTokens": 201,
+              "outputTokens": 7,
+              "totalTokens": 208
+            }
+          }
+        ]
+      },
+      "number": 37,
+      "id": "pendulum",
+      "prompt": "Make a pendulum swing where I can adjust its starting angle and length",
+      "status": "PASS",
+      "seconds": "41.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-37-pendulum/attachments/prompt-b86911091349f2aa8d1b04ba4145b51ecd7522bd.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-37-pendulum/attachments/result-b4890d973419408470daffc177ac5408cb1e215a.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-37-pendulum/attachments/planner-diagnostics-f50724ca1c63362b6dd335ad1e6b3e97821fcb4e.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-37-pendulum/attachments/measurements-e2375682c6a7a6cb9d257fa4c98417a67a53ee0d.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-37-pendulum/attachments/events-5b098de2421456c931580c20825a51626b1a84d0.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "2df07fc0-8361-4dc5-ad08-4c4529d70e1c",
+      "generationMs": 37289.709,
+      "observedMs": 37289.709,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 37064,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 7,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 7,
+        "composerFeedback": 0,
+        "schemaRepairs": 2,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11028,
+            "usage": {
+              "promptTokens": 1042,
+              "outputTokens": 137,
+              "totalTokens": 1179
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 12205,
+            "usage": {
+              "promptTokens": 4180,
+              "outputTokens": 12,
+              "totalTokens": 4192
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2193,
+            "usage": {
+              "promptTokens": 637,
+              "outputTokens": 16,
+              "totalTokens": 653
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 958,
+            "usage": {
+              "promptTokens": 207,
+              "outputTokens": 7,
+              "totalTokens": 214
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1185,
+            "usage": {
+              "promptTokens": 234,
+              "outputTokens": 7,
+              "totalTokens": 241
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1359,
+            "usage": {
+              "promptTokens": 313,
+              "outputTokens": 8,
+              "totalTokens": 321
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1016,
+            "usage": {
+              "promptTokens": 182,
+              "outputTokens": 9,
+              "totalTokens": 191
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1451,
+            "usage": {
+              "promptTokens": 283,
+              "outputTokens": 16,
+              "totalTokens": 299
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1297,
+            "usage": {
+              "promptTokens": 288,
+              "outputTokens": 8,
+              "totalTokens": 296
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1082,
+            "usage": {
+              "promptTokens": 182,
+              "outputTokens": 11,
+              "totalTokens": 193
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1478,
+            "usage": {
+              "promptTokens": 283,
+              "outputTokens": 16,
+              "totalTokens": 299
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1337,
+            "usage": {
+              "promptTokens": 263,
+              "outputTokens": 7,
+              "totalTokens": 270
+            }
+          }
+        ]
+      },
+      "number": 38,
+      "id": "slope",
+      "prompt": "Make me a line where I can adjust its slope and y axis",
+      "status": "PASS",
+      "seconds": "40.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-38-slope/attachments/prompt-1459deb56fe6888b495cce4598b9e9b10d00dc85.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-38-slope/attachments/result-ee422dffe342048b55b8acd918062db7d55779d7.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-38-slope/attachments/planner-diagnostics-50fe2210963fbdaddea013d51a631e9c33be1233.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-38-slope/attachments/measurements-098d61ebf4e33fc9ab994f085dfffc9f547c4fc3.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-38-slope/attachments/events-1abfe0e2dcac060f23776861c920aaf09ef08fde.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "f40b6b8d-9a71-4361-b8a8-31fc40a93490",
+      "generationMs": 47142.861124999996,
+      "observedMs": 47142.861124999996,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 46899,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10711,
+            "usage": {
+              "promptTokens": 1064,
+              "outputTokens": 122,
+              "totalTokens": 1186
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 13607,
+            "usage": {
+              "promptTokens": 4342,
+              "outputTokens": 12,
+              "totalTokens": 4354
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 4201,
+            "usage": {
+              "promptTokens": 1229,
+              "outputTokens": 10,
+              "totalTokens": 1239
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10926,
+            "usage": {
+              "promptTokens": 3670,
+              "outputTokens": 12,
+              "totalTokens": 3682
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 3746,
+            "usage": {
+              "promptTokens": 1106,
+              "outputTokens": 22,
+              "totalTokens": 1128
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1378,
+            "usage": {
+              "promptTokens": 234,
+              "outputTokens": 8,
+              "totalTokens": 242
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 911,
+            "usage": {
+              "promptTokens": 145,
+              "outputTokens": 7,
+              "totalTokens": 152
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 916,
+            "usage": {
+              "promptTokens": 215,
+              "outputTokens": 7,
+              "totalTokens": 222
+            }
+          }
+        ]
+      },
+      "number": 39,
+      "id": "bridge",
+      "prompt": "Make a bridge with a load on it. Let me move the load and see which parts are under the most stress.",
+      "status": "PASS",
+      "seconds": "50.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-39-bridge/attachments/prompt-a788cf70361e447884ab84693d5e9e2b113765e5.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-39-bridge/attachments/result-06df5e45ae57150dd6d18ecfec66d35d4a8e9db3.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-39-bridge/attachments/planner-diagnostics-0ec4f13ab359622cdd4b7128688d48e3b12daf9e.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-39-bridge/attachments/measurements-49c71bb387c69eb12e19fc86056642cd129631bd.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-39-bridge/attachments/events-47a3dd2efe22673062b84def1e4dbfef89c193b1.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "cab0ee8d-77da-45fc-bb0d-17efbd6e10ba",
+      "generationMs": 34919.571792,
+      "observedMs": 34919.571792,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 34498,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 10768,
+            "usage": {
+              "promptTokens": 1050,
+              "outputTokens": 128,
+              "totalTokens": 1178
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 11689,
+            "usage": {
+              "promptTokens": 3989,
+              "outputTokens": 12,
+              "totalTokens": 4001
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 4485,
+            "usage": {
+              "promptTokens": 1186,
+              "outputTokens": 28,
+              "totalTokens": 1214
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 2198,
+            "usage": {
+              "promptTokens": 371,
+              "outputTokens": 7,
+              "totalTokens": 378
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1403,
+            "usage": {
+              "promptTokens": 273,
+              "outputTokens": 7,
+              "totalTokens": 280
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1351,
+            "usage": {
+              "promptTokens": 241,
+              "outputTokens": 8,
+              "totalTokens": 249
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1110,
+            "usage": {
+              "promptTokens": 142,
+              "outputTokens": 9,
+              "totalTokens": 151
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4",
+            "elapsedMs": 1064,
+            "usage": {
+              "promptTokens": 220,
+              "outputTokens": 7,
+              "totalTokens": 227
+            }
+          }
+        ]
+      },
+      "number": 40,
+      "id": "shared-fishing-lake",
+      "prompt": "Make a fishing lake where I can see what happens if everyone catches too many fish.",
+      "status": "PASS",
+      "seconds": "38.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/prompt-ed755c42762648b66854a7178c690df3e6c7dd18.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/result-df9c297e441deeb5f7da0c501f8c66ad2db50936.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/planner-diagnostics-93848d7428927d93bee81517a467633c3607092e.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/measurements-2838c5e4c0cfb5916338eed6994460d2f1122cac.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/events-c06e8af29ecef468b6caab75a845eba1f2156c28.jsonl"
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "summary": {
+    "total": 40,
+    "passed": 38,
+    "successRate": 0.95,
+    "firstPass": 38,
+    "firstPassRate": 0.95,
+    "validationReached": 38,
+    "firstPassAmongValidated": 1,
+    "unknownMeasurements": 0,
+    "zeroRepairCompletions": 30,
+    "latencySamples": 38,
+    "medianMs": 28979.60552100001,
+    "p95Ms": 37718.65154200001,
+    "statuses": {
+      "PASS": 38,
+      "ERROR": 2
+    }
+  }
+}

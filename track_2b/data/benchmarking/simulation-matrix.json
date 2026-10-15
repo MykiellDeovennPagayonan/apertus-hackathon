@@ -1,0 +1,654 @@
+{
+  "definition": "Visible rendering without an observed terminal error; scientific correctness and learner interactions are not certified.",
+  "models": [
+    "apertus-1.5-8b",
+    "llama-3.1-8b",
+    "qwen3-8b",
+    "gpt-6-luna",
+    "gpt-6.1-sol",
+    "qwen3-32b",
+    "mistral-small-3.1-24b"
+  ],
+  "rows": [
+    {
+      "number": 1,
+      "simulationId": "projectile",
+      "prompt": "Show me 2 projectiles distance comparison based on angles",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 2,
+      "simulationId": "price-elasticity",
+      "prompt": "Can you show me how changing the price affects how much people buy?",
+      "renderedModels": 6,
+      "renderRate": 0.8571428571428571,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "ERROR",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 3,
+      "simulationId": "pythagorean",
+      "prompt": "I have a ladder leaning against a wall. Let me change how far the bottom is from the wall and how high it reaches to see how long the ladder needs to be.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 4,
+      "simulationId": "acid-base-titration",
+      "prompt": "Show me what happens to the pH when I slowly add a base to an acid.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 5,
+      "simulationId": "cost-and-profit",
+      "prompt": "Make a small business example where I can change how much we produce and see our costs and profit.",
+      "renderedModels": 5,
+      "renderRate": 0.7142857142857143,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "ERROR",
+        "gpt-6.1-sol": "ERROR",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 6,
+      "simulationId": "tree-height",
+      "prompt": "How can I work out the height of a tree without climbing it? Show me using the angle from where I stand.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 7,
+      "simulationId": "galvanic-cell",
+      "prompt": "Show me how a battery made with two different metals works. Let me change the solution concentrations and see what happens to the voltage.",
+      "renderedModels": 4,
+      "renderRate": 0.5714285714285714,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "ERROR",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "ERROR",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "ERROR"
+      }
+    },
+    {
+      "number": 8,
+      "simulationId": "craft-production",
+      "prompt": "Compare making things by hand with using an assembly line. I want to see which produces more in the same time.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 9,
+      "simulationId": "tile-patterns",
+      "prompt": "Why can hexagons cover a floor without gaps but regular pentagons can’t? Let me try both.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 10,
+      "simulationId": "wildfire",
+      "prompt": "Show a wildfire spreading through a forest. Can I change how much dry vegetation there is?",
+      "renderedModels": 5,
+      "renderRate": 0.7142857142857143,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "ERROR",
+        "gpt-6.1-sol": "ERROR",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 11,
+      "simulationId": "can-material",
+      "prompt": "I want to design a can that holds the same amount but uses less metal. Let me try different widths and heights.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 12,
+      "simulationId": "survey-sampling",
+      "prompt": "How many people should I survey? Show me how the results change with a small sample versus a bigger one.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 13,
+      "simulationId": "levers",
+      "prompt": "Show me how a crowbar helps lift something heavy. Let me move the pivot.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 14,
+      "simulationId": "pulleys",
+      "prompt": "Make a pulley lifting a weight so I can see whether more supporting ropes make it easier to lift.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 15,
+      "simulationId": "bicycle-gears",
+      "prompt": "Help me understand bicycle gears. Let me change the front and back gears and see how fast the wheel turns.",
+      "renderedModels": 6,
+      "renderRate": 0.8571428571428571,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "ERROR",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 16,
+      "simulationId": "tipping",
+      "prompt": "Show me when a cabinet will tip over if I push it. I want to try different cabinet sizes.",
+      "renderedModels": 5,
+      "renderRate": 0.7142857142857143,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "ERROR",
+        "gpt-6.1-sol": "ERROR",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 17,
+      "simulationId": "collisions",
+      "prompt": "Make two carts crash into each other. Let me change their masses and speeds and see what happens after they collide.",
+      "renderedModels": 5,
+      "renderRate": 0.7142857142857143,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "ERROR",
+        "gpt-6.1-sol": "ERROR",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 18,
+      "simulationId": "hydraulics",
+      "prompt": "I don’t get how a hydraulic lift works. Can you show me?",
+      "renderedModels": 6,
+      "renderRate": 0.8571428571428571,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "ERROR",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 19,
+      "simulationId": "buoyancy",
+      "prompt": "Why does a steel ship float when a solid steel block sinks? Show me both in water.",
+      "renderedModels": 6,
+      "renderRate": 0.8571428571428571,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "ERROR",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 20,
+      "simulationId": "doppler-siren",
+      "prompt": "Show an ambulance passing someone and how the siren frequency changes. Let me change how fast it moves.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 21,
+      "simulationId": "guitar-string",
+      "prompt": "Help me understand how a guitar string makes different notes. Let me change its length and tension.",
+      "renderedModels": 5,
+      "renderRate": 0.7142857142857143,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "ERROR",
+        "gpt-6.1-sol": "ERROR",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 22,
+      "simulationId": "cooling-drinks",
+      "prompt": "Show a hot drink cooling down. I want to change the room temperature and see how long it takes.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 23,
+      "simulationId": "magnet-induction",
+      "prompt": "Show me a magnet moving through a coil. What happens to the current if I move it faster or reverse direction?",
+      "renderedModels": 6,
+      "renderRate": 0.8571428571428571,
+      "statusByModel": {
+        "apertus-1.5-8b": "ERROR",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 24,
+      "simulationId": "rc-circuit",
+      "prompt": "Make a circuit where a capacitor charges and discharges. Let me change the resistance and see how quickly it happens.",
+      "renderedModels": 5,
+      "renderRate": 0.7142857142857143,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "ERROR",
+        "qwen3-32b": "ERROR",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 25,
+      "simulationId": "fraction-number-line",
+      "prompt": "Help me understand fractions using a number line.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 26,
+      "simulationId": "cell-division",
+      "prompt": "Show me what happens to a cell when it divides.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 27,
+      "simulationId": "area-perimeter",
+      "prompt": "Compare two rectangles and their areas",
+      "renderedModels": 5,
+      "renderRate": 0.7142857142857143,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "ERROR",
+        "qwen3-32b": "ERROR",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 28,
+      "simulationId": "beer-lambert",
+      "prompt": "Show light passing through a coloured solution. Let me change how concentrated it is and see how much light gets through.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 29,
+      "simulationId": "arithmetic",
+      "prompt": "Help me learn addition with circles",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 30,
+      "simulationId": "gas-equilibrium",
+      "prompt": "Show me a gas reaction at equilibrium. What happens if I squeeze the container?",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 31,
+      "simulationId": "phase-change",
+      "prompt": "Let me heat a substance and change the pressure to see when it becomes a solid, liquid or gas.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 32,
+      "simulationId": "coordinates",
+      "prompt": "Help me practise plotting points on an x and y grid.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 33,
+      "simulationId": "water-pressure",
+      "prompt": "Show water coming out of a hole in a bottle. Let me change the water level and see how far the stream goes.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 34,
+      "simulationId": "voting-systems",
+      "prompt": "Can the same votes give different winners? Show me an election with different voting systems.",
+      "renderedModels": 4,
+      "renderRate": 0.5714285714285714,
+      "statusByModel": {
+        "apertus-1.5-8b": "ERROR",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "ERROR",
+        "gpt-6-luna": "ERROR",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 35,
+      "simulationId": "counting",
+      "prompt": "Help me practise counting circles.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 36,
+      "simulationId": "equal-groups",
+      "prompt": "Show me multiplication with equal groups of dots. Let me change the number of groups and how many dots are in each.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 37,
+      "simulationId": "pendulum",
+      "prompt": "Make a pendulum swing where I can adjust its starting angle and length",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 38,
+      "simulationId": "slope",
+      "prompt": "Make me a line where I can adjust its slope and y axis",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 39,
+      "simulationId": "bridge",
+      "prompt": "Make a bridge with a load on it. Let me move the load and see which parts are under the most stress.",
+      "renderedModels": 6,
+      "renderRate": 0.8571428571428571,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "ERROR",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    },
+    {
+      "number": 40,
+      "simulationId": "shared-fishing-lake",
+      "prompt": "Make a fishing lake where I can see what happens if everyone catches too many fish.",
+      "renderedModels": 7,
+      "renderRate": 1,
+      "statusByModel": {
+        "apertus-1.5-8b": "PASS",
+        "llama-3.1-8b": "PASS",
+        "qwen3-8b": "PASS",
+        "gpt-6-luna": "PASS",
+        "gpt-6.1-sol": "PASS",
+        "qwen3-32b": "PASS",
+        "mistral-small-3.1-24b": "PASS"
+      }
+    }
+  ]
+}

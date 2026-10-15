@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="280" viewBox="0 0 320 280" fill="none">
+  <defs>
+    <mask id="paper-cutouts" maskUnits="userSpaceOnUse" x="0" y="0" width="320" height="280" style="mask-type:luminance">
+      <rect width="320" height="280" fill="white"/>
+      <path d="m74 63 145 25-27 149-147-26L74 63Z" stroke="black" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M237 204c-6-23-14-61-35-87-13-17-29-25-43-20-27 9-51 41-77 77" stroke="black" stroke-width="6" stroke-linecap="round" stroke-dasharray="10 10"/>
+      <path d="m73 146 9 32 29-8" stroke="black" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    </mask>
+  </defs>
+  <g mask="url(#paper-cutouts)">
+    <path d="M70 16h124l48 37-29 199c-.8 6-6 10-12 10H29c-8 0-12-5-10-13L57 28c1-7 5-12 13-12Z" fill="#1E4035"/>
+    <path d="m194 16 48 37-47 14c-3 1-5-1-5-4l4-47Z" fill="#4C6F5D"/>
+  </g>
+  <path d="M258 207c9 11 3 25-10 27-12 2-24-11-20-23 3-10 19-14 30-4Z" fill="#1E4035"/>
+  <path d="m244 184 35-124c2-7 6-9 12-7l6 2c5 2 6 5 4 11l-37 123-20-5Z" fill="#1E4035" stroke="#4C6F5D" stroke-width="4" stroke-linejoin="round"/>
+  <path d="m274 76 22 7" stroke="#4C6F5D" stroke-width="4"/>
+  <path d="m244 184 20 5-19 25-1-30Z" fill="#E7EAD5" stroke="#4C6F5D" stroke-width="4" stroke-linejoin="round"/>
+</svg>
