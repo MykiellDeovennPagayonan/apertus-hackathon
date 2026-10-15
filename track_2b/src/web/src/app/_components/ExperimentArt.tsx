@@ -1,7 +1,7 @@
 export default function ExperimentArt({
   type,
 }: {
-  type: "projectile" | "bridge" | "acid-base-titration";
+  type: "projectile" | "cell-division" | "acid-base-titration";
 }) {
   return (
     <svg viewBox="0 0 320 170" fill="none" aria-hidden="true">
@@ -54,45 +54,32 @@ export default function ExperimentArt({
           </text>
         </>
       )}
-      {type === "bridge" && (
+      {type === "cell-division" && (
         <>
           <path
-            d="M31 140L48 113 65 140M255 140L272 113 289 140"
-            fill="#c8c7b5"
-          />
-          <path
-            d="M48 114H272M48 114L104 57 160 114 216 57 272 114M104 57H216M104 57V114M160 57V114M216 57V114M104 114L160 57 216 114"
+            d="M160 60C120 15 48 38 48 85S120 155 160 110C200 155 272 132 272 85S200 15 160 60Z"
+            fill="#e2e9dc"
             stroke="#47796a"
             strokeWidth="2"
-            strokeLinejoin="round"
           />
-          {[48, 104, 160, 216, 272].map((x) => (
-            <circle
-              key={x}
-              cx={x}
-              cy="114"
-              r="3.3"
-              fill="#fffbef"
-              stroke="#47796a"
-              strokeWidth="1.5"
-            />
-          ))}
-          <rect x="145" y="90" width="30" height="18" rx="2" fill="#c99d5c" />
+          <circle cx="105" cy="85" r="25" fill="#faf5df" stroke="#a7bab1" />
+          <circle cx="215" cy="85" r="25" fill="#faf5df" stroke="#a7bab1" />
           <path
-            d="M160 27V45m-5 -5 5 5 5 -5"
+            d="M95 74L105 96M105 74L95 96M111 78L120 92M120 78L111 92M205 74L215 96M215 74L205 96M221 78L230 92M230 78L221 92"
             stroke="#b48147"
-            strokeWidth="1.5"
+            strokeWidth="3"
+            strokeLinecap="round"
           />
+          <path d="M160 36V134" stroke="#a7bab1" strokeDasharray="3 5" />
           <text
-            x="172"
-            y="35"
+            x="106"
+            y="157"
             fill="#98917d"
-            fontSize="10"
+            fontSize="9"
             fontFamily="monospace"
           >
-            load
+            DAUGHTER CELLS
           </text>
-          <path d="M75 150q20 -7 40 0t40 0t40 0t40 0" stroke="#a7bab1" />
         </>
       )}
       {type === "acid-base-titration" && (

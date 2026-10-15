@@ -53,7 +53,11 @@ export default function ExperimentsShell({
 }) {
   const { data: account } = useSession();
   const ownerId = account?.user.id;
-  const [draft, setDraft] = useState("");
+  const [draft, setDraft] = useState(
+    landing
+      ? "Make a pendulum swing where I can adjust its starting angle and length"
+      : "",
+  );
   const [lastRequest, setLastRequest] = useState<{
     prompt: string;
     details: string;
@@ -508,11 +512,7 @@ export default function ExperimentsShell({
       placeholder={ready ? "Ask for a change…" : "Describe an experiment…"}
       chips={
         ready
-          ? [
-              "Reset this lesson",
-              "Change the starting values",
-              "Add another observation",
-            ]
+          ? []
           : [
               "Make a pendulum swing where I can adjust its starting angle and length",
               "Show me 2 projectiles distance comparison based on angles",

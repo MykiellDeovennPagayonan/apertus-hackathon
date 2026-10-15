@@ -16,11 +16,11 @@ export default function LandingPage({ children }: { children?: ReactNode }) {
       name: "Projectile motion",
     },
     {
-      type: "bridge",
-      tag: "STRUCTURES",
-      title: "Truss bridge",
-      description: "Change the bridge structure and load to compare forces.",
-      name: "Truss bridge",
+      type: "cell-division",
+      tag: "BIOLOGY",
+      title: "Cell division",
+      description: "Explore how chromosomes separate as a cell divides.",
+      name: "Cell division",
     },
     {
       type: "acid-base-titration",

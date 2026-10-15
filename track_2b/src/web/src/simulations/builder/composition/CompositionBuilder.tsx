@@ -901,28 +901,6 @@ export default function CompositionBuilder({
                 ? "Describe a change…"
                 : "Describe an experiment…"
             }
-            chips={
-              doc.authored?.nodes?.length
-                ? doc.authored.nodes.some(
-                    (node) => node.definition === "models/SpringMass",
-                  )
-                  ? [
-                      "What happens if the spring is stronger?",
-                      "Make it stop bouncing so much",
-                      "Add a chart",
-                    ]
-                  : [
-                      "Add a slider I can change",
-                      "Add an example to compare",
-                      "Add a chart",
-                    ]
-                : [
-                    "Show me how springs work",
-                    "Show me how pendulums work",
-                    "Why do traffic jams happen?",
-                    "Show me how a ball flies",
-                  ]
-            }
             disabled={ai.busy}
             status={ai.status}
             value={ai.draft}
