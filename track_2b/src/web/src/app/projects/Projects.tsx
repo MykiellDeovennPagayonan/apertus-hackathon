@@ -19,13 +19,13 @@ import type {
 } from "../../lib/projects/types";
 import { RecipeRepository } from "../../simulations/builder/library/RecipeRepository";
 import { readLibrary } from "../../simulations/builder/persistence/storage";
-import { useOffline } from "../_components/DeploymentProvider";
+import { useAccountFeaturesEnabled } from "../_components/DeploymentProvider";
 import LoadingState from "../_components/LoadingState";
 import NameAvailability from "../_components/NameAvailability";
 import PublishDialog from "../_components/PublishDialog";
 import SiteHeader from "../_components/SiteHeader";
 export default function Projects() {
-  const offline = useOffline();
+  const accountsDisabled = !useAccountFeaturesEnabled();
   const { data } = useSession(),
     owner = data?.user.id;
   const [entries, setEntries] = useState<ProjectSummary[]>([]),
@@ -159,7 +159,7 @@ export default function Projects() {
         <Link href="/experiments/builder?new=1">Create manually →</Link>
         <h1>My projects</h1>
         <p>
-          {offline
+          {accountsDisabled
             ? "Projects are saved in this browser. Export a copy to keep a backup."
             : "Save privately. Publish a snapshot when you are ready to share."}
         </p>
@@ -173,7 +173,7 @@ export default function Projects() {
           <p className="local-notice">
             You're working locally. Browser data can be cleared; download
             recipes to keep a portable copy.{" "}
-            {!offline && (
+            {!accountsDisabled && (
               <>
                 <Link href="/auth/sign-in">Sign in</Link> to save to your
                 account and publish.
@@ -333,9 +333,9 @@ export default function Projects() {
         )}
         {local.length > 0 && (
           <section>
-            <h2>Saved on this device</h2>
+            <h2>Saved in this browser</h2>
             <p>
-              {offline
+              {accountsDisabled
                 ? "Download recipes to keep portable copies of your work."
                 : "Import is explicit. Local originals are retained after a successful account save."}
             </p>

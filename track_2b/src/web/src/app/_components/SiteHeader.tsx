@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import AccountControl from "./AccountControl";
-import { useOffline } from "./DeploymentProvider";
+import { useAccountFeaturesEnabled } from "./DeploymentProvider";
 import "./SiteHeader.css";
 
 export default function SiteHeader({
@@ -11,7 +11,7 @@ export default function SiteHeader({
 }: {
   active: "home" | "experiments" | "community" | "projects";
 }) {
-  const offline = useOffline();
+  const accountsDisabled = !useAccountFeaturesEnabled();
   return (
     <header className="site-header">
       <Link href="/" className="site-header__brand" aria-label="pAperSim home">
@@ -28,7 +28,7 @@ export default function SiteHeader({
         >
           Experiments
         </Link>
-        {!offline && (
+        {!accountsDisabled && (
           <Link
             href="/community"
             aria-current={active === "community" ? "page" : undefined}

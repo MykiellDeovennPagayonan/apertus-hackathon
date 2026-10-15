@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { offlineEnabled } from "../../lib/deployment";
+import { accountFeaturesEnabled } from "../../lib/deployment";
 import Community from "./Community";
 export default function Page() {
-  if (offlineEnabled()) notFound();
+  if (!accountFeaturesEnabled()) notFound();
   return <Community />;
 }

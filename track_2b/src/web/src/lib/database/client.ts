@@ -1,6 +1,6 @@
 import { env } from "node:process";
 import { type Db, MongoClient } from "mongodb";
-import { offlineEnabled } from "../deployment";
+import { accountFeaturesEnabled } from "../deployment";
 import { initializeAuthIndexes, initializeLibraryCollections } from "./schema";
 
 type DatabaseConnection = { client: MongoClient; db: Db };
@@ -10,8 +10,8 @@ declare global {
 
 /** One connection pool, retained across development module reloads. */
 export function getDatabase(): Promise<DatabaseConnection> {
-  if (offlineEnabled())
-    throw new Error("Database access is disabled in offline mode.");
+  if (!accountFeaturesEnabled())
+    throw new Error("Database access is disabled in this deployment.");
   if (!globalThis.apertusDatabase) {
     const uri = env.MONGODB_URI?.trim();
     const name = env.MONGODB_DB_NAME?.trim();

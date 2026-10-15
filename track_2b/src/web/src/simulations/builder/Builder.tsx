@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useOffline } from "../../app/_components/DeploymentProvider";
+import { useAccountFeaturesEnabled } from "../../app/_components/DeploymentProvider";
 import LoadingState from "../../app/_components/LoadingState";
 import PublishDialog from "../../app/_components/PublishDialog";
 import UnsavedDialog from "../../app/_components/UnsavedDialog";
@@ -52,7 +52,7 @@ import {
 const message = (e: unknown) =>
   e instanceof Error ? e.message : "Something went wrong";
 export default function Builder() {
-  const offline = useOffline();
+  const accountsDisabled = !useAccountFeaturesEnabled();
   const { data: account } = useSession();
   const ownerId = account?.user.id;
   const params = useSearchParams();
@@ -241,9 +241,9 @@ export default function Builder() {
         const query = new URLSearchParams(queryKey);
         const requestedProject = query.get("project");
         const publicId = query.get("community") ?? query.get("insert");
-        if (offline && publicId)
+        if (accountsDisabled && publicId)
           throw new Error(
-            "Community imports are unavailable offline. Import a downloaded recipe instead.",
+            "Community imports are unavailable when account features are disabled. Import a downloaded recipe instead.",
           );
         if (query.has("new")) {
           const fresh = createFreshDocument();
@@ -402,7 +402,7 @@ export default function Builder() {
     return () => {
       disposed = true;
     };
-  }, [open, ownerId, queryKey, offline]);
+  }, [open, ownerId, queryKey, accountsDisabled]);
   useEffect(() => {
     if (!ready || !doc || !valid || playingSaved) return;
     try {
@@ -592,7 +592,7 @@ export default function Builder() {
         currentSaved
           ? ownerId
             ? "Saved to your account."
-            : "Saved on this device."
+            : "Saved in this browser."
           : "Saved the earlier snapshot. Your newer edits are still unsaved.",
       );
       return currentSaved;
@@ -696,7 +696,7 @@ export default function Builder() {
   );
   const library = (saved.length > 0 || remoteList.length > 0) && (
     <section className="builder-library">
-      <h2>{ownerId ? "Your saved experiments" : "Saved on this device"}</h2>
+      <h2>{ownerId ? "Your saved experiments" : "Saved in this browser"}</h2>
       {ownerId &&
         remoteList.map((entry) => (
           <div key={entry.projectId}>
@@ -931,7 +931,7 @@ export default function Builder() {
                 <>
                   You're working locally. Browser data can be cleared; download
                   a recipe to keep a portable copy.{" "}
-                  {!offline && (
+                  {!accountsDisabled && (
                     <>
                       <Link href="/auth/sign-in">Sign in</Link> to save to your
                       account and publish.
@@ -1017,7 +1017,7 @@ export default function Builder() {
                 </div>
                 <div className="builder-menu-group">
                   <p>Sharing and navigation</p>
-                  {!offline && (
+                  {!accountsDisabled && (
                     <button
                       aria-label="Publish"
                       type="button"
@@ -1048,7 +1048,7 @@ export default function Builder() {
                   >
                     <BuilderIcon name="folder" /> My projects
                   </Link>
-                  {!offline && (
+                  {!accountsDisabled && (
                     <Link
                       href="/community"
                       onClick={(event) => {

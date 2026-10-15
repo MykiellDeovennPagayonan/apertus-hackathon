@@ -13,12 +13,12 @@ function AccountBoundary({ children }: { children: ReactNode }) {
 
 export default function AuthProvider({
   children,
-  offline = false,
+  accountFeaturesEnabled = true,
 }: {
   children: ReactNode;
-  offline?: boolean;
+  accountFeaturesEnabled?: boolean;
 }) {
-  if (offline)
+  if (!accountFeaturesEnabled)
     return (
       <SessionContext.Provider
         value={{

@@ -2,7 +2,7 @@ import { createHash, randomBytes } from "node:crypto";
 import { env } from "node:process";
 import { MongoServerError, ObjectId } from "mongodb";
 import { getDatabase } from "../database/client";
-import { offlineEnabled } from "../deployment";
+import { accountFeaturesEnabled } from "../deployment";
 import { emailAddress, type LabUser, rateLimit } from "./accounts";
 import { hashPassword } from "./password";
 
@@ -74,9 +74,9 @@ export async function handleAccountRequest(
       },
     });
   try {
-    if (offlineEnabled())
+    if (!accountFeaturesEnabled())
       return respond(
-        { error: "Account services are disabled in offline mode." },
+        { error: "Account services are disabled in this deployment." },
         503,
       );
     const base = env.NEXTAUTH_URL;

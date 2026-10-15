@@ -6,6 +6,21 @@ export function offlineEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
   throw new Error("OFFLINE must be true or false.");
 }
 
+/** Account services are independent of inference; offline always disables them. */
+export function accountFeaturesEnabled(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  const value = env.ACCOUNT_FEATURES_ENABLED?.trim().toLowerCase();
+  if (
+    value !== undefined &&
+    value !== "" &&
+    value !== "true" &&
+    value !== "false"
+  )
+    throw new Error("ACCOUNT_FEATURES_ENABLED must be true or false.");
+  return !offlineEnabled(env) && value !== "false";
+}
+
 /** Offline deployments use loopback, private LAN addresses, or Docker DNS names. */
 export function requireLocalEndpoint(value: string) {
   const host = new URL(value).hostname.toLowerCase();

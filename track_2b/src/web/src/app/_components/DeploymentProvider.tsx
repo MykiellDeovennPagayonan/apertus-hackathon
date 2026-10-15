@@ -2,19 +2,20 @@
 
 import { createContext, type ReactNode, useContext } from "react";
 
-const OfflineContext = createContext(false);
-export const useOffline = () => useContext(OfflineContext);
+const AccountFeaturesContext = createContext(true);
+export const useAccountFeaturesEnabled = () =>
+  useContext(AccountFeaturesContext);
 
 export default function DeploymentProvider({
-  offline,
+  accountFeaturesEnabled,
   children,
 }: {
-  offline: boolean;
+  accountFeaturesEnabled: boolean;
   children: ReactNode;
 }) {
   return (
-    <OfflineContext.Provider value={offline}>
+    <AccountFeaturesContext.Provider value={accountFeaturesEnabled}>
       {children}
-    </OfflineContext.Provider>
+    </AccountFeaturesContext.Provider>
   );
 }

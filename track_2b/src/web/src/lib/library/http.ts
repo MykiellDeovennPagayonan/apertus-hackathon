@@ -2,7 +2,7 @@ import { env } from "node:process";
 import { getLibrarySession } from "../auth/server";
 import { getDatabase } from "../database/client";
 import { LibraryError, LibraryRepository } from "../database/LibraryRepository";
-import { offlineEnabled } from "../deployment";
+import { accountFeaturesEnabled } from "../deployment";
 
 const BYTE_LIMIT = 2_000_000;
 
@@ -53,11 +53,11 @@ export async function handleLibraryRequest(
       headers: { "Cache-Control": "no-store" },
     });
   try {
-    if (offlineEnabled())
+    if (!accountFeaturesEnabled())
       return respond(
         {
           message:
-            "Account and community services are disabled in offline mode.",
+            "Account and community services are disabled in this deployment.",
         },
         503,
       );
