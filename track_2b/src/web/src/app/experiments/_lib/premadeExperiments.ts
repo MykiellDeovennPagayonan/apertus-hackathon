@@ -1,8 +1,20 @@
-import { catalogRecipeSlugs } from "../../../simulations/registry/catalogScope";
 import { premadeRecipe } from "../../../simulations/registry/recipes/premade";
 
 export const premadeExperiments = Object.fromEntries(
-  catalogRecipeSlugs.map((slug) => {
+  [
+    "projectile",
+    "pythagorean",
+    "acid-base-titration",
+    "tile-patterns",
+    "cell-division",
+    "area-perimeter",
+    "coordinates",
+    "slope",
+    "pendulum",
+    "arithmetic",
+    "can-material",
+    "pulleys",
+  ].map((slug) => {
     const recipe = premadeRecipe(slug);
     return [
       slug,

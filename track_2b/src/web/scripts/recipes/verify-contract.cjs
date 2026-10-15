@@ -29,11 +29,20 @@ assert.equal(listPremadeRecipes().length, cases.length);
 const { premadeExperiments } = load(
   "src/app/experiments/_lib/premadeExperiments.ts",
 );
-assert.equal(Object.keys(premadeExperiments).length, 40);
-for (const slug of ["pendulum", "slope", "bridge", "shared-fishing-lake"])
-  assert.ok(premadeExperiments[slug]);
-for (const slug of ["gas", "town", "loan-payments", "nitrogen-cycle"])
-  assert.equal(premadeExperiments[slug], undefined);
+assert.deepEqual(Object.keys(premadeExperiments), [
+  "projectile",
+  "pythagorean",
+  "acid-base-titration",
+  "tile-patterns",
+  "cell-division",
+  "area-perimeter",
+  "coordinates",
+  "slope",
+  "pendulum",
+  "arithmetic",
+  "can-material",
+  "pulleys",
+]);
 for (const { slug, recipe } of listPremadeRecipes()) {
   if (!premadeExperiments[slug]) continue;
   assert.equal(premadeExperiments[slug].title, recipe.title);
