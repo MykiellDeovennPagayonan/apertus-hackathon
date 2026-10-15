@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./community/community.css";
 import { connection } from "next/server";
-import { offlineEnabled } from "../lib/deployment";
+import { accountFeaturesEnabled } from "../lib/deployment";
 import AuthProvider from "./_components/AuthProvider";
 import DeploymentProvider from "./_components/DeploymentProvider";
 export const metadata: Metadata = {
@@ -16,12 +16,14 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   await connection();
-  const offline = offlineEnabled();
+  const accountsEnabled = accountFeaturesEnabled();
   return (
     <html lang="en">
       <body>
-        <DeploymentProvider offline={offline}>
-          <AuthProvider offline={offline}>{children}</AuthProvider>
+        <DeploymentProvider accountFeaturesEnabled={accountsEnabled}>
+          <AuthProvider accountFeaturesEnabled={accountsEnabled}>
+            {children}
+          </AuthProvider>
         </DeploymentProvider>
       </body>
     </html>

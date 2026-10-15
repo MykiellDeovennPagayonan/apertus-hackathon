@@ -9,6 +9,7 @@
     "lint": "biome check",
     "format": "biome format --write",
     "test": "node scripts/recipes/verify-contract.cjs",
+    "test:deployment": "node scripts/verify-deployment.cjs",
     "test:components:community": "node scripts/recipes/verify-html-community.cjs",
     "test:components:community:browser": "node scripts/recipes/verify-html-community-browser.cjs",
     "recipes:generate": "node scripts/recipes/generate-registry.cjs",

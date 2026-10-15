@@ -19,15 +19,15 @@ import {
   diagnostic,
   inspectSource,
 } from "../../../../simulations/creation-and-editing/runtime-engine/imported/contract";
-import { useOffline } from "../../../_components/DeploymentProvider";
+import { useAccountFeaturesEnabled } from "../../../_components/DeploymentProvider";
 import PublishDialog from "../../../_components/PublishDialog";
 import SiteHeader from "../../../_components/SiteHeader";
 import "../../community.css";
 
 export default function ComponentAuthoring() {
   const { data: session } = useSession();
-  const offline = useOffline();
-  const owner = offline ? undefined : session?.user.id;
+  const accountsDisabled = !useAccountFeaturesEnabled();
+  const owner = accountsDisabled ? undefined : session?.user.id;
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [upload, setUpload] = useState(false);
@@ -98,8 +98,8 @@ export default function ComponentAuthoring() {
     <>
       <SiteHeader active="community" />
       <main className="community-page component-authoring-page">
-        <Link href={offline ? "/projects" : "/community"}>
-          {offline ? "← My projects" : "← Community"}
+        <Link href={accountsDisabled ? "/projects" : "/community"}>
+          {accountsDisabled ? "← My projects" : "← Community"}
         </Link>
         <h1>Create an HTML component</h1>
         <p>
@@ -303,7 +303,7 @@ export default function ComponentAuthoring() {
                     Review community publication
                   </button>
                 )}
-                {!owner && !offline && (
+                {!owner && !accountsDisabled && (
                   <Link href="/auth/sign-in">Sign in to publish</Link>
                 )}
               </div>

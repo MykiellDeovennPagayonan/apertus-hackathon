@@ -63,7 +63,7 @@ Verify `window.isSecureContext` and `Boolean(navigator.locks)` in the phone brow
 
 ## Offline behavior
 
-Compose sets server-side `OFFLINE=true`; no build-time browser flag is needed. The server supplies the boolean to the frontend at request time. Online deployments continue to default to `OFFLINE=false` when the variable is absent.
+Compose sets server-side `OFFLINE=true`; no build-time browser flag is needed. The server supplies the account-feature setting to the frontend at request time. Online deployments continue to default to `OFFLINE=false` when the variable is absent.
 
 - Experiment, composition, and draft saves use each device's browser storage.
 - Authentication, account libraries, community routes, and MongoDB access are disabled, even if database credentials are present.
@@ -73,6 +73,8 @@ Compose sets server-side `OFFLINE=true`; no build-time browser flag is needed. T
 - Guest agent runs remain temporary process state and expire on web restart.
 
 Browser saves are independent per phone and per origin. Keep the hostname/protocol/port stable. Download recipe JSON regularly; Pi model volumes do not back up phone data. Pi-side shared storage and cross-device synchronization are not implemented.
+
+For hosted inference with browser-only saves, use `OFFLINE=false` and `ACCOUNT_FEATURES_ENABLED=false`. This disables login, community, publishing, cloud saves, and MongoDB access without restricting the configured inference provider. The account flag defaults to enabled online; `OFFLINE=true` always disables it. Repair memory remains controlled separately by `REPAIR_MEMORY_MODE`.
 
 ## Full-stack benchmark
 

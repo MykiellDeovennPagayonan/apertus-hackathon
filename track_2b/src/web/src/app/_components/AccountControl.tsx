@@ -1,15 +1,15 @@
 "use client";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import { useOffline } from "./DeploymentProvider";
+import { useAccountFeaturesEnabled } from "./DeploymentProvider";
 
 export default function AccountControl() {
   const { data } = useSession();
-  const offline = useOffline();
+  const accountsDisabled = !useAccountFeaturesEnabled();
   return (
     <>
-      {offline ? (
-        <span>Saved on this device</span>
+      {accountsDisabled ? (
+        <span>Saved in this browser</span>
       ) : data?.user.id ? (
         <button
           type="button"
