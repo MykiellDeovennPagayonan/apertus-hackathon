@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import AccountControl from "./AccountControl";
 import { useOffline } from "./DeploymentProvider";
@@ -14,7 +15,8 @@ export default function SiteHeader({
   return (
     <header className="site-header">
       <Link href="/" className="site-header__brand" aria-label="pAperSim home">
-        <span aria-hidden="true">✳</span> pAperSim
+        <Image src="/logo.svg" alt="" loading="eager" width={40} height={35} />{" "}
+        pAperSim
       </Link>
       <nav aria-label="Main navigation">
         <Link href="/" aria-current={active === "home" ? "page" : undefined}>

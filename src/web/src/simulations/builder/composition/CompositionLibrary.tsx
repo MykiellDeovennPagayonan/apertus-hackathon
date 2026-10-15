@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { publicDefinition } from "../../registry/index";
-import { catalogRecipeAllowed } from "../../registry/catalogScope";
-import { definitionDiscovery, discoverySections, searchRank } from "../../registry/discovery";
-import { SchemaForm } from "../../registry/controls/SchemaForm";
 import type { CompositeRecipe } from "../../creation-and-editing/authoring-engine/document";
-import type { PublicDefinition } from "../../registry/contracts/publicDefinition";
+import { catalogRecipeAllowed } from "../../registry/catalogScope";
 import { object } from "../../registry/contracts/parameterSchema";
+import type { PublicDefinition } from "../../registry/contracts/publicDefinition";
+import { SchemaForm } from "../../registry/controls/SchemaForm";
+import {
+  definitionDiscovery,
+  discoverySections,
+  searchRank,
+} from "../../registry/discovery";
+import { publicDefinition } from "../../registry/index";
 import { BuilderIcon } from "../BuilderIcon";
 import { ComponentDialog } from "../ComponentDialog";
 import { portLabel } from "../graph/authoredGraph";
@@ -224,10 +228,7 @@ export function CompositionLibrary({
                   </option>
                 )}
                 {catalog.document.nodes
-                  .filter(
-                    (n) =>
-                      publicDefinition(n).category === "canvases",
-                  )
+                  .filter((n) => publicDefinition(n).category === "canvases")
                   .map((n) => (
                     <option key={n.id} value={n.id}>
                       {n.label}
@@ -251,7 +252,7 @@ export function CompositionLibrary({
                     {s.title}
                   </option>
                 ))}
-                <option value="saved">Saved composites</option>
+                <option value="saved">My components & composites</option>
                 <option value="prebuilt">All prepared assemblies</option>
               </select>
             </label>
@@ -299,7 +300,7 @@ export function CompositionLibrary({
               setImporting(true);
             }}
           >
-            Import assembly
+            Import HTML or assembly
           </button>
         </div>
         <div className="catalog-browse" hidden={!!detail || importing}>
@@ -441,7 +442,9 @@ export function CompositionLibrary({
                               {entry.recipe
                                 ? metadata(entry).kind === "experiment"
                                   ? "Add experiment"
-                                  : metadata(entry).kind === "component" ? "Add component" : "Add composite"
+                                  : metadata(entry).kind === "component"
+                                    ? "Add component"
+                                    : "Add composite"
                                 : entry.definition.application
                                   ? "Apply preset"
                                   : "Add component"}
@@ -539,9 +542,7 @@ export function CompositionLibrary({
                             ...detail.recipe.document.nodes,
                             ...detail.recipe.document.resources,
                           ].filter(
-                            (n) =>
-                              publicDefinition(n).category ===
-                              category,
+                            (n) => publicDefinition(n).category === category,
                           ).length,
                         }))
                         .filter((group) => group.count)
@@ -571,8 +572,7 @@ export function CompositionLibrary({
                         ...detail.recipe.document.resources,
                       ].map((n) => (
                         <li key={n.id}>
-                          {n.label}{" "}
-                          <small>{publicDefinition(n).title}</small>
+                          {n.label} <small>{publicDefinition(n).title}</small>
                         </li>
                       ))}
                     </ul>
@@ -700,8 +700,7 @@ export function CompositionLibrary({
                     {catalog.document.nodes
                       .filter(
                         (node) =>
-                          publicDefinition(node).category ===
-                          "canvases",
+                          publicDefinition(node).category === "canvases",
                       )
                       .map((node) => (
                         <option key={node.id} value={node.id}>
@@ -720,7 +719,9 @@ export function CompositionLibrary({
                   {detail.recipe
                     ? metadata(detail).kind === "experiment"
                       ? "Add experiment"
-                      : metadata(detail).kind === "component" ? "Add component" : "Add composite"
+                      : metadata(detail).kind === "component"
+                        ? "Add component"
+                        : "Add composite"
                     : detail.definition.application
                       ? "Apply preset"
                       : "Add component"}

@@ -1,11 +1,7 @@
 "use client";
 import "../../creation-and-editing/simulation/recipe/imported-component.css";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { schemaDefault } from "../../registry/contracts/defaults";
-import {
-  hasArray,
-  ImportedValueForm,
-} from "../../legacy/components/controls/ImportedValueForm";
+import { htmlRecipe } from "../../creation-and-editing/authoring-engine/compatibility/importedRecipe";
 import type { CompositeRecipe } from "../../creation-and-editing/authoring-engine/document";
 import {
   type Diagnostic,
@@ -16,33 +12,75 @@ import {
   inspectSource,
   type VerificationReport,
 } from "../../creation-and-editing/runtime-engine/imported/contract";
-import { htmlRecipe } from "../../creation-and-editing/authoring-engine/compatibility/importedRecipe";
 import { ComponentRunner } from "../../creation-and-editing/runtime-engine/imported/runner";
-import { repairBrief, verifyComponent } from "../../creation-and-editing/validator/imported";
+import {
+  repairBrief,
+  verifyComponent,
+} from "../../creation-and-editing/validator/imported";
+import {
+  hasArray,
+  ImportedValueForm,
+} from "../../legacy/components/controls/ImportedValueForm";
+import { schemaDefault } from "../../registry/contracts/defaults";
+import { ComponentConnectionTrial } from "./ComponentConnectionTrial";
 import type { ComponentCatalog } from "./useComponentCatalog";
 
 export function HTMLComponentImport({
   source,
   catalog,
   onReveal,
+  initialInputs,
+  initialSettings,
+  onVerified,
+  onSave,
+  verificationOnly = false,
+  saveLabel = "Save component to library",
 }: {
   source: string;
-  catalog: ComponentCatalog;
-  onReveal: (recipe: CompositeRecipe) => void;
+  catalog?: ComponentCatalog;
+  onReveal?: (recipe: CompositeRecipe) => void;
+  initialInputs?: Record<string, unknown>;
+  initialSettings?: Record<string, unknown>;
+  onVerified?: (recipe: CompositeRecipe | null) => void;
+  onSave?: (recipe: CompositeRecipe) => Promise<void>;
+  verificationOnly?: boolean;
+  saveLabel?: string;
 }) {
   const manifest = useMemo(() => inspectSource(source), [source]);
-  const [inputs, setInputs] = useState(() => defaults(manifest.inputs));
-  const [settings, setSettings] = useState(() => defaults(manifest.settings));
+  const [inputs, setInputs] = useState(() => ({
+    ...defaults(manifest.inputs),
+    ...initialInputs,
+  }));
+  const [settings, setSettings] = useState(() => ({
+    ...defaults(manifest.settings),
+    ...initialSettings,
+  }));
   const [report, setReport] = useState<VerificationReport | null>(null);
   const [outputs, setOutputs] = useState<Record<string, unknown>>({});
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [savedSource, setSavedSource] = useState("");
   const [running, setRunning] = useState(false);
   const [width, setWidth] = useState(640);
   const frame = useRef<HTMLDivElement>(null);
   const runner = useRef<ComponentRunner | null>(null);
   const previewTime = useRef(0);
   const [revision, setRevision] = useState(0);
+  const verified = useMemo(
+    () =>
+      report?.status === "passed"
+        ? htmlRecipe(source, inputs, settings, report)
+        : null,
+    [source, inputs, settings, report],
+  );
+  const saveIdentity = JSON.stringify(
+    verified?.document.nodes[0].configuration,
+  );
+  const verifiedCallback = useRef(onVerified);
+  verifiedCallback.current = onVerified;
+  useEffect(() => {
+    verifiedCallback.current?.(verified);
+  }, [verified]);
   let needsInputs = "";
   try {
     inputValues(manifest, inputs);
@@ -157,7 +195,7 @@ export function HTMLComponentImport({
       <h4>{manifest.name}</h4>
       <p>{manifest.description}</p>
       {needsInputs && <output>{needsInputs}</output>}
-      {!!Object.keys(manifest.inputs).length && (
+      {!verificationOnly && !!Object.keys(manifest.inputs).length && (
         <ImportedValueForm
           schema={declarationsSchema(manifest.inputs)}
           initial={{
@@ -232,7 +270,7 @@ export function HTMLComponentImport({
           Copy fixes for AI
         </button>
       )}
-      {!!Object.keys(manifest.settings).length && (
+      {!verificationOnly && !!Object.keys(manifest.settings).length && (
         <details>
           <summary>Component settings</summary>
           <ImportedValueForm
@@ -249,7 +287,7 @@ export function HTMLComponentImport({
           />
         </details>
       )}
-      {!!Object.keys(manifest.actions).length && (
+      {!verificationOnly && !!Object.keys(manifest.actions).length && (
         <details>
           <summary>Try actions</summary>
           {Object.entries(manifest.actions).map(([name, action]) => (
@@ -302,30 +340,58 @@ export function HTMLComponentImport({
           value={report ? repairBrief(report) : "Checks have not completed."}
         />
       </details>
-      <button
-        type="button"
-        className="builder-primary"
-        disabled={saving || report?.status !== "passed"}
-        onClick={async () => {
-          setRunning(false);
-          setSaving(true);
-          try {
-            const recipe = htmlRecipe(source, inputs, settings);
-            const result = await catalog.importRecipe(
-              JSON.stringify(recipe),
-              catalog.allRecipes.some((r) => r.id === recipe.id),
-            );
-            if (result.recipe) onReveal(result.recipe);
-            else setError(result.error?.body ?? "Could not save component.");
-          } catch (e) {
-            setError(diagnostic(e).message);
-          } finally {
-            setSaving(false);
+      {!verificationOnly && verified && (
+        <ComponentConnectionTrial
+          key={JSON.stringify({ inputs, settings })}
+          recipe={verified}
+          catalog={catalog}
+        />
+      )}
+      {(catalog || onSave) && (
+        <button
+          type="button"
+          className="builder-primary"
+          disabled={
+            saving ||
+            report?.status !== "passed" ||
+            savedSource === saveIdentity
           }
-        }}
-      >
-        {saving ? "Saving…" : "Save component to library"}
-      </button>
+          onClick={async () => {
+            setRunning(false);
+            setSaving(true);
+            try {
+              if (!verified)
+                throw new Error("Run component checks before saving.");
+              if (onSave) {
+                await onSave(verified);
+                setSavedSource(saveIdentity);
+                return;
+              }
+              if (!catalog) return;
+              const recipe = verified;
+              const result = await catalog.importRecipe(
+                JSON.stringify(recipe),
+                catalog.allRecipes.some((r) => r.id === recipe.id),
+              );
+              if (result.recipe) {
+                setSavedSource(saveIdentity);
+                onReveal?.(result.recipe);
+              } else
+                setError(result.error?.body ?? "Could not save component.");
+            } catch (e) {
+              setError(diagnostic(e).message);
+            } finally {
+              setSaving(false);
+            }
+          }}
+        >
+          {saving
+            ? "Saving…"
+            : savedSource === saveIdentity
+              ? "Saved to My components"
+              : saveLabel}
+        </button>
+      )}
     </section>
   );
 }

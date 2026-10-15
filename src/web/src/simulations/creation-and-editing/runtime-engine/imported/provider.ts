@@ -12,16 +12,23 @@ export const importedProvider: RuntimeProvider = {
         ...defaults(manifestFor(String(node.configuration.source)).inputs),
         ...(node.configuration.inputs as object),
       },
+      authoredInputs: JSON.stringify(node.configuration.inputs),
+      manual: {},
       outputs: {},
       commands: [],
       error: "",
     };
   },
   reinitialize(state, node) {
-    return state.source === node.configuration.source &&
-      state.settings === JSON.stringify(node.configuration.settings)
+    if (
+      state.source !== node.configuration.source ||
+      state.settings !== JSON.stringify(node.configuration.settings)
+    )
+      return importedProvider.initialize(node);
+    const authoredInputs = JSON.stringify(node.configuration.inputs);
+    return state.authoredInputs === authoredInputs
       ? state
-      : importedProvider.initialize(node);
+      : { ...state, authoredInputs, manual: {} };
   },
   synchronize(state, connected, node) {
     const values = Object.fromEntries(
@@ -32,7 +39,10 @@ export const importedProvider: RuntimeProvider = {
         ...state,
         inputs: inputValues(
           manifestFor(String(node.configuration.source)),
-          node.configuration.inputs as Record<string, unknown>,
+          {
+            ...(node.configuration.inputs as Record<string, unknown>),
+            ...(state.manual as object),
+          },
           values,
         ),
         missing: "",
@@ -48,6 +58,19 @@ export const importedProvider: RuntimeProvider = {
   apply(state, command, args) {
     if (state.error || state.missing)
       throw new Error(String(state.error || state.missing));
+    if (command.startsWith("set:")) {
+      const name = command.slice(4);
+      const manifest = manifestFor(String(state.source));
+      if (!Object.hasOwn(manifest.inputs, name))
+        throw new Error("Unknown component input");
+      const manual = { ...(state.manual as object), [name]: args.value };
+      inputValues(manifest, { ...(state.inputs as object), ...manual });
+      return {
+        ...state,
+        manual,
+        inputs: { ...(state.inputs as object), ...manual },
+      };
+    }
     const commands = [
       ...(state.commands as unknown[]),
       { id: crypto.randomUUID(), name: command, arguments: args },

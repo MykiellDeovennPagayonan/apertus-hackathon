@@ -1,14 +1,20 @@
 import { publicDefinition } from "../../../registry/index";
 import {
+  defaults,
+  IMPORTED_HTML,
+  inspectSource,
+  type VerificationReport,
+} from "../../runtime-engine/imported/contract";
+import {
   type CompositeRecipe,
   emptyAuthoredDocument,
   emptyLayout,
 } from "../document";
-import { defaults, IMPORTED_HTML, inspectSource } from "../../runtime-engine/imported/contract";
 export function htmlRecipe(
   source: string,
   inputs: Record<string, unknown>,
   settings: Record<string, unknown>,
+  report?: VerificationReport,
 ): CompositeRecipe {
   const manifest = inspectSource(source);
   const document = emptyAuthoredDocument();
@@ -23,6 +29,7 @@ export function htmlRecipe(
       source,
       settings: { ...defaults(manifest.settings), ...settings },
       inputs,
+      ...(report ? { verification: JSON.stringify(report) } : {}),
     },
   };
   document.nodes.push(node);
@@ -37,7 +44,7 @@ export function htmlRecipe(
   };
   const definition = publicDefinition(node);
   return {
-    recipeVersion: 1,
+    recipeVersion: 2,
     id: `imported/${manifest.id}`,
     version: manifest.version,
     title: manifest.name,

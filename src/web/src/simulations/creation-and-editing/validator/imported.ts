@@ -5,7 +5,10 @@ import {
   inspectSource,
   type VerificationReport,
 } from "../runtime-engine/imported/contract";
-import type { ComponentRunner, InitialContext } from "../runtime-engine/imported/runner";
+import type {
+  ComponentRunner,
+  InitialContext,
+} from "../runtime-engine/imported/runner";
 export async function sourceHash(source: string) {
   const bytes = await crypto.subtle.digest(
     "SHA-256",
@@ -25,6 +28,8 @@ export async function verifyComponent(
 ): Promise<VerificationReport> {
   const report: VerificationReport = {
     sourceHash: await sourceHash(source),
+    inputs: structuredClone(context.inputs),
+    settings: structuredClone(context.settings),
     apiVersion: 1,
     verifierVersion: "1",
     checkedAt: new Date().toISOString(),

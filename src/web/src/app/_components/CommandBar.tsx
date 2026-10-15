@@ -65,13 +65,13 @@ export default function CommandBar({
   const startedAt =
     status?.kind === "working" ? status.progress?.startedAt : undefined;
   useEffect(() => {
-    if (startedAt === undefined) return;
+    if (landing || startedAt === undefined) return;
     const update = () =>
       setElapsed(Math.floor((Date.now() - startedAt) / 1000));
     update();
     const timer = window.setInterval(update, 1000);
     return () => window.clearInterval(timer);
-  }, [startedAt]);
+  }, [landing, startedAt]);
   // biome-ignore lint/correctness/useExhaustiveDependencies: Remeasure the DOM after each controlled text change.
   useLayoutEffect(() => {
     const field = input.current;
@@ -166,7 +166,7 @@ export default function CommandBar({
               </output>
               {status.help && <p>{status.help}</p>}
             </div>
-            {status.kind === "working" && status.progress && (
+            {!landing && status.kind === "working" && status.progress && (
               <span className="command-bar__elapsed">{elapsed}s elapsed</span>
             )}
             {status.suggestions && status.suggestions.length > 0 && (

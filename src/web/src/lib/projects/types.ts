@@ -10,6 +10,7 @@ export type Attribution = {
 export type Project = {
   projectId: string;
   projectType: ProjectType;
+  contentKind?: "experiment" | "component" | "composition";
   name: string;
   description: string;
   tags: string[];
@@ -33,6 +34,7 @@ export type Publication = {
   authorId: string;
   authorName: string;
   projectType: ProjectType;
+  contentKind?: "experiment" | "component" | "composition";
   name: string;
   description: string;
   tags: string[];

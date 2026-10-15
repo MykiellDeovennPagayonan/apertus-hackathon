@@ -1,0 +1,212 @@
+{
+  "definitions": {
+    "timingUnit": "milliseconds",
+    "rateUnit": "fraction from 0 to 1",
+    "renderSuccess": "Visible rendering without an observed terminal error; scientific correctness and learner interactions are not certified.",
+    "firstValidatorPass": "First validator outcome; earlier JSON/schema repairs may have occurred. Null means validation was not reached.",
+    "zeroRepairCompletion": "Successful result with zero schema repairs, validator returns, and deterministic repairs.",
+    "successfulLatency": "Submission to final render, only for PASS rows; P95 is nearest rank; standard deviation is the sample statistic.",
+    "humanPreference": "Multiple models can be selected per reviewed ballot; missing answers are excluded, not rejected.",
+    "commonSubset": "The same simulations rendered under all seven campaign models.",
+    "fractionalCredit": "Each selected model receives 1 divided by the number selected; an analytical tie normalization, not the original rubric.",
+    "provenanceLimit": "Human exports do not embed screenshot versions or candidate exposure logs; availability uses these fixed campaign runs."
+  },
+  "totals": {
+    "evaluators": 4,
+    "possibleBallots": 160,
+    "reviewed": 157,
+    "missing": 3,
+    "nonePreferred": 21,
+    "totalSelections": 320,
+    "soleFavoriteBallots": 62,
+    "multipleFavoriteBallots": 74,
+    "commonReviewed": 99,
+    "selectionCountDistribution": {
+      "0": 21,
+      "1": 62,
+      "2": 28,
+      "3": 18,
+      "4": 5,
+      "5": 14,
+      "6": 5,
+      "7": 4
+    }
+  },
+  "reviewers": [
+    {
+      "evaluatorId": "6f768b669f46fc2643e5ddab0ba43145",
+      "source": "data/human-evaluations/evaluation-47306fd36d0df4fc0831f35f5a0af998.json",
+      "sha256": "c7ef057471c7c4571a6ed45dd7ffef41b6004f230ce72b06dd5cae8b5d01d625",
+      "exportedAt": "2026-10-14T12:23:27.899Z",
+      "reviewed": 39,
+      "missingSimulations": [
+        "tipping"
+      ],
+      "nonePreferred": 8,
+      "soleFavoriteBallots": 20,
+      "totalSelections": 49,
+      "meanSelectionsPerBallot": 1.2564102564102564,
+      "selectedByModel": {
+        "apertus-1.5-8b": 6,
+        "llama-3.1-8b": 10,
+        "qwen3-8b": 5,
+        "gpt-6-luna": 4,
+        "gpt-6.1-sol": 3,
+        "qwen3-32b": 10,
+        "mistral-small-3.1-24b": 11
+      }
+    },
+    {
+      "evaluatorId": "768ae69594a38f09545fc093b0816500",
+      "source": "data/human-evaluations/evaluation-a9ef80c6f93c0969af45cd8c5459a8af.json",
+      "sha256": "cce27e131992112bd6ad915b03bafdd97b3d740f452f92b3dc02ea680f690733",
+      "exportedAt": "2026-10-14T13:25:28.432Z",
+      "reviewed": 40,
+      "missingSimulations": [],
+      "nonePreferred": 1,
+      "soleFavoriteBallots": 19,
+      "totalSelections": 86,
+      "meanSelectionsPerBallot": 2.15,
+      "selectedByModel": {
+        "apertus-1.5-8b": 13,
+        "llama-3.1-8b": 12,
+        "qwen3-8b": 15,
+        "gpt-6-luna": 4,
+        "gpt-6.1-sol": 5,
+        "qwen3-32b": 16,
+        "mistral-small-3.1-24b": 21
+      }
+    },
+    {
+      "evaluatorId": "5f65ff10c813fcf5fd2941101838b900",
+      "source": "data/human-evaluations/evaluation-da861cdde63c91ee11d232dfa669c379.json",
+      "sha256": "168f7c5a617bf5200d0e22a6c257991000df1e07350dee73931baa199ec1039a",
+      "exportedAt": "2026-10-14T12:57:05.601Z",
+      "reviewed": 38,
+      "missingSimulations": [
+        "hydraulics",
+        "cell-division"
+      ],
+      "nonePreferred": 4,
+      "soleFavoriteBallots": 9,
+      "totalSelections": 108,
+      "meanSelectionsPerBallot": 2.8421052631578947,
+      "selectedByModel": {
+        "apertus-1.5-8b": 15,
+        "llama-3.1-8b": 16,
+        "qwen3-8b": 17,
+        "gpt-6-luna": 10,
+        "gpt-6.1-sol": 9,
+        "qwen3-32b": 18,
+        "mistral-small-3.1-24b": 23
+      }
+    },
+    {
+      "evaluatorId": "6403e1d5945c1c254d40315f5b31bec5",
+      "source": "data/human-evaluations/evaluation-f32ae941d2093555b5cb990fbc9ca5d3.json",
+      "sha256": "41c73baa6a3a02a38202959f4553825b9ab265828e5446783cda10ae514c4f42",
+      "exportedAt": "2026-10-14T12:05:19.997Z",
+      "reviewed": 40,
+      "missingSimulations": [],
+      "nonePreferred": 8,
+      "soleFavoriteBallots": 14,
+      "totalSelections": 77,
+      "meanSelectionsPerBallot": 1.925,
+      "selectedByModel": {
+        "apertus-1.5-8b": 12,
+        "llama-3.1-8b": 12,
+        "qwen3-8b": 12,
+        "gpt-6-luna": 4,
+        "gpt-6.1-sol": 5,
+        "qwen3-32b": 12,
+        "mistral-small-3.1-24b": 20
+      }
+    }
+  ],
+  "models": [
+    {
+      "modelSlug": "apertus-1.5-8b",
+      "selected": 46,
+      "selectionRate": 0.2929936305732484,
+      "soleFavorites": 4,
+      "fractionalCredit": 15.904761904761903,
+      "availableBallots": 149,
+      "selectionRateWhenRendered": 0.3087248322147651,
+      "commonSelected": 30,
+      "commonReviewed": 99,
+      "commonSelectionRate": 0.30303030303030304
+    },
+    {
+      "modelSlug": "llama-3.1-8b",
+      "selected": 50,
+      "selectionRate": 0.3184713375796178,
+      "soleFavorites": 11,
+      "fractionalCredit": 21.004761904761896,
+      "availableBallots": 154,
+      "selectionRateWhenRendered": 0.3246753246753247,
+      "commonSelected": 35,
+      "commonReviewed": 99,
+      "commonSelectionRate": 0.35353535353535354
+    },
+    {
+      "modelSlug": "qwen3-8b",
+      "selected": 49,
+      "selectionRate": 0.31210191082802546,
+      "soleFavorites": 8,
+      "fractionalCredit": 18.121428571428563,
+      "availableBallots": 149,
+      "selectionRateWhenRendered": 0.3288590604026846,
+      "commonSelected": 30,
+      "commonReviewed": 99,
+      "commonSelectionRate": 0.30303030303030304
+    },
+    {
+      "modelSlug": "gpt-6-luna",
+      "selected": 22,
+      "selectionRate": 0.14012738853503184,
+      "soleFavorites": 2,
+      "fractionalCredit": 7.504761904761906,
+      "availableBallots": 118,
+      "selectionRateWhenRendered": 0.1864406779661017,
+      "commonSelected": 18,
+      "commonReviewed": 99,
+      "commonSelectionRate": 0.18181818181818182
+    },
+    {
+      "modelSlug": "gpt-6.1-sol",
+      "selected": 22,
+      "selectionRate": 0.14012738853503184,
+      "soleFavorites": 3,
+      "fractionalCredit": 7.321428571428574,
+      "availableBallots": 126,
+      "selectionRateWhenRendered": 0.1746031746031746,
+      "commonSelected": 12,
+      "commonReviewed": 99,
+      "commonSelectionRate": 0.12121212121212122
+    },
+    {
+      "modelSlug": "qwen3-32b",
+      "selected": 56,
+      "selectionRate": 0.35668789808917195,
+      "soleFavorites": 13,
+      "fractionalCredit": 26.554761904761897,
+      "availableBallots": 149,
+      "selectionRateWhenRendered": 0.37583892617449666,
+      "commonSelected": 37,
+      "commonReviewed": 99,
+      "commonSelectionRate": 0.37373737373737376
+    },
+    {
+      "modelSlug": "mistral-small-3.1-24b",
+      "selected": 75,
+      "selectionRate": 0.47770700636942676,
+      "soleFavorites": 21,
+      "fractionalCredit": 39.58809523809524,
+      "availableBallots": 153,
+      "selectionRateWhenRendered": 0.49019607843137253,
+      "commonSelected": 49,
+      "commonReviewed": 99,
+      "commonSelectionRate": 0.494949494949495
+    }
+  ]
+}

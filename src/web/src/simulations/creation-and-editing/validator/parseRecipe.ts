@@ -2,8 +2,9 @@ import {
   migrateControlDependencies,
   migrateControls,
 } from "../../legacy/compatibility/migrateControls";
-import { validateRecipe } from "./recipe";
 import type { CompositeRecipe } from "../authoring-engine/document";
+import { htmlComponent } from "./componentEvidence";
+import { validateRecipe } from "./recipe";
 export function parseRecipe(source: unknown): CompositeRecipe {
   const candidate =
     typeof source === "string" ? JSON.parse(source) : structuredClone(source);
@@ -22,6 +23,8 @@ export function parseRecipe(source: unknown): CompositeRecipe {
       );
     }
   }
+  if (candidate?.recipeVersion === 1 && htmlComponent(candidate))
+    candidate.recipeVersion = 2;
   validateRecipe(candidate);
   return candidate;
 }

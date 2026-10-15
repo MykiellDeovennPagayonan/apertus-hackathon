@@ -97,6 +97,7 @@ export function listCommunity(
   cursor?: string | null,
   author?: string,
   seriesId?: string,
+  kind?: "component" | "composition",
 ) {
   const params = new URLSearchParams({
     q: query,
@@ -104,6 +105,7 @@ export function listCommunity(
     ...(tag ? { tag } : {}),
     ...(cursor ? { cursor } : {}),
     ...(author ? { author } : {}),
+    ...(kind ? { kind } : {}),
   });
   return projectFetch<Page<PublicationSummary>>(
     `/api/community${seriesId ? `/series/${seriesId}` : ""}?${params}`,
@@ -124,6 +126,10 @@ export async function publishProject(
     description: string;
     tags: string[];
     licenseAccepted: boolean;
+    componentChecks?: Record<
+      string,
+      import("../../simulations/creation-and-editing/runtime-engine/imported/contract").VerificationReport
+    >;
     idempotencyKey: string;
   },
 ) {

@@ -1,7 +1,10 @@
 import { type DefaultTreeAdapterMap, parse } from "parse5";
-import type { ComponentInstance } from "../../authoring-engine/document";
+import {
+  type ParameterSchema,
+  validateValue,
+} from "../../../registry/contracts/parameterSchema";
 import type { PublicDefinition } from "../../../registry/contracts/publicDefinition";
-import { type ParameterSchema, validateValue } from "../../../registry/contracts/parameterSchema";
+import type { ComponentInstance } from "../../authoring-engine/document";
 
 export const IMPORTED_HTML = "displays/ImportedHTML";
 export const componentLimits = {
@@ -56,6 +59,8 @@ export type Diagnostic = {
 };
 export type VerificationReport = {
   sourceHash: string;
+  inputs: Record<string, unknown>;
+  settings: Record<string, unknown>;
   apiVersion: number;
   verifierVersion: string;
   checkedAt: string;
@@ -534,6 +539,11 @@ export function importedDefinition(node?: ComponentInstance): PublicDefinition {
         settings: m
           ? declarationsSchema(m.settings)
           : { type: "object", properties: {} },
+        verification: {
+          type: "string",
+          minLength: 1,
+          maxLength: componentLimits.payload,
+        },
         inputs: m
           ? ({
               ...declarationsSchema(m.inputs),
@@ -541,11 +551,26 @@ export function importedDefinition(node?: ComponentInstance): PublicDefinition {
             } as ParameterSchema)
           : { type: "object", properties: {} },
       },
+      optional: ["verification"],
     },
     defaults: {},
     inputs: ports(m?.inputs ?? {}),
     outputs: ports(m?.outputs ?? {}),
     commands: {
+      ...Object.fromEntries(
+        Object.entries(m?.inputs ?? {}).map(([key, d]) => [
+          `set:${key}`,
+          {
+            description: d.description,
+            arguments: {
+              type: "object" as const,
+              properties: { value: d.schema },
+            },
+            timing: "live" as const,
+            submission: "continuous" as const,
+          },
+        ]),
+      ),
       ...Object.fromEntries(
         Object.entries(m?.actions ?? {}).map(([key, a]) => [
           key,
@@ -570,7 +595,7 @@ export function importedDefinition(node?: ComponentInstance): PublicDefinition {
     presentationProvider: IMPORTED_HTML,
   };
 }
-export function stableSchema(schema: ParameterSchema): string {
+export function stableSchema(schema: unknown): string {
   const normalize = (v: unknown): unknown =>
     Array.isArray(v)
       ? v.map(normalize)

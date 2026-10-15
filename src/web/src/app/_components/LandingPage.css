@@ -369,3 +369,8 @@
 .manual-create-entry span {
   font-size: 14px;
 }
+.landing__footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}

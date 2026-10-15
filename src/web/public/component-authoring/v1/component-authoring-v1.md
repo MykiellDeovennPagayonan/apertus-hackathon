@@ -99,6 +99,17 @@ Common diagnostics:
 
 “Technical checks passed” means interface and tested lifecycle behavior passed. Scientific correctness, visual quality, and accessibility still require human review. A report applies to its exact source and tested inputs; runtime output validation continues after insertion.
 
+
+## Authoring, trying, and sharing
+
+Use **Community → Create HTML component** to describe a component and download a Markdown brief containing this contract, your request, and the starter. Give that brief to your external AI, then upload its complete HTML file. Existing HTML can be uploaded directly.
+
+After technical checks, open **Suggested connections** to choose controls for declared inputs, action buttons/forms, and output displays. Try the selected connections before saving. The saved component contains one independent HTML panel; the trial controls and displays are separate components. In the builder, compatible existing endpoints can also be suggested, and **Add to experiment with connections** applies the chosen connections together.
+
+Saving to My components is optional. Guests save on their current device; signed-in users save privately to their account. Community publication is a separate action with license review, checks of the saved source and starting values, and an immutable published snapshot. The Components tab lists standalone HTML components; Compositions lists assemblies. A shared component can be tried, downloaded as HTML, or copied to My components with its source attribution retained in the app. Credit the author when reusing downloaded HTML.
+
+Stored check reports are contributor-reported evidence. The server checks report/source linkage and tested inputs/settings, but does not execute or certify uploaded JavaScript. Public previews run in the same isolated runtime and continue validating outputs. Scientific correctness and untested actions still require review.
+
 ## Deliverable for an external AI
 
 Return one complete HTML file following this guide. Include the manifest and every required handler. Use API version 1. Include no remote dependencies or build instructions. Replace the starter's visual content while keeping the protocol. Explain relevant assumptions in the component description. Do not claim automated scientific verification.

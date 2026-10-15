@@ -243,3 +243,55 @@
 .project-dialog input:where(:not([type="checkbox"]):not([type="radio"])) {
   min-height: 44px;
 }
+
+.component-authoring-page {
+  max-width: 900px;
+}
+.component-authoring-page form,
+.component-upload {
+  margin: 24px 0;
+}
+.component-authoring-page textarea {
+  width: 100%;
+}
+.component-authoring-page .builder-primary,
+.community-page .html-component-import .builder-primary {
+  background: var(--accent);
+  color: var(--panel);
+}
+.component-connection-trial {
+  margin: 20px 0;
+}
+.component-connection-trial summary {
+  cursor: pointer;
+  padding: 12px 0;
+}
+.component-connection-trial .project-check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.component-connection-trial .project-check input {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+.component-authoring-page :focus-visible,
+.component-connection-trial :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.publication-dialog .html-component-import {
+  margin: 20px 0;
+}
+
+.publication-kind {
+  display: block;
+  margin: 16px 0;
+}
+.html-publication-preview {
+  max-height: none;
+  padding: 20px;
+}

@@ -1,7 +1,7 @@
 export default function ExperimentArt({
   type,
 }: {
-  type: "projectile" | "bridge" | "town";
+  type: "projectile" | "bridge" | "acid-base-titration";
 }) {
   return (
     <svg viewBox="0 0 320 170" fill="none" aria-hidden="true">
@@ -95,40 +95,63 @@ export default function ExperimentArt({
           <path d="M75 150q20 -7 40 0t40 0t40 0t40 0" stroke="#a7bab1" />
         </>
       )}
-      {type === "town" && (
+      {type === "acid-base-titration" && (
         <>
           <path
-            d="M25 132Q60 116 97 128T175 129T295 121V138H25Z"
-            fill="#bac3aa"
+            d="M63 137V24M47 137H89M63 38H137"
+            stroke="#98917d"
+            strokeWidth="3"
+            strokeLinecap="round"
           />
-          <path d="M130 139L145 104H174L195 139" fill="#e5dbc4" />
-          <path d="M70 125V88H107V125" fill="#dfd6bc" stroke="#a99e83" />
-          <path d="M63 89L88 67 115 89Z" fill="#739280" />
-          <path d="M192 124V77H236V124" fill="#e8dcc0" stroke="#aa9e85" />
-          <path d="M185 78L214 54 242 78Z" fill="#b68065" />
-          <path d="M83 125V109H94V125M207 123V105H218V123" fill="#918d74" />
           <path
-            d="M78 95H85V102H78ZM95 95H102V102H95ZM200 88H208V97H200ZM221 88H229V97H221Z"
+            d="M126 20H140V76L133 83V91"
+            stroke="#47796a"
+            strokeWidth="2"
+            strokeLinejoin="round"
+          />
+          <path d="M128 43H138V74L133 79 128 74Z" fill="#a7bab1" />
+          <path
+            d="M126 31H132M126 41H132M126 51H132M126 61H132M123 83H145"
+            stroke="#47796a"
+          />
+          <path d="M133 94Q127 102 133 104Q139 102 133 94Z" fill="#47796a" />
+          <path
+            d="M120 108V116L101 134Q99 137 105 137H161Q167 137 165 134L146 116V108"
             fill="#faf5df"
+            stroke="#47796a"
+            strokeWidth="2"
+            strokeLinejoin="round"
           />
-          <path d="M46 125V105M269 127V97" stroke="#a88161" strokeWidth="4" />
-          <path d="M33 108L46 78 59 108Z" fill="#6d9278" />
-          <path d="M253 101L269 62 285 101Z" fill="#7b9b80" />
-          <circle cx="153" cy="117" r="3" fill="#b78060" />
+          <path d="M113 125Q133 122 153 125L161 135H105Z" fill="#cc9aa0" />
           <path
-            d="M153 121V129"
+            d="M193 121H281M193 121V43"
+            stroke="#c9c1ac"
+            strokeWidth="1.5"
+          />
+          <path
+            d="M197 113C222 113 227 106 233 84S240 53 277 51"
             stroke="#285e56"
-            strokeWidth="4"
-            strokeLinecap="round"
+            strokeWidth="2.5"
           />
-          <circle cx="179" cy="129" r="3" fill="#b78060" />
-          <path
-            d="M179 133V140"
-            stroke="#b5944c"
-            strokeWidth="4"
-            strokeLinecap="round"
-          />
-          <circle cx="139" cy="48" r="12" fill="#eeddb0" />
+          <path d="M234 48V121" stroke="#b48147" strokeDasharray="3 5" />
+          <text
+            x="202"
+            y="39"
+            fill="#808777"
+            fontFamily="monospace"
+            fontSize="11"
+          >
+            pH
+          </text>
+          <text
+            x="207"
+            y="157"
+            fill="#98917d"
+            fontFamily="monospace"
+            fontSize="9"
+          >
+            BASE ADDED
+          </text>
         </>
       )}
     </svg>

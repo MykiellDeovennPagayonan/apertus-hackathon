@@ -17,9 +17,6 @@
     serif;
   color: var(--accent);
 }
-.auth-brand > span:first-child {
-  font: 40px var(--font-sans);
-}
 .auth-suffix {
   color: #606658;
   font: 18px var(--font-sans);

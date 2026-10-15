@@ -8,7 +8,7 @@ import LoadingState from "../_components/LoadingState";
 import SiteHeader from "../_components/SiteHeader";
 import "./gallery.css";
 export default function Community() {
-  const [type, setType] = useState<ProjectType>("experiment"),
+  const [type, setType] = useState<ProjectType | "component">("experiment"),
     [query, setQuery] = useState(""),
     [tag, setTag] = useState("");
   const [entries, setEntries] = useState<PublicationSummary[]>([]),
@@ -32,7 +32,15 @@ export default function Community() {
     setLoading(true);
     setError("");
     const timer = setTimeout(() => {
-      void listCommunity(type, query, tag)
+      void listCommunity(
+        type === "component" ? "composition" : type,
+        query,
+        tag,
+        null,
+        undefined,
+        undefined,
+        type === "experiment" ? undefined : type,
+      )
         .then((r) => {
           if (!disposed) {
             setEntries(r.entries);
@@ -61,17 +69,18 @@ export default function Community() {
             <h1>
               Browse shared
               <br />
-              <em>experiments.</em>
+              <em>experiments & components.</em>
             </h1>
             <p>
-              Run experiments shared by other users, or copy one to edit it.
+              Run shared experiments or try HTML components and add them to your
+              library.
             </p>
             <div className="community-hero-actions">
               <Link
                 className="community-create"
-                href="/experiments/builder?new=1"
+                href="/community/components/new"
               >
-                <BuilderIcon name="plus" /> Create manually
+                <BuilderIcon name="plus" /> Create HTML component
               </Link>
               <Link className="community-secondary" href="/projects">
                 My projects <BuilderIcon name="forward" />
@@ -150,6 +159,13 @@ export default function Community() {
               </button>
               <button
                 type="button"
+                aria-pressed={type === "component"}
+                onClick={() => setType("component")}
+              >
+                Components
+              </button>
+              <button
+                type="button"
                 aria-pressed={type === "composition"}
                 onClick={() => setType("composition")}
               >
@@ -163,7 +179,7 @@ export default function Community() {
                 <BuilderIcon name="search" />
                 <input
                   type="search"
-                  placeholder="Search experiments, ideas…"
+                  placeholder="Search experiments, components…"
                   value={query}
                   maxLength={100}
                   onChange={(e) => setQuery(e.target.value)}
@@ -245,7 +261,7 @@ export default function Community() {
               <h3>
                 {filtered
                   ? "No matching projects"
-                  : `No ${type === "experiment" ? "experiments" : "compositions"} shared yet`}
+                  : `No ${type === "experiment" ? "experiments" : type === "component" ? "components" : "compositions"} shared yet`}
               </h3>
               <p>
                 {filtered
@@ -263,9 +279,16 @@ export default function Community() {
               ) : (
                 <Link
                   className="community-create"
-                  href="/experiments/builder?new=1"
+                  href={
+                    type === "component"
+                      ? "/community/components/new"
+                      : "/experiments/builder?new=1"
+                  }
                 >
-                  <BuilderIcon name="plus" /> Create manually
+                  <BuilderIcon name="plus" />{" "}
+                  {type === "component"
+                    ? "Create HTML component"
+                    : "Create manually"}
                 </Link>
               )}
               {!filtered && (
@@ -296,7 +319,9 @@ export default function Community() {
                       />
                       {p.projectType === "experiment"
                         ? "Interactive experiment"
-                        : "Reusable composition"}
+                        : p.contentKind === "component"
+                          ? "HTML component"
+                          : "Reusable composition"}
                     </span>
                     <div className="community-card-diagram" aria-hidden="true">
                       <span>
@@ -330,8 +355,7 @@ export default function Community() {
                       </Link>
                     </h2>
                     <p className="community-card-description">
-                      {p.description ||
-                        "No description provided."}
+                      {p.description || "No description provided."}
                     </p>
                     <div className="community-card-tags">
                       {p.tags.map((t) => (
@@ -360,7 +384,9 @@ export default function Community() {
                       <Link href={`/community/${p.publicationId}`}>
                         {p.projectType === "experiment"
                           ? "Run & remix"
-                          : "Preview & add to builder"}
+                          : p.contentKind === "component"
+                            ? "Try & add to My components"
+                            : "Preview & add to builder"}
                         <BuilderIcon name="forward" />
                       </Link>
                     </div>
@@ -377,7 +403,15 @@ export default function Community() {
               onClick={async () => {
                 setMore(true);
                 try {
-                  const r = await listCommunity(type, query, tag, cursor);
+                  const r = await listCommunity(
+                    type === "component" ? "composition" : type,
+                    query,
+                    tag,
+                    cursor,
+                    undefined,
+                    undefined,
+                    type === "experiment" ? undefined : type,
+                  );
                   setEntries((old) => [...old, ...r.entries]);
                   setCursor(r.nextCursor);
                 } catch (e) {
@@ -398,13 +432,17 @@ export default function Community() {
             <BuilderIcon name="share" />
           </span>
           <div>
-            <h2>Share a project</h2>
+            <h2>Share a component or experiment</h2>
             <p>
-              Save an experiment to My projects, then publish it to the community.
+              Create an HTML component, or publish a saved experiment from My
+              projects.
             </p>
           </div>
-          <Link className="community-secondary" href="/projects">
-            Share a project <BuilderIcon name="forward" />
+          <Link
+            className="community-secondary"
+            href="/community/components/new"
+          >
+            Create HTML component <BuilderIcon name="forward" />
           </Link>
         </aside>
       </main>

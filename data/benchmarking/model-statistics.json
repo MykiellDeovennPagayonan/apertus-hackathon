@@ -1,0 +1,686 @@
+{
+  "definitions": {
+    "timingUnit": "milliseconds",
+    "rateUnit": "fraction from 0 to 1",
+    "renderSuccess": "Visible rendering without an observed terminal error; scientific correctness and learner interactions are not certified.",
+    "firstValidatorPass": "First validator outcome; earlier JSON/schema repairs may have occurred. Null means validation was not reached.",
+    "zeroRepairCompletion": "Successful result with zero schema repairs, validator returns, and deterministic repairs.",
+    "successfulLatency": "Submission to final render, only for PASS rows; P95 is nearest rank; standard deviation is the sample statistic.",
+    "humanPreference": "Multiple models can be selected per reviewed ballot; missing answers are excluded, not rejected.",
+    "commonSubset": "The same simulations rendered under all seven campaign models.",
+    "fractionalCredit": "Each selected model receives 1 divided by the number selected; an analytical tie normalization, not the original rubric.",
+    "provenanceLimit": "Human exports do not embed screenshot versions or candidate exposure logs; availability uses these fixed campaign runs."
+  },
+  "totals": {
+    "models": 7,
+    "simulations": 40,
+    "attempts": 280,
+    "rendered": 254,
+    "firstValidatorPasses": 253,
+    "validationReached": 255,
+    "zeroRepairCompletions": 235,
+    "schemaRepairAttempts": 23,
+    "validatorReturns": 2,
+    "terminalOutcomes": {
+      "created": 254,
+      "failed": 3,
+      "unsupported": 23
+    },
+    "renderCountDistribution": {
+      "4": 2,
+      "5": 7,
+      "6": 6,
+      "7": 25
+    },
+    "layaDecisions": {
+      "rejected": 268,
+      "accepted": 11
+    }
+  },
+  "commonPrompts": [
+    {
+      "number": 1,
+      "simulationId": "projectile",
+      "prompt": "Show me 2 projectiles distance comparison based on angles"
+    },
+    {
+      "number": 3,
+      "simulationId": "pythagorean",
+      "prompt": "I have a ladder leaning against a wall. Let me change how far the bottom is from the wall and how high it reaches to see how long the ladder needs to be."
+    },
+    {
+      "number": 4,
+      "simulationId": "acid-base-titration",
+      "prompt": "Show me what happens to the pH when I slowly add a base to an acid."
+    },
+    {
+      "number": 6,
+      "simulationId": "tree-height",
+      "prompt": "How can I work out the height of a tree without climbing it? Show me using the angle from where I stand."
+    },
+    {
+      "number": 8,
+      "simulationId": "craft-production",
+      "prompt": "Compare making things by hand with using an assembly line. I want to see which produces more in the same time."
+    },
+    {
+      "number": 9,
+      "simulationId": "tile-patterns",
+      "prompt": "Why can hexagons cover a floor without gaps but regular pentagons can’t? Let me try both."
+    },
+    {
+      "number": 11,
+      "simulationId": "can-material",
+      "prompt": "I want to design a can that holds the same amount but uses less metal. Let me try different widths and heights."
+    },
+    {
+      "number": 12,
+      "simulationId": "survey-sampling",
+      "prompt": "How many people should I survey? Show me how the results change with a small sample versus a bigger one."
+    },
+    {
+      "number": 13,
+      "simulationId": "levers",
+      "prompt": "Show me how a crowbar helps lift something heavy. Let me move the pivot."
+    },
+    {
+      "number": 14,
+      "simulationId": "pulleys",
+      "prompt": "Make a pulley lifting a weight so I can see whether more supporting ropes make it easier to lift."
+    },
+    {
+      "number": 20,
+      "simulationId": "doppler-siren",
+      "prompt": "Show an ambulance passing someone and how the siren frequency changes. Let me change how fast it moves."
+    },
+    {
+      "number": 22,
+      "simulationId": "cooling-drinks",
+      "prompt": "Show a hot drink cooling down. I want to change the room temperature and see how long it takes."
+    },
+    {
+      "number": 25,
+      "simulationId": "fraction-number-line",
+      "prompt": "Help me understand fractions using a number line."
+    },
+    {
+      "number": 26,
+      "simulationId": "cell-division",
+      "prompt": "Show me what happens to a cell when it divides."
+    },
+    {
+      "number": 28,
+      "simulationId": "beer-lambert",
+      "prompt": "Show light passing through a coloured solution. Let me change how concentrated it is and see how much light gets through."
+    },
+    {
+      "number": 29,
+      "simulationId": "arithmetic",
+      "prompt": "Help me learn addition with circles"
+    },
+    {
+      "number": 30,
+      "simulationId": "gas-equilibrium",
+      "prompt": "Show me a gas reaction at equilibrium. What happens if I squeeze the container?"
+    },
+    {
+      "number": 31,
+      "simulationId": "phase-change",
+      "prompt": "Let me heat a substance and change the pressure to see when it becomes a solid, liquid or gas."
+    },
+    {
+      "number": 32,
+      "simulationId": "coordinates",
+      "prompt": "Help me practise plotting points on an x and y grid."
+    },
+    {
+      "number": 33,
+      "simulationId": "water-pressure",
+      "prompt": "Show water coming out of a hole in a bottle. Let me change the water level and see how far the stream goes."
+    },
+    {
+      "number": 35,
+      "simulationId": "counting",
+      "prompt": "Help me practise counting circles."
+    },
+    {
+      "number": 36,
+      "simulationId": "equal-groups",
+      "prompt": "Show me multiplication with equal groups of dots. Let me change the number of groups and how many dots are in each."
+    },
+    {
+      "number": 37,
+      "simulationId": "pendulum",
+      "prompt": "Make a pendulum swing where I can adjust its starting angle and length"
+    },
+    {
+      "number": 38,
+      "simulationId": "slope",
+      "prompt": "Make me a line where I can adjust its slope and y axis"
+    },
+    {
+      "number": 40,
+      "simulationId": "shared-fishing-lake",
+      "prompt": "Make a fishing lake where I can see what happens if everyone catches too many fish."
+    }
+  ],
+  "models": [
+    {
+      "modelSlug": "apertus-1.5-8b",
+      "runId": "2026-10-14T04-18-05-230Z-16457",
+      "total": 40,
+      "passed": 38,
+      "successRate": 0.95,
+      "firstPass": 38,
+      "firstPassRate": 0.95,
+      "validationReached": 38,
+      "firstPassAmongValidated": 1,
+      "unknownMeasurements": 0,
+      "zeroRepairCompletions": 30,
+      "latencySamples": 38,
+      "medianMs": 28979.60552100001,
+      "p95Ms": 37718.65154200001,
+      "statuses": {
+        "PASS": 38,
+        "ERROR": 2
+      },
+      "source": {
+        "modelSlug": "apertus-1.5-8b",
+        "runId": "2026-10-14T04-18-05-230Z-16457",
+        "original": "src/playwright/runs/2026-10-14T04-18-05-230Z-16457/run.json",
+        "snapshot": "data/benchmarking/runs/2026-10-14T04-18-05-230Z-16457.json",
+        "sha256": "d5e9b7a27c8de1c7ae14dbf19f46667c73d132d5448e9955b46318bb9f6c761f",
+        "report": "docs/agent-only/benchmark/results/apertus-laya-40-2026-10-14T04-18-05-230Z-16457.md",
+        "reportSha256": "ab84f8b601d8cb3c16d103238b810e59200b0a4a9c27ace5d4de28347436af45",
+        "batchWallMs": 1348100
+      },
+      "schemaRepairAttempts": 13,
+      "validatorReturns": 0,
+      "deterministicRepairs": 0,
+      "meanMs": 29436.734572315792,
+      "minMs": 18418.147375,
+      "maxMs": 47142.861124999996,
+      "sampleStandardDeviationMs": 6325.299196119212,
+      "commonPromptSamples": 25,
+      "commonPromptMeanMs": 29046.887108280003,
+      "commonPromptMedianMs": 28965.597833,
+      "failedTerminalMs": 95132,
+      "batchWallMs": 1348100,
+      "wallMsPerRender": 35476.31578947369,
+      "generationAndFailedMsPerRender": 31940.208256526315,
+      "recordedInferenceEvents": 276,
+      "inferenceMsByStage": {
+        "teaching_intent": 438303,
+        "assembly_plan": 489494,
+        "assembly_input_requirement": 117698,
+        "assembly_controls": 15189,
+        "assembly_observations": 22174,
+        "assembly_settings": 65747,
+        "assembly_setting_value": 42383
+      },
+      "outputConstraintCounts": {
+        "false": 276
+      },
+      "finishReasonCounts": {
+        "stop": 276
+      },
+      "promptTokens": 322908,
+      "outputTokens": 9006,
+      "inferenceEventsWithTokenUsage": 276,
+      "layaDecisions": {
+        "rejected": 39
+      },
+      "layaMeanDurationMs": 258.28205128205127,
+      "failedSimulations": [
+        "magnet-induction",
+        "voting-systems"
+      ]
+    },
+    {
+      "modelSlug": "llama-3.1-8b",
+      "runId": "2026-10-14T05-38-00-070Z-35031",
+      "total": 40,
+      "passed": 39,
+      "successRate": 0.975,
+      "firstPass": 39,
+      "firstPassRate": 0.975,
+      "validationReached": 39,
+      "firstPassAmongValidated": 1,
+      "unknownMeasurements": 0,
+      "zeroRepairCompletions": 34,
+      "latencySamples": 39,
+      "medianMs": 18364.49662500003,
+      "p95Ms": 58282.24349999998,
+      "statuses": {
+        "PASS": 39,
+        "ERROR": 1
+      },
+      "source": {
+        "modelSlug": "llama-3.1-8b",
+        "runId": "2026-10-14T05-38-00-070Z-35031",
+        "original": "src/playwright/runs/2026-10-14T05-38-00-070Z-35031/run.json",
+        "snapshot": "data/benchmarking/runs/2026-10-14T05-38-00-070Z-35031.json",
+        "sha256": "ebcda2bba24fe4415357bbc12e0842736ae3fc7f337ffdfc00f2962baf3b2a84",
+        "report": "docs/agent-only/benchmark/results/llama-3.1-8b-huggingface-laya-40-2026-10-14T05-38-00-070Z-35031.md",
+        "reportSha256": "37ea907bdfa2b3621b66f886994dafc5a0d47a6f03edcb68afdb0c8e4c243b0a",
+        "batchWallMs": 1084800
+      },
+      "schemaRepairAttempts": 5,
+      "validatorReturns": 0,
+      "deterministicRepairs": 0,
+      "meanMs": 22919.225353641028,
+      "minMs": 7202.114708000037,
+      "maxMs": 58663.916042,
+      "sampleStandardDeviationMs": 12480.155014580861,
+      "commonPromptSamples": 25,
+      "commonPromptMeanMs": 22385.491886720007,
+      "commonPromptMedianMs": 19243.02933399999,
+      "failedTerminalMs": 8441,
+      "batchWallMs": 1084800,
+      "wallMsPerRender": 27815.384615384617,
+      "generationAndFailedMsPerRender": 23135.661251076926,
+      "recordedInferenceEvents": 375,
+      "inferenceMsByStage": {
+        "teaching_intent": 141431,
+        "assembly_plan": 89255,
+        "assembly_input_requirement": 99695,
+        "assembly_controls": 94382,
+        "assembly_observations": 43538,
+        "assembly_settings": 207265,
+        "assembly_setting_value": 181562
+      },
+      "outputConstraintCounts": {
+        "true": 375
+      },
+      "finishReasonCounts": {
+        "stop": 375
+      },
+      "promptTokens": 295458,
+      "outputTokens": 9030,
+      "inferenceEventsWithTokenUsage": 375,
+      "layaDecisions": {
+        "rejected": 39,
+        "accepted": 1
+      },
+      "layaMeanDurationMs": 283.45,
+      "failedSimulations": [
+        "hydraulics"
+      ]
+    },
+    {
+      "modelSlug": "qwen3-8b",
+      "runId": "2026-10-14T05-19-00-653Z-25103",
+      "total": 40,
+      "passed": 38,
+      "successRate": 0.95,
+      "firstPass": 37,
+      "firstPassRate": 0.925,
+      "validationReached": 39,
+      "firstPassAmongValidated": 0.9487179487179487,
+      "unknownMeasurements": 0,
+      "zeroRepairCompletions": 37,
+      "latencySamples": 38,
+      "medianMs": 20463.255770499993,
+      "p95Ms": 45119.25316600001,
+      "statuses": {
+        "PASS": 38,
+        "ERROR": 2
+      },
+      "source": {
+        "modelSlug": "qwen3-8b",
+        "runId": "2026-10-14T05-19-00-653Z-25103",
+        "original": "src/playwright/runs/2026-10-14T05-19-00-653Z-25103/run.json",
+        "snapshot": "data/benchmarking/runs/2026-10-14T05-19-00-653Z-25103.json",
+        "sha256": "5bf54fa5855daa3d2fe54b6983c4d8bc72a3d75966a705b69a544d4dd83e6a42",
+        "report": "docs/agent-only/benchmark/results/qwen3-8b-huggingface-laya-40-2026-10-14T05-19-00-653Z-25103.md",
+        "reportSha256": "aa6919a38207e5bf194a9d6fa72229dfcca4d06dd117f1ebaa9e3216ed36190d",
+        "batchWallMs": 1106300
+      },
+      "schemaRepairAttempts": 0,
+      "validatorReturns": 2,
+      "deterministicRepairs": 0,
+      "meanMs": 22745.484905684214,
+      "minMs": 7933.248250000062,
+      "maxMs": 51351.01237499999,
+      "sampleStandardDeviationMs": 10656.691019022612,
+      "commonPromptSamples": 25,
+      "commonPromptMeanMs": 19253.100661640005,
+      "commonPromptMedianMs": 16374.68287499994,
+      "failedTerminalMs": 61174,
+      "batchWallMs": 1106300,
+      "wallMsPerRender": 29113.157894736843,
+      "generationAndFailedMsPerRender": 24355.32701094737,
+      "recordedInferenceEvents": 398,
+      "inferenceMsByStage": {
+        "teaching_intent": 176914,
+        "assembly_plan": 124060,
+        "assembly_input_requirement": 108909,
+        "assembly_controls": 28271,
+        "assembly_observations": 41391,
+        "assembly_settings": 208595,
+        "assembly_setting_value": 200849
+      },
+      "outputConstraintCounts": {
+        "true": 398
+      },
+      "finishReasonCounts": {
+        "stop": 398
+      },
+      "promptTokens": 330769,
+      "outputTokens": 10023,
+      "inferenceEventsWithTokenUsage": 398,
+      "layaDecisions": {
+        "rejected": 39,
+        "accepted": 1
+      },
+      "layaMeanDurationMs": 522.775,
+      "failedSimulations": [
+        "galvanic-cell",
+        "voting-systems"
+      ]
+    },
+    {
+      "modelSlug": "gpt-6-luna",
+      "runId": "2026-10-14T05-56-54-380Z-41033",
+      "total": 40,
+      "passed": 30,
+      "successRate": 0.75,
+      "firstPass": 30,
+      "firstPassRate": 0.75,
+      "validationReached": 30,
+      "firstPassAmongValidated": 1,
+      "unknownMeasurements": 0,
+      "zeroRepairCompletions": 28,
+      "latencySamples": 30,
+      "medianMs": 13475.6025625,
+      "p95Ms": 51478.315083,
+      "statuses": {
+        "PASS": 30,
+        "ERROR": 10
+      },
+      "source": {
+        "modelSlug": "gpt-6-luna",
+        "runId": "2026-10-14T05-56-54-380Z-41033",
+        "original": "src/playwright/runs/2026-10-14T05-56-54-380Z-41033/run.json",
+        "snapshot": "data/benchmarking/runs/2026-10-14T05-56-54-380Z-41033.json",
+        "sha256": "1babb5a8241a67d274262d55ae5d3e962680d029b661e6a56b7870c530f13d61",
+        "report": "docs/agent-only/benchmark/results/gpt-6-luna-openai-laya-40-2026-10-14T05-56-54-380Z-41033.md",
+        "reportSha256": "2a6a80655be48b92e19bf01e2dbf711fad6f07d3d7e23597103d477675387f68",
+        "batchWallMs": 989400
+      },
+      "schemaRepairAttempts": 2,
+      "validatorReturns": 0,
+      "deterministicRepairs": 0,
+      "meanMs": 23532.82782643333,
+      "minMs": 6196.394290999975,
+      "maxMs": 135122.733541,
+      "sampleStandardDeviationMs": 24511.774648474264,
+      "commonPromptSamples": 25,
+      "commonPromptMeanMs": 23501.868185040006,
+      "commonPromptMedianMs": 13716.636957999996,
+      "failedTerminalMs": 94028,
+      "batchWallMs": 989400,
+      "wallMsPerRender": 32980,
+      "generationAndFailedMsPerRender": 26667.094493099998,
+      "recordedInferenceEvents": 204,
+      "inferenceMsByStage": {
+        "teaching_intent": 283271,
+        "assembly_plan": 117043,
+        "assembly_input_requirement": 163515,
+        "assembly_controls": 47394,
+        "assembly_observations": 45729,
+        "assembly_settings": 118958,
+        "assembly_setting_value": 4066
+      },
+      "outputConstraintCounts": {
+        "true": 204
+      },
+      "finishReasonCounts": {
+        "completed": 203,
+        "length": 1
+      },
+      "promptTokens": 316371,
+      "outputTokens": 8771,
+      "inferenceEventsWithTokenUsage": 204,
+      "layaDecisions": {
+        "rejected": 39,
+        "accepted": 1
+      },
+      "layaMeanDurationMs": 253.75,
+      "failedSimulations": [
+        "price-elasticity",
+        "cost-and-profit",
+        "wildfire",
+        "bicycle-gears",
+        "tipping",
+        "collisions",
+        "buoyancy",
+        "guitar-string",
+        "voting-systems",
+        "bridge"
+      ]
+    },
+    {
+      "modelSlug": "gpt-6.1-sol",
+      "runId": "2026-10-14T06-36-50-397Z-53783",
+      "total": 40,
+      "passed": 32,
+      "successRate": 0.8,
+      "firstPass": 32,
+      "firstPassRate": 0.8,
+      "validationReached": 32,
+      "firstPassAmongValidated": 1,
+      "unknownMeasurements": 0,
+      "zeroRepairCompletions": 32,
+      "latencySamples": 32,
+      "medianMs": 19400.180167000006,
+      "p95Ms": 66414.9995,
+      "statuses": {
+        "PASS": 32,
+        "ERROR": 8
+      },
+      "source": {
+        "modelSlug": "gpt-6.1-sol",
+        "runId": "2026-10-14T06-36-50-397Z-53783",
+        "original": "src/playwright/runs/2026-10-14T06-36-50-397Z-53783/run.json",
+        "snapshot": "data/benchmarking/runs/2026-10-14T06-36-50-397Z-53783.json",
+        "sha256": "2e763c009e33f31ae372256ba286b3f463bc40a691e024ad5e105c69adeb61b1",
+        "report": "docs/agent-only/benchmark/results/gpt-6.1-sol-openai-laya-40-2026-10-14T06-36-50-397Z-53783.md",
+        "reportSha256": "ac7f1853225ef108d706b8170e7fc10dc298f4fa0f94c6314f1cc3d331cf142e",
+        "batchWallMs": 1235000
+      },
+      "schemaRepairAttempts": 0,
+      "validatorReturns": 0,
+      "deterministicRepairs": 0,
+      "meanMs": 28503.543627624997,
+      "minMs": 12921.02,
+      "maxMs": 120124.513708,
+      "sampleStandardDeviationMs": 22399.062995885448,
+      "commonPromptSamples": 25,
+      "commonPromptMeanMs": 28683.690546680005,
+      "commonPromptMedianMs": 19368.703917000006,
+      "failedTerminalMs": 114054,
+      "batchWallMs": 1235000,
+      "wallMsPerRender": 38593.75,
+      "generationAndFailedMsPerRender": 32067.731127624997,
+      "recordedInferenceEvents": 192,
+      "inferenceMsByStage": {
+        "teaching_intent": 339059,
+        "assembly_plan": 192230,
+        "assembly_input_requirement": 116439,
+        "assembly_controls": 128751,
+        "assembly_observations": 81747,
+        "assembly_settings": 109454,
+        "assembly_setting_value": 21920
+      },
+      "outputConstraintCounts": {
+        "true": 192
+      },
+      "finishReasonCounts": {
+        "completed": 192
+      },
+      "promptTokens": 278317,
+      "outputTokens": 9359,
+      "inferenceEventsWithTokenUsage": 192,
+      "layaDecisions": {
+        "rejected": 39,
+        "accepted": 1
+      },
+      "layaMeanDurationMs": 496.45,
+      "failedSimulations": [
+        "cost-and-profit",
+        "galvanic-cell",
+        "wildfire",
+        "tipping",
+        "collisions",
+        "guitar-string",
+        "rc-circuit",
+        "area-perimeter"
+      ]
+    },
+    {
+      "modelSlug": "qwen3-32b",
+      "runId": "2026-10-14T06-14-16-814Z-46582",
+      "total": 40,
+      "passed": 38,
+      "successRate": 0.95,
+      "firstPass": 38,
+      "firstPassRate": 0.95,
+      "validationReached": 38,
+      "firstPassAmongValidated": 1,
+      "unknownMeasurements": 0,
+      "zeroRepairCompletions": 35,
+      "latencySamples": 38,
+      "medianMs": 23260.490541,
+      "p95Ms": 58464.86020800001,
+      "statuses": {
+        "PASS": 38,
+        "ERROR": 2
+      },
+      "source": {
+        "modelSlug": "qwen3-32b",
+        "runId": "2026-10-14T06-14-16-814Z-46582",
+        "original": "src/playwright/runs/2026-10-14T06-14-16-814Z-46582/run.json",
+        "snapshot": "data/benchmarking/runs/2026-10-14T06-14-16-814Z-46582.json",
+        "sha256": "b51a830450175c6718bdb7cd09ca89f2ee19f4ca3259bcb388dd2796dd8c4297",
+        "report": "docs/agent-only/benchmark/results/qwen3-32b-huggingface-laya-40-2026-10-14T06-14-16-814Z-46582.md",
+        "reportSha256": "62671723369336f0ea52728a461d80481990bf57fcecef69f323eae08bd184f1",
+        "batchWallMs": 1230400
+      },
+      "schemaRepairAttempts": 3,
+      "validatorReturns": 0,
+      "deterministicRepairs": 0,
+      "meanMs": 25962.74067652632,
+      "minMs": 16000.094167000003,
+      "maxMs": 58746.32712499995,
+      "sampleStandardDeviationMs": 9693.748733825401,
+      "commonPromptSamples": 25,
+      "commonPromptMeanMs": 26202.414138319997,
+      "commonPromptMedianMs": 22885.850791000004,
+      "failedTerminalMs": 58370,
+      "batchWallMs": 1230400,
+      "wallMsPerRender": 32378.947368421053,
+      "generationAndFailedMsPerRender": 27498.793308105265,
+      "recordedInferenceEvents": 293,
+      "inferenceMsByStage": {
+        "teaching_intent": 761990,
+        "assembly_plan": 63977,
+        "assembly_input_requirement": 50444,
+        "assembly_controls": 16680,
+        "assembly_observations": 23646,
+        "assembly_settings": 59313,
+        "assembly_setting_value": 43107
+      },
+      "outputConstraintCounts": {
+        "true": 293
+      },
+      "finishReasonCounts": {
+        "stop": 290,
+        "length": 3
+      },
+      "promptTokens": 291918,
+      "outputTokens": 22404,
+      "inferenceEventsWithTokenUsage": 293,
+      "layaDecisions": {
+        "accepted": 3,
+        "rejected": 37
+      },
+      "layaMeanDurationMs": 325.5,
+      "failedSimulations": [
+        "rc-circuit",
+        "area-perimeter"
+      ]
+    },
+    {
+      "modelSlug": "mistral-small-3.1-24b",
+      "runId": "2026-10-14T06-58-22-525Z-60750",
+      "total": 40,
+      "passed": 39,
+      "successRate": 0.975,
+      "firstPass": 39,
+      "firstPassRate": 0.975,
+      "validationReached": 39,
+      "firstPassAmongValidated": 1,
+      "unknownMeasurements": 0,
+      "zeroRepairCompletions": 39,
+      "latencySamples": 39,
+      "medianMs": 24086.266959,
+      "p95Ms": 50301.427333,
+      "statuses": {
+        "PASS": 39,
+        "ERROR": 1
+      },
+      "source": {
+        "modelSlug": "mistral-small-3.1-24b",
+        "runId": "2026-10-14T06-58-22-525Z-60750",
+        "original": "src/playwright/runs/2026-10-14T06-58-22-525Z-60750/run.json",
+        "snapshot": "data/benchmarking/runs/2026-10-14T06-58-22-525Z-60750.json",
+        "sha256": "11697ca37b908f4b8132145238778d3ba7bd4846f18adeb62f1b39f6f6cb668f",
+        "report": "docs/agent-only/benchmark/results/mistral-small-3.1-24b-huggingface-laya-40-2026-10-14T06-58-22-525Z-60750.md",
+        "reportSha256": "4813aaa9ae1f9c74ddfdb740ed24899e1aa4356e061efa26b471af3a171eb684",
+        "batchWallMs": 1119100
+      },
+      "schemaRepairAttempts": 0,
+      "validatorReturns": 0,
+      "deterministicRepairs": 0,
+      "meanMs": 24604.63121579488,
+      "minMs": 9137.516208000015,
+      "maxMs": 50898.651375000016,
+      "sampleStandardDeviationMs": 10308.662550967783,
+      "commonPromptSamples": 25,
+      "commonPromptMeanMs": 23283.51091672001,
+      "commonPromptMedianMs": 20479.41645800002,
+      "failedTerminalMs": 8087,
+      "batchWallMs": 1119100,
+      "wallMsPerRender": 28694.871794871793,
+      "generationAndFailedMsPerRender": 24811.990190153854,
+      "recordedInferenceEvents": 292,
+      "inferenceMsByStage": {
+        "teaching_intent": 308500,
+        "assembly_plan": 135689,
+        "assembly_input_requirement": 110650,
+        "assembly_controls": 51873,
+        "assembly_observations": 106548,
+        "assembly_settings": 144390,
+        "assembly_setting_value": 95793
+      },
+      "outputConstraintCounts": {
+        "true": 292
+      },
+      "finishReasonCounts": {
+        "stop": 292
+      },
+      "promptTokens": 299608,
+      "outputTokens": 9754,
+      "inferenceEventsWithTokenUsage": 292,
+      "layaDecisions": {
+        "rejected": 36,
+        "accepted": 4
+      },
+      "layaMeanDurationMs": 176.7,
+      "failedSimulations": [
+        "galvanic-cell"
+      ]
+    }
+  ]
+}

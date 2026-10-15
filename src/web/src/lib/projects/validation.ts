@@ -4,6 +4,10 @@ import {
   validateRunnableDocument,
 } from "../../simulations/builder/document/validateDocument";
 import type { CompositeRecipe } from "../../simulations/creation-and-editing/authoring-engine/document";
+import {
+  componentEvidence,
+  importedNodes,
+} from "../../simulations/creation-and-editing/validator/componentEvidence";
 import { assertData } from "../../simulations/creation-and-editing/validator/document";
 import { parseRecipe } from "../../simulations/creation-and-editing/validator/parseRecipe";
 import { ProjectError, type ProjectPayload, type ProjectType } from "./types";
@@ -99,6 +103,8 @@ export function publicPayload(
       );
     if (document.authored) delete document.authored.compatibility;
     validateRunnableDocument(document);
+    for (const node of importedNodes(document.authored))
+      componentEvidence(node);
     if (document.recipeMetadata?.nested.length)
       throw new ProjectError("Expand nested recipes before publishing.");
     return document;
@@ -128,6 +134,7 @@ export function publicPayload(
     );
   if (!recipe.document.nodes.length && !recipe.document.resources.length)
     throw new ProjectError("Add content before publishing a composition.");
+  for (const node of importedNodes(recipe.document)) componentEvidence(node);
   delete recipe.document.compatibility;
   return payload(type, recipe);
 }

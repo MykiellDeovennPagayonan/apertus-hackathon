@@ -5,6 +5,11 @@ import { listCommunity, publishProject } from "../../lib/projects/client";
 import type { Project, Publication } from "../../lib/projects/types";
 import { publicPayload } from "../../lib/projects/validation";
 import { ComponentDialog } from "../../simulations/builder/ComponentDialog";
+import { HTMLComponentImport } from "../../simulations/builder/composition/HTMLComponentImport";
+import type { ExperimentDocument } from "../../simulations/builder/document/types";
+import type { CompositeRecipe } from "../../simulations/creation-and-editing/authoring-engine/document";
+import type { VerificationReport } from "../../simulations/creation-and-editing/runtime-engine/imported/contract";
+import { importedNodes } from "../../simulations/creation-and-editing/validator/componentEvidence";
 import NameAvailability from "./NameAvailability";
 export default function PublishDialog({
   project,
@@ -24,10 +29,30 @@ export default function PublishDialog({
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
     [published, setPublished] = useState<Publication | null>(null);
+  const [componentChecks, setComponentChecks] = useState<
+    Record<string, VerificationReport>
+  >({});
+  const htmlNodes = importedNodes(
+    project.projectType === "composition"
+      ? (project.payload as CompositeRecipe).document
+      : (project.payload as ExperimentDocument).authored,
+  );
   const candidate = useMemo(() => {
     try {
+      const checked = structuredClone(project.payload);
+      const document =
+        project.projectType === "composition"
+          ? (checked as CompositeRecipe).document
+          : (checked as ExperimentDocument).authored;
+      for (const node of importedNodes(document)) {
+        if (!componentChecks[node.id])
+          throw new Error("Finish component checks before publishing.");
+        node.configuration.verification = JSON.stringify(
+          componentChecks[node.id],
+        );
+      }
       return {
-        payload: publicPayload(project.projectType, project.payload),
+        payload: publicPayload(project.projectType, checked),
         error: "",
       };
     } catch (error) {
@@ -39,7 +64,7 @@ export default function PublishDialog({
             : "This project is not ready to publish.",
       };
     }
-  }, [project.projectType, project.payload]);
+  }, [project.projectType, project.payload, componentChecks]);
   const key = useRef(crypto.randomUUID());
   useEffect(() => {
     let disposed = false;
@@ -83,6 +108,7 @@ export default function PublishDialog({
           .map((t) => t.trim())
           .filter(Boolean),
         licenseAccepted: license,
+        ...(htmlNodes.length ? { componentChecks } : {}),
         idempotencyKey: key.current,
       });
       setPublished(result);
@@ -139,9 +165,9 @@ export default function PublishDialog({
       ) : (
         <>
           <p>
-            Publishing shares a copy of your saved {project.projectType}.
-            Editing it later requires publishing a new version with a different
-            name.
+            Publishing shares a copy of your saved{" "}
+            {project.contentKind ?? project.projectType}. Editing it later
+            requires publishing a new version with a different name.
           </p>
           <p>
             Saved revision {project.saveRevision} · {project.projectType} ·{" "}
@@ -149,6 +175,47 @@ export default function PublishDialog({
               ? `Remixed from ${project.basedOn.name}`
               : "Original project"}
           </p>
+          {!!htmlNodes.length && (
+            <section aria-label="Publication component checks">
+              <p>
+                Checking the HTML in this saved snapshot. These are
+                contributor-reported technical checks.
+              </p>
+              {htmlNodes.map((node) => (
+                <HTMLComponentImport
+                  key={`${node.id}/${String(node.configuration.source)}`}
+                  source={String(node.configuration.source)}
+                  initialInputs={
+                    node.configuration.inputs as Record<string, unknown>
+                  }
+                  initialSettings={
+                    node.configuration.settings as Record<string, unknown>
+                  }
+                  verificationOnly
+                  onVerified={(recipe) => {
+                    const report = recipe
+                      ? (JSON.parse(
+                          String(
+                            recipe.document.nodes[0].configuration.verification,
+                          ),
+                        ) as VerificationReport)
+                      : undefined;
+                    setComponentChecks((previous) => {
+                      if (
+                        JSON.stringify(previous[node.id]) ===
+                        JSON.stringify(report)
+                      )
+                        return previous;
+                      const next = { ...previous };
+                      if (report) next[node.id] = report;
+                      else delete next[node.id];
+                      return next;
+                    });
+                  }}
+                />
+              ))}
+            </section>
+          )}
           <label>
             Public name
             <input

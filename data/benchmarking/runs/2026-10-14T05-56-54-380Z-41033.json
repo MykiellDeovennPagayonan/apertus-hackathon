@@ -1,0 +1,4519 @@
+{
+  "protocolVersion": 1,
+  "id": "2026-10-14T05-56-54-380Z-41033",
+  "modelSlug": "gpt-6-luna",
+  "scope": "full-batch",
+  "startedAt": "2026-10-14T05:57:00.866Z",
+  "endedAt": "2026-10-14T06:13:30.313Z",
+  "state": "FINISHED",
+  "complete": true,
+  "promptHash": "7eb999db69a660c06f2af15d25f0e1764a8cc68945a19524c53677c4f042b8d3",
+  "configuration": {
+    "protocolVersion": 1,
+    "llm": {
+      "provider": "openai",
+      "connection": "openai",
+      "label": "OpenAI",
+      "baseUrl": "https://api.openai.com/v1",
+      "model": "gpt-6-luna",
+      "structuredOutput": "auto",
+      "contextTokens": null,
+      "timeout": 120000,
+      "maxTokens": 4096,
+      "concurrency": 1,
+      "reasoningEffort": "none"
+    },
+    "decision": {
+      "baseUrl": "http://127.0.0.1:43102",
+      "timeout": 20000,
+      "provider": "laya",
+      "runtimeModel": "aac6fef/laya-multilingual-mlx"
+    },
+    "planner": {
+      "mode": "hybrid",
+      "compositionPolicy": "required-laya",
+      "decisionProvider": "laya",
+      "timeoutMs": 240000,
+      "memoryMode": "off"
+    },
+    "source": {
+      "revision": "9f0c351b5aef3b063029509e425075facdb52f2e",
+      "dirty": true,
+      "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+    },
+    "capture": {
+      "width": 1440,
+      "height": 1000,
+      "testTimeoutMs": 300000,
+      "workers": 1,
+      "retries": 0
+    },
+    "hardware": {
+      "hostname": "Mykiells-MacBook-Air.local",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M5",
+      "memoryBytes": 25769803776,
+      "inferenceHardware": "not supplied",
+      "quantization": "not supplied"
+    }
+  },
+  "rows": [
+    {
+      "requestId": "5497e9f7-ea63-47f1-8dfc-336c9a7d9ca5",
+      "generationMs": 27894.153625000003,
+      "observedMs": 27894.153625000003,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 27124,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2454,
+            "usage": {
+              "promptTokens": 1129,
+              "outputTokens": 122,
+              "totalTokens": 1251
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1659,
+            "usage": {
+              "promptTokens": 4340,
+              "outputTokens": 19,
+              "totalTokens": 4359
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 12990,
+            "usage": {
+              "promptTokens": 1000,
+              "outputTokens": 20,
+              "totalTokens": 1020
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1604,
+            "usage": {
+              "promptTokens": 569,
+              "outputTokens": 14,
+              "totalTokens": 583
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 6201,
+            "usage": {
+              "promptTokens": 393,
+              "outputTokens": 15,
+              "totalTokens": 408
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1457,
+            "usage": {
+              "promptTokens": 347,
+              "outputTokens": 14,
+              "totalTokens": 361
+            }
+          }
+        ]
+      },
+      "number": 1,
+      "id": "projectile",
+      "prompt": "Show me 2 projectiles distance comparison based on angles",
+      "status": "PASS",
+      "seconds": "37.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-01-projectile/attachments/prompt-7820789e631c3c8e4da94486aece7e8945f6f081.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-01-projectile/attachments/result-8062d52de97218fec5fc021fab6d38d8b37d26fe.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-01-projectile/attachments/planner-diagnostics-89dfc4a6e94427cc8724e32e2626bf7f75e00a58.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-01-projectile/attachments/measurements-7713104d18493a6977a618189fbc7b5b554d8eb3.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-01-projectile/attachments/events-718ccb73daa7f1e30b779933f848a8744662188c.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "d14e6ca1-f19a-48a5-8643-0f28ec27532e",
+      "generationMs": null,
+      "observedMs": 6586.184666000001,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 6568,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1872,
+            "usage": {
+              "promptTokens": 1135,
+              "outputTokens": 94,
+              "totalTokens": 1229
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1301,
+            "usage": {
+              "promptTokens": 4439,
+              "outputTokens": 19,
+              "totalTokens": 4458
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1679,
+            "usage": {
+              "promptTokens": 941,
+              "outputTokens": 17,
+              "totalTokens": 958
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1439,
+            "usage": {
+              "promptTokens": 3936,
+              "outputTokens": 19,
+              "totalTokens": 3955
+            }
+          }
+        ]
+      },
+      "number": 2,
+      "id": "price-elasticity",
+      "prompt": "Can you show me how changing the price affects how much people buy?",
+      "status": "ERROR",
+      "seconds": "10.1",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/prompt-d7270555a9cce43fa8632eba7a93e7624ceb2187.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/result-0a479f17dba840335f314ba392e4c86308dcbcff.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/error-details-b310cbc90fe3fdd67b27c24f9d98100592f59d39.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/planner-diagnostics-817d3e88db4ac12717f93a0377b342c10cc83572.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/measurements-7c3f518f6a2e5626b28be902e902cb140f757250.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/events-8d200539250dc736af595db3ca9c9b57318745b3.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-02-price-elasticity/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-02-price-elasticity/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: That request isn't supported yet.Details\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "66589686-ef47-44f2-b5c3-25ac701185ad",
+      "generationMs": 22707.361125,
+      "observedMs": 22707.361125,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 22575,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2217,
+            "usage": {
+              "promptTokens": 1176,
+              "outputTokens": 152,
+              "totalTokens": 1328
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1357,
+            "usage": {
+              "promptTokens": 4883,
+              "outputTokens": 19,
+              "totalTokens": 4902
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1340,
+            "usage": {
+              "promptTokens": 748,
+              "outputTokens": 23,
+              "totalTokens": 771
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 17422,
+            "usage": {
+              "promptTokens": 206,
+              "outputTokens": 14,
+              "totalTokens": 220
+            }
+          }
+        ]
+      },
+      "number": 3,
+      "id": "pythagorean",
+      "prompt": "I have a ladder leaning against a wall. Let me change how far the bottom is from the wall and how high it reaches to see how long the ladder needs to be.",
+      "status": "PASS",
+      "seconds": "27.3",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/prompt-ac76216632e5fca0d7179771f53359121469d22f.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/result-630c91082f198d76adea90eb2bda365a1b0ead25.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/planner-diagnostics-ae6d3254d65bff18d9512d55b495697f1d065eea.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/measurements-4978e8e80fa8fdc7a81f58501fdff25702879e53.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/events-667115768a1e158b50ed12c3d499739d93ef9af9.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "5ce51e1e-c9c3-4c9f-9e6f-647ece93332f",
+      "generationMs": 37192.92020899999,
+      "observedMs": 37192.92020899999,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 37055,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 7420,
+            "usage": {
+              "promptTokens": 1142,
+              "outputTokens": 133,
+              "totalTokens": 1275
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1266,
+            "usage": {
+              "promptTokens": 4824,
+              "outputTokens": 19,
+              "totalTokens": 4843
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 4093,
+            "usage": {
+              "promptTokens": 1337,
+              "outputTokens": 20,
+              "totalTokens": 1357
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 20835,
+            "usage": {
+              "promptTokens": 406,
+              "outputTokens": 14,
+              "totalTokens": 420
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 845,
+            "usage": {
+              "promptTokens": 279,
+              "outputTokens": 15,
+              "totalTokens": 294
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1393,
+            "usage": {
+              "promptTokens": 248,
+              "outputTokens": 14,
+              "totalTokens": 262
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 939,
+            "usage": {
+              "promptTokens": 173,
+              "outputTokens": 14,
+              "totalTokens": 187
+            }
+          }
+        ]
+      },
+      "number": 4,
+      "id": "acid-base-titration",
+      "prompt": "Show me what happens to the pH when I slowly add a base to an acid.",
+      "status": "PASS",
+      "seconds": "41.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/prompt-c646666eaf4fbe7dc0260aa2843ba8fa07158042.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/result-25b4cc92f125b1e22fb721f7af665750f4f800f0.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/planner-diagnostics-f2cb0884b9812050f07c891d46d59295ab063830.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/measurements-be9ae0151f289db829672f9b14e0e82433cf9a64.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/events-77149fdd8bd3bc9097cc60dec7199b990b59f12e.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "c3ccf6bd-fe5e-45e1-b897-97420d52bb1c",
+      "generationMs": null,
+      "observedMs": 18553.034,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 18540,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2250,
+            "usage": {
+              "promptTokens": 1146,
+              "outputTokens": 118,
+              "totalTokens": 1264
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 13458,
+            "usage": {
+              "promptTokens": 4781,
+              "outputTokens": 19,
+              "totalTokens": 4800
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1416,
+            "usage": {
+              "promptTokens": 889,
+              "outputTokens": 17,
+              "totalTokens": 906
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1163,
+            "usage": {
+              "promptTokens": 4223,
+              "outputTokens": 19,
+              "totalTokens": 4242
+            }
+          }
+        ]
+      },
+      "number": 5,
+      "id": "cost-and-profit",
+      "prompt": "Make a small business example where I can change how much we produce and see our costs and profit.",
+      "status": "ERROR",
+      "seconds": "22.3",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/prompt-83a3f94b51eb7d17bd0fd4cdd25825974b38e67c.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/result-4fe5b0f0172b611081ce9be0ed70bbd2f99b04f5.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/error-details-de0a1b801632505e3c16ff0e238594ad5bd362e1.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/planner-diagnostics-2dd4686a3b8105bf1c028de51de9c836784fdad1.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/measurements-6ca38470a582de3e19d23ac95d8f80a0e6eabfe4.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/events-aabf3049089f37d7b64f076c1b1d7335e0b0d627.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-05-cost-and-profit/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-05-cost-and-profit/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: That request isn't supported yet.Details\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "7d0c47cf-e168-42d9-a823-b8a63766a837",
+      "generationMs": 17533.4475,
+      "observedMs": 17533.4475,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 17400,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 1,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 7919,
+            "usage": {
+              "promptTokens": 1154,
+              "outputTokens": 768,
+              "totalTokens": 1922
+            }
+          },
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 3220,
+            "usage": {
+              "promptTokens": 1644,
+              "outputTokens": 159,
+              "totalTokens": 1803
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1419,
+            "usage": {
+              "promptTokens": 4494,
+              "outputTokens": 19,
+              "totalTokens": 4513
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1494,
+            "usage": {
+              "promptTokens": 1089,
+              "outputTokens": 26,
+              "totalTokens": 1115
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1806,
+            "usage": {
+              "promptTokens": 277,
+              "outputTokens": 15,
+              "totalTokens": 292
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1229,
+            "usage": {
+              "promptTokens": 244,
+              "outputTokens": 14,
+              "totalTokens": 258
+            }
+          }
+        ]
+      },
+      "number": 6,
+      "id": "tree-height",
+      "prompt": "How can I work out the height of a tree without climbing it? Show me using the angle from where I stand.",
+      "status": "PASS",
+      "seconds": "21.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-06-tree-height/attachments/prompt-58ed00ee57f90cdc8ff5f9eeb220cd246ea27a01.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-06-tree-height/attachments/result-a8ad225f2f6de1d9b851afa4aad3d116c2801c33.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-06-tree-height/attachments/planner-diagnostics-464cfda650c23a4e96824c52e0cb59a106ca24e0.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-06-tree-height/attachments/measurements-a2174724ab2562c0b85b0ee1b75d27b0616a0b9e.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-06-tree-height/attachments/events-152370ba1271a251024f98946faa53c57969ee2f.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "a046fc66-b358-4967-9abe-ce6a127629be",
+      "generationMs": 11960.9015,
+      "observedMs": 11960.9015,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 11837,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2723,
+            "usage": {
+              "promptTokens": 1158,
+              "outputTokens": 123,
+              "totalTokens": 1281
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 3089,
+            "usage": {
+              "promptTokens": 4854,
+              "outputTokens": 19,
+              "totalTokens": 4873
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1039,
+            "usage": {
+              "promptTokens": 1128,
+              "outputTokens": 23,
+              "totalTokens": 1151
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2703,
+            "usage": {
+              "promptTokens": 316,
+              "outputTokens": 15,
+              "totalTokens": 331
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1112,
+            "usage": {
+              "promptTokens": 283,
+              "outputTokens": 14,
+              "totalTokens": 297
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 902,
+            "usage": {
+              "promptTokens": 201,
+              "outputTokens": 14,
+              "totalTokens": 215
+            }
+          }
+        ]
+      },
+      "number": 7,
+      "id": "galvanic-cell",
+      "prompt": "Show me how a battery made with two different metals works. Let me change the solution concentrations and see what happens to the voltage.",
+      "status": "PASS",
+      "seconds": "16.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/prompt-79166eb4f85328926dadfe218a1813e9ef506285.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/result-1e97bb16500b5c9df9b21add27c8c62bbd7fd265.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/planner-diagnostics-ce323a524b8688102a1c4f66a90ac8dcaa84e2e0.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/measurements-b12a81cc5c49b67b966a866e5aec0b3f1089b03d.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/events-c9eb0194714622d9935da2c4d98eb64d33fc9a22.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "5c43aaa7-5b3a-4159-bee8-e8b511a64a97",
+      "generationMs": 13716.636957999996,
+      "observedMs": 13716.636957999996,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 13574,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 3226,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 147,
+              "totalTokens": 1299
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1414,
+            "usage": {
+              "promptTokens": 3781,
+              "outputTokens": 19,
+              "totalTokens": 3800
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1782,
+            "usage": {
+              "promptTokens": 848,
+              "outputTokens": 20,
+              "totalTokens": 868
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 861,
+            "usage": {
+              "promptTokens": 240,
+              "outputTokens": 14,
+              "totalTokens": 254
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 944,
+            "usage": {
+              "promptTokens": 414,
+              "outputTokens": 15,
+              "totalTokens": 429
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 3554,
+            "usage": {
+              "promptTokens": 385,
+              "outputTokens": 15,
+              "totalTokens": 400
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1502,
+            "usage": {
+              "promptTokens": 356,
+              "outputTokens": 14,
+              "totalTokens": 370
+            }
+          }
+        ]
+      },
+      "number": 8,
+      "id": "craft-production",
+      "prompt": "Compare making things by hand with using an assembly line. I want to see which produces more in the same time.",
+      "status": "PASS",
+      "seconds": "18.0",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-08-craft-production/attachments/prompt-013e1f00ffe08f74890d2e0c83572ccc5647a3a1.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-08-craft-production/attachments/result-280b9879640d5d0c53e01123da0572c51c3a5856.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-08-craft-production/attachments/planner-diagnostics-ff1fcdea2028a6b61ff9184dc67923539b43a898.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-08-craft-production/attachments/measurements-88f64d97cd94b27540aa7c07ff0b41842062be9a.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-08-craft-production/attachments/events-120b091d0c4c8468dd98b12b6a3fb48b6449f028.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "de13cb9d-bc14-4631-835f-f00d19bee694",
+      "generationMs": 8159.942374999991,
+      "observedMs": 8159.942374999991,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 8057,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 4,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 4,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2806,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 189,
+              "totalTokens": 1341
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1216,
+            "usage": {
+              "promptTokens": 4403,
+              "outputTokens": 19,
+              "totalTokens": 4422
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1268,
+            "usage": {
+              "promptTokens": 732,
+              "outputTokens": 20,
+              "totalTokens": 752
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1153,
+            "usage": {
+              "promptTokens": 175,
+              "outputTokens": 15,
+              "totalTokens": 190
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1420,
+            "usage": {
+              "promptTokens": 156,
+              "outputTokens": 14,
+              "totalTokens": 170
+            }
+          }
+        ]
+      },
+      "number": 9,
+      "id": "tile-patterns",
+      "prompt": "Why can hexagons cover a floor without gaps but regular pentagons can’t? Let me try both.",
+      "status": "PASS",
+      "seconds": "12.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/prompt-02dfd7d0cf698848f11a320b8489c294bdb067de.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/result-6b4abb9428dd06d6f252543f0beeca0e4493d5f4.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/planner-diagnostics-c71913960988e58995bf4e64d1732711276b9cf5.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/measurements-b9ad34d81097b5ea12602c2284800faaea4ce81b.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/events-9aab3ef60826e6bae22c45a3ed98dfad8acfdec1.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "cfb61f59-8a24-4bc1-a9af-b31e2be7cdcb",
+      "generationMs": null,
+      "observedMs": 4474.832082999987,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 4451,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2236,
+            "usage": {
+              "promptTokens": 1143,
+              "outputTokens": 109,
+              "totalTokens": 1252
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1994,
+            "usage": {
+              "promptTokens": 4393,
+              "outputTokens": 19,
+              "totalTokens": 4412
+            }
+          }
+        ]
+      },
+      "number": 10,
+      "id": "wildfire",
+      "prompt": "Show a wildfire spreading through a forest. Can I change how much dry vegetation there is?",
+      "status": "ERROR",
+      "seconds": "7.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-10-wildfire/attachments/prompt-a772a0ba5285fc7017f6163888697eed1829f4b1.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-10-wildfire/attachments/result-63d9176926aa8114f83e0b761792616154e00d59.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-10-wildfire/attachments/error-details-745fbb6b99ca2a77e0cfb96808113aee554c3374.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-10-wildfire/attachments/planner-diagnostics-87dd2d34efa654264dd6f530900bc83a406ddd59.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-10-wildfire/attachments/measurements-a0875fb7bb6506f4cfa5db4b1b185eeae4c16581.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-10-wildfire/attachments/events-7b4de79cde963806f5e0b9068cd4b2728d2f8434.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-10-wildfire/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-10-wildfire/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: That request isn't supported yet.Details\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "2f4d59f6-7c26-4cfe-82ab-3838ef0f0bf3",
+      "generationMs": 28988.298,
+      "observedMs": 28988.298,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 28857,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2576,
+            "usage": {
+              "promptTokens": 1154,
+              "outputTokens": 148,
+              "totalTokens": 1302
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2423,
+            "usage": {
+              "promptTokens": 3999,
+              "outputTokens": 19,
+              "totalTokens": 4018
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1136,
+            "usage": {
+              "promptTokens": 1107,
+              "outputTokens": 20,
+              "totalTokens": 1127
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1269,
+            "usage": {
+              "promptTokens": 303,
+              "outputTokens": 15,
+              "totalTokens": 318
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1056,
+            "usage": {
+              "promptTokens": 296,
+              "outputTokens": 14,
+              "totalTokens": 310
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 20191,
+            "usage": {
+              "promptTokens": 199,
+              "outputTokens": 14,
+              "totalTokens": 213
+            }
+          }
+        ]
+      },
+      "number": 11,
+      "id": "can-material",
+      "prompt": "I want to design a can that holds the same amount but uses less metal. Let me try different widths and heights.",
+      "status": "PASS",
+      "seconds": "33.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-11-can-material/attachments/prompt-952b440181a49f84bb99c506bd057816d49d121e.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-11-can-material/attachments/result-d39758034bb6617b755e3a3ad8b8ebf7e7b2ec10.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-11-can-material/attachments/planner-diagnostics-41c5ba07a06e4335e1989821cbf5fcc5f7d7d1d9.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-11-can-material/attachments/measurements-6f9cc2b8f780a46b11d056f89dc0d8a4205478dc.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-11-can-material/attachments/events-1434c5e8f38bf0a3798662259e2fed84b4f8486c.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "ed25b20e-9159-4ba3-93e9-bc5f32ee9dbd",
+      "generationMs": 28937.65825,
+      "observedMs": 28937.65825,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 28836,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 25329,
+            "usage": {
+              "promptTokens": 1150,
+              "outputTokens": 117,
+              "totalTokens": 1267
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1212,
+            "usage": {
+              "promptTokens": 4694,
+              "outputTokens": 19,
+              "totalTokens": 4713
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1145,
+            "usage": {
+              "promptTokens": 1115,
+              "outputTokens": 20,
+              "totalTokens": 1135
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 861,
+            "usage": {
+              "promptTokens": 380,
+              "outputTokens": 14,
+              "totalTokens": 394
+            }
+          }
+        ]
+      },
+      "number": 12,
+      "id": "survey-sampling",
+      "prompt": "How many people should I survey? Show me how the results change with a small sample versus a bigger one.",
+      "status": "PASS",
+      "seconds": "33.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/prompt-8c6980673455822df3a86e3b638aa3ff46a5f8d9.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/result-b99a36a87432ac6c9cb563b5a8c9c822bd733462.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/planner-diagnostics-31fa6d0c0df9d380b235763ddc7fe10e6533e8d5.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/measurements-4f4c5fea8842d5be6b997696475ed4eae7ef3661.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/events-3a58fc130d0598c206317f4fa9c2c135ef85ce87.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "51bfa79a-0923-43ce-909d-b40812fc1356",
+      "generationMs": 47782.537167,
+      "observedMs": 47782.537167,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 47667,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 14779,
+            "usage": {
+              "promptTokens": 1140,
+              "outputTokens": 112,
+              "totalTokens": 1252
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1267,
+            "usage": {
+              "promptTokens": 4561,
+              "outputTokens": 19,
+              "totalTokens": 4580
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 28876,
+            "usage": {
+              "promptTokens": 1122,
+              "outputTokens": 20,
+              "totalTokens": 1142
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1170,
+            "usage": {
+              "promptTokens": 307,
+              "outputTokens": 14,
+              "totalTokens": 321
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1167,
+            "usage": {
+              "promptTokens": 239,
+              "outputTokens": 14,
+              "totalTokens": 253
+            }
+          }
+        ]
+      },
+      "number": 13,
+      "id": "levers",
+      "prompt": "Show me how a crowbar helps lift something heavy. Let me move the pivot.",
+      "status": "PASS",
+      "seconds": "51.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-13-levers/attachments/prompt-1fc0a9a00d7c0bad5ddbb0b800e71ed29784fba1.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-13-levers/attachments/result-bea4df1d9fd3217b476727d8785328f9e14a629c.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-13-levers/attachments/planner-diagnostics-22740e1484acebf040fdf6693fdbf44c582a9daf.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-13-levers/attachments/measurements-b572f16f97d41d609d1e8bcf0ff23f4fcd89527f.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-13-levers/attachments/events-a41eb3202fecb17e254bb69c5452d767de292f17.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "f3053d1d-5966-49b0-8a47-64ab07955893",
+      "generationMs": 135122.733541,
+      "observedMs": 135122.733541,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 134991,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 87903,
+            "usage": {
+              "promptTokens": 1146,
+              "outputTokens": 143,
+              "totalTokens": 1289
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 20443,
+            "usage": {
+              "promptTokens": 4065,
+              "outputTokens": 19,
+              "totalTokens": 4084
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 15453,
+            "usage": {
+              "promptTokens": 670,
+              "outputTokens": 23,
+              "totalTokens": 693
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1483,
+            "usage": {
+              "promptTokens": 213,
+              "outputTokens": 15,
+              "totalTokens": 228
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1008,
+            "usage": {
+              "promptTokens": 151,
+              "outputTokens": 14,
+              "totalTokens": 165
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 8238,
+            "usage": {
+              "promptTokens": 195,
+              "outputTokens": 14,
+              "totalTokens": 209
+            }
+          }
+        ]
+      },
+      "number": 14,
+      "id": "pulleys",
+      "prompt": "Make a pulley lifting a weight so I can see whether more supporting ropes make it easier to lift.",
+      "status": "PASS",
+      "seconds": "139.5",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-14-pulleys/attachments/prompt-f611881e39971bf86b6c6706a9bfb9bd4ad4a4fd.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-14-pulleys/attachments/result-d2bd74b0f6da9987ba76fb4d438563113084aaca.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-14-pulleys/attachments/planner-diagnostics-f0862c948db27b937999495d725b4fc2be13cb67.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-14-pulleys/attachments/measurements-61a04aba041060b6fcbd199567507604999487f5.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-14-pulleys/attachments/events-651a7dcd7d38b899ab980ed4b461a4ea3e57a660.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "a5fbcadd-8343-4739-b415-f00a2e914619",
+      "generationMs": null,
+      "observedMs": 6356.958166999975,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 6340,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2290,
+            "usage": {
+              "promptTokens": 1150,
+              "outputTokens": 117,
+              "totalTokens": 1267
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1388,
+            "usage": {
+              "promptTokens": 4332,
+              "outputTokens": 19,
+              "totalTokens": 4351
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1342,
+            "usage": {
+              "promptTokens": 743,
+              "outputTokens": 17,
+              "totalTokens": 760
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1092,
+            "usage": {
+              "promptTokens": 3926,
+              "outputTokens": 19,
+              "totalTokens": 3945
+            }
+          }
+        ]
+      },
+      "number": 15,
+      "id": "bicycle-gears",
+      "prompt": "Help me understand bicycle gears. Let me change the front and back gears and see how fast the wheel turns.",
+      "status": "ERROR",
+      "seconds": "9.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/prompt-11bc1333dd6f39b8d209808975ae270dd492c804.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/result-4420eb0759a624b3e75db581c74dbdda023de809.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/error-details-e0e783eee480763644a26fa86f2d1f3a5f81243b.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/planner-diagnostics-110fdba4a472400e82960ba61194257d0db781ed.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/measurements-5c4e5054fbdc1ef7b0d9c5c373fb245687d7626d.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/events-4b510232cc213bf4a52d6e08ad89cd52b15b9e9f.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-15-bicycle-gears/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-15-bicycle-gears/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: That request isn't supported yet.Details\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "1fd53a95-227c-4023-a57e-7f5c608cdc03",
+      "generationMs": null,
+      "observedMs": 6313.12375,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 6294,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1995,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 131,
+              "totalTokens": 1279
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1630,
+            "usage": {
+              "promptTokens": 4424,
+              "outputTokens": 19,
+              "totalTokens": 4443
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1217,
+            "usage": {
+              "promptTokens": 765,
+              "outputTokens": 17,
+              "totalTokens": 782
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1197,
+            "usage": {
+              "promptTokens": 4015,
+              "outputTokens": 19,
+              "totalTokens": 4034
+            }
+          }
+        ]
+      },
+      "number": 16,
+      "id": "tipping",
+      "prompt": "Show me when a cabinet will tip over if I push it. I want to try different cabinet sizes.",
+      "status": "ERROR",
+      "seconds": "9.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-16-tipping/attachments/prompt-cad792299b874fdb5f54c0bce7bdafd7deb5a74b.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-16-tipping/attachments/result-e77ed02922b81825263cde0893b918e5a1b0c6a1.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-16-tipping/attachments/error-details-4fa82bcc78599ba2eee3d98e560764cb4debdd07.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-16-tipping/attachments/planner-diagnostics-8f93fbcef1a5e31b10e5b8944978c45f53c79b28.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-16-tipping/attachments/measurements-02f41241a977ca8487a6666bf242e30f18e697c0.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-16-tipping/attachments/events-ebcd07638e06ada22a1647a6fd62195c1c8dc244.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-16-tipping/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-16-tipping/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: That request isn't supported yet.Details\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "1aa83bb8-4f15-4593-9203-eb3f1b75cea6",
+      "generationMs": null,
+      "observedMs": 14827.122791999998,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 14810,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1841,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 163,
+              "totalTokens": 1315
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 6856,
+            "usage": {
+              "promptTokens": 4147,
+              "outputTokens": 19,
+              "totalTokens": 4166
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1368,
+            "usage": {
+              "promptTokens": 800,
+              "outputTokens": 17,
+              "totalTokens": 817
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 4588,
+            "usage": {
+              "promptTokens": 3691,
+              "outputTokens": 19,
+              "totalTokens": 3710
+            }
+          }
+        ]
+      },
+      "number": 17,
+      "id": "collisions",
+      "prompt": "Make two carts crash into each other. Let me change their masses and speeds and see what happens after they collide.",
+      "status": "ERROR",
+      "seconds": "18.1",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-17-collisions/attachments/prompt-e53fdd83c3b2f6909b4531e4e7b99f0fe70b3239.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-17-collisions/attachments/result-9a0536e219bd18582c6d8d56a0c4eaa7c0b35e9c.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-17-collisions/attachments/error-details-1dd8919bed15400450161506630bce1556c5ac0b.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-17-collisions/attachments/planner-diagnostics-fe5c36f890c7045c8467a99793524d8eb7c1d184.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-17-collisions/attachments/measurements-0af97b46bee872e980a8802b38d37b3b03e54de1.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-17-collisions/attachments/events-aa2cd70d6f717479e29b0fa6c6555f4d25e4e266.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-17-collisions/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-17-collisions/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: That request isn't supported yet.Details\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "cef7dbc4-1fc5-4e7f-9351-939bbfd73aaf",
+      "generationMs": 9068.2255,
+      "observedMs": 9068.2255,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 8950,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1789,
+            "usage": {
+              "promptTokens": 1137,
+              "outputTokens": 127,
+              "totalTokens": 1264
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1776,
+            "usage": {
+              "promptTokens": 4445,
+              "outputTokens": 19,
+              "totalTokens": 4464
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2013,
+            "usage": {
+              "promptTokens": 914,
+              "outputTokens": 26,
+              "totalTokens": 940
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 3078,
+            "usage": {
+              "promptTokens": 252,
+              "outputTokens": 14,
+              "totalTokens": 266
+            }
+          }
+        ]
+      },
+      "number": 18,
+      "id": "hydraulics",
+      "prompt": "I don’t get how a hydraulic lift works. Can you show me?",
+      "status": "PASS",
+      "seconds": "13.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/prompt-93eadbdec4b87459fd1dbb9ed285962265d6612c.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/result-49d7cf8e46d16f003d95216b35e5cb23cf4d358a.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/planner-diagnostics-16d5d439216ea330e18a91b061286393795e1a58.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/measurements-77fd47acc6cdd5fd1e533817821fa6b85d6c8443.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/events-22fbb75a5efb48c42ca6244a8416bb4492da9305.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "c7ca4a41-466f-4267-985b-66c497b1a651",
+      "generationMs": null,
+      "observedMs": 8294.053916,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 8276,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2916,
+            "usage": {
+              "promptTokens": 1144,
+              "outputTokens": 152,
+              "totalTokens": 1296
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2516,
+            "usage": {
+              "promptTokens": 4198,
+              "outputTokens": 19,
+              "totalTokens": 4217
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1096,
+            "usage": {
+              "promptTokens": 719,
+              "outputTokens": 17,
+              "totalTokens": 736
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1151,
+            "usage": {
+              "promptTokens": 3795,
+              "outputTokens": 19,
+              "totalTokens": 3814
+            }
+          }
+        ]
+      },
+      "number": 19,
+      "id": "buoyancy",
+      "prompt": "Why does a steel ship float when a solid steel block sinks? Show me both in water.",
+      "status": "ERROR",
+      "seconds": "11.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/prompt-56d0c6ccbb21870f903abf0a3c4dd55cf57caa08.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/result-25282dd91f55704c72d7b5960cd1e0a64c805056.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/error-details-49a5c4b47c1971d90abfbe9b9fe22473fdc10e90.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/planner-diagnostics-14b459516fd81f2711359490eb067d44646176ce.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/measurements-2adfbd5c7a1e625a5ea080b561dd307c053ba065.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/events-9861e41a462623b21de7455dad0e4d37e6703d12.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-19-buoyancy/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-19-buoyancy/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: That request isn't supported yet.Details\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "3f6703e4-aa02-412a-85a1-d36019281fbc",
+      "generationMs": 15000.973750000001,
+      "observedMs": 15000.973750000001,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 14869,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2181,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 145,
+              "totalTokens": 1293
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1361,
+            "usage": {
+              "promptTokens": 4132,
+              "outputTokens": 19,
+              "totalTokens": 4151
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 8591,
+            "usage": {
+              "promptTokens": 677,
+              "outputTokens": 20,
+              "totalTokens": 697
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1232,
+            "usage": {
+              "promptTokens": 222,
+              "outputTokens": 14,
+              "totalTokens": 236
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1118,
+            "usage": {
+              "promptTokens": 259,
+              "outputTokens": 14,
+              "totalTokens": 273
+            }
+          }
+        ]
+      },
+      "number": 20,
+      "id": "doppler-siren",
+      "prompt": "Show an ambulance passing someone and how the siren frequency changes. Let me change how fast it moves.",
+      "status": "PASS",
+      "seconds": "19.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/prompt-a607bc74fce2c23fcfb2a88ebd3027c6c9358449.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/result-64a4ea6a4c273b06a15ca4760c4aeb1eca7cd876.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/planner-diagnostics-6bbf57c90e52f51b83e4cf1cc908b5ef91f04d0a.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/measurements-86df56861604dc21bc17424a0c6178339bb42019.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/events-29816b4625a96b95a1487de97615b7f9d83764ff.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "b411331b-808e-4697-80a1-a9a7fa84ec14",
+      "generationMs": null,
+      "observedMs": 9929.438584,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 9873,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 5064,
+            "usage": {
+              "promptTokens": 1144,
+              "outputTokens": 143,
+              "totalTokens": 1287
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1771,
+            "usage": {
+              "promptTokens": 4532,
+              "outputTokens": 19,
+              "totalTokens": 4551
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1131,
+            "usage": {
+              "promptTokens": 714,
+              "outputTokens": 17,
+              "totalTokens": 731
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1669,
+            "usage": {
+              "promptTokens": 4182,
+              "outputTokens": 19,
+              "totalTokens": 4201
+            }
+          }
+        ]
+      },
+      "number": 21,
+      "id": "guitar-string",
+      "prompt": "Help me understand how a guitar string makes different notes. Let me change its length and tension.",
+      "status": "ERROR",
+      "seconds": "13.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/prompt-ac5ae0f27d54124268bfd5245ce88e69aed015c0.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/result-947f7e020996f58a2e9eaac8706b2f0ee1216cba.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/error-details-004d9ec1694665ac376f60147f652a2e7d44e4da.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/planner-diagnostics-ba1202a87cac6d6622522240ecd9d05f039cccbf.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/measurements-f05a3868844f612e023472fa97718ab98e0ef33e.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/events-436722e63d644d9344bd47a11264068cda5e5380.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-21-guitar-string/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-21-guitar-string/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: That request isn't supported yet.Details\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "b50c69bc-4f02-4649-a02c-eac3fdb16e02",
+      "generationMs": 37676.667959,
+      "observedMs": 37676.667959,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 37534,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2602,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 131,
+              "totalTokens": 1279
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1280,
+            "usage": {
+              "promptTokens": 4771,
+              "outputTokens": 19,
+              "totalTokens": 4790
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 15355,
+            "usage": {
+              "promptTokens": 644,
+              "outputTokens": 23,
+              "totalTokens": 667
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 18053,
+            "usage": {
+              "promptTokens": 326,
+              "outputTokens": 14,
+              "totalTokens": 340
+            }
+          }
+        ]
+      },
+      "number": 22,
+      "id": "cooling-drinks",
+      "prompt": "Show a hot drink cooling down. I want to change the room temperature and see how long it takes.",
+      "status": "PASS",
+      "seconds": "42.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/prompt-6e5c11937d6402aa9a71a7aab30a15f8bf2f7ecd.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/result-30d5fcf0687b8337c7af9ef482726e893fec7f75.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/planner-diagnostics-e9081950a1af5fc649070ce327483a1af58f5c18.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/measurements-b28210d21076cf9f7659e8cdbcd5edbbbd23f3bd.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/events-633f652f5b4e2112b24831349b6e26e365562338.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "bb987fe0-795d-4bc2-ab29-bc404196b875",
+      "generationMs": 51478.315083,
+      "observedMs": 51478.315083,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 51392,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2824,
+            "usage": {
+              "promptTokens": 1153,
+              "outputTokens": 130,
+              "totalTokens": 1283
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1948,
+            "usage": {
+              "promptTokens": 3629,
+              "outputTokens": 19,
+              "totalTokens": 3648
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 18666,
+            "usage": {
+              "promptTokens": 716,
+              "outputTokens": 20,
+              "totalTokens": 736
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1537,
+            "usage": {
+              "promptTokens": 247,
+              "outputTokens": 14,
+              "totalTokens": 261
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 26147,
+            "usage": {
+              "promptTokens": 315,
+              "outputTokens": 14,
+              "totalTokens": 329
+            }
+          }
+        ]
+      },
+      "number": 23,
+      "id": "magnet-induction",
+      "prompt": "Show me a magnet moving through a coil. What happens to the current if I move it faster or reverse direction?",
+      "status": "PASS",
+      "seconds": "55.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/prompt-913d7cd6fafb213e80d558b871a816d11cc6f02b.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/result-18be9069180e8c8358944f8931c3e6fb6fa03774.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/planner-diagnostics-86ebbcbf033e0100cf7ef8aec1e5c3a66b3f3ffd.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/measurements-23276a40fff4614ab63abcc09fd1091c91904a96.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/events-8aec8725b20b9e81c03d462a934c142a5ce01e9f.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "53956a69-67f4-474a-a0eb-c46d075f7ab2",
+      "generationMs": 13234.568167000005,
+      "observedMs": 13234.568167000005,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 13142,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 5489,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 117,
+              "totalTokens": 1269
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1645,
+            "usage": {
+              "promptTokens": 4033,
+              "outputTokens": 19,
+              "totalTokens": 4052
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1949,
+            "usage": {
+              "promptTokens": 599,
+              "outputTokens": 20,
+              "totalTokens": 619
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2231,
+            "usage": {
+              "promptTokens": 236,
+              "outputTokens": 14,
+              "totalTokens": 250
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1512,
+            "usage": {
+              "promptTokens": 288,
+              "outputTokens": 14,
+              "totalTokens": 302
+            }
+          }
+        ]
+      },
+      "number": 24,
+      "id": "rc-circuit",
+      "prompt": "Make a circuit where a capacitor charges and discharges. Let me change the resistance and see how quickly it happens.",
+      "status": "PASS",
+      "seconds": "17.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/prompt-53c7ef2c139875b85dcea76ee61d4ab87bac120f.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/result-2ba4fa60b6322e55df20aaba1f50a2636358d298.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/planner-diagnostics-8b7d14c882005e863105d92fba15299c8688359d.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/measurements-621ae878586ce0a0ec5d07cd7a456437268e78d8.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/events-65f8d3d8facee0916e9eadc5ca53f5bbb60d522c.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "a5caf8c7-c31d-49f8-98b6-412b0d8c8107",
+      "generationMs": 21889.224833999993,
+      "observedMs": 21889.224833999993,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 21756,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 4515,
+            "usage": {
+              "promptTokens": 1124,
+              "outputTokens": 103,
+              "totalTokens": 1227
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1400,
+            "usage": {
+              "promptTokens": 3955,
+              "outputTokens": 19,
+              "totalTokens": 3974
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 14448,
+            "usage": {
+              "promptTokens": 672,
+              "outputTokens": 20,
+              "totalTokens": 692
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1131,
+            "usage": {
+              "promptTokens": 202,
+              "outputTokens": 14,
+              "totalTokens": 216
+            }
+          }
+        ]
+      },
+      "number": 25,
+      "id": "fraction-number-line",
+      "prompt": "Help me understand fractions using a number line.",
+      "status": "PASS",
+      "seconds": "26.3",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/prompt-6d0f0de332093f9b26241a8529b16c99cd0533d2.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/result-7e4d02a3e4a9cbbdd11e087816dba4e291e8cc5b.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/planner-diagnostics-544eb1a54f199c1f91ea4ac943bb2b76894d0826.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/measurements-05cd2608a8c91156c8b4d79c726f4a0d2b5880e7.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/events-98fc8d9dc0a207859668b60457d12b3767e2e504.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "071721dd-ddd5-4c46-8f14-d22c27a1ff45",
+      "generationMs": 34021.56541600003,
+      "observedMs": 34021.56541600003,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 33854,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 24136,
+            "usage": {
+              "promptTokens": 1128,
+              "outputTokens": 93,
+              "totalTokens": 1221
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2727,
+            "usage": {
+              "promptTokens": 4837,
+              "outputTokens": 19,
+              "totalTokens": 4856
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1568,
+            "usage": {
+              "promptTokens": 1310,
+              "outputTokens": 17,
+              "totalTokens": 1327
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1794,
+            "usage": {
+              "promptTokens": 399,
+              "outputTokens": 14,
+              "totalTokens": 413
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2155,
+            "usage": {
+              "promptTokens": 209,
+              "outputTokens": 14,
+              "totalTokens": 223
+            }
+          }
+        ]
+      },
+      "number": 26,
+      "id": "cell-division",
+      "prompt": "Show me what happens to a cell when it divides.",
+      "status": "PASS",
+      "seconds": "38.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-26-cell-division/attachments/prompt-84946432e49dbfc544754538054ef2b85c7220f5.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-26-cell-division/attachments/result-ee69026e9f821cfa4b0b6514fb6cbba438ea9d1c.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-26-cell-division/attachments/planner-diagnostics-04940760bf90ac95d15919534deb528a1909abce.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-26-cell-division/attachments/measurements-7d670f932d8a2940a4573f176c7e2127cfca80ea.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-26-cell-division/attachments/events-ee734f41da108f8907e3cb9a0a30896afb53e56a.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "9554aae3-fe55-4461-be81-6689a4af4d92",
+      "generationMs": 32696.119917000004,
+      "observedMs": 32696.119917000004,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 32560,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 24187,
+            "usage": {
+              "promptTokens": 1119,
+              "outputTokens": 115,
+              "totalTokens": 1234
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2025,
+            "usage": {
+              "promptTokens": 4378,
+              "outputTokens": 19,
+              "totalTokens": 4397
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1563,
+            "usage": {
+              "promptTokens": 782,
+              "outputTokens": 23,
+              "totalTokens": 805
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1183,
+            "usage": {
+              "promptTokens": 287,
+              "outputTokens": 15,
+              "totalTokens": 302
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2066,
+            "usage": {
+              "promptTokens": 247,
+              "outputTokens": 15,
+              "totalTokens": 262
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1146,
+            "usage": {
+              "promptTokens": 178,
+              "outputTokens": 14,
+              "totalTokens": 192
+            }
+          }
+        ]
+      },
+      "number": 27,
+      "id": "area-perimeter",
+      "prompt": "Compare two rectangles and their areas",
+      "status": "PASS",
+      "seconds": "37.0",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/prompt-f2c5cd1f0fba42e89c923035343ae70fac680d48.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/result-16ff698b433062d237ff4b8e3c85cd787a5409a0.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/planner-diagnostics-7862d35fc02747bec30b9ef599720102f7a540d1.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/measurements-a4a2cb9b3e189e7a6e4ec584084d250919a3ca81.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/events-fafe8aac8fa1d8cd73ef4632e3b2c0225853d12c.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "6c56c5a9-bd4a-4519-9d5e-238e57dca7f4",
+      "generationMs": 10687.729709000007,
+      "observedMs": 10687.729709000007,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 10476,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1495,
+            "usage": {
+              "promptTokens": 1152,
+              "outputTokens": 131,
+              "totalTokens": 1283
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1175,
+            "usage": {
+              "promptTokens": 4987,
+              "outputTokens": 19,
+              "totalTokens": 5006
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1256,
+            "usage": {
+              "promptTokens": 1058,
+              "outputTokens": 20,
+              "totalTokens": 1078
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 911,
+            "usage": {
+              "promptTokens": 282,
+              "outputTokens": 14,
+              "totalTokens": 296
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1468,
+            "usage": {
+              "promptTokens": 304,
+              "outputTokens": 15,
+              "totalTokens": 319
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1112,
+            "usage": {
+              "promptTokens": 261,
+              "outputTokens": 15,
+              "totalTokens": 276
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2842,
+            "usage": {
+              "promptTokens": 196,
+              "outputTokens": 14,
+              "totalTokens": 210
+            }
+          }
+        ]
+      },
+      "number": 28,
+      "id": "beer-lambert",
+      "prompt": "Show light passing through a coloured solution. Let me change how concentrated it is and see how much light gets through.",
+      "status": "PASS",
+      "seconds": "15.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/prompt-2d2616ac04c96d1109277eb09cb90df5b0a71b0b.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/result-0036997fa71348c10413f9e72d859f74dcaf757e.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/planner-diagnostics-e9f18ad5567921dc9190956e4f35eed949e89e0e.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/measurements-ff9b258e96765461dcf3fac68265fa79f578434b.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/events-c07b2d103762731cf914f521cc4163b3217eb1b6.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "17eb7901-c403-4c12-b1f5-a362e1ea3266",
+      "generationMs": 12000.655792000005,
+      "observedMs": 12000.655792000005,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 11875,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1602,
+            "usage": {
+              "promptTokens": 1119,
+              "outputTokens": 106,
+              "totalTokens": 1225
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1676,
+            "usage": {
+              "promptTokens": 3923,
+              "outputTokens": 19,
+              "totalTokens": 3942
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1427,
+            "usage": {
+              "promptTokens": 576,
+              "outputTokens": 20,
+              "totalTokens": 596
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1968,
+            "usage": {
+              "promptTokens": 194,
+              "outputTokens": 14,
+              "totalTokens": 208
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1702,
+            "usage": {
+              "promptTokens": 189,
+              "outputTokens": 15,
+              "totalTokens": 204
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1638,
+            "usage": {
+              "promptTokens": 241,
+              "outputTokens": 24,
+              "totalTokens": 265
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1620,
+            "usage": {
+              "promptTokens": 161,
+              "outputTokens": 14,
+              "totalTokens": 175
+            }
+          }
+        ]
+      },
+      "number": 29,
+      "id": "arithmetic",
+      "prompt": "Help me learn addition with circles",
+      "status": "PASS",
+      "seconds": "16.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/prompt-a2e58f8a910f195a89df89fffdac0b2238960381.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/result-21aa206fd08f883a110971acebb284c362deaff5.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/planner-diagnostics-5884af99c90c4ff78a6aadfa3e295e47f5f1fec5.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/measurements-9b0b837be15de94eaf69bf54891fb0500f028194.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/events-2ba5bc994709f2dc6ca04457710d47021a0644ee.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "a1589e40-8b5c-4e18-b999-9062719b9f63",
+      "generationMs": 12644.910332999978,
+      "observedMs": 12644.910332999978,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 12517,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2038,
+            "usage": {
+              "promptTokens": 1139,
+              "outputTokens": 129,
+              "totalTokens": 1268
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1326,
+            "usage": {
+              "promptTokens": 4441,
+              "outputTokens": 19,
+              "totalTokens": 4460
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1308,
+            "usage": {
+              "promptTokens": 972,
+              "outputTokens": 20,
+              "totalTokens": 992
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1363,
+            "usage": {
+              "promptTokens": 231,
+              "outputTokens": 14,
+              "totalTokens": 245
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1573,
+            "usage": {
+              "promptTokens": 308,
+              "outputTokens": 15,
+              "totalTokens": 323
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1630,
+            "usage": {
+              "promptTokens": 273,
+              "outputTokens": 15,
+              "totalTokens": 288
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2129,
+            "usage": {
+              "promptTokens": 243,
+              "outputTokens": 14,
+              "totalTokens": 257
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 897,
+            "usage": {
+              "promptTokens": 188,
+              "outputTokens": 14,
+              "totalTokens": 202
+            }
+          }
+        ]
+      },
+      "number": 30,
+      "id": "gas-equilibrium",
+      "prompt": "Show me a gas reaction at equilibrium. What happens if I squeeze the container?",
+      "status": "PASS",
+      "seconds": "17.0",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/prompt-82bc8e48ad6965f81e98d01739996536f3d90fc2.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/result-d2b2d0536ac54e0627f4210d6b4d73609201f02e.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/planner-diagnostics-cbec5c218c8ff807b3670596aab2925aa5e3cafc.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/measurements-80fe1150663df32786b54226d144afff5b61951f.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/events-62874e9aaee0375bcc843565f113d24fa2f1941b.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "edfe436c-92f5-4164-8a8e-60cdaf2c6dd5",
+      "generationMs": 12697.252584000002,
+      "observedMs": 12697.252584000002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 12564,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1803,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 130,
+              "totalTokens": 1278
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1167,
+            "usage": {
+              "promptTokens": 4441,
+              "outputTokens": 19,
+              "totalTokens": 4460
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1567,
+            "usage": {
+              "promptTokens": 1018,
+              "outputTokens": 23,
+              "totalTokens": 1041
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2828,
+            "usage": {
+              "promptTokens": 248,
+              "outputTokens": 14,
+              "totalTokens": 262
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1508,
+            "usage": {
+              "promptTokens": 316,
+              "outputTokens": 15,
+              "totalTokens": 331
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1052,
+            "usage": {
+              "promptTokens": 287,
+              "outputTokens": 14,
+              "totalTokens": 301
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2313,
+            "usage": {
+              "promptTokens": 212,
+              "outputTokens": 14,
+              "totalTokens": 226
+            }
+          }
+        ]
+      },
+      "number": 31,
+      "id": "phase-change",
+      "prompt": "Let me heat a substance and change the pressure to see when it becomes a solid, liquid or gas.",
+      "status": "PASS",
+      "seconds": "17.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-31-phase-change/attachments/prompt-f59e3a975c8dd4327c92dfa88c6f2c658509944c.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-31-phase-change/attachments/result-638618eadb09a47c6fcccf28a2f9789af1d51df4.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-31-phase-change/attachments/planner-diagnostics-615aa4469135a0921f4c8112f760bedbe4f2b3b8.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-31-phase-change/attachments/measurements-b2f303e42dedc264459cf19dc5e9d46a493a71d5.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-31-phase-change/attachments/events-85b824eafd1a866aa873272527fb2bab597c01e7.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "edc00603-b41c-450c-a2cb-ef0a3c17ffd4",
+      "generationMs": 6196.394290999975,
+      "observedMs": 6196.394290999975,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 6057,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1730,
+            "usage": {
+              "promptTokens": 1130,
+              "outputTokens": 102,
+              "totalTokens": 1232
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1202,
+            "usage": {
+              "promptTokens": 4988,
+              "outputTokens": 19,
+              "totalTokens": 5007
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1165,
+            "usage": {
+              "promptTokens": 543,
+              "outputTokens": 23,
+              "totalTokens": 566
+            }
+          }
+        ]
+      },
+      "number": 32,
+      "id": "coordinates",
+      "prompt": "Help me practise plotting points on an x and y grid.",
+      "status": "PASS",
+      "seconds": "10.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-32-coordinates/attachments/prompt-4708b09429fc4f82c3e417664e06e5bfd24f4cbd.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-32-coordinates/attachments/result-7eb37a0983394b2a0677464ac2589594f4f4080c.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-32-coordinates/attachments/planner-diagnostics-8943e624d64fce8dd506accc657d537e3bcc77d3.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-32-coordinates/attachments/measurements-2ff571df347c4468ea78498119d76af536e2b385.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-32-coordinates/attachments/events-1b9d5dba0f6ea13f33747f132be183d92960435e.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "b0fed4a5-3904-4c66-9778-bb55d664e86f",
+      "generationMs": 6913.594708000019,
+      "observedMs": 6913.594708000019,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 6808,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1566,
+            "usage": {
+              "promptTokens": 1156,
+              "outputTokens": 143,
+              "totalTokens": 1299
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1270,
+            "usage": {
+              "promptTokens": 4599,
+              "outputTokens": 19,
+              "totalTokens": 4618
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1708,
+            "usage": {
+              "promptTokens": 809,
+              "outputTokens": 20,
+              "totalTokens": 829
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 972,
+            "usage": {
+              "promptTokens": 226,
+              "outputTokens": 14,
+              "totalTokens": 240
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1111,
+            "usage": {
+              "promptTokens": 221,
+              "outputTokens": 14,
+              "totalTokens": 235
+            }
+          }
+        ]
+      },
+      "number": 33,
+      "id": "water-pressure",
+      "prompt": "Show water coming out of a hole in a bottle. Let me change the water level and see how far the stream goes.",
+      "status": "PASS",
+      "seconds": "11.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/prompt-f7dfafa5d1b309789647ecd50a27683c5a7ef0a8.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/result-991a83af68bed9f22183aa8ab038da1610227d36.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/planner-diagnostics-50542be36c0dd4cea8339509b822d78a2c6fbcf4.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/measurements-5c6c074be3cf6b2ebc6c140d2ea30997d2539865.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/events-1c856d72034b2bf127cedec22cbf8a24a09b432f.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "893a821c-10c3-4f2e-a2ab-1835d6a8bbd5",
+      "generationMs": null,
+      "observedMs": 6958.161708,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 6945,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1660,
+            "usage": {
+              "promptTokens": 1140,
+              "outputTokens": 143,
+              "totalTokens": 1283
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1441,
+            "usage": {
+              "promptTokens": 4514,
+              "outputTokens": 19,
+              "totalTokens": 4533
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1960,
+            "usage": {
+              "promptTokens": 1012,
+              "outputTokens": 17,
+              "totalTokens": 1029
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1636,
+            "usage": {
+              "promptTokens": 4008,
+              "outputTokens": 19,
+              "totalTokens": 4027
+            }
+          }
+        ]
+      },
+      "number": 34,
+      "id": "voting-systems",
+      "prompt": "Can the same votes give different winners? Show me an election with different voting systems.",
+      "status": "ERROR",
+      "seconds": "10.3",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/prompt-0eb31a03b34d38e422a5f04c6f1586c4653ac5d2.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/result-09470ee3268b424b9c8cbcc7c21c8f5669c53c41.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/error-details-5838eeb1264f7f4623df019c9af90bd49662669e.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/planner-diagnostics-249054da93378d46dda71be69fd5b6c36ba7df01.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/measurements-c3b471562eb431b68c9fbd11ffd0f131f0c6a6b9.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/events-ab793bc154c90fdec78754cfc0505f29d24e75ee.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-34-voting-systems/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-34-voting-systems/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: That request isn't supported yet.Details\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "def46dca-d067-41aa-b656-88336afa311f",
+      "generationMs": 6762.969917,
+      "observedMs": 6762.969917,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 6658,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1387,
+            "usage": {
+              "promptTokens": 1118,
+              "outputTokens": 77,
+              "totalTokens": 1195
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1359,
+            "usage": {
+              "promptTokens": 3607,
+              "outputTokens": 19,
+              "totalTokens": 3626
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1215,
+            "usage": {
+              "promptTokens": 597,
+              "outputTokens": 20,
+              "totalTokens": 617
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1171,
+            "usage": {
+              "promptTokens": 187,
+              "outputTokens": 14,
+              "totalTokens": 201
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1302,
+            "usage": {
+              "promptTokens": 194,
+              "outputTokens": 14,
+              "totalTokens": 208
+            }
+          }
+        ]
+      },
+      "number": 35,
+      "id": "counting",
+      "prompt": "Help me practise counting circles.",
+      "status": "PASS",
+      "seconds": "11.3",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-35-counting/attachments/prompt-539d81138d1cc421e01962a3a1f0e32daeeeb548.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-35-counting/attachments/result-ae06a4cef0d496cbef0809ecbb6281b1985ec5ed.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-35-counting/attachments/planner-diagnostics-2f81ecfbcd4f81fa5575aaf533e3b672c3497162.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-35-counting/attachments/measurements-7fac6a6161c40e92f351ad224a0912d5d93f76ed.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-35-counting/attachments/events-ccd4cd14ca5f3b30de37995be613b10e98afb69f.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "92400948-afe6-4ac9-bff8-ec4d4a84ab3a",
+      "generationMs": 11039.4525,
+      "observedMs": 11039.4525,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 10907,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 6594,
+            "usage": {
+              "promptTokens": 1154,
+              "outputTokens": 160,
+              "totalTokens": 1314
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1267,
+            "usage": {
+              "promptTokens": 4286,
+              "outputTokens": 19,
+              "totalTokens": 4305
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1400,
+            "usage": {
+              "promptTokens": 638,
+              "outputTokens": 20,
+              "totalTokens": 658
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1347,
+            "usage": {
+              "promptTokens": 214,
+              "outputTokens": 14,
+              "totalTokens": 228
+            }
+          }
+        ]
+      },
+      "number": 36,
+      "id": "equal-groups",
+      "prompt": "Show me multiplication with equal groups of dots. Let me change the number of groups and how many dots are in each.",
+      "status": "PASS",
+      "seconds": "15.5",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/prompt-4ef8e52ef9b766a3b9bf5ff2f59d82a17e4670ec.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/result-08427f542a0add2f74532c035f6660c053b88de0.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/planner-diagnostics-0fb13f920da882237362c53a1edfd9a76c71d09f.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/measurements-5b36aa97b68954af1a200bf0b7218f00b4482778.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/events-e32ee1e5527893323aa9108d5fa6850926280aae.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "05b3a7af-508b-4da3-9e86-726b1658a0f5",
+      "generationMs": 9806.089791999999,
+      "observedMs": 9806.089791999999,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 9657,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1763,
+            "usage": {
+              "promptTokens": 1135,
+              "outputTokens": 111,
+              "totalTokens": 1246
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1283,
+            "usage": {
+              "promptTokens": 4661,
+              "outputTokens": 19,
+              "totalTokens": 4680
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1505,
+            "usage": {
+              "promptTokens": 1195,
+              "outputTokens": 23,
+              "totalTokens": 1218
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1089,
+            "usage": {
+              "promptTokens": 273,
+              "outputTokens": 14,
+              "totalTokens": 287
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1277,
+            "usage": {
+              "promptTokens": 246,
+              "outputTokens": 14,
+              "totalTokens": 260
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1620,
+            "usage": {
+              "promptTokens": 229,
+              "outputTokens": 14,
+              "totalTokens": 243
+            }
+          }
+        ]
+      },
+      "number": 37,
+      "id": "pendulum",
+      "prompt": "Make a pendulum swing where I can adjust its starting angle and length",
+      "status": "PASS",
+      "seconds": "14.3",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-37-pendulum/attachments/prompt-4af13b9e0b5263b1eccaa359c14d2988f1252935.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-37-pendulum/attachments/result-4a9f7ab504be36096556bca2f5693f437d07dfe8.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-37-pendulum/attachments/planner-diagnostics-b4052877ac4a998a376117704c18cd0ee20852e2.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-37-pendulum/attachments/measurements-c4fe0e4a468fc732ab6270fd66e18f304e073103.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-37-pendulum/attachments/events-4236d82014d41097966fe40cebd6ccd49fa35cda.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "94aeb163-a0a2-40b6-b685-837907d4d0f3",
+      "generationMs": 12461.474791,
+      "observedMs": 12461.474791,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 12339,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 1,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1801,
+            "usage": {
+              "promptTokens": 1133,
+              "outputTokens": 114,
+              "totalTokens": 1247
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 2656,
+            "usage": {
+              "promptTokens": 3881,
+              "outputTokens": 78,
+              "totalTokens": 3959
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1518,
+            "usage": {
+              "promptTokens": 4023,
+              "outputTokens": 19,
+              "totalTokens": 4042
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1539,
+            "usage": {
+              "promptTokens": 635,
+              "outputTokens": 23,
+              "totalTokens": 658
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1285,
+            "usage": {
+              "promptTokens": 212,
+              "outputTokens": 14,
+              "totalTokens": 226
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 931,
+            "usage": {
+              "promptTokens": 243,
+              "outputTokens": 15,
+              "totalTokens": 258
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1110,
+            "usage": {
+              "promptTokens": 216,
+              "outputTokens": 14,
+              "totalTokens": 230
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1231,
+            "usage": {
+              "promptTokens": 323,
+              "outputTokens": 14,
+              "totalTokens": 337
+            }
+          }
+        ]
+      },
+      "number": 38,
+      "id": "slope",
+      "prompt": "Make me a line where I can adjust its slope and y axis",
+      "status": "PASS",
+      "seconds": "16.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-38-slope/attachments/prompt-00e4df0927e8c175a1caed59debc3ca13aa476b2.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-38-slope/attachments/result-145d6c1a90de1481c090e1daa255d745b8f70572.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-38-slope/attachments/planner-diagnostics-b6f1a14bfde1e7d4c42b296fcb586c087a7ee859.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-38-slope/attachments/measurements-f713eabfdfb7dc3820667f3132828dea9faedcdc.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-38-slope/attachments/events-a0cee17177d6546415d724940804e2fa5a96b07b.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "b63a2fe9-f7aa-4bed-9714-718c52513ef9",
+      "generationMs": null,
+      "observedMs": 11943.203833,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 11931,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 7386,
+            "usage": {
+              "promptTokens": 1154,
+              "outputTokens": 149,
+              "totalTokens": 1303
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1125,
+            "usage": {
+              "promptTokens": 4708,
+              "outputTokens": 19,
+              "totalTokens": 4727
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1645,
+            "usage": {
+              "promptTokens": 1188,
+              "outputTokens": 17,
+              "totalTokens": 1205
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1442,
+            "usage": {
+              "promptTokens": 4096,
+              "outputTokens": 19,
+              "totalTokens": 4115
+            }
+          }
+        ]
+      },
+      "number": 39,
+      "id": "bridge",
+      "prompt": "Make a bridge with a load on it. Let me move the load and see which parts are under the most stress.",
+      "status": "ERROR",
+      "seconds": "15.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-39-bridge/attachments/prompt-97affdb847d1a7a394d9411755a24d35d66870d5.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-39-bridge/attachments/result-1084cc1557787cd8ee98c5f5aa8a0be24878aaae.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-39-bridge/attachments/error-details-16bc564f7da74a5663f4d1d82fe222b92881a459.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-39-bridge/attachments/planner-diagnostics-e904d0c07dd19a3ae795385b58e2689d2310bc9e.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-39-bridge/attachments/measurements-c607fc1c1d5b4412df7aac7374119c1a7ed25fe1.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-39-bridge/attachments/events-820db551a1f46b12dbde75940f80bc77216c4096.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-39-bridge/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-39-bridge/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: That request isn't supported yet.Details\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "ac068664-8ced-44df-a9a8-d7a7aa545e5d",
+      "generationMs": 9712.0595,
+      "observedMs": 9712.0595,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 9533,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1687,
+            "usage": {
+              "promptTokens": 1140,
+              "outputTokens": 97,
+              "totalTokens": 1237
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1360,
+            "usage": {
+              "promptTokens": 4098,
+              "outputTokens": 19,
+              "totalTokens": 4117
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1802,
+            "usage": {
+              "promptTokens": 1153,
+              "outputTokens": 35,
+              "totalTokens": 1188
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1519,
+            "usage": {
+              "promptTokens": 386,
+              "outputTokens": 14,
+              "totalTokens": 400
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1076,
+            "usage": {
+              "promptTokens": 284,
+              "outputTokens": 15,
+              "totalTokens": 299
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "gpt-6-luna",
+            "elapsedMs": 1844,
+            "usage": {
+              "promptTokens": 251,
+              "outputTokens": 14,
+              "totalTokens": 265
+            }
+          }
+        ]
+      },
+      "number": 40,
+      "id": "shared-fishing-lake",
+      "prompt": "Make a fishing lake where I can see what happens if everyone catches too many fish.",
+      "status": "PASS",
+      "seconds": "14.1",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/prompt-a11657de049a7e7fc7b105419e522143516c7a9f.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/result-4d13426b39ba6c13bd64204db1b50ee71d6340fd.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/planner-diagnostics-2788a55f5c4ca6b31335cc818cbdc303a499e290.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/measurements-d83340f92d9e18270e8fa5670b28b8878d01846a.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/events-caf2aa6f16fb34d12e35c87cf38a0d663f22335c.jsonl"
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "summary": {
+    "total": 40,
+    "passed": 30,
+    "successRate": 0.75,
+    "firstPass": 30,
+    "firstPassRate": 0.75,
+    "validationReached": 30,
+    "firstPassAmongValidated": 1,
+    "unknownMeasurements": 0,
+    "zeroRepairCompletions": 28,
+    "latencySamples": 30,
+    "medianMs": 13475.6025625,
+    "p95Ms": 51478.315083,
+    "statuses": {
+      "PASS": 30,
+      "ERROR": 10
+    }
+  }
+}

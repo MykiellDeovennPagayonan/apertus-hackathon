@@ -58,7 +58,11 @@ export async function projectRequest(
       );
     const input = mutation ? await readJson(request) : undefined;
     const { db, client } = await getDatabase();
+    const kind = url.searchParams.get("kind");
+    if (kind !== null && kind !== "component" && kind !== "composition")
+      throw new ProjectError("Choose component or composition.");
     const options = {
+      ...(kind ? { kind: kind as "component" | "composition" } : {}),
       type: url.searchParams.has("type")
         ? projectType(url.searchParams.get("type"))
         : undefined,

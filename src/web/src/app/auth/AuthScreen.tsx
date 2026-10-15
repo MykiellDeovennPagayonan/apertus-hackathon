@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { type FormEvent, useState } from "react";
@@ -277,8 +278,8 @@ export default function AuthScreen({
   return (
     <main className="auth-page">
       <Link href="/" className="auth-brand">
-        <span aria-hidden="true">✳</span> pAperSim{" "}
-        <span className="auth-suffix">/ local lab</span>
+        <Image src="/logo.svg" alt="" loading="eager" width={48} height={42} />{" "}
+        pAperSim <span className="auth-suffix">/ local lab</span>
       </Link>
       <section
         className={`auth-card ${signin || signup ? "auth-card--form" : ""}`}

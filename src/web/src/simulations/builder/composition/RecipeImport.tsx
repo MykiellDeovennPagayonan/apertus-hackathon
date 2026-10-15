@@ -1,12 +1,14 @@
 "use client";
-import { inspectSource, componentLimits } from "../../creation-and-editing/runtime-engine/imported/contract";
-import { HTMLComponentImport } from "./HTMLComponentImport";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { validateRecipe } from "../../creation-and-editing/validator/recipe";
+import { readComponentFile } from "../../../lib/projects/componentAuthoring";
 import type { CompositeRecipe } from "../../creation-and-editing/authoring-engine/document";
+import { inspectSource } from "../../creation-and-editing/runtime-engine/imported/contract";
+import { validateRecipe } from "../../creation-and-editing/validator/recipe";
 import { BuilderIcon } from "../BuilderIcon";
 import { FeedbackView } from "./FeedbackView";
 import { type Feedback, makeFeedback } from "./feedback";
+import { HTMLComponentImport } from "./HTMLComponentImport";
 import type { ComponentCatalog } from "./useComponentCatalog";
 export function RecipeImport({
   catalog,
@@ -29,8 +31,23 @@ export function RecipeImport({
   const inspect = (text: string, asHtml = false) => {
     setHtml("");
     if (asHtml) {
-      try { inspectSource(text); catalog.retain(text); setRecipe(null); setMessage(null); setHtml(text); }
-      catch (e) { catalog.retain(text); setMessage(makeFeedback(e instanceof Error ? e.message : "Invalid component", "error", "inspect component", "import.html")); }
+      try {
+        inspectSource(text);
+        catalog.retain(text);
+        setRecipe(null);
+        setMessage(null);
+        setHtml(text);
+      } catch (e) {
+        catalog.retain(text);
+        setMessage(
+          makeFeedback(
+            e instanceof Error ? e.message : "Invalid component",
+            "error",
+            "inspect component",
+            "import.html",
+          ),
+        );
+      }
       return;
     }
     catalog.retain(text);
@@ -88,9 +105,13 @@ export function RecipeImport({
     setHtml("");
     setMessage(null);
     try {
-      if (file.size > componentLimits.source && /\.html?$/i.test(file.name)) throw new Error("HTML exceeds the 256 KiB limit.");
-      const text = new TextDecoder("utf-8", { fatal: true }).decode(await file.arrayBuffer());
-      if (sequence === readSequence.current) inspect(text, /\.html?$/i.test(file.name));
+      const text = /\.html?$/i.test(file.name)
+        ? await readComponentFile(file)
+        : new TextDecoder("utf-8", { fatal: true }).decode(
+            await file.arrayBuffer(),
+          );
+      if (sequence === readSequence.current)
+        inspect(text, /\.html?$/i.test(file.name));
     } catch {
       if (sequence === readSequence.current)
         setMessage(
@@ -163,16 +184,72 @@ export function RecipeImport({
           </output>
         )}
       </fieldset>
-      <p><a href="/component-authoring/v1/component-authoring-v1.md" download>Download component instructions</a>{" · "}<a href="/component-authoring/v1/component-starter-v1.html" download>Download starter HTML</a></p>
-      <button type="button" onClick={async () => {
-        try {
-          const [guide, starter] = await Promise.all([fetch("/component-authoring/v1/component-authoring-v1.md").then(r => { if (!r.ok) throw new Error("Could not load guide"); return r.text(); }), fetch("/component-authoring/v1/component-starter-v1.html").then(r => { if (!r.ok) throw new Error("Could not load starter"); return r.text(); })]);
-          await navigator.clipboard.writeText(`${guide}\n\nStarter HTML:\n${starter}`);
-          setMessage(makeFeedback("Copied component instructions and starter HTML.", "success", "copy instructions", "import.instructions"));
-        } catch { setMessage(makeFeedback("Could not copy instructions. Download them using the link above.", "error", "copy instructions", "import.instructions")); }
-      }}>Copy component instructions</button>
+      <p>
+        <Link href="/community/components/new">
+          Describe a new component and download its AI brief
+        </Link>
+      </p>
+      <p>
+        <a href="/component-authoring/v1/component-authoring-v1.md" download>
+          Download component instructions
+        </a>
+        {" · "}
+        <a href="/component-authoring/v1/component-starter-v1.html" download>
+          Download starter HTML
+        </a>
+      </p>
+      <button
+        type="button"
+        onClick={async () => {
+          try {
+            const [guide, starter] = await Promise.all([
+              fetch("/component-authoring/v1/component-authoring-v1.md").then(
+                (r) => {
+                  if (!r.ok) throw new Error("Could not load guide");
+                  return r.text();
+                },
+              ),
+              fetch("/component-authoring/v1/component-starter-v1.html").then(
+                (r) => {
+                  if (!r.ok) throw new Error("Could not load starter");
+                  return r.text();
+                },
+              ),
+            ]);
+            await navigator.clipboard.writeText(
+              `${guide}\n\nStarter HTML:\n${starter}`,
+            );
+            setMessage(
+              makeFeedback(
+                "Copied component instructions and starter HTML.",
+                "success",
+                "copy instructions",
+                "import.instructions",
+              ),
+            );
+          } catch {
+            setMessage(
+              makeFeedback(
+                "Could not copy instructions. Download them using the link above.",
+                "error",
+                "copy instructions",
+                "import.instructions",
+              ),
+            );
+          }
+        }}
+      >
+        Copy component instructions
+      </button>
       <FeedbackView message={message} />
-      {html && <HTMLComponentImport key={html} source={html} catalog={catalog} onReveal={onReveal} />}
+      {html && (
+        <HTMLComponentImport
+          key={html}
+          source={html}
+          catalog={catalog}
+          onReveal={onReveal}
+        />
+      )}
       {recipe && (
         <div className="catalog-import-review">
           <h4>{recipe.title}</h4>
@@ -228,7 +305,9 @@ export function RecipeImport({
           <button
             type="button"
             disabled={busy}
-            onClick={() => inspect(catalog.recovery, /\.html?$/i.test(filename))}
+            onClick={() =>
+              inspect(catalog.recovery, /\.html?$/i.test(filename))
+            }
           >
             Validate again
           </button>

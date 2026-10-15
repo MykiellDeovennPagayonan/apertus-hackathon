@@ -27,6 +27,7 @@ node_modules/
 /docs/agent-only/implementation/029-validation/
 /docs/agent-only/implementation/030-validation/screenshots/
 /docs/agent-only/implementation/032-validation/
+/docs/agent-only/implementation/037-validation/
 
 # Pi model downloads, local deployment configuration, and measured runs
 /deploy/raspberry-pi/models/

@@ -1,0 +1,5678 @@
+{
+  "protocolVersion": 1,
+  "id": "2026-10-14T06-58-22-525Z-60750",
+  "modelSlug": "mistral-small-3.1-24b",
+  "scope": "full-batch",
+  "startedAt": "2026-10-14T06:58:44.909Z",
+  "endedAt": "2026-10-14T07:17:24.035Z",
+  "state": "FINISHED",
+  "complete": true,
+  "promptHash": "7eb999db69a660c06f2af15d25f0e1764a8cc68945a19524c53677c4f042b8d3",
+  "configuration": {
+    "protocolVersion": 1,
+    "llm": {
+      "structuredOutput": "auto",
+      "contextTokens": null,
+      "provider": "apertus",
+      "localRuntime": "mlx",
+      "baseUrl": "https://router.huggingface.co/featherless-ai/v1",
+      "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+      "timeout": 120000,
+      "maxTokens": 1024,
+      "concurrency": 1,
+      "connection": "huggingface",
+      "label": "Hugging Face"
+    },
+    "decision": {
+      "baseUrl": "http://127.0.0.1:43102",
+      "timeout": 20000,
+      "provider": "laya",
+      "runtimeModel": "aac6fef/laya-multilingual-mlx"
+    },
+    "planner": {
+      "mode": "hybrid",
+      "compositionPolicy": "required-laya",
+      "decisionProvider": "laya",
+      "timeoutMs": 240000,
+      "memoryMode": "off"
+    },
+    "source": {
+      "revision": "c4ab92e94ac1844e6d3683b1c0bdfd460c257350",
+      "dirty": true,
+      "fingerprint": "0a6bea27a6428caf3065f345da8604b4d21bf076d5101418a08976268aa95b8c"
+    },
+    "capture": {
+      "width": 1440,
+      "height": 1000,
+      "testTimeoutMs": 300000,
+      "workers": 1,
+      "retries": 0
+    },
+    "hardware": {
+      "hostname": "Mykiells-MacBook-Air.local",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M5",
+      "memoryBytes": 25769803776,
+      "inferenceHardware": "not supplied",
+      "quantization": "not supplied"
+    }
+  },
+  "rows": [
+    {
+      "requestId": "7da3dd3c-a5d9-4770-8b07-19a68d143b2a",
+      "generationMs": 39387.659042,
+      "observedMs": 39387.659042,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 38472,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 12273,
+            "usage": {
+              "promptTokens": 1022,
+              "outputTokens": 199,
+              "totalTokens": 1221
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 14106,
+            "usage": {
+              "promptTokens": 4652,
+              "outputTokens": 11,
+              "totalTokens": 4663
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2059,
+            "usage": {
+              "promptTokens": 1049,
+              "outputTokens": 18,
+              "totalTokens": 1067
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5053,
+            "usage": {
+              "promptTokens": 539,
+              "outputTokens": 6,
+              "totalTokens": 545
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2202,
+            "usage": {
+              "promptTokens": 407,
+              "outputTokens": 7,
+              "totalTokens": 414
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2357,
+            "usage": {
+              "promptTokens": 363,
+              "outputTokens": 6,
+              "totalTokens": 369
+            }
+          }
+        ]
+      },
+      "number": 1,
+      "id": "projectile",
+      "prompt": "Show me 2 projectiles distance comparison based on angles",
+      "status": "PASS",
+      "seconds": "46.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-01-projectile/attachments/prompt-48e41dd5318a718084945aa73ef8c9f9841e9f92.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-01-projectile/attachments/result-0bf8d8d417be8c8d0e7535363ad576fd393d1957.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-01-projectile/attachments/planner-diagnostics-f41eb34a86a488354d9fa32d5daf5e6647f8cf95.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-01-projectile/attachments/measurements-1ba6ae719712245244ba3df09f838ef2f3263c2c.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-01-projectile/attachments/events-7ea0e5279f409bdfd5188dbd1ef2d5d3875ade78.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "a268270a-9bd4-498e-a419-b5fa40d03685",
+      "generationMs": 36069.612541,
+      "observedMs": 36069.612541,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 35799,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 4,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 4,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 7664,
+            "usage": {
+              "promptTokens": 1028,
+              "outputTokens": 153,
+              "totalTokens": 1181
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 3906,
+            "usage": {
+              "promptTokens": 4742,
+              "outputTokens": 11,
+              "totalTokens": 4753
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5389,
+            "usage": {
+              "promptTokens": 944,
+              "outputTokens": 18,
+              "totalTokens": 962
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5272,
+            "usage": {
+              "promptTokens": 291,
+              "outputTokens": 7,
+              "totalTokens": 298
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1768,
+            "usage": {
+              "promptTokens": 256,
+              "outputTokens": 7,
+              "totalTokens": 263
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 7722,
+            "usage": {
+              "promptTokens": 225,
+              "outputTokens": 7,
+              "totalTokens": 232
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1743,
+            "usage": {
+              "promptTokens": 138,
+              "outputTokens": 7,
+              "totalTokens": 145
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1931,
+            "usage": {
+              "promptTokens": 119,
+              "outputTokens": 6,
+              "totalTokens": 125
+            }
+          }
+        ]
+      },
+      "number": 2,
+      "id": "price-elasticity",
+      "prompt": "Can you show me how changing the price affects how much people buy?",
+      "status": "PASS",
+      "seconds": "41.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/prompt-d85d4c9c64bf7a70628dbb16b18e4f1702a03a49.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/result-6b32156199ce1d23dbc096785d7691a5b4bc47ab.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/planner-diagnostics-7b7d36f82c367d20771a321cb45622ef850bd384.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/measurements-af3147116bad577a4273e48e453b8af173a78252.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-02-price-elasticity/attachments/events-bceac4885b17f3fd5844a8d2b9901cdd6421f183.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "ef8114e8-bdb4-49f8-8fcb-4d2e966fd999",
+      "generationMs": 44340.838584,
+      "observedMs": 44340.838584,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 44253,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 15331,
+            "usage": {
+              "promptTokens": 1070,
+              "outputTokens": 218,
+              "totalTokens": 1288
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 17268,
+            "usage": {
+              "promptTokens": 5095,
+              "outputTokens": 11,
+              "totalTokens": 5106
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 8648,
+            "usage": {
+              "promptTokens": 729,
+              "outputTokens": 15,
+              "totalTokens": 744
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2552,
+            "usage": {
+              "promptTokens": 177,
+              "outputTokens": 6,
+              "totalTokens": 183
+            }
+          }
+        ]
+      },
+      "number": 3,
+      "id": "pythagorean",
+      "prompt": "I have a ladder leaning against a wall. Let me change how far the bottom is from the wall and how high it reaches to see how long the ladder needs to be.",
+      "status": "PASS",
+      "seconds": "48.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/prompt-a499055f931f7292bbaa07b375c885f1e35dad3a.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/result-c7fec6c0100efbf102344722a012a8a7590687c8.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/planner-diagnostics-40799ea40826e834c70321c791e0e4814bcc2ddd.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/measurements-f8dd6a5314b30625b2fd7ec417bc3f6a4e911fae.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-03-pythagorean/attachments/events-ee56df5aba24b15ff10d2fc30dc305566ce960a4.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "442add02-92ea-4575-9c8c-dfc4c0452f4f",
+      "generationMs": 24436.70750000002,
+      "observedMs": 24436.70750000002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 24342,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 9108,
+            "usage": {
+              "promptTokens": 1036,
+              "outputTokens": 215,
+              "totalTokens": 1251
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2891,
+            "usage": {
+              "promptTokens": 4363,
+              "outputTokens": 11,
+              "totalTokens": 4374
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1960,
+            "usage": {
+              "promptTokens": 1314,
+              "outputTokens": 12,
+              "totalTokens": 1326
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1832,
+            "usage": {
+              "promptTokens": 364,
+              "outputTokens": 6,
+              "totalTokens": 370
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2500,
+            "usage": {
+              "promptTokens": 247,
+              "outputTokens": 7,
+              "totalTokens": 254
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 3377,
+            "usage": {
+              "promptTokens": 217,
+              "outputTokens": 7,
+              "totalTokens": 224
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2435,
+            "usage": {
+              "promptTokens": 143,
+              "outputTokens": 6,
+              "totalTokens": 149
+            }
+          }
+        ]
+      },
+      "number": 4,
+      "id": "acid-base-titration",
+      "prompt": "Show me what happens to the pH when I slowly add a base to an acid.",
+      "status": "PASS",
+      "seconds": "28.1",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/prompt-3f42d6942783c73bc6035832a2cdf62aee1da53c.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/result-6d6420a175bdbc28cf9a2a120cd20d4332cffe85.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/planner-diagnostics-4fb871778c085a589ffe19ea8cbe66f3907d0944.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/measurements-59ac108a27149f2d7297fd29780f3e68a9901688.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-04-acid-base-titration/attachments/events-1b163fb9eccf343303065fbf7b69eb4dd73d49e6.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "086c74e5-9ef5-4e4b-90ba-3cb1eef2e352",
+      "generationMs": 29638.61275,
+      "observedMs": 29638.61275,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 29542,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 10032,
+            "usage": {
+              "promptTokens": 1040,
+              "outputTokens": 161,
+              "totalTokens": 1201
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 3222,
+            "usage": {
+              "promptTokens": 5113,
+              "outputTokens": 11,
+              "totalTokens": 5124
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2757,
+            "usage": {
+              "promptTokens": 905,
+              "outputTokens": 15,
+              "totalTokens": 920
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2386,
+            "usage": {
+              "promptTokens": 341,
+              "outputTokens": 7,
+              "totalTokens": 348
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2490,
+            "usage": {
+              "promptTokens": 309,
+              "outputTokens": 7,
+              "totalTokens": 316
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1692,
+            "usage": {
+              "promptTokens": 278,
+              "outputTokens": 7,
+              "totalTokens": 285
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 4834,
+            "usage": {
+              "promptTokens": 243,
+              "outputTokens": 7,
+              "totalTokens": 250
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1925,
+            "usage": {
+              "promptTokens": 166,
+              "outputTokens": 6,
+              "totalTokens": 172
+            }
+          }
+        ]
+      },
+      "number": 5,
+      "id": "cost-and-profit",
+      "prompt": "Make a small business example where I can change how much we produce and see our costs and profit.",
+      "status": "PASS",
+      "seconds": "33.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/prompt-cdc27afbb7c5634afb297cd1251f32afad833a1c.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/result-dab1f1b40174331e27e2b40bd9418f93304b10dd.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/planner-diagnostics-a9f83449cb0cfbd650e82134a5df3ab818315f55.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/measurements-fca35b58eb13248d2eae1b24b7eb5ff0fdf79feb.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-05-cost-and-profit/attachments/events-2d7a9cf2a7cc413185f4aa7f10f941973265870d.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "1ea2c57b-906c-42d8-af6b-134f6317e29f",
+      "generationMs": 25334.20283299999,
+      "observedMs": 25334.20283299999,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 25246,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 9052,
+            "usage": {
+              "promptTokens": 1048,
+              "outputTokens": 213,
+              "totalTokens": 1261
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2308,
+            "usage": {
+              "promptTokens": 5084,
+              "outputTokens": 11,
+              "totalTokens": 5095
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2181,
+            "usage": {
+              "promptTokens": 1089,
+              "outputTokens": 18,
+              "totalTokens": 1107
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 9550,
+            "usage": {
+              "promptTokens": 252,
+              "outputTokens": 6,
+              "totalTokens": 258
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1920,
+            "usage": {
+              "promptTokens": 218,
+              "outputTokens": 6,
+              "totalTokens": 224
+            }
+          }
+        ]
+      },
+      "number": 6,
+      "id": "tree-height",
+      "prompt": "How can I work out the height of a tree without climbing it? Show me using the angle from where I stand.",
+      "status": "PASS",
+      "seconds": "29.0",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-06-tree-height/attachments/prompt-4dfe162fd311ae6cda9193c000c091d173125077.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-06-tree-height/attachments/result-c7958cef055d74037107464b2490092a7f44f504.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-06-tree-height/attachments/planner-diagnostics-3867c099522b04fb8a116fc4dfb61746abc812d9.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-06-tree-height/attachments/measurements-bbbe33794def1827e9b9aa87a4519e871d565295.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-06-tree-height/attachments/events-926c97c54631515c6b77800b3830c88f787b82d1.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "53ad9919-49d8-4283-a03a-f4b1609764ae",
+      "generationMs": null,
+      "observedMs": 8105.836249999993,
+      "measurements": {
+        "terminal": "unsupported",
+        "elapsedMs": 8087,
+        "validationReached": false,
+        "firstPass": null,
+        "validationStages": 0,
+        "firstValidatorOutcomes": [],
+        "validationChecks": 0,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5491,
+            "usage": {
+              "promptTokens": 1052,
+              "outputTokens": 177,
+              "totalTokens": 1229
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2341,
+            "usage": {
+              "promptTokens": 4814,
+              "outputTokens": 11,
+              "totalTokens": 4825
+            }
+          }
+        ]
+      },
+      "number": 7,
+      "id": "galvanic-cell",
+      "prompt": "Show me how a battery made with two different metals works. Let me change the solution concentrations and see what happens to the voltage.",
+      "status": "ERROR",
+      "seconds": "10.3",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/prompt-b957770585201a723cd7afa5cb123fe20b98fca2.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/result-05f9f49efbfd762c6f1c6e7493a01f3dd8496cce.png"
+        },
+        {
+          "name": "error-details",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/error-details-f724d0c9e8221a15d869954fefc258e80737d64a.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/planner-diagnostics-3f4f3394c021a76cbb2fa458d5a769e800b43ed5.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/measurements-a49599170a7428b7feb65ce98169bdf0584149b0.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-07-galvanic-cell/attachments/events-543e2e447a50868419910a561c00fe7b7621e976.jsonl"
+        },
+        {
+          "name": "error-context",
+          "path": "artifacts/benchmark-07-galvanic-cell/error-context.md"
+        },
+        {
+          "name": "trace",
+          "path": "artifacts/benchmark-07-galvanic-cell/trace.zip"
+        }
+      ],
+      "errors": [
+        "Error: That request isn't supported yet.Details\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: \"RENDERED\"\nReceived: \"ERROR\""
+      ]
+    },
+    {
+      "requestId": "a888aeb1-f21e-4047-92d7-f38db58de297",
+      "generationMs": 24086.266959,
+      "observedMs": 24086.266959,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 23959,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 4976,
+            "usage": {
+              "promptTokens": 1046,
+              "outputTokens": 167,
+              "totalTokens": 1213
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2201,
+            "usage": {
+              "promptTokens": 4049,
+              "outputTokens": 11,
+              "totalTokens": 4060
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2115,
+            "usage": {
+              "promptTokens": 861,
+              "outputTokens": 18,
+              "totalTokens": 879
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2669,
+            "usage": {
+              "promptTokens": 397,
+              "outputTokens": 7,
+              "totalTokens": 404
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2542,
+            "usage": {
+              "promptTokens": 368,
+              "outputTokens": 7,
+              "totalTokens": 375
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2694,
+            "usage": {
+              "promptTokens": 340,
+              "outputTokens": 7,
+              "totalTokens": 347
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2460,
+            "usage": {
+              "promptTokens": 308,
+              "outputTokens": 7,
+              "totalTokens": 315
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2478,
+            "usage": {
+              "promptTokens": 276,
+              "outputTokens": 7,
+              "totalTokens": 283
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1636,
+            "usage": {
+              "promptTokens": 242,
+              "outputTokens": 7,
+              "totalTokens": 249
+            }
+          }
+        ]
+      },
+      "number": 8,
+      "id": "craft-production",
+      "prompt": "Compare making things by hand with using an assembly line. I want to see which produces more in the same time.",
+      "status": "PASS",
+      "seconds": "27.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-08-craft-production/attachments/prompt-54e871a0327157efb6b5a13f810c32c6057dca13.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-08-craft-production/attachments/result-67256605c8ccd3e97711d96e1220aebff50f471d.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-08-craft-production/attachments/planner-diagnostics-7af9c088546bfb01a940dd9f6bd8f098fde21656.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-08-craft-production/attachments/measurements-21b0f558550ca62dab78f99a9ef0e4e64ba7946b.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-08-craft-production/attachments/events-f341c8d5dd95b645d20189c900e53ffe6bf2ae5d.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "6ac4e556-c8ef-49a2-8525-ba7703c82ae9",
+      "generationMs": 14187.853084000002,
+      "observedMs": 14187.853084000002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 14115,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 4,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 4,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 6239,
+            "usage": {
+              "promptTokens": 1046,
+              "outputTokens": 219,
+              "totalTokens": 1265
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2372,
+            "usage": {
+              "promptTokens": 4351,
+              "outputTokens": 11,
+              "totalTokens": 4362
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1819,
+            "usage": {
+              "promptTokens": 724,
+              "outputTokens": 12,
+              "totalTokens": 736
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1619,
+            "usage": {
+              "promptTokens": 146,
+              "outputTokens": 7,
+              "totalTokens": 153
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1736,
+            "usage": {
+              "promptTokens": 127,
+              "outputTokens": 5,
+              "totalTokens": 132
+            }
+          }
+        ]
+      },
+      "number": 9,
+      "id": "tile-patterns",
+      "prompt": "Why can hexagons cover a floor without gaps but regular pentagons can’t? Let me try both.",
+      "status": "PASS",
+      "seconds": "17.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/prompt-c386649f804eba7d347927b832872319ad8b9549.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/result-7ea0ec4b936796d8455e3442dd36baac19f663f5.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/planner-diagnostics-866f53cff7ed50a0df3d33ecceb2d6c524518b44.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/measurements-2c35a67d4d3457db0f330ad2c58581a0c213e350.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-09-tile-patterns/attachments/events-b92cb4b3e55f0873f533dc50aa38d8b00f0f3745.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "b0097f62-7879-4134-ae7d-4288439cdc78",
+      "generationMs": 21234.434415999996,
+      "observedMs": 21234.434415999996,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 21048,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5666,
+            "usage": {
+              "promptTokens": 1038,
+              "outputTokens": 191,
+              "totalTokens": 1229
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2416,
+            "usage": {
+              "promptTokens": 5022,
+              "outputTokens": 11,
+              "totalTokens": 5033
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1872,
+            "usage": {
+              "promptTokens": 1039,
+              "outputTokens": 12,
+              "totalTokens": 1051
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1699,
+            "usage": {
+              "promptTokens": 254,
+              "outputTokens": 6,
+              "totalTokens": 260
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1928,
+            "usage": {
+              "promptTokens": 334,
+              "outputTokens": 7,
+              "totalTokens": 341
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1714,
+            "usage": {
+              "promptTokens": 304,
+              "outputTokens": 7,
+              "totalTokens": 311
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1834,
+            "usage": {
+              "promptTokens": 275,
+              "outputTokens": 7,
+              "totalTokens": 282
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1754,
+            "usage": {
+              "promptTokens": 248,
+              "outputTokens": 7,
+              "totalTokens": 255
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1983,
+            "usage": {
+              "promptTokens": 218,
+              "outputTokens": 7,
+              "totalTokens": 225
+            }
+          }
+        ]
+      },
+      "number": 10,
+      "id": "wildfire",
+      "prompt": "Show a wildfire spreading through a forest. Can I change how much dry vegetation there is?",
+      "status": "PASS",
+      "seconds": "24.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-10-wildfire/attachments/prompt-2d3ec63e89f7b0224c6f80b22fb309f49e9462d9.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-10-wildfire/attachments/result-2a7244e26402dfb27fc20db38a8e85bac1928021.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-10-wildfire/attachments/planner-diagnostics-ad3b7906743981e77d8e6b4453c90dbb8e67acd6.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-10-wildfire/attachments/measurements-4178321ce7985c17e3c13277f60ca0f9076500c1.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-10-wildfire/attachments/events-c408c1da9e6b6a81d2a750d976b3fb07a597efe9.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "1e023496-9ded-4816-8747-4c8540482c03",
+      "generationMs": 25956.891625000004,
+      "observedMs": 25956.891625000004,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 25867,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 7257,
+            "usage": {
+              "promptTokens": 1048,
+              "outputTokens": 183,
+              "totalTokens": 1231
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2501,
+            "usage": {
+              "promptTokens": 4262,
+              "outputTokens": 11,
+              "totalTokens": 4273
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2520,
+            "usage": {
+              "promptTokens": 1108,
+              "outputTokens": 18,
+              "totalTokens": 1126
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2020,
+            "usage": {
+              "promptTokens": 171,
+              "outputTokens": 7,
+              "totalTokens": 178
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 9699,
+            "usage": {
+              "promptTokens": 129,
+              "outputTokens": 7,
+              "totalTokens": 136
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1668,
+            "usage": {
+              "promptTokens": 151,
+              "outputTokens": 6,
+              "totalTokens": 157
+            }
+          }
+        ]
+      },
+      "number": 11,
+      "id": "can-material",
+      "prompt": "I want to design a can that holds the same amount but uses less metal. Let me try different widths and heights.",
+      "status": "PASS",
+      "seconds": "29.5",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-11-can-material/attachments/prompt-703cd0c1fefa943e2970c75c11e0bfea84ed0401.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-11-can-material/attachments/result-ad4df5759bfd33d8e61f3bf634ca47cd7a8cf4eb.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-11-can-material/attachments/planner-diagnostics-8e6c5fb3cd084c12353fbe8c51b8c9043d49ceec.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-11-can-material/attachments/measurements-f33928d4d97110c2098a6084f31f496a838540e8.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-11-can-material/attachments/events-c482a0aafe9955bfa831f9c87476a7003ff00e0e.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "936a3211-969d-4813-bce1-775c6a2a0366",
+      "generationMs": 13034.091207999998,
+      "observedMs": 13034.091207999998,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 12960,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 6267,
+            "usage": {
+              "promptTokens": 1044,
+              "outputTokens": 178,
+              "totalTokens": 1222
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2566,
+            "usage": {
+              "promptTokens": 5043,
+              "outputTokens": 11,
+              "totalTokens": 5054
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2016,
+            "usage": {
+              "promptTokens": 1175,
+              "outputTokens": 12,
+              "totalTokens": 1187
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1844,
+            "usage": {
+              "promptTokens": 348,
+              "outputTokens": 6,
+              "totalTokens": 354
+            }
+          }
+        ]
+      },
+      "number": 12,
+      "id": "survey-sampling",
+      "prompt": "How many people should I survey? Show me how the results change with a small sample versus a bigger one.",
+      "status": "PASS",
+      "seconds": "16.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/prompt-3bf634b3e15a1ffc953df4a4e7d67924be4f87d3.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/result-8c2ea6a5af774689e93098c543a37401572046d7.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/planner-diagnostics-683b13b5f7ed51f356bd66e89759783016e0069d.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/measurements-7af1b00eef74727e0f48a209e8c8b63f7a19e8d1.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-12-survey-sampling/attachments/events-02794f85a669e42eb9c170db59827be3d6473c1d.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "524b91f9-061e-4aaa-a5a0-ed02ff7729ed",
+      "generationMs": 19853.745208000008,
+      "observedMs": 19853.745208000008,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 19779,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5565,
+            "usage": {
+              "promptTokens": 1034,
+              "outputTokens": 183,
+              "totalTokens": 1217
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2568,
+            "usage": {
+              "promptTokens": 5367,
+              "outputTokens": 11,
+              "totalTokens": 5378
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1975,
+            "usage": {
+              "promptTokens": 1148,
+              "outputTokens": 12,
+              "totalTokens": 1160
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1742,
+            "usage": {
+              "promptTokens": 284,
+              "outputTokens": 6,
+              "totalTokens": 290
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2159,
+            "usage": {
+              "promptTokens": 225,
+              "outputTokens": 7,
+              "totalTokens": 232
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 3192,
+            "usage": {
+              "promptTokens": 138,
+              "outputTokens": 13,
+              "totalTokens": 151
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2389,
+            "usage": {
+              "promptTokens": 190,
+              "outputTokens": 6,
+              "totalTokens": 196
+            }
+          }
+        ]
+      },
+      "number": 13,
+      "id": "levers",
+      "prompt": "Show me how a crowbar helps lift something heavy. Let me move the pivot.",
+      "status": "PASS",
+      "seconds": "23.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-13-levers/attachments/prompt-80ad638c6eab894a088dd72544b9091311e685d5.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-13-levers/attachments/result-b2136e27aafffce469b6315c3d6533e36d0b496b.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-13-levers/attachments/planner-diagnostics-2cbf2690e91d16800af9953cae499767ede6e445.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-13-levers/attachments/measurements-eeaacc3dc9fbf2ccfee0f850d79bf3536b33b76a.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-13-levers/attachments/events-3cdbe99c55ca57dde5ff66a1bfc076db37d5262b.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "b66f8c49-25b8-4e45-a6ae-95fbb5635581",
+      "generationMs": 17502.75908400002,
+      "observedMs": 17502.75908400002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 17423,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 6897,
+            "usage": {
+              "promptTokens": 1042,
+              "outputTokens": 247,
+              "totalTokens": 1289
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2351,
+            "usage": {
+              "promptTokens": 4389,
+              "outputTokens": 11,
+              "totalTokens": 4400
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1876,
+            "usage": {
+              "promptTokens": 670,
+              "outputTokens": 15,
+              "totalTokens": 685
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1820,
+            "usage": {
+              "promptTokens": 186,
+              "outputTokens": 7,
+              "totalTokens": 193
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1618,
+            "usage": {
+              "promptTokens": 118,
+              "outputTokens": 5,
+              "totalTokens": 123
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2657,
+            "usage": {
+              "promptTokens": 168,
+              "outputTokens": 6,
+              "totalTokens": 174
+            }
+          }
+        ]
+      },
+      "number": 14,
+      "id": "pulleys",
+      "prompt": "Make a pulley lifting a weight so I can see whether more supporting ropes make it easier to lift.",
+      "status": "PASS",
+      "seconds": "21.1",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-14-pulleys/attachments/prompt-bef309167423f5f5084ed1e7023b6437b7a0c61a.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-14-pulleys/attachments/result-3a6d14dd3dd8afd1c483893e9bed4fd12f1fa172.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-14-pulleys/attachments/planner-diagnostics-cda65928f278a170169ed04d78f1709cb934d11f.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-14-pulleys/attachments/measurements-e3d8633fa6bdd7d120afa40f8c77cfa787824c54.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-14-pulleys/attachments/events-dddd123d5aa382e9a379a1233a1c94e40b8c1a6c.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "36f4c5c0-f846-4949-b21a-212c83701c5c",
+      "generationMs": 31961.906791999994,
+      "observedMs": 31961.906791999994,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 31898,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 9474,
+            "usage": {
+              "promptTokens": 1044,
+              "outputTokens": 156,
+              "totalTokens": 1200
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 11435,
+            "usage": {
+              "promptTokens": 4563,
+              "outputTokens": 11,
+              "totalTokens": 4574
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2002,
+            "usage": {
+              "promptTokens": 746,
+              "outputTokens": 15,
+              "totalTokens": 761
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1922,
+            "usage": {
+              "promptTokens": 211,
+              "outputTokens": 6,
+              "totalTokens": 217
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 6788,
+            "usage": {
+              "promptTokens": 236,
+              "outputTokens": 6,
+              "totalTokens": 242
+            }
+          }
+        ]
+      },
+      "number": 15,
+      "id": "bicycle-gears",
+      "prompt": "Help me understand bicycle gears. Let me change the front and back gears and see how fast the wheel turns.",
+      "status": "PASS",
+      "seconds": "35.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/prompt-c1762db5bb5dcf677097d67597d9f9c2705b8cdc.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/result-4d50d4160d9c6580de883da37cbec1b7104345b0.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/planner-diagnostics-d8fe5b16c847ba7d2886691d561208c102ce9311.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/measurements-52e482d0f7d871ba5b555a7540ba8ab9875e9c72.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-15-bicycle-gears/attachments/events-d277067854ec5d906cfda4c5ac1686be04fa81b7.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "5a14c800-5cbc-49cc-b247-7f2c120eaa7b",
+      "generationMs": 25571.680541999987,
+      "observedMs": 25571.680541999987,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 25490,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 7,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 7,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 7240,
+            "usage": {
+              "promptTokens": 1042,
+              "outputTokens": 190,
+              "totalTokens": 1232
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 3242,
+            "usage": {
+              "promptTokens": 4298,
+              "outputTokens": 11,
+              "totalTokens": 4309
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2198,
+            "usage": {
+              "promptTokens": 777,
+              "outputTokens": 18,
+              "totalTokens": 795
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2096,
+            "usage": {
+              "promptTokens": 250,
+              "outputTokens": 7,
+              "totalTokens": 257
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1806,
+            "usage": {
+              "promptTokens": 126,
+              "outputTokens": 7,
+              "totalTokens": 133
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5299,
+            "usage": {
+              "promptTokens": 230,
+              "outputTokens": 7,
+              "totalTokens": 237
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1608,
+            "usage": {
+              "promptTokens": 124,
+              "outputTokens": 5,
+              "totalTokens": 129
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1703,
+            "usage": {
+              "promptTokens": 212,
+              "outputTokens": 6,
+              "totalTokens": 218
+            }
+          }
+        ]
+      },
+      "number": 16,
+      "id": "tipping",
+      "prompt": "Show me when a cabinet will tip over if I push it. I want to try different cabinet sizes.",
+      "status": "PASS",
+      "seconds": "29.1",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-16-tipping/attachments/prompt-88eb2dbd5efca1d20bc2fb6db40813630fe62b08.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-16-tipping/attachments/result-adf180988a792df0b231cac2bae78cd282ff1a66.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-16-tipping/attachments/planner-diagnostics-d16f1501a54b9871a4a3f64ff417949ab0c79ae0.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-16-tipping/attachments/measurements-1b9fc0c46f0f869b33014dc04214c0bd50d4640f.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-16-tipping/attachments/events-ac1c3c78ffb8791adf3001c75a93f431684d2471.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "ac52a7be-6295-44a8-95f6-da112dd71fa6",
+      "generationMs": 15437.140916000004,
+      "observedMs": 15437.140916000004,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 15399,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 7295,
+            "usage": {
+              "promptTokens": 1050,
+              "outputTokens": 272,
+              "totalTokens": 1322
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2373,
+            "usage": {
+              "promptTokens": 4466,
+              "outputTokens": 11,
+              "totalTokens": 4477
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1919,
+            "usage": {
+              "promptTokens": 795,
+              "outputTokens": 15,
+              "totalTokens": 810
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1952,
+            "usage": {
+              "promptTokens": 210,
+              "outputTokens": 6,
+              "totalTokens": 216
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1637,
+            "usage": {
+              "promptTokens": 254,
+              "outputTokens": 6,
+              "totalTokens": 260
+            }
+          }
+        ]
+      },
+      "number": 17,
+      "id": "collisions",
+      "prompt": "Make two carts crash into each other. Let me change their masses and speeds and see what happens after they collide.",
+      "status": "PASS",
+      "seconds": "19.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-17-collisions/attachments/prompt-bad03dd22b85c67d2899e9dac419b643429af002.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-17-collisions/attachments/result-02501c471af147dc8c5940ef57d8408b31e02de1.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-17-collisions/attachments/planner-diagnostics-cc5b1d723809cf53acf7055b90b4d340ebbbea53.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-17-collisions/attachments/measurements-8772bfb417207131753d96dc8a5103784378bcbc.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-17-collisions/attachments/events-cd7e82ae9c44d882965cd2a81c80459ab1902152.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "f564b034-7ae9-4b78-8c60-dc70d3e1ec63",
+      "generationMs": 12648.457082999987,
+      "observedMs": 12648.457082999987,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 12583,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5151,
+            "usage": {
+              "promptTokens": 1030,
+              "outputTokens": 168,
+              "totalTokens": 1198
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2422,
+            "usage": {
+              "promptTokens": 4939,
+              "outputTokens": 11,
+              "totalTokens": 4950
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2929,
+            "usage": {
+              "promptTokens": 912,
+              "outputTokens": 18,
+              "totalTokens": 930
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1895,
+            "usage": {
+              "promptTokens": 228,
+              "outputTokens": 6,
+              "totalTokens": 234
+            }
+          }
+        ]
+      },
+      "number": 18,
+      "id": "hydraulics",
+      "prompt": "I don’t get how a hydraulic lift works. Can you show me?",
+      "status": "PASS",
+      "seconds": "16.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/prompt-622f81da93272aff6ec0edeca05e1b893245e395.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/result-d45aac49a6b1ca0399001e49f16192d01a45a328.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/planner-diagnostics-77e0745fd4bb7df04ce0480412b9ea51393ce2ef.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/measurements-bf180b9c1a2d2e1e723975ddd897a9cc00f357eb.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-18-hydraulics/attachments/events-301fc28bab3eba52b8b7fec5c2bb45171cbabb74.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "a2b8d989-bef1-4f1a-b3d9-8b71aee028dc",
+      "generationMs": 50301.427333,
+      "observedMs": 50301.427333,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 50218,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 16,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/11",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/12",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/13",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/14",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/15",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/16",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/17",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/18",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 16,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5504,
+            "usage": {
+              "promptTokens": 1038,
+              "outputTokens": 189,
+              "totalTokens": 1227
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2197,
+            "usage": {
+              "promptTokens": 4306,
+              "outputTokens": 11,
+              "totalTokens": 4317
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1954,
+            "usage": {
+              "promptTokens": 715,
+              "outputTokens": 12,
+              "totalTokens": 727
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1789,
+            "usage": {
+              "promptTokens": 195,
+              "outputTokens": 6,
+              "totalTokens": 201
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1758,
+            "usage": {
+              "promptTokens": 296,
+              "outputTokens": 7,
+              "totalTokens": 303
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2372,
+            "usage": {
+              "promptTokens": 150,
+              "outputTokens": 10,
+              "totalTokens": 160
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1764,
+            "usage": {
+              "promptTokens": 258,
+              "outputTokens": 7,
+              "totalTokens": 265
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1906,
+            "usage": {
+              "promptTokens": 130,
+              "outputTokens": 9,
+              "totalTokens": 139
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1689,
+            "usage": {
+              "promptTokens": 237,
+              "outputTokens": 7,
+              "totalTokens": 244
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1644,
+            "usage": {
+              "promptTokens": 123,
+              "outputTokens": 5,
+              "totalTokens": 128
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1711,
+            "usage": {
+              "promptTokens": 219,
+              "outputTokens": 7,
+              "totalTokens": 226
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1735,
+            "usage": {
+              "promptTokens": 131,
+              "outputTokens": 8,
+              "totalTokens": 139
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5965,
+            "usage": {
+              "promptTokens": 198,
+              "outputTokens": 7,
+              "totalTokens": 205
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2006,
+            "usage": {
+              "promptTokens": 108,
+              "outputTokens": 5,
+              "totalTokens": 113
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1610,
+            "usage": {
+              "promptTokens": 180,
+              "outputTokens": 7,
+              "totalTokens": 187
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1753,
+            "usage": {
+              "promptTokens": 126,
+              "outputTokens": 7,
+              "totalTokens": 133
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 9601,
+            "usage": {
+              "promptTokens": 160,
+              "outputTokens": 7,
+              "totalTokens": 167
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 3041,
+            "usage": {
+              "promptTokens": 122,
+              "outputTokens": 6,
+              "totalTokens": 128
+            }
+          }
+        ]
+      },
+      "number": 19,
+      "id": "buoyancy",
+      "prompt": "Why does a steel ship float when a solid steel block sinks? Show me both in water.",
+      "status": "PASS",
+      "seconds": "53.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/prompt-a12f17147df81fbaa45b459925b26976b6fc7aca.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/result-9b30b2eeb753087b945dbe8259568bc47508c21e.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/planner-diagnostics-7f1802c4a663b34c32e5f83a74b79efc9b69b62d.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/measurements-01728c2e14b9dcb17e46a1f0e6b0eb396792882d.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-19-buoyancy/attachments/events-103fa567cbbc7ca63c4cc1e82379591a5c19eddf.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "96be00cf-ffac-4767-aa02-e0d4de0b4926",
+      "generationMs": 19520.24983300001,
+      "observedMs": 19520.24983300001,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 19443,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 6739,
+            "usage": {
+              "promptTokens": 1042,
+              "outputTokens": 225,
+              "totalTokens": 1267
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2844,
+            "usage": {
+              "promptTokens": 4409,
+              "outputTokens": 11,
+              "totalTokens": 4420
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2517,
+            "usage": {
+              "promptTokens": 659,
+              "outputTokens": 12,
+              "totalTokens": 671
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2106,
+            "usage": {
+              "promptTokens": 197,
+              "outputTokens": 6,
+              "totalTokens": 203
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1698,
+            "usage": {
+              "promptTokens": 236,
+              "outputTokens": 7,
+              "totalTokens": 243
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1669,
+            "usage": {
+              "promptTokens": 127,
+              "outputTokens": 6,
+              "totalTokens": 133
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1645,
+            "usage": {
+              "promptTokens": 217,
+              "outputTokens": 6,
+              "totalTokens": 223
+            }
+          }
+        ]
+      },
+      "number": 20,
+      "id": "doppler-siren",
+      "prompt": "Show an ambulance passing someone and how the siren frequency changes. Let me change how fast it moves.",
+      "status": "PASS",
+      "seconds": "23.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/prompt-dcc3eedbdf364b996f8f2745089b0435ae5d8929.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/result-1ca1019e761dff07f968605ff1279a4602a51fef.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/planner-diagnostics-f3f56cc276ab087338f9ddbffed7449460930465.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/measurements-d819e2ce8635b0447481aaaeeec160af71cef253.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-20-doppler-siren/attachments/events-f01f03df619ae5ff9b3b9e70377303e647dd0c3d.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "1e8955e5-ed1e-4cb1-87d4-fb500d091c19",
+      "generationMs": 17638.111166000017,
+      "observedMs": 17638.111166000017,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 17575,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5431,
+            "usage": {
+              "promptTokens": 1038,
+              "outputTokens": 161,
+              "totalTokens": 1199
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2907,
+            "usage": {
+              "promptTokens": 4836,
+              "outputTokens": 11,
+              "totalTokens": 4847
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1913,
+            "usage": {
+              "promptTokens": 702,
+              "outputTokens": 15,
+              "totalTokens": 717
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1895,
+            "usage": {
+              "promptTokens": 201,
+              "outputTokens": 6,
+              "totalTokens": 207
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1915,
+            "usage": {
+              "promptTokens": 237,
+              "outputTokens": 7,
+              "totalTokens": 244
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1680,
+            "usage": {
+              "promptTokens": 126,
+              "outputTokens": 8,
+              "totalTokens": 134
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1648,
+            "usage": {
+              "promptTokens": 216,
+              "outputTokens": 6,
+              "totalTokens": 222
+            }
+          }
+        ]
+      },
+      "number": 21,
+      "id": "guitar-string",
+      "prompt": "Help me understand how a guitar string makes different notes. Let me change its length and tension.",
+      "status": "PASS",
+      "seconds": "21.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/prompt-b38c558153c8a790cf69c7ea356aab5485a8c61d.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/result-56ba375330d4e8be7ec2f649c5940adffeaf7e01.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/planner-diagnostics-b5ad4d3fc71b3de4e7229d76d19c91baff3d2205.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/measurements-0b7114917e72f3fe93647226959068516f83eaca.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-21-guitar-string/attachments/events-b1d904ebf5356b971dc2e29f65472d6f4599df0a.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "39cefa82-81fb-4dc3-ac99-91d138a3530a",
+      "generationMs": 25264.58383300004,
+      "observedMs": 25264.58383300004,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 25178,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 9,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/11",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 9,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 6379,
+            "usage": {
+              "promptTokens": 1042,
+              "outputTokens": 225,
+              "totalTokens": 1267
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2285,
+            "usage": {
+              "promptTokens": 4886,
+              "outputTokens": 11,
+              "totalTokens": 4897
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1970,
+            "usage": {
+              "promptTokens": 630,
+              "outputTokens": 12,
+              "totalTokens": 642
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1824,
+            "usage": {
+              "promptTokens": 273,
+              "outputTokens": 6,
+              "totalTokens": 279
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1841,
+            "usage": {
+              "promptTokens": 305,
+              "outputTokens": 7,
+              "totalTokens": 312
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1865,
+            "usage": {
+              "promptTokens": 127,
+              "outputTokens": 6,
+              "totalTokens": 133
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1836,
+            "usage": {
+              "promptTokens": 286,
+              "outputTokens": 7,
+              "totalTokens": 293
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1681,
+            "usage": {
+              "promptTokens": 127,
+              "outputTokens": 6,
+              "totalTokens": 133
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1693,
+            "usage": {
+              "promptTokens": 267,
+              "outputTokens": 7,
+              "totalTokens": 274
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1813,
+            "usage": {
+              "promptTokens": 127,
+              "outputTokens": 6,
+              "totalTokens": 133
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1682,
+            "usage": {
+              "promptTokens": 248,
+              "outputTokens": 6,
+              "totalTokens": 254
+            }
+          }
+        ]
+      },
+      "number": 22,
+      "id": "cooling-drinks",
+      "prompt": "Show a hot drink cooling down. I want to change the room temperature and see how long it takes.",
+      "status": "PASS",
+      "seconds": "28.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/prompt-8523026f2bd1b6b3d021b425c6d9cbf16e946b0c.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/result-8ea995c65434b11f8e36e49bcb7b1f6e53b48388.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/planner-diagnostics-55fb5b85f6cab96ae5128d12fc27db92945f17a0.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/measurements-652ed2057a69f68d2ad978317397a32be3d1c88b.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-22-cooling-drinks/attachments/events-d69b7a3d59aaf309edd90d12c5804dfe735c1578.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "53c2f857-f36b-48fb-a522-6293883e7ea6",
+      "generationMs": 25250.529417000012,
+      "observedMs": 25250.529417000012,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 25175,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 9,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/11",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 9,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 6346,
+            "usage": {
+              "promptTokens": 1046,
+              "outputTokens": 223,
+              "totalTokens": 1269
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2150,
+            "usage": {
+              "promptTokens": 4129,
+              "outputTokens": 11,
+              "totalTokens": 4140
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1980,
+            "usage": {
+              "promptTokens": 707,
+              "outputTokens": 15,
+              "totalTokens": 722
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1638,
+            "usage": {
+              "promptTokens": 208,
+              "outputTokens": 6,
+              "totalTokens": 214
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1804,
+            "usage": {
+              "promptTokens": 293,
+              "outputTokens": 7,
+              "totalTokens": 300
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1873,
+            "usage": {
+              "promptTokens": 134,
+              "outputTokens": 8,
+              "totalTokens": 142
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1780,
+            "usage": {
+              "promptTokens": 272,
+              "outputTokens": 7,
+              "totalTokens": 279
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1813,
+            "usage": {
+              "promptTokens": 134,
+              "outputTokens": 9,
+              "totalTokens": 143
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1867,
+            "usage": {
+              "promptTokens": 250,
+              "outputTokens": 7,
+              "totalTokens": 257
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1908,
+            "usage": {
+              "promptTokens": 120,
+              "outputTokens": 5,
+              "totalTokens": 125
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1804,
+            "usage": {
+              "promptTokens": 232,
+              "outputTokens": 6,
+              "totalTokens": 238
+            }
+          }
+        ]
+      },
+      "number": 23,
+      "id": "magnet-induction",
+      "prompt": "Show me a magnet moving through a coil. What happens to the current if I move it faster or reverse direction?",
+      "status": "PASS",
+      "seconds": "28.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/prompt-c7dcebe097b906dfb16476ee49ff288ff22e119a.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/result-433fc44dc777e49ba4932bbacef37b66204906fb.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/planner-diagnostics-f4733aaea14bad92e94dc0bcd53a29cf5d6057f2.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/measurements-8d4434f933a909bafd6ba2c10253b7a59cb8b370.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-23-magnet-induction/attachments/events-8a409b10c68ab036eab04c6798d201c983c82d4f.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "266acffa-4dc8-4ac1-9ead-4679c4d4733c",
+      "generationMs": 26747.354708000028,
+      "observedMs": 26747.354708000028,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 26678,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 6457,
+            "usage": {
+              "promptTokens": 1044,
+              "outputTokens": 206,
+              "totalTokens": 1250
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2159,
+            "usage": {
+              "promptTokens": 4451,
+              "outputTokens": 11,
+              "totalTokens": 4462
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 10019,
+            "usage": {
+              "promptTokens": 587,
+              "outputTokens": 12,
+              "totalTokens": 599
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1978,
+            "usage": {
+              "promptTokens": 213,
+              "outputTokens": 6,
+              "totalTokens": 219
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1834,
+            "usage": {
+              "promptTokens": 263,
+              "outputTokens": 7,
+              "totalTokens": 270
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1820,
+            "usage": {
+              "promptTokens": 137,
+              "outputTokens": 9,
+              "totalTokens": 146
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2254,
+            "usage": {
+              "promptTokens": 241,
+              "outputTokens": 6,
+              "totalTokens": 247
+            }
+          }
+        ]
+      },
+      "number": 24,
+      "id": "rc-circuit",
+      "prompt": "Make a circuit where a capacitor charges and discharges. Let me change the resistance and see how quickly it happens.",
+      "status": "PASS",
+      "seconds": "30.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/prompt-2157139db955a882b5531abf37dbccbeec97d7ee.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/result-dd4f851368a3713c35045cbe7894544fb1f0e22e.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/planner-diagnostics-46672487df9c6bf8fb4312567a744c2e53e69415.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/measurements-cd60e4a058cf6c4a5455db3de812d11e03d80d67.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-24-rc-circuit/attachments/events-1d28703b353650de43deaec40378bd2c8a1a4fb5.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "eacdf57e-9818-40e6-b5e8-23ce6f118c46",
+      "generationMs": 19455.024957999995,
+      "observedMs": 19455.024957999995,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 19329,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5168,
+            "usage": {
+              "promptTokens": 1018,
+              "outputTokens": 169,
+              "totalTokens": 1187
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2269,
+            "usage": {
+              "promptTokens": 4335,
+              "outputTokens": 11,
+              "totalTokens": 4346
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1979,
+            "usage": {
+              "promptTokens": 680,
+              "outputTokens": 12,
+              "totalTokens": 692
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 9529,
+            "usage": {
+              "promptTokens": 175,
+              "outputTokens": 7,
+              "totalTokens": 182
+            }
+          }
+        ]
+      },
+      "number": 25,
+      "id": "fraction-number-line",
+      "prompt": "Help me understand fractions using a number line.",
+      "status": "PASS",
+      "seconds": "23.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/prompt-cb2d35a00b7560d24fd20d32053036e56c4dbd1e.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/result-1056ba5fdb0ccbf6fecb435a748b156651d0b6bb.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/planner-diagnostics-07c0e265ad59c55d098971c817a4f11af5efb117.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/measurements-3989682f73f97716387a59b362e64928e2635637.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-25-fraction-number-line/attachments/events-3b0cd9da2a5b03e5b6dc88862b6581a5aaa2f337.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "46c38b76-ea43-43b8-9f9d-7090cd3ade45",
+      "generationMs": 16825.77241700003,
+      "observedMs": 16825.77241700003,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 16727,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 7073,
+            "usage": {
+              "promptTokens": 1022,
+              "outputTokens": 172,
+              "totalTokens": 1194
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2208,
+            "usage": {
+              "promptTokens": 5014,
+              "outputTokens": 11,
+              "totalTokens": 5025
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 3792,
+            "usage": {
+              "promptTokens": 1400,
+              "outputTokens": 9,
+              "totalTokens": 1409
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1770,
+            "usage": {
+              "promptTokens": 357,
+              "outputTokens": 6,
+              "totalTokens": 363
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1688,
+            "usage": {
+              "promptTokens": 184,
+              "outputTokens": 7,
+              "totalTokens": 191
+            }
+          }
+        ]
+      },
+      "number": 26,
+      "id": "cell-division",
+      "prompt": "Show me what happens to a cell when it divides.",
+      "status": "PASS",
+      "seconds": "20.3",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-26-cell-division/attachments/prompt-075492ea5eb1113e3e30fa77e049110b40030c0a.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-26-cell-division/attachments/result-d214e51f3497af9d68d400bbbcc9fe9c87f1a1f0.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-26-cell-division/attachments/planner-diagnostics-83810ba9227e8baddba5dfcde7bc9ad566e47e5b.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-26-cell-division/attachments/measurements-d96f769563f5d7ab78c9cd25f4b4ed07d6a0b90f.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-26-cell-division/attachments/events-696acd2f5a020b465fee0575bd041c75afb395db.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "5d761d75-1a5e-47de-92d2-47e945257c08",
+      "generationMs": 22422.956333999988,
+      "observedMs": 22422.956333999988,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 22321,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 6,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 6,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5616,
+            "usage": {
+              "promptTokens": 1012,
+              "outputTokens": 193,
+              "totalTokens": 1205
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2614,
+            "usage": {
+              "promptTokens": 4907,
+              "outputTokens": 11,
+              "totalTokens": 4918
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2871,
+            "usage": {
+              "promptTokens": 767,
+              "outputTokens": 15,
+              "totalTokens": 782
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1797,
+            "usage": {
+              "promptTokens": 258,
+              "outputTokens": 7,
+              "totalTokens": 265
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1658,
+            "usage": {
+              "promptTokens": 219,
+              "outputTokens": 7,
+              "totalTokens": 226
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1738,
+            "usage": {
+              "promptTokens": 147,
+              "outputTokens": 7,
+              "totalTokens": 154
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1746,
+            "usage": {
+              "promptTokens": 111,
+              "outputTokens": 5,
+              "totalTokens": 116
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1753,
+            "usage": {
+              "promptTokens": 129,
+              "outputTokens": 7,
+              "totalTokens": 136
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2359,
+            "usage": {
+              "promptTokens": 111,
+              "outputTokens": 5,
+              "totalTokens": 116
+            }
+          }
+        ]
+      },
+      "number": 27,
+      "id": "area-perimeter",
+      "prompt": "Compare two rectangles and their areas",
+      "status": "PASS",
+      "seconds": "25.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/prompt-29c58dcc038cb3b2ce6b55e85d2590994982441f.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/result-46c2c1f3396858f7296f71519996e036edc37b44.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/planner-diagnostics-a1b518c107e26cda8d32f10df12e940a71f89fde.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/measurements-5fdef30aeae1d53afa59d38754388a5e1f28fa4e.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-27-area-perimeter/attachments/events-329b53f694fe4c84f02630c954330d22141e6981.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "539b895c-922e-45c5-8733-1706e6fbdfe6",
+      "generationMs": 20479.41645800002,
+      "observedMs": 20479.41645800002,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 20394,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 8478,
+            "usage": {
+              "promptTokens": 1046,
+              "outputTokens": 189,
+              "totalTokens": 1235
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2578,
+            "usage": {
+              "promptTokens": 5165,
+              "outputTokens": 11,
+              "totalTokens": 5176
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2264,
+            "usage": {
+              "promptTokens": 1051,
+              "outputTokens": 12,
+              "totalTokens": 1063
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1663,
+            "usage": {
+              "promptTokens": 251,
+              "outputTokens": 6,
+              "totalTokens": 257
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1685,
+            "usage": {
+              "promptTokens": 273,
+              "outputTokens": 7,
+              "totalTokens": 280
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1800,
+            "usage": {
+              "promptTokens": 230,
+              "outputTokens": 7,
+              "totalTokens": 237
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1666,
+            "usage": {
+              "promptTokens": 168,
+              "outputTokens": 6,
+              "totalTokens": 174
+            }
+          }
+        ]
+      },
+      "number": 28,
+      "id": "beer-lambert",
+      "prompt": "Show light passing through a coloured solution. Let me change how concentrated it is and see how much light gets through.",
+      "status": "PASS",
+      "seconds": "23.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/prompt-f0b8edb364c1025f6af021ccc46db19ad6daaee3.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/result-577641aa33b7d8feae11e152cfe847962b5e403d.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/planner-diagnostics-8dd3dede1c95aa1793608628911926316d935fd8.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/measurements-3f719c7c9ec4e72fd022a2885e70ef4b30152a98.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-28-beer-lambert/attachments/events-ea2b4a1e14a6657c5177562283d702986f4d650d.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "ea10848f-5110-4f0c-8cbc-54134f2cd1d8",
+      "generationMs": 13214.45874999999,
+      "observedMs": 13214.45874999999,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 13133,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5203,
+            "usage": {
+              "promptTokens": 1012,
+              "outputTokens": 165,
+              "totalTokens": 1177
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2209,
+            "usage": {
+              "promptTokens": 4402,
+              "outputTokens": 11,
+              "totalTokens": 4413
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2071,
+            "usage": {
+              "promptTokens": 583,
+              "outputTokens": 12,
+              "totalTokens": 595
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1684,
+            "usage": {
+              "promptTokens": 169,
+              "outputTokens": 7,
+              "totalTokens": 176
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1870,
+            "usage": {
+              "promptTokens": 160,
+              "outputTokens": 6,
+              "totalTokens": 166
+            }
+          }
+        ]
+      },
+      "number": 29,
+      "id": "arithmetic",
+      "prompt": "Help me learn addition with circles",
+      "status": "PASS",
+      "seconds": "16.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/prompt-66b95302032d8ed6d0afb3185a57994ba0e3edd1.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/result-aaa9a45c75ead7d196e1afd568a8e6fc7a0d5309.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/planner-diagnostics-3b8e39b02a0080ff012997935493843b52c3cb72.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/measurements-7d59ca0c0f0bd5cffc8f09176f365a7a159e4de1.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-29-arithmetic/attachments/events-a31fa8fd33b2e9a7e3a2fdf0c42077252a4ddedf.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "ee78271b-099a-4d37-82d5-3f3f5c65fa54",
+      "generationMs": 32474.667083000066,
+      "observedMs": 32474.667083000066,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 32379,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5896,
+            "usage": {
+              "promptTokens": 1032,
+              "outputTokens": 195,
+              "totalTokens": 1227
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2484,
+            "usage": {
+              "promptTokens": 4494,
+              "outputTokens": 11,
+              "totalTokens": 4505
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 9730,
+            "usage": {
+              "promptTokens": 972,
+              "outputTokens": 12,
+              "totalTokens": 984
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1758,
+            "usage": {
+              "promptTokens": 204,
+              "outputTokens": 6,
+              "totalTokens": 210
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1784,
+            "usage": {
+              "promptTokens": 279,
+              "outputTokens": 7,
+              "totalTokens": 286
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1874,
+            "usage": {
+              "promptTokens": 249,
+              "outputTokens": 7,
+              "totalTokens": 256
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2144,
+            "usage": {
+              "promptTokens": 216,
+              "outputTokens": 7,
+              "totalTokens": 223
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1819,
+            "usage": {
+              "promptTokens": 160,
+              "outputTokens": 7,
+              "totalTokens": 167
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 3150,
+            "usage": {
+              "promptTokens": 118,
+              "outputTokens": 5,
+              "totalTokens": 123
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1615,
+            "usage": {
+              "promptTokens": 142,
+              "outputTokens": 6,
+              "totalTokens": 148
+            }
+          }
+        ]
+      },
+      "number": 30,
+      "id": "gas-equilibrium",
+      "prompt": "Show me a gas reaction at equilibrium. What happens if I squeeze the container?",
+      "status": "PASS",
+      "seconds": "35.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/prompt-67b2485c8fc6efc4416d45a8cfff9d6ecb8c298a.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/result-29501abe1c0e4cd6ce99a7b7deca1b86d65249d2.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/planner-diagnostics-009cd0c93fac0a2c2105168029468689811cdc26.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/measurements-3af5944b9d04ff38affeb8dc9de69c964bd6eed8.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-30-gas-equilibrium/attachments/events-01e3a7e2a122d96c355af91bf4b9713169b3be1a.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "909472e4-04c6-457b-999e-b1d3b383c7d0",
+      "generationMs": 26168.567875000066,
+      "observedMs": 26168.567875000066,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 26073,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 8,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/11",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/12",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 8,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5617,
+            "usage": {
+              "promptTokens": 1042,
+              "outputTokens": 191,
+              "totalTokens": 1233
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2386,
+            "usage": {
+              "promptTokens": 5019,
+              "outputTokens": 11,
+              "totalTokens": 5030
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2078,
+            "usage": {
+              "promptTokens": 1042,
+              "outputTokens": 18,
+              "totalTokens": 1060
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1741,
+            "usage": {
+              "promptTokens": 293,
+              "outputTokens": 7,
+              "totalTokens": 300
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1748,
+            "usage": {
+              "promptTokens": 265,
+              "outputTokens": 7,
+              "totalTokens": 272
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1607,
+            "usage": {
+              "promptTokens": 232,
+              "outputTokens": 7,
+              "totalTokens": 239
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1744,
+            "usage": {
+              "promptTokens": 185,
+              "outputTokens": 7,
+              "totalTokens": 192
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1653,
+            "usage": {
+              "promptTokens": 127,
+              "outputTokens": 7,
+              "totalTokens": 134
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1860,
+            "usage": {
+              "promptTokens": 165,
+              "outputTokens": 7,
+              "totalTokens": 172
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1562,
+            "usage": {
+              "promptTokens": 128,
+              "outputTokens": 5,
+              "totalTokens": 133
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2197,
+            "usage": {
+              "promptTokens": 147,
+              "outputTokens": 7,
+              "totalTokens": 154
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1790,
+            "usage": {
+              "promptTokens": 122,
+              "outputTokens": 5,
+              "totalTokens": 127
+            }
+          }
+        ]
+      },
+      "number": 31,
+      "id": "phase-change",
+      "prompt": "Let me heat a substance and change the pressure to see when it becomes a solid, liquid or gas.",
+      "status": "PASS",
+      "seconds": "29.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-31-phase-change/attachments/prompt-114af52e5de4b9ce86b79d956124dc97032c20dc.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-31-phase-change/attachments/result-e2e2280a0962a5013e7c631e08ab990a83d86f00.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-31-phase-change/attachments/planner-diagnostics-f491c33a6405bb867bc4e95d437464039c481649.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-31-phase-change/attachments/measurements-312eb6f87d0510937b996f83dfdab4f4d5555245.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-31-phase-change/attachments/events-889ccdfa29f47b9c8ca50af709ea42f1d8dc41e9.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "3b2eb2f3-ad1c-4656-b951-de8fb29589af",
+      "generationMs": 9137.516208000015,
+      "observedMs": 9137.516208000015,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 9035,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 4655,
+            "usage": {
+              "promptTokens": 1026,
+              "outputTokens": 148,
+              "totalTokens": 1174
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2326,
+            "usage": {
+              "promptTokens": 5302,
+              "outputTokens": 11,
+              "totalTokens": 5313
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1901,
+            "usage": {
+              "promptTokens": 533,
+              "outputTokens": 15,
+              "totalTokens": 548
+            }
+          }
+        ]
+      },
+      "number": 32,
+      "id": "coordinates",
+      "prompt": "Help me practise plotting points on an x and y grid.",
+      "status": "PASS",
+      "seconds": "12.6",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-32-coordinates/attachments/prompt-3263c2924b9faf85010a5e32f35dc9956d471a89.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-32-coordinates/attachments/result-dfd1185c72df22e43d36e4c23abe9dd3d90cc52f.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-32-coordinates/attachments/planner-diagnostics-ac0aa4a88e879c994c1071e01eae10ecfdd85e53.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-32-coordinates/attachments/measurements-f4d5a7ee69159959ca5569d1b1c219208de8b67b.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-32-coordinates/attachments/events-eb267d59ad52cd8db545646c7a76e6b7e4322e78.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "620e64d4-0f97-4c66-b1f4-d14676622476",
+      "generationMs": 15461.56716700003,
+      "observedMs": 15461.56716700003,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 15388,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 5,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/4",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 5,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5406,
+            "usage": {
+              "promptTokens": 1050,
+              "outputTokens": 184,
+              "totalTokens": 1234
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2419,
+            "usage": {
+              "promptTokens": 5006,
+              "outputTokens": 11,
+              "totalTokens": 5017
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2223,
+            "usage": {
+              "promptTokens": 812,
+              "outputTokens": 15,
+              "totalTokens": 827
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1634,
+            "usage": {
+              "promptTokens": 195,
+              "outputTokens": 7,
+              "totalTokens": 202
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1871,
+            "usage": {
+              "promptTokens": 129,
+              "outputTokens": 5,
+              "totalTokens": 134
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1717,
+            "usage": {
+              "promptTokens": 177,
+              "outputTokens": 6,
+              "totalTokens": 183
+            }
+          }
+        ]
+      },
+      "number": 33,
+      "id": "water-pressure",
+      "prompt": "Show water coming out of a hole in a bottle. Let me change the water level and see how far the stream goes.",
+      "status": "PASS",
+      "seconds": "18.9",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/prompt-d77b536ebacfdb0ced29b3648e854800d58c6fe5.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/result-83b2efc66008807707b93fc042be774a67bf7363.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/planner-diagnostics-18f9d515f8934c72f9258344f522da0cb5dac99f.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/measurements-638801e4dae5955f581fa5025b32462cf3aea067.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-33-water-pressure/attachments/events-32e4da4378bba80513a8688c8eadf7e798164970.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "2302c315-54de-453d-84ad-120f34d280ba",
+      "generationMs": 40293.80850000004,
+      "observedMs": 40293.80850000004,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 40150,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 11,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/11",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/12",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/13",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/14",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 11,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5920,
+            "usage": {
+              "promptTokens": 1034,
+              "outputTokens": 204,
+              "totalTokens": 1238
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2232,
+            "usage": {
+              "promptTokens": 4995,
+              "outputTokens": 11,
+              "totalTokens": 5006
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1895,
+            "usage": {
+              "promptTokens": 1025,
+              "outputTokens": 12,
+              "totalTokens": 1037
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2117,
+            "usage": {
+              "promptTokens": 311,
+              "outputTokens": 6,
+              "totalTokens": 317
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1961,
+            "usage": {
+              "promptTokens": 198,
+              "outputTokens": 7,
+              "totalTokens": 205
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2216,
+            "usage": {
+              "promptTokens": 230,
+              "outputTokens": 7,
+              "totalTokens": 237
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 10027,
+            "usage": {
+              "promptTokens": 113,
+              "outputTokens": 5,
+              "totalTokens": 118
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2334,
+            "usage": {
+              "promptTokens": 212,
+              "outputTokens": 7,
+              "totalTokens": 219
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1731,
+            "usage": {
+              "promptTokens": 207,
+              "outputTokens": 5,
+              "totalTokens": 212
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1632,
+            "usage": {
+              "promptTokens": 194,
+              "outputTokens": 7,
+              "totalTokens": 201
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1849,
+            "usage": {
+              "promptTokens": 145,
+              "outputTokens": 13,
+              "totalTokens": 158
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1875,
+            "usage": {
+              "promptTokens": 168,
+              "outputTokens": 7,
+              "totalTokens": 175
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1699,
+            "usage": {
+              "promptTokens": 120,
+              "outputTokens": 5,
+              "totalTokens": 125
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2454,
+            "usage": {
+              "promptTokens": 150,
+              "outputTokens": 6,
+              "totalTokens": 156
+            }
+          }
+        ]
+      },
+      "number": 34,
+      "id": "voting-systems",
+      "prompt": "Can the same votes give different winners? Show me an election with different voting systems.",
+      "status": "PASS",
+      "seconds": "43.8",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/prompt-20e8c421e21cf20c46fa62e5a6705f91b28991d1.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/result-81e0b4f7b2481f260743d58e4dc4b94a43d761ec.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/planner-diagnostics-3b43b2679a078954fe5fe2df755aedeb01376294.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/measurements-53b05eda81ab9b88b94964bf6935bb3b96859224.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-34-voting-systems/attachments/events-b276f6196476c530d0ec4f0719b46834bb71bec4.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "c9eb33d0-30f3-49fb-82b2-98b794cee6b9",
+      "generationMs": 12119.382458999986,
+      "observedMs": 12119.382458999986,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 12047,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 3707,
+            "usage": {
+              "promptTokens": 1014,
+              "outputTokens": 99,
+              "totalTokens": 1113
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2286,
+            "usage": {
+              "promptTokens": 3928,
+              "outputTokens": 11,
+              "totalTokens": 3939
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1953,
+            "usage": {
+              "promptTokens": 607,
+              "outputTokens": 12,
+              "totalTokens": 619
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1834,
+            "usage": {
+              "promptTokens": 165,
+              "outputTokens": 6,
+              "totalTokens": 171
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1646,
+            "usage": {
+              "promptTokens": 172,
+              "outputTokens": 7,
+              "totalTokens": 179
+            }
+          }
+        ]
+      },
+      "number": 35,
+      "id": "counting",
+      "prompt": "Help me practise counting circles.",
+      "status": "PASS",
+      "seconds": "15.5",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-35-counting/attachments/prompt-ee7eca4047169c277cd5a09790e56c9f40695338.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-35-counting/attachments/result-1657599965b25ea4bc1cc1d90d7684ad57bdbfc2.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-35-counting/attachments/planner-diagnostics-28380d75afa12ecefb0a9cb508dffa4d41dbba9c.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-35-counting/attachments/measurements-6bce77c6b52307d5b2dd18af88acdf8344646360.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-35-counting/attachments/events-919d36b0e6dc106932ea3456eb35a042ce62c4af.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "e275c38b-fcbf-40b3-9793-52c1138f4700",
+      "generationMs": 13293.814167000004,
+      "observedMs": 13293.814167000004,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 13214,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 2,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 2,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 6049,
+            "usage": {
+              "promptTokens": 1048,
+              "outputTokens": 206,
+              "totalTokens": 1254
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2373,
+            "usage": {
+              "promptTokens": 4596,
+              "outputTokens": 11,
+              "totalTokens": 4607
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2073,
+            "usage": {
+              "promptTokens": 652,
+              "outputTokens": 12,
+              "totalTokens": 664
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2560,
+            "usage": {
+              "promptTokens": 187,
+              "outputTokens": 7,
+              "totalTokens": 194
+            }
+          }
+        ]
+      },
+      "number": 36,
+      "id": "equal-groups",
+      "prompt": "Show me multiplication with equal groups of dots. Let me change the number of groups and how many dots are in each.",
+      "status": "PASS",
+      "seconds": "17.0",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/prompt-f7f99538c29880301471ba0d24571ea60bdafc9e.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/result-684c99f273e5aa366dd70e7d30f3cbf9dd63bd0b.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/planner-diagnostics-f1633e64306a763f6d6b5d9594e0217c1bc846b2.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/measurements-5eb8387c0d070a8b6e5d4f69a7fba23370c9ce8d.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-36-equal-groups/attachments/events-f127fc5276dc32b850bfb6b2eba4724550b0f9a9.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "1f9ba0e9-07f0-438d-bfc5-cbcc0e47c362",
+      "generationMs": 27116.30895799992,
+      "observedMs": 27116.30895799992,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 27008,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 9,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/11",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/12",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 9,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 5755,
+            "usage": {
+              "promptTokens": 1028,
+              "outputTokens": 200,
+              "totalTokens": 1228
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2228,
+            "usage": {
+              "promptTokens": 4960,
+              "outputTokens": 11,
+              "totalTokens": 4971
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1960,
+            "usage": {
+              "promptTokens": 1224,
+              "outputTokens": 15,
+              "totalTokens": 1239
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1696,
+            "usage": {
+              "promptTokens": 250,
+              "outputTokens": 6,
+              "totalTokens": 256
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1740,
+            "usage": {
+              "promptTokens": 221,
+              "outputTokens": 7,
+              "totalTokens": 228
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1824,
+            "usage": {
+              "promptTokens": 203,
+              "outputTokens": 7,
+              "totalTokens": 210
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2071,
+            "usage": {
+              "promptTokens": 118,
+              "outputTokens": 6,
+              "totalTokens": 124
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1813,
+            "usage": {
+              "promptTokens": 184,
+              "outputTokens": 7,
+              "totalTokens": 191
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1770,
+            "usage": {
+              "promptTokens": 118,
+              "outputTokens": 5,
+              "totalTokens": 123
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1741,
+            "usage": {
+              "promptTokens": 166,
+              "outputTokens": 7,
+              "totalTokens": 173
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1619,
+            "usage": {
+              "promptTokens": 124,
+              "outputTokens": 8,
+              "totalTokens": 132
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2582,
+            "usage": {
+              "promptTokens": 145,
+              "outputTokens": 6,
+              "totalTokens": 151
+            }
+          }
+        ]
+      },
+      "number": 37,
+      "id": "pendulum",
+      "prompt": "Make a pendulum swing where I can adjust its starting angle and length",
+      "status": "PASS",
+      "seconds": "31.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-37-pendulum/attachments/prompt-f5d2f894fe8ed1806cd93f3886245d0ad660d267.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-37-pendulum/attachments/result-3f67837ed460e18eef371072eaf247f7b3392bf4.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-37-pendulum/attachments/planner-diagnostics-96be6689dc63edc989f38f9434c3d6ebb141134c.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-37-pendulum/attachments/measurements-69c937b11118e933b4c9d87fccdf16d9d815c133.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-37-pendulum/attachments/events-0486ac0aae629d1a097e9e9fdc4b9d417b207575.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "77fd1aaa-45ad-4d98-803c-03b6939fe9bd",
+      "generationMs": 50898.651375000016,
+      "observedMs": 50898.651375000016,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 50811,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 37632,
+            "usage": {
+              "promptTokens": 1026,
+              "outputTokens": 170,
+              "totalTokens": 1196
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2972,
+            "usage": {
+              "promptTokens": 4470,
+              "outputTokens": 11,
+              "totalTokens": 4481
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2202,
+            "usage": {
+              "promptTokens": 620,
+              "outputTokens": 15,
+              "totalTokens": 635
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2073,
+            "usage": {
+              "promptTokens": 191,
+              "outputTokens": 6,
+              "totalTokens": 197
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1899,
+            "usage": {
+              "promptTokens": 218,
+              "outputTokens": 7,
+              "totalTokens": 225
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1876,
+            "usage": {
+              "promptTokens": 193,
+              "outputTokens": 7,
+              "totalTokens": 200
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1892,
+            "usage": {
+              "promptTokens": 297,
+              "outputTokens": 6,
+              "totalTokens": 303
+            }
+          }
+        ]
+      },
+      "number": 38,
+      "id": "slope",
+      "prompt": "Make me a line where I can adjust its slope and y axis",
+      "status": "PASS",
+      "seconds": "54.4",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-38-slope/attachments/prompt-10fe57cba7dc92bcdf1165fef1ca0f360166ea56.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-38-slope/attachments/result-89f73875fa43e3916abfdb86b1042993e503f94d.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-38-slope/attachments/planner-diagnostics-e1bc9a582387333f56c9a45cb9903296124f773e.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-38-slope/attachments/measurements-03a0bae25bd8fc8d0fa82d54e0510b516dba247d.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-38-slope/attachments/events-754e55d724665f416624ccd6bf2c25def9a8bb17.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "c1e2750a-1f08-487e-b7a9-84ffb666e9ff",
+      "generationMs": 22276.812000000034,
+      "observedMs": 22276.812000000034,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 22138,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 3,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/5",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 3,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 12070,
+            "usage": {
+              "promptTokens": 1048,
+              "outputTokens": 184,
+              "totalTokens": 1232
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2706,
+            "usage": {
+              "promptTokens": 5180,
+              "outputTokens": 11,
+              "totalTokens": 5191
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2895,
+            "usage": {
+              "promptTokens": 1212,
+              "outputTokens": 18,
+              "totalTokens": 1230
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2120,
+            "usage": {
+              "promptTokens": 426,
+              "outputTokens": 7,
+              "totalTokens": 433
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2068,
+            "usage": {
+              "promptTokens": 170,
+              "outputTokens": 6,
+              "totalTokens": 176
+            }
+          }
+        ]
+      },
+      "number": 39,
+      "id": "bridge",
+      "prompt": "Make a bridge with a load on it. Let me move the load and see which parts are under the most stress.",
+      "status": "PASS",
+      "seconds": "25.7",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-39-bridge/attachments/prompt-a365904d636413d5f5573b64762924a4c0822ac0.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-39-bridge/attachments/result-e00a20cade433686123e0946192270f570351a4b.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-39-bridge/attachments/planner-diagnostics-f559239314215fae3ba39342615dc173ecb925e3.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-39-bridge/attachments/measurements-ff80fa1719026991ee33798c3629e2e8fb105d5c.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-39-bridge/attachments/events-8157bb3275c1ce87fdc035abfc5937beb1af1a5e.jsonl"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "requestId": "7b414581-2113-47e9-bade-9f9099236cfe",
+      "generationMs": 32536.776249999995,
+      "observedMs": 32536.776249999995,
+      "measurements": {
+        "terminal": "created",
+        "elapsedMs": 32411,
+        "validationReached": true,
+        "firstPass": true,
+        "validationStages": 12,
+        "firstValidatorOutcomes": [
+          {
+            "stage": "assembly_settings/6",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/7",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/8",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/9",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/10",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/11",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/12",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/13",
+            "passed": true
+          },
+          {
+            "stage": "assembly_settings/14",
+            "passed": true
+          },
+          {
+            "stage": "assembly_setting_value/15",
+            "passed": true
+          },
+          {
+            "stage": "assembly.document",
+            "passed": true
+          },
+          {
+            "stage": "final.document",
+            "passed": true
+          }
+        ],
+        "validationChecks": 12,
+        "composerFeedback": 0,
+        "schemaRepairs": 0,
+        "deterministicRepairs": 0,
+        "inference": [
+          {
+            "stage": "teaching_intent",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 6421,
+            "usage": {
+              "promptTokens": 1034,
+              "outputTokens": 216,
+              "totalTokens": 1250
+            }
+          },
+          {
+            "stage": "assembly_plan",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2368,
+            "usage": {
+              "promptTokens": 4413,
+              "outputTokens": 11,
+              "totalTokens": 4424
+            }
+          },
+          {
+            "stage": "assembly_input_requirement",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2175,
+            "usage": {
+              "promptTokens": 1169,
+              "outputTokens": 24,
+              "totalTokens": 1193
+            }
+          },
+          {
+            "stage": "assembly_controls",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 2138,
+            "usage": {
+              "promptTokens": 355,
+              "outputTokens": 6,
+              "totalTokens": 361
+            }
+          },
+          {
+            "stage": "assembly_observations",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1715,
+            "usage": {
+              "promptTokens": 257,
+              "outputTokens": 7,
+              "totalTokens": 264
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1674,
+            "usage": {
+              "promptTokens": 225,
+              "outputTokens": 7,
+              "totalTokens": 232
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1847,
+            "usage": {
+              "promptTokens": 111,
+              "outputTokens": 5,
+              "totalTokens": 116
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1732,
+            "usage": {
+              "promptTokens": 207,
+              "outputTokens": 7,
+              "totalTokens": 214
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1739,
+            "usage": {
+              "promptTokens": 105,
+              "outputTokens": 5,
+              "totalTokens": 110
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1683,
+            "usage": {
+              "promptTokens": 189,
+              "outputTokens": 7,
+              "totalTokens": 196
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1619,
+            "usage": {
+              "promptTokens": 126,
+              "outputTokens": 8,
+              "totalTokens": 134
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1685,
+            "usage": {
+              "promptTokens": 168,
+              "outputTokens": 7,
+              "totalTokens": 175
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1636,
+            "usage": {
+              "promptTokens": 113,
+              "outputTokens": 5,
+              "totalTokens": 118
+            }
+          },
+          {
+            "stage": "assembly_settings",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1848,
+            "usage": {
+              "promptTokens": 150,
+              "outputTokens": 7,
+              "totalTokens": 157
+            }
+          },
+          {
+            "stage": "assembly_setting_value",
+            "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+            "elapsedMs": 1886,
+            "usage": {
+              "promptTokens": 114,
+              "outputTokens": 5,
+              "totalTokens": 119
+            }
+          }
+        ]
+      },
+      "number": 40,
+      "id": "shared-fishing-lake",
+      "prompt": "Make a fishing lake where I can see what happens if everyone catches too many fish.",
+      "status": "PASS",
+      "seconds": "36.2",
+      "files": [
+        {
+          "name": "prompt",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/prompt-96d08d1a3e116ea1a9012f2cfd110c98fa0cc2cc.png"
+        },
+        {
+          "name": "result",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/result-6802cd45860369d7d9f4cd6d31c4aef9a242b129.png"
+        },
+        {
+          "name": "planner-diagnostics",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/planner-diagnostics-dcbdd75fd269333e27042551dfbc6539794b500a.json"
+        },
+        {
+          "name": "measurements",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/measurements-cdc2d0632dea2aa90edba39435fb05b9a2930282.json"
+        },
+        {
+          "name": "events",
+          "path": "artifacts/benchmark-40-shared-fishing-lake/attachments/events-f6ada3c96666cac405e3c94028ba29858ca7db72.jsonl"
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "summary": {
+    "total": 40,
+    "passed": 39,
+    "successRate": 0.975,
+    "firstPass": 39,
+    "firstPassRate": 0.975,
+    "validationReached": 39,
+    "firstPassAmongValidated": 1,
+    "unknownMeasurements": 0,
+    "zeroRepairCompletions": 39,
+    "latencySamples": 39,
+    "medianMs": 24086.266959,
+    "p95Ms": 50301.427333,
+    "statuses": {
+      "PASS": 39,
+      "ERROR": 1
+    }
+  }
+}

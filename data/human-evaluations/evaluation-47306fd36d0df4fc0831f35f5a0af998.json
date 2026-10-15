@@ -1,0 +1,401 @@
+{
+  "protocolVersion": 2,
+  "evaluatorId": "6f768b669f46fc2643e5ddab0ba43145",
+  "exportedAt": "2026-10-14T12:23:27.899Z",
+  "completedQuestions": 39,
+  "totalQuestions": 40,
+  "votes": [
+    {
+      "simulationId": "projectile",
+      "prompt": "Show me 2 projectiles distance comparison based on angles",
+      "selectedModels": [
+        "apertus-1.5-8b",
+        "gpt-6-luna",
+        "mistral-small-3.1-24b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:10:04.970Z"
+    },
+    {
+      "simulationId": "price-elasticity",
+      "prompt": "Can you show me how changing the price affects how much people buy?",
+      "selectedModels": [
+        "mistral-small-3.1-24b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:10:37.575Z"
+    },
+    {
+      "simulationId": "pythagorean",
+      "prompt": "I have a ladder leaning against a wall. Let me change how far the bottom is from the wall and how high it reaches to see how long the ladder needs to be.",
+      "selectedModels": [
+        "qwen3-32b",
+        "qwen3-8b",
+        "gpt-6.1-sol",
+        "gpt-6-luna",
+        "llama-3.1-8b",
+        "apertus-1.5-8b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:11:12.803Z"
+    },
+    {
+      "simulationId": "acid-base-titration",
+      "prompt": "Show me what happens to the pH when I slowly add a base to an acid.",
+      "selectedModels": [
+        "qwen3-32b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:11:31.218Z"
+    },
+    {
+      "simulationId": "cost-and-profit",
+      "prompt": "Make a small business example where I can change how much we produce and see our costs and profit.",
+      "selectedModels": [
+        "mistral-small-3.1-24b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:11:38.537Z"
+    },
+    {
+      "simulationId": "tree-height",
+      "prompt": "How can I work out the height of a tree without climbing it? Show me using the angle from where I stand.",
+      "selectedModels": [
+        "llama-3.1-8b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:11:54.388Z"
+    },
+    {
+      "simulationId": "galvanic-cell",
+      "prompt": "Show me how a battery made with two different metals works. Let me change the solution concentrations and see what happens to the voltage.",
+      "selectedModels": [
+        "qwen3-32b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:12:20.366Z"
+    },
+    {
+      "simulationId": "craft-production",
+      "prompt": "Compare making things by hand with using an assembly line. I want to see which produces more in the same time.",
+      "selectedModels": [
+        "apertus-1.5-8b",
+        "qwen3-32b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:12:32.934Z"
+    },
+    {
+      "simulationId": "tile-patterns",
+      "prompt": "Why can hexagons cover a floor without gaps but regular pentagons can’t? Let me try both.",
+      "selectedModels": [],
+      "nonePreferred": true,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:13:27.235Z"
+    },
+    {
+      "simulationId": "wildfire",
+      "prompt": "Show a wildfire spreading through a forest. Can I change how much dry vegetation there is?",
+      "selectedModels": [
+        "apertus-1.5-8b",
+        "qwen3-8b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:13:51.563Z"
+    },
+    {
+      "simulationId": "can-material",
+      "prompt": "I want to design a can that holds the same amount but uses less metal. Let me try different widths and heights.",
+      "selectedModels": [
+        "mistral-small-3.1-24b",
+        "apertus-1.5-8b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:14:12.826Z"
+    },
+    {
+      "simulationId": "survey-sampling",
+      "prompt": "How many people should I survey? Show me how the results change with a small sample versus a bigger one.",
+      "selectedModels": [
+        "llama-3.1-8b",
+        "mistral-small-3.1-24b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:14:30.026Z"
+    },
+    {
+      "simulationId": "levers",
+      "prompt": "Show me how a crowbar helps lift something heavy. Let me move the pivot.",
+      "selectedModels": [
+        "gpt-6.1-sol"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:15:46.533Z"
+    },
+    {
+      "simulationId": "pulleys",
+      "prompt": "Make a pulley lifting a weight so I can see whether more supporting ropes make it easier to lift.",
+      "selectedModels": [],
+      "nonePreferred": true,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:15:54.464Z"
+    },
+    {
+      "simulationId": "bicycle-gears",
+      "prompt": "Help me understand bicycle gears. Let me change the front and back gears and see how fast the wheel turns.",
+      "selectedModels": [],
+      "nonePreferred": true,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:16:08.422Z"
+    },
+    {
+      "simulationId": "collisions",
+      "prompt": "Make two carts crash into each other. Let me change their masses and speeds and see what happens after they collide.",
+      "selectedModels": [
+        "llama-3.1-8b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:16:37.519Z"
+    },
+    {
+      "simulationId": "hydraulics",
+      "prompt": "I don’t get how a hydraulic lift works. Can you show me?",
+      "selectedModels": [
+        "qwen3-8b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:16:47.848Z"
+    },
+    {
+      "simulationId": "buoyancy",
+      "prompt": "Why does a steel ship float when a solid steel block sinks? Show me both in water.",
+      "selectedModels": [],
+      "nonePreferred": true,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:16:56.761Z"
+    },
+    {
+      "simulationId": "doppler-siren",
+      "prompt": "Show an ambulance passing someone and how the siren frequency changes. Let me change how fast it moves.",
+      "selectedModels": [
+        "gpt-6.1-sol"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:17:10.071Z"
+    },
+    {
+      "simulationId": "guitar-string",
+      "prompt": "Help me understand how a guitar string makes different notes. Let me change its length and tension.",
+      "selectedModels": [
+        "qwen3-8b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:17:13.663Z"
+    },
+    {
+      "simulationId": "cooling-drinks",
+      "prompt": "Show a hot drink cooling down. I want to change the room temperature and see how long it takes.",
+      "selectedModels": [],
+      "nonePreferred": true,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:17:33.119Z"
+    },
+    {
+      "simulationId": "magnet-induction",
+      "prompt": "Show me a magnet moving through a coil. What happens to the current if I move it faster or reverse direction?",
+      "selectedModels": [
+        "qwen3-32b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:17:45.603Z"
+    },
+    {
+      "simulationId": "rc-circuit",
+      "prompt": "Make a circuit where a capacitor charges and discharges. Let me change the resistance and see how quickly it happens.",
+      "selectedModels": [
+        "llama-3.1-8b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:19:13.376Z"
+    },
+    {
+      "simulationId": "fraction-number-line",
+      "prompt": "Help me understand fractions using a number line.",
+      "selectedModels": [
+        "qwen3-32b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:19:21.726Z"
+    },
+    {
+      "simulationId": "cell-division",
+      "prompt": "Show me what happens to a cell when it divides.",
+      "selectedModels": [
+        "llama-3.1-8b",
+        "qwen3-8b",
+        "apertus-1.5-8b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:19:33.609Z"
+    },
+    {
+      "simulationId": "area-perimeter",
+      "prompt": "Compare two rectangles and their areas",
+      "selectedModels": [
+        "gpt-6-luna"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:19:43.988Z"
+    },
+    {
+      "simulationId": "beer-lambert",
+      "prompt": "Show light passing through a coloured solution. Let me change how concentrated it is and see how much light gets through.",
+      "selectedModels": [
+        "llama-3.1-8b",
+        "gpt-6-luna",
+        "mistral-small-3.1-24b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:19:55.745Z"
+    },
+    {
+      "simulationId": "arithmetic",
+      "prompt": "Help me learn addition with circles",
+      "selectedModels": [
+        "mistral-small-3.1-24b",
+        "qwen3-32b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:20:02.857Z"
+    },
+    {
+      "simulationId": "gas-equilibrium",
+      "prompt": "Show me a gas reaction at equilibrium. What happens if I squeeze the container?",
+      "selectedModels": [
+        "llama-3.1-8b",
+        "mistral-small-3.1-24b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:20:09.228Z"
+    },
+    {
+      "simulationId": "phase-change",
+      "prompt": "Let me heat a substance and change the pressure to see when it becomes a solid, liquid or gas.",
+      "selectedModels": [
+        "mistral-small-3.1-24b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:20:17.694Z"
+    },
+    {
+      "simulationId": "coordinates",
+      "prompt": "Help me practise plotting points on an x and y grid.",
+      "selectedModels": [],
+      "nonePreferred": true,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:20:24.691Z"
+    },
+    {
+      "simulationId": "water-pressure",
+      "prompt": "Show water coming out of a hole in a bottle. Let me change the water level and see how far the stream goes.",
+      "selectedModels": [
+        "llama-3.1-8b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:20:29.052Z"
+    },
+    {
+      "simulationId": "voting-systems",
+      "prompt": "Can the same votes give different winners? Show me an election with different voting systems.",
+      "selectedModels": [],
+      "nonePreferred": true,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:20:43.731Z"
+    },
+    {
+      "simulationId": "counting",
+      "prompt": "Help me practise counting circles.",
+      "selectedModels": [],
+      "nonePreferred": true,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:20:49.667Z"
+    },
+    {
+      "simulationId": "equal-groups",
+      "prompt": "Show me multiplication with equal groups of dots. Let me change the number of groups and how many dots are in each.",
+      "selectedModels": [
+        "mistral-small-3.1-24b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:21:00.619Z"
+    },
+    {
+      "simulationId": "pendulum",
+      "prompt": "Make a pendulum swing where I can adjust its starting angle and length",
+      "selectedModels": [
+        "qwen3-32b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:22:37.231Z"
+    },
+    {
+      "simulationId": "slope",
+      "prompt": "Make me a line where I can adjust its slope and y axis",
+      "selectedModels": [
+        "qwen3-32b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:22:46.061Z"
+    },
+    {
+      "simulationId": "bridge",
+      "prompt": "Make a bridge with a load on it. Let me move the load and see which parts are under the most stress.",
+      "selectedModels": [
+        "mistral-small-3.1-24b",
+        "qwen3-32b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:23:15.350Z"
+    },
+    {
+      "simulationId": "shared-fishing-lake",
+      "prompt": "Make a fishing lake where I can see what happens if everyone catches too many fish.",
+      "selectedModels": [
+        "llama-3.1-8b"
+      ],
+      "nonePreferred": false,
+      "reviewed": true,
+      "updatedAt": "2026-10-14T12:23:25.378Z"
+    }
+  ]
+}

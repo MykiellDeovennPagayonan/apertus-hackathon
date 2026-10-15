@@ -1,3 +1,4 @@
+import Image from "next/image";
 import "./LoadingState.css";
 
 export default function LoadingState({
@@ -18,6 +19,13 @@ export default function LoadingState({
       <div className="app-loading__message">
         {variant === "screen" && (
           <span className="app-loading__brand">
+            <Image
+              src="/logo.svg"
+              alt=""
+              loading="eager"
+              width={64}
+              height={56}
+            />
             pAperSim <span>LOCAL LAB</span>
           </span>
         )}

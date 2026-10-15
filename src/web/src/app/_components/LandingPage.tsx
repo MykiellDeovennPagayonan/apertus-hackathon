@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import ApertusBadge from "./ApertusBadge";
@@ -22,11 +23,11 @@ export default function LandingPage({ children }: { children?: ReactNode }) {
       name: "Truss bridge",
     },
     {
-      type: "town",
-      tag: "SIMULATION",
-      title: "Town simulation",
-      description: "Set routes and schedules, then track movement through town.",
-      name: "Living town",
+      type: "acid-base-titration",
+      tag: "CHEMISTRY",
+      title: "Acid-base titration",
+      description: "Add base to an acid and watch the pH and indicator change.",
+      name: "Acid-base titration",
     },
   ] as const;
   return (
@@ -79,7 +80,9 @@ export default function LandingPage({ children }: { children?: ReactNode }) {
         </section>
       </main>
       <footer className="landing__footer">
-        <span>pAperSim</span>
+        <span className="landing__footer-brand">
+          <Image src="/logo.svg" alt="" width={32} height={28} /> pAperSim
+        </span>
         <span>
           <i /> Local-first simulations
         </span>

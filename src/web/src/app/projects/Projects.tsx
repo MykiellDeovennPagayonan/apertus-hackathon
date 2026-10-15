@@ -10,6 +10,7 @@ import {
   projectFetch,
   saveProject,
 } from "../../lib/projects/client";
+import { deleteLocalProject } from "../../lib/projects/local";
 import type {
   Project,
   ProjectSummary,
@@ -205,7 +206,7 @@ export default function Projects() {
                 >
                   <option value="">All projects</option>
                   <option value="experiment">Experiments</option>
-                  <option value="composition">Compositions</option>
+                  <option value="composition">Components & compositions</option>
                 </select>
               </label>
             </div>
@@ -227,7 +228,9 @@ export default function Projects() {
               <div className="project-grid">
                 {entries.map((e) => (
                   <article key={`${e.projectType}/${e.projectId}`}>
-                    <span className="project-kind">{e.projectType}</span>
+                    <span className="project-kind">
+                      {e.contentKind ?? e.projectType}
+                    </span>
                     <h2>{e.name}</h2>
                     <p>{e.description || "Private project"}</p>
                     <p>
@@ -347,6 +350,30 @@ export default function Projects() {
                       onClick={() => downloadPayload(item.payload, item.name)}
                     >
                       Download recipe
+                    </button>
+                    <button
+                      type="button"
+                      disabled={busy}
+                      onClick={() => {
+                        if (
+                          confirm(
+                            `Delete “${item.name}” from this device? This cannot be undone. Account copies and community publications stay unchanged.`,
+                          )
+                        )
+                          void act(async () => {
+                            await deleteLocalProject(item.id, item.type);
+                            setLocal((entries) =>
+                              entries.filter(
+                                (entry) =>
+                                  entry.id !== item.id ||
+                                  entry.type !== item.type,
+                              ),
+                            );
+                            setNotice(`Deleted ${item.name} from this device.`);
+                          });
+                      }}
+                    >
+                      Delete
                     </button>
                     {owner && (
                       <button

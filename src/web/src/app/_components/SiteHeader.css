@@ -20,9 +20,6 @@
   letter-spacing: -1px;
   white-space: nowrap;
 }
-.site-header__brand span {
-  color: var(--accent);
-}
 .site-header nav {
   display: flex;
   align-items: center;

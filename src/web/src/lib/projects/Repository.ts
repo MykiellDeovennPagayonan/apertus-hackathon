@@ -5,6 +5,9 @@ import {
   type MongoClient,
   MongoServerError,
 } from "mongodb";
+import { IMPORTED_HTML } from "../../simulations/creation-and-editing/runtime-engine/imported/contract";
+import { htmlComponent } from "../../simulations/creation-and-editing/validator/componentEvidence";
+import { verifyPublicationComponents } from "./componentVerification";
 import {
   type Attribution,
   type Page,
@@ -84,6 +87,12 @@ export function projectDTO(row: ProjectRow): Project {
   return {
     projectId: row.projectId,
     projectType: row.projectType,
+    contentKind:
+      row.projectType === "experiment"
+        ? "experiment"
+        : htmlComponent(row.payload)
+          ? "component"
+          : "composition",
     name: row.name,
     description: row.description,
     tags: row.tags,
@@ -112,6 +121,12 @@ function publicationDTO(row: PublicationRow): Publication {
     authorId: row.authorId,
     authorName: row.authorName,
     projectType: row.projectType,
+    contentKind:
+      row.projectType === "experiment"
+        ? "experiment"
+        : htmlComponent(row.payload)
+          ? "component"
+          : "composition",
     name: row.name,
     description: row.description,
     tags: row.tags,
@@ -127,6 +142,7 @@ function publicationDTO(row: PublicationRow): Publication {
 }
 export type ListOptions = {
   type?: ProjectType;
+  kind?: "component" | "composition";
   query?: string;
   tag?: string;
   cursor?: string | null;
@@ -498,6 +514,7 @@ export class ProjectRepository {
       "tags",
       "idempotencyKey",
       "licenseAccepted",
+      "componentChecks",
     ]);
     const expected = revision(source.expectedRevision) as number,
       names = nameFields(source.name),
@@ -557,7 +574,33 @@ export class ProjectRepository {
             409,
             "name_conflict",
           );
-        const candidate = publicPayload(type, project.payload);
+        const checkedPayload = structuredClone(project.payload);
+        const authored =
+          type === "composition"
+            ? (
+                checkedPayload as import("../../simulations/creation-and-editing/authoring-engine/document").CompositeRecipe
+              ).document
+            : (
+                checkedPayload as import("../../simulations/builder/document/types").ExperimentDocument
+              ).authored;
+        const nodes =
+          authored?.nodes.filter((node) => node.definition === IMPORTED_HTML) ??
+          [];
+        if (source.componentChecks !== undefined) {
+          const checks = record(
+            source.componentChecks,
+            nodes.map((node) => node.id),
+          );
+          for (const node of nodes) {
+            if (!checks[node.id])
+              throw new ProjectError(
+                `${node.label}: component checks are missing.`,
+              );
+            node.configuration.verification = JSON.stringify(checks[node.id]);
+          }
+        }
+        verifyPublicationComponents(authored);
+        const candidate = publicPayload(type, checkedPayload);
         const series = await this.db
           .collection<SeriesRow>("publicationSeries")
           .findOneAndUpdate(
@@ -668,6 +711,20 @@ export class CommunityRepository {
     const { limit, query, after } = pagination(options);
     const filter: Filter<PublicationRow> = { visibility: "published" };
     if (options.type) filter.projectType = projectType(options.type);
+    if (options.kind) {
+      const component = {
+        projectType: "composition" as const,
+        "payload.document.nodes.0.definition": IMPORTED_HTML,
+        "payload.document.nodes.1": { $exists: false },
+        "payload.document.resources": { $size: 0 },
+        "payload.nested": { $size: 0 },
+      };
+      if (options.kind === "component") Object.assign(filter, component);
+      else {
+        filter.projectType = "composition";
+        filter.$nor = [component];
+      }
+    }
     if (options.authorId) filter.authorId = identity(options.authorId);
     if (options.seriesId) filter.seriesId = identity(options.seriesId);
     if (options.tag) filter.tags = text(options.tag, 40, "Tag");

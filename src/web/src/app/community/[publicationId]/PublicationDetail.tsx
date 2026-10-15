@@ -8,17 +8,27 @@ import {
   listCommunity,
   projectFetch,
 } from "../../../lib/projects/client";
+import {
+  componentSource,
+  downloadComponentText,
+} from "../../../lib/projects/componentAuthoring";
 import type {
   Publication,
   PublicationSummary,
 } from "../../../lib/projects/types";
+import { HTMLComponentImport } from "../../../simulations/builder/composition/HTMLComponentImport";
 import { parseDocument } from "../../../simulations/builder/document/serialization";
+import {
+  loadComponentLibrary,
+  saveComponentRecipe,
+} from "../../../simulations/builder/library/persistence";
 import { editableDocument } from "../../../simulations/builder/persistence/recovery";
-import { RecipeLesson } from "../../../simulations/creation-and-editing/simulation/RecipeLesson";
 import type {
   AuthoredDocument,
   CompositeRecipe,
 } from "../../../simulations/creation-and-editing/authoring-engine/document";
+import { RecipeLesson } from "../../../simulations/creation-and-editing/simulation/RecipeLesson";
+import { htmlComponent } from "../../../simulations/creation-and-editing/validator/componentEvidence";
 import LoadingState from "../../_components/LoadingState";
 import SiteHeader from "../../_components/SiteHeader";
 export default function PublicationDetail({ id }: { id: string }) {
@@ -36,6 +46,9 @@ export default function PublicationDetail({ id }: { id: string }) {
     setPublication(null);
     setError("");
     setPreview(false);
+    setDocument(null);
+    setVersions([]);
+    setNotice("");
     void getPublication(id)
       .then(async (p) => {
         if (disposed) return;
@@ -84,6 +97,70 @@ export default function PublicationDetail({ id }: { id: string }) {
     publication?.projectType === "composition"
       ? (publication.payload as CompositeRecipe)
       : null;
+  const component = recipe ? htmlComponent(recipe) : undefined;
+  const publicationActions = publication && (
+    <>
+      <Link
+        href={`/experiments/builder?community=${publication.publicationId}`}
+      >
+        Remix in builder
+      </Link>
+      {recipe && !component && (
+        <Link href={`/experiments/builder?insert=${publication.publicationId}`}>
+          Add to builder
+        </Link>
+      )}
+      <button type="button" onClick={() => downloadPublication(publication)}>
+        Download recipe
+      </button>
+      {owner === publication.authorId && (
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => {
+            if (
+              confirm(
+                "Withdraw this publication from public browsing? Its snapshot will remain preserved.",
+              )
+            )
+              void act(async () => {
+                await projectFetch(
+                  `/api/community/${id}/withdraw`,
+                  owner,
+                  "POST",
+                  {},
+                );
+                setPublication(null);
+                setNotice("Publication withdrawn.");
+              });
+          }}
+        >
+          Withdraw publication
+        </button>
+      )}
+      {owner && (
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => {
+            const reason = prompt("Why should this project be reviewed?");
+            if (reason)
+              void act(async () => {
+                await projectFetch(
+                  `/api/community/${id}/report`,
+                  owner,
+                  "POST",
+                  { reason },
+                );
+                setNotice("Report submitted for review.");
+              });
+          }}
+        >
+          Report project
+        </button>
+      )}
+    </>
+  );
   return (
     <>
       <SiteHeader active="community" />
@@ -101,7 +178,9 @@ export default function PublicationDetail({ id }: { id: string }) {
           )
         ) : (
           <>
-            <span className="project-kind">{publication.projectType}</span>
+            <span className="project-kind publication-kind">
+              {publication.contentKind ?? publication.projectType}
+            </span>
             <h1>{publication.name}</h1>
             <p>
               By {publication.authorName} · Version {publication.versionNumber}{" "}
@@ -140,76 +219,79 @@ export default function PublicationDetail({ id }: { id: string }) {
                   ? "Stop preview"
                   : publication.projectType === "experiment"
                     ? "Run experiment"
-                    : "Preview composition"}
+                    : component
+                      ? "Try component"
+                      : "Preview composition"}
               </button>
-              <Link
-                href={`/experiments/builder?community=${publication.publicationId}`}
-              >
-                Remix in builder
-              </Link>
-              {recipe && (
-                <Link
-                  href={`/experiments/builder?insert=${publication.publicationId}`}
-                >
-                  Add to builder
-                </Link>
-              )}
-              <button
-                type="button"
-                onClick={() => downloadPublication(publication)}
-              >
-                Download recipe
-              </button>
-              {owner === publication.authorId && (
+              {component && recipe && (
                 <button
                   type="button"
-                  disabled={busy}
-                  onClick={() => {
-                    if (
-                      confirm(
-                        "Withdraw this publication from public browsing? Its snapshot will remain preserved.",
-                      )
+                  onClick={() =>
+                    downloadComponentText(
+                      componentSource(recipe),
+                      publication.name,
+                      "html",
                     )
-                      void act(async () => {
-                        await projectFetch(
-                          `/api/community/${id}/withdraw`,
-                          owner,
-                          "POST",
-                          {},
-                        );
-                        setPublication(null);
-                        setNotice("Publication withdrawn.");
-                      });
-                  }}
+                  }
                 >
-                  Withdraw publication
+                  Download HTML
                 </button>
               )}
-              {owner && (
-                <button
-                  type="button"
-                  disabled={busy}
-                  onClick={() => {
-                    const reason = prompt(
-                      "Why should this project be reviewed?",
-                    );
-                    if (reason)
-                      void act(async () => {
-                        await projectFetch(
-                          `/api/community/${id}/report`,
-                          owner,
-                          "POST",
-                          { reason },
-                        );
-                        setNotice("Report submitted for review.");
-                      });
-                  }}
-                >
-                  Report project
-                </button>
+              {component ? (
+                <details>
+                  <summary>More publication actions</summary>
+                  <div className="project-actions">{publicationActions}</div>
+                </details>
+              ) : (
+                publicationActions
               )}
             </div>
-            {preview && document && (
+            {preview && component && recipe && (
+              <section
+                className="publication-preview html-publication-preview"
+                aria-label="HTML component preview"
+              >
+                <HTMLComponentImport
+                  key={id}
+                  saveLabel="Add to My components"
+                  source={componentSource(recipe)}
+                  initialInputs={
+                    component.configuration.inputs as Record<string, unknown>
+                  }
+                  initialSettings={
+                    component.configuration.settings as Record<string, unknown>
+                  }
+                  onSave={async (verified) => {
+                    const library = await loadComponentLibrary(owner);
+                    const copy = structuredClone(recipe);
+                    copy.id = `user/${crypto.randomUUID()}`;
+                    copy.title = publication.name;
+                    let suffix = 2;
+                    while (
+                      library.some(
+                        (r) =>
+                          r.title.toLowerCase() === copy.title.toLowerCase(),
+                      )
+                    )
+                      copy.title = `${publication.name} (copy ${suffix++})`;
+                    copy.document.lesson.title = copy.title;
+                    copy.document.nodes[0].configuration =
+                      verified.document.nodes[0].configuration;
+                    await saveComponentRecipe(
+                      copy,
+                      owner,
+                      publication.publicationId,
+                    );
+                    setNotice(
+                      owner
+                        ? "Added to My components in your account."
+                        : "Added to My components on this device.",
+                    );
+                  }}
+                />
+              </section>
+            )}
+            {preview && !component && document && (
               <section
                 className="publication-preview"
                 aria-label="Project preview"
@@ -217,7 +299,7 @@ export default function PublicationDetail({ id }: { id: string }) {
                 <RecipeLesson key={id} document={document} />
               </section>
             )}
-            {recipe && (
+            {recipe && !component && (
               <section>
                 <h2>Composition interface</h2>
                 <h3>Parameters</h3>
@@ -255,6 +337,13 @@ export default function PublicationDetail({ id }: { id: string }) {
                   ))}
                 </ul>
               </section>
+            )}
+            {component && (
+              <p>
+                Checks are contributor-reported and apply to the tested HTML and
+                starting values. Try the component before adding it to your
+                library.
+              </p>
             )}
             <section>
               <h2>Published versions</h2>
