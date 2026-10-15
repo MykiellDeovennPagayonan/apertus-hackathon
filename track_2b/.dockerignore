@@ -1,0 +1,23 @@
+.git
+**/node_modules
+**/.next*
+**/tsconfig.tsbuildinfo
+**/.env*
+**/.venv*
+**/__pycache__
+**/.pytest_cache
+**/*.gguf
+**/*.safetensors
+deploy/raspberry-pi/models
+deploy/raspberry-pi/results
+deploy/raspberry-pi/.env
+docs
+
+# Evaluation assets and local tooling are not application build inputs.
+src/eval
+src/playwright
+src/captures-playwright
+data
+.pnpm-store
+deploy/repair-memory
+**/output/playwright
