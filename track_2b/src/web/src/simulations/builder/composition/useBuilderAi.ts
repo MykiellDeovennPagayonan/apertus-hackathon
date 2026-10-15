@@ -188,7 +188,11 @@ export function useBuilderAi({
     revision: number;
     fingerprint: string;
   }>({ sessionId: null, revision: 0, fingerprint: "" });
-  const [draft, setDraft] = useState("");
+  const [draft, setDraft] = useState(
+    doc.authored?.nodes?.length
+      ? ""
+      : "Make a pendulum swing where I can adjust its starting angle and length",
+  );
   const [lastRequest, setLastRequest] = useState<{
     prompt: string;
     details: string;

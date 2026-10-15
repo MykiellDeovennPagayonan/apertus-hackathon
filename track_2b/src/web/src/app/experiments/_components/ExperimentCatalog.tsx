@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import ApertusBadge from "../../_components/ApertusBadge";
 import { premadeExperiments } from "../_lib/premadeExperiments";
 
 export default function ExperimentCatalog({
@@ -74,7 +73,6 @@ export default function ExperimentCatalog({
             </span>
             <h2>{experiment.title}</h2>
             <p>{experiment.description}</p>
-            <ApertusBadge />
             <span>Open experiment ↗</span>
           </Link>
         ))}
