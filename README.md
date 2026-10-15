@@ -56,7 +56,7 @@ The implementation described in the paper contains 458 public definitions, inclu
 
 ### Authoring pipeline
 
-![Authoring pipeline from request interpretation through activity retrieval, Apertus composition, application validation, and browser execution.](track_2b/docs/papersim_paper/figures/architecture.png)
+![Authoring pipeline: input, intent interpreter, relevant components, composer, authoring engine, validator, runtime engine, and simulation, supported by the component library and repair memory.](track_2b/docs/papersim_paper/figures/architecture.png)
 
 Apertus identifies the teaching goal, concepts, required interactions and observations, explicit constraints, and whether the experiment calls for a single instance or a comparison. A lexical retriever ranks eligible activities using the request, interpreted intent, and capability metadata, retaining at most eight candidates.
 
