@@ -41,7 +41,7 @@ Hugging Face is the default for open-weight benchmark models; the two GPT profil
 
 ## Verified HF routes and quantization
 
-The current seven-model lineup uses Llama 3.1 8B through Featherless in place of Gemma: Gemma 4 E4B was unavailable through the router, and Gemma 3 12B repeatedly returned unsupported for the first prompt. It also uses Mistral Small 3.1 24B through HF's direct Featherless route in place of Mistral 3.2. Earlier artifacts retain their original identities. Qwen3-8B stays the same model and explicitly selects Featherless; automatic provider selection had rejected it for this account. Its chat template disables thinking so the small JSON-stage budget produces an answer instead of reasoning-only output. See [HF provider selection](https://huggingface.co/docs/inference-providers/providers/featherless-ai) and [Featherless thinking controls](https://featherless.ai/docs/chat-template-kwargs).
+The current seven-model lineup uses Llama 3.1 8B through Featherless and Mistral Small 3.1 24B through HF's direct Featherless route. Qwen3-8B also explicitly selects Featherless and disables thinking in its chat template for bounded JSON authoring stages. Each artifact retains its model and provider identity. See [HF provider selection](https://huggingface.co/docs/inference-providers/providers/featherless-ai) and [Featherless thinking controls](https://featherless.ai/docs/chat-template-kwargs).
 
 The Mistral profile selects `https://router.huggingface.co/featherless-ai/v1` when the HF base URL is unset or the standard router URL. A custom `APERTUS_HF_BASE_URL` is preserved. Requests still use the same `HF_TOKEN`; no Featherless subscription or dedicated endpoint was created.
 

@@ -1,4 +1,4 @@
-# pAperSim: Apertus-Assisted Component-Based Simulation Authoring for Accessible Education
+# pAperSim: Apertus-Assisted Component-Based Simulation Authoring
 
 Louie Dale Cervera, Fides Anna Notes, Mykiell Deovenn Pagayonan, Raine Christine Perez, and Ian Clyde Tejada
 

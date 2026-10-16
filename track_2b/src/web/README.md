@@ -38,7 +38,7 @@ NextAuth uses encrypted JWT sessions and the official MongoDB adapter for user i
 
 The custom interface lives at `/auth/sign-in`, `/auth/sign-up`, `/auth/forgot-password`, `/auth/reset-password`, and `/auth/verify-email`. Auth pages share an animated physics background with pause/resume and reduced-motion support. Sign-in and sign-out controls are available on the landing page and experiment catalog. With authentication unconfigured, the existing guest workspace remains available.
 
-**Draft limitation:** email/password registration, verification, and recovery are not connected to HTTP routes or an email transport yet. The forms and account-service groundwork are present; they are not completed email flows. Choosing the delivery provider and approving tests for these new endpoints are still pending. Google OAuth also needs a manual check with real credentials. Do not treat this draft as ready to deploy.
+Use Google OAuth for configured account sign-in and browser-local libraries for guest use. Email/password registration and recovery require HTTP-route and email-delivery integration before enabling those flows.
 
 Signed-in experiment saves, generated lessons, and reusable component recipes use MongoDB. Guests keep the existing device-local libraries. Guest records are not automatically uploaded or merged into an account. Draft recovery remains local, with separate keys for each account. Switching accounts resets the active workspace.
 

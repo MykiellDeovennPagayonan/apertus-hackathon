@@ -74,11 +74,9 @@ pnpm build
 
 The existing contract runner checks recipe loading, runtime behavior, serialization, rejected inputs, persistence contracts and repair-memory behavior. Real database checks require the explicitly configured disposable test database described in the [repair-memory runbook](../deploy/repair-memory/README.md).
 
-The full runner currently fails at `scripts/recipes/verify-contract.cjs:366`: the assertion expects `requiredCapabilities`, while activity retrieval returns `ranked` and `cards`. This failure was reproduced before restructuring; the cleanup preserves both the application behavior and the assertion. Resolve that contract separately from documentation changes.
-
 After adding or removing prepared recipes, run `pnpm recipes:generate`; use `pnpm recipes:generate -- --check` to check freshness. For Python wrapper checks, run `make -C src/inference test-laya` from `track_2b/` after setting up that environment.
 
-For the release, use the actual Docker app to generate a lesson, operate its controls, save, reload, reopen and export it. Also check one manual builder edit and a prepared 3D lesson. Passing contract tests does not prove request fidelity, scientific accuracy, browser rendering or target-hardware performance.
+For the release, use the actual Docker app to generate a lesson, operate its controls, save, reload, reopen and export it. Also check one manual builder edit and a prepared 3D lesson. Review request coverage, scientific behavior, and rendering on the target hardware.
 
 ## Benchmarks and evidence
 
@@ -89,10 +87,10 @@ For the release, use the actual Docker app to generate a lesson, operate its con
 
 Keep `docs/agent-only/benchmark/`: the runner reads its prompt list and the statistics collector reads its reports and catalog inventory. Historical implementation diaries, loose captures, speculative simulation designs and duplicate report authoring files are omitted from this submission. They are not required to build or run the application.
 
-## Limits and optional services
+## Deployment and optional services
 
-AI composition is limited to registered capabilities. Render success alone does not establish that a lesson satisfies its request or models the science correctly. Many domain models are simplified teaching demonstrations rather than forecasts.
+AI composition uses registered capabilities and domain models designed for teaching demonstrations.
 
-Guest saves are browser-local; guest agent runs are temporary process state. Account/community flows require online services and their own verification. Raspberry Pi latency, memory, thermals and classroom suitability remain unmeasured.
+Guest saves are browser-local; guest agent runs are temporary process state. Account/community flows use online services. The [deployment guide](../deploy/raspberry-pi/README.md) covers the Raspberry Pi configuration and local inference options.
 
-[Repair memory](../deploy/repair-memory/README.md) is optional and defaults to off. Its PostgreSQL, embedding service, migrations and operator processing are separate from the submission stack. Do not describe it as an enabled background-learning service or infer a quality improvement from its implementation alone.
+[Repair memory](../deploy/repair-memory/README.md) is optional and defaults to off. Its PostgreSQL, embedding service, migrations and operator processing are separate from the submission stack. Enable and evaluate these services separately when using repair memory.

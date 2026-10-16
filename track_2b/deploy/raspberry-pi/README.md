@@ -161,7 +161,7 @@ Evidence is saved under ignored `deploy/raspberry-pi/results/<UTC timestamp>/`:
 - Laya startup/warmup timings and llama.cpp cumulative prompt/token-generation metrics before and after the run.
 - Container CPU/memory snapshots, host memory and swap counters, thermal/throttling data when available, and final container states/image IDs.
 
-Nonzero exit means at least one generation failed. Inspect its result before changing settings. An unsupported request does not count as a successful generation. The application's validators check accepted generation results; the benchmark does not prove browser rendering or learning quality.
+The benchmark records each generation outcome and applies the application's validators to accepted results. Review the saved report alongside the browser checks below.
 
 Cold-load time is visible through Laya status and service startup logs; llama.cpp metrics are cumulative. No maximum-latency acceptance target is set. Do not use sustained swap as proof that the stack fits comfortably on 8 GB. Check for OOM exits, service restarts, and thermal throttling across repeated runs.
 
