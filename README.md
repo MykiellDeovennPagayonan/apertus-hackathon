@@ -8,6 +8,8 @@ Hack Apertus Online 2026 — Track 2B: Own Project.
 
 [Demo video](https://www.youtube.com/watch?v=bpb16vIsMLg) · [Technical report (PDF)](track_2b/pAperSim_Report.pdf) · [Local deployment](#run-locally) · [Documentation](track_2b/docs/README.md)
 
+[![Watch the pAperSim demo video](https://img.youtube.com/vi/bpb16vIsMLg/hqdefault.jpg)](https://www.youtube.com/watch?v=bpb16vIsMLg)
+
 ![Projectile motion comparison simulation with independently adjustable launch angles.](track_2b/docs/papersim_paper/figures/projectile.png)
 
 *Projectile motion comparison assembled by Apertus from registered components.*
