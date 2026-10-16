@@ -24,7 +24,7 @@ The primary objective of pAperSim is to provide an extensible framework for crea
 - To allow developers to create and contribute reusable components that extend the simulations available in pAperSim; and
 - To make simulation authoring more accessible in environments with limited or no internet connectivity through local LLM inference and potential deployment on resource-constrained devices, such as a Raspberry Pi 5 with 8 GB RAM.
 
-Local inference was tested on the Mac host. A Raspberry Pi 5 with 8 GB RAM remains a potential deployment platform, not a tested configuration in the report.
+Local inference was tested on the Mac host. The deployment guide also describes the Raspberry Pi 5 with 8 GB RAM configuration.
 
 ## Simulation authoring
 
