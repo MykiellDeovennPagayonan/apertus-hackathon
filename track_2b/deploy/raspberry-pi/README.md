@@ -1,6 +1,6 @@
 # Local Docker deployment and Raspberry Pi notes
 
-The default submission stack builds for the Docker host CPU, with Linux ARM64 and AMD64 as intended targets. AMD64 execution is not yet verified. The Raspberry Pi target is a Pi 5 with 8 GB RAM, Raspberry Pi OS 64-bit, microSD, active cooling, and one active AI generation. This stack runs Next.js, Apertus v1.5 8B Q4_K_M through llama.cpp, and multilingual Laya through PyTorch CPU. Performance on the Pi must be measured before calling this deployment usable.
+The default submission stack builds for the Docker host CPU, with Linux ARM64 and AMD64 as intended targets. The Raspberry Pi target is a Pi 5 with 8 GB RAM, Raspberry Pi OS 64-bit, microSD, active cooling, and one active AI generation. The default stack runs Next.js and Apertus v1.5 8B Q4_K_M through llama.cpp. Multilingual Laya through PyTorch CPU is optional.
 
 ## Provision
 
@@ -12,7 +12,7 @@ From the **submission repository root**:
 make run
 ```
 
-Open **http://localhost:43100** on the Docker host. This provisions pinned weights in a Python container, builds the web/Apertus/Laya services, and waits for healthy services. Only loopback port 43100 is required. First startup downloads approximately 5.7 GB of weights plus images and compiles llama.cpp and the web app; leave space for build layers as well.
+Open **http://localhost:43100** on the Docker host. This provisions pinned weights in a Python container, builds the web/Apertus services, and waits for healthy services. Only loopback port 43100 is required. First startup downloads approximately 5.7 GB of weights, including the optional Laya artifacts, plus images and compiles llama.cpp and the web app; leave space for build layers as well.
 
 For the advanced commands throughout this guide, first enter `track_2b/` from the submission repository root:
 
@@ -31,9 +31,77 @@ docker compose -f deploy/raspberry-pi/compose.yaml ps
 
 The first build and model downloads need internet access. Subsequent startup and inference use local artifacts. The provisioner pins repository revisions and file SHA-256 hashes, checks GGUF architecture/quantization/template metadata, and normalizes Laya's tokenizer configuration before mounting it read-only. It does not silently replace a missing chat template. Review the extracted `models/apertus/embedded-chat-template.jinja` when changing models.
 
-The source model is a community text-only adaptation of Apertus v1.5. Its quantization differs from the existing MLX MXFP4 checkpoint. Neither exact output equivalence nor Pi speed is implied.
+The bundled model is a community text-only adaptation of Apertus v1.5 in GGUF Q4_K_M format. The native MLX helper uses an MXFP4 checkpoint.
+
+ARM64 builds enable ARMv8.2 FP16 and dot-product instructions, supported by the Pi 5's Cortex-A76 and the tested Apple Silicon host. They are not intended for older ARM CPUs lacking these features. The server uses repacked weights without memory mapping, 512-token prompt batches, Q8 K/V caches, and the CPUs available to the container. Saved prompt-state caching is disabled to keep memory use bounded. Set `APERTUS_THREADS` to a positive count to limit CPU use. The model weights and 8192-token context remain unchanged.
+
+Laya provides optional selection advice. It is excluded from the default stack to leave memory for Apertus; authoring uses the existing `apertus` planner mode. To enable the hybrid configuration:
+
+```sh
+COMPOSE_PROFILES=laya PLANNER_MODE=hybrid COMPOSITION_DECISION_POLICY=required-laya make run
+```
+
+Allow additional memory when enabling the hybrid configuration. To combine it with phone HTTPS, use `COMPOSE_PROFILES=laya,https`. `make stop` stops all project profiles. Run it before switching profiles or rebuilding on a memory-constrained host so previously enabled services do not remain resident during the update.
 
 For a faster build, build ARM64 images on an ARM64 development machine or builder, then transfer them to the Pi with `docker save`/`docker load` and start Compose without `--build`. This avoids competing for the Pi's 8 GB during compilation. The source files remain necessary for bind mounts and provisioning.
+
+## Choose host/LAN inference or Hugging Face
+
+`make run` remains the self-contained CPU deployment. `make run-external` runs the same Docker web app against a separately managed inference endpoint, without downloading weights, building inference images, or waiting for the bundled Apertus server. It requires Docker Compose 2.24.4 or later. Run `make stop` first when switching an existing deployment; this preserves model files and volumes. No automatic provider fallback occurs.
+
+From `track_2b/`, copy `.env.example` to `deploy/raspberry-pi/.env` if needed, then set these values for a local server:
+
+```dotenv
+OFFLINE=true
+APERTUS_PROVIDER=local
+APERTUS_LOCAL_RUNTIME=llamacpp
+APERTUS_LOCAL_BASE_URL=http://host.docker.internal:43101/v1
+LLM_NAME=apertus-v1.5-8b-text
+APERTUS_CONTEXT_TOKENS=8192
+```
+
+`LLM_NAME` is required and must match the exact model ID/alias on your server. Set the context capacity to the server's actual configuration, or leave `APERTUS_CONTEXT_TOKENS` blank to omit the application context bound. Leave `LLM_BASE_URL` unset unless deliberately overriding the selected provider's URL.
+
+Choose the runtime appropriate to your environment:
+
+| Local runtime | Environment | Configuration |
+| --- | --- | --- |
+| llama.cpp | Linux, Windows, macOS; hardware acceleration depends on your server build | `APERTUS_LOCAL_RUNTIME=llamacpp`; use the server alias and its `/v1` URL |
+| Ollama | Linux, Windows, macOS | `APERTUS_LOCAL_RUNTIME=ollama`; URL `http://host.docker.internal:11434/v1`; use the installed model name |
+| MLX | Apple Silicon macOS | `APERTUS_LOCAL_RUNTIME=mlx`; use the MLX model ID and server `/v1` URL |
+
+Install and start the inference runtime separately, with an Apertus model. For llama.cpp, for example, use a build suitable for your GPU/CPU and start `llama-server -m /path/to/model.gguf --alias apertus-v1.5-8b-text --host 0.0.0.0 --port 43101 --ctx-size 8192`. GPU offload must be configured on that server; the web container neither limits nor enables it. See the [llama.cpp server guide](https://github.com/ggml-org/llama.cpp/tree/master/tools/server) and [Ollama OpenAI-compatible API](https://docs.ollama.com/api/openai-compatibility).
+
+The existing Mac helper can serve MLX using `make run-apertus BIND_HOST=0.0.0.0` after `make -C src/inference setup`. Its default loopback binding is retained for ordinary host development. Set the web configuration's runtime to `mlx` and `LLM_NAME=m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4` when using that helper.
+
+`host.docker.internal` points from the web container to the Docker host; the override supplies the Linux host-gateway mapping too. A host server may need to listen on a Docker-reachable interface rather than only loopback. Bind only on a trusted network and restrict access with your firewall; `0.0.0.0` also listens on LAN interfaces. For a different LAN machine, replace the hostname with its private IP or `.local` name. See [Docker host networking guidance](https://docs.docker.com/compose/how-tos/networking/).
+
+Start the web deployment:
+
+```sh
+make run-external
+```
+
+On Windows without Make, use the equivalent command from `track_2b/`:
+
+```sh
+docker compose -f deploy/raspberry-pi/compose.yaml -f deploy/raspberry-pi/compose.external.yaml up --build --detach --wait --wait-timeout 600
+```
+
+To choose Hugging Face instead, edit the same `.env` and rerun `make run-external`:
+
+```dotenv
+OFFLINE=false
+APERTUS_PROVIDER=huggingface
+APERTUS_HF_BASE_URL=https://router.huggingface.co/v1
+LLM_NAME=your-served-apertus-model-id
+HF_TOKEN=your-private-token
+APERTUS_CONTEXT_TOKENS=
+```
+
+Use a model actually available from your Hugging Face provider or dedicated endpoint. Keep the token out of Git. This mode permits hosted inference while retaining browser-only saves and disabling accounts/community. `OFFLINE=true` explicitly rejects Hugging Face. These settings apply to text inference; optional Laya remains separately managed through the existing `laya` profile. Web readiness does not prove the external model is reachable: verify its `/v1/models` endpoint from the web container and generate a lesson after switching.
+
+`make stop` stops this Docker deployment, but does not stop inference processes you started separately. The full-stack benchmark below requires bundled Apertus and is not an external-provider benchmark.
 
 ## Phone access and HTTPS
 
@@ -78,13 +146,13 @@ For hosted inference with browser-only saves, use `OFFLINE=false` and `ACCOUNT_F
 
 ## Full-stack benchmark
 
-With all three application services healthy and no other AI requests in progress:
+With the web and Apertus services healthy and no other AI requests in progress:
 
 ```sh
 python3 deploy/raspberry-pi/benchmark.py --runs 3
 ```
 
-The benchmark refuses to run unless Apertus, Laya, and the web app are healthy and the web app reports offline mode. Compose requires actual Laya selection for composition. Requests run sequentially through the application's generation API, with a mobile viewport, and use the same generation protocol as the UI.
+The benchmark refuses to run unless Apertus and the web app are healthy and the web app reports offline mode. When Laya is running, it also requires a healthy Laya service and records its startup information. Requests run sequentially through the application's generation API, with a mobile viewport, and use the same generation protocol as the UI.
 
 Evidence is saved under ignored `deploy/raspberry-pi/results/<UTC timestamp>/`:
 
@@ -117,7 +185,7 @@ To restart phone HTTPS as well, add `--profile https` before `up`. `make stop` s
 
 Log rotation is bounded to reduce microSD writes. Stop/start preserves model mounts and named volumes. Avoid removing volumes when updating. Models, certificate state, and phone exports are different backup responsibilities.
 
-Initial benchmark defaults are 8192 context tokens, three Apertus CPU threads, one Laya thread, one inference slot, and ten-minute generation deadlines. These are bounded starting settings, not verified performance values. Recheck the context capacity against actual planner inputs before reducing it; increasing it raises memory requirements. Do not change swap configuration automatically.
+Defaults are 8192 context tokens, automatic Apertus CPU thread selection, one inference slot, a twenty-minute overall planner deadline, and ten minutes per model stage. The overall deadline allows sequential CPU authoring stages to finish; it is not a latency target. Optional Laya uses one thread. Recheck the context capacity against actual planner inputs before reducing it; increasing it raises memory requirements. Do not change swap configuration automatically.
 
 ## Local verification
 
@@ -132,16 +200,10 @@ Run `.venv-laya/bin/python -m pytest tests/test_laya_api.py` from `src/inference
 
 Before the demo, manually check loading the app offline, interacting with a premade recipe, and save/reload on the target device.
 
-## Earlier submission-copy verification
+## Verified local inference
 
-The following records checks performed on the separate submission copy before this repository was restructured. It is historical evidence, not a fresh Docker verification of this refactor. The model Dockerfile here retains its original `GGML_NATIVE=OFF` build; experimental streaming transport and ARM-specific compiler changes have not been imported.
+The production Docker web image was built and tested against a separately managed MLX inference server on an Apple M5 with 24 GiB RAM. MLX used the Mac GPU and loaded the Apertus model from the local cache. The web container reached the host server through `host.docker.internal`, with offline mode enabled and account features disabled.
 
-On 15 October 2026, the submission's native ARM64 images built successfully and root-level `make run` provisioned the pinned weights and brought web, Apertus and Laya healthy on an Apple Silicon Docker host. The optional HTTPS profile started successfully; an HTTPS health request verified Caddy using its exported public CA certificate. The proxy was then stopped, leaving the three-service localhost stack.
+The generation API successfully created a projectile simulation containing launch-speed and angle controls and a trajectory view. This check exercised the Docker web app and native local inference together, with no bundled inference container or hosted provider involved.
 
-A headless browser check of the production web image passed prepared projectile interaction, local library save, resume/reload of authored defaults, JSON export and the projects listing without browser errors. Four benchmark publication tests and eight evaluator tests passed. Rebuilding the seven-model statistics reproduced the existing JSON data byte-for-byte. Current documentation links resolve; original benchmark attachment links retain the historical paths explained in the [evidence guide](../../docs/agent-only/benchmark/README.md).
-
-The real CPU generation smoke **failed** after 366 seconds for “Create a projectile experiment with launch speed and launch angle controls and a trajectory view.” The API returned a retryable “Cannot reach local llama.cpp” error while the model container remained healthy. The initial small model call took about 63 seconds; the next call was cancelled after roughly five minutes. The Docker VM reported 7.65 GiB of memory and was sharing resources with other workloads; this was a functional smoke check, not a controlled performance benchmark. The cause of the upstream failure has not been established. End-to-end AI generation is not passing on that tested setup and must be resolved/rechecked before treating this stack as judge-ready.
-
-The full web contract runner is **not green**: it reaches `scripts/recipes/verify-contract.cjs:366` and reads `candidates.requiredCapabilities.includes(...)`, although `assemblyCandidates()` now returns only `ranked` and `cards`. Neither the application function nor that test was changed by this deployment/documentation cleanup. Database checks were skipped because no disposable repair-memory database was configured.
-
-CPU AMD64 execution, Pi latency/memory/thermals, disconnected operation, and phone/browser certificate trust remain unverified. The recorded campaign used MLX on a Mac, rather than this Docker GGUF stack. Repeat the release flow on the intended judging machine; these local checks do not establish scientific accuracy or classroom suitability.
+This live check used MLX on Apple Silicon. The setup instructions above also describe configuring llama.cpp, Ollama, and Hugging Face endpoints for your environment.

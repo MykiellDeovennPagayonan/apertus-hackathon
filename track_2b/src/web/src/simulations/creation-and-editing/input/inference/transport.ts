@@ -1,3 +1,6 @@
+import { request as httpRequest } from "node:http";
+import { request as httpsRequest } from "node:https";
+import { Readable } from "node:stream";
 import { SchemaValidationError } from "../../../registry/contracts/parameterSchema";
 import type { GenerationBudget } from "../../budget";
 import { PlannerError } from "../../errors";
@@ -102,20 +105,47 @@ export async function requestStructured<T>(
       tokens,
       schema,
     );
-    let response: Response;
+    let response: Pick<Response, "ok" | "status" | "body">;
     try {
       options.onInferenceStarted?.();
-      response = await fetch(providerRequest.url, {
-        method: "POST",
-        cache: "no-store",
-        redirect: "error",
-        signal: combined,
-        headers: providerRequest.headers,
-        body: JSON.stringify(providerRequest.body),
-      });
+      if (config.connection === "local" && config.localRuntime === "llamacpp") {
+        // CPU inference can exceed fetch's five-minute header timeout; keep the application deadline.
+        response = await new Promise<typeof response>((resolve, reject) => {
+          const request = providerRequest.url.startsWith("https:")
+            ? httpsRequest
+            : httpRequest;
+          const outgoing = request(
+            providerRequest.url,
+            {
+              method: "POST",
+              signal: combined,
+              headers: providerRequest.headers,
+            },
+            (incoming) => {
+              const status = incoming.statusCode ?? 502;
+              resolve({
+                ok: status >= 200 && status < 300,
+                status,
+                body: Readable.toWeb(incoming) as Response["body"],
+              });
+            },
+          );
+          outgoing.on("error", reject);
+          outgoing.end(JSON.stringify(providerRequest.body));
+        });
+      } else {
+        response = await fetch(providerRequest.url, {
+          method: "POST",
+          cache: "no-store",
+          redirect: "error",
+          signal: combined,
+          headers: providerRequest.headers,
+          body: JSON.stringify(providerRequest.body),
+        });
+      }
     } catch (err) {
       if (combined.aborted) throw err;
-      throw new PlannerError(connectionError(config), 502);
+      throw new PlannerError(connectionError(config), 502, err);
     }
     if (!response.ok) {
       await response.body?.cancel();
@@ -397,7 +427,7 @@ export async function requestStructured<T>(
         504,
       );
     if (error instanceof PlannerError) throw error;
-    throw new PlannerError(connectionError(config), 502);
+    throw new PlannerError(connectionError(config), 502, error);
   } finally {
     active--;
   }

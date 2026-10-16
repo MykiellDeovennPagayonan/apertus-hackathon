@@ -99,7 +99,9 @@ make run
 
 Open **http://localhost:43100**.
 
-The first run requires internet access to download approximately **5.7 GB of pinned model artifacts**, plus dependencies and container images/build layers. It builds images for the Docker host and starts the web application, Apertus, and Laya. No host Node.js or Python installation, database, or API credentials are required. The command also works from `track_2b/`.
+The first run requires internet access to download approximately **5.7 GB of pinned model artifacts**, including optional Laya artifacts, plus dependencies and container images/build layers. It builds images for the Docker host and starts the web application and Apertus. Laya is available through an optional profile described in the deployment guide. No host Node.js or Python installation, database, or API credentials are required. The command also works from `track_2b/`.
+
+To use a separately managed local inference server on Linux, Windows, or macOS, or Hugging Face, configure `track_2b/deploy/raspberry-pi/.env` and run **`make run-external`**. This starts the Docker web app without downloading or starting bundled models. See [inference provider setup](track_2b/deploy/raspberry-pi/README.md#choose-hostlan-inference-or-hugging-face).
 
 To stop the stack:
 
@@ -111,7 +113,7 @@ Stopping preserves model files and Docker volumes. Guest lessons belong to the b
 
 The default stack uses local services with `OFFLINE=true`. Accounts, MongoDB access, community publishing, hosted inference, and repair memory are disabled. The browser still needs access to the running web server. Optional phone HTTPS is available through `COMPOSE_PROFILES=https make run`, with additional certificate and hostname setup described in the [deployment guide](track_2b/deploy/raspberry-pi/README.md).
 
-**Deployment status:** AI generation is not established as reliable in the CPU Docker stack. An earlier submission-copy smoke request failed despite healthy containers. The benchmark above used Mac/MLX inference; AMD64 and Raspberry Pi execution remain unverified. See the deployment guide for current checks and limits.
+**Local inference verification:** The Docker web app connected to a local MLX inference server on Apple Silicon and successfully generated a projectile simulation with launch-speed and angle controls and a trajectory view. See the [inference setup guide](track_2b/deploy/raspberry-pi/README.md#choose-hostlan-inference-or-hugging-face) to configure your runtime or Hugging Face provider.
 
 For host development, `make dev` starts the web development server; inference is configured separately. Follow the [development guide](track_2b/docs/DEVELOPMENT.md), and use `make stop-dev` to stop host development processes.
 

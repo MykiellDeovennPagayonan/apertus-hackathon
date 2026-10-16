@@ -92,15 +92,17 @@ def main():
     report = {"startedAt": stamp, "platform": platform.platform(), "architecture": platform.machine(),
               "configuration": command(COMPOSE + ["config"]), "services": command(COMPOSE + ["ps", "--format", "json"]),
               "hostBefore": sample_host(), "runs": [], "latencyTarget": None}
-    # Refuse to measure an Apertus-only stack or a web instance in online mode.
-    for service in ["web", "apertus", "laya"]:
+    # Include the optional decision sidecar only when it is running.
+    laya_enabled = bool(command(COMPOSE + ["ps", "-q", "laya"]).strip())
+    report["layaEnabled"] = laya_enabled
+    for service in ["web", "apertus"] + (["laya"] if laya_enabled else []):
         container = command(COMPOSE + ["ps", "-q", service]).strip()
         if not container or command(["docker", "inspect", "--format", "{{.State.Health.Status}}", container]).strip() != "healthy":
             raise RuntimeError(f"Full-stack benchmark requires healthy {service}")
     with urllib.request.urlopen(args.base_url.rstrip("/") + "/api/health", timeout=10) as response:
         if not json.load(response).get("offline"):
             raise RuntimeError("Benchmark requires OFFLINE=true")
-    report["layaStartup"] = json.loads(internal_fetch("http://laya:43102/api/status"))
+    report["layaStartup"] = json.loads(internal_fetch("http://laya:43102/api/status")) if laya_enabled else None
     (output / "llama-metrics-before.txt").write_text(internal_fetch("http://apertus:43101/metrics"))
     stop = threading.Event()
 

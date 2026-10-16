@@ -23,13 +23,30 @@ services:
       - --ctx-size
       - "${APERTUS_CONTEXT_TOKENS:-8192}"
       - --threads
-      - "${APERTUS_THREADS:-3}"
+      - "${APERTUS_THREADS:--1}"
       - --threads-batch
-      - "${APERTUS_THREADS:-3}"
+      - "${APERTUS_THREADS:--1}"
       - --parallel
       - "1"
+      # llama.cpp otherwise allows 8 GiB of saved prompt states beyond the active KV cache.
+      - --cache-ram
+      - "0"
+      # Bound prompt buffers and KV memory on an 8 GB host.
+      - --batch-size
+      - "512"
+      - --ubatch-size
+      - "512"
+      - --flash-attn
+      - "on"
+      - --cache-type-k
+      - q8_0
+      - --cache-type-v
+      - q8_0
       - --n-gpu-layers
       - "0"
+      # Avoid retaining both mapped and repacked weights on an 8 GB host.
+      - --load-mode
+      - none
       - --jinja
       - --metrics
     volumes:
@@ -39,6 +56,7 @@ services:
     logging: *logging
 
   laya:
+    profiles: [laya]
     build:
       context: ../..
       dockerfile: src/inference/Dockerfile.laya
@@ -72,10 +90,10 @@ services:
       APERTUS_TIMEOUT_MS: "${APERTUS_TIMEOUT_MS:-600000}"
       APERTUS_MAX_TOKENS: "1024"
       APERTUS_MAX_CONCURRENT_REQUESTS: "1"
-      PLANNER_TIMEOUT_MS: "${PLANNER_TIMEOUT_MS:-600000}"
+      PLANNER_TIMEOUT_MS: "${PLANNER_TIMEOUT_MS:-1200000}"
       PLANNER_MAX_CONCURRENT_REQUESTS: "1"
-      PLANNER_MODE: hybrid
-      COMPOSITION_DECISION_POLICY: required-laya
+      PLANNER_MODE: "${PLANNER_MODE:-apertus}"
+      COMPOSITION_DECISION_POLICY: "${COMPOSITION_DECISION_POLICY:-optional}"
       DECISION_PROVIDER: laya
       LAYA_BASE_URL: http://laya:43102
       DECISION_TIMEOUT_MS: "30000"
@@ -85,7 +103,6 @@ services:
       - "127.0.0.1:43100:3000"
     depends_on:
       apertus: { condition: service_healthy }
-      laya: { condition: service_healthy }
     networks: [frontend, inference]
     restart: unless-stopped
     logging: *logging

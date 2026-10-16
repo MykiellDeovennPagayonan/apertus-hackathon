@@ -8,7 +8,7 @@ APERTUS_PORT ?= 43101
 LAYA_PORT ?= 43102
 COMPOSE := docker compose -f deploy/raspberry-pi/compose.yaml
 
-.PHONY: install dev run provision run-web run-realistic run-apertus run-laya stop stop-dev stop-web stop-apertus stop-laya build start benchmark benchmark-model eval
+.PHONY: install dev run run-external provision run-web run-realistic run-apertus run-laya stop stop-dev stop-web stop-apertus stop-laya build start benchmark benchmark-model eval
 
 install:
 	$(PNPM) --dir $(WEB_DIR) install --frozen-lockfile
@@ -34,6 +34,11 @@ run: provision
 	$(COMPOSE) up --build --detach --wait --wait-timeout 600
 	@printf '%s\n' 'Open http://localhost:43100 (enable the https profile for phone access).'
 
+# Host/LAN inference or Hugging Face; no bundled model provisioning.
+run-external:
+	$(COMPOSE) -f deploy/raspberry-pi/compose.external.yaml up --build --detach --wait --wait-timeout 600
+	@printf '%s\n' 'Open http://localhost:43100 (inference is managed separately).'
+
 provision:
 	docker run --rm --user "$$(id -u):$$(id -g)" --volume "$(CURDIR):/workspace" --workdir /workspace python:3.12.12-slim-bookworm python3 deploy/raspberry-pi/provision_models.py
 
@@ -56,7 +61,7 @@ stop-laya:
 	if [ -n "$$pids" ]; then kill $$pids && echo "Stopped Laya on port $(LAYA_PORT)."; else echo "Laya is not running on port $(LAYA_PORT)."; fi
 
 stop:
-	$(COMPOSE) --profile https stop
+	$(COMPOSE) --profile '*' stop
 
 stop-dev: stop-web stop-apertus stop-laya
 

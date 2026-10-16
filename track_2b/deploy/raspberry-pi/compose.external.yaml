@@ -1,0 +1,20 @@
+# Use after compose.yaml to connect the web app to separately managed inference.
+services:
+  apertus:
+    profiles: [bundled]
+  web:
+    depends_on: !reset {}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      OFFLINE: "${OFFLINE:-true}"
+      ACCOUNT_FEATURES_ENABLED: "false"
+      LLM_NAME: "${LLM_NAME:?Set LLM_NAME to the model ID served by your inference endpoint}"
+      LLM_BASE_URL: "${LLM_BASE_URL:-}"
+      APERTUS_PROVIDER: "${APERTUS_PROVIDER:-local}"
+      APERTUS_LOCAL_RUNTIME: "${APERTUS_LOCAL_RUNTIME:-llamacpp}"
+      APERTUS_LOCAL_BASE_URL: "${APERTUS_LOCAL_BASE_URL:-http://host.docker.internal:43101/v1}"
+      APERTUS_HF_BASE_URL: "${APERTUS_HF_BASE_URL:-https://router.huggingface.co/v1}"
+      HF_TOKEN: "${HF_TOKEN:-}"
+      # External servers own their context capacity; enforce a bound only if set.
+      APERTUS_CONTEXT_TOKENS: "${APERTUS_CONTEXT_TOKENS:-}"

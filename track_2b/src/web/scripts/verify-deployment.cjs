@@ -51,6 +51,38 @@ assert.throws(
   /local inference endpoint/,
 );
 
+for (const runtime of ["llamacpp", "ollama", "mlx"]) {
+  const config = readLlmConfig({
+    OFFLINE: "true",
+    APERTUS_PROVIDER: "local",
+    APERTUS_LOCAL_RUNTIME: runtime,
+    LLM_NAME: "test-apertus-model",
+    APERTUS_LOCAL_BASE_URL: "http://host.docker.internal:43101/v1",
+    APERTUS_CONTEXT_TOKENS: "",
+  });
+  assert.equal(config.connection, "local");
+  assert.equal(config.localRuntime, runtime);
+  assert.equal(config.model, "test-apertus-model");
+  assert.equal(config.baseUrl, "http://host.docker.internal:43101/v1");
+  assert.equal(config.contextTokens, null);
+}
+assert.throws(
+  () =>
+    readLlmConfig({
+      OFFLINE: "true",
+      LLM_BASE_URL: "https://host.docker.internal.example.com/v1",
+    }),
+  /local inference endpoint/,
+);
+const externalHosted = readLlmConfig({
+  ...hosted,
+  APERTUS_HF_MODEL: undefined,
+  LLM_NAME: "served-apertus-model",
+  LLM_BASE_URL: "",
+});
+assert.equal(externalHosted.model, "served-apertus-model");
+assert.equal(externalHosted.baseUrl, hosted.APERTUS_HF_BASE_URL);
+
 (async () => {
   const savedEnv = { ...process.env };
   const originalLoad = Module._load;

@@ -32,7 +32,10 @@ export function requireLocalEndpoint(value: string) {
       ipv4[0] === 10 ||
       (ipv4[0] === 192 && ipv4[1] === 168) ||
       (ipv4[0] === 172 && ipv4[1] >= 16 && ipv4[1] <= 31));
-  const localName = /^[a-z][a-z0-9-]*$/.test(host) || host.endsWith(".local");
+  const localName =
+    host === "host.docker.internal" ||
+    /^[a-z][a-z0-9-]*$/.test(host) ||
+    host.endsWith(".local");
   const privateV6 = host === "[::1]" || /^\[f[cd][0-9a-f]{2}:/.test(host);
   if (!privateV4 && !privateV6 && !localName)
     throw new Error("OFFLINE requires a local inference endpoint.");
