@@ -4,9 +4,13 @@
 
 From this directory or the repository root, run `make run` with Docker, Compose, and GNU Make installed. The default deployment builds native CPU images for the Docker host (intended targets: Linux ARM64 and AMD64): setup downloads pinned Apertus/Laya weights (approximately 5.7 GB) in a Python container, builds the images, and waits for healthy services. Open **http://localhost:43100** on the Docker host. `make stop` stops the containers without deleting model files or volumes.
 
-The template variables `LLM_NAME`, `LLM_BASE_URL`, and `LLM_API_KEY` override the web service's model connection; defaults use the bundled Apertus service. Set overrides in the shell or `deploy/raspberry-pi/.env`. Offline mode allows local/private inference endpoints only. Pi performance is unmeasured; the recorded benchmark used an Apple M5 with 24 GiB RAM and MLX, rather than the Docker GGUF serving stack.
+The template variables `LLM_NAME`, `LLM_BASE_URL`, and `LLM_API_KEY` override the web service's model connection; defaults use the bundled Apertus service. Set overrides in the shell or `deploy/raspberry-pi/.env`. Offline mode allows local/private inference endpoints only. The recorded research benchmark used an Apple M5 with 24 GiB RAM and MLX.
 
 The current deployment supports premade lessons, AI generation, manual editing, and local browser saves. Accounts and community publishing are disabled offline. Phone access uses the optional `https` profile and needs the hostname and certificate setup described in [the deployment guide](deploy/raspberry-pi/README.md).
+
+The default CPU stack runs the web application and Apertus in `apertus` planner mode. Laya is optional through the `laya` profile; the hybrid configuration requires additional memory. See the deployment guide for the profile settings.
+
+For a separately managed local inference server on Linux, Windows, or macOS, or for Hugging Face, configure `deploy/raspberry-pi/.env` and use `make run-external`. This starts the Docker web app without provisioning or starting bundled inference. See [provider selection and examples](deploy/raspberry-pi/README.md#choose-hostlan-inference-or-hugging-face).
 
 For host-based development, use `make dev`; install/start local inference separately as described in [the development guide](docs/DEVELOPMENT.md). `make stop-dev` stops those host development services.
 

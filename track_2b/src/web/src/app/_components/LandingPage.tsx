@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import ApertusBadge from "./ApertusBadge";
 import ExperimentArt from "./ExperimentArt";
 import SiteHeader from "./SiteHeader";
 import "./LandingPage.css";
@@ -68,7 +67,6 @@ export default function LandingPage({ children }: { children?: ReactNode }) {
                 <div className="experiment-card__body">
                   <h3>{experiment.title}</h3>
                   <p>{experiment.description}</p>
-                  <ApertusBadge />
                   <div className="experiment-card__link">
                     {experiment.name}
                     <span aria-hidden="true">↗</span>

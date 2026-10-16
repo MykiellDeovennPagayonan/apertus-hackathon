@@ -64,7 +64,7 @@ export class GenerationBudget {
     readonly trace?: TraceSink,
   ) {
     const timeout = compositionDeadlineMs();
-    if (!Number.isInteger(timeout) || timeout < 1 || timeout > 600000)
+    if (!Number.isInteger(timeout) || timeout < 1 || timeout > 1200000)
       throw new PlannerError("Invalid PLANNER_TIMEOUT_MS.", 503);
     this.deadline = AbortSignal.timeout(timeout);
     this.signal = external

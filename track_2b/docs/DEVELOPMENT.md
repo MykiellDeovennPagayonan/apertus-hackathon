@@ -12,7 +12,7 @@ make run
 
 Open **http://localhost:43100** on the Docker host. The command downloads pinned models, builds the production web and inference images, and waits for healthy services. No host Node.js, Python environment, database, or API credentials are required. Initial setup needs internet access and approximately 5.7 GB for weights, plus space for images and build layers.
 
-The default stack has three services: web, Apertus through llama.cpp, and Laya through PyTorch CPU. Images build for the Docker host's architecture. Linux ARM64 and AMD64 are the intended CPU targets; the verification status is recorded in the [deployment guide](../deploy/raspberry-pi/README.md). Phone HTTPS is optional.
+The default stack has two services: web and Apertus through llama.cpp. Laya through PyTorch CPU is available through an optional profile. Images build for the Docker host's architecture. Linux ARM64 and AMD64 are the intended CPU targets; ARM64 builds require ARMv8.2 FP16 and dot-product support. The verification status and hybrid-mode instructions are recorded in the [deployment guide](../deploy/raspberry-pi/README.md). Phone HTTPS is optional.
 
 ```sh
 make stop
@@ -42,6 +42,8 @@ make run-laya
 
 Use `make stop-dev` to stop the host web/inference processes on the configured ports. `make stop` controls the Docker submission stack. Avoid running both web stacks on port 43100 at once. Host production development uses `make build` followed by `make start`.
 
+To keep the web app in Docker while using host/LAN inference (llama.cpp, Ollama, or MLX), or Hugging Face, configure `deploy/raspberry-pi/.env` and use `make run-external`. It skips model provisioning and bundled inference startup. See [provider configuration](../deploy/raspberry-pi/README.md#choose-hostlan-inference-or-hugging-face). The MLX helper accepts `BIND_HOST` for Docker-reachable binding; its default remains loopback.
+
 See the [web configuration guide](../src/web/README.md) and [inference setup](../src/inference/Makefile) for provider-specific settings. Optional online account storage and community publication require separate MongoDB/authentication configuration. They are not part of `make run`.
 
 ## Source map
@@ -65,6 +67,7 @@ From `track_2b/src/web`, after installing dependencies:
 
 ```sh
 pnpm test
+node scripts/recipes/verify-llamacpp-transport.cjs
 pnpm exec tsc --noEmit
 pnpm build
 ```

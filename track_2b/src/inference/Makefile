@@ -2,6 +2,7 @@
 PYTHON ?= python3.12
 MODEL ?= m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4
 PORT ?= 43101
+BIND_HOST ?= 127.0.0.1
 
 .PHONY: help setup run run-apertus setup-laya run-laya smoke-laya test-laya smoke planner-smoke
 help:
@@ -12,7 +13,7 @@ setup:
 	.venv/bin/python -m pip install -r requirements.txt
 run:
 	@test -x .venv/bin/python || { printf '%s\n' 'Run make setup first.'; exit 1; }
-	.venv/bin/python serve_apertus.py --model "$(MODEL)" --host 127.0.0.1 --port "$(PORT)" --max-tokens 1024 --temp 0.2 --top-p 0.9
+	.venv/bin/python serve_apertus.py --model "$(MODEL)" --host "$(BIND_HOST)" --port "$(PORT)" --max-tokens 1024 --temp 0.2 --top-p 0.9
 smoke:
 	curl --fail-with-body --silent --show-error --max-time 120 "http://127.0.0.1:$(PORT)/v1/chat/completions" -H 'Content-Type: application/json' -d '{"messages":[{"role":"user","content":"Say hello in one sentence."}],"max_tokens":512,"stream":false}'
 
